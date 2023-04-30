@@ -5,6 +5,6 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   base: process.env.GITHUB_PAGES
-    ? "OpenFisca-Shibuya" // レポジトリ名を設定
+    ? "OpenFisca-Japan" // レポジトリ名を設定
     : "./",
 });

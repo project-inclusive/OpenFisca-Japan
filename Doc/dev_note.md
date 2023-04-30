@@ -13,7 +13,19 @@ M1 Macの場合、`--platform amd64`が必要。
 - Makefile内の環境変数は`$hoge`では認識されない。他の記載方法がある？
 
 
-### その他
+## フロントエンド
+
+- Github Pages上にViteでビルドしたアプリをデプロイするには、vite.config.tsにリポジトリ名を設定する必要がある。（Github pagesのリンクは `<アカウント名>/<リポジトリ名>/`になるため。
+    ```
+    export default defineConfig({
+    plugins: [react()],
+    base: process.env.GITHUB_PAGES
+        ? "OpenFisca-Japan" // レポジトリ名を設定
+        : "./",
+    });
+    ```
+
+## その他
 
 - テストパターンCSVの所得 -> テストファイルyamlの収入 -> OpenFiscaの所得　が0.5単位に丸められるため、所得が一致しない可能性がある。  
 テストパターンCSVの所得が境界値下なのか上なのか分からないと、収入をどちらに丸めれば良いかわからないため、テストファイルyamlには所得を直接記載する。  
