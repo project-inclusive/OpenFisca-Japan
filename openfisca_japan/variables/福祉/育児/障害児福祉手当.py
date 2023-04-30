@@ -14,14 +14,10 @@ class 障害児福祉手当(Variable):
     value_type = float
     entity = 世帯
     definition_period = DAY
-    label = "保護者への障害児童福祉手当"
-    reference = "https://www.city.shibuya.tokyo.jp/kurashi/shogaisha/teate.html"
+    label = "障害児童福祉手当"
+    reference = "https://www.mhlw.go.jp/bunya/shougaihoken/jidou/hukushi.html"
     documentation = """
-    渋谷区の障害児童福祉手当
-
-    - 〒150-8010 東京都渋谷区宇田川町1-1
-    - 渋谷区子ども青少年課子育て給付係
-    - 03-3463-2558
+    障害児童福祉手当
     """
 
     def formula(対象世帯, 対象期間, parameters):

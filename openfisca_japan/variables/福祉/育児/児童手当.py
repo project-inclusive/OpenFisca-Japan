@@ -14,13 +14,9 @@ class 児童手当(Variable):
     #definition_period = DAY
     definition_period = DAY
     label = "保護者への児童手当"
-    reference = "https://www.city.shibuya.tokyo.jp/kodomo/teate/teate/jido_t.html"
+    reference = "https://www8.cao.go.jp/shoushi/jidouteate/annai.html"
     documentation = """
-    渋谷区の児童手当制度
-
-    - 〒150-8010 東京都渋谷区宇田川町1-1
-    - 渋谷区子ども青少年課子育て給付係
-    - 03-3463-2558
+    児童手当制度
     """
 
     def formula(対象世帯, 対象期間, parameters):

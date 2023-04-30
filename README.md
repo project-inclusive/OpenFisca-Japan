@@ -1,11 +1,17 @@
-# OpenFisca Shibuya （非公式）
+# OpenFisca Japan
 
 ## 概要
-渋谷区の子育て支援制度のシミュレーターです。  
-世帯の属性を入力すると、利用可能な制度と手当額が表示されます。
+日本の制度のシミュレーターです。  
+世帯の情報を入力すると、利用可能な制度と手当額が簡易的に算出されます。  
+2023/4/30時点で、以下の子育て支援制度が対応しています。
+
+- 児童手当
+- 児童扶養手当
+- 特別児童扶養手当
+- 障害児福祉手当
 
 ## 作成Webアプリ
-[OpenFisca Shibuya ホームページ](https://project-inclusive.github.io/OpenFisca-Shibuya/)に作成されたWebアプリが公開されています。  
+[OpenFisca Japan ホームページ](https://project-inclusive.github.io/OpenFisca-Japan/)に作成されたWebアプリが公開されています。  
 mainブランチのソースコードがビルド・デプロイされています。  
 フロントエンド(React)はGithub Pages、バックエンド(OpenFisca)はGoogle CloudのCloud Runでビルド・デプロイされています。
 
@@ -22,10 +28,10 @@ mainブランチのソースコードがビルド・デプロイされていま�
     - Windowsの場合：[WindowsでのDocker Desktop環境構築](https://chigusa-web.com/blog/windows%E3%81%ABdocker%E3%82%92%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%81%97%E3%81%A6python%E7%92%B0%E5%A2%83%E3%82%92%E6%A7%8B%E7%AF%89/)
     - Macの場合：[MacでのDocker Desktop環境構築](https://matsuand.github.io/docs.docker.jp.onthefly/desktop/mac/install/)
 
-1. proj-inclusiveのOpenFisca Githubリポジトリを個人アカウントのリポジトリとしてフォークし、ローカル環境（自分のPC）にクローン（ダウンロード）する。  
+1. proj-inclusiveのOpenFisca-Japan Githubリポジトリを個人アカウントのリポジトリとしてフォークし、ローカル環境（自分のPC）にクローン（ダウンロード）する。  
   [フォーク・クローン・プルリクエストの流れ](https://techtechmedia.com/how-to-fork-github/)    
    リポジトリのクローンはGithub desktop, Source treeなどのツールを使うのが簡単です。
-1. 自分のPC上にクローンしたOpenfisca-Shibuyaのルートディレクトリで、WindowsならPowershell、MacならTerminalを開く。  
+1. 自分のPC上にクローンしたOpenfisca-Japanのルートディレクトリで、WindowsならPowershell、MacならTerminalを開く。  
 以下の手順でフロントエンド・バックエンドの環境構築・起動を行う。  
 環境は同時に複数起動できない。  
 そのため、環境を変える場合は元の環境を停止してから新しく起動する。
@@ -63,7 +69,7 @@ mainブランチのソースコードがビルド・デプロイされていま�
     - フロントエンドを起動している場合は
       http://localhost:30000/ をブラウザに打ち込むとフォームが表示されます。
 
-1. project-inclusive/OpenFisca-Shibuya の mainブランチにプルリクエストを送る。  
+1. project-inclusive/OpenFisca-Japan の mainブランチにプルリクエストを送る。  
 （参考）[フォーク・クローン・プルリクエストの流れ](https://techtechmedia.com/how-to-fork-github/)   
 **このリポジトリ自体のフォーク元である「SnoozingJellyfish/OpenFisca-Yuisekin」リポジトリにプルリクエストを送らないよう注意してください。**
 
@@ -146,4 +152,4 @@ openfisca_japan/variables/~.py等の計算方法を規定するファイルを�
 
 ## その他の情報
 
-project-inclusiveの開発方針やOpenFiscaそのもの等の情報は、[本リポジトリのWiki](https://github.com/project-inclusive/OpenFisca-Shibuya/wiki)に記載しています。
+project-inclusiveの開発方針やOpenFiscaそのもの等の情報は、[本リポジトリのWiki](https://github.com/project-inclusive/OpenFisca-Japan/wiki)に記載しています。

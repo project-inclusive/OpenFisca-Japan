@@ -18,13 +18,9 @@ class 児童扶養手当_最大(Variable):
     entity = 世帯
     definition_period = DAY
     label = "保護者への児童扶養手当の最大額"
-    reference = "https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/hitorioya_teate.html"
+    reference = "https://www.mhlw.go.jp/bunya/kodomo/osirase/100526-1.html"
     documentation = """
-    渋谷区の児童扶養手当制度
-
-    - 〒150-8010 東京都渋谷区宇田川町1-1
-    - 渋谷区子ども青少年課子育て給付係
-    - 03-3463-2558
+    児童扶養手当制度
     """
 
     def formula(対象世帯, 対象期間, parameters):
@@ -61,13 +57,9 @@ class 児童扶養手当_最小(Variable):
     entity = 世帯
     definition_period = DAY
     label = "保護者への児童扶養手当の最小額"
-    reference = "https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/hitorioya_teate.html"
+    reference = "https://www.mhlw.go.jp/bunya/kodomo/osirase/100526-1.html"
     documentation = """
-    渋谷区の児童扶養手当制度
-
-    - 〒150-8010 東京都渋谷区宇田川町1-1
-    - 渋谷区子ども青少年課子育て給付係
-    - 03-3463-2558
+    児童扶養手当制度
     """
 
     def formula(対象世帯, 対象期間, parameters):
@@ -105,13 +97,9 @@ class 児童扶養手当の全部支給所得条件(Variable):
     entity = 世帯
     definition_period = DAY
     label = "保護者への児童扶養手当の全額支給所得条件"
-    reference = "https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/hitorioya_teate.html"
+    reference = "https://www.mhlw.go.jp/bunya/kodomo/osirase/100526-1.html"
     documentation = """
-    渋谷区の児童扶養手当制度
-
-    - 〒150-8010 東京都渋谷区宇田川町1-1
-    - 渋谷区子ども青少年課子育て給付係
-    - 03-3463-2558
+    児童扶養手当制度
     """
 
     def formula(対象世帯, 対象期間, parameters):
@@ -134,13 +122,9 @@ class 児童扶養手当の一部支給所得条件(Variable):
     entity = 世帯
     definition_period = DAY
     label = "保護者への児童扶養手当の一部支給所得条件"
-    reference = "https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/hitorioya_teate.html"
+    reference = "https://www.mhlw.go.jp/bunya/kodomo/osirase/100526-1.html"
     documentation = """
-    渋谷区の児童扶養手当制度
-
-    - 〒150-8010 東京都渋谷区宇田川町1-1
-    - 渋谷区子ども青少年課子育て給付係
-    - 03-3463-2558
+    児童扶養手当制度
     """
 
     def formula(対象世帯, 対象期間, parameters):
@@ -165,13 +149,9 @@ class 児童扶養手当の対象児童人数(Variable):
     entity = 世帯
     definition_period = DAY
     label = "保護者への児童扶養手当の対象児童人数"
-    reference = "https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/hitorioya_teate.html"
+    reference = "https://www.mhlw.go.jp/bunya/kodomo/osirase/100526-1.html"
     documentation = """
-    渋谷区の児童扶養手当制度
-
-    - 〒150-8010 東京都渋谷区宇田川町1-1
-    - 渋谷区子ども青少年課子育て給付係
-    - 03-3463-2558
+    児童扶養手当制度
     """
 
     def formula(対象世帯, 対象期間, parameters):

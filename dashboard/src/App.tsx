@@ -19,7 +19,7 @@ function App() {
 
   const apiURL =
     import.meta.env.MODE === "production"
-      ? "https://openfisca-shibuya-deploy-test-cidt7ibyvq-uc.a.run.app" // Cloud Run
+      ? "https://openfisca-japan-hymisxpzca-uc.a.run.app" // Cloud Run
       : "http://localhost:50000";
 
   const [yourself, setYourself] = useState({
@@ -67,18 +67,22 @@ function App() {
         児童扶養手当_最小: {
           [currentDate]: null,
         },
+        /* 児童育成手当は東京都のみの制度のため除外
         児童育成手当: {
           [currentDate]: null,
         },
+        */
         特別児童扶養手当_最小: {
           [currentDate]: null,
         },
         特別児童扶養手当_最大: {
           [currentDate]: null,
         },
+        /* 障害児童育成手当は東京都のみの制度のため除外
         障害児童育成手当: {
           [currentDate]: null,
         },
+        */
         障害児福祉手当: {
           [currentDate]: null,
         },
@@ -94,7 +98,7 @@ function App() {
   useEffect(() => {
     (async () => {
       // variablesから手当の情報のみ抽出
-      const linkPrefix: string = "渋谷区HP";
+      const linkPrefix: string = "国の詳細HP";
       const variablesRes = await fetch(`${apiURL}/variables`);
       const variablesJson = await variablesRes.json();
       const allowance = new Map<string, any>();
@@ -120,12 +124,12 @@ function App() {
           <HouseholdContext.Provider value={householdContextValue}>
             <AllowanceContext.Provider value={allowanceContextValue}>
               <div className="container">
-                <h1 className="mt-3">OpenFisca Shibuya（非公式）</h1>
+                <h1 className="mt-3">OpenFisca Japan</h1>
                 <hr />
                 <h4 className="mb-4">
-                  世帯の情報をもとに、東京都渋谷区で受けられる子育て支援の手当を簡易的に算出します。
+                  世帯の情報をもとに、受けられる国の子育て支援手当を簡易的に算出します。
                   <br></br>
-                  実際に受けられる手当及び正確な給付額は自治体の窓口にお問い合わせください。
+                  実際に受けられる手当及び正確な給付額はお住まいの自治体の窓口にお問い合わせください。
                   <br></br>
                   入力された情報がサーバーに保存されることはありません。
                 </h4>
