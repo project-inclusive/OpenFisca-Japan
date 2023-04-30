@@ -1,0 +1,7 @@
+description: 児童育成手当の上限学年(18歳3ヶ月のため高校3年生としたときの小学1年生からの通算学年を記載)
+metadata:
+  reference: https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/hitorioya_teate.html
+  unit: year
+values:
+  2010-05-01:
+    value: 12

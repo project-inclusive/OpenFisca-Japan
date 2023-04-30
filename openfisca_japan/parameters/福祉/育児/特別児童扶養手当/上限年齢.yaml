@@ -1,0 +1,7 @@
+description: 特別児童扶養手当の上限年齢
+metadata:
+  reference: https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/hitorioya_teate.html
+  unit: year
+values:
+  2000-05-01:
+    value: 20.0

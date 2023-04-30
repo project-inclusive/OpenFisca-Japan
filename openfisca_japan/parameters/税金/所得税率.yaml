@@ -1,0 +1,6 @@
+description: 所得税率
+metadata:
+  unit: /1
+values:
+  2011-06-18:
+    value: 0.9

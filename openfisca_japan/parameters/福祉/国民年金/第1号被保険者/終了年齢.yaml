@@ -1,0 +1,7 @@
+description: 国民年金 第1号被保険者 終了年齢
+metadata:
+  reference: https://www.nenkin.go.jp/service/yougo/tagyo/dai1hihokensha.html
+  unit: year
+values:
+  2000-07-02:
+    value: 60

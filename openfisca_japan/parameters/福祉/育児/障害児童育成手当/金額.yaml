@@ -1,0 +1,7 @@
+description: 障害児童育成手当の金額
+metadata:
+  reference: https://www.city.shibuya.tokyo.jp/kodomo/ninshin/teate/jido_i.html
+  unit: currency-JPY
+values:
+  2000-05-01:
+    value: 15500

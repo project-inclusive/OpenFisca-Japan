@@ -1,0 +1,7 @@
+description: 障害児童育成手当の上限年齢
+metadata:
+  reference: https://www.city.shibuya.tokyo.jp/kodomo/ninshin/teate/jido_i.html
+  unit: year
+values:
+  2010-05-01:
+    value: 20.0

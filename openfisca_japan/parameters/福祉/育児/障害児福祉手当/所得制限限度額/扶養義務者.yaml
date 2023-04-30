@@ -1,0 +1,14 @@
+description: 障害児福祉手当の扶養義務者の所得制限限度額(扶養人数が0人から増えるごとに増額する)
+metadata:
+  threshold_unit: person
+  rate_unit: 1
+  reference: https://www.mhlw.go.jp/bunya/shougaihoken/jidou/hukushi.html
+values:
+  2000-05-01:
+    value:
+      - 6287000
+      - 6536000
+      - 6749000
+      - 6962000
+      - 7175000
+      - 7388000

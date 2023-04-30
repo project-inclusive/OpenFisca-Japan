@@ -1,0 +1,7 @@
+description: 障害児福祉手当の上限年齢
+metadata:
+  reference: https://www.city.shibuya.tokyo.jp/kurashi/shogaisha/teate.html
+  unit: year
+values:
+  2010-05-01:
+    value: 20.0

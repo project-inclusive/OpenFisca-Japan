@@ -1,0 +1,11 @@
+description: 住宅手当
+documentation: |
+  住宅手当の例。
+  2010年に制定され、2016年に廃止された想定。
+metadata:
+  unit: /1
+values:
+  2010-01-01:
+    value: 0.25
+  2016-12-01:
+    value: null

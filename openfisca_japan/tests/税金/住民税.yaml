@@ -1,0 +1,7 @@
+- name: 所得が100万円の渋谷区民は住民税を10万5000円払う
+  period: 2022-07
+  absolute_error_margin: 1000
+  input:
+    所得: 1000000
+  output:
+    住民税: 105000

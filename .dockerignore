@@ -1,0 +1,6 @@
+.devcontainer
+.git
+.github
+.pylintrc
+.vscode
+dashboard

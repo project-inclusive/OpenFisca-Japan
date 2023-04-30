@@ -1,0 +1,9 @@
+description: 都民税の均等割額
+metadata:
+  reference: https://www.city.shibuya.tokyo.jp/kurashi/zeikin/juminzei/juminzei_fuka.html
+  unit: currency-JPY
+values:
+  2022-06-26:
+    value: 3500
+    metadata:
+      reference: https://www.city.shibuya.tokyo.jp/kurashi/zeikin/juminzei/juminzei_fuka.html

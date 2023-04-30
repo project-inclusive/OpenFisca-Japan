@@ -1,0 +1,50 @@
+# Test files describe situations and their expected outcomes
+# We can run this test on our command line using `openfisca-run-test ベーシックインカム.yaml`
+
+- name: The ベーシックインカム should be 0 before it was introduced
+  period: 2015-11
+  input:
+    年齢: 18
+    所得: 0
+  output:
+    ベーシックインカム: 0
+
+- name: In Dec 2015, an adult with no 所得 should get a ベーシックインカム of 600
+  period: 2015-12
+  input:
+    所得: 0
+    年齢: 20
+  output:
+    ベーシックインカム: 100000
+
+- name: In Dec 2015, a child with no 所得 should get no ベーシックインカム
+  period: 2015-12
+  input:
+    所得: 0
+    年齢: 17
+  output:
+    ベーシックインカム: 0
+
+- name: In Dec 2015, an adult with a 所得 should get no ベーシックインカム
+  period: 2015-12
+  input:
+    所得: 1200
+    年齢: 20
+  output:
+    ベーシックインカム: 0
+
+- name: In Dec 2016, a child with no 所得 should get no ベーシックインカム
+  period: 2016-12
+  input:
+    所得: 0
+    年齢: 17
+  output:
+    ベーシックインカム: 100000
+
+- name: In Dec 2016, an adult with a 所得 should get a ベーシックインカム of 600
+  period: 2016-12
+  input:
+    所得: 1200
+    年齢: 20
+  output:
+    ベーシックインカム: 100000

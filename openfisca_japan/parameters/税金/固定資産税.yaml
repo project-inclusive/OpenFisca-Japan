@@ -1,0 +1,14 @@
+description: 固定資産税
+rate:
+  description: 固定資産税率
+  metadata:
+    unit: currency-EUR/m2
+  values:
+    2010-01-01: 10
+minimal_金額:
+  description: 最低固定資産税額
+  metadata:
+    unit: currency-EUR
+  values:
+    2010-01-01: 200
+documentation: 固定資産税です

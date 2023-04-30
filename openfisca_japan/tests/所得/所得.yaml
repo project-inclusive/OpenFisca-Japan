@@ -1,0 +1,62 @@
+- name: 収入0円の場合、所得は0円(令和2年)
+  period: 2020-01-01
+  input:
+    収入: 0
+  output:
+    所得: 0
+
+- name: 収入550,000円の場合、所得は0円(令和2年)
+  period: 2020-01-01
+  input:
+    収入: 550000
+  output:
+    所得: 0
+
+- name: 収入1,625,000円の場合、所得は1,074,000円(令和2年)
+  # NOTE: 収入660万円未満の場合給与所得控除額ではなく「所得税法別表第五」から直接算出するため、最大1000円程度誤差が発生する
+  # https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1410.htm
+  absolute_error_margin: 1000
+  period: 2020-01-01
+  input:
+    収入: 1625000
+  output:
+    所得: 1074000
+
+- name: 収入1,800,000円の場合、所得は1,180,000円(令和2年)
+  absolute_error_margin: 1000
+  period: 2020-01-01
+  input:
+    収入: 1800000
+  output:
+    所得: 1180000
+
+- name: 収入3,600,000円の場合、所得は2,440,000円(令和2年)
+  absolute_error_margin: 1000
+  period: 2020-01-01
+  input:
+    収入: 3600000
+  output:
+    所得: 2440000
+
+- name: 収入6,600,000円の場合、所得は4,840,000円(令和2年)
+  absolute_error_margin: 1000
+  period: 2020-01-01
+  input:
+    収入: 6600000
+  output:
+    所得: 4840000
+
+- name: 収入8,500,000円の場合、所得は6,550,000円(令和2年)
+  absolute_error_margin: 1000
+  period: 2020-01-01
+  input:
+    収入: 8500000
+  output:
+    所得: 6550000
+
+- name: 収入650,000円の場合、所得は0円(令和元年)
+  period: 2019-01-01
+  input:
+    収入: 650000
+  output:
+    所得: 0

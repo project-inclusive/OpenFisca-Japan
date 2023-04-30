@@ -1,0 +1,11 @@
+description: 成人年齢
+metadata:
+  reference: https://www.moj.go.jp/MINJI/minji07_00238.html
+  unit: year
+values:
+  # 我が国における成年年齢は，明治９年以来，２０歳とされています。
+  1876-01-01:
+    value: 20.0
+  # 成年年齢を１８歳に引き下げることを内容とする「民法の一部を改正する法律」は，２０２２年４月１日から施行されます。
+  2022-04-01:
+    value: 18.0

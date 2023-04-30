@@ -1,0 +1,9 @@
+description: 児童手当の金額
+metadata:
+  reference: https://www.city.shibuya.tokyo.jp/kodomo/teate/teate/jido_t.html
+  unit: currency-JPY
+values:
+  2022-05-01:
+    value: 10000
+    metadata:
+      reference: https://www.city.shibuya.tokyo.jp/kodomo/teate/teate/jido_t.html

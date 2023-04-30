@@ -1,0 +1,8 @@
+description: ベーシックインカム
+documentation: |
+  ベーシックインカムの例。
+metadata:
+  unit: currency-JPY
+values:
+  2015-12-01:
+    value: 100000.0

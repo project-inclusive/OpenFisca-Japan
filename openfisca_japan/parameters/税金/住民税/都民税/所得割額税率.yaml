@@ -1,0 +1,9 @@
+description: 都民税の所得割額の税率
+metadata:
+  reference: https://www.city.shibuya.tokyo.jp/kurashi/zeikin/juminzei/juminzei_fuka.html
+  unit: /1
+values:
+  2022-06-26:
+    value: 0.04
+    metadata:
+      reference: https://www.city.shibuya.tokyo.jp/kurashi/zeikin/juminzei/juminzei_fuka.html

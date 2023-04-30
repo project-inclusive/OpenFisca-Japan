@@ -1,0 +1,9 @@
+description: 児童扶養手当の金額（児童1人目の一部支給最小額）
+metadata:
+  reference: https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/hitorioya_teate.html
+  unit: currency-JPY
+values:
+  2010-05-01:
+    value: 10410
+    metadata:
+      reference: https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/hitorioya_teate.html
