@@ -10,7 +10,7 @@ class AgeGakunenError(Exception):
         return "同一人物に対し、年齢と学年は両方記載しないか一方のみ記載してください"
 
 
-# 渋谷区児童手当
+# 子育て支援制度・手当
 class Process(ProcessBase):
     def __init__(self, period, titles):
         super().__init__(period, titles)
@@ -124,8 +124,25 @@ class Process(ProcessBase):
                     p_dict['身体障害者手帳等級認定'] = '二級'
                 elif disability == '3':
                     p_dict['身体障害者手帳等級認定'] = '三級'
+                elif disability == '4':
+                    p_dict['身体障害者手帳等級認定'] = '四級'
+                elif disability == '5':
+                    p_dict['身体障害者手帳等級認定'] = '五級'
+                elif disability == '6':
+                    p_dict['身体障害者手帳等級認定'] = '六級'
+                elif disability == '7':
+                    p_dict['身体障害者手帳等級認定'] = '七級'
 
                 p_dict['身体障害者手帳交付年月日'] = self.period
+
+            if row[self.titles[f'{p}_療育手帳等級']]:
+                disability = row[self.titles[f'{p}_療育手帳等級']]
+                if disability == '0':
+                    p_dict['療育手帳等級'] = '無'
+                elif disability == 'A':
+                    p_dict['療育手帳等級'] = 'A'
+                elif disability == 'B':
+                    p_dict['療育手帳等級'] = 'B'
                 
             if row[self.titles[f'{p}_愛の手帳等級']]:
                 disability = row[self.titles[f'{p}_愛の手帳等級']]

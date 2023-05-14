@@ -23,6 +23,7 @@ export const Disability = ({ personName }: { personName: string }) => {
     if (!event.target.checked) {
       const newHousehold = { ...household };
       newHousehold.世帯員[personName].身体障害者手帳等級認定.ETERNITY = "無";
+      newHousehold.世帯員[personName].療育手帳等級.ETERNITY = "無";
       newHousehold.世帯員[personName].愛の手帳等級.ETERNITY = "無";
       newHousehold.世帯員[personName].精神障害者保健福祉手帳等級.ETERNITY =
         "無";
