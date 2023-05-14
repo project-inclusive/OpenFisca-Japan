@@ -7,6 +7,7 @@ from openfisca_core.periods import MONTH, DAY
 from openfisca_core.variables import Variable
 from openfisca_japan.entities import 世帯
 from openfisca_japan.variables.障害.身体障害者手帳 import 身体障害者手帳等級認定パターン
+from openfisca_japan.variables.障害.療育手帳 import 療育手帳等級パターン
 from openfisca_japan.variables.障害.愛の手帳 import 愛の手帳等級パターン
 
 
@@ -27,6 +28,7 @@ class 障害児福祉手当(Variable):
         扶養人数 = 対象世帯("扶養人数", 対象期間)[0]
 
         身体障害者手帳等級一覧 = 対象世帯.members("身体障害者手帳等級", 対象期間)
+        療育手帳等級一覧 = 対象世帯.members("療育手帳等級", 対象期間)
         愛の手帳等級一覧 = 対象世帯.members("愛の手帳等級", 対象期間)
         年齢 = 対象世帯.members("年齢", 対象期間)
         上限年齢未満 = 年齢 < 障害児福祉手当.上限年齢
@@ -34,8 +36,10 @@ class 障害児福祉手当(Variable):
         対象障害者手帳等級 = \
             (身体障害者手帳等級一覧 == 身体障害者手帳等級認定パターン.一級) + \
                 (身体障害者手帳等級一覧 == 身体障害者手帳等級認定パターン.二級) + \
-                    (愛の手帳等級一覧 == 愛の手帳等級パターン.一度) + \
-                        (愛の手帳等級一覧 == 愛の手帳等級パターン.二度)
+                    (療育手帳等級一覧 == 療育手帳等級パターン.A) + \
+                        (療育手帳等級一覧 == 療育手帳等級パターン.B) + \
+                            (愛の手帳等級一覧 == 愛の手帳等級パターン.一度) + \
+                                (愛の手帳等級一覧 == 愛の手帳等級パターン.二度)
 
         対象障害者である = 上限年齢未満 * 対象障害者手帳等級
         対象障害者の所得 = 対象障害者である * 所得一覧
