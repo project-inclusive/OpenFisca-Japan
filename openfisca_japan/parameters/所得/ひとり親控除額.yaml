@@ -1,0 +1,7 @@
+description: ひとり親控除額
+metadata:
+  reference: https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1171.htm
+  unit: currency-JPY
+values:
+  2020-01-01:
+    value: 350000
