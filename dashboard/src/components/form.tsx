@@ -3,10 +3,11 @@ import { FormYou } from "./forms/you";
 import { FormSpouse } from "./forms/spouse";
 import { FormChildren } from "./forms/children";
 import { useContext, useEffect, useState } from "react";
+import { scroller } from "react-scroll";
 import { AllowanceContext } from "../contexts/AllowanceContext";
 
 export const OpenFiscaForm = () => {
-  const result = useCalculate();
+  const [result, calculate] = useCalculate();
   const allowance = useContext(AllowanceContext);
 
   const [totalAllowance, setTotalAllowance] = useState<string>("0");
@@ -91,7 +92,8 @@ export const OpenFiscaForm = () => {
         <FormSpouse />
         <FormChildren />
       </form>
-      <h2>受けられる手当（月額）</h2>
+      <button className="btn btn-primary mb-3" type="button" onClick={() => {calculate(); scroller.scrollTo("calculate-result", {})}}>計算</button>
+      <h2 id="calculate-result">受けられる手当（月額）</h2>
       {/* {result && <pre>{JSON.stringify(result.世帯.世帯1, null, 2)}</pre>} */}
       {/* {result && <pre>{JSON.stringify(allowancesContextValue, null, 2)}</pre>} */}
       <ul className="list-group mb-3">
