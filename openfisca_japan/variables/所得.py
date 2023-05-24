@@ -143,11 +143,16 @@ class 障害者控除(Variable):
                     (精神障害者保健福祉手帳等級一覧 != 精神障害者保健福祉手帳等級パターン.無) + \
                         (療育手帳等級一覧 != 療育手帳等級パターン.無) + \
                             (愛の手帳等級一覧 != 愛の手帳等級パターン.無))
-        
+
+        # 障害者控除額は対象人数分が算出される
+        # https://www.city.hirakata.osaka.jp/kosodate/0000000544.html
+        特別障害者控除対象人数 = 対象世帯.sum(特別障害者控除対象)
+        障害者控除対象人数 = 対象世帯.sum(障害者控除対象)
+
         特別障害者控除額 = parameters(対象期間).所得.特別障害者控除額
         障害者控除額 = parameters(対象期間).所得.障害者控除額
         
-        return 特別障害者控除対象 * 特別障害者控除額 + 障害者控除対象 * 障害者控除額
+        return 特別障害者控除対象人数 * 特別障害者控除額 + 障害者控除対象人数 * 障害者控除額
         
 
 class ひとり親控除(Variable):
@@ -159,6 +164,8 @@ class ひとり親控除(Variable):
 
     def formula_2020_01_01(対象世帯, 対象期間, parameters):
         世帯高所得 = 対象世帯("世帯高所得", 対象期間)
+        # 児童扶養手当の対象と異なり、父母の遺棄・DV等は考慮しない
+        # (参考：児童扶養手当 https://www.city.hirakata.osaka.jp/0000026828.html)
         対象ひとり親 = (対象世帯.nb_persons(世帯.保護者) == 1) * (対象世帯.nb_persons(世帯.児童) >= 1) 
         ひとり親控除額 = parameters(対象期間).所得.ひとり親控除額
         ひとり親控除_所得制限額 = parameters(対象期間).所得.ひとり親控除_所得制限額
@@ -175,14 +182,41 @@ class 寡婦控除(Variable):
 
     def formula_2020_01_01(対象世帯, 対象期間, parameters):
         世帯高所得 = 対象世帯("世帯高所得", 対象期間)
-        ひとり親控除 = 対象世帯("ひとり親控除", 対象期間)
-        ひとり親でない = ひとり親控除 == 0
-        寡婦 = 対象世帯.nb_persons(世帯.保護者) == 1
+        寡婦 = 対象世帯("寡婦", 対象期間)
         寡婦控除額 = parameters(対象期間).所得.寡婦控除額
         寡婦控除_所得制限額 = parameters(対象期間).所得.寡婦控除_所得制限額
 
-        return 寡婦控除額 * ひとり親でない * 寡婦 * (世帯高所得 < 寡婦控除_所得制限額)
+        return 寡婦控除額 * 寡婦 * (世帯高所得 <= 寡婦控除_所得制限額)
             
+
+class 学生(Variable):
+    value_type = bool
+    default_value = False
+    entity = 人物
+    definition_period = DAY
+    label = "小・中・高校、大学、専門学校、職業訓練学校等の学生"
+    reference = "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1175.htm"
+
+
+class 勤労学生控除(Variable):
+    value_type = float
+    entity = 人物
+    definition_period = DAY
+    label = "勤労学生控除"
+    reference = "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1175.htm"
+
+    def formula(対象世帯, 対象期間, parameters):
+        # 勤労学生控除額は対象人数によらず定額そう
+        # https://www.city.hirakata.osaka.jp/kosodate/0000000544.html
+
+        世帯高所得 = 対象世帯("世帯高所得", 対象期間)
+        学生 = np.any(対象世帯.members("学生", 対象期間))
+        勤労学生控除額 = parameters(対象期間).所得.勤労学生控除額
+        勤労学生_所得制限額 = parameters(対象期間).所得.勤労学生_所得制限額
+        所得条件 = (世帯高所得 > 0) * (世帯高所得 <= 勤労学生_所得制限額)
+
+        return 所得条件 * 学生 * 勤労学生控除額
+        
 
 class 控除後世帯高所得(Variable):
     value_type = float
@@ -198,12 +232,32 @@ class 控除後世帯高所得(Variable):
         障害者控除 = 対象世帯("障害者控除", 対象期間)
         ひとり親控除 = 対象世帯("ひとり親控除", 対象期間)
         寡婦控除 = 対象世帯("寡婦控除", 対象期間)
+        勤労学生控除 = 対象世帯("勤労学生控除", 対象期間)
 
-        
+        # 他の控除（雑損控除・医療費控除等）は定額でなく実費を元に算出するため除外する    
 
-        return (
-            + 対象人物("所得", 対象期間)
-            + 対象人物("ベーシックインカム", 対象期間)
-            - 対象人物("所得税", 対象期間)
-            - 対象人物("社会保険料", 対象期間)
-            )
+        総控除額 = 社会保険料 + 給与所得及び雑所得からの控除額 + 障害者控除 + ひとり親控除 + 寡婦控除 + 勤労学生控除
+
+        return 世帯高所得 - 総控除額
+    
+
+class 児童扶養手当の控除後世帯高所得(Variable):
+    value_type = float
+    entity = 人物
+    definition_period = DAY
+    label = "各種控除が適用された後の児童扶養手当の世帯高所得額"
+    reference = "https://www.city.otsu.lg.jp/soshiki/015/1406/g/jidofuyoteate/1389538447829.html"
+
+    def formula(対象世帯, 対象期間, parameters):
+        世帯高所得 = 対象世帯("世帯高所得", 対象期間)
+        社会保険料 = parameters(対象期間).所得.社会保険料相当額
+        給与所得及び雑所得からの控除額 = parameters(対象期間).所得.給与所得及び雑所得からの控除額
+        障害者控除 = 対象世帯("障害者控除", 対象期間)
+        勤労学生控除 = 対象世帯("勤労学生控除", 対象期間)
+
+        # 他の控除（雑損控除・医療費控除等）は定額でなく実費を元に算出するため除外する    
+        # 養育者が児童の父母の場合は寡婦控除・ひとり親控除は加えられない
+
+        総控除額 = 社会保険料 + 給与所得及び雑所得からの控除額 + 障害者控除 + 勤労学生控除
+
+        return 世帯高所得 - 総控除額

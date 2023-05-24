@@ -1,0 +1,7 @@
+description: 勤労学生_所得制限控除額
+metadata:
+  reference: https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1175.htm
+  unit: currency-JPY
+values:
+  2020-01-01:
+    value: 750000
