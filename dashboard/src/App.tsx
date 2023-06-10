@@ -7,9 +7,10 @@ import { APIServerURLContext } from "./contexts/APIServerURLContext";
 import { AllowanceContext } from "./contexts/AllowanceContext";
 
 function App() {
-  const currentDate = `${new Date().getFullYear()}-${
-    new Date().getMonth() + 1
-  }-${new Date().getDate()}`;
+  // 日付は「YYYY-MM-DD」の桁数フォーマットでないとOpenFisca APIが正常動作しない
+  const currentDate = `${new Date().getFullYear()}-${(new Date().getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}-${new Date().getDate().toString().padStart(2, "0")}`;
 
   const lastYearDate = `${new Date().getFullYear() - 1}-${(
     new Date().getMonth() + 1
