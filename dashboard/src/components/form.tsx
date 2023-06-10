@@ -89,10 +89,17 @@ export const OpenFiscaForm = () => {
     <div>
       <form>
         <FormYou />
-        <FormSpouse />
-        <FormChildren />
       </form>
-      <button className="btn btn-primary mb-3" type="button" onClick={() => {calculate(); scroller.scrollTo("calculate-result", {})}}>計算</button>
+      <button
+        className="btn btn-primary mb-3"
+        type="button"
+        onClick={() => {
+          calculate();
+          scroller.scrollTo("calculate-result", {});
+        }}
+      >
+        計算
+      </button>
       <h2 id="calculate-result">受けられる手当（月額）</h2>
       {/* {result && <pre>{JSON.stringify(result.世帯.世帯1, null, 2)}</pre>} */}
       {/* {result && <pre>{JSON.stringify(allowancesContextValue, null, 2)}</pre>} */}
