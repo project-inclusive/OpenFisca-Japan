@@ -35,3 +35,23 @@ class ひとり親(Variable):
 
         return 保護者が一人 + 対象世帯("配偶者がいるがひとり親に該当", 対象期間)
 
+
+class 夫と離別死別(Variable):
+    value_type = bool
+    default_value = False
+    entity = 世帯
+    definition_period = DAY
+    label = "夫と離別・死別しているか否か"
+    reference = "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1170.htm"
+
+
+class 寡婦(Variable):
+    value_type = bool
+    entity = 世帯
+    definition_period = DAY
+    label = "寡婦に該当するか否か"
+    reference = "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1170.htm"
+
+    def formula(対象世帯, 対象期間, parameters):
+        子供がいない = 対象世帯.nb_persons(世帯.児童) == 0
+        return 子供がいない * 対象世帯("夫と離別死別", 対象期間)

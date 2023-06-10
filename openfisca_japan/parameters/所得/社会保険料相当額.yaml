@@ -1,0 +1,7 @@
+description: 所得控除の算出に用いる社会保険料相当額
+metadata:
+  reference: https://www.city.okayama.jp/kurashi/0000011187.html
+  unit: currency-JPY
+values:
+  2000-04-01:
+    value: 80000

@@ -1,0 +1,7 @@
+description: 給与所得金額及び雑所得金額からの控除額
+metadata:
+  reference: https://www.city.hirakata.osaka.jp/kosodate/0000000544.html
+  unit: currency-JPY
+values:
+  2021-06-01:
+    value: 100000

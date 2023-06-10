@@ -75,7 +75,7 @@ export const ChildrenNum = () => {
     </div>
     */
     <>
-      <label>子どもの数</label>
+      <label>あなたの子どもの数</label>
       <div className="row g-3 align-items-center mb-3">
         <div className="col-auto">
           <input

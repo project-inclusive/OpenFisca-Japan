@@ -1,0 +1,7 @@
+description: 寡婦控除額
+metadata:
+  reference: https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1170.htm
+  unit: currency-JPY
+values:
+  2020-01-01:
+    value: 270000

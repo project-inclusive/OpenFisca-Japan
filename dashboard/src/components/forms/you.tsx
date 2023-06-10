@@ -1,5 +1,9 @@
 import { Birthday } from "./attributes/Birthday";
+import { Student } from "./attributes/Student";
 import { ChildrenNum } from "./attributes/ChildrenNum";
+import { FormChildren } from "./children";
+import { SpouseExists } from "./attributes/SpouseExists";
+import { FormSpouse } from "./spouse";
 import { Income } from "./attributes/Income";
 import { Disability } from "./attributes/Disability";
 
@@ -9,9 +13,13 @@ export const FormYou = () => {
     <>
       <h3>あなたについて</h3>
       <Birthday personName={yourName} />
-      <Income personName={yourName} />
-      <ChildrenNum />
       <Disability personName={yourName} />
+      <Student personName={yourName} />
+      <Income personName={yourName} />
+      <SpouseExists />
+      <FormSpouse />
+      <ChildrenNum />
+      <FormChildren />
     </>
   );
 };
