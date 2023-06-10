@@ -118,7 +118,7 @@ class 可処分所得(Variable):
 
 class 障害者控除(Variable):
     value_type = float
-    entity = 人物
+    entity = 世帯
     definition_period = DAY
     label = "障害者控除額"
     reference = "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1160.htm"
@@ -157,7 +157,7 @@ class 障害者控除(Variable):
 
 class ひとり親控除(Variable):
     value_type = float
-    entity = 人物
+    entity = 世帯
     definition_period = DAY
     label = "ひとり親控除額"
     reference = "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1171.htm"
@@ -175,7 +175,7 @@ class ひとり親控除(Variable):
 
 class 寡婦控除(Variable):
     value_type = float
-    entity = 人物
+    entity = 世帯
     definition_period = DAY
     label = "寡婦控除額"
     reference = "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1170.htm"
@@ -200,7 +200,7 @@ class 学生(Variable):
 
 class 勤労学生控除(Variable):
     value_type = float
-    entity = 人物
+    entity = 世帯
     definition_period = DAY
     label = "勤労学生控除"
     reference = "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1175.htm"
@@ -220,7 +220,7 @@ class 勤労学生控除(Variable):
 
 class 控除後世帯高所得(Variable):
     value_type = float
-    entity = 人物
+    entity = 世帯
     definition_period = DAY
     label = "各種控除が適用された後の世帯高所得額"
     reference = "https://www.city.himeji.lg.jp/waku2child/0000013409.html"
@@ -238,12 +238,13 @@ class 控除後世帯高所得(Variable):
 
         総控除額 = 社会保険料 + 給与所得及び雑所得からの控除額 + 障害者控除 + ひとり親控除 + 寡婦控除 + 勤労学生控除
 
-        return 世帯高所得 - 総控除額
+        # 負の数にならないよう、0円未満になった場合は0円に補正
+        return np.clip(世帯高所得 - 総控除額, 0.0, None)
     
 
 class 児童扶養手当の控除後世帯高所得(Variable):
     value_type = float
-    entity = 人物
+    entity = 世帯
     definition_period = DAY
     label = "各種控除が適用された後の児童扶養手当の世帯高所得額"
     reference = "https://www.city.otsu.lg.jp/soshiki/015/1406/g/jidofuyoteate/1389538447829.html"
@@ -260,4 +261,5 @@ class 児童扶養手当の控除後世帯高所得(Variable):
 
         総控除額 = 社会保険料 + 給与所得及び雑所得からの控除額 + 障害者控除 + 勤労学生控除
 
-        return 世帯高所得 - 総控除額
+        # 負の数にならないよう、0円未満になった場合は0円に補正
+        return np.clip(世帯高所得 - 総控除額, 0.0, None)
