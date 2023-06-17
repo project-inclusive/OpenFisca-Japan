@@ -99,6 +99,17 @@ class 扶養人数(Variable):
         return 扶養人数
 
 
+class 世帯人数(Variable):
+    value_type = int
+    entity = 世帯
+    definition_period = DAY
+    label = "世帯人数"
+
+    def formula(対象世帯, 対象期間, parameters):
+        # 世帯人数を直接出す方法がOpenFiscaにあるかもしれないが、一旦以下の方法で出す
+        return len(対象世帯.members("年齢", 対象期間))
+
+
 class 行方不明年月日(Variable):
     value_type = bool
     entity = 人物
