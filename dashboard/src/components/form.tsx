@@ -1,141 +1,55 @@
+import { useState } from "react";
 import { useCalculate } from "../hooks/calculate";
 import { FormYou } from "./forms/you";
-import { FormSpouse } from "./forms/spouse";
-import { FormChildren } from "./forms/children";
-import { useContext, useEffect, useState } from "react";
-import { scroller } from "react-scroll";
-import { AllowanceContext } from "../contexts/AllowanceContext";
+import { OpenFiscaResult } from "./result";
 
 export const OpenFiscaForm = () => {
   const [result, calculate] = useCalculate();
-  const allowance = useContext(AllowanceContext);
+  const [showForm, setShowForm] = useState(true);
 
-  const [totalAllowance, setTotalAllowance] = useState<string>("0");
-  const [displayedResult, setDisplayedResult] = useState<any>();
-
-  interface Obj {
-    [prop: string]: any; // これを記述することで、どんなプロパティでも持てるようになる
+  // はじめはフォーム画面のみ表示
+  if (showForm) {
+    return (
+      <div>
+        <h1 className="mt-3">以下の項目を入力してください</h1>
+        <hr />
+        <h4 className="mb-4">
+          <br></br>
+          「計算する」ボタンを押すと受けられる支援、給付額が表示されます。
+        </h4>
+        <div>
+          <form>
+            <FormYou />
+          </form>
+          <button
+            className="btn btn-primary mb-3"
+            type="button"
+            onClick={() => {
+              calculate();
+              setShowForm(false);
+            }}
+          >
+            計算する
+          </button>
+        </div>
+      </div>
+    );
   }
 
-  useEffect(() => {
-    const minMaxResult: Obj = {};
-
-    if (result && allowance) {
-      for (const [key, value] of Object.entries(
-        Object.entries(result.世帯.世帯1)
-      )) {
-        if (typeof value[1] === "object" && allowance.get(value[0])) {
-          const dateValue = value[1] as { foo: unknown };
-
-          // 手当の名称を取得
-          let allowanceName = "";
-          if (value[0].endsWith("_最大") || value[0].endsWith("_最小")) {
-            allowanceName = value[0].substring(0, value[0].length - 3);
-          } else {
-            allowanceName = value[0];
-          }
-
-          // 手当の情報を格納
-          if (!minMaxResult.hasOwnProperty(allowanceName)) {
-            minMaxResult[allowanceName] = {
-              name: allowanceName,
-              allowanceDate: Object.keys(dateValue),
-              description: allowance.get("linkPrefix"),
-              reference: allowance.get(value[0]).references[0],
-            };
-          }
-
-          if (value[0].endsWith("_最大")) {
-            minMaxResult[allowanceName].max = Object.values(dateValue)[0];
-          } else if (value[0].endsWith("_最大")) {
-            minMaxResult[allowanceName].min = Object.values(dateValue)[0];
-          } else {
-            minMaxResult[allowanceName].max = Object.values(dateValue)[0];
-            minMaxResult[allowanceName].min = Object.values(dateValue)[0];
-          }
-        }
-      }
-
-      let totalAllowanceMax = 0;
-      let totalAllowanceMin = 0;
-      for (const [key, value] of Object.entries(minMaxResult)) {
-        totalAllowanceMax += value.max;
-        totalAllowanceMin += value.min;
-
-        if (value.max === value.min) {
-          minMaxResult[key].displayedMoney = Number(value.max).toLocaleString();
-        } else {
-          // 最小額と最大額が異なる場合は「（最小額）〜（最大額）」の文字列を格納
-          minMaxResult[key].displayedMoney = `${Number(
-            value.min
-          ).toLocaleString()}~${Number(value.max).toLocaleString()}`;
-        }
-      }
-
-      // 合計額を格納
-      if (totalAllowanceMax === totalAllowanceMin) {
-        setTotalAllowance(totalAllowanceMax.toLocaleString());
-      } else {
-        setTotalAllowance(
-          `${totalAllowanceMin.toLocaleString()}~${totalAllowanceMax.toLocaleString()}`
-        );
-      }
-
-      setDisplayedResult(minMaxResult);
-    }
-  }, [result]);
-
+  // 計算が終わると結果のみ表示
   return (
     <div>
-      <form>
-        <FormYou />
-      </form>
+      <OpenFiscaResult result={result} />
       <button
         className="btn btn-primary mb-3"
         type="button"
         onClick={() => {
           calculate();
-          scroller.scrollTo("calculate-result", {});
+          setShowForm(true);
         }}
       >
-        計算
+        戻る
       </button>
-      <h2 id="calculate-result">受けられる手当（月額）</h2>
-      {/* {result && <pre>{JSON.stringify(result.世帯.世帯1, null, 2)}</pre>} */}
-      {/* {result && <pre>{JSON.stringify(allowancesContextValue, null, 2)}</pre>} */}
-      <ul className="list-group mb-3">
-        <li
-          key={-1}
-          className="list-group-item list-group-item-secondary d-flex justify-content-between lh-sm"
-        >
-          <div>
-            <h5 className="my-0">合計</h5>
-          </div>
-          <span className="text-muted">
-            <h5 className="my-0">{totalAllowance} 円</h5>
-          </span>
-        </li>
-        {displayedResult &&
-          Object.values(displayedResult).map(
-            (val: any, index) =>
-              val.displayedMoney !== "0" && (
-                <li
-                  key={index}
-                  className="list-group-item d-flex justify-content-between lh-sm"
-                >
-                  <div>
-                    <h6 className="my-0">{val.name}</h6>
-                    <small className="text-muted">
-                      <a href={val.reference} target="_blank">
-                        {val.description}
-                      </a>
-                    </small>
-                  </div>
-                  <span className="text-muted">{val.displayedMoney} 円</span>
-                </li>
-              )
-          )}
-      </ul>
     </div>
   );
 };
