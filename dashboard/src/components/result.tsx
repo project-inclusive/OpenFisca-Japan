@@ -14,8 +14,6 @@ export const OpenFiscaResult = ({result}: {result: any}) => {
   useEffect(() => {
     const minMaxResult: Obj = {};
 
-    console.log(result);
-
     if (result && allowance) {
       for (const [key, value] of Object.entries(
         Object.entries(result.世帯.世帯1)
