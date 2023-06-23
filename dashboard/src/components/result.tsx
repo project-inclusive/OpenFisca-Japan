@@ -1,8 +1,9 @@
-import { useContext, useEffect, useState } from "react";
-import { AllowanceContext } from "../contexts/AllowanceContext";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
-export const OpenFiscaResult = ({result}: {result: any}) => {
-  const allowance = useContext(AllowanceContext);
+export const OpenFiscaResult = () => {
+  const location = useLocation();
+  const { result, allowance } = location.state as {result: any, allowance: any};
 
   const [totalAllowance, setTotalAllowance] = useState<string>("0");
   const [displayedResult, setDisplayedResult] = useState<any>();

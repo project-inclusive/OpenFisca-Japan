@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider} from "react-router-dom";
 import CaluculationForm from "./pages/CaluculationForm";
 import Description from "./pages/Description";
+import { OpenFiscaResult } from "./components/result";
 
 function App() {
   return (
@@ -12,6 +13,10 @@ function App() {
       {
         path: "/calculate",
         element: <CaluculationForm />,
+      },
+      {
+        path: "/result",
+        element: <OpenFiscaResult />,
       },
     ])} />
   );
