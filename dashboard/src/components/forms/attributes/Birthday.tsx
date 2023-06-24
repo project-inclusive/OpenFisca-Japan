@@ -1,5 +1,6 @@
 import { useState, useCallback, useContext, useMemo, useEffect } from "react";
 import { HouseholdContext } from "../../../contexts/HouseholdContext";
+import { ErrorMessage } from "./validation/ErrorMessage";
 
 export const Birthday = ({ personName }: { personName: string }) => {
   const { household, setHousehold } = useContext(HouseholdContext);
@@ -76,6 +77,7 @@ export const Birthday = ({ personName }: { personName: string }) => {
 
   return (
     <>
+      <ErrorMessage condition={isNaN(selectedYear) || isNaN(selectedMonth) || isNaN(selectedDate)} />
       <label>生年月日</label>
       <div className="row g-3 align-items-center mb-3">
         <div className="col-auto">
