@@ -20,7 +20,7 @@ function CaluculationForm() {
 
   const apiURL =
     import.meta.env.MODE === "production"
-      ? "https://openfisca-japan-hymisxpzca-uc.a.run.Form" // Cloud Run
+      ? "https://openfisca-japan-hymisxpzca-uc.a.run.app" // Cloud Run
       : "http://localhost:50000";
 
   const [yourself, setYourself] = useState({

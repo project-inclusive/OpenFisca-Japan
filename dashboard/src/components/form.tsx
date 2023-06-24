@@ -1,6 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { useCalculate } from "../hooks/calculate";
 import { FormYou } from "./forms/you";
+import { FormSpouse } from "./forms/spouse";
+import { FormChildren } from "./forms/children";
 import { OpenFiscaResult } from "./result";
 import { useValidate } from "../hooks/validate";
 import { ShowAlertMessageContext } from "../contexts/ShowAlertMessageContext";
@@ -18,7 +20,7 @@ export const OpenFiscaForm = () => {
   useEffect(() => {
     if (showResult && result) {
       // HACK: レスポンスを受け取ってからページ遷移（クリック時点で遷移するとresultの更新が反映されない）
-      navigate("/result", {state: {result: result, allowance: allowance}})
+      navigate("/result", { state: { result: result, allowance: allowance } });
     }
   }, [result]);
 
@@ -34,6 +36,8 @@ export const OpenFiscaForm = () => {
         <div>
           <form>
             <FormYou />
+            <FormSpouse />
+            <FormChildren />
           </form>
           <button
             className="btn btn-primary mb-3"
