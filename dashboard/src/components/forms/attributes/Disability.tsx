@@ -8,7 +8,6 @@ import { HouseholdContext } from "../../../contexts/HouseholdContext";
 import { CurrentDateContext } from "../../../contexts/CurrentDateContext";
 
 export const Disability = ({ personName }: { personName: string }) => {
-  const currentDate = useContext(CurrentDateContext);
   const [isChecked, setIsChecked] = useState(false);
   const { household, setHousehold } = useContext(HouseholdContext);
 

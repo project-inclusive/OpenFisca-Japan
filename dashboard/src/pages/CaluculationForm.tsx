@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+
+import configData from "../app_config.json";
 import { OpenFiscaForm } from "../components/form";
 import { HouseholdContext } from "../contexts/HouseholdContext";
-import { YourselfContext } from "../contexts/YourselfContext";
 import { CurrentDateContext } from "../contexts/CurrentDateContext";
 import { APIServerURLContext } from "../contexts/APIServerURLContext";
-import { AllowanceContext } from "../contexts/AllowanceContext";
 
 function CaluculationForm() {
   // 日付は「YYYY-MM-DD」の桁数フォーマットでないとOpenFisca APIが正常動作しない
@@ -20,21 +20,8 @@ function CaluculationForm() {
 
   const apiURL =
     import.meta.env.MODE === "production"
-      ? "https://openfisca-japan-hymisxpzca-uc.a.run.app" // Cloud Run
+      ? configData.OpenFisca_API_URL // Cloud Run
       : "http://localhost:50000";
-
-  const [yourself, setYourself] = useState({
-    誕生年月日: undefined,
-    身体障害者手帳がある: undefined,
-    精神障害者保健福祉手帳がある: undefined,
-    療養手帳がある: undefined,
-    配偶者がいる: undefined,
-    子どもの数: 0,
-  });
-  const yourselfContextValue = {
-    yourself,
-    setYourself,
-  };
 
   const [household, setHousehold] = useState({
     世帯員: {
@@ -95,42 +82,15 @@ function CaluculationForm() {
     household,
     setHousehold,
   };
-  const [allowanceContextValue, setAllowance] = useState<any>();
-
-  useEffect(() => {
-    (async () => {
-      // variablesから手当の情報のみ抽出
-      const linkPrefix: string = "国の詳細HP";
-      const variablesRes = await fetch(`${apiURL}/variables`);
-      const variablesJson = await variablesRes.json();
-      const allowance = new Map<string, any>();
-      allowance.set("linkPrefix", linkPrefix);
-      for (const [key, value] of Object.entries(variablesJson)) {
-        const variableRes = await fetch(`${apiURL}/variable/${key}`);
-        const variableJson = await variableRes.json();
-        if (
-          Object.hasOwn(variableJson, "formulas") &&
-          Object.hasOwn(variableJson, "references")
-        ) {
-          allowance.set(variableJson.id, variableJson);
-        }
-      }
-      setAllowance(allowance);
-    })();
-  }, []);
 
   return (
     <APIServerURLContext.Provider value={apiURL}>
       <CurrentDateContext.Provider value={currentDate}>
-        <YourselfContext.Provider value={yourselfContextValue}>
-          <HouseholdContext.Provider value={householdContextValue}>
-            <AllowanceContext.Provider value={allowanceContextValue}>
-              <div className="container">
-                <OpenFiscaForm />
-              </div>
-            </AllowanceContext.Provider>
-          </HouseholdContext.Provider>
-        </YourselfContext.Provider>
+        <HouseholdContext.Provider value={householdContextValue}>
+          <div className="container">
+            <OpenFiscaForm />
+          </div>
+        </HouseholdContext.Provider>
       </CurrentDateContext.Provider>
     </APIServerURLContext.Provider>
   );
