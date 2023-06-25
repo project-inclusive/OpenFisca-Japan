@@ -3,11 +3,10 @@ import { useCalculate } from "../hooks/calculate";
 import { FormYou } from "./forms/you";
 import { FormSpouse } from "./forms/spouse";
 import { FormChildren } from "./forms/children";
-import { OpenFiscaResult } from "./result";
 import { useValidate } from "../hooks/validate";
 import { ShowAlertMessageContext } from "../contexts/ShowAlertMessageContext";
 import { useNavigate } from "react-router-dom";
-import { AllowanceContext } from "../contexts/AllowanceContext";
+import { CurrentDateContext } from "../contexts/CurrentDateContext";
 
 export const OpenFiscaForm = () => {
   const [result, calculate] = useCalculate();
@@ -15,12 +14,17 @@ export const OpenFiscaForm = () => {
   const [showResult, setShowResult] = useState(false);
   const validated = useValidate();
   const navigate = useNavigate();
-  const allowance = useContext(AllowanceContext);
+  const currentDate = useContext(CurrentDateContext);
 
   useEffect(() => {
     if (showResult && result) {
       // HACK: レスポンスを受け取ってからページ遷移（クリック時点で遷移するとresultの更新が反映されない）
-      navigate("/result", { state: { result: result, allowance: allowance } });
+      navigate("/result", {
+        state: {
+          result: result,
+          currentDate: currentDate,
+        },
+      });
     }
   }, [result]);
 

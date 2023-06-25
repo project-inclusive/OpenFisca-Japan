@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
+import configData from "../app_config.json";
+
 export const OpenFiscaResult = () => {
   const location = useLocation();
-  const { result, allowance } = location.state as {result: any, allowance: any};
+  const { result, currentDate } = location.state as {
+    result: any;
+    currentDate: string;
+  };
 
   const [totalAllowance, setTotalAllowance] = useState<string>("0");
   const [displayedResult, setDisplayedResult] = useState<any>();
@@ -15,38 +20,31 @@ export const OpenFiscaResult = () => {
   useEffect(() => {
     const minMaxResult: Obj = {};
 
-    if (result && allowance) {
-      for (const [key, value] of Object.entries(
-        Object.entries(result.世帯.世帯1)
+    if (result) {
+      for (const [allowanceName, allowanceInfo] of Object.entries(
+        configData.result.給付制度.制度一覧
       )) {
-        if (typeof value[1] === "object" && allowance.get(value[0])) {
-          const dateValue = value[1] as { foo: unknown };
-
-          // 手当の名称を取得
-          let allowanceName = "";
-          if (value[0].endsWith("_最大") || value[0].endsWith("_最小")) {
-            allowanceName = value[0].substring(0, value[0].length - 3);
-          } else {
-            allowanceName = value[0];
-          }
-
-          // 手当の情報を格納
-          if (!minMaxResult.hasOwnProperty(allowanceName)) {
+        if (allowanceName in result.世帯.世帯1) {
+          if (result.世帯.世帯1[allowanceName][currentDate] > 0) {
             minMaxResult[allowanceName] = {
               name: allowanceName,
-              allowanceDate: Object.keys(dateValue),
-              description: allowance.get("linkPrefix"),
-              reference: allowance.get(value[0]).references[0],
+              max: result.世帯.世帯1[allowanceName][currentDate],
+              min: result.世帯.世帯1[allowanceName][currentDate],
+              unit: allowanceInfo.unit,
+              caption: allowanceInfo.caption,
+              reference: allowanceInfo.reference,
             };
           }
-
-          if (value[0].endsWith("_最大")) {
-            minMaxResult[allowanceName].max = Object.values(dateValue)[0];
-          } else if (value[0].endsWith("_最大")) {
-            minMaxResult[allowanceName].min = Object.values(dateValue)[0];
-          } else {
-            minMaxResult[allowanceName].max = Object.values(dateValue)[0];
-            minMaxResult[allowanceName].min = Object.values(dateValue)[0];
+        } else if (`${allowanceName}_最大` in result.世帯.世帯1) {
+          if (result.世帯.世帯1[`${allowanceName}_最大`][currentDate] > 0) {
+            minMaxResult[allowanceName] = {
+              name: allowanceName,
+              max: result.世帯.世帯1[`${allowanceName}_最大`][currentDate],
+              min: result.世帯.世帯1[`${allowanceName}_最小`][currentDate],
+              unit: allowanceInfo.unit,
+              caption: allowanceInfo.caption,
+              reference: allowanceInfo.reference,
+            };
           }
         }
       }
@@ -85,7 +83,8 @@ export const OpenFiscaResult = () => {
       <h1 className="mt-3">計算結果</h1>
       <hr />
       <div>
-        <h2 id="calculate-result">受けられる手当（月額）</h2>
+        <h2 id="calculate-result">給付されるお金</h2>
+        {configData.result.給付制度.caption[0]}
         <ul className="list-group mb-3">
           <li
             key={-1}
@@ -95,29 +94,30 @@ export const OpenFiscaResult = () => {
               <h5 className="my-0">合計</h5>
             </div>
             <span className="text-muted">
-              <h5 className="my-0">{totalAllowance} 円</h5>
+              <h5 className="my-0">{totalAllowance} 円/月</h5>
             </span>
           </li>
           {displayedResult &&
-            Object.values(displayedResult).map(
-              (val: any, index) =>
-                val.displayedMoney !== "0" && (
-                  <li
-                    key={index}
-                    className="list-group-item d-flex justify-content-between lh-sm"
-                  >
-                    <div>
-                      <h6 className="my-0">{val.name}</h6>
-                      <small className="text-muted">
-                        <a href={val.reference} target="_blank">
-                          {val.description}
-                        </a>
-                      </small>
-                    </div>
-                    <span className="text-muted">{val.displayedMoney} 円</span>
-                  </li>
-                )
-            )}
+            Object.values(displayedResult).map((val: any, index) => (
+              <li
+                key={index}
+                className="list-group-item d-flex justify-content-between lh-sm"
+              >
+                <div>
+                  <h6 className="my-0">{val.name}</h6>
+                  <small className="text-muted">
+                    {val.caption[0]}
+                    <br></br>
+                    <a href={val.reference} target="_blank">
+                      詳細リンク
+                    </a>
+                  </small>
+                </div>
+                <span className="text-muted">
+                  {val.displayedMoney} {val.unit}
+                </span>
+              </li>
+            ))}
         </ul>
       </div>
     </div>

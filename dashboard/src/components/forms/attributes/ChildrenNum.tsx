@@ -1,19 +1,32 @@
 import { useCallback, useContext, useState } from "react";
-import { YourselfContext } from "../../../contexts/YourselfContext";
 import { HouseholdContext } from "../../../contexts/HouseholdContext";
-import { CurrentDateContext } from "../../../contexts/CurrentDateContext";
 
 export const ChildrenNum = () => {
-  const currentDate = useContext(CurrentDateContext);
   const lastYearDate = `${new Date().getFullYear() - 1}-${(
     new Date().getMonth() + 1
   )
     .toString()
     .padStart(2, "0")}-01`;
-  const { yourself, setYourself } = useContext(YourselfContext);
   const { household, setHousehold } = useContext(HouseholdContext);
-
   const [shownChildrenNum, setShownChildrenNum] = useState<string | number>("");
+
+  const [isChecked, setIsChecked] = useState(false);
+  // チェックボックスの値が変更された時
+  const onCheckChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (!event.target.checked && household.世帯.世帯1.児童一覧) {
+        const newHousehold = { ...household };
+        household.世帯.世帯1.児童一覧.map((childName: string) => {
+          delete newHousehold.世帯員[childName];
+        });
+        newHousehold.世帯.世帯1.児童一覧 = Array(0);
+        setShownChildrenNum("");
+        setHousehold({ ...newHousehold });
+      }
+      setIsChecked(event.target.checked);
+    },
+    []
+  );
 
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     let childrenNum = parseInt(event.currentTarget.value);
@@ -24,10 +37,6 @@ export const ChildrenNum = () => {
     } else {
       setShownChildrenNum(childrenNum);
     }
-    const newYourself = Object.assign(yourself, {
-      子どもの数: childrenNum,
-    });
-    setYourself({ ...newYourself });
 
     // 変更前の子どもの情報を削除
     const newHousehold = { ...household };
@@ -61,35 +70,38 @@ export const ChildrenNum = () => {
   }, []);
 
   return (
-    /*
-    <div className="input-group input-group-lg mb-3">
-      <span className="input-group-text">子どもの数</span>
-      <input
-        name="子どもの数"
-        className="form-control"
-        type="number"
-        value={shownChildrenNum}
-        onChange={onChange}
-      />
-      <span className="input-group-text">人</span>
-    </div>
-    */
     <>
-      <label>あなたの子どもの数</label>
-      <div className="row g-3 align-items-center mb-3">
-        <div className="col-auto">
-          <input
-            name="子どもの数"
-            className="form-control"
-            type="number"
-            value={shownChildrenNum}
-            onChange={onChange}
-          />
-        </div>
-        <div className="col-auto">
-          <label className="col-form-label">人</label>
-        </div>
+      <div className="form-check">
+        <input
+          className="form-check-input"
+          type="checkbox"
+          checked={isChecked}
+          id="flexCheckDefault"
+          onChange={onCheckChange}
+        />
+        <label className="form-check-label" htmlFor="flexCheckDefault">
+          子どもがいる
+        </label>
       </div>
+      {isChecked && (
+        <div className="ms-3">
+          <label>子どもの数</label>
+          <div className="row g-3 align-items-center mb-3">
+            <div className="col-auto">
+              <input
+                name="子どもの数"
+                className="form-control"
+                type="number"
+                value={shownChildrenNum}
+                onChange={onChange}
+              />
+            </div>
+            <div className="col-auto">
+              <label className="col-form-label">人</label>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

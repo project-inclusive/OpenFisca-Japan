@@ -1,0 +1,56 @@
+{
+  "OpenFisca_API_URL": "https://openfisca-japan-hymisxpzca-uc.a.run.app",
+  "result": {
+    "給付制度": {
+      "caption": [
+        "詳細な給付条件や申請方法については市町村の窓口にお問い合わせください。"
+      ],
+      "制度一覧": {
+        "児童手当": {
+          "unit": "円/月",
+          "caption": ["中学校卒業までの児童を養育している方に給付される手当"],
+          "reference": "https://www8.cao.go.jp/shoushi/jidouteate/annai.html"
+        },
+        "児童扶養手当": {
+          "unit": "円/月",
+          "caption": ["ひとり親家庭に給付される手当"],
+          "reference": "https://www.mhlw.go.jp/bunya/kodomo/osirase/100526-1.html"
+        },
+        "特別児童扶養手当": {
+          "unit": "円/月",
+          "caption": [
+            "精神又は身体に障害をもつ20歳未満の児童を養育している方に給付される手当"
+          ],
+          "reference": "https://www.mhlw.go.jp/bunya/shougaihoken/jidou/huyou.html"
+        },
+        "障害児福祉手当": {
+          "unit": "円/月",
+          "caption": [
+            "精神又は身体に重度の障害をもつ20歳未満の方に給付される手当"
+          ],
+          "reference": "https://www.mhlw.go.jp/bunya/shougaihoken/jidou/hukushi.html"
+        }
+      }
+    },
+    "貸付制度": {
+      "caption": [
+        "原則無利子・無担保でお金を借りられ、サポーターの支援も受けられる制度",
+        "詳細は市町村社会福祉協議会または都道府県社会福祉協議会にお問い合わせください"
+      ],
+      "reference": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/index.html",
+      "制度一覧": {
+        "生活支援費": {
+          "unit": "円/月",
+          "caption": [
+            "生活再建までの間に必要な生活費用",
+            "貸付期間:原則3ヶ月（最長12ヶ月）",
+            "返済期限：10年以内",
+            "利子：保証人あり 無利子",
+            "　　　保証人なし 年 1.5%"
+          ],
+          "reference": "https://www8.cao.go.jp/shoushi/jidouteate/annai.html"
+        }
+      }
+    }
+  }
+}
