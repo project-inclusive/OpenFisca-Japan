@@ -1,4 +1,7 @@
 import { useState, useCallback, useContext, useMemo, useEffect } from "react";
+import { Box, Center, Select, HStack } from "@chakra-ui/react";
+
+import configData from "../../../app_config.json";
 import { HouseholdContext } from "../../../contexts/HouseholdContext";
 import { ErrorMessage } from "./validation/ErrorMessage";
 
@@ -77,52 +80,75 @@ export const Birthday = ({ personName }: { personName: string }) => {
 
   return (
     <>
-      <ErrorMessage condition={isNaN(selectedYear) || isNaN(selectedMonth) || isNaN(selectedDate)} />
-      <label>生年月日</label>
-      <div className="row g-3 align-items-center mb-3">
-        <div className="col-auto">
-          <select className="form-select" onChange={(e) => handleYearChange(e)}>
-            <option value={""} key={0}></option>
-            {yearArray.map((year) => (
-              <option value={year} key={year}>
-                {year}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="col-auto">
-          <label className="col-form-label">年</label>
-        </div>
-        <div className="col-auto">
-          <select
-            className="form-select"
-            onChange={(e) => handleMonthChange(e)}
-          >
-            <option value={""} key={0}></option>
-            {monthArray.map((month) => (
-              <option value={month} key={month}>
-                {month}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="col-auto">
-          <label className="col-form-label">月</label>
-        </div>
-        <div className="col-auto">
-          <select className="form-select" onChange={(e) => handleDateChange(e)}>
-            <option value={""} key={0}></option>
-            {dateArray.map((date) => (
-              <option value={date} key={date}>
-                {date}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="col-auto">
-          <label className="col-form-label">日</label>
-        </div>
-      </div>
+      <ErrorMessage
+        condition={
+          isNaN(selectedYear) || isNaN(selectedMonth) || isNaN(selectedDate)
+        }
+      />
+      <Box fontSize={configData.style.itemFontSize}>生年月日</Box>
+      <HStack>
+        <Select
+          onChange={(e) => handleYearChange(e)}
+          fontSize={configData.style.itemFontSize}
+          width={configData.style.selectYearSize}
+          height={configData.style.selectHeight}
+        >
+          <option value={""} key={0}></option>
+          {yearArray.map((year) => (
+            <option value={year} key={year}>
+              {year}
+            </option>
+          ))}
+        </Select>
+        <Box
+          fontSize={configData.style.itemFontSize}
+          mt={configData.style.unitMt}
+        >
+          年
+        </Box>
+
+        <Select
+          className="form-select"
+          onChange={(e) => handleMonthChange(e)}
+          fontSize={configData.style.itemFontSize}
+          width={configData.style.selectMonthDateSize}
+          height={configData.style.selectHeight}
+        >
+          <option value={""} key={0}></option>
+          {monthArray.map((month) => (
+            <option value={month} key={month}>
+              {month}
+            </option>
+          ))}
+        </Select>
+        <Box
+          fontSize={configData.style.itemFontSize}
+          mt={configData.style.unitMt}
+        >
+          月
+        </Box>
+
+        <Select
+          className="form-select"
+          onChange={(e) => handleDateChange(e)}
+          fontSize={configData.style.itemFontSize}
+          width={configData.style.selectMonthDateSize}
+          height={configData.style.selectHeight}
+        >
+          <option value={""} key={0}></option>
+          {dateArray.map((date) => (
+            <option value={date} key={date}>
+              {date}
+            </option>
+          ))}
+        </Select>
+        <Box
+          fontSize={configData.style.itemFontSize}
+          mt={configData.style.unitMt}
+        >
+          日
+        </Box>
+      </HStack>
     </>
   );
 };

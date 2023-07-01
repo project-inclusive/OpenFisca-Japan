@@ -1,5 +1,76 @@
 {
   "OpenFisca_API_URL": "https://openfisca-japan-hymisxpzca-uc.a.run.app",
+  "style": {
+    "titleFontSize": {
+      "base": "1.5em",
+      "sm": "2.2em",
+      "md": "2.5em",
+      "lg": "2.8em",
+      "xl": "2.8em"
+    },
+    "subTitleFontSize": {
+      "base": "1.3em",
+      "sm": "1.7em",
+      "md": "2em",
+      "lg": "2.5em",
+      "xl": "2.5em"
+    },
+    "descriptionFontSize": {
+      "base": "1em",
+      "sm": "1.3em",
+      "md": "1.3em",
+      "lg": "1.5em",
+      "xl": "1.5em"
+    },
+    "itemFontSize": {
+      "base": "0.5em",
+      "sm": "1em",
+      "md": "1.3em",
+      "lg": "1.5em",
+      "xl": "1.5em"
+    },
+    "selectYearSize": {
+      "base": "5em",
+      "sm": "7em",
+      "md": "7em",
+      "lg": "7em",
+      "xl": "7em"
+    },
+    "selectMonthDateSize": {
+      "base": "4em",
+      "sm": "6em",
+      "md": "5em",
+      "lg": "5em",
+      "xl": "5em"
+    },
+    "selectHeight": {
+      "base": "2em",
+      "sm": "2.5em",
+      "md": "2em",
+      "lg": "2em",
+      "xl": "2em"
+    },
+    "unitMt": {
+      "base": "0.75em",
+      "sm": "0.2em",
+      "md": "0.2em",
+      "lg": "0.2em",
+      "xl": "0.2em"
+    }
+  },
+  "description": {
+    "title": "マイ制度シミュレーター",
+    "feature": ["わかりやすい", "窓口へ", "安心"],
+    "description": [
+      "世帯の情報をもとに、あなたが受けられる支援制度の給付額や貸付上限額をピンポイントで簡易的に算出します。",
+      "実際に受けられる制度及び正確な給付・貸付額、申請方法はお住まいの自治体の窓口にお問い合わせください。",
+      "入力された情報はどこにも保存されません。また、入力された情報が本アプリの目的以外で使用されたり、第三者に提供されることもありません。"
+    ]
+  },
+  "calculationForm": {
+    "topDescription": "情報を入力してください",
+    "youDescription": "あなたについて"
+  },
   "result": {
     "給付制度": {
       "caption": [
