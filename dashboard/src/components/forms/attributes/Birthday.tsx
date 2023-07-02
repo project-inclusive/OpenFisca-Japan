@@ -5,7 +5,13 @@ import configData from "../../../app_config.json";
 import { HouseholdContext } from "../../../contexts/HouseholdContext";
 import { ErrorMessage } from "./validation/ErrorMessage";
 
-export const Birthday = ({ personName }: { personName: string }) => {
+export const Birthday = ({
+  personName,
+  mustInput,
+}: {
+  personName: string;
+  mustInput: boolean;
+}) => {
   const { household, setHousehold } = useContext(HouseholdContext);
 
   const thisYear = new Date().getFullYear();
@@ -80,18 +86,26 @@ export const Birthday = ({ personName }: { personName: string }) => {
 
   return (
     <>
-      <ErrorMessage
-        condition={
-          isNaN(selectedYear) || isNaN(selectedMonth) || isNaN(selectedDate)
-        }
-      />
-      <Box fontSize={configData.style.itemFontSize}>生年月日</Box>
+      {mustInput && (
+        <ErrorMessage
+          condition={
+            isNaN(selectedYear) || isNaN(selectedMonth) || isNaN(selectedDate)
+          }
+        />
+      )}
       <HStack>
+        <Box fontSize={configData.style.itemFontSize}>生年月日</Box>
+        {mustInput && (
+          <Box color="red" fontSize="0.7em">
+            必須
+          </Box>
+        )}
+      </HStack>
+      <HStack mb={4}>
         <Select
           onChange={(e) => handleYearChange(e)}
           fontSize={configData.style.itemFontSize}
           width={configData.style.selectYearSize}
-          height={configData.style.selectHeight}
         >
           <option value={""} key={0}></option>
           {yearArray.map((year) => (
@@ -112,7 +126,6 @@ export const Birthday = ({ personName }: { personName: string }) => {
           onChange={(e) => handleMonthChange(e)}
           fontSize={configData.style.itemFontSize}
           width={configData.style.selectMonthDateSize}
-          height={configData.style.selectHeight}
         >
           <option value={""} key={0}></option>
           {monthArray.map((month) => (
@@ -133,7 +146,6 @@ export const Birthday = ({ personName }: { personName: string }) => {
           onChange={(e) => handleDateChange(e)}
           fontSize={configData.style.itemFontSize}
           width={configData.style.selectMonthDateSize}
-          height={configData.style.selectHeight}
         >
           <option value={""} key={0}></option>
           {dateArray.map((date) => (

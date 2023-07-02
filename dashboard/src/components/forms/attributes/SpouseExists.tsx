@@ -1,4 +1,6 @@
 import { useCallback, useContext, useState } from "react";
+import { Checkbox, Box, HStack } from "@chakra-ui/react";
+
 import { HouseholdContext } from "../../../contexts/HouseholdContext";
 import { CurrentDateContext } from "../../../contexts/CurrentDateContext";
 
@@ -42,17 +44,16 @@ export const SpouseExists = () => {
   }, []);
 
   return (
-    <div className="form-check mb-4">
-      <input
-        className="form-check-input"
-        type="checkbox"
+    <>
+      <Checkbox
+        colorScheme="cyan"
         checked={isChecked}
-        id="flexCheckDefault"
         onChange={onChange}
-      />
-      <label className="form-check-label" htmlFor="flexCheckDefault">
+        mb={4}
+      >
         配偶者がいる（事実婚の場合も含む）
-      </label>
-    </div>
+      </Checkbox>
+      <br></br>
+    </>
   );
 };

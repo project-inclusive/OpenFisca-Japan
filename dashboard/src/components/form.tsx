@@ -37,8 +37,8 @@ export const OpenFiscaForm = () => {
         <Center
           fontSize={configData.style.subTitleFontSize}
           fontWeight="medium"
-          mt="0.5em"
-          mb="0.5em"
+          mt={2}
+          mb={2}
         >
           {configData.calculationForm.topDescription}
         </Center>
@@ -48,22 +48,30 @@ export const OpenFiscaForm = () => {
           <FormSpouse />
           <FormChildren />
         </form>
-        <button
-          className="btn btn-primary mb-3"
-          type="button"
-          onClick={() => {
-            // 必須項目が入力されていない場合、結果は表示されずトップへ戻る
-            if (!validated) {
-              setShowAlertMessage(true);
-              scrollTo(0, 0);
-              return;
-            }
-            calculate();
-            setShowResult(true);
-          }}
-        >
-          計算する
-        </button>
+
+        <Center pr={4} pl={4} pb={4}>
+          <Button
+            fontSize={configData.style.subTitleFontSize}
+            borderRadius="xl"
+            height="2em"
+            width="100%"
+            bg="cyan.600"
+            color="white"
+            _hover={{ bg: "cyan.700" }}
+            onClick={() => {
+              // 必須項目が入力されていない場合、結果は表示されずトップへ戻る
+              if (!validated) {
+                setShowAlertMessage(true);
+                scrollTo(0, 0);
+                return;
+              }
+              calculate();
+              setShowResult(true);
+            }}
+          >
+            計算する
+          </Button>
+        </Center>
       </div>
     </ShowAlertMessageContext.Provider>
   );

@@ -12,18 +12,18 @@ export const FormYou = () => {
   const yourName = "あなた";
   return (
     <>
-      <Box bg="white" borderRadius="xl" p={4} m={4}>
+      <Box bg="white" borderRadius="xl" p={4} mb={4} ml={4} mr={4}>
         <Center
           fontSize={configData.style.subTitleFontSize}
           fontWeight="medium"
-          mb="0.5em"
+          mb={2}
         >
           {configData.calculationForm.youDescription}
         </Center>
-        <Birthday personName={yourName} />
+        <Birthday personName={yourName} mustInput={true} />
+        <Income personName={yourName} mustInput={true} />
         <Disability personName={yourName} />
         <Student personName={yourName} />
-        <Income personName={yourName} />
         <SpouseExists />
         <ChildrenNum />
       </Box>

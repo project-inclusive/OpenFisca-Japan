@@ -1,7 +1,19 @@
-import { Link } from "react-router-dom";
-import { Box, AbsoluteCenter, Center, Button } from "@chakra-ui/react";
+import { Link as RouterLink } from "react-router-dom";
+import {
+  Box,
+  AbsoluteCenter,
+  Center,
+  Button,
+  Heading,
+  VStack,
+  Image,
+} from "@chakra-ui/react";
+import { Icon, IconProps } from "@chakra-ui/react";
 import { CheckCircleIcon } from "@chakra-ui/icons";
+import { FaGithub } from "react-icons/fa";
+
 import configData from "../app_config.json";
+import bokyuIcon from "../assets/bokyu_lab_icon.png";
 
 function Description() {
   return (
@@ -16,7 +28,11 @@ function Description() {
           {configData.description.title}
         </Center>
 
-        <Center fontSize={configData.style.subTitleFontSize} mb="0.5em">
+        <Center
+          fontSize={configData.style.subTitleFontSize}
+          mb="0.5em"
+          color="cyan.800"
+        >
           <CheckCircleIcon color="cyan.600" mr="0.3em" />
           {configData.description.feature[0]}
         </Center>
@@ -24,7 +40,11 @@ function Description() {
           {configData.description.description[0]}
         </Box>
 
-        <Center fontSize={configData.style.subTitleFontSize} mb="0.5em">
+        <Center
+          fontSize={configData.style.subTitleFontSize}
+          mb="0.5em"
+          color="cyan.800"
+        >
           <CheckCircleIcon color="cyan.600" mr="0.3em" />
           {configData.description.feature[1]}
         </Center>
@@ -32,16 +52,38 @@ function Description() {
           {configData.description.description[1]}
         </Box>
 
-        <Center fontSize={configData.style.subTitleFontSize} mb="0.5em">
+        <Center
+          fontSize={configData.style.subTitleFontSize}
+          mb="0.5em"
+          color="cyan.800"
+        >
           <CheckCircleIcon color="cyan.600" mr="0.3em" />
           {configData.description.feature[2]}
         </Center>
         <Box fontSize={configData.style.descriptionFontSize} mb="1.5em">
           {configData.description.description[2]}
         </Box>
+
+        <Center>
+          <a href={configData.防窮研究所URL}>
+            <VStack mr={4}>
+              <Image src={bokyuIcon} alt="防窮研究所" boxSize="2em" />
+              <Box color="gray.600">About</Box>
+            </VStack>
+          </a>
+          <a href={configData.Github_URL}>
+            <VStack>
+              <Icon as={FaGithub} boxSize="2em" color="cyan.600"></Icon>
+              <Box color="gray.600">Github</Box>
+            </VStack>
+          </a>
+        </Center>
       </Box>
+
       <Center pr={4} pl={4} pb={4}>
         <Button
+          as={RouterLink}
+          to="/calculate"
           fontSize={configData.style.subTitleFontSize}
           borderRadius="xl"
           height="2em"
@@ -50,7 +92,7 @@ function Description() {
           color="white"
           _hover={{ bg: "cyan.700" }}
         >
-          <Link to="/calculate">はじめる</Link>
+          はじめる
         </Button>
       </Center>
     </>

@@ -1,4 +1,13 @@
 import { useContext, useState, useCallback } from "react";
+import {
+  Box,
+  Center,
+  Checkbox,
+  UnorderedList,
+  ListItem,
+} from "@chakra-ui/react";
+
+import configData from "../../app_config.json";
 import { HouseholdContext } from "../../contexts/HouseholdContext";
 import { CurrentDateContext } from "../../contexts/CurrentDateContext";
 import { Birthday } from "./attributes/Birthday";
@@ -36,32 +45,38 @@ export const FormSpouse = () => {
     <>
       {household.世帯.世帯1.保護者一覧.includes(spouseName) && (
         <>
-          <h3>配偶者について</h3>
-          <Birthday personName={spouseName} />
-          <Disability personName={spouseName} />
-          <Student personName={spouseName} />
-          <Income personName={spouseName} />
+          <Box bg="white" borderRadius="xl" p={4} m={4}>
+            <Center
+              fontSize={configData.style.subTitleFontSize}
+              fontWeight="medium"
+              mb="0.5em"
+            >
+              {configData.calculationForm.spouseDescription}
+            </Center>
 
-          <div className="form-check">
-            <input
-              className="form-check-input"
-              type="checkbox"
+            <Birthday personName={spouseName} mustInput={true} />
+            <Income personName={spouseName} mustInput={true} />
+            <Disability personName={spouseName} />
+            <Student personName={spouseName} />
+
+            <Checkbox
+              colorScheme="cyan"
               checked={isChecked}
-              id="flexCheckDefault"
               onChange={onChange}
-            />
-            <label className="form-check-label" htmlFor="flexCheckDefault">
+            >
               以下のいずれかに当てはまる
-            </label>
-          </div>
-          <ul>
-            <li>重度の障害がある</li>
-            <li>生死が不明</li>
-            <li>子を1年以上遺棄している</li>
-            <li>裁判所からのDV保護命令を受けた</li>
-            <li>法令により1年以上拘禁されている</li>
-          </ul>
-          <br></br>
+            </Checkbox>
+            <UnorderedList ml={8} mt={1}>
+              <ul>
+                <ListItem>重度の障害がある</ListItem>
+                <ListItem>生死が不明</ListItem>
+                <ListItem>子を1年以上遺棄している</ListItem>
+                <ListItem>裁判所からのDV保護命令を受けた</ListItem>
+                <ListItem>法令により1年以上拘禁されている</ListItem>
+              </ul>
+              <br></br>
+            </UnorderedList>
+          </Box>
         </>
       )}
     </>

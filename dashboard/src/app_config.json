@@ -1,5 +1,7 @@
 {
   "OpenFisca_API_URL": "https://openfisca-japan-hymisxpzca-uc.a.run.app",
+  "Github_URL": "https://github.com/project-inclusive/OpenFisca-Japan",
+  "防窮研究所URL": "https://www.facebook.com/Institute.for.Poverty.Prevention",
   "style": {
     "titleFontSize": {
       "base": "1.5em",
@@ -10,10 +12,10 @@
     },
     "subTitleFontSize": {
       "base": "1.3em",
-      "sm": "1.7em",
-      "md": "2em",
-      "lg": "2.5em",
-      "xl": "2.5em"
+      "sm": "1.5em",
+      "md": "1.5em",
+      "lg": "1.7em",
+      "xl": "1.7em"
     },
     "descriptionFontSize": {
       "base": "1em",
@@ -23,21 +25,21 @@
       "xl": "1.5em"
     },
     "itemFontSize": {
-      "base": "0.5em",
+      "base": "1em",
       "sm": "1em",
-      "md": "1.3em",
-      "lg": "1.5em",
-      "xl": "1.5em"
+      "md": "1em",
+      "lg": "1em",
+      "xl": "1em"
     },
     "selectYearSize": {
-      "base": "5em",
+      "base": "6em",
       "sm": "7em",
       "md": "7em",
       "lg": "7em",
       "xl": "7em"
     },
     "selectMonthDateSize": {
-      "base": "4em",
+      "base": "5em",
       "sm": "6em",
       "md": "5em",
       "lg": "5em",
@@ -51,11 +53,11 @@
       "xl": "2em"
     },
     "unitMt": {
-      "base": "0.75em",
-      "sm": "0.2em",
-      "md": "0.2em",
-      "lg": "0.2em",
-      "xl": "0.2em"
+      "base": "0em",
+      "sm": "0em",
+      "md": "0em",
+      "lg": "0em",
+      "xl": "0em"
     }
   },
   "description": {
@@ -69,9 +71,13 @@
   },
   "calculationForm": {
     "topDescription": "情報を入力してください",
-    "youDescription": "あなたについて"
+    "youDescription": "あなたについて",
+    "spouseDescription": "配偶者について",
+    "childrenDescription": "人目の子ども"
   },
   "result": {
+    "topDescription": "計算結果",
+    "benefitDescription": "給付されるお金",
     "給付制度": {
       "caption": [
         "詳細な給付条件や申請方法については市町村の窓口にお問い合わせください。"
