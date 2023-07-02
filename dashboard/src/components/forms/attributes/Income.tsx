@@ -1,8 +1,17 @@
 import { useCallback, useContext, useState } from "react";
+import { Box, HStack, Input } from "@chakra-ui/react";
+
 import { CurrentDateContext } from "../../../contexts/CurrentDateContext";
 import { HouseholdContext } from "../../../contexts/HouseholdContext";
+import { ErrorMessage } from "./validation/ErrorMessage";
 
-export const Income = ({ personName }: { personName: string }) => {
+export const Income = ({
+  personName,
+  mustInput,
+}: {
+  personName: string;
+  mustInput: boolean;
+}) => {
   const currentDate = useContext(CurrentDateContext);
   const { household, setHousehold } = useContext(HouseholdContext);
 
@@ -42,21 +51,24 @@ export const Income = ({ personName }: { personName: string }) => {
     </div>
     */
     <>
-      <label>年収</label>
-      <div className="row g-3 align-items-center mb-3">
-        <div className="col-auto">
-          <input
-            name="年収"
-            className="form-control"
-            type="number"
-            value={shownIncome}
-            onChange={onChange}
-          />
-        </div>
-        <div className="col-auto">
-          <label className="col-form-label">万円</label>
-        </div>
-      </div>
+      {mustInput && <ErrorMessage condition={shownIncome === ""} />}
+      <HStack>
+        <Box>年収</Box>
+        {mustInput && (
+          <Box color="red" fontSize="0.7em">
+            必須
+          </Box>
+        )}
+      </HStack>
+      <HStack mb={4}>
+        <Input
+          type="number"
+          value={shownIncome}
+          onChange={onChange}
+          width="10em"
+        />
+        <Box>万円</Box>
+      </HStack>
     </>
   );
 };

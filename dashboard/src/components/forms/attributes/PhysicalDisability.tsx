@@ -1,4 +1,6 @@
 import { useState, useCallback, useContext, useEffect } from "react";
+import { Box, Select } from "@chakra-ui/react";
+
 import { HouseholdContext } from "../../../contexts/HouseholdContext";
 
 export const PhysicalDisability = ({ personName }: { personName: string }) => {
@@ -41,20 +43,20 @@ export const PhysicalDisability = ({ personName }: { personName: string }) => {
   }, [household.世帯員[personName].身体障害者手帳等級認定]);
 
   return (
-    <div className="mb-3">
-      <label className="me-3">身体障害者手帳</label>
-      <br />
-      <select
+    <>
+      <Box>身体障害者手帳</Box>
+      <Select
         value={selectedItemIndex}
         className="form-select"
         onChange={onChange}
+        mb={2}
       >
         {items.map((item, index) => (
           <option value={index} key={index}>
             {item[0]}
           </option>
         ))}
-      </select>
-    </div>
+      </Select>
+    </>
   );
 };

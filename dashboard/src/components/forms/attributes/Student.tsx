@@ -1,4 +1,6 @@
 import { useState, useCallback, useContext } from "react";
+import { Checkbox, Box } from "@chakra-ui/react";
+
 import { HouseholdContext } from "../../../contexts/HouseholdContext";
 import { CurrentDateContext } from "../../../contexts/CurrentDateContext";
 
@@ -21,18 +23,14 @@ export const Student = ({ personName }: { personName: string }) => {
 
   return (
     <>
-      <div className="form-check">
-        <input
-          className="form-check-input"
-          type="checkbox"
-          checked={isChecked}
-          id="flexCheckDefault"
-          onChange={onChange}
-        />
-        <label className="form-check-label" htmlFor="flexCheckDefault">
-          小・中・高校、大学、専門学校、職業訓練学校等の学生である
-        </label>
-      </div>
+      <Checkbox
+        colorScheme="cyan"
+        checked={isChecked}
+        onChange={onChange}
+        mb={4}
+      >
+        小・中・高校、大学、専門学校、職業訓練学校等の学生である
+      </Checkbox>
       <br></br>
     </>
   );

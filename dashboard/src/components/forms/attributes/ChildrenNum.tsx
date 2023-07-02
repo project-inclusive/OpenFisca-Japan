@@ -1,4 +1,6 @@
 import { useCallback, useContext, useState } from "react";
+import { Checkbox, Box, HStack, Input } from "@chakra-ui/react";
+
 import { HouseholdContext } from "../../../contexts/HouseholdContext";
 
 export const ChildrenNum = () => {
@@ -71,37 +73,29 @@ export const ChildrenNum = () => {
 
   return (
     <>
-      <div className="form-check">
-        <input
-          className="form-check-input"
-          type="checkbox"
+      <Box mb={4}>
+        <Checkbox
+          colorScheme="cyan"
           checked={isChecked}
-          id="flexCheckDefault"
           onChange={onCheckChange}
-        />
-        <label className="form-check-label" htmlFor="flexCheckDefault">
+        >
           子どもがいる
-        </label>
-      </div>
-      {isChecked && (
-        <div className="ms-3">
-          <label>子どもの数</label>
-          <div className="row g-3 align-items-center mb-3">
-            <div className="col-auto">
-              <input
-                name="子どもの数"
-                className="form-control"
+        </Checkbox>
+        {isChecked && (
+          <Box mt={2} ml={4} mr={4} mb={4}>
+            <Box>子どもの数</Box>
+            <HStack mb={4}>
+              <Input
                 type="number"
                 value={shownChildrenNum}
                 onChange={onChange}
+                width="9em"
               />
-            </div>
-            <div className="col-auto">
-              <label className="col-form-label">人</label>
-            </div>
-          </div>
-        </div>
-      )}
+              <Box>人</Box>
+            </HStack>
+          </Box>
+        )}
+      </Box>
     </>
   );
 };

@@ -1,4 +1,6 @@
 import { useState, useCallback, useContext } from "react";
+import { Checkbox } from "@chakra-ui/react";
+
 import { HouseholdContext } from "../../../contexts/HouseholdContext";
 
 export const InternalDisability = ({ personName }: { personName: string }) => {
@@ -20,18 +22,15 @@ export const InternalDisability = ({ personName }: { personName: string }) => {
 
   return (
     <>
-      <div className="form-check mb-2">
-        <input
-          className="form-check-input"
-          type="checkbox"
-          checked={isChecked}
-          id="flexCheckDefault"
-          onChange={onChange}
-        />
-        <label className="form-check-label" htmlFor="flexCheckDefault">
-          内部障害がある
-        </label>
-      </div>
+      <Checkbox
+        checked={isChecked}
+        onChange={onChange}
+        colorScheme="cyan"
+        mb={2}
+      >
+        内部障害がある
+      </Checkbox>
+      <br></br>
     </>
   );
 };

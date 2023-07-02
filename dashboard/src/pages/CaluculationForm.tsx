@@ -87,9 +87,7 @@ function CaluculationForm() {
     <APIServerURLContext.Provider value={apiURL}>
       <CurrentDateContext.Provider value={currentDate}>
         <HouseholdContext.Provider value={householdContextValue}>
-          <div className="container">
-            <OpenFiscaForm />
-          </div>
+          <OpenFiscaForm />
         </HouseholdContext.Provider>
       </CurrentDateContext.Provider>
     </APIServerURLContext.Provider>

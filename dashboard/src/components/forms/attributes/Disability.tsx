@@ -1,4 +1,6 @@
 import { useState, useCallback, useContext, useEffect } from "react";
+import { Checkbox, Box, HStack } from "@chakra-ui/react";
+
 import { PhysicalDisability } from "./PhysicalDisability";
 import { MentalDisability } from "./MentalDisability";
 import { IntellectualDisability } from "./IntellectualDisability";
@@ -36,19 +38,19 @@ export const Disability = ({ personName }: { personName: string }) => {
 
   return (
     <>
-      <div className="form-check">
+      <Checkbox colorScheme="cyan" checked={isChecked} onChange={onChange}>
+        障害がある
+      </Checkbox>
+      {/*
         <input
           className="form-check-input"
           type="checkbox"
           checked={isChecked}
           id="flexCheckDefault"
           onChange={onChange}
-        />
-        <label className="form-check-label" htmlFor="flexCheckDefault">
-          障害がある
-        </label>
-      </div>
-      <div className="ms-3">
+        />*/}
+
+      <Box mt={2} ml={4} mr={4} mb={4}>
         {isChecked && (
           <>
             <PhysicalDisability personName={personName} />
@@ -58,9 +60,7 @@ export const Disability = ({ personName }: { personName: string }) => {
             <CerebralParalysis personName={personName} />
           </>
         )}
-      </div>
-
-      <br></br>
+      </Box>
     </>
   );
 };

@@ -1,27 +1,102 @@
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
+import {
+  Box,
+  AbsoluteCenter,
+  Center,
+  Button,
+  Heading,
+  VStack,
+  Image,
+} from "@chakra-ui/react";
+import { Icon, IconProps } from "@chakra-ui/react";
+import { CheckCircleIcon } from "@chakra-ui/icons";
+import { FaGithub } from "react-icons/fa";
+
+import configData from "../app_config.json";
+import bokyuIcon from "../assets/bokyu_lab_icon.png";
 
 function Description() {
-  return(
+  return (
     // TODO: GitHubとproj-inclusiveのリンクアイコン追加
-    <div className="container">
-      <h1 className="mt-3">マイ制度シミュレーター</h1>
-      <hr />
-      <h4 className="mb-4">
-        世帯の情報をもとに、受けられる国の子育て支援手当を簡易的に算出します。
-        <br></br>
-        実際に受けられる手当及び正確な給付額はお住まいの自治体の窓口にお問い合わせください。
-        <br></br>
-        入力された情報が第三者へ提供されることはありません。
-      </h4>
-      <hr />
-      <Link
-        className="btn btn-primary mb-3"
-        to="/calculate"
-      >
-        はじめる
-      </Link>
-    </div>
-  )
+    <>
+      <Box bg="white" borderRadius="xl" p={4} m={4}>
+        <Center
+          fontSize={configData.style.titleFontSize}
+          fontWeight="semibold"
+          mb="0.5em"
+        >
+          {configData.description.title}
+        </Center>
+
+        <Center
+          fontSize={configData.style.subTitleFontSize}
+          mb="0.5em"
+          color="cyan.800"
+        >
+          <CheckCircleIcon color="cyan.600" mr="0.3em" />
+          {configData.description.feature[0]}
+        </Center>
+        <Box fontSize={configData.style.descriptionFontSize} mb="1.5em">
+          {configData.description.description[0]}
+        </Box>
+
+        <Center
+          fontSize={configData.style.subTitleFontSize}
+          mb="0.5em"
+          color="cyan.800"
+        >
+          <CheckCircleIcon color="cyan.600" mr="0.3em" />
+          {configData.description.feature[1]}
+        </Center>
+        <Box fontSize={configData.style.descriptionFontSize} mb="1.5em">
+          {configData.description.description[1]}
+        </Box>
+
+        <Center
+          fontSize={configData.style.subTitleFontSize}
+          mb="0.5em"
+          color="cyan.800"
+        >
+          <CheckCircleIcon color="cyan.600" mr="0.3em" />
+          {configData.description.feature[2]}
+        </Center>
+        <Box fontSize={configData.style.descriptionFontSize} mb="1.5em">
+          {configData.description.description[2]}
+        </Box>
+
+        <Center>
+          <a href={configData.防窮研究所URL}>
+            <VStack mr={4}>
+              <Image src={bokyuIcon} alt="防窮研究所" boxSize="2em" />
+              <Box color="gray.600">About</Box>
+            </VStack>
+          </a>
+          <a href={configData.Github_URL}>
+            <VStack>
+              <Icon as={FaGithub} boxSize="2em" color="cyan.600"></Icon>
+              <Box color="gray.600">Github</Box>
+            </VStack>
+          </a>
+        </Center>
+      </Box>
+
+      <Center pr={4} pl={4} pb={4}>
+        <Button
+          as={RouterLink}
+          to="/calculate"
+          fontSize={configData.style.subTitleFontSize}
+          borderRadius="xl"
+          height="2em"
+          width="100%"
+          bg="cyan.600"
+          color="white"
+          _hover={{ bg: "cyan.700" }}
+        >
+          はじめる
+        </Button>
+      </Center>
+    </>
+  );
 }
 
 export default Description;

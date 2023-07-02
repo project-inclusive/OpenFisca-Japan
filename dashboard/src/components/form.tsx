@@ -1,4 +1,7 @@
 import { useContext, useEffect, useState } from "react";
+import { Box, Center, Button } from "@chakra-ui/react";
+
+import configData from "../app_config.json";
 import { useCalculate } from "../hooks/calculate";
 import { FormYou } from "./forms/you";
 import { FormSpouse } from "./forms/spouse";
@@ -31,21 +34,30 @@ export const OpenFiscaForm = () => {
   return (
     <ShowAlertMessageContext.Provider value={ShowAlertMessage}>
       <div>
-        <h1 className="mt-3">以下の項目を入力してください</h1>
-        <hr />
-        <h4 className="mb-4">
-          <br></br>
-          「計算する」ボタンを押すと受けられる支援、給付額が表示されます。
-        </h4>
-        <div>
-          <form>
-            <FormYou />
-            <FormSpouse />
-            <FormChildren />
-          </form>
-          <button
-            className="btn btn-primary mb-3"
-            type="button"
+        <Center
+          fontSize={configData.style.subTitleFontSize}
+          fontWeight="medium"
+          mt={2}
+          mb={2}
+        >
+          {configData.calculationForm.topDescription}
+        </Center>
+
+        <form>
+          <FormYou />
+          <FormSpouse />
+          <FormChildren />
+        </form>
+
+        <Center pr={4} pl={4} pb={4}>
+          <Button
+            fontSize={configData.style.subTitleFontSize}
+            borderRadius="xl"
+            height="2em"
+            width="100%"
+            bg="cyan.600"
+            color="white"
+            _hover={{ bg: "cyan.700" }}
             onClick={() => {
               // 必須項目が入力されていない場合、結果は表示されずトップへ戻る
               if (!validated) {
@@ -58,8 +70,8 @@ export const OpenFiscaForm = () => {
             }}
           >
             計算する
-          </button>
-        </div>
+          </Button>
+        </Center>
       </div>
     </ShowAlertMessageContext.Provider>
   );
