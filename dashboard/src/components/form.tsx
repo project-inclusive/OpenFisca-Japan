@@ -15,6 +15,7 @@ export const OpenFiscaForm = () => {
   const [result, calculate] = useCalculate();
   const [ShowAlertMessage, setShowAlertMessage] = useState(false);
   const [showResult, setShowResult] = useState(false);
+  const [loading, setLoading] = useState(false);
   const validated = useValidate();
   const navigate = useNavigate();
   const currentDate = useContext(CurrentDateContext);
@@ -51,6 +52,8 @@ export const OpenFiscaForm = () => {
 
         <Center pr={4} pl={4} pb={4}>
           <Button
+            isLoading={loading}
+            loadingText="計算する"
             fontSize={configData.style.subTitleFontSize}
             borderRadius="xl"
             height="2em"
@@ -65,6 +68,7 @@ export const OpenFiscaForm = () => {
                 scrollTo(0, 0);
                 return;
               }
+              setLoading(true);
               calculate();
               setShowResult(true);
             }}
