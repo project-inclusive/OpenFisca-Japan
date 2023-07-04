@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState } from "react";
+import { KeyboardEvent, useCallback, useContext, useState } from "react";
 import { Box, HStack, Input } from "@chakra-ui/react";
 
 import { CurrentDateContext } from "../../../contexts/CurrentDateContext";
@@ -36,6 +36,13 @@ export const Income = ({
     setHousehold(newHousehold);
   }, []);
 
+  const onKeyDown = (e: KeyboardEvent<HTMLElement>) => {
+    // 入力確定した際にページ遷移しないようにする
+    if (e.key == "Enter") {
+      e.preventDefault();
+    }
+  };
+
   return (
     /*
     <div className="input-group input-group-lg mb-3">
@@ -65,6 +72,7 @@ export const Income = ({
           type="number"
           value={shownIncome}
           onChange={onChange}
+          onKeyDown={onKeyDown}
           width="10em"
         />
         <Box>万円</Box>
