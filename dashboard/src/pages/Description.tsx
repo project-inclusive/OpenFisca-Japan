@@ -25,7 +25,7 @@ function Description() {
           fontWeight="semibold"
           mb="0.5em"
         >
-          {configData.description.title}
+          develop{configData.description.title}
         </Center>
 
         <Center
