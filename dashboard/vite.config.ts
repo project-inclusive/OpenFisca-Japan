@@ -6,5 +6,7 @@ export default defineConfig({
   plugins: [react()],
   base: process.env.GITHUB_PAGES
     ? "OpenFisca-Japan" // レポジトリ名を設定
+    : process.env.GITHUB_PAGES_DEVELOP
+    ? "OpenFisca-Japan/develop"
     : "./",
 });
