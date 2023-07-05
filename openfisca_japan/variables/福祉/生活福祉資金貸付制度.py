@@ -77,3 +77,76 @@ class 生活支援費(Variable):
 # 一時生活再建費・福祉費・緊急小口資金・住宅入居費・教育支援費・就学支援費・不動産担保型生活資金の
 # 実装も行う
 # 「子供がいる」の条件は「np.any(対象世帯.has_role(世帯.児童))」で判定可能
+
+class 一時生活再建費(Variable):
+    value_type = float
+    entity = 世帯
+    definition_period = DAY
+    label = "一時生活再建費"
+    reference = "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/index.html"
+
+    def formula(対象世帯, 対象期間, parameters):
+        住民税非課税世帯 = 対象世帯("住民税非課税世帯", 対象期間)  # openfisca_japan/variables/所得.py の「住民税非課税世帯」を参照している
+        障害者手帳を持つ世帯員がいる = 対象世帯("障害者手帳を持つ世帯員がいる", 対象期間)
+        六十五歳以上の世帯員がいる = 対象世帯("六十五歳以上の世帯員がいる", 対象期間)
+        
+        # openfisca_japan/parameters/福祉/生活福祉資金貸付制度/一時生活再建費_貸付額.yaml を参照している
+        貸付条件 = 住民税非課税世帯 or 障害者手帳を持つ世帯員がいる or 六十五歳以上の世帯員がいる
+        一時生活再建費_貸付額 = parameters(対象期間).福祉.生活福祉資金貸付制度.一時生活再建費_貸付額
+
+        return 貸付条件 * 一時生活再建費_貸付額
+
+class 福祉費(Variable):
+    value_type = float
+    entity = 世帯
+    definition_period = DAY
+    label = "福祉費"
+    reference = "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/index.html"
+
+    def formula(対象世帯, 対象期間, parameters):
+        住民税非課税世帯 = 対象世帯("住民税非課税世帯", 対象期間)  # openfisca_japan/variables/所得.py の「住民税非課税世帯」を参照している
+        障害者手帳を持つ世帯員がいる = 対象世帯("障害者手帳を持つ世帯員がいる", 対象期間)
+        六十五歳以上の世帯員がいる = 対象世帯("六十五歳以上の世帯員がいる", 対象期間)
+        
+        # openfisca_japan/parameters/福祉/生活福祉資金貸付制度/福祉費_貸付額.yaml を参照している
+        貸付条件 = 住民税非課税世帯 or 障害者手帳を持つ世帯員がいる or 六十五歳以上の世帯員がいる
+        福祉費_貸付額 = parameters(対象期間).福祉.生活福祉資金貸付制度.福祉費_貸付額
+
+        return 貸付条件 * 福祉費_貸付額
+
+class 緊急小口資金(Variable):
+    value_type = float
+    entity = 世帯
+    definition_period = DAY
+    label = "緊急小口資金"
+    reference = "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/index.html"
+
+    def formula(対象世帯, 対象期間, parameters):
+        住民税非課税世帯 = 対象世帯("住民税非課税世帯", 対象期間)  # openfisca_japan/variables/所得.py の「住民税非課税世帯」を参照している
+        障害者手帳を持つ世帯員がいる = 対象世帯("障害者手帳を持つ世帯員がいる", 対象期間)
+        六十五歳以上の世帯員がいる = 対象世帯("六十五歳以上の世帯員がいる", 対象期間)
+        
+        # openfisca_japan/parameters/福祉/生活福祉資金貸付制度/緊急小口資金_貸付額.yaml を参照している
+        貸付条件 = 住民税非課税世帯 or 障害者手帳を持つ世帯員がいる or 六十五歳以上の世帯員がいる
+        緊急小口資金_貸付額 = parameters(対象期間).福祉.生活福祉資金貸付制度.緊急小口資金_貸付額
+
+        return 貸付条件 * 緊急小口資金_貸付額
+
+class 住宅入居費(Variable):
+    value_type = float
+    entity = 世帯
+    definition_period = DAY
+    label = "住宅入居費"
+    reference = "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/index.html"
+
+    def formula(対象世帯, 対象期間, parameters):
+        住民税非課税世帯 = 対象世帯("住民税非課税世帯", 対象期間)  # openfisca_japan/variables/所得.py の「住民税非課税世帯」を参照している
+        障害者手帳を持つ世帯員がいる = 対象世帯("障害者手帳を持つ世帯員がいる", 対象期間)
+        六十五歳以上の世帯員がいる = 対象世帯("六十五歳以上の世帯員がいる", 対象期間)
+        
+        # openfisca_japan/parameters/福祉/生活福祉資金貸付制度/住宅入居費_貸付額.yaml を参照している
+        貸付条件 = 住民税非課税世帯 or 障害者手帳を持つ世帯員がいる or 六十五歳以上の世帯員がいる
+        住宅入居費_貸付額 = parameters(対象期間).福祉.生活福祉資金貸付制度.住宅入居費_貸付額
+
+        return 貸付条件 * 住宅入居費_貸付額
+
