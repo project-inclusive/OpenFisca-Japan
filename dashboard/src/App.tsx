@@ -18,20 +18,25 @@ function App() {
       axis="horizontal"
     >
       <RouterProvider
-        router={createBrowserRouter([
+        router={createBrowserRouter(
+          [
+            {
+              path: "/",
+              element: <Description />,
+            },
+            {
+              path: "/calculate",
+              element: <CaluculationForm />,
+            },
+            {
+              path: "/result",
+              element: <OpenFiscaResult />,
+            },
+          ],
           {
-            path: "/",
-            element: <Description />,
-          },
-          {
-            path: "/calculate",
-            element: <CaluculationForm />,
-          },
-          {
-            path: "/result",
-            element: <OpenFiscaResult />,
-          },
-        ])}
+            basename: import.meta.env.BASE_URL,
+          }
+        )}
       />
     </AbsoluteCenter>
   );
