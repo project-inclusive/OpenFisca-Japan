@@ -46,7 +46,11 @@ export const FormSpouse = () => {
       {household.世帯.世帯1.保護者一覧.includes(spouseName) && (
         <>
           <Box bg="white" borderRadius="xl" p={4} m={4}>
-            <Center fontSize={configData.style.subTitleFontSize} mb="0.5em">
+            <Center
+              fontSize={configData.style.subTitleFontSize}
+              fontWeight="medium"
+              mb="0.5em"
+            >
               {configData.calculationForm.spouseDescription}
             </Center>
 

@@ -15,7 +15,11 @@ export const FormChildren = () => {
           (childName: string, index: number) => (
             <div key={index}>
               <Box bg="white" borderRadius="xl" p={4} m={4}>
-                <Center fontSize={configData.style.subTitleFontSize} mb="0.5em">
+                <Center
+                  fontSize={configData.style.subTitleFontSize}
+                  fontWeight="medium"
+                  mb="0.5em"
+                >
                   {index + 1}
                   {configData.calculationForm.childrenDescription}
                 </Center>

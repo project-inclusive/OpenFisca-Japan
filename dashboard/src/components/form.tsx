@@ -35,7 +35,12 @@ export const OpenFiscaForm = () => {
   return (
     <ShowAlertMessageContext.Provider value={ShowAlertMessage}>
       <div>
-        <Center fontSize={configData.style.subTitleFontSize} mt={2} mb={2}>
+        <Center
+          fontSize={configData.style.subTitleFontSize}
+          fontWeight="medium"
+          mt={2}
+          mb={2}
+        >
           {configData.calculationForm.topDescription}
         </Center>
 
