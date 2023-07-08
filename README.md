@@ -1,4 +1,4 @@
-# OpenFisca Japan
+# OpenFisca Japan （マイ制度シミュレーター）
 
 ## 概要
 日本の制度のシミュレーターです。  
@@ -11,16 +11,15 @@
 - 障害児福祉手当
 
 ## 作成Webアプリ
-[OpenFisca Japan ホームページ](https://project-inclusive.github.io/OpenFisca-Japan/)に作成されたWebアプリが公開されています。  
+[マイ制度シミュレーター](https://myseido-simulator.netlify.app/)に作成されたWebアプリが公開されています。  
 mainブランチのソースコードがビルド・デプロイされています。  
-フロントエンド(React)はGithub Pages、バックエンド(OpenFisca)はGoogle CloudのCloud Runでビルド・デプロイされています。
+フロントエンド(React)はNetlify、バックエンド(OpenFisca)はGoogle CloudのCloud Runでビルド・デプロイされています。
 
 ## 環境構築・開発参加方法
 
 ### 0. 前提
 
 - GitHub にユーザー登録する
-- Visual Studio Code をインストールする
 
 ### 1. 自分のPCにDockerを使って開発環境を作る方法
 
@@ -69,45 +68,8 @@ mainブランチのソースコードがビルド・デプロイされていま�
     - フロントエンドを起動している場合は
       http://localhost:30000/ をブラウザに打ち込むとフォームが表示されます。
 
-1. project-inclusive/OpenFisca-Japan の mainブランチにプルリクエストを送る。  
+1. project-inclusive/OpenFisca-Japan の developブランチにプルリクエストを送る。  
 （参考）[フォーク・クローン・プルリクエストの流れ](https://techtechmedia.com/how-to-fork-github/)   
-**このリポジトリ自体のフォーク元である「SnoozingJellyfish/OpenFisca-Yuisekin」リポジトリにプルリクエストを送らないよう注意してください。**
-
-### 2. （参考）GitHub Codespaceを使用する方法
-Dockerを自分のPCにインストールする必要はありませんが、操作性はやや悪いです。
-- （このリポジトリ を自分の GitHub アカウントに Fork する | 既に Fork してる場合は Fetch upstream する（必須））
-- → Fork した自分のアカウントの側のリポジトリをブラウザで開き、緑色の「Code」ボタンをクリック
-- → 「Create codespace on main」をクリック
-- → 「Open this codespace in VS Code Desktop」をクリック
-- → ダイアログが数回表示されるので全部 OK っぽい方をクリック
-- → VSCode と GitHub を連携させるために認証が求められるので承認する
-- → VSCode で GitHub Codespaces に無事に接続できたら、動作確認のために、ターミナルで `make` を実行
-
-これだけで全員同じ環境で開発できるようになるはず。料金は 2022-07-02 現在、無料です。
-
-#### このリポジトリを GitHub であなたのアカウントへ Fork して、 `git clone` する
-
-#### Fork したあなたのリポジトリで、GitHub Codespaces を起動して、Visual Studio Code で開く
-
-[![Image from Gyazo](https://i.gyazo.com/a29c4cce16baca1b33978231849b2269.png)](https://gyazo.com/a29c4cce16baca1b33978231849b2269)
-[![Image from Gyazo](https://i.gyazo.com/1351c39a5ac9a4f5a4a4ae9901ec12d6.png)](https://gyazo.com/1351c39a5ac9a4f5a4a4ae9901ec12d6)
-
-#### GitHub Codespaces で動作確認する
-
-```
-make
-```
-
-#### GitHub Codespaces で API サーバーとして動かす
-
-```
-make serve-local
-```
-
-- GET http://localhost:50000/spec
-- GET http://localhost:50000/entities
-- GET http://localhost:50000/variables
-- GET http://localhost:50000/parameters
 
 
 
@@ -129,7 +91,8 @@ make serve-local
 openfisca_japan/variables/~.py等の計算方法を規定するファイルを修正する。  
 以下のコマンドでビルドを行わないとテスト時に修正が反映されない。  
 `make build`   
-その後、上述のテストを行う。
+その後、上述のテストを行う。  
+通常は標準出力は表示されませんが、例外を発生させると標準出力が表示されデバッグが容易になります。
 
 - テスト条件・結果を記載したCSVファイルから、yamlのテストファイルを自動生成する方法
   ```
@@ -153,3 +116,7 @@ openfisca_japan/variables/~.py等の計算方法を規定するファイルを�
 ## その他の情報
 
 project-inclusiveの開発方針やOpenFiscaそのもの等の情報は、[本リポジトリのWiki](https://github.com/project-inclusive/OpenFisca-Japan/wiki)に記載しています。
+
+
+## お問い合わせ
+[防窮研究所](https://www.facebook.com/Institute.for.Poverty.Prevention)
