@@ -1,4 +1,4 @@
-description: 障害児福祉手当の扶養義務者の所得制限限度額(扶養人数が0人から増えるごとに増額する)
+description: 障害児福祉手当の扶養義務者の所得制限限度額(扶養人数が0人から増えるごとに増額する。6人以上の場合は https://www.city.date.hokkaido.jp/hotnews/files/00000500/00000589/20130221214915.pdf 参照)
 metadata:
   threshold_unit: person
   rate_unit: 1
@@ -12,3 +12,7 @@ values:
       - 6962000
       - 7175000
       - 7388000
+      - 7768000
+      - 8148000
+      - 8528000
+      - 8908000
