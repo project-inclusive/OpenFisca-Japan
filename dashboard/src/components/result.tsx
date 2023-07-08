@@ -13,12 +13,7 @@ export const OpenFiscaResult = () => {
 
   return (
     <div>
-      <Center
-        fontSize={configData.style.subTitleFontSize}
-        fontWeight="medium"
-        mt={2}
-        mb={2}
-      >
+      <Center fontSize={configData.style.subTitleFontSize} mt={2} mb={2}>
         {configData.result.topDescription}
       </Center>
 

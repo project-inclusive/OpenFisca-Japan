@@ -89,11 +89,7 @@ export const Benefit = ({
   return (
     <>
       <Box bg="white" borderRadius="xl" p={4} mb={4} ml={4} mr={4}>
-        <Center
-          fontSize={configData.style.subTitleFontSize}
-          fontWeight="medium"
-          mb={2}
-        >
+        <Center fontSize={configData.style.subTitleFontSize} mb={2}>
           {configData.result.benefitDescription}
         </Center>
 
