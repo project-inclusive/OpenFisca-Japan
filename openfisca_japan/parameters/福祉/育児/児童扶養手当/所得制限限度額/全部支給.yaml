@@ -1,4 +1,4 @@
-description: 渋谷区の児童扶養手当の全部支給の所得制限限度額(扶養人数が0人から増えるごとに増額する)
+description: 渋谷区の児童扶養手当の全部支給の所得制限限度額(扶養人数が0人から増えるごとに増額する6人以上の場合は https://www.city.osaka.lg.jp/kodomo/page/0000002395.html 参照)
 metadata:
   threshold_unit: person
   rate_unit: 1
@@ -12,3 +12,7 @@ values:
       - 1630000
       - 2010000
       - 2390000
+      - 2770000
+      - 3150000
+      - 3530000
+      - 3910000

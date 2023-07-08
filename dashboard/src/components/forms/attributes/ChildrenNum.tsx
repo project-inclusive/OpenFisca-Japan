@@ -36,6 +36,9 @@ export const ChildrenNum = () => {
     if (isNaN(childrenNum) || childrenNum < 0) {
       childrenNum = 0;
       setShownChildrenNum("");
+    } else if (childrenNum > 5) {
+      childrenNum = 5;
+      setShownChildrenNum(childrenNum);
     } else {
       setShownChildrenNum(childrenNum);
     }

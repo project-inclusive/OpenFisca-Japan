@@ -1,4 +1,4 @@
-description: 渋谷区の児童手当の所得上限限度額(扶養人数が0人から増えるごとに増額する)
+description: 渋谷区の児童手当の所得上限限度額(扶養人数が0人から増えるごとに増額する。6人以上の場合は https://www.city.yokohama.lg.jp/kurashi/kosodate-kyoiku/oyakokenko/teate/teate/jite-limit.html 参照)
 metadata:
   threshold_unit: person
   rate_unit: 1
@@ -12,3 +12,7 @@ values:
       - 9720000
       - 10100000
       - 10480000
+      - 10860000
+      - 11240000
+      - 11620000
+      - 12000000
