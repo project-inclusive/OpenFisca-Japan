@@ -5,6 +5,7 @@ import Description from "./pages/Description";
 import { OpenFiscaResult } from "./components/result";
 
 function App() {
+  console.log(import.meta.env.BASE_URL);
   return (
     <AbsoluteCenter
       width={{
