@@ -16,6 +16,10 @@ export const theme = extendTheme({
       },
     },
   },
+  fonts: {
+    heading: `'Noto Sans JP', sans-serif`,
+    body: `'Noto Sans JP', sans-serif`,
+  },
 });
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
