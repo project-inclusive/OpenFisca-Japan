@@ -1,19 +1,11 @@
 import { Link as RouterLink } from "react-router-dom";
-import {
-  Box,
-  AbsoluteCenter,
-  Center,
-  Button,
-  Heading,
-  VStack,
-  Image,
-} from "@chakra-ui/react";
-import { Icon, IconProps } from "@chakra-ui/react";
+import { Box, Center, Button, VStack, Image } from "@chakra-ui/react";
+import { Icon } from "@chakra-ui/react";
 import { CheckCircleIcon } from "@chakra-ui/icons";
 import { FaGithub } from "react-icons/fa";
 
 import configData from "../app_config.json";
-import bokyuIcon from "../assets/bokyu_lab_icon.png";
+import bokyuIcon from "../assets/bokyu_lab_icon_cyan.png";
 
 function Description() {
   return (
