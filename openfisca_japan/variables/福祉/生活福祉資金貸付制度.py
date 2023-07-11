@@ -51,8 +51,9 @@ class 高校1年生以上の子供がいる(Variable):
     label = "高校1年生以上の子供がいる"
 
     def formula(対象世帯, 対象期間, parameters):
-        学年 = 対象世帯.members("学年", 対象期間)
-        return np.any(学年 >= 10)
+        高校1年生以上である = 対象世帯.members("学年", 対象期間) >= 10
+        子供である = 対象世帯.has_role(世帯.児童)
+        return np.any(高校1年生以上である * 子供である)
     
 class 中学3年生以上の子供がいる(Variable):
     value_type = bool
@@ -61,8 +62,9 @@ class 中学3年生以上の子供がいる(Variable):
     label = "中学3年生以上の子供がいる"
 
     def formula(対象世帯, 対象期間, parameters):
-        学年 = 対象世帯.members("学年", 対象期間)
-        return np.any(学年 >= 9)
+        中学3年生以上である = 対象世帯.members("学年", 対象期間) >= 9
+        子供である = 対象世帯.has_role(世帯.児童)
+        return np.any(中学3年生以上である * 子供である)
 
 class 生活支援費(Variable):
     value_type = float
@@ -89,13 +91,6 @@ class 生活支援費(Variable):
                          0)
         
         return 貸付条件 * 生活支援費_貸付額
-
-
-
-# 生活支援費と同じ要領で、
-# 一時生活再建費・福祉費・緊急小口資金・住宅入居費・教育支援費・就学支援費・不動産担保型生活資金の
-# 実装も行う
-# 「子供がいる」の条件は「np.any(対象世帯.has_role(世帯.児童))」で判定可能
 
 class 一時生活再建費(Variable):
     value_type = float
