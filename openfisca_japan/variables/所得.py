@@ -272,6 +272,9 @@ class 住民税非課税世帯(Variable):
     label = "住民税非課税世帯か否か（東京23区で所得割と均等割両方が非課税になる世帯）"
     reference = "https://financial-field.com/tax/entry-173575"
 
+    # TODO 市町村の級地により住民税均等割における非課税限度額が異なる
+    # https://www.soumu.go.jp/main_content/000758656.pdf
+
     def formula(対象世帯, 対象期間, parameters):
         世帯高所得 = 対象世帯("世帯高所得", 対象期間)
         世帯人数 = 対象世帯("世帯人数", 対象期間)            

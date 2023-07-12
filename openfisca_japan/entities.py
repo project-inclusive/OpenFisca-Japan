@@ -41,6 +41,12 @@ from openfisca_core.entities import build_entity
             "label": "児童",
             "doc": "Other individuals living in the 世帯.",
             },
+        {
+            "key": "祖父母",
+            "plural": "祖父母一覧",
+            "label": "祖父母",
+            "doc": "Other individuals living in the 世帯.",
+            },
         ],
     )
 

@@ -1,0 +1,7 @@
+description: 生活支援費_貸付上限額_二人以上
+metadata:
+  reference: https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/kashitsukejoken.html
+  unit: currency-JPY
+values:
+  2000-04-01:
+    value: 200000
