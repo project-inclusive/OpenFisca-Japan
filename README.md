@@ -21,7 +21,7 @@ mainブランチのソースコードがビルド・デプロイされていま�
     - Windowsの場合：[WindowsでのDocker Desktop環境構築](https://chigusa-web.com/blog/windows%E3%81%ABdocker%E3%82%92%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%81%97%E3%81%A6python%E7%92%B0%E5%A2%83%E3%82%92%E6%A7%8B%E7%AF%89/)
     - Macの場合：[MacでのDocker Desktop環境構築](https://matsuand.github.io/docs.docker.jp.onthefly/desktop/mac/install/)
 
-1. proj-inclusiveのOpenFisca-Japan Githubリポジトリを個人アカウントのリポジトリとしてフォークし、ローカル環境（自分のPC）にクローン（ダウンロード）する。  
+1. proj-inclusiveのOpenFisca-Japan Githubリポジトリ **developブランチ** を個人アカウントのリポジトリとしてフォークし、ローカル環境（自分のPC）にクローン（ダウンロード）する。  
   [フォーク・クローン・プルリクエストの流れ](https://techtechmedia.com/how-to-fork-github/)    
    リポジトリのクローンはGithub desktop, Source treeなどのツールを使うのが簡単です。
 1. 自分のPC上にクローンしたOpenfisca-Japanのルートディレクトリで、WindowsならPowershell、MacならTerminalを開く。  
