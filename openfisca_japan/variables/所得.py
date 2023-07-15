@@ -70,6 +70,7 @@ class 給与所得控除額(Variable):
 class 収入(Variable):
     value_type = float
     entity = 人物
+    # 年間収入を指す
     # NOTE: 収入自体は1年ごとに定義されるが、特定の日付における各種手当に計算できるように DAY で定義
     definition_period = DAY
     # Optional attribute. Allows user to declare this variable for a year.

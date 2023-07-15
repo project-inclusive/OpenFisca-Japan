@@ -6,12 +6,64 @@ A variable is a property of an Entity such as a 人物, a 世帯…
 See https://openfisca.org/doc/key-concepts/variables.html
 """
 
+import json
+
+import numpy as np
 # Import from openfisca-core the Python objects used to code the legislation in OpenFisca
 from openfisca_core.indexed_enums import Enum
 from openfisca_core.periods import MONTH, DAY
 from openfisca_core.variables import Variable
 # Import the Entities specifically defined for this tax and benefit system
 from openfisca_japan.entities import 世帯
+
+with open('openfisca_japan/parameters/市区町村級地区分.json') as f:
+    市区町村級地区分 = json.load(f)
+
+
+class 居住都道府県(Variable):
+    value_type = str
+    entity = 世帯
+    label = "居住都道府県"
+    definition_period = DAY
+
+
+class 居住市区町村(Variable):
+    value_type = str
+    entity = 世帯
+    label = "居住市区町村"
+    definition_period = DAY
+
+
+class 居住級地区分1(Variable):
+    # m級地-n のとき m を返す
+    value_type = int
+    entity = 世帯
+    label = "居住級地区分1"
+    definition_period = DAY
+
+    def formula(対象世帯, 対象期間, parameters):
+        居住都道府県 = 対象世帯("居住都道府県", 対象期間)[0]
+        居住市区町村 = 対象世帯("居住市区町村", 対象期間)[0]
+        if 居住市区町村 == 'その他':
+            return 3
+        else:
+            return 市区町村級地区分[居住都道府県][居住市区町村][0]
+        
+    
+class 居住級地区分2(Variable):
+    # m級地-n のとき n を返す
+    value_type = int
+    entity = 世帯
+    label = "居住級地区分2"
+    definition_period = DAY
+
+    def formula(対象世帯, 対象期間, parameters):
+        居住都道府県 = 対象世帯("居住都道府県", 対象期間)[0]
+        居住市区町村 = 対象世帯("居住市区町村", 対象期間)[0]
+        if 居住市区町村 == 'その他':
+            return 2
+        else:
+            return 市区町村級地区分[居住都道府県][居住市区町村][1]
 
 
 # This variable is a pure input: it doesn't have a formula
