@@ -38,7 +38,7 @@ export const Loan = ({
               unit: loanInfo.unit,
               caption: loanInfo.caption,
               reference: loanInfo.reference,
-              displayedMoney: Number(result.世帯.世帯1[loanName][currentDate]).toLocaleString()
+              displayedMoney: Number(result.世帯.世帯1[loanName][currentDate]),
             };
           }
         }
@@ -90,7 +90,8 @@ export const Loan = ({
                         {val.name}
                       </Box>
                       <Box flex="1" textAlign="right">
-                        {val.displayedMoney} {val.unit}
+                        {/* １万円単位で表示 */}
+                        ~{val.displayedMoney / 10_000} 万{val.unit}
                       </Box>
                     </AccordionButton>
                   </h2>
