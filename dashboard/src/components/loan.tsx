@@ -101,7 +101,6 @@ export const Loan = ({
                         <br/>
                       </span>
                     ))}
-                    <br></br>
                     <Box color="blue">
                       <a href={val.reference}>詳細リンク</a>
                     </Box>
