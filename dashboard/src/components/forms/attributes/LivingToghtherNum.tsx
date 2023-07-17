@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext, useState, useRef, useEffect } from "react";
 import { Checkbox, Box, HStack, Input } from "@chakra-ui/react";
 
 import { HouseholdContext } from "../../../contexts/HouseholdContext";
@@ -12,7 +12,10 @@ export const LivingToghtherNum = () => {
     .toString()
     .padStart(2, "0")}-01`;
   const { household, setHousehold } = useContext(HouseholdContext);
-  const [shownLivingToghtherNum, setShownLivingToghtherNum] = useState<string | number>("");
+  const [shownLivingToghtherNum, setShownLivingToghtherNum] = useState<
+    string | number
+  >("");
+  const inputEl = useRef<HTMLInputElement>(null);
 
   const [isChecked, setIsChecked] = useState(false);
   // チェックボックスの値が変更された時
@@ -23,7 +26,9 @@ export const LivingToghtherNum = () => {
         household.世帯.世帯1.祖父母一覧.map((name: string) => {
           delete newHousehold.世帯員[name];
         });
-        newHousehold.世帯.世帯1.祖父母一覧 = [...newHousehold.世帯.世帯1.祖父母一覧];
+        newHousehold.世帯.世帯1.祖父母一覧 = [
+          ...newHousehold.世帯.世帯1.祖父母一覧,
+        ];
         setShownLivingToghtherNum("");
         setHousehold({ ...newHousehold });
       }
@@ -32,13 +37,21 @@ export const LivingToghtherNum = () => {
     []
   );
 
+  // チェックされたときに人数フォームにフォーカス
+  useEffect(() => {
+    if (inputEl.current) {
+      inputEl.current.focus();
+    }
+  }, [isChecked]);
+
+  // 人数フォーム変更時
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     let LivingToghtherNum = parseInt(event.currentTarget.value);
     // 正の整数以外は0に変換
     if (isNaN(LivingToghtherNum) || LivingToghtherNum < 0) {
       LivingToghtherNum = 0;
       setShownLivingToghtherNum("");
-    // TODO: 算出に必要な最大人数に設定する
+      // TODO: 算出に必要な最大人数に設定する
     } else if (LivingToghtherNum > 10) {
       LivingToghtherNum = 10;
       setShownLivingToghtherNum(LivingToghtherNum);
@@ -97,6 +110,7 @@ export const LivingToghtherNum = () => {
                 value={shownLivingToghtherNum}
                 onChange={onChange}
                 width="9em"
+                ref={inputEl}
               />
               <Box>人</Box>
             </HStack>

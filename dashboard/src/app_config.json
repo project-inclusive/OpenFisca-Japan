@@ -130,7 +130,7 @@
           "reference": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/kashitsukejoken.html"
         },
         "一時生活再建費": {
-          "unit": "円",
+          "unit": "円 　",
           "caption": [
             "生活再建までの間に一時的に必要な生活費用",
             "返済期限：10年以内",
@@ -140,7 +140,7 @@
           "reference": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/kashitsukejoken.html"
         },
         "福祉費": {
-          "unit": "円",
+          "unit": "円 　",
           "caption": [
             "様々な用途で必要なお金",
             "返済期限：20年以内",
@@ -150,7 +150,7 @@
           "reference": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/kashitsukejoken.html"
         },
         "緊急小口資金": {
-          "unit": "円",
+          "unit": "円 　",
           "caption": [
             "緊急かつ一時的に生計の維持が困難となった場合に借りられる資金",
             "返済期限：1年以内",
@@ -159,7 +159,7 @@
           "reference": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/kashitsukejoken.html"
         },
         "住宅入居費": {
-          "unit": "円",
+          "unit": "円 　",
           "caption": [
             "家の賃貸契約を結ぶために必要な費用",
             "返済期限：10年以内",
@@ -178,7 +178,7 @@
           "reference": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/kashitsukejoken.html"
         },
         "就学支度費": {
-          "unit": "円",
+          "unit": "円 　",
           "caption": [
             "高校、大学等の入学に必要な費用",
             "返済期限：20年以内",
