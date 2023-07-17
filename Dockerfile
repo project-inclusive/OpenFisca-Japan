@@ -4,8 +4,8 @@ USER root
 #RUN pip install --upgrade pip
 #RUN pip install --upgrade setuptools
 RUN pip install --no-cache-dir \
-    autopep8 \
-    flake8
+    autopep8==1.5.7 \
+    flake8==3.9.2
 
 WORKDIR /app
 COPY . /app
