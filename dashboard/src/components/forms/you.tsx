@@ -4,7 +4,7 @@ import configData from "../../app_config.json";
 import { Birthday } from "./attributes/Birthday";
 import { Student } from "./attributes/Student";
 import { ChildrenNum } from "./attributes/ChildrenNum";
-import { LivingToghtherNum } from "./attributes/LivingToghtherNum";
+import { ParentsNum } from "./attributes/ParentsNum";
 import { SpouseExists } from "./attributes/SpouseExists";
 import { Income } from "./attributes/Income";
 import { Disability } from "./attributes/Disability";
@@ -28,7 +28,7 @@ export const FormYou = () => {
         <Student personName={yourName} />
         <SpouseExists />
         <ChildrenNum />
-        <LivingToghtherNum />
+        <ParentsNum />
         <RentingHouse />
       </Box>
     </>

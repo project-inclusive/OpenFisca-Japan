@@ -20,11 +20,11 @@ export const SpouseExists = () => {
     const newHousehold = { ...household };
     if (!event.target.checked) {
       delete newHousehold.世帯員[spouseName];
-      newHousehold.世帯.世帯1.保護者一覧 = ["あなた"];
+      delete newHousehold.世帯.世帯1.配偶者一覧;
       newHousehold.世帯.世帯1.配偶者がいるがひとり親に該当[currentDate] = false;
       setIsChecked(false);
     } else {
-      newHousehold.世帯.世帯1.保護者一覧.push(spouseName);
+      newHousehold.世帯.世帯1["配偶者一覧"] = [spouseName];
       newHousehold.世帯員[spouseName] = {
         誕生年月日: { ETERNITY: "" },
         収入: { [currentDate]: 0 },

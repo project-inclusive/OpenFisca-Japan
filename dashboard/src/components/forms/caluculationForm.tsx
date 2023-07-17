@@ -1,10 +1,10 @@
 import { useState } from "react";
 
-import configData from "../app_config.json";
-import { OpenFiscaForm } from "../components/form";
-import { HouseholdContext } from "../contexts/HouseholdContext";
-import { CurrentDateContext } from "../contexts/CurrentDateContext";
-import { APIServerURLContext } from "../contexts/APIServerURLContext";
+import configData from "../../app_config.json";
+import { FormContent } from "./formContent";
+import { HouseholdContext } from "../../contexts/HouseholdContext";
+import { CurrentDateContext } from "../../contexts/CurrentDateContext";
+import { APIServerURLContext } from "../../contexts/APIServerURLContext";
 
 function CaluculationForm() {
   // 日付は「YYYY-MM-DD」の桁数フォーマットでないとOpenFisca APIが正常動作しない
@@ -44,7 +44,7 @@ function CaluculationForm() {
     },
     世帯: {
       世帯1: {
-        保護者一覧: ["あなた"],
+        自分一覧: ["あなた"],
         配偶者がいるがひとり親に該当: {
           [currentDate]: null,
         },
@@ -114,7 +114,7 @@ function CaluculationForm() {
     <APIServerURLContext.Provider value={apiURL}>
       <CurrentDateContext.Provider value={currentDate}>
         <HouseholdContext.Provider value={householdContextValue}>
-          <OpenFiscaForm />
+          <FormContent />
         </HouseholdContext.Provider>
       </CurrentDateContext.Provider>
     </APIServerURLContext.Provider>

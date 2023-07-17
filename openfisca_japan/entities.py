@@ -28,23 +28,29 @@ from openfisca_core.entities import build_entity
     """,
     roles = [
         {
-            "key": "保護者",
-            "plural": "保護者一覧",
-            "label": "保護者",
-            "max": 2,
-            "subroles": ["first_parent", "second_parent"],
-            "doc": "The one or two adults in charge of the 世帯.",
+            "key": "自分",
+            "plural": "自分一覧",
+            "label": "自分",
+            "max": 1,
+            "doc": "フォームの入力者を想定",
             },
         {
-            "key": "児童",
-            "plural": "児童一覧",
-            "label": "児童",
+            "key": "配偶者",  # 「自分」に対しての配偶者
+            "plural": "配偶者一覧",
+            "label": "配偶者",
+            "max": 1,
+            "doc": "「自分」の配偶者",
+            },
+        {
+            "key": "子",  # 「自分」に対しての子。「親」から見ると孫・ひ孫
+            "plural": "子一覧",
+            "label": "子",
             "doc": "Other individuals living in the 世帯.",
             },
         {
-            "key": "祖父母",
-            "plural": "祖父母一覧",
-            "label": "祖父母",
+            "key": "親",  # 「自分」に対しての親または祖父母。「孫」から見ると祖父母・曽祖父母
+            "plural": "親一覧",
+            "label": "親",
             "doc": "Other individuals living in the 世帯.",
             },
         ],

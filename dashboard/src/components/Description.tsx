@@ -9,7 +9,6 @@ import bokyuIcon from "../assets/bokyu_lab_icon_cyan.png";
 
 function Description() {
   return (
-    // TODO: GitHubとproj-inclusiveのリンクアイコン追加
     <>
       <Box bg="white" borderRadius="xl" p={4} m={4}>
         <Center

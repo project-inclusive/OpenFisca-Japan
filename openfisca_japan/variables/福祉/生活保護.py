@@ -75,7 +75,7 @@ class 生活保護(Variable):
 
         # TODO: 母子家庭加算
         # https://www.mhlw.go.jp/content/000776372.pdf 1ページ目右上を参照
-        # 父子世帯も対象となるため、「対象世帯.nb_persons(世帯.保護者) == 1」をもとに判定
+        # 父子世帯も対象となるため、「対象世帯.nb_persons(世帯.配偶者) == 0」をもとに判定
 
         # 障害者加算と母子加算は併給できないため高い方のみ加算？（参考：https://www.mhlw.go.jp/content/000776372.pdf）
 

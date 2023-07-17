@@ -8,7 +8,8 @@ clean:
 	find . -name '*.pyc' -exec rm \{\} \;
 
 deps:
-	pip install --upgrade pip build twine pyYAML
+	@# pip install --upgrade pip build twine
+	pip install build==0.10.0 twine==4.0.2
 
 install: deps
 	@# Install OpenFisca-Extension-Template for development.
