@@ -9,7 +9,7 @@ import {
   AccordionPanel,
 } from "@chakra-ui/react";
 
-import configData from "../app_config.json";
+import configData from "../../app_config.json";
 
 export const Loan = ({
   result,
@@ -51,7 +51,7 @@ export const Loan = ({
 
   return (
     <>
-      {displayedResult && (Object.keys(displayedResult).length > 0) &&
+      {displayedResult && Object.keys(displayedResult).length > 0 && (
         <Box bg="white" borderRadius="xl" p={4} mb={4} ml={4} mr={4}>
           <Center
             fontSize={configData.style.subTitleFontSize}
@@ -61,20 +61,19 @@ export const Loan = ({
             {configData.result.loanDescription}
           </Center>
 
-          <Box
-            fontWeight="medium"
-            mb={2}
-          >
+          <Box fontWeight="medium" mb={2}>
             {/* TODO: 他の貸付制度を追加したらconfigDataから読み込むようにする */}
             生活福祉資金貸付制度
           </Box>
 
-          {configData.result.貸付制度.caption.map((line: string, index: any) => (
-            <span key={index}>
-              {line}
-              <br/>
-            </span>
-          ))}
+          {configData.result.貸付制度.caption.map(
+            (line: string, index: any) => (
+              <span key={index}>
+                {line}
+                <br />
+              </span>
+            )
+          )}
           <Box color="blue">
             <a href={configData.result.貸付制度.reference}>詳細リンク</a>
           </Box>
@@ -90,8 +89,8 @@ export const Loan = ({
                         {val.name}
                       </Box>
                       <Box flex="1" textAlign="right">
-                        {/* １万円単位で表示 */}
-                        ~{val.displayedMoney / 10_000} 万{val.unit}
+                        {/* １万円単位で表示 */}~{val.displayedMoney / 10_000}{" "}
+                        万{val.unit}
                       </Box>
                     </AccordionButton>
                   </h2>
@@ -99,7 +98,7 @@ export const Loan = ({
                     {val.caption.map((line: string, index: any) => (
                       <span key={index}>
                         {line}
-                        <br/>
+                        <br />
                       </span>
                     ))}
                     <Box color="blue">
@@ -110,7 +109,7 @@ export const Loan = ({
               ))}
           </Accordion>
         </Box>
-      }
+      )}
     </>
   );
 };

@@ -1,8 +1,8 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Box, AbsoluteCenter } from "@chakra-ui/react";
-import CaluculationForm from "./pages/CaluculationForm";
-import Description from "./pages/Description";
-import { OpenFiscaResult } from "./components/result";
+import CaluculationForm from "./components/forms/caluculationForm";
+import Description from "./components/Description";
+import { Result } from "./components/result/result";
 
 function App() {
   return (
@@ -29,7 +29,7 @@ function App() {
             },
             {
               path: "/result",
-              element: <OpenFiscaResult />,
+              element: <Result />,
             },
           ],
           {

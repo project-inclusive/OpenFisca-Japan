@@ -12,15 +12,17 @@ class Process(ProcessBase):
         super().__init__(period, titles)
 
         # 親と子の名前を定義
-        self.parents = [ '親1', '親2' ]
+        self.myself = '親1'
+        self.spouse = '親2'
         self.children = [ '第1子', '第2子', '第3子', '第4子', '第5子']
 
     def process(self, row):
         res = super().process(row)
         d_input = dict()
         d_input['世帯'] = dict()
-        d_input['世帯']['保護者一覧'] = []
-        d_input['世帯']['児童一覧'] = []
+        d_input['世帯']['自分一覧'] = []
+        d_input['世帯']['配偶者一覧'] = []
+        d_input['世帯']['子一覧'] = []
         d_input['世帯員'] = dict()
         d_output = {'世帯': {}}
         allowance = row[self.titles['対象支援制度']]
@@ -28,14 +30,17 @@ class Process(ProcessBase):
 
         ### 入力情報を追加 ###
         # 世帯の一覧属性
-        for p in self.parents:
-            if row[self.titles[f'{p}_年齢']] or row[self.titles[f'{p}_学年']]:
-                d_input['世帯']['保護者一覧'].append(p)
-                people.append(p)
+        if row[self.titles[f'{self.myself}_年齢']] or row[self.titles[f'{self.myself}_学年']]:
+            d_input['世帯']['自分一覧'].append(self.myself)
+            people.append(self.myself)
+
+        if row[self.titles[f'{self.spouse}_年齢']] or row[self.titles[f'{self.spouse}_学年']]:
+            d_input['世帯']['配偶者一覧'].append(self.spouse)
+            people.append(self.spouse)
                 
         for p in self.children:
             if row[self.titles[f'{p}_年齢']] or row[self.titles[f'{p}_学年']]:
-                d_input['世帯']['児童一覧'].append(p)
+                d_input['世帯']['子一覧'].append(p)
                 people.append(p)
 
         if row[self.titles["配偶者がいるがひとり親に該当"]] == 'する':

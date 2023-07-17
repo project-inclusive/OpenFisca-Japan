@@ -52,7 +52,7 @@ class 高校1年生以上の子供がいる(Variable):
 
     def formula(対象世帯, 対象期間, parameters):
         高校1年生以上である = 対象世帯.members("学年", 対象期間) >= 10
-        子供である = 対象世帯.has_role(世帯.児童)
+        子供である = 対象世帯.has_role(世帯.子)
         return np.any(高校1年生以上である * 子供である)
     
 class 中学3年生以上の子供がいる(Variable):
@@ -63,7 +63,7 @@ class 中学3年生以上の子供がいる(Variable):
 
     def formula(対象世帯, 対象期間, parameters):
         中学3年生以上である = 対象世帯.members("学年", 対象期間) >= 9
-        子供である = 対象世帯.has_role(世帯.児童)
+        子供である = 対象世帯.has_role(世帯.子)
         return np.any(中学3年生以上である * 子供である)
 
 class 生活支援費(Variable):
