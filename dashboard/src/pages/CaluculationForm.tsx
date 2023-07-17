@@ -23,6 +23,7 @@ function CaluculationForm() {
       ? configData.OpenFisca_API_URL // Cloud Run (developブランチプッシュ時にビルドされるバックエンドAPI。mainブランチデプロイとdevelopブランチデプロイを判別する方法は不明)
       : "http://localhost:50000";
 
+  // NOTE: 計算したい制度については、予めここに設定する必要がある
   const [household, setHousehold] = useState({
     世帯員: {
       あなた: {
@@ -73,6 +74,32 @@ function CaluculationForm() {
         },
         */
         障害児福祉手当: {
+          [currentDate]: null,
+        },
+        生活支援費: {
+          [currentDate]: null,
+        },
+        一時生活再建費: {
+          [currentDate]: null,
+        },
+        福祉費: {
+          [currentDate]: null,
+        },
+        緊急小口資金: {
+          [currentDate]: null,
+        },
+        /* 住宅入居費はチェックボックスを有効化するまで除外
+        住宅入居費: {
+          [currentDate]: null,
+        },
+        */
+        教育支援費: {
+          [currentDate]: null,
+        },
+        就学支度費: {
+          [currentDate]: null,
+        },
+        不動産担保型生活資金: {
           [currentDate]: null,
         },
       },

@@ -10,6 +10,7 @@ import { useValidate } from "../hooks/validate";
 import { ShowAlertMessageContext } from "../contexts/ShowAlertMessageContext";
 import { useNavigate } from "react-router-dom";
 import { CurrentDateContext } from "../contexts/CurrentDateContext";
+import { FormParents } from "./forms/parents";
 
 export const OpenFiscaForm = () => {
   const [result, calculate] = useCalculate();
@@ -48,6 +49,7 @@ export const OpenFiscaForm = () => {
           <FormYou />
           <FormSpouse />
           <FormChildren />
+          <FormParents />
         </form>
 
         <Center pr={4} pl={4} pb={4}>

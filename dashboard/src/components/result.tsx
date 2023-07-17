@@ -3,6 +3,7 @@ import { Box, Center, Button } from "@chakra-ui/react";
 
 import configData from "../app_config.json";
 import { Benefit } from "./benefit";
+import { Loan } from "./loan";
 
 export const OpenFiscaResult = () => {
   const location = useLocation();
@@ -23,6 +24,7 @@ export const OpenFiscaResult = () => {
       </Center>
 
       <Benefit result={result} currentDate={currentDate} />
+      <Loan result={result} currentDate={currentDate} />
     </div>
   );
 };
