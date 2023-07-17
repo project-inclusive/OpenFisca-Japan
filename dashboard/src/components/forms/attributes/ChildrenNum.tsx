@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext, useState, useRef, useEffect } from "react";
 import { Checkbox, Box, HStack, Input } from "@chakra-ui/react";
 
 import { HouseholdContext } from "../../../contexts/HouseholdContext";
@@ -11,6 +11,7 @@ export const ChildrenNum = () => {
     .padStart(2, "0")}-01`;
   const { household, setHousehold } = useContext(HouseholdContext);
   const [shownChildrenNum, setShownChildrenNum] = useState<string | number>("");
+  const inputEl = useRef<HTMLInputElement>(null);
 
   const [isChecked, setIsChecked] = useState(false);
   // チェックボックスの値が変更された時
@@ -30,6 +31,14 @@ export const ChildrenNum = () => {
     []
   );
 
+  // チェックされたときに「子どもの数」フォームにフォーカス
+  useEffect(() => {
+    if (inputEl.current) {
+      inputEl.current.focus();
+    }
+  }, [isChecked]);
+
+  // 「子どもの数」フォームの変更時
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     let childrenNum = parseInt(event.currentTarget.value);
     // 正の整数以外は0に変換
@@ -93,6 +102,7 @@ export const ChildrenNum = () => {
                 value={shownChildrenNum}
                 onChange={onChange}
                 width="9em"
+                ref={inputEl}
               />
               <Box>人</Box>
             </HStack>
