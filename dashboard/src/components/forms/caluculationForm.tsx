@@ -1,10 +1,10 @@
 import { useState } from "react";
 
-import configData from "../app_config.json";
-import { OpenFiscaForm } from "../components/form";
-import { HouseholdContext } from "../contexts/HouseholdContext";
-import { CurrentDateContext } from "../contexts/CurrentDateContext";
-import { APIServerURLContext } from "../contexts/APIServerURLContext";
+import configData from "../../app_config.json";
+import { FormContent } from "./formContent";
+import { HouseholdContext } from "../../contexts/HouseholdContext";
+import { CurrentDateContext } from "../../contexts/CurrentDateContext";
+import { APIServerURLContext } from "../../contexts/APIServerURLContext";
 
 function CaluculationForm() {
   // 日付は「YYYY-MM-DD」の桁数フォーマットでないとOpenFisca APIが正常動作しない
@@ -23,6 +23,7 @@ function CaluculationForm() {
       ? configData.OpenFisca_API_URL // Cloud Run (developブランチプッシュ時にビルドされるバックエンドAPI。mainブランチデプロイとdevelopブランチデプロイを判別する方法は不明)
       : "http://localhost:50000";
 
+  // NOTE: 計算したい制度については、予めここに設定する必要がある
   const [household, setHousehold] = useState({
     世帯員: {
       あなた: {
@@ -43,7 +44,7 @@ function CaluculationForm() {
     },
     世帯: {
       世帯1: {
-        保護者一覧: ["あなた"],
+        自分一覧: ["あなた"],
         配偶者がいるがひとり親に該当: {
           [currentDate]: null,
         },
@@ -75,6 +76,32 @@ function CaluculationForm() {
         障害児福祉手当: {
           [currentDate]: null,
         },
+        生活支援費: {
+          [currentDate]: null,
+        },
+        一時生活再建費: {
+          [currentDate]: null,
+        },
+        福祉費: {
+          [currentDate]: null,
+        },
+        緊急小口資金: {
+          [currentDate]: null,
+        },
+        /* 住宅入居費はチェックボックスを有効化するまで除外
+        住宅入居費: {
+          [currentDate]: null,
+        },
+        */
+        教育支援費: {
+          [currentDate]: null,
+        },
+        就学支度費: {
+          [currentDate]: null,
+        },
+        不動産担保型生活資金: {
+          [currentDate]: null,
+        },
       },
     },
   });
@@ -87,7 +114,7 @@ function CaluculationForm() {
     <APIServerURLContext.Provider value={apiURL}>
       <CurrentDateContext.Provider value={currentDate}>
         <HouseholdContext.Provider value={householdContextValue}>
-          <OpenFiscaForm />
+          <FormContent />
         </HouseholdContext.Provider>
       </CurrentDateContext.Provider>
     </APIServerURLContext.Provider>

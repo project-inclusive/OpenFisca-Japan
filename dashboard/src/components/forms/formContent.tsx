@@ -1,17 +1,18 @@
 import { useContext, useEffect, useState } from "react";
 import { Box, Center, Button } from "@chakra-ui/react";
 
-import configData from "../app_config.json";
-import { useCalculate } from "../hooks/calculate";
-import { FormYou } from "./forms/you";
-import { FormSpouse } from "./forms/spouse";
-import { FormChildren } from "./forms/children";
-import { useValidate } from "../hooks/validate";
-import { ShowAlertMessageContext } from "../contexts/ShowAlertMessageContext";
+import configData from "../../app_config.json";
+import { useCalculate } from "../../hooks/calculate";
+import { FormYou } from "./you";
+import { FormSpouse } from "./spouse";
+import { FormChildren } from "./children";
+import { useValidate } from "../../hooks/validate";
+import { ShowAlertMessageContext } from "../../contexts/ShowAlertMessageContext";
 import { useNavigate } from "react-router-dom";
-import { CurrentDateContext } from "../contexts/CurrentDateContext";
+import { CurrentDateContext } from "../../contexts/CurrentDateContext";
+import { FormParents } from "./parents";
 
-export const OpenFiscaForm = () => {
+export const FormContent = () => {
   const [result, calculate] = useCalculate();
   const [ShowAlertMessage, setShowAlertMessage] = useState(false);
   const [showResult, setShowResult] = useState(false);
@@ -48,6 +49,7 @@ export const OpenFiscaForm = () => {
           <FormYou />
           <FormSpouse />
           <FormChildren />
+          <FormParents />
         </form>
 
         <Center pr={4} pl={4} pb={4}>

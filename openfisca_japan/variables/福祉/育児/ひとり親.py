@@ -31,9 +31,9 @@ class ひとり親(Variable):
     """
 
     def formula(対象世帯, 対象期間, parameters):
-        保護者が一人 = 対象世帯.nb_persons(世帯.保護者) == 1
+        配偶者なし = 対象世帯.nb_persons(世帯.配偶者) == 0
 
-        return 保護者が一人 + 対象世帯("配偶者がいるがひとり親に該当", 対象期間)
+        return 配偶者なし + 対象世帯("配偶者がいるがひとり親に該当", 対象期間)
 
 
 class 夫と離別死別(Variable):
@@ -53,5 +53,5 @@ class 寡婦(Variable):
     reference = "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1170.htm"
 
     def formula(対象世帯, 対象期間, parameters):
-        子供がいない = 対象世帯.nb_persons(世帯.児童) == 0
+        子供がいない = 対象世帯.nb_persons(世帯.子) == 0
         return 子供がいない * 対象世帯("夫と離別死別", 対象期間)

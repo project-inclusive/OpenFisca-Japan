@@ -2,28 +2,32 @@ import { useCallback, useContext, useState, useRef, useEffect } from "react";
 import { Checkbox, Box, HStack, Input } from "@chakra-ui/react";
 
 import { HouseholdContext } from "../../../contexts/HouseholdContext";
+import { CurrentDateContext } from "../../../contexts/CurrentDateContext";
 
-export const ChildrenNum = () => {
+export const ParentsNum = () => {
+  const currentDate = useContext(CurrentDateContext);
   const lastYearDate = `${new Date().getFullYear() - 1}-${(
     new Date().getMonth() + 1
   )
     .toString()
     .padStart(2, "0")}-01`;
   const { household, setHousehold } = useContext(HouseholdContext);
-  const [shownChildrenNum, setShownChildrenNum] = useState<string | number>("");
+  const [shownLivingToghtherNum, setShownLivingToghtherNum] = useState<
+    string | number
+  >("");
   const inputEl = useRef<HTMLInputElement>(null);
 
   const [isChecked, setIsChecked] = useState(false);
   // チェックボックスの値が変更された時
   const onCheckChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      if (!event.target.checked && household.世帯.世帯1.子一覧) {
+      if (!event.target.checked && household.世帯.世帯1.親一覧) {
         const newHousehold = { ...household };
-        household.世帯.世帯1.子一覧.map((childName: string) => {
-          delete newHousehold.世帯員[childName];
+        household.世帯.世帯1.親一覧.map((name: string) => {
+          delete newHousehold.世帯員[name];
         });
-        newHousehold.世帯.世帯1.子一覧 = Array(0);
-        setShownChildrenNum("");
+        newHousehold.世帯.世帯1.親一覧 = [...newHousehold.世帯.世帯1.親一覧];
+        setShownLivingToghtherNum("");
         setHousehold({ ...newHousehold });
       }
       setIsChecked(event.target.checked);
@@ -31,43 +35,45 @@ export const ChildrenNum = () => {
     []
   );
 
-  // チェックされたときに「子どもの数」フォームにフォーカス
+  // チェックされたときに人数フォームにフォーカス
   useEffect(() => {
     if (inputEl.current) {
       inputEl.current.focus();
     }
   }, [isChecked]);
 
-  // 「子どもの数」フォームの変更時
+  // 人数フォーム変更時
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    let childrenNum = parseInt(event.currentTarget.value);
+    let LivingToghtherNum = parseInt(event.currentTarget.value);
     // 正の整数以外は0に変換
-    if (isNaN(childrenNum) || childrenNum < 0) {
-      childrenNum = 0;
-      setShownChildrenNum("");
-    } else if (childrenNum > 5) {
-      childrenNum = 5;
-      setShownChildrenNum(childrenNum);
+    if (isNaN(LivingToghtherNum) || LivingToghtherNum < 0) {
+      LivingToghtherNum = 0;
+      setShownLivingToghtherNum("");
+      // TODO: 算出に必要な最大人数に設定する
+    } else if (LivingToghtherNum > 10) {
+      LivingToghtherNum = 10;
+      setShownLivingToghtherNum(LivingToghtherNum);
     } else {
-      setShownChildrenNum(childrenNum);
+      setShownLivingToghtherNum(LivingToghtherNum);
     }
 
-    // 変更前の子どもの情報を削除
+    // 変更前の親または祖父母の情報を削除
     const newHousehold = { ...household };
-    if (household.世帯.世帯1.子一覧) {
-      household.世帯.世帯1.子一覧.map((childName: string) => {
-        delete newHousehold.世帯員[childName];
+    if (household.世帯.世帯1.親一覧) {
+      household.世帯.世帯1.親一覧.map((name: string) => {
+        delete newHousehold.世帯員[name];
       });
     }
 
-    // 新しい子どもの情報を追加
-    newHousehold.世帯.世帯1.子一覧 = [...Array(childrenNum)].map(
-      (val, i) => `子ども${i}`
+    // 新しい親または祖父母の情報を追加
+    newHousehold.世帯.世帯1.親一覧 = [...Array(LivingToghtherNum)].map(
+      (val, i) => `親${i}`
     );
-    if (newHousehold.世帯.世帯1.子一覧) {
-      newHousehold.世帯.世帯1.子一覧.map((childName: string) => {
-        newHousehold.世帯員[childName] = {
+    if (newHousehold.世帯.世帯1.親一覧) {
+      newHousehold.世帯.世帯1.親一覧.map((name: string) => {
+        newHousehold.世帯員[name] = {
           誕生年月日: { ETERNITY: "" },
+          収入: { [currentDate]: 0 },
           身体障害者手帳等級認定: { ETERNITY: "無" },
           // 身体障害者手帳交付年月日は入力作業を省略させるため昨年の日付を設定
           // (身体障害者手帳等級認定は身体障害者手帳交付年月日から2年以内が有効)
@@ -91,15 +97,15 @@ export const ChildrenNum = () => {
           checked={isChecked}
           onChange={onCheckChange}
         >
-          子どもがいる
+          親または祖父母と同居している
         </Checkbox>
         {isChecked && (
           <Box mt={2} ml={4} mr={4} mb={4}>
-            <Box>子どもの数</Box>
+            <Box>同居している親または祖父母の数</Box>
             <HStack mb={4}>
               <Input
                 type="number"
-                value={shownChildrenNum}
+                value={shownLivingToghtherNum}
                 onChange={onChange}
                 width="9em"
                 ref={inputEl}

@@ -1,0 +1,7 @@
+description: 不動産担保型生活資金_貸付上限額
+metadata:
+  reference: https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/kashitsukejoken.html
+  unit: currency-JPY
+values:
+  2000-04-01:
+    value: 300000

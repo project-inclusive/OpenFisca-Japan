@@ -4,9 +4,11 @@ import configData from "../../app_config.json";
 import { Birthday } from "./attributes/Birthday";
 import { Student } from "./attributes/Student";
 import { ChildrenNum } from "./attributes/ChildrenNum";
+import { ParentsNum } from "./attributes/ParentsNum";
 import { SpouseExists } from "./attributes/SpouseExists";
 import { Income } from "./attributes/Income";
 import { Disability } from "./attributes/Disability";
+import { RentingHouse } from "./attributes/RentingHouse";
 
 export const FormYou = () => {
   const yourName = "あなた";
@@ -26,6 +28,8 @@ export const FormYou = () => {
         <Student personName={yourName} />
         <SpouseExists />
         <ChildrenNum />
+        <ParentsNum />
+        <RentingHouse />
       </Box>
     </>
   );

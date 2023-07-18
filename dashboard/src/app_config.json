@@ -73,7 +73,8 @@
     "topDescription": "情報を入力してください",
     "youDescription": "あなたについて",
     "spouseDescription": "配偶者について",
-    "childrenDescription": "人目の子ども"
+    "childrenDescription": "人目の子ども",
+    "parentDescription": "同居している親または祖父母"
   },
   "result": {
     "topDescription": "計算結果",
@@ -109,10 +110,11 @@
         }
       }
     },
+    "loanDescription": "借りられるお金",
     "貸付制度": {
       "caption": [
-        "原則無利子・無担保でお金を借りられ、サポーターの支援も受けられる制度",
-        "詳細は市町村社会福祉協議会または都道府県社会福祉協議会にお問い合わせください"
+        "原則無利子・無担保でお金を借りられ、サポーターの支援も受けられる制度。",
+        "詳細は市町村社会福祉協議会または都道府県社会福祉協議会にお問い合わせください。"
       ],
       "reference": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/index.html",
       "制度一覧": {
@@ -123,9 +125,74 @@
             "貸付期間:原則3ヶ月（最長12ヶ月）",
             "返済期限：10年以内",
             "利子：保証人あり 無利子",
-            "　　　保証人なし 年 1.5%"
+            "　　　保証人なし 年1.5%"
           ],
-          "reference": "https://www8.cao.go.jp/shoushi/jidouteate/annai.html"
+          "reference": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/kashitsukejoken.html"
+        },
+        "一時生活再建費": {
+          "unit": "円 　",
+          "caption": [
+            "生活再建までの間に一時的に必要な生活費用",
+            "返済期限：10年以内",
+            "利子：保証人あり 無利子",
+            "　　　保証人なし 年1.5%"
+          ],
+          "reference": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/kashitsukejoken.html"
+        },
+        "福祉費": {
+          "unit": "円 　",
+          "caption": [
+            "様々な用途で必要なお金",
+            "返済期限：20年以内",
+            "利子：保証人あり 無利子",
+            "　　　保証人なし 年1.5%"
+          ],
+          "reference": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/kashitsukejoken.html"
+        },
+        "緊急小口資金": {
+          "unit": "円 　",
+          "caption": [
+            "緊急かつ一時的に生計の維持が困難となった場合に借りられる資金",
+            "返済期限：1年以内",
+            "利子：無利子"
+          ],
+          "reference": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/kashitsukejoken.html"
+        },
+        "住宅入居費": {
+          "unit": "円 　",
+          "caption": [
+            "家の賃貸契約を結ぶために必要な費用",
+            "返済期限：10年以内",
+            "利子：保証人あり 無利子",
+            "　　　保証人なし 年1.5%"
+          ],
+          "reference": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/kashitsukejoken.html"
+        },
+        "教育支援費": {
+          "unit": "円/月",
+          "caption": [
+            "高校、大学等で学ぶために必要な費用",
+            "返済期限：20年以内",
+            "利子：無利子"
+          ],
+          "reference": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/kashitsukejoken.html"
+        },
+        "就学支度費": {
+          "unit": "円 　",
+          "caption": [
+            "高校、大学等の入学に必要な費用",
+            "返済期限：20年以内",
+            "利子：無利子"
+          ],
+          "reference": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/kashitsukejoken.html"
+        },
+        "不動産担保型生活資金": {
+          "unit": "円/月",
+          "caption": [
+            "不動産を担保として借りられる生活資金",
+            "利子：年3%、または長期プライムレートのいずれか低い利率"
+          ],
+          "reference": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/kashitsukejoken.html"
         }
       }
     }

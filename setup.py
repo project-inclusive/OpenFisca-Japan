@@ -58,6 +58,7 @@ setup(
             "pylint >= 2.6.0, < 3.0.0",
             "pycodestyle >= 2.6.0, < 3.0.0",
             "python-dateutil > 2.8.1",
+            "PyYAML == 6.0"
             ],
         },
     packages = find_packages(),

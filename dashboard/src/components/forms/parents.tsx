@@ -1,17 +1,19 @@
 import { useContext } from "react";
-import { Box, Center, Checkbox } from "@chakra-ui/react";
+import { Box, Center } from "@chakra-ui/react";
 
 import configData from "../../app_config.json";
 import { HouseholdContext } from "../../contexts/HouseholdContext";
 import { Birthday } from "./attributes/Birthday";
 import { Disability } from "./attributes/Disability";
+import { Income } from "./attributes/Income";
+import { Student } from "./attributes/Student";
 
-export const FormChildren = () => {
+export const FormParents = () => {
   const { household, setHousehold } = useContext(HouseholdContext);
   return (
     <>
-      {household.世帯.世帯1.子一覧 &&
-        household.世帯.世帯1.子一覧.map((childName: string, index: number) => (
+      {household.世帯.世帯1.親一覧 &&
+        household.世帯.世帯1.親一覧.map((parentName: string, index: number) => (
           <div key={index}>
             <Box bg="white" borderRadius="xl" p={4} m={4}>
               <Center
@@ -19,11 +21,13 @@ export const FormChildren = () => {
                 fontWeight="medium"
                 mb="0.5em"
               >
-                {index + 1}
-                {configData.calculationForm.childrenDescription}
+                {configData.calculationForm.parentDescription}
+                {`（${index + 1}人目）`}
               </Center>
-              <Birthday personName={childName} mustInput={true} />
-              <Disability personName={childName} />
+              <Birthday personName={parentName} mustInput={true} />
+              <Income personName={parentName} mustInput={true} />
+              <Disability personName={parentName} />
+              <Student personName={parentName} />
             </Box>
           </div>
         ))}

@@ -70,6 +70,7 @@ class 給与所得控除額(Variable):
 class 収入(Variable):
     value_type = float
     entity = 人物
+    # 年間収入を指す
     # NOTE: 収入自体は1年ごとに定義されるが、特定の日付における各種手当に計算できるように DAY で定義
     definition_period = DAY
     # Optional attribute. Allows user to declare this variable for a year.
@@ -165,7 +166,7 @@ class ひとり親控除(Variable):
         世帯高所得 = 対象世帯("世帯高所得", 対象期間)
         # 児童扶養手当の対象と異なり、父母の遺棄・DV等は考慮しない
         # (参考：児童扶養手当 https://www.city.hirakata.osaka.jp/0000026828.html)
-        対象ひとり親 = (対象世帯.nb_persons(世帯.保護者) == 1) * (対象世帯.nb_persons(世帯.児童) >= 1) 
+        対象ひとり親 = (対象世帯.nb_persons(世帯.配偶者) == 0) * (対象世帯.nb_persons(世帯.子) >= 1) 
         ひとり親控除額 = parameters(対象期間).所得.ひとり親控除額
         ひとり親控除_所得制限額 = parameters(対象期間).所得.ひとり親控除_所得制限額
 
@@ -271,6 +272,9 @@ class 住民税非課税世帯(Variable):
     definition_period = DAY
     label = "住民税非課税世帯か否か（東京23区で所得割と均等割両方が非課税になる世帯）"
     reference = "https://financial-field.com/tax/entry-173575"
+
+    # TODO 市町村の級地により住民税均等割における非課税限度額が異なる
+    # https://www.soumu.go.jp/main_content/000758656.pdf
 
     def formula(対象世帯, 対象期間, parameters):
         世帯高所得 = 対象世帯("世帯高所得", 対象期間)

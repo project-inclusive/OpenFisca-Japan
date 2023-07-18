@@ -43,7 +43,7 @@ export const FormSpouse = () => {
 
   return (
     <>
-      {household.世帯.世帯1.保護者一覧.includes(spouseName) && (
+      {household.世帯.世帯1.配偶者一覧 && (
         <>
           <Box bg="white" borderRadius="xl" p={4} m={4}>
             <Center
