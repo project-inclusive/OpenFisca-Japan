@@ -12,15 +12,16 @@ from openfisca_japan.entities import 世帯
 from openfisca_core.indexed_enums import Enum
 
 
-# NOTE: 各種基準額表は項目数が多いため可読性の高いCSV形式で作成する
+# TODO: issue#45 で作成した「openfisca_japan/parameters/福祉/生活保護」以下の設定ファイルを
 # グローバル名前空間で読み込む
+# NOTE: 各種基準額表は項目数が多いため可読性の高いCSV形式やjson形式としている。
 # https://www.mhlw.go.jp/content/000776372.pdf を参照
 
-with open('openfisca_japan/parameters/福祉/生活保護/生活扶助基準額_第1類1.csv') as f:
+with open('openfisca_japan/parameters/福祉/生活保護/生活扶助基準/第1類1.csv') as f:
     reader = csv.reader(f)
-    # TODO: dict形式等に変換して扱いやすいようにする
+    # TODO: dict型等に変換して扱いやすいようにする
 
-# TODO: 逓減率, 生活扶助本体に係る経過的加算等も設定ファイルを作成し読み込む
+# TODO: 逓減率, 冬季加算, ...
 
 
 class 生活保護(Variable):
@@ -104,6 +105,9 @@ class 生活保護(Variable):
         # http://kobekoubora.life.coocan.jp/2021juutakufujo.pdf 参照
         # p.4~6までの市に居住している場合はp.4~6を適用
         # それ以外の市区町村に居住している場合はp.1~3を適用
+        # 母子家庭や障害、病気などで特定の病院の近くに住む必要があるといった場合には、特別加算分が計上される場合もあるが、
+        # 判定条件不明のため一旦無視
+        # （参考：https://www.chintai.net/news/2021/02/09/109515/）
 
         # TODO: 教育扶助基準、高等学校等就学費の加算
         # https://www.mhlw.go.jp/content/000776372.pdf 1ページ目右を参照
