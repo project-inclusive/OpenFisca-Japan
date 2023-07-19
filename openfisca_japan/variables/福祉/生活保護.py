@@ -17,7 +17,7 @@ from openfisca_core.indexed_enums import Enum
 # NOTE: 各種基準額表は項目数が多いため可読性の高いCSV形式やjson形式としている。
 # https://www.mhlw.go.jp/content/000776372.pdf を参照
 
-with open('openfisca_japan/parameters/福祉/生活保護/生活扶助基準/第1類1.csv') as f:
+with open('openfisca_japan/parameters/福祉/生活保護/生活扶助基準額/第1類1.csv') as f:
     reader = csv.reader(f)
     # TODO: dict型等に変換して扱いやすいようにする
 

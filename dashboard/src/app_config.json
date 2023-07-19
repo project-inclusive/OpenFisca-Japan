@@ -1,5 +1,8 @@
 {
-  "OpenFisca_API_URL": "https://openfisca-japan-dev-hymisxpzca-uc.a.run.app/",
+  "OpenFisca_API_URL": {
+    "production": "https://openfisca-japan-hymisxpzca-uc.a.run.app/",
+    "dev": "https://openfisca-japan-dev-hymisxpzca-uc.a.run.app/"
+  },
   "Github_URL": "https://github.com/project-inclusive/OpenFisca-Japan",
   "防窮研究所URL": "https://www.facebook.com/Institute.for.Poverty.Prevention",
   "style": {
