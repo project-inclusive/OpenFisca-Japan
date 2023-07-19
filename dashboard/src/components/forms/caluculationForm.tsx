@@ -20,7 +20,8 @@ function CaluculationForm() {
 
   const apiURL =
     import.meta.env.MODE === "production"
-      ? configData.OpenFisca_API_URL.production // mainブランチマージ時にdevからproductionに変更。Cloud Run (developブランチプッシュ時にビルドされるバックエンドAPI。mainブランチデプロイとdevelopブランチデプロイを判別する方法は不明)
+      ? //? configData.OpenFisca_API_URL.production // mainブランチマージ時にビルドされるバックエンドAPI。Cloud Run
+        configData.OpenFisca_API_URL.dev // developブランチプッシュ時にビルドされるバックエンドAPI。Cloud Run
       : "http://localhost:50000";
 
   // NOTE: 計算したい制度については、予めここに設定する必要がある
