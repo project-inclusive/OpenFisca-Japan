@@ -1,5 +1,4 @@
 title: OpenFisca-Japan Docs
 description: OpenFisca-Japan Documentation
 google_analytics:
-# theme: jekyll-theme-cayman
-theme: just-the-docs
+theme: jekyll-theme-cayman
