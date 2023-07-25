@@ -1,7 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { Box, Center, Button } from "@chakra-ui/react";
 
-import configData from "../../app_config.json";
+import configData from "../../config/app_config.json";
 import { Benefit } from "./benefit";
 import { Loan } from "./loan";
 

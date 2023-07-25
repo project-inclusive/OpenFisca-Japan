@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import configData from "../../app_config.json";
+import configData from "../../config/app_config.json";
 import { FormContent } from "./formContent";
 import { HouseholdContext } from "../../contexts/HouseholdContext";
 import { CurrentDateContext } from "../../contexts/CurrentDateContext";
@@ -46,6 +46,12 @@ function CaluculationForm() {
     世帯: {
       世帯1: {
         自分一覧: ["あなた"],
+        居住都道府県: {
+          [currentDate]: "東京都", // default
+        },
+        居住市区町村: {
+          [currentDate]: "その他", // default
+        },
         配偶者がいるがひとり親に該当: {
           [currentDate]: null,
         },

@@ -40,6 +40,7 @@ class 居住級地区分1(Variable):
     entity = 世帯
     label = "居住級地区分1"
     definition_period = DAY
+    reference = 'https://best-selection.co.jp/media/wp-content/uploads/2021/03/seikatsuhogo-kyuchi2022.pdf'
 
     def formula(対象世帯, 対象期間, parameters):
         居住都道府県 = 対象世帯("居住都道府県", 対象期間)[0]
@@ -56,6 +57,7 @@ class 居住級地区分2(Variable):
     entity = 世帯
     label = "居住級地区分2"
     definition_period = DAY
+    reference = 'https://best-selection.co.jp/media/wp-content/uploads/2021/03/seikatsuhogo-kyuchi2022.pdf'
 
     def formula(対象世帯, 対象期間, parameters):
         居住都道府県 = 対象世帯("居住都道府県", 対象期間)[0]

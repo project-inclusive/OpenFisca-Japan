@@ -7,7 +7,7 @@ import {
   ListItem,
 } from "@chakra-ui/react";
 
-import configData from "../../app_config.json";
+import configData from "../../config/app_config.json";
 import { HouseholdContext } from "../../contexts/HouseholdContext";
 import { CurrentDateContext } from "../../contexts/CurrentDateContext";
 import { Birthday } from "./attributes/Birthday";
