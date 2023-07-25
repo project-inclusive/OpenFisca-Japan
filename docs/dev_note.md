@@ -41,7 +41,7 @@ bash generate.sh
 #### GitHub Codespaceを使用する方法
 Dockerを自分のPCにインストールする必要はありませんが、操作性はやや悪いです。
 
-- （このリポジトリ を自分の GitHub アカウントに Fork する | 既に Fork してる場合は Fetch upstream する（必須））
+- このリポジトリ を自分の GitHub アカウントに Fork する or 既に Fork してる場合は Fetch upstream する（必須）
 - → Fork した自分のアカウントの側のリポジトリをブラウザで開き、緑色の「Code」ボタンをクリック
 - → 「Create codespace on main」をクリック
 - → 「Open this codespace in VS Code Desktop」をクリック
