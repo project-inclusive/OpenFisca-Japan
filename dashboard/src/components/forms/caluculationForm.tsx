@@ -47,10 +47,10 @@ function CaluculationForm() {
       世帯1: {
         自分一覧: ["あなた"],
         居住都道府県: {
-          [currentDate]: "東京都", // default
+          [currentDate]: null,
         },
         居住市区町村: {
-          [currentDate]: "その他", // default
+          [currentDate]: null,
         },
         配偶者がいるがひとり親に該当: {
           [currentDate]: null,

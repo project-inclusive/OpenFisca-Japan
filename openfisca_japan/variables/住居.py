@@ -25,6 +25,7 @@ class 居住都道府県(Variable):
     entity = 世帯
     label = "居住都道府県"
     definition_period = DAY
+    default_value = "東京都"
 
 
 class 居住市区町村(Variable):
@@ -32,6 +33,7 @@ class 居住市区町村(Variable):
     entity = 世帯
     label = "居住市区町村"
     definition_period = DAY
+    default_value = "足立区"
 
 
 class 居住級地区分1(Variable):
