@@ -3,21 +3,21 @@
 ## OpenFiscaとは
 
 ### 概要
-OpenFiscaは、社会制度などをソフトウェアコードとして記述できる(Rule as Code)、フランス発のOSSです。  
-[公式HP](https://openfisca.org/en)  
-[Githubリポジトリ](https://github.com/openfisca)  
-[OpenFiscaのドキュメント](https://openfisca.org/doc/)   
-ライセンスはAGPLです。  
-フランスには[Mes Aides](https://www.mesdroitssociaux.gouv.fr/accueil/)という、福祉制度が機械可読に実装され、自分のプロフィールを入力すると自分が受けられる福祉制度が確認できるWebサイトがあります。  
-その裏側がOpenFiscaです。
+- OpenFiscaは、社会制度などをソフトウェアコードとして記述できる(Rule as Code)、フランス発のOSSです
+  - [公式HP](https://openfisca.org/en)
+  - [Githubリポジトリ](https://github.com/openfisca)
+  - [OpenFiscaのドキュメント](https://openfisca.org/doc/)
+  - ライセンスはAGPLです
+- フランスには[Mes Aides](https://www.mesdroitssociaux.gouv.fr/accueil/)という、福祉制度が機械可読に実装され、自分のプロフィールを入力すると自分が受けられる福祉制度が確認できるWebサイトがあります
+  - その裏側がOpenFiscaです
 
 #### Rule as Codeとは
-Rule as Codeとは、法や条例、社会制度などを、ソフトウェアコードとして記述しようという概念です。
+- Rule as Codeとは、法や条例、社会制度などを、ソフトウェアコードとして記述しようという概念です
 
 ### 特徴
-- NumPyによるベクトル演算で社会制度を記述します。  
-それにより、複数の世帯や個人に対し、if分岐なしで一括でロジックを適用できます。  
-（例）
+- NumPyによるベクトル演算で社会制度を記述します
+  - それにより、複数の世帯や個人に対し、if分岐なしで一括でロジックを適用できます
+- （例）
   - if 文の場合：
     ```
     200 if their salary is less than 500;
@@ -64,7 +64,8 @@ Rule as Codeとは、法や条例、社会制度などを、ソフトウェア�
   - 個人、世帯、法人の持つ属性情報
 
 ## Tips
-OpenFiscaフレームワークは高機能ですが、それゆえ想定と異なる挙動を示すこともあります。公式のマニュアルに載っていない内容もあるため、それらを以下に記載します。
+- OpenFiscaフレームワークは高機能ですが、それゆえ想定と異なる挙動を示すこともあります
+- 公式のマニュアルに載っていない内容もあるため、それらを以下に記載します
 
 ### テスト
 - テスト実行
@@ -97,7 +98,7 @@ OpenFiscaフレームワークは高機能ですが、それゆえ想定と異�
 ### 計算ロジック (variables)
 - メソッド名 formula の代わりに forluma\_{年} や formula\_{年\}\_{月}\_{日} を使うと、指定した時刻以降のperiodの場合にのみ呼び出されます
 - つまり、periodの場合分けでif文を使わずに済むようになります
-  - （参考） https://github.com/openfisca/openfisca-core/blob/fad5f69a91435c767cb6bca73de6a7d1b666c082/openfisca_core/variables/variable.py#L246
+  - [参考実装](https://github.com/openfisca/openfisca-core/blob/fad5f69a91435c767cb6bca73de6a7d1b666c082/openfisca_core/variables/variable.py#L246)
 
 ### API
 - (APIのURL)/spec から仕様のjsonをgetできる
