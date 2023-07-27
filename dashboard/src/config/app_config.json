@@ -34,6 +34,13 @@
       "lg": "1em",
       "xl": "1em"
     },
+    "selectPrefectureSize": {
+      "base": "10em",
+      "sm": "10em",
+      "md": "10em",
+      "lg": "10em",
+      "xl": "10em"
+    },
     "selectYearSize": {
       "base": "6em",
       "sm": "7em",

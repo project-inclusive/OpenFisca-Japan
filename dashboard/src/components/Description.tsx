@@ -4,7 +4,7 @@ import { Icon } from "@chakra-ui/react";
 import { CheckCircleIcon } from "@chakra-ui/icons";
 import { FaGithub } from "react-icons/fa";
 
-import configData from "../app_config.json";
+import configData from "../config/app_config.json";
 import bokyuIcon from "../assets/bokyu_lab_icon_cyan.png";
 
 function Description() {

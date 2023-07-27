@@ -1,7 +1,7 @@
 import { useState, useCallback, useContext, useMemo, useEffect } from "react";
 import { Box, Center, Select, HStack } from "@chakra-ui/react";
 
-import configData from "../../../app_config.json";
+import configData from "../../../config/app_config.json";
 import { HouseholdContext } from "../../../contexts/HouseholdContext";
 import { ErrorMessage } from "./validation/ErrorMessage";
 
