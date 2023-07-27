@@ -51,15 +51,15 @@ class 生活保護(Variable):
         生活扶助本体における経過的加算 = 対象世帯("生活扶助本体における経過的加算", 対象期間)
         a = np.max([生活扶助基準1 * 0.855, 生活扶助基準2]) + 生活扶助本体における経過的加算
 
-        # 【Ｂ】加算額
-        障害者加算額 = 対象世帯("障害者加算額", 対象期間)
-        母子加算額 = 対象世帯("母子加算額", 対象期間)
-        児童を養育する場合の加算額 = 対象世帯("児童を養育する場合の加算額", 対象期間)
+        # 【Ｂ】加算
+        障害者加算 = 対象世帯("障害者加算", 対象期間)
+        母子加算 = 対象世帯("母子加算", 対象期間)
+        児童を養育する場合の加算 = 対象世帯("児童を養育する場合の加算", 対象期間)
         母子世帯等に係る経過的加算 = 対象世帯("母子世帯等に係る経過的加算", 対象期間)
         児童を養育する場合に係る経過的加算 = 対象世帯("児童を養育する場合に係る経過的加算", 対象期間)
         # 障害者加算と母子加算は併給できない（参考：https://www.mhlw.go.jp/content/000776372.pdf）
         # 高い方のみ加算（参考：https://www.ace-room.jp/safetynet/safetyqa/safety-add/）
-        b = np.max([障害者加算額, 母子加算額]) + 児童を養育する場合の加算額 + 母子世帯等に係る経過的加算 + 児童を養育する場合に係る経過的加算
+        b = np.max([障害者加算, 母子加算]) + 児童を養育する場合の加算 + 母子世帯等に係る経過的加算 + 児童を養育する場合に係る経過的加算
 
         # TODO: その他加算
         # 必要な入力情報もvariableで定義する
@@ -166,11 +166,11 @@ class 生活扶助本体における経過的加算(Variable):
         return 0
 
 
-class 障害者加算額(Variable):
+class 障害者加算(Variable):
     value_type = float
     entity = 世帯
     definition_period = DAY
-    label = "障害者に関する加算額"
+    label = "障害者に関する加算"
     reference = "https://www.mhlw.go.jp/content/000776372.pdf"
     documentation = """
     算出方法は以下リンクも参考になる。
@@ -186,11 +186,11 @@ class 障害者加算額(Variable):
         return 0
 
 
-class 母子加算額(Variable):
+class 母子加算(Variable):
     value_type = float
     entity = 世帯
     definition_period = DAY
-    label = "母子世帯等に関する加算額（父子世帯も対象）"
+    label = "母子世帯等に関する加算（父子世帯も対象）"
     reference = "https://www.mhlw.go.jp/content/000776372.pdf"
     documentation = """
     算出方法は以下リンクも参考になる。
@@ -206,11 +206,11 @@ class 母子加算額(Variable):
         return 0
 
 
-class 児童を養育する場合の加算額(Variable):
+class 児童を養育する場合の加算(Variable):
     value_type = float
     entity = 世帯
     definition_period = DAY
-    label = "児童を養育する場合の加算額"
+    label = "児童を養育する場合の加算"
     reference = "https://www.mhlw.go.jp/content/000776372.pdf"
     documentation = """
     算出方法は以下リンクも参考になる。
