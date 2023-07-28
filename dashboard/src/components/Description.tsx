@@ -56,13 +56,13 @@ function Description() {
         </Box>
 
         <Center>
-          <a href={configData.防窮研究所URL}>
+          <a href={configData.URL.防窮研究所}>
             <VStack mr={4}>
               <Image src={bokyuIcon} alt="防窮研究所" boxSize="2em" />
               <Box color="gray.600">About</Box>
             </VStack>
           </a>
-          <a href={configData.Github_URL}>
+          <a href={configData.URL.Github}>
             <VStack>
               <Icon as={FaGithub} boxSize="2em" color="cyan.600"></Icon>
               <Box color="gray.600">Github</Box>

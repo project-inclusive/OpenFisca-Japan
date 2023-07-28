@@ -1,10 +1,13 @@
 {
-  "OpenFisca_API_URL": {
-    "production": "https://openfisca-japan-hymisxpzca-uc.a.run.app/",
-    "dev": "https://openfisca-japan-dev-hymisxpzca-uc.a.run.app/"
+  "URL": {
+    "OpenFisca_API": {
+      "production": "https://openfisca-japan-hymisxpzca-uc.a.run.app/",
+      "dev": "https://openfisca-japan-dev-hymisxpzca-uc.a.run.app/"
+    },
+    "Github": "https://github.com/project-inclusive/OpenFisca-Japan",
+    "防窮研究所": "https://www.facebook.com/Institute.for.Poverty.Prevention",
+    "questionnaire_form": "https://forms.gle/7G6XZKsGvf7VdNTR7"
   },
-  "Github_URL": "https://github.com/project-inclusive/OpenFisca-Japan",
-  "防窮研究所URL": "https://www.facebook.com/Institute.for.Poverty.Prevention",
   "style": {
     "titleFontSize": {
       "base": "1.5em",
@@ -88,6 +91,9 @@
   },
   "result": {
     "topDescription": "計算結果",
+    "questionnaireDescription": [
+      "よろしければ改善のための簡単なアンケートにご協力ください。"
+    ],
     "benefitDescription": "給付されるお金",
     "給付制度": {
       "caption": [

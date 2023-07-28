@@ -25,6 +25,26 @@ export const Result = () => {
 
       <Benefit result={result} currentDate={currentDate} />
       <Loan result={result} currentDate={currentDate} />
+
+      <Center pr={4} pl={4} pb={4}>
+        {configData.result.questionnaireDescription[0]}
+      </Center>
+
+      <Center pr={4} pl={4} pb={4}>
+        <Button
+          as="a"
+          href={configData.URL.questionnaire_form}
+          fontSize={configData.style.subTitleFontSize}
+          borderRadius="xl"
+          height="2em"
+          width="100%"
+          bg="cyan.600"
+          color="white"
+          _hover={{ bg: "cyan.700" }}
+        >
+          アンケートに答える
+        </Button>
+      </Center>
     </div>
   );
 };
