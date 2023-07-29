@@ -123,14 +123,6 @@ make serve-local
 - GET http://localhost:50000/variables
 - GET http://localhost:50000/parameters
 
-#### (for Windows) 環境変数を利用して Python に UTF-8 を強制させる
-
-Unicode Decoding Error が起きるときもこちらの通りにしてください。
-Powershell を起動し以下のコマンドを入力して下さい。
-
-```
-$env:PYTHONUTF8=1
-```
 
 
 ## デプロイ方法
@@ -151,3 +143,63 @@ $env:PYTHONUTF8=1
 
 ### フロントエンド
 - Netlifyでmainブランチ、developブランチにpull (push)時にbuild, deployされる。
+
+- developブランチのデプロイURLは[https://develop--myseido-simulator.netlify.app/](https://develop--myseido-simulator.netlify.app/)
+
+
+
+## TroubleShooting
+
+### Frontend
+
+- When `npm ci` in `dashboard/Dockerfile`, this error happened and docker image can't be made.
+
+  ```
+  npm verb cli /usr/local/bin/node /usr/local/bin/npm
+  npm info using npm@9.6.7
+  npm info using node@v18.17.0
+  npm verb cache could not create cache: Error: ENOENT: no such file or directory, mkdir '/home/user/.npm'
+  npm verb logfile could not create logs-dir: Error: ENOENT: no such file or directory, mkdir '/home/user/.npm'
+  npm verb title npm ci
+  npm verb argv "ci" "--loglevel" "verbose"
+  npm verb logfile logs-max:10 dir:/home/user/.npm/_logs/2023-07-29T13_01_14_844Z-
+  npm verb logfile could not be created: Error: ENOENT: no such file or directory, open '/home/user/.npm/_logs/2023-07-29T13_01_14_844Z-debug-0.log'
+  npm verb logfile no logfile created
+  npm verb stack Error: ENOENT: no such file or directory, mkdir '/app/node_modules'
+  npm verb cwd /app
+  npm verb Linux 5.10.104-linuxkit
+  npm verb node v18.17.0
+  npm verb npm  v9.6.7
+  npm ERR! code ENOENT
+  npm ERR! syscall mkdir
+  npm ERR! path /app/node_modules
+  npm ERR! errno -2
+  npm ERR! enoent ENOENT: no such file or directory, mkdir '/app/node_modules'
+  npm ERR! enoent This is related to npm not being able to find a file.
+  npm ERR! enoent 
+  npm verb exit -2
+  npm verb unfinished npm timer reify 1690635675079
+  npm verb unfinished npm timer reify:createSparse 1690635675086
+  npm verb code -2
+
+  npm ERR! Log files were not written due to an error writing to the directory: /home/user/.npm/_logs
+  npm ERR! You can rerun the command with `--loglevel=verbose` to see the logs in your terminal
+  ```
+
+  This error is resolved by add `npm cache clean --force` by root user in Dockerfile.
+
+  The cause is not unknown.   
+  It is also unknown whether this error occurs only on the one local PC or in any environment.  
+  In Netlify depoloy environment, the error is probably not occured.  
+  The error may have happened when the node:18-bullseye docker image went up from 18.16 to 18.17, but same error occured when reversion back to 16. 
+
+
+### Backend
+
+- (for Windows) 環境変数を利用して Python に UTF-8 を強制させる  
+Unicode Decoding Error が起きるときもこちらの通りにしてください。
+Powershell を起動し以下のコマンドを入力して下さい。
+
+  ```
+  $env:PYTHONUTF8=1
+  ```
