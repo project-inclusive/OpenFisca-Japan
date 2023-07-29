@@ -15,3 +15,5 @@
 - [環境構築](./dev_note#環境構築)
 - [開発方法](./dev_note#開発方法)
 - [デプロイ方法](./dev_note#デプロイ方法)
+
+### [変更履歴 (Change log)](./change_log)

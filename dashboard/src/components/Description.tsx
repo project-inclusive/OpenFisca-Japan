@@ -56,7 +56,7 @@ function Description() {
         </Box>
 
         <Center>
-          <a href={configData.URL.防窮研究所}>
+          <a href={configData.URL.contact}>
             <VStack mr={4}>
               <Image src={bokyuIcon} alt="防窮研究所" boxSize="2em" />
               <Box color="gray.600">About</Box>

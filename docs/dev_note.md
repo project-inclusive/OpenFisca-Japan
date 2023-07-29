@@ -6,7 +6,7 @@
     - Windowsの場合：[WindowsでのDocker Desktop環境構築](https://chigusa-web.com/blog/windows%E3%81%ABdocker%E3%82%92%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%81%97%E3%81%A6python%E7%92%B0%E5%A2%83%E3%82%92%E6%A7%8B%E7%AF%89/)
     - Macの場合：[MacでのDocker Desktop環境構築](https://matsuand.github.io/docs.docker.jp.onthefly/desktop/mac/install/)
 
-1. proj-inclusiveのOpenFisca-Japan Githubリポジトリ **developブランチ** を個人アカウントのリポジトリとしてフォークし、ローカル環境（自分のPC）にクローン（ダウンロード）する。  
+1. proj-inclusiveのOpenFisca-Japan Githubリポジトリをフォークし、ローカル環境（自分のPC）にクローン（ダウンロード）する。 **developブランチ** をチェックアウトする。  
   [フォーク・クローン・プルリクエストの流れ](https://techtechmedia.com/how-to-fork-github/)    
    リポジトリのクローンはGithub desktop, Source treeなどのツールを使うのが簡単です。
 1. 自分のPC上にクローンしたOpenfisca-Japanのルートディレクトリで、WindowsならPowershell、MacならTerminalを開く。  
@@ -21,7 +21,7 @@
       # 「Ctrlキー＋c」でdocker環境を停止
       ```
 
-    - バックエンドのみ環境構築・起動
+    - バックエンドのみ環境構築・起動  
       ```
       # docker環境を構築
       docker build ./ -t openfisca_japan
@@ -30,8 +30,9 @@
       # $(pwd)はDockerfileが存在するディレクトリの絶対パスで置き換える必要があるかもしれません。
       # docker環境を終了
       exit
+      ```
   
-    - フロントエンドのみ環境構築・起動
+    - フロントエンドのみ環境構築・起動  
       ```
       # dashboardのディレクトリに移動
       cd dashboard
@@ -122,10 +123,25 @@ make serve-local
 - GET http://localhost:50000/variables
 - GET http://localhost:50000/parameters
 
+#### (for Windows) 環境変数を利用して Python に UTF-8 を強制させる
+
+Unicode Decoding Error が起きるときもこちらの通りにしてください。
+Powershell を起動し以下のコマンドを入力して下さい。
+
+```
+$env:PYTHONUTF8=1
+```
+
+
 ## デプロイ方法
 
 ### バックエンド（OpenFisca Python APIサーバー）
-#### ローカルでdockerイメージを作りcloud runにデプロイする
+
+### 自動build, deploy
+- Google CloudのCloud Buildにより、mainブランチ、developブランチにpull (push) されたとき、`Dockerfile_cloud`を元にそれぞれ自動でbuildされ、Cloud Runによりdeployされる。
+- mainブランチ、developブランチでbuild, deployされるAPIは別々。`dashboard/src/components/forms/caluculationForm.tsx`の`apiURL`を、mainブランチとdevelopブランチpull (push)時に、`configData.URL.OpenFisca_API.production`と`configData.URL.OpenFisca_API.dev`に手動で切り替えている。
+
+#### ローカルでdockerイメージを作りcloud runにデプロイする（参考）
 - `docker build -t gcr.io/openfisca-shibuya/openfisca-shibuya-deploy-test -f Dockerfile_cloud --platform amd64 .`
   - M1 Macの場合、`--platform amd64`が必要
 - `docker push gcr.io/openfisca-shibuya/openfisca-shibuya-deploy-test:latest`
@@ -134,4 +150,4 @@ make serve-local
 - Makefile内の環境変数は`$hoge`では認識されない。他の記載方法がある？
 
 ### フロントエンド
-- メンテナンス中
+- Netlifyでmainブランチ、developブランチにpull (push)時にbuild, deployされる。
