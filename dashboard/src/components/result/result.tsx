@@ -31,6 +31,7 @@ export const Result = () => {
       </Center>
 
       <Center pr={4} pl={4} pb={4}>
+        {/* When returning to this calculation result page from the questionnaire form on a PC browser (Chrome, Edge) deployed by Netlify, it will be 404, so open it in a new tab */}
         <Button
           as="a"
           href={configData.URL.questionnaire_form}
@@ -41,6 +42,8 @@ export const Result = () => {
           bg="cyan.600"
           color="white"
           _hover={{ bg: "cyan.700" }}
+          target="_blank"
+          rel="noopener noreferrer"
         >
           アンケートに答える
         </Button>
