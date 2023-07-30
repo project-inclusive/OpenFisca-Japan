@@ -48,43 +48,6 @@
     - フロントエンドを起動している場合は
       http://localhost:30000/ をブラウザに打ち込むとフォームが表示されます。
 
-## 開発方法
-
-### バックエンド
-
-#### 事前準備
-- バックエンドのdocker環境に入る
-
-#### テスト実行
-- 全てのテストを実行（2023/2/25時点でエラーになるため、下の「一部のテストを実行」で確認）
-  - `make test` 
-- 一部のテストを実行
-  - `openfisca test --country-package openfisca_japan openfisca_japan/tests/<実行したいテストファイル或いはディレクトリパス>`
-    - 上記コマンド実行時にテストファイル（~.yaml）を読み込みます
-    - そのため、テストファイルのみ修正する場合はそれ自身を修正してコマンド実行すれば良いです
-#### 内部計算方法の修正
-- openfisca_japan/variables/~.py等の計算方法を規定するファイルを修正する
-- 以下のコマンドでビルドを行わないとテスト時に修正が反映されない
-  - `make build`
-- その後、上述のテストを行う
-- 通常は標準出力は表示されませんが、例外を発生させると標準出力が表示されデバッグが容易になります
-
-#### テスト条件・結果を記載したCSVファイルから、yamlのテストファイルを自動生成する方法
-
-```
-cd make_tests
-bash generate.sh
-```
-  
-- 上記コマンドで openfisca_japan/tests/generated 以下にyamlのテストファイルが作成される
-  - そのテストファイルを上述の方法でテストする
-
-### フロントエンド
-- ルートディレクトリで以下コマンドを打ち、フロントエンドとバックエンドのDocker環境を一括で起動する
-  - `docker-compose up --build`
-- `cd dashboard` でdashboardディレクトリにて開発する。
-- http://localhost:30000/ をブラウザに打ち込み、ページを確認する。
-
 ### Dockerを使わない環境構築方法（参考）
 #### GitHub Codespaceを使用する方法
 Dockerを自分のPCにインストールする必要はありませんが、操作性はやや悪いです。
@@ -122,6 +85,46 @@ make serve-local
 - GET http://localhost:50000/entities
 - GET http://localhost:50000/variables
 - GET http://localhost:50000/parameters
+
+
+
+
+## 開発方法
+
+### バックエンド
+
+#### 事前準備
+- バックエンドのdocker環境に入る
+
+#### テスト実行
+- 全てのテストを実行（2023/2/25時点でエラーになるため、下の「一部のテストを実行」で確認）
+  - `make test` 
+- 一部のテストを実行
+  - `openfisca test --country-package openfisca_japan openfisca_japan/tests/<実行したいテストファイル或いはディレクトリパス>`
+    - 上記コマンド実行時にテストファイル（~.yaml）を読み込みます
+    - そのため、テストファイルのみ修正する場合はそれ自身を修正してコマンド実行すれば良いです
+#### 内部計算方法の修正
+- openfisca_japan/variables/~.py等の計算方法を規定するファイルを修正する
+- 以下のコマンドでビルドを行わないとテスト時に修正が反映されない
+  - `make build`
+- その後、上述のテストを行う
+- 通常は標準出力は表示されませんが、例外を発生させると標準出力が表示されデバッグが容易になります
+
+#### テスト条件・結果を記載したCSVファイルから、yamlのテストファイルを自動生成する方法
+
+```
+cd make_tests
+bash generate.sh
+```
+  
+- 上記コマンドで openfisca_japan/tests/generated 以下にyamlのテストファイルが作成される
+  - そのテストファイルを上述の方法でテストする
+
+### フロントエンド
+- ルートディレクトリで以下コマンドを打ち、フロントエンドとバックエンドのDocker環境を一括で起動する
+  - `docker-compose up --build`
+- `cd dashboard` でdashboardディレクトリにて開発する。
+- http://localhost:30000/ をブラウザに打ち込み、ページを確認する。
 
 
 
