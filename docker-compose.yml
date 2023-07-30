@@ -19,7 +19,7 @@ services:
     volumes:
       - ${LOCAL_WORKSPACE_FOLDER:-.}/dashboard/src:/app/src
     #command: npm run dev
-    user: user:user
+    #user: user:user
     ports:
       - 30000:30000
     networks:

@@ -34,7 +34,7 @@ setup(
     data_files = [
         (
             "share/openfisca/openfisca-country-template",
-            ["CHANGELOG.md", "README.md"],
+            ["README.md"],
             ),
         ],
     install_requires = [

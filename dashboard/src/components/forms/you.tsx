@@ -1,6 +1,7 @@
 import { Box, Center } from "@chakra-ui/react";
 
-import configData from "../../app_config.json";
+import configData from "../../config/app_config.json";
+import { PrefectureMunicipality } from "./attributes/PrefectureMunicipality";
 import { Birthday } from "./attributes/Birthday";
 import { Student } from "./attributes/Student";
 import { ChildrenNum } from "./attributes/ChildrenNum";
@@ -22,6 +23,7 @@ export const FormYou = () => {
         >
           {configData.calculationForm.youDescription}
         </Center>
+        <PrefectureMunicipality mustInput={true} />
         <Birthday personName={yourName} mustInput={true} />
         <Income personName={yourName} mustInput={true} />
         <Disability personName={yourName} />

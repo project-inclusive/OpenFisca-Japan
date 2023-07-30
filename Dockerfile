@@ -1,6 +1,7 @@
 FROM python:3.8-bullseye
 USER root
 
+# comment out upgrade pip for avoiding error
 #RUN pip install --upgrade pip
 #RUN pip install --upgrade setuptools
 RUN pip install --no-cache-dir \

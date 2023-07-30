@@ -1,5 +1,5 @@
 import { useState, useCallback, useContext, useEffect } from "react";
-import { Box, Select } from "@chakra-ui/react";
+import { Select, FormControl, FormLabel } from "@chakra-ui/react";
 
 import { HouseholdContext } from "../../../contexts/HouseholdContext";
 
@@ -73,33 +73,37 @@ export const IntellectualDisability = ({
 
   return (
     <>
-      <Box>療育手帳</Box>
-      <Select
-        value={selectedRyoikuItemIndex}
-        className="form-select"
-        onChange={onRyoikuChange}
-        mb={2}
-      >
-        {ryoikuItems.map((item, index) => (
-          <option value={index} key={index}>
-            {item[0]}
-          </option>
-        ))}
-      </Select>
+      <FormControl>
+        <FormLabel fontWeight="Regular">療育手帳</FormLabel>
+        <Select
+          value={selectedRyoikuItemIndex}
+          className="form-select"
+          onChange={onRyoikuChange}
+          mb={3}
+        >
+          {ryoikuItems.map((item, index) => (
+            <option value={index} key={index}>
+              {item[0]}
+            </option>
+          ))}
+        </Select>
+      </FormControl>
 
-      <Box>愛の手帳</Box>
-      <Select
-        value={selectedAiItemIndex}
-        className="form-select"
-        onChange={onAiChange}
-        mb={2}
-      >
-        {aiItems.map((item, index) => (
-          <option value={index} key={index}>
-            {item[0]}
-          </option>
-        ))}
-      </Select>
+      <FormControl>
+        <FormLabel fontWeight="Regular">愛の手帳</FormLabel>
+        <Select
+          value={selectedAiItemIndex}
+          className="form-select"
+          onChange={onAiChange}
+          mb={3}
+        >
+          {aiItems.map((item, index) => (
+            <option value={index} key={index}>
+              {item[0]}
+            </option>
+          ))}
+        </Select>
+      </FormControl>
     </>
   );
 };

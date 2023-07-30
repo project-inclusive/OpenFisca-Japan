@@ -7,7 +7,7 @@ import {
   ListItem,
 } from "@chakra-ui/react";
 
-import configData from "../../app_config.json";
+import configData from "../../config/app_config.json";
 import { HouseholdContext } from "../../contexts/HouseholdContext";
 import { CurrentDateContext } from "../../contexts/CurrentDateContext";
 import { Birthday } from "./attributes/Birthday";
@@ -20,12 +20,6 @@ export const FormSpouse = () => {
   const [isChecked, setIsChecked] = useState(false);
   const { household, setHousehold } = useContext(HouseholdContext);
   const spouseName = "配偶者";
-
-  const lastYearDate = `${new Date().getFullYear() - 1}-${(
-    new Date().getMonth() + 1
-  )
-    .toString()
-    .padStart(2, "0")}-01`;
 
   // チェックボックスの値が変更された時
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {

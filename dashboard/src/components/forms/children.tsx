@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { Box, Center, Checkbox } from "@chakra-ui/react";
 
-import configData from "../../app_config.json";
+import configData from "../../config/app_config.json";
 import { HouseholdContext } from "../../contexts/HouseholdContext";
 import { Birthday } from "./attributes/Birthday";
 import { Disability } from "./attributes/Disability";

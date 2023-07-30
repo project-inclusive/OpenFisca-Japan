@@ -9,7 +9,7 @@ import {
   AccordionPanel,
 } from "@chakra-ui/react";
 
-import configData from "../../app_config.json";
+import configData from "../../config/app_config.json";
 
 export const Benefit = ({
   result,

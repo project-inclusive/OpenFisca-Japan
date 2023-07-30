@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import configData from "../../app_config.json";
+import configData from "../../config/app_config.json";
 import { FormContent } from "./formContent";
 import { HouseholdContext } from "../../contexts/HouseholdContext";
 import { CurrentDateContext } from "../../contexts/CurrentDateContext";
@@ -20,8 +20,9 @@ function CaluculationForm() {
 
   const apiURL =
     import.meta.env.MODE === "production"
-      ? configData.OpenFisca_API_URL.production // mainブランチマージ時にdevからproductionに変更。Cloud Run (developブランチプッシュ時にビルドされるバックエンドAPI。mainブランチデプロイとdevelopブランチデプロイを判別する方法は不明)
-      : "http://localhost:50000";
+      ? configData.URL.OpenFisca_API.production // mainブランチマージ時にビルドされるバックエンドAPI。Cloud Run
+      : //  configData.URL.OpenFisca_API.dev // developブランチプッシュ時にビルドされるバックエンドAPI。Cloud Run
+        "http://localhost:50000";
 
   // NOTE: 計算したい制度については、予めここに設定する必要がある
   const [household, setHousehold] = useState({
@@ -45,6 +46,12 @@ function CaluculationForm() {
     世帯: {
       世帯1: {
         自分一覧: ["あなた"],
+        居住都道府県: {
+          [currentDate]: null,
+        },
+        居住市区町村: {
+          [currentDate]: null,
+        },
         配偶者がいるがひとり親に該当: {
           [currentDate]: null,
         },
