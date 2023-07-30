@@ -1,5 +1,5 @@
 import { KeyboardEvent, useCallback, useContext, useState } from "react";
-import { Box, HStack, Input } from "@chakra-ui/react";
+import { Box, HStack, Input, FormControl, FormLabel } from "@chakra-ui/react";
 
 import { CurrentDateContext } from "../../../contexts/CurrentDateContext";
 import { HouseholdContext } from "../../../contexts/HouseholdContext";
@@ -59,24 +59,29 @@ export const Income = ({
     */
     <>
       {mustInput && <ErrorMessage condition={shownIncome === ""} />}
-      <HStack>
-        <Box>年収</Box>
-        {mustInput && (
-          <Box color="red" fontSize="0.7em">
-            必須
-          </Box>
-        )}
-      </HStack>
-      <HStack mb={4}>
-        <Input
-          type="number"
-          value={shownIncome}
-          onChange={onChange}
-          onKeyDown={onKeyDown}
-          width="10em"
-        />
-        <Box>万円</Box>
-      </HStack>
+      <FormControl>
+        <FormLabel fontWeight="Regular">
+          <HStack>
+            <Box>年収</Box>
+            {mustInput && (
+              <Box color="red" fontSize="0.7em">
+                必須
+              </Box>
+            )}
+          </HStack>
+        </FormLabel>
+
+        <HStack mb={4}>
+          <Input
+            type="number"
+            value={shownIncome}
+            onChange={onChange}
+            onKeyDown={onKeyDown}
+            width="10em"
+          />
+          <Box>万円</Box>
+        </HStack>
+      </FormControl>
     </>
   );
 };

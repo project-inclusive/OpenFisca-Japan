@@ -1,5 +1,5 @@
 import { useState, useCallback, useContext, useMemo, useEffect } from "react";
-import { Box, Center, Select, HStack } from "@chakra-ui/react";
+import { Box, Select, HStack, FormControl, FormLabel } from "@chakra-ui/react";
 
 import configData from "../../../config/app_config.json";
 import { HouseholdContext } from "../../../contexts/HouseholdContext";
@@ -93,74 +93,82 @@ export const Birthday = ({
           }
         />
       )}
-      <HStack>
-        <Box fontSize={configData.style.itemFontSize}>生年月日</Box>
-        {mustInput && (
-          <Box color="red" fontSize="0.7em">
-            必須
+      <FormControl>
+        <FormLabel
+          fontSize={configData.style.itemFontSize}
+          fontWeight="Regular"
+        >
+          <HStack>
+            <Box>生年月日</Box>
+            {mustInput && (
+              <Box color="red" fontSize="0.7em">
+                必須
+              </Box>
+            )}
+          </HStack>
+        </FormLabel>
+
+        <HStack mb={4}>
+          <Select
+            onChange={(e) => handleYearChange(e)}
+            fontSize={configData.style.itemFontSize}
+            width={configData.style.selectYearSize}
+          >
+            <option value={""} key={0}></option>
+            {yearArray.map((year) => (
+              <option value={year} key={year}>
+                {year}
+              </option>
+            ))}
+          </Select>
+          <Box
+            fontSize={configData.style.itemFontSize}
+            mt={configData.style.unitMt}
+          >
+            年
           </Box>
-        )}
-      </HStack>
-      <HStack mb={4}>
-        <Select
-          onChange={(e) => handleYearChange(e)}
-          fontSize={configData.style.itemFontSize}
-          width={configData.style.selectYearSize}
-        >
-          <option value={""} key={0}></option>
-          {yearArray.map((year) => (
-            <option value={year} key={year}>
-              {year}
-            </option>
-          ))}
-        </Select>
-        <Box
-          fontSize={configData.style.itemFontSize}
-          mt={configData.style.unitMt}
-        >
-          年
-        </Box>
 
-        <Select
-          className="form-select"
-          onChange={(e) => handleMonthChange(e)}
-          fontSize={configData.style.itemFontSize}
-          width={configData.style.selectMonthDateSize}
-        >
-          <option value={""} key={0}></option>
-          {monthArray.map((month) => (
-            <option value={month} key={month}>
-              {month}
-            </option>
-          ))}
-        </Select>
-        <Box
-          fontSize={configData.style.itemFontSize}
-          mt={configData.style.unitMt}
-        >
-          月
-        </Box>
+          <Select
+            className="form-select"
+            onChange={(e) => handleMonthChange(e)}
+            fontSize={configData.style.itemFontSize}
+            width={configData.style.selectMonthDateSize}
+          >
+            <option value={""} key={0}></option>
+            {monthArray.map((month) => (
+              <option value={month} key={month}>
+                {month}
+              </option>
+            ))}
+          </Select>
+          <Box
+            fontSize={configData.style.itemFontSize}
+            mt={configData.style.unitMt}
+          >
+            月
+          </Box>
 
-        <Select
-          className="form-select"
-          onChange={(e) => handleDateChange(e)}
-          fontSize={configData.style.itemFontSize}
-          width={configData.style.selectMonthDateSize}
-        >
-          <option value={""} key={0}></option>
-          {dateArray.map((date) => (
-            <option value={date} key={date}>
-              {date}
-            </option>
-          ))}
-        </Select>
-        <Box
-          fontSize={configData.style.itemFontSize}
-          mt={configData.style.unitMt}
-        >
-          日
-        </Box>
-      </HStack>
+          <Select
+            className="form-select"
+            onChange={(e) => handleDateChange(e)}
+            fontSize={configData.style.itemFontSize}
+            width={configData.style.selectMonthDateSize}
+          >
+            <option value={""} key={0}></option>
+            {dateArray.map((date) => (
+              <option value={date} key={date}>
+                {date}
+              </option>
+            ))}
+          </Select>
+          <Box
+            fontSize={configData.style.itemFontSize}
+            mt={configData.style.unitMt}
+          >
+            日
+          </Box>
+        </HStack>
+      </FormControl>
     </>
   );
 };

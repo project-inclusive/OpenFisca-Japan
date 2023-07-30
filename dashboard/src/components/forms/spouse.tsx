@@ -21,12 +21,6 @@ export const FormSpouse = () => {
   const { household, setHousehold } = useContext(HouseholdContext);
   const spouseName = "配偶者";
 
-  const lastYearDate = `${new Date().getFullYear() - 1}-${(
-    new Date().getMonth() + 1
-  )
-    .toString()
-    .padStart(2, "0")}-01`;
-
   // チェックボックスの値が変更された時
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const newHousehold = { ...household };

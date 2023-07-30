@@ -1,5 +1,12 @@
 import { useCallback, useContext, useState, useRef, useEffect } from "react";
-import { Checkbox, Box, HStack, Input } from "@chakra-ui/react";
+import {
+  Checkbox,
+  Box,
+  HStack,
+  Input,
+  FormControl,
+  FormLabel,
+} from "@chakra-ui/react";
 
 import { HouseholdContext } from "../../../contexts/HouseholdContext";
 import { CurrentDateContext } from "../../../contexts/CurrentDateContext";
@@ -100,8 +107,11 @@ export const ParentsNum = () => {
           親または祖父母と同居している
         </Checkbox>
         {isChecked && (
-          <Box mt={2} ml={4} mr={4} mb={4}>
-            <Box>同居している親または祖父母の数</Box>
+          <FormControl mt={2} ml={4} mr={4} mb={4}>
+            <FormLabel fontWeight="Regular">
+              同居している親または祖父母の数
+            </FormLabel>
+
             <HStack mb={4}>
               <Input
                 type="number"
@@ -112,7 +122,7 @@ export const ParentsNum = () => {
               />
               <Box>人</Box>
             </HStack>
-          </Box>
+          </FormControl>
         )}
       </Box>
     </>
