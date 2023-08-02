@@ -72,34 +72,10 @@ with open('openfisca_japan/parameters/福祉/生活保護/冬季加算/地域区
 冬季加算表 = {}
 
 
-with open('openfisca_japan/parameters/福祉/生活保護/冬季加算/1区.csv') as f:
-    reader = csv.DictReader(f)
-    冬季加算表[1] = {row[""]: row for row in reader}
-
-
-with open('openfisca_japan/parameters/福祉/生活保護/冬季加算/2区.csv') as f:
-    reader = csv.DictReader(f)
-    冬季加算表[2] = {row[""]: row for row in reader}
-
-
-with open('openfisca_japan/parameters/福祉/生活保護/冬季加算/3区.csv') as f:
-    reader = csv.DictReader(f)
-    冬季加算表[3] = {row[""]: row for row in reader}
-
-
-with open('openfisca_japan/parameters/福祉/生活保護/冬季加算/4区.csv') as f:
-    reader = csv.DictReader(f)
-    冬季加算表[4] = {row[""]: row for row in reader}
-
-
-with open('openfisca_japan/parameters/福祉/生活保護/冬季加算/5区.csv') as f:
-    reader = csv.DictReader(f)
-    冬季加算表[5] = {row[""]: row for row in reader}
-
-
-with open('openfisca_japan/parameters/福祉/生活保護/冬季加算/6区.csv') as f:
-    reader = csv.DictReader(f)
-    冬季加算表[6] = {row[""]: row for row in reader}
+for i in range(1, 7):
+    with open(f'openfisca_japan/parameters/福祉/生活保護/冬季加算/{i}区.csv') as f:
+        reader = csv.DictReader(f)
+        冬季加算表[f'{i}区'] = {row[""]: row for row in reader}
 
 
 with open('openfisca_japan/parameters/福祉/生活保護/住宅扶助基準額/市.csv') as f:
@@ -122,29 +98,10 @@ with open('openfisca_japan/parameters/福祉/生活保護/住宅扶助基準額/
 生活扶助本体に係る経過的加算表 = {}
 
 
-with open('openfisca_japan/parameters/福祉/生活保護/生活扶助本体に係る経過的加算/1人世帯.csv') as f:
-    reader = csv.DictReader(f)
-    生活扶助本体に係る経過的加算表[1] = {row[""]: row for row in reader}
-
-
-with open('openfisca_japan/parameters/福祉/生活保護/生活扶助本体に係る経過的加算/2人世帯.csv') as f:
-    reader = csv.DictReader(f)
-    生活扶助本体に係る経過的加算表[2] = {row[""]: row for row in reader}
-
-
-with open('openfisca_japan/parameters/福祉/生活保護/生活扶助本体に係る経過的加算/3人世帯.csv') as f:
-    reader = csv.DictReader(f)
-    生活扶助本体に係る経過的加算表[3] = {row[""]: row for row in reader}
-
-
-with open('openfisca_japan/parameters/福祉/生活保護/生活扶助本体に係る経過的加算/4人世帯.csv') as f:
-    reader = csv.DictReader(f)
-    生活扶助本体に係る経過的加算表[4] = {row[""]: row for row in reader}
-
-
-with open('openfisca_japan/parameters/福祉/生活保護/生活扶助本体に係る経過的加算/5人世帯.csv') as f:
-    reader = csv.DictReader(f)
-    生活扶助本体に係る経過的加算表[5] = {row[""]: row for row in reader}
+for i in range(1, 6):
+    with open(f'openfisca_japan/parameters/福祉/生活保護/生活扶助本体に係る経過的加算/{i}人世帯.csv') as f:
+        reader = csv.DictReader(f)
+        生活扶助本体に係る経過的加算表[f'{i}人'] = {row[""]: row for row in reader}
 
 
 # 母子世帯等に係る経過的加算表[世帯人数][年齢][居住級地区分] の形で参照可能
@@ -507,7 +464,7 @@ class 生活扶助本体に係る経過的加算(Variable):
             ["0~2", "3~5", "6~11", "12~17", "18~19", "20~40", "41~59", "60~64", "65~69", "70~74", "75~"],
             0) for 年齢 in 各世帯員の年齢]
         return sum([
-            int(生活扶助本体に係る経過的加算表[世帯人数[0]][str(年齢区分)][f'{居住級地区分1[0]}級地-{居住級地区分2[0]}'])
+            int(生活扶助本体に係る経過的加算表[f'{世帯人数[0]}人'][str(年齢区分)][f'{居住級地区分1[0]}級地-{居住級地区分2[0]}'])
             for 年齢区分 in 各世帯員の年齢区分])
 
 
@@ -910,7 +867,7 @@ class 冬季加算(Variable):
         居住級地区分 = f'{居住級地区分1[0]}級地-{居住級地区分2[0]}'
 
         # TODO: 10人以降の場合の1人当たり加算額を追加
-        return 冬季加算表[冬季加算地域区分1[0]][世帯人数区分[0]][居住級地区分]
+        return 冬季加算表[f'{冬季加算地域区分1[0]}区'][世帯人数区分[0]][居住級地区分]
 
 
 class 冬季加算地域区分1(Variable):
