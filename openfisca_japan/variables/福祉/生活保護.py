@@ -15,8 +15,6 @@ from openfisca_japan.variables.障害.身体障害者手帳 import 身体障害�
 from openfisca_core.indexed_enums import Enum
 
 
-# TODO: issue#45 で作成した「openfisca_japan/parameters/福祉/生活保護」以下の設定ファイルを
-# グローバル名前空間で読み込む
 # NOTE: 各種基準額表は項目数が多いため可読性の高いCSV形式やjson形式としている。
 # https://www.mhlw.go.jp/content/000776372.pdf を参照
 
@@ -168,19 +166,15 @@ class 生活保護(Variable):
         児童を養育する場合の加算 = 対象世帯("児童を養育する場合の加算", 対象期間)
         母子世帯等に係る経過的加算 = 対象世帯("母子世帯等に係る経過的加算", 対象期間)
         児童を養育する場合に係る経過的加算 = 対象世帯("児童を養育する場合に係る経過的加算", 対象期間)
+        放射線障害者加算 = 対象世帯("放射線障害者加算", 対象期間)
+        妊産婦加算 = 対象世帯("妊産婦加算", 対象期間)
+        介護施設入所者加算 = 対象世帯("介護施設入所者加算", 対象期間)
+        在宅患者加算 = 対象世帯("在宅患者加算", 対象期間)
+
         # 障害者加算と母子加算は併給できない（参考：https://www.mhlw.go.jp/content/000776372.pdf）
         # 高い方のみ加算（参考：https://www.ace-room.jp/safetynet/safetyqa/safety-add/）
-        b = np.max([障害者加算, 母子加算]) + 児童を養育する場合の加算 + 母子世帯等に係る経過的加算 + 児童を養育する場合に係る経過的加算
-
-        # TODO: その他加算
-        # 必要な入力情報もvariableで定義する
-        # openfisca_japan/variables/障害/精神障害者保健福祉手帳.py, openfisca_japan/variables/所得.py の学生のようにenumやboolで定義
-        # https://seikatsuhogo.biz/blogs/105
-        # 放射線障害者加算
-        # 妊産婦加算
-        # 児童養育加算
-        # 介護施設入所者加算
-        # 在宅患者加算
+        b = np.max([障害者加算, 母子加算]) + 児童を養育する場合の加算 + 母子世帯等に係る経過的加算 + 児童を養育する場合に係る経過的加算 + \
+            放射線障害者加算 + 妊産婦加算 + 介護施設入所者加算 + 在宅患者加算
 
         # 【Ｃ】住宅扶助基準
         住宅扶助基準 = 対象世帯("住宅扶助基準", 対象期間)
@@ -765,6 +759,128 @@ class 第三子以降の三歳から小学生修了前の児童がいる場合�
 
         加算対象者数 = np.count_nonzero(第三子以降である & 三歳以上である & 小学生終了前である)
         return 加算対象者数 * 4330
+
+
+class 放射線障害者パターン(Enum):
+    __order__ = "無 現罹患者 元罹患者"
+    無 = "無"
+    現罹患者 = "現罹患者"
+    元罹患者 = "元罹患者"
+
+
+class 放射線障害(Variable):
+    value_type = Enum
+    possible_values = 放射線障害者パターン
+    default_value = 放射線障害者パターン.無
+    entity = 人物
+    definition_period = DAY
+    label = "放射線障害状況"
+
+
+class 放射線障害者加算(Variable):
+    value_type = float
+    entity = 世帯
+    definition_period = DAY
+    label = "放射線障害者加算"
+    reference = "https://www.mhlw.go.jp/content/12002000/000771098.pdf"
+    documentation = """
+    算出方法は以下リンクも参考になる。
+    https://seikatsuhogo.biz/blogs/105
+    """
+
+    def formula(対象世帯, 対象期間, parameters):
+        各世帯員の放射線障害 = 対象世帯.members("放射線障害", 対象期間)
+        現罹患者の人数 = np.count_nonzero(各世帯員の放射線障害 == 放射線障害者パターン.現罹患者)
+        元罹患者の人数 = np.count_nonzero(各世帯員の放射線障害 == 放射線障害者パターン.元罹患者)
+
+        return 現罹患者の人数 * 43830 + 元罹患者の人数 * 21920
+
+
+class 妊産婦パターン(Enum):
+    __order__ = "無 妊娠6ヵ月未満 妊娠6ヵ月以上 産後6ヵ月以内"
+    無 = "無"
+    妊娠6ヵ月未満 = "妊娠6ヵ月未満"
+    妊娠6ヵ月以上 = "妊娠6ヵ月以上"
+    産後6ヵ月以内 = "産後6ヵ月以内"
+
+
+class 妊産婦(Variable):
+    value_type = Enum
+    possible_values = 妊産婦パターン
+    default_value = 妊産婦パターン.無
+    entity = 人物
+    definition_period = DAY
+    label = "妊産婦の妊娠、産後状況"
+
+
+class 妊産婦加算(Variable):
+    value_type = float
+    entity = 世帯
+    definition_period = DAY
+    label = "妊産婦加算"
+    reference = "https://www.mhlw.go.jp/content/12002000/000771098.pdf"
+    documentation = """
+    算出方法は以下リンクも参考になる。
+    https://seikatsuhogo.biz/blogs/105
+    """
+
+    def formula(対象世帯, 対象期間, parameters):
+        妊産婦 = 対象世帯.members("妊産婦", 対象期間)
+        妊娠6ヵ月未満の人数 = np.count_nonzero(妊産婦 == 妊産婦パターン.妊娠6ヵ月未満)
+        妊娠6ヵ月以上の人数 = np.count_nonzero(妊産婦 == 妊産婦パターン.妊娠6ヵ月以上)
+        産後6ヵ月以内の人数 = np.count_nonzero(妊産婦 == 妊産婦パターン.産後6ヵ月以内)
+
+        return 妊娠6ヵ月未満の人数 * 9130 + 妊娠6ヵ月以上の人数 * 13790 + 産後6ヵ月以内の人数 * 8480
+
+
+class 介護施設入所中(Variable):
+    value_type = bool
+    default_value = False
+    entity = 人物
+    definition_period = DAY
+    label = "介護施設に入所しているか否か"
+
+
+class 介護施設入所者加算(Variable):
+    value_type = float
+    entity = 世帯
+    definition_period = DAY
+    label = "介護施設入所者加算"
+    reference = "https://www.mhlw.go.jp/content/12002000/000771098.pdf"
+    documentation = """
+    算出方法は以下リンクも参考になる。
+    https://seikatsuhogo.biz/blogs/105
+    """
+
+    def formula(対象世帯, 対象期間, parameters):
+        介護施設入所中 = 対象世帯.members("介護施設入所中", 対象期間)
+        加算対象者数 = np.count_nonzero(介護施設入所中)
+        return 加算対象者数 * 9880
+
+
+class 在宅療養中(Variable):
+    value_type = bool
+    default_value = False
+    entity = 人物
+    definition_period = DAY
+    label = "在宅で療養に専念している患者(結核又は3ヶ月以上の治療を要するもの)か否か"
+
+
+class 在宅患者加算(Variable):
+    value_type = float
+    entity = 世帯
+    definition_period = DAY
+    label = "在宅患者加算"
+    reference = "https://www.mhlw.go.jp/content/12002000/000771098.pdf"
+    documentation = """
+    算出方法は以下リンクも参考になる。
+    https://seikatsuhogo.biz/blogs/105
+    """
+
+    def formula(対象世帯, 対象期間, parameters):
+        各世帯員が在宅療養中 = 対象世帯.members("在宅療養中", 対象期間)
+        加算対象者数 = np.count_nonzero(各世帯員が在宅療養中)
+        return 加算対象者数 * 13270
 
 
 class 住宅扶助基準(Variable):
