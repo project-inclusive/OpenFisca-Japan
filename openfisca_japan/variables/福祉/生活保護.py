@@ -15,8 +15,6 @@ from openfisca_japan.variables.障害.身体障害者手帳 import 身体障害�
 from openfisca_core.indexed_enums import Enum
 
 
-# TODO: issue#45 で作成した「openfisca_japan/parameters/福祉/生活保護」以下の設定ファイルを
-# グローバル名前空間で読み込む
 # NOTE: 各種基準額表は項目数が多いため可読性の高いCSV形式やjson形式としている。
 # https://www.mhlw.go.jp/content/000776372.pdf を参照
 
@@ -168,19 +166,15 @@ class 生活保護(Variable):
         児童を養育する場合の加算 = 対象世帯("児童を養育する場合の加算", 対象期間)
         母子世帯等に係る経過的加算 = 対象世帯("母子世帯等に係る経過的加算", 対象期間)
         児童を養育する場合に係る経過的加算 = 対象世帯("児童を養育する場合に係る経過的加算", 対象期間)
+        放射線障害者加算 = 対象世帯("放射線障害者加算", 対象期間)
+        妊産婦加算 = 対象世帯("妊産婦加算", 対象期間)
+        介護施設入所者加算 = 対象世帯("介護施設入所者加算", 対象期間)
+        在宅患者加算 = 対象世帯("在宅患者加算", 対象期間)
+
         # 障害者加算と母子加算は併給できない（参考：https://www.mhlw.go.jp/content/000776372.pdf）
         # 高い方のみ加算（参考：https://www.ace-room.jp/safetynet/safetyqa/safety-add/）
-        b = np.max([障害者加算, 母子加算]) + 児童を養育する場合の加算 + 母子世帯等に係る経過的加算 + 児童を養育する場合に係る経過的加算
-
-        # TODO: その他加算
-        # 必要な入力情報もvariableで定義する
-        # openfisca_japan/variables/障害/精神障害者保健福祉手帳.py, openfisca_japan/variables/所得.py の学生のようにenumやboolで定義
-        # https://seikatsuhogo.biz/blogs/105
-        # 放射線障害者加算
-        # 妊産婦加算
-        # 児童養育加算
-        # 介護施設入所者加算
-        # 在宅患者加算
+        b = np.max([障害者加算, 母子加算]) + 児童を養育する場合の加算 + 母子世帯等に係る経過的加算 + 児童を養育する場合に係る経過的加算 + \
+            放射線障害者加算 + 妊産婦加算 + 介護施設入所者加算 + 在宅患者加算
 
         # 【Ｃ】住宅扶助基準
         住宅扶助基準 = 対象世帯("住宅扶助基準", 対象期間)
@@ -203,7 +197,10 @@ class 生活保護(Variable):
         # 参考: https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatuhogo/index.html
         最低生活費 = a + b + c + d + e + f + 期末一時扶助
         収入 = np.sum(対象世帯.members("収入", 対象期間))
-        月収 = 収入 / 12
+        # 就労収入のうち一定額を控除
+        勤労控除 = 対象世帯("勤労控除", 対象期間)
+        月収 = np.clip(収入 / 12 - 勤労控除, 0, None)
+
         # TODO: 実装される手当てが増えるたびに追記しなくてもよい仕組みが必要？
         各種手当額 = 対象世帯("児童手当", 対象期間) + 対象世帯("児童育成手当", 対象期間) + 対象世帯("児童扶養手当_最小", 対象期間)
 
@@ -289,8 +286,12 @@ class 生活扶助基準1_逓減率1(Variable):
         居住級地区分2 = 対象世帯("居住級地区分2", 対象期間)
         居住級地区分 = f'{居住級地区分1[0]}級地-{居住級地区分2[0]}'
 
-        # TODO: 入院患者、施設入所者を含めないようにする
         世帯人数 = 対象世帯("世帯人数", 対象期間)
+        # 入院患者、施設入所者は世帯人数に含めない
+        入院中 = 対象世帯.members("入院中", 対象期間)
+        介護施設入所中 = 対象世帯.members("介護施設入所中", 対象期間)
+        世帯人数 -= np.count_nonzero(入院中 | 介護施設入所中)
+
         世帯人数区分 = np.clip(世帯人数, 1, 5).astype(str)
 
         return 生活扶助基準1_逓減率1表[世帯人数区分[0]][居住級地区分]
@@ -314,8 +315,12 @@ class 生活扶助基準1_第2類_基準額1(Variable):
         居住級地区分2 = 対象世帯("居住級地区分2", 対象期間)
         居住級地区分 = f'{居住級地区分1[0]}級地-{居住級地区分2[0]}'
 
-        # TODO: 入院患者、施設入所者を含めないようにする
         世帯人数 = 対象世帯("世帯人数", 対象期間)
+        # 入院患者、施設入所者は世帯人数に含めない
+        入院中 = 対象世帯.members("入院中", 対象期間)
+        介護施設入所中 = 対象世帯.members("介護施設入所中", 対象期間)
+        世帯人数 -= np.count_nonzero(入院中 | 介護施設入所中)
+
         世帯人数区分 = np.clip(世帯人数, 1, 5).astype(str)
 
         return 生活扶助基準1_第2類_基準額1表[世帯人数区分[0]][居住級地区分]
@@ -399,8 +404,12 @@ class 生活扶助基準2_逓減率2(Variable):
         居住級地区分2 = 対象世帯("居住級地区分2", 対象期間)
         居住級地区分 = f'{居住級地区分1[0]}級地-{居住級地区分2[0]}'
 
-        # TODO: 入院患者、施設入所者を含めないようにする
         世帯人数 = 対象世帯("世帯人数", 対象期間)
+        # 入院患者、施設入所者は世帯人数に含めない
+        入院中 = 対象世帯.members("入院中", 対象期間)
+        介護施設入所中 = 対象世帯.members("介護施設入所中", 対象期間)
+        世帯人数 -= np.count_nonzero(入院中 | 介護施設入所中)
+
         世帯人数区分 = np.clip(世帯人数, 1, 5).astype(str)
 
         return 生活扶助基準2_逓減率2表[世帯人数区分[0]][居住級地区分]
@@ -424,8 +433,12 @@ class 生活扶助基準2_第2類_基準額2(Variable):
         居住級地区分2 = 対象世帯("居住級地区分2", 対象期間)
         居住級地区分 = f'{居住級地区分1[0]}級地-{居住級地区分2[0]}'
 
-        # TODO: 入院患者、施設入所者を含めないようにする
         世帯人数 = 対象世帯("世帯人数", 対象期間)
+        # 入院患者、施設入所者は世帯人数に含めない
+        入院中 = 対象世帯.members("入院中", 対象期間)
+        介護施設入所中 = 対象世帯.members("介護施設入所中", 対象期間)
+        世帯人数 -= np.count_nonzero(入院中 | 介護施設入所中)
+
         世帯人数区分 = np.clip(世帯人数, 1, 5).astype(str)
 
         return 生活扶助基準2_第2類_基準額2表[世帯人数区分[0]][居住級地区分]
@@ -767,6 +780,128 @@ class 第三子以降の三歳から小学生修了前の児童がいる場合�
         return 加算対象者数 * 4330
 
 
+class 放射線障害者パターン(Enum):
+    __order__ = "無 現罹患者 元罹患者"
+    無 = "無"
+    現罹患者 = "現罹患者"
+    元罹患者 = "元罹患者"
+
+
+class 放射線障害(Variable):
+    value_type = Enum
+    possible_values = 放射線障害者パターン
+    default_value = 放射線障害者パターン.無
+    entity = 人物
+    definition_period = DAY
+    label = "放射線障害状況"
+
+
+class 放射線障害者加算(Variable):
+    value_type = float
+    entity = 世帯
+    definition_period = DAY
+    label = "放射線障害者加算"
+    reference = "https://www.mhlw.go.jp/content/12002000/000771098.pdf"
+    documentation = """
+    算出方法は以下リンクも参考になる。
+    https://seikatsuhogo.biz/blogs/105
+    """
+
+    def formula(対象世帯, 対象期間, parameters):
+        各世帯員の放射線障害 = 対象世帯.members("放射線障害", 対象期間)
+        現罹患者の人数 = np.count_nonzero(各世帯員の放射線障害 == 放射線障害者パターン.現罹患者)
+        元罹患者の人数 = np.count_nonzero(各世帯員の放射線障害 == 放射線障害者パターン.元罹患者)
+
+        return 現罹患者の人数 * 43830 + 元罹患者の人数 * 21920
+
+
+class 妊産婦パターン(Enum):
+    __order__ = "無 妊娠6ヵ月未満 妊娠6ヵ月以上 産後6ヵ月以内"
+    無 = "無"
+    妊娠6ヵ月未満 = "妊娠6ヵ月未満"
+    妊娠6ヵ月以上 = "妊娠6ヵ月以上"
+    産後6ヵ月以内 = "産後6ヵ月以内"
+
+
+class 妊産婦(Variable):
+    value_type = Enum
+    possible_values = 妊産婦パターン
+    default_value = 妊産婦パターン.無
+    entity = 人物
+    definition_period = DAY
+    label = "妊産婦の妊娠、産後状況"
+
+
+class 妊産婦加算(Variable):
+    value_type = float
+    entity = 世帯
+    definition_period = DAY
+    label = "妊産婦加算"
+    reference = "https://www.mhlw.go.jp/content/12002000/000771098.pdf"
+    documentation = """
+    算出方法は以下リンクも参考になる。
+    https://seikatsuhogo.biz/blogs/105
+    """
+
+    def formula(対象世帯, 対象期間, parameters):
+        妊産婦 = 対象世帯.members("妊産婦", 対象期間)
+        妊娠6ヵ月未満の人数 = np.count_nonzero(妊産婦 == 妊産婦パターン.妊娠6ヵ月未満)
+        妊娠6ヵ月以上の人数 = np.count_nonzero(妊産婦 == 妊産婦パターン.妊娠6ヵ月以上)
+        産後6ヵ月以内の人数 = np.count_nonzero(妊産婦 == 妊産婦パターン.産後6ヵ月以内)
+
+        return 妊娠6ヵ月未満の人数 * 9130 + 妊娠6ヵ月以上の人数 * 13790 + 産後6ヵ月以内の人数 * 8480
+
+
+class 介護施設入所中(Variable):
+    value_type = bool
+    default_value = False
+    entity = 人物
+    definition_period = DAY
+    label = "介護施設に入所しているか否か"
+
+
+class 介護施設入所者加算(Variable):
+    value_type = float
+    entity = 世帯
+    definition_period = DAY
+    label = "介護施設入所者加算"
+    reference = "https://www.mhlw.go.jp/content/12002000/000771098.pdf"
+    documentation = """
+    算出方法は以下リンクも参考になる。
+    https://seikatsuhogo.biz/blogs/105
+    """
+
+    def formula(対象世帯, 対象期間, parameters):
+        介護施設入所中 = 対象世帯.members("介護施設入所中", 対象期間)
+        加算対象者数 = np.count_nonzero(介護施設入所中)
+        return 加算対象者数 * 9880
+
+
+class 在宅療養中(Variable):
+    value_type = bool
+    default_value = False
+    entity = 人物
+    definition_period = DAY
+    label = "在宅で療養に専念している患者(結核又は3ヶ月以上の治療を要するもの)か否か"
+
+
+class 在宅患者加算(Variable):
+    value_type = float
+    entity = 世帯
+    definition_period = DAY
+    label = "在宅患者加算"
+    reference = "https://www.mhlw.go.jp/content/12002000/000771098.pdf"
+    documentation = """
+    算出方法は以下リンクも参考になる。
+    https://seikatsuhogo.biz/blogs/105
+    """
+
+    def formula(対象世帯, 対象期間, parameters):
+        各世帯員が在宅療養中 = 対象世帯.members("在宅療養中", 対象期間)
+        加算対象者数 = np.count_nonzero(各世帯員が在宅療養中)
+        return 加算対象者数 * 13270
+
+
 class 住宅扶助基準(Variable):
     value_type = float
     entity = 世帯
@@ -940,3 +1075,93 @@ class 期末一時扶助(Variable):
         居住級地区分 = f'{居住級地区分1[0]}級地-{居住級地区分2[0]}'
 
         return 期末一時扶助表[世帯人数区分[0]][居住級地区分]
+
+
+class 勤労控除(Variable):
+    value_type = float
+    entity = 世帯
+    definition_period = DAY
+    label = "勤労控除"
+    reference = "https://www.mhlw.go.jp/content/12002000/000771098.pdf"
+    documentation = """
+    算出方法は以下リンクも参考になる。
+    https://www.holos.jp/media/welfare-income-earn.php
+    """
+
+    def formula(対象世帯, 対象期間, parameters):
+        基礎控除 = 対象世帯("基礎控除", 対象期間)
+        新規就労控除 = 対象世帯("新規就労控除", 対象期間)
+        未成年者控除 = 対象世帯("未成年者控除", 対象期間)
+        return 基礎控除 + 新規就労控除 + 未成年者控除
+
+
+class 基礎控除(Variable):
+    value_type = float
+    entity = 世帯
+    definition_period = DAY
+    label = "基礎控除"
+    reference = "https://www.mhlw.go.jp/content/12002000/000771098.pdf"
+    documentation = """
+    算出方法は以下リンクも参考になる。
+    https://www.holos.jp/media/welfare-income-earn.php
+    https://www.city.chiba.jp/hokenfukushi/hogo/documents/r3shinkijunngakuhyou.pdf
+    """
+
+    def formula(対象世帯, 対象期間, parameters):
+        # TODO: 収入として年金等も入力するようになったら、勤労収入のみ計算対象に入れるようにする
+        収入 = 対象世帯.members("収入", 対象期間)
+        # 収入を高い順にソート
+        収入 = np.sort(収入)[::-1]
+        月収 = 収入 / 12
+
+        一人目の控除 = np.clip((月収[0] - 15000) * 0.1 + 15000, 0, 月収[0])
+        # 2人目以降の計算式は https://www.city.chiba.jp/hokenfukushi/hogo/documents/r3shinkijunngakuhyou.pdf の基礎控除表を参考に作成
+        二人目以降の控除 = np.sum(np.clip(np.clip((月収[1:] - 41000) * 0.085, 0, None) + 14960 + np.clip(月収[1:] - 14960, 0, 40), 0, 月収[1:]))
+
+        return 一人目の控除 + 二人目以降の控除
+
+
+class 六か月以内に新規就労(Variable):
+    value_type = bool
+    default_value = False
+    entity = 人物
+    definition_period = DAY
+    label = "6か月以内に新たに継続性のある職業に従事したかどうか"
+
+
+class 新規就労控除(Variable):
+    value_type = float
+    entity = 世帯
+    definition_period = DAY
+    label = "新規就労控除"
+    reference = "https://www.mhlw.go.jp/content/12002000/000771098.pdf"
+    documentation = """
+    算出方法は以下リンクも参考になる。
+    https://www.holos.jp/media/welfare-income-earn.php
+    https://www.mhlw.go.jp/stf/shingi/2r9852000001ifbg-att/2r9852000001ifii.pdf (額は現在と異なる部分あり)
+    """
+
+    def formula(対象世帯, 対象期間, parameters):
+        六か月以内に新規就労 = 対象世帯.members("六か月以内に新規就労", 対象期間)
+        対象者数 = np.count_nonzero(六か月以内に新規就労)
+        return 対象者数 * 11700
+
+
+class 未成年者控除(Variable):
+    value_type = float
+    entity = 世帯
+    definition_period = DAY
+    label = "未成年者控除"
+    reference = "https://www.mhlw.go.jp/content/12002000/000771098.pdf"
+    documentation = """
+    算出方法は以下リンクも参考になる。
+    https://www.holos.jp/media/welfare-income-earn.php
+    https://www.mhlw.go.jp/stf/shingi/2r9852000001ifbg-att/2r9852000001ifii.pdf (額は現在と異なる部分あり)
+    """
+
+    def formula(対象世帯, 対象期間, parameters):
+        未成年 = 対象世帯.members("年齢", 対象期間) < parameters(対象期間).全般.成人年齢
+        # TODO: 収入として年金等も入力するようになったら、勤労収入のみ計算対象に入れるようにする
+        就労中 = 対象世帯.members("収入", 対象期間) > 0
+        対象者数 = np.count_nonzero(未成年 & 就労中)
+        return 対象者数 * 11600
