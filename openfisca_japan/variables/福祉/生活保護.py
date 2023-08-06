@@ -197,7 +197,10 @@ class 生活保護(Variable):
         # 参考: https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatuhogo/index.html
         最低生活費 = a + b + c + d + e + f + 期末一時扶助
         収入 = np.sum(対象世帯.members("収入", 対象期間))
-        月収 = 収入 / 12
+        # 就労収入のうち一定額を控除
+        勤労控除 = 対象世帯("勤労控除", 対象期間)
+        月収 = np.clip(収入 / 12 - 勤労控除, 0, None)
+
         # TODO: 実装される手当てが増えるたびに追記しなくてもよい仕組みが必要？
         各種手当額 = 対象世帯("児童手当", 対象期間) + 対象世帯("児童育成手当", 対象期間) + 対象世帯("児童扶養手当_最小", 対象期間)
 
@@ -1072,3 +1075,93 @@ class 期末一時扶助(Variable):
         居住級地区分 = f'{居住級地区分1[0]}級地-{居住級地区分2[0]}'
 
         return 期末一時扶助表[世帯人数区分[0]][居住級地区分]
+
+
+class 勤労控除(Variable):
+    value_type = float
+    entity = 世帯
+    definition_period = DAY
+    label = "勤労控除"
+    reference = "https://www.mhlw.go.jp/content/12002000/000771098.pdf"
+    documentation = """
+    算出方法は以下リンクも参考になる。
+    https://www.holos.jp/media/welfare-income-earn.php
+    """
+
+    def formula(対象世帯, 対象期間, parameters):
+        基礎控除 = 対象世帯("基礎控除", 対象期間)
+        新規就労控除 = 対象世帯("新規就労控除", 対象期間)
+        未成年者控除 = 対象世帯("未成年者控除", 対象期間)
+        return 基礎控除 + 新規就労控除 + 未成年者控除
+
+
+class 基礎控除(Variable):
+    value_type = float
+    entity = 世帯
+    definition_period = DAY
+    label = "基礎控除"
+    reference = "https://www.mhlw.go.jp/content/12002000/000771098.pdf"
+    documentation = """
+    算出方法は以下リンクも参考になる。
+    https://www.holos.jp/media/welfare-income-earn.php
+    https://www.city.chiba.jp/hokenfukushi/hogo/documents/r3shinkijunngakuhyou.pdf
+    """
+
+    def formula(対象世帯, 対象期間, parameters):
+        # TODO: 収入として年金等も入力するようになったら、勤労収入のみ計算対象に入れるようにする
+        収入 = 対象世帯.members("収入", 対象期間)
+        # 収入を高い順にソート
+        収入 = np.sort(収入)[::-1]
+        月収 = 収入 / 12
+
+        一人目の控除 = np.clip((月収[0] - 15000) * 0.1 + 15000, 0, 月収[0])
+        # 2人目以降の計算式は https://www.city.chiba.jp/hokenfukushi/hogo/documents/r3shinkijunngakuhyou.pdf の基礎控除表を参考に作成
+        二人目以降の控除 = np.sum(np.clip(np.clip((月収[1:] - 41000) * 0.085, 0, None) + 14960 + np.clip(月収[1:] - 14960, 0, 40), 0, 月収[1:]))
+
+        return 一人目の控除 + 二人目以降の控除
+
+
+class 六か月以内に新規就労(Variable):
+    value_type = bool
+    default_value = False
+    entity = 人物
+    definition_period = DAY
+    label = "6か月以内に新たに継続性のある職業に従事したかどうか"
+
+
+class 新規就労控除(Variable):
+    value_type = float
+    entity = 世帯
+    definition_period = DAY
+    label = "新規就労控除"
+    reference = "https://www.mhlw.go.jp/content/12002000/000771098.pdf"
+    documentation = """
+    算出方法は以下リンクも参考になる。
+    https://www.holos.jp/media/welfare-income-earn.php
+    https://www.mhlw.go.jp/stf/shingi/2r9852000001ifbg-att/2r9852000001ifii.pdf (額は現在と異なる部分あり)
+    """
+
+    def formula(対象世帯, 対象期間, parameters):
+        六か月以内に新規就労 = 対象世帯.members("六か月以内に新規就労", 対象期間)
+        対象者数 = np.count_nonzero(六か月以内に新規就労)
+        return 対象者数 * 11700
+
+
+class 未成年者控除(Variable):
+    value_type = float
+    entity = 世帯
+    definition_period = DAY
+    label = "未成年者控除"
+    reference = "https://www.mhlw.go.jp/content/12002000/000771098.pdf"
+    documentation = """
+    算出方法は以下リンクも参考になる。
+    https://www.holos.jp/media/welfare-income-earn.php
+    https://www.mhlw.go.jp/stf/shingi/2r9852000001ifbg-att/2r9852000001ifii.pdf (額は現在と異なる部分あり)
+    """
+
+    def formula(対象世帯, 対象期間, parameters):
+        未成年 = 対象世帯.members("年齢", 対象期間) < parameters(対象期間).全般.成人年齢
+        # TODO: 収入として年金等も入力するようになったら、勤労収入のみ計算対象に入れるようにする
+        就労中 = 対象世帯.members("収入", 対象期間) > 0
+        対象者数 = np.count_nonzero(未成年 & 就労中)
+        return 対象者数 * 11600
