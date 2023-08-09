@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { Box, Center, Button } from "@chakra-ui/react";
+import { Center, Button } from "@chakra-ui/react";
 
 import configData from "../../config/app_config.json";
 import { Benefit } from "./benefit";
@@ -25,6 +25,21 @@ export const Result = () => {
 
       <Benefit result={result} currentDate={currentDate} />
       <Loan result={result} currentDate={currentDate} />
+
+      <Center pr={4} pl={4} pb={4}>
+         <Button
+          as="button"
+          fontSize={configData.style.subTitleFontSize}
+          borderRadius="xl"
+          height="2em"
+          width="100%"
+          bg="gray.500"
+          color="white"
+          _hover={{ bg: "cyan.700" }}
+        >
+        {configData.result.screenshotButtonText}
+        </Button>
+      </Center>
 
       <Center pr={4} pl={4} pb={4}>
         {configData.result.questionnaireDescription[0]}
