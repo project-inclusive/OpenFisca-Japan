@@ -24,6 +24,16 @@ services:
       - 30000:30000
     networks:
       - openfisca
+  swagger-ui:
+    image: swaggerapi/swagger-ui:v5.3.0
+    environment:
+      API_URL: http://localhost:50000/spec
+    ports: 
+      - 8080:8080
+    depends_on:
+      - openfisca
+    networks:
+      - openfisca
 
 networks:
   openfisca:
