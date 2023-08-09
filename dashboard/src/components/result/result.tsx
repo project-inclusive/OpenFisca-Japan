@@ -7,7 +7,7 @@ import configData from "../../config/app_config.json";
 import { Benefit } from "./benefit";
 import { Loan } from "./loan";
 
-const createFileName = (extension = "", ...names:string[]) => {
+const createFileName = (extension: string = "", ...names: string[]) => {
   if (!extension) {
     return "";
   }
@@ -22,15 +22,21 @@ export const Result = () => {
     currentDate: string;
   };
 
-  const divRef = useRef<HTMLDivElement>(null);
+  const divRef = useRef<HTMLDivElement | null>(null);
   const [loadingScreenshotDownload, setLoadingScreenshotDownload] = useState(false);
 
-  const takeScreenShot = async (node:HTMLDivElement | null) => {
+  const takeScreenShot = async (node: HTMLDivElement | null): Promise<string> => {
     setLoadingScreenshotDownload(true);
-    return node ? await htmlToImage.toJpeg(node, { backgroundColor: "white" }) : "";
+    if (!node) {
+      throw new Error('Invalid element reference.');
+    }
+    const dataURI = await htmlToImage.toJpeg(node, { backgroundColor: "white" });
+    return dataURI;
   };
 
-  const download = (image:string, { name = "img", extension = "jpg" } = {}) => {
+  const download = (
+    image: string, 
+    { name = "img", extension = "jpg" }: { name?: string; extension?: string } = {}): void => {
     const a = document.createElement("a");
     a.href = image;
     a.download = createFileName(extension, name);
@@ -38,7 +44,11 @@ export const Result = () => {
     setLoadingScreenshotDownload(false)
   };
 
-  const downloadScreenshot = () => divRef && takeScreenShot(divRef.current).then(download);
+  const downloadScreenshot = (): void => {
+    if (divRef.current) {
+      takeScreenShot(divRef.current).then(download);
+    }
+  };
 
   return (
     <div ref={divRef}>
