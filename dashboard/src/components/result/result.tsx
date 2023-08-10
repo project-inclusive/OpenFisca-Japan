@@ -30,7 +30,7 @@ export const Result = () => {
     if (!node) {
       throw new Error('Invalid element reference.');
     }
-    const dataURI = await htmlToImage.toJpeg(node, { backgroundColor: "#C4F1F9", skipFonts: true });
+    const dataURI = await htmlToImage.toJpeg(node, { backgroundColor: "#C4F1F9" });
     return dataURI;
   };
 
