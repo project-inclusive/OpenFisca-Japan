@@ -91,6 +91,7 @@
   },
   "result": {
     "topDescription": "計算結果",
+    "screenshotButtonText":"このページを画像で保存",
     "questionnaireDescription": [
       "よろしければ改善のための簡単なアンケートにご協力ください。"
     ],
