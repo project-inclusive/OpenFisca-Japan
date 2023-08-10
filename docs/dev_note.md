@@ -32,6 +32,21 @@
       exit
       ```
   
+    - バックエンド(swagger-ui&openfisca)を環境構築・起動
+      ```
+      # docker環境を構築・起動
+      docker compose up -d swagger-ui
+      # ブラウザでSwagger-UIを表示する
+      http://localhost:8080
+      # docker環境を停止・破棄
+      docker compose down -v
+      ```
+      
+      Swagger-UIでopenfiscaの動作確認
+      ![](./images/dev_note/swagger-ui-initial-display.png)
+    　![](./images/dev_note/swagger-ui-test-before-calculate.png)
+      ![](./images/dev_note/swagger-ui-test-after-calculate.png)
+
     - フロントエンドのみ環境構築・起動  
       ```
       # dashboardのディレクトリに移動
@@ -119,6 +134,7 @@ bash generate.sh
   
 - 上記コマンドで openfisca_japan/tests/generated 以下にyamlのテストファイルが作成される
   - そのテストファイルを上述の方法でテストする
+
 
 ### フロントエンド
 - ルートディレクトリで以下コマンドを打ち、フロントエンドとバックエンドのDocker環境を一括で起動する
