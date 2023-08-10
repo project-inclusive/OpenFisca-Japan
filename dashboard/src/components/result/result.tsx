@@ -30,13 +30,13 @@ export const Result = () => {
     if (!node) {
       throw new Error('Invalid element reference.');
     }
-    const dataURI = await htmlToImage.toJpeg(node, { backgroundColor: "white" });
+    const dataURI = await htmlToImage.toJpeg(node, { backgroundColor: "#C4F1F9", skipFonts: true });
     return dataURI;
   };
 
   const download = (
     image: string, 
-    { name = "img", extension = "jpg" }: { name?: string; extension?: string } = {}): void => {
+    { name = "お金サポート_結果", extension = "jpg" }: { name?: string; extension?: string } = {}): void => {
     const a = document.createElement("a");
     a.href = image;
     a.download = createFileName(extension, name);
