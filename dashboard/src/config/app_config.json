@@ -93,6 +93,7 @@
   },
   "result": {
     "topDescription": "計算結果",
+    "detailedCalculationDescription": "「くわしく計算」モードでは、より正確な結果が表示されます。金額が上がる場合もあります。",
     "screenshotButtonText":"このページを画像で保存",
     "questionnaireDescription": [
       "よろしければ改善のための簡単なアンケートにご協力ください。"
