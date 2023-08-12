@@ -1,4 +1,5 @@
 import { useContext, useState, useCallback } from "react";
+import { useLocation } from "react-router-dom";
 import {
   Box,
   Center,
@@ -16,6 +17,10 @@ import { Disability } from "./attributes/Disability";
 import { Student } from "./attributes/Student";
 
 export const FormSpouse = () => {
+
+  const location = useLocation();
+  const isSimpleCalculation = location.pathname === "/calculate-simple";
+  
   const currentDate = useContext(CurrentDateContext);
   const [isChecked, setIsChecked] = useState(false);
   const { household, setHousehold } = useContext(HouseholdContext);
@@ -48,11 +53,12 @@ export const FormSpouse = () => {
               {configData.calculationForm.spouseDescription}
             </Center>
 
-            <Birthday personName={spouseName} mustInput={true} />
+            {!isSimpleCalculation && <Birthday personName={spouseName} mustInput={true} />}
             <Income personName={spouseName} mustInput={true} />
-            <Disability personName={spouseName} />
-            <Student personName={spouseName} />
+            {!isSimpleCalculation && <Disability personName={spouseName} />}
+            {!isSimpleCalculation && <Student personName={spouseName} />}
 
+            {!isSimpleCalculation && <>
             <Checkbox
               colorScheme="cyan"
               checked={isChecked}
@@ -70,6 +76,7 @@ export const FormSpouse = () => {
               </ul>
               <br></br>
             </UnorderedList>
+            </>}
           </Box>
         </>
       )}

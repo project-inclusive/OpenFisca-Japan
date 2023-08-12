@@ -1,4 +1,5 @@
 import { Box, Center } from "@chakra-ui/react";
+import { useLocation } from "react-router-dom";
 
 import configData from "../../config/app_config.json";
 import { PrefectureMunicipality } from "./attributes/PrefectureMunicipality";
@@ -12,6 +13,10 @@ import { Disability } from "./attributes/Disability";
 import { RentingHouse } from "./attributes/RentingHouse";
 
 export const FormYou = () => {
+
+  const location = useLocation();
+  const isSimpleCalculation = location.pathname === "/calculate-simple";
+
   const yourName = "あなた";
   return (
     <>
@@ -24,14 +29,14 @@ export const FormYou = () => {
           {configData.calculationForm.youDescription}
         </Center>
         <PrefectureMunicipality mustInput={true} />
-        <Birthday personName={yourName} mustInput={true} />
+        {!isSimpleCalculation && <Birthday personName={yourName} mustInput={true} />}
         <Income personName={yourName} mustInput={true} />
-        <Disability personName={yourName} />
-        <Student personName={yourName} />
+        {!isSimpleCalculation && <Disability personName={yourName} />}
+        {!isSimpleCalculation && <Student personName={yourName} />}
         <SpouseExists />
         <ChildrenNum />
-        <ParentsNum />
-        <RentingHouse />
+        {!isSimpleCalculation && <ParentsNum />}
+        {!isSimpleCalculation && <RentingHouse />}
       </Box>
     </>
   );

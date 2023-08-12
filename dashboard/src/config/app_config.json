@@ -87,7 +87,9 @@
     "youDescription": "あなたについて",
     "spouseDescription": "配偶者について",
     "childrenDescription": "人目の子ども",
-    "parentDescription": "同居している親または祖父母"
+    "parentDescription": "同居している親または祖父母",
+    "simpleCalculation": "かんたん計算",
+    "detailedCalculation": "くわしく計算"
   },
   "result": {
     "topDescription": "計算結果",

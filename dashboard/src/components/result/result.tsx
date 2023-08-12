@@ -6,6 +6,7 @@ import * as htmlToImage from "html-to-image";
 import configData from "../../config/app_config.json";
 import { Benefit } from "./benefit";
 import { Loan } from "./loan";
+import { CalculationLabel } from '../forms/calculationLabel';
 
 const createFileName = (extension: string = "", ...names: string[]) => {
   if (!extension) {
@@ -17,9 +18,10 @@ const createFileName = (extension: string = "", ...names: string[]) => {
 
 export const Result = () => {
   const location = useLocation();
-  const { result, currentDate } = location.state as {
+  const { result, currentDate, isSimpleCalculation } = location.state as {
     result: any;
     currentDate: string;
+    isSimpleCalculation: boolean;
   };
 
   const divRef = useRef<HTMLDivElement | null>(null);
@@ -52,6 +54,16 @@ export const Result = () => {
 
   return (
     <div ref={divRef}>
+
+        <CalculationLabel 
+        text={isSimpleCalculation ? 
+          configData.calculationForm.simpleCalculation 
+          :
+          configData.calculationForm.detailedCalculation
+        } 
+        colour={isSimpleCalculation ? "teal" : "blue"} 
+        />
+        
       <Center
         fontSize={configData.style.subTitleFontSize}
         fontWeight="medium"
