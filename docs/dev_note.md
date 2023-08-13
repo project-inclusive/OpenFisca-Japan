@@ -128,7 +128,7 @@ make serve-local
 #### テスト条件・結果を記載したCSVファイルから、yamlのテストファイルを自動生成する方法
 
 ```
-cd make_tests
+cd tools/make_tests
 bash generate.sh
 ```
   
