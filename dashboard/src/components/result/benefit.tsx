@@ -63,6 +63,9 @@ export const Benefit = ({
         totalAllowanceMax += value.max;
         totalAllowanceMin += value.min;
 
+        // 後で金額順にソートするため、最大額を格納
+        minMaxResult[key].maxMoney = value.max;
+
         if (value.max === value.min) {
           minMaxResult[key].displayedMoney = Number(value.max).toLocaleString();
         } else {
@@ -82,7 +85,9 @@ export const Benefit = ({
         );
       }
 
-      setDisplayedResult(minMaxResult);
+      // 表示のため最大額が小さい順にソート
+      const sortedMinMaxResult = Object.values(minMaxResult).sort((a: any, b: any) => a.maxMoney - b.maxMoney);
+      setDisplayedResult(sortedMinMaxResult);
     }
   }, [result]);
 
@@ -118,7 +123,7 @@ export const Benefit = ({
           </AccordionItem>
 
           {displayedResult &&
-            Object.values(displayedResult).map((val: any, index) => (
+            displayedResult.map((val: any, index: any) => (
               <AccordionItem key={index}>
                 <h2>
                   <AccordionButton>
