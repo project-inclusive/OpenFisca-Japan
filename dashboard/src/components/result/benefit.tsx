@@ -137,8 +137,14 @@ export const Benefit = ({
                   </AccordionButton>
                 </h2>
                 <AccordionPanel pb={4}>
-                  {val.caption[0]}
-                  <br></br>
+                  {val.caption.map(
+                    (line: string, index: any) => (
+                      <span key={index}>
+                        {line}
+                        <br />
+                      </span>
+                    )
+                  )}
                   <Box color="blue">
                     <a href={val.reference}>詳細リンク</a>
                   </Box>

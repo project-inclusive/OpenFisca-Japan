@@ -8,6 +8,7 @@ import { InternalDisability } from "./InternalDisability";
 import { CerebralParalysis } from "./CerebralParalysis";
 import { HouseholdContext } from "../../../contexts/HouseholdContext";
 import { CurrentDateContext } from "../../../contexts/CurrentDateContext";
+import { RadiationDamage } from "./RadiationDamage";
 
 export const Disability = ({ personName }: { personName: string }) => {
   const [isChecked, setIsChecked] = useState(false);
@@ -56,6 +57,7 @@ export const Disability = ({ personName }: { personName: string }) => {
             <PhysicalDisability personName={personName} />
             <MentalDisability personName={personName} />
             <IntellectualDisability personName={personName} />
+            <RadiationDamage personName={personName} />
             <InternalDisability personName={personName} />
             <CerebralParalysis personName={personName} />
           </>

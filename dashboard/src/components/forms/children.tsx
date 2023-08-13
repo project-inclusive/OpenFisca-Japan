@@ -7,6 +7,8 @@ import { HouseholdContext } from "../../contexts/HouseholdContext";
 import { Birthday } from "./attributes/Birthday";
 import { Disability } from "./attributes/Disability";
 import { AgeInput } from './attributes/AgeInput';
+import { Working } from "./attributes/Working";
+import { Recuperation } from "./attributes/Recuperation";
 
 export const FormChildren = () => {
 
@@ -34,6 +36,8 @@ export const FormChildren = () => {
               : 
               <Birthday personName={childName} mustInput={true} />}
               {!isSimpleCalculation && <Disability personName={childName} />}
+              {!isSimpleCalculation && <Working personName={childName} />}
+              {!isSimpleCalculation && <Recuperation personName={childName} />}
             </Box>
           </div>
         ))}

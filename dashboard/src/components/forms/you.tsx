@@ -11,6 +11,8 @@ import { SpouseExists } from "./attributes/SpouseExists";
 import { Income } from "./attributes/Income";
 import { Disability } from "./attributes/Disability";
 import { RentingHouse } from "./attributes/RentingHouse";
+import { Working } from "./attributes/Working";
+import { Recuperation } from "./attributes/Recuperation";
 
 export const FormYou = () => {
 
@@ -34,9 +36,11 @@ export const FormYou = () => {
         {!isSimpleCalculation && <Disability personName={yourName} />}
         {!isSimpleCalculation && <Student personName={yourName} />}
         <SpouseExists />
-        <ChildrenNum />
+        <ChildrenNum yourName={yourName} />
         {!isSimpleCalculation && <ParentsNum />}
         {!isSimpleCalculation && <RentingHouse />}
+        {!isSimpleCalculation && <Working personName={yourName} />}
+        {!isSimpleCalculation && <Recuperation personName={yourName} />}
       </Box>
     </>
   );

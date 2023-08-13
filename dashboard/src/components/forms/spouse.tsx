@@ -15,6 +15,7 @@ import { Birthday } from "./attributes/Birthday";
 import { Income } from "./attributes/Income";
 import { Disability } from "./attributes/Disability";
 import { Student } from "./attributes/Student";
+import { Working } from "./attributes/Working";
 
 export const FormSpouse = () => {
 
@@ -57,6 +58,7 @@ export const FormSpouse = () => {
             <Income personName={spouseName} mustInput={true} />
             {!isSimpleCalculation && <Disability personName={spouseName} />}
             {!isSimpleCalculation && <Student personName={spouseName} />}
+            {!isSimpleCalculation && <Working personName={spouseName} />}
 
             {!isSimpleCalculation && <>
             <Checkbox

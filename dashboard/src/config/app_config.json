@@ -127,6 +127,15 @@
             "精神又は身体に重度の障害をもつ20歳未満の方に給付される手当"
           ],
           "reference": "https://www.mhlw.go.jp/bunya/shougaihoken/jidou/hukushi.html"
+        },
+        "生活保護": {
+          "unit": "円/月",
+          "caption": [
+            "家賃や水光熱費、食費、医療費、教育費などのふつうに暮らすために必要なお金の給付。",
+            "働いて収入がある場合も、働いていない場合も対象になります。",
+            "算出された額に加え、医療費・介護費等が実費で給付されます。"
+          ],
+          "reference": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsuhogopage.html"
         }
       }
     },

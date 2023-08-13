@@ -41,6 +41,7 @@ function CaluculationForm() {
         愛の手帳等級: { ETERNITY: "無" },
         精神障害者保健福祉手帳等級: { ETERNITY: "無" },
         内部障害: { ETERNITY: "無" },
+        放射線障害: { [currentDate]: null },
         脳性まひ_進行性筋萎縮症: { ETERNITY: "無" },
       },
     },
@@ -74,6 +75,9 @@ function CaluculationForm() {
           [currentDate]: null,
         },
         特別児童扶養手当_最大: {
+          [currentDate]: null,
+        },
+        生活保護: {
           [currentDate]: null,
         },
         /* 障害児童育成手当は東京都のみの制度のため除外
