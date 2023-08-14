@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
-import { Box, Center, Button } from "@chakra-ui/react";
+import { useLocation } from "react-router-dom";
+import { Tag, Center, Button } from "@chakra-ui/react";
 
 import configData from "../../config/app_config.json";
 import { useCalculate } from "../../hooks/calculate";
@@ -11,8 +12,13 @@ import { ShowAlertMessageContext } from "../../contexts/ShowAlertMessageContext"
 import { useNavigate } from "react-router-dom";
 import { CurrentDateContext } from "../../contexts/CurrentDateContext";
 import { FormParents } from "./parents";
+import { CalculationLabel } from './calculationLabel';
 
 export const FormContent = () => {
+  
+  const location = useLocation();
+  const isSimpleCalculation = location.pathname === "/calculate-simple";
+
   const [result, calculate] = useCalculate();
   const [ShowAlertMessage, setShowAlertMessage] = useState(false);
   const [showResult, setShowResult] = useState(false);
@@ -28,6 +34,7 @@ export const FormContent = () => {
         state: {
           result: result,
           currentDate: currentDate,
+          isSimpleCalculation: isSimpleCalculation,
         },
       });
     }
@@ -36,6 +43,15 @@ export const FormContent = () => {
   return (
     <ShowAlertMessageContext.Provider value={ShowAlertMessage}>
       <div>
+        <CalculationLabel 
+        text={isSimpleCalculation ? 
+          configData.calculationForm.simpleCalculation 
+          :
+          configData.calculationForm.detailedCalculation
+        } 
+        colour={isSimpleCalculation ? "teal" : "blue"} 
+        />
+        
         <Center
           fontSize={configData.style.subTitleFontSize}
           fontWeight="medium"

@@ -71,19 +71,37 @@ function Description() {
         </Center>
       </Box>
 
-      <Center pr={4} pl={4} pb={4}>
+      <Center pr={4} pl={4} pb={4} style={{ textAlign: "center" }}>
         <Button
           as={RouterLink}
           to="/calculate"
+          style={{ marginRight: "8%" }}
           fontSize={configData.style.subTitleFontSize}
           borderRadius="xl"
-          height="2em"
-          width="100%"
-          bg="cyan.600"
+          height="4em"
+          width="45%"
+          bg="blue.500"
           color="white"
-          _hover={{ bg: "cyan.700" }}
+          _hover={{ bg: "blue.600" }}
         >
-          はじめる
+          くわしく
+          <br/>
+          計算
+        </Button>
+        <Button
+          as={RouterLink}
+          to="/calculate-simple"
+          fontSize={configData.style.subTitleFontSize}
+          borderRadius="xl"
+          height="4em"
+          width="45%"
+          bg="teal.500"
+          color="white"
+          _hover={{ bg: "teal.600" }}
+        >
+          かんたん
+          <br/>
+          計算
         </Button>
       </Center>
     </>

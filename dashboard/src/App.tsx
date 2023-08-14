@@ -31,6 +31,10 @@ function App() {
               element: <CaluculationForm />,
             },
             {
+              path: "/calculate-simple",
+              element: <CaluculationForm />,
+            },
+            {
               path: "/result",
               element: <Result />,
             },

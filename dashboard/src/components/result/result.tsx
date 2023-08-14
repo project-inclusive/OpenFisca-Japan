@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { Link as RouterLink, useLocation } from "react-router-dom";
 import { Center, Button } from "@chakra-ui/react";
 import { useRef, useState } from "react";
 import * as htmlToImage from "html-to-image";
@@ -6,6 +6,7 @@ import * as htmlToImage from "html-to-image";
 import configData from "../../config/app_config.json";
 import { Benefit } from "./benefit";
 import { Loan } from "./loan";
+import { CalculationLabel } from '../forms/calculationLabel';
 
 const createFileName = (extension: string = "", ...names: string[]) => {
   if (!extension) {
@@ -17,9 +18,10 @@ const createFileName = (extension: string = "", ...names: string[]) => {
 
 export const Result = () => {
   const location = useLocation();
-  const { result, currentDate } = location.state as {
+  const { result, currentDate, isSimpleCalculation } = location.state as {
     result: any;
     currentDate: string;
+    isSimpleCalculation: boolean;
   };
 
   const divRef = useRef<HTMLDivElement | null>(null);
@@ -52,6 +54,16 @@ export const Result = () => {
 
   return (
     <div ref={divRef}>
+
+        <CalculationLabel 
+        text={isSimpleCalculation ? 
+          configData.calculationForm.simpleCalculation 
+          :
+          configData.calculationForm.detailedCalculation
+        } 
+        colour={isSimpleCalculation ? "teal" : "blue"} 
+        />
+        
       <Center
         fontSize={configData.style.subTitleFontSize}
         fontWeight="medium"
@@ -63,6 +75,30 @@ export const Result = () => {
 
       <Benefit result={result} currentDate={currentDate} />
       <Loan result={result} currentDate={currentDate} />
+
+      {isSimpleCalculation &&
+      <>
+        <Center pr={4} pl={4} pb={4}>
+          {configData.result.detailedCalculationDescription}
+        </Center>
+      
+        <Center pr={4} pl={4} pb={4}>
+          <Button
+          as={RouterLink}
+          to="/calculate"
+          fontSize={configData.style.subTitleFontSize}
+          borderRadius="xl"
+          height="2em"
+          width="100%"
+          bg="blue.500"
+          color="white"
+          _hover={{ bg: "blue.600" }}
+          >
+          {configData.calculationForm.detailedCalculation}
+        </Button>
+        </Center>
+      </>
+      }
 
       <Center pr={4} pl={4} pb={4}>
          <Button
