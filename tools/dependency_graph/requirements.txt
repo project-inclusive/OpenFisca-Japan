@@ -1,0 +1,2 @@
+graphviz==0.20.1
+OpenFisca-Japan @ file:///../dist/OpenFisca_Japan-3.13.2-py3-none-any.whl
