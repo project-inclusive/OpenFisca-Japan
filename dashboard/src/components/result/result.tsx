@@ -6,7 +6,7 @@ import * as htmlToImage from "html-to-image";
 import configData from "../../config/app_config.json";
 import { Benefit } from "./benefit";
 import { Loan } from "./loan";
-import { CalculationLabel } from '../forms/calculationLabel';
+import { CalculationLabel } from "../forms/calculationLabel";
 
 const createFileName = (extension: string = "", ...names: string[]) => {
   if (!extension) {
@@ -25,25 +25,34 @@ export const Result = () => {
   };
 
   const divRef = useRef<HTMLDivElement | null>(null);
-  const [loadingScreenshotDownload, setLoadingScreenshotDownload] = useState(false);
+  const [loadingScreenshotDownload, setLoadingScreenshotDownload] =
+    useState(false);
 
-  const takeScreenShot = async (node: HTMLDivElement | null): Promise<string> => {
+  const takeScreenShot = async (
+    node: HTMLDivElement | null
+  ): Promise<string> => {
     setLoadingScreenshotDownload(true);
     if (!node) {
-      throw new Error('Invalid element reference.');
+      throw new Error("Invalid element reference.");
     }
-    const dataURI = await htmlToImage.toJpeg(node, { backgroundColor: "#C4F1F9" });
+    const dataURI = await htmlToImage.toPng(node, {
+      backgroundColor: "#C4F1F9",
+    });
     return dataURI;
   };
 
   const download = (
-    image: string, 
-    { name = "お金サポート_結果", extension = "jpg" }: { name?: string; extension?: string } = {}): void => {
+    image: string,
+    {
+      name = "お金サポート_結果",
+      extension = "png",
+    }: { name?: string; extension?: string } = {}
+  ): void => {
     const a = document.createElement("a");
     a.href = image;
     a.download = createFileName(extension, name);
     a.click();
-    setLoadingScreenshotDownload(false)
+    setLoadingScreenshotDownload(false);
   };
 
   const downloadScreenshot = (): void => {
@@ -54,16 +63,15 @@ export const Result = () => {
 
   return (
     <div ref={divRef}>
+      <CalculationLabel
+        text={
+          isSimpleCalculation
+            ? configData.calculationForm.simpleCalculation
+            : configData.calculationForm.detailedCalculation
+        }
+        colour={isSimpleCalculation ? "teal" : "blue"}
+      />
 
-        <CalculationLabel 
-        text={isSimpleCalculation ? 
-          configData.calculationForm.simpleCalculation 
-          :
-          configData.calculationForm.detailedCalculation
-        } 
-        colour={isSimpleCalculation ? "teal" : "blue"} 
-        />
-        
       <Center
         fontSize={configData.style.subTitleFontSize}
         fontWeight="medium"
@@ -76,32 +84,32 @@ export const Result = () => {
       <Benefit result={result} currentDate={currentDate} />
       <Loan result={result} currentDate={currentDate} />
 
-      {isSimpleCalculation &&
-      <>
-        <Center pr={4} pl={4} pb={4}>
-          {configData.result.detailedCalculationDescription}
-        </Center>
-      
-        <Center pr={4} pl={4} pb={4}>
-          <Button
-          as={RouterLink}
-          to="/calculate"
-          fontSize={configData.style.subTitleFontSize}
-          borderRadius="xl"
-          height="2em"
-          width="100%"
-          bg="blue.500"
-          color="white"
-          _hover={{ bg: "blue.600" }}
-          >
-          {configData.calculationForm.detailedCalculation}
-        </Button>
-        </Center>
-      </>
-      }
+      {isSimpleCalculation && (
+        <>
+          <Center pr={4} pl={4} pb={4}>
+            {configData.result.detailedCalculationDescription}
+          </Center>
+
+          <Center pr={4} pl={4} pb={4}>
+            <Button
+              as={RouterLink}
+              to="/calculate"
+              fontSize={configData.style.subTitleFontSize}
+              borderRadius="xl"
+              height="2em"
+              width="100%"
+              bg="blue.500"
+              color="white"
+              _hover={{ bg: "blue.600" }}
+            >
+              {configData.calculationForm.detailedCalculation}
+            </Button>
+          </Center>
+        </>
+      )}
 
       <Center pr={4} pl={4} pb={4}>
-         <Button
+        <Button
           onClick={downloadScreenshot}
           loadingText={"読み込み中..."}
           isLoading={loadingScreenshotDownload}
@@ -114,7 +122,7 @@ export const Result = () => {
           color="white"
           _hover={{ bg: "gray.600" }}
         >
-        {configData.result.screenshotButtonText}
+          {configData.result.screenshotButtonText}
         </Button>
       </Center>
 
