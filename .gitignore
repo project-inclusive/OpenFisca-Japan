@@ -20,3 +20,6 @@ venv
 .DS_Store
 *~
 
+# debugging images
+tools/dependency_graph/dependency_graph
+tools/dependency_graph/dependency_graph.png
