@@ -15,7 +15,8 @@ export const AgeInput = ({
   const { household, setHousehold } = useContext(HouseholdContext);
   const [age, setAge] = useState("");
 
-  const handleAgeChange = (event: React.ChangeEvent<HTMLInputElement>) => setAge(event.currentTarget.value);
+  const handleAgeChange = (event: React.ChangeEvent<HTMLInputElement>) => 
+  parseInt(event.currentTarget.value) < 0 ? setAge("0") : setAge(event.currentTarget.value);
 
   useEffect(() => {
     let birthday;
