@@ -85,7 +85,7 @@ function Description() {
           _hover={{ bg: "blue.600" }}
         >
           くわしく
-          <br/>
+          <br />
           計算
         </Button>
         <Button
@@ -100,7 +100,7 @@ function Description() {
           _hover={{ bg: "teal.600" }}
         >
           かんたん
-          <br/>
+          <br />
           計算
         </Button>
       </Center>

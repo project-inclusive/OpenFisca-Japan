@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import ScrollToTop from "../scrollToTop";
 import configData from "../../config/app_config.json";
 import { FormContent } from "./formContent";
 import { HouseholdContext } from "../../contexts/HouseholdContext";
@@ -121,6 +122,7 @@ function CaluculationForm() {
     <APIServerURLContext.Provider value={apiURL}>
       <CurrentDateContext.Provider value={currentDate}>
         <HouseholdContext.Provider value={householdContextValue}>
+          <ScrollToTop />
           <FormContent />
         </HouseholdContext.Provider>
       </CurrentDateContext.Provider>
