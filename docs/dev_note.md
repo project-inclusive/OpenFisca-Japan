@@ -32,6 +32,21 @@
       exit
       ```
   
+    - バックエンド(swagger-ui&openfisca)を環境構築・起動
+      ```
+      # docker環境を構築・起動
+      docker compose up -d swagger-ui
+      # ブラウザでSwagger-UIを表示する
+      http://localhost:8080
+      # docker環境を停止・破棄
+      docker compose down -v
+      ```
+      
+      Swagger-UIでopenfiscaの動作確認
+      ![](./images/dev_note/swagger-ui-initial-display.png)
+    　![](./images/dev_note/swagger-ui-test-before-calculate.png)
+      ![](./images/dev_note/swagger-ui-test-after-calculate.png)
+
     - フロントエンドのみ環境構築・起動  
       ```
       # dashboardのディレクトリに移動
@@ -113,12 +128,31 @@ make serve-local
 #### テスト条件・結果を記載したCSVファイルから、yamlのテストファイルを自動生成する方法
 
 ```
-cd make_tests
+cd tools/make_tests
 bash generate.sh
 ```
   
 - 上記コマンドで openfisca_japan/tests/generated 以下にyamlのテストファイルが作成される
   - そのテストファイルを上述の方法でテストする
+
+#### Variableの依存関係を確認する方法
+
+```
+python tools/dependency_graph/dependency.py
+```
+
+- 上記コマンドで `tools/dependency_graph/dependency_graph.png` にopenfisca_japan全体のVariableの依存関係図が作成される
+  - `A -> B` はVariable `A` の計算式に Variable `B` を使用していることを表す
+  - 他のVariableに依存していない場合青色で表示される
+- 実行には事前に [Graphviz](https://graphviz.org/) のインストールが必要
+
+```
+# Ubuntuの場合
+sudo apt install graphviz
+python -m pip install graphviz
+sudo apt install xdg-utils
+```
+
 
 ### フロントエンド
 - ルートディレクトリで以下コマンドを打ち、フロントエンドとバックエンドのDocker環境を一括で起動する
