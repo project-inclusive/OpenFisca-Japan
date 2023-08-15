@@ -21,9 +21,9 @@ function CaluculationForm() {
 
   const apiURL =
     import.meta.env.MODE === "production"
-      ? //configData.URL.OpenFisca_API.production // mainブランチマージ時にビルドされるバックエンドAPI。Cloud Run
-        configData.URL.OpenFisca_API.dev // developブランチプッシュ時にビルドされるバックエンドAPI。Cloud Run
-      : "http://localhost:50000";
+      ? configData.URL.OpenFisca_API.production // mainブランチマージ時にビルドされるバックエンドAPI。Cloud Run
+      : //configData.URL.OpenFisca_API.dev // developブランチプッシュ時にビルドされるバックエンドAPI。Cloud Run
+        "http://localhost:50000";
 
   // NOTE: 計算したい制度については、予めここに設定する必要がある
   const [household, setHousehold] = useState({
