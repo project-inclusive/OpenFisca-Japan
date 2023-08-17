@@ -653,7 +653,7 @@ class 母子世帯等に係る経過的加算(Variable):
             None)
 
         # 年齢が該当しない場合
-        if 年齢区分 is None:
+        if 年齢区分 == None:
             return 0
 
         return 母子世帯等に係る経過的加算表[世帯人数[0]][str(年齢区分)][居住級地区分]
