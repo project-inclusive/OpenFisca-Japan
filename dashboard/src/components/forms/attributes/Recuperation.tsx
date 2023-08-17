@@ -33,20 +33,19 @@ export const Recuperation = ({ personName }: { personName: string }) => {
   }, []);
 
   return (
-    <>
+    <Box mb={4}>
       <Checkbox colorScheme="cyan" checked={isChecked} onChange={onChange}>
-        入院中／施設入所中／療養中である
+        病気がある
       </Checkbox>
 
       {isChecked && (
         <Box mt={2} ml={4} mr={4} mb={4}>
           <>
             <HomeRecuperation personName={personName} />
-            <NursingHome personName={personName} />
             <Hospitalized personName={personName} />
           </>
         </Box>
       )}
-    </>
+    </Box>
   );
 };

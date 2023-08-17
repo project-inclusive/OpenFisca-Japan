@@ -11,7 +11,7 @@ import {
 import { HouseholdContext } from "../../../contexts/HouseholdContext";
 import { Pregnant } from "./Pregnant";
 
-export const ChildrenNum = ({ yourName }: { yourName: string }) => {
+export const ChildrenNum = () => {
   const isSimpleCalculation = location.pathname === "/calculate-simple";
 
   const lastYearDate = `${new Date().getFullYear() - 1}-${(
@@ -101,26 +101,23 @@ export const ChildrenNum = ({ yourName }: { yourName: string }) => {
           checked={isChecked}
           onChange={onCheckChange}
         >
-          子どもがいる／妊娠中である
+          子どもがいる
         </Checkbox>
         {isChecked && (
-          <>
-            <FormControl mt={2} ml={4} mr={4} mb={4}>
-              <FormLabel fontWeight="Regular">子どもの数</FormLabel>
-              <HStack mb={4}>
-                <Input
-                  type="number"
-                  value={shownChildrenNum}
-                  onChange={onChange}
-                  width="9em"
-                  ref={inputEl}
-                />
-                <Box>人</Box>
-              </HStack>
-            </FormControl>
-            {!isSimpleCalculation && <Pregnant personName={yourName} />}
-          </>
-      )}
+          <FormControl mt={2} ml={4} mr={4} mb={4}>
+            <FormLabel fontWeight="Regular">子どもの数</FormLabel>
+            <HStack mb={4}>
+              <Input
+                type="number"
+                value={shownChildrenNum}
+                onChange={onChange}
+                width="9em"
+                ref={inputEl}
+              />
+              <Box>人</Box>
+            </HStack>
+          </FormControl>
+        )}
       </Box>
     </>
   );

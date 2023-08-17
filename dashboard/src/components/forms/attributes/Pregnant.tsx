@@ -31,7 +31,7 @@ export const Pregnant = ({ personName }: { personName: string }) => {
 
   return (
     <>
-      <FormControl ml={4}>
+      <FormControl>
         <FormLabel fontWeight="Regular">妊娠している、または産後6ヵ月以内</FormLabel>
         <Select
           value={selectedItemIndex}

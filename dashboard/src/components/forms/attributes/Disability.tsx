@@ -13,6 +13,7 @@ import { RadiationDamage } from "./RadiationDamage";
 export const Disability = ({ personName }: { personName: string }) => {
   const [isChecked, setIsChecked] = useState(false);
   const { household, setHousehold } = useContext(HouseholdContext);
+  const currentDate = useContext(CurrentDateContext);
 
   const lastYearDate = `${new Date().getFullYear() - 1}-${(
     new Date().getMonth() + 1
@@ -31,6 +32,7 @@ export const Disability = ({ personName }: { personName: string }) => {
         "無";
       newHousehold.世帯員[personName].内部障害.ETERNITY = "無";
       newHousehold.世帯員[personName].脳性まひ_進行性筋萎縮症.ETERNITY = "無";
+      newHousehold.世帯員[personName].放射線障害 = { [currentDate]: "無"};
       setHousehold({ ...newHousehold });
     }
 

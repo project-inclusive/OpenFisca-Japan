@@ -13,6 +13,8 @@ import { Disability } from "./attributes/Disability";
 import { RentingHouse } from "./attributes/RentingHouse";
 import { Working } from "./attributes/Working";
 import { Recuperation } from "./attributes/Recuperation";
+import { NursingHome } from "./attributes/NursingHome";
+import { Pregnant } from "./attributes/Pregnant";
 
 export const FormYou = () => {
 
@@ -33,14 +35,16 @@ export const FormYou = () => {
         <PrefectureMunicipality mustInput={true} />
         {!isSimpleCalculation && <Birthday personName={yourName} mustInput={true} />}
         <Income personName={yourName} mustInput={true} />
-        {!isSimpleCalculation && <Disability personName={yourName} />}
         {!isSimpleCalculation && <Student personName={yourName} />}
+        {!isSimpleCalculation && <Working personName={yourName} />}
+        {!isSimpleCalculation && <Disability personName={yourName} />}
+        {!isSimpleCalculation && <Recuperation personName={yourName} />}
+        {!isSimpleCalculation && <NursingHome personName={yourName} />}
+        {!isSimpleCalculation && <Pregnant personName={yourName} />}
         <SpouseExists />
-        <ChildrenNum yourName={yourName} />
+        <ChildrenNum />
         {!isSimpleCalculation && <ParentsNum />}
         {!isSimpleCalculation && <RentingHouse />}
-        {!isSimpleCalculation && <Working personName={yourName} />}
-        {!isSimpleCalculation && <Recuperation personName={yourName} />}
       </Box>
     </>
   );

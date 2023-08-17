@@ -9,6 +9,7 @@ import { Disability } from "./attributes/Disability";
 import { AgeInput } from './attributes/AgeInput';
 import { Working } from "./attributes/Working";
 import { Recuperation } from "./attributes/Recuperation";
+import { NursingHome } from "./attributes/NursingHome";
 
 export const FormChildren = () => {
 
@@ -35,9 +36,10 @@ export const FormChildren = () => {
               <AgeInput personName={childName} mustInput />
               : 
               <Birthday personName={childName} mustInput={true} />}
-              {!isSimpleCalculation && <Disability personName={childName} />}
               {!isSimpleCalculation && <Working personName={childName} />}
+              {!isSimpleCalculation && <Disability personName={childName} />}
               {!isSimpleCalculation && <Recuperation personName={childName} />}
+              {!isSimpleCalculation && <NursingHome personName={childName} />}
             </Box>
           </div>
         ))}

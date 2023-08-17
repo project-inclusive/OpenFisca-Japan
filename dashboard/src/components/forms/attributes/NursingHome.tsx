@@ -25,8 +25,8 @@ export const NursingHome = ({ personName }: { personName: string }) => {
 
   return (
     <>
-      <Checkbox checked={isChecked} onChange={onChange} colorScheme="cyan" mb={2}>
-        介護施設入所中
+      <Checkbox checked={isChecked} onChange={onChange} colorScheme="cyan" mb={4}>
+        介護施設に入所している
       </Checkbox>
       <br />
     </>
