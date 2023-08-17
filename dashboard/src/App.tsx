@@ -3,8 +3,8 @@ import { AbsoluteCenter } from "@chakra-ui/react";
 import CaluculationForm from "./components/forms/caluculationForm";
 import Description from "./components/Description";
 import { Result } from "./components/result/result";
-import { GenericError } from './components/errors/GenericError';
-import { NotFoundError } from './components/errors/NotFoundError';
+import { GenericError } from "./components/errors/GenericError";
+import { NotFoundError } from "./components/errors/NotFoundError";
 
 function App() {
   return (
@@ -31,12 +31,16 @@ function App() {
               element: <CaluculationForm />,
             },
             {
+              path: "/calculate-simple",
+              element: <CaluculationForm />,
+            },
+            {
               path: "/result",
               element: <Result />,
             },
             {
               path: "/*",
-              element: <NotFoundError/>,
+              element: <NotFoundError />,
             },
           ],
           {
