@@ -7,6 +7,9 @@ import { Birthday } from "./attributes/Birthday";
 import { Disability } from "./attributes/Disability";
 import { Income } from "./attributes/Income";
 import { Student } from "./attributes/Student";
+import { Working } from "./attributes/Working";
+import { Recuperation } from "./attributes/Recuperation";
+import { NursingHome } from "./attributes/NursingHome";
 
 export const FormParents = () => {
   const { household, setHousehold } = useContext(HouseholdContext);
@@ -26,8 +29,11 @@ export const FormParents = () => {
               </Center>
               <Birthday personName={parentName} mustInput={true} />
               <Income personName={parentName} mustInput={true} />
-              <Disability personName={parentName} />
               <Student personName={parentName} />
+              <Working personName={parentName} />
+              <Disability personName={parentName} />
+              <Recuperation personName={parentName} />
+              <NursingHome personName={parentName} />
             </Box>
           </div>
         ))}

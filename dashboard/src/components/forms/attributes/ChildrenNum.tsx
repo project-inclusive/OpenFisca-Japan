@@ -9,8 +9,11 @@ import {
 } from "@chakra-ui/react";
 
 import { HouseholdContext } from "../../../contexts/HouseholdContext";
+import { Pregnant } from "./Pregnant";
 
 export const ChildrenNum = () => {
+  const isSimpleCalculation = location.pathname === "/calculate-simple";
+
   const lastYearDate = `${new Date().getFullYear() - 1}-${(
     new Date().getMonth() + 1
   )
