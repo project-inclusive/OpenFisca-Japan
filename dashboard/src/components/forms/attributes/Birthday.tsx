@@ -80,7 +80,7 @@ export const Birthday = ({
     const newHousehold = {
       ...household,
     };
-    newHousehold.世帯員[personName]["誕生年月日"].ETERNITY = birthday;
+    newHousehold.世帯員[personName].誕生年月日 = { ETERNITY: birthday };
     setHousehold(newHousehold);
   }, [selectedYear, selectedMonth, selectedDate]);
 

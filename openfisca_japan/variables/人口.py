@@ -14,7 +14,7 @@ from datetime import date
 # Import from openfisca-core the Python objects used to code the legislation in OpenFisca
 from numpy import where
 from openfisca_core.indexed_enums import Enum
-from openfisca_core.periods import DAY, ETERNITY, MONTH
+from openfisca_core.periods import DAY, ETERNITY
 from openfisca_core.variables import Variable
 # Import the Entities specifically defined for this tax and benefit system
 from openfisca_japan.entities import 人物, 世帯
@@ -40,7 +40,6 @@ class 死亡年月日(Variable):
 class 年齢(Variable):
     value_type = int
     entity = 人物
-    #definition_period = DAY
     definition_period = DAY
     label = "人物の年齢"
 

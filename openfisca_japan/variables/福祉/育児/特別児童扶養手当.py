@@ -6,7 +6,7 @@ import numpy as np
 from openfisca_core.periods import MONTH, DAY
 from openfisca_core.variables import Variable
 from openfisca_japan.entities import 世帯
-from openfisca_japan.variables.障害.身体障害者手帳 import 身体障害者手帳等級認定パターン
+from openfisca_japan.variables.障害.身体障害者手帳 import 身体障害者手帳等級パターン
 from openfisca_japan.variables.障害.療育手帳 import 療育手帳等級パターン
 from openfisca_japan.variables.障害.愛の手帳 import 愛の手帳等級パターン
 from openfisca_japan.variables.障害.精神障害者保健福祉手帳 import 精神障害者保健福祉手帳等級パターン
@@ -39,9 +39,9 @@ class 特別児童扶養手当_最大(Variable):
         # https://www.nakashibetsu.jp/kurashi/kosodate_fukushi/shougaisha/teate/tokubetujidou/
         # 内部障害は対象になる場合とならない場合があるため最大額の対象には含める
         対象障害者手帳等級 = \
-            (身体障害者手帳等級一覧 == 身体障害者手帳等級認定パターン.一級) + \
-                (身体障害者手帳等級一覧 == 身体障害者手帳等級認定パターン.二級) + \
-                    (身体障害者手帳等級一覧 == 身体障害者手帳等級認定パターン.三級) + \
+            (身体障害者手帳等級一覧 == 身体障害者手帳等級パターン.一級) + \
+                (身体障害者手帳等級一覧 == 身体障害者手帳等級パターン.二級) + \
+                    (身体障害者手帳等級一覧 == 身体障害者手帳等級パターン.三級) + \
                         (療育手帳等級一覧 == 療育手帳等級パターン.A) + \
                             (療育手帳等級一覧 == 療育手帳等級パターン.B) + \
                                 (愛の手帳等級一覧 == 愛の手帳等級パターン.一度) + \
@@ -86,9 +86,9 @@ class 特別児童扶養手当_最小(Variable):
         # https://www.nakashibetsu.jp/kurashi/kosodate_fukushi/shougaisha/teate/tokubetujidou/
         # 内部障害は対象になる場合とならない場合があるため最小額の対象には含めない
         対象障害者手帳等級 = \
-            (身体障害者手帳等級一覧 == 身体障害者手帳等級認定パターン.一級) + \
-                (身体障害者手帳等級一覧 == 身体障害者手帳等級認定パターン.二級) + \
-                    (身体障害者手帳等級一覧 == 身体障害者手帳等級認定パターン.三級) + \
+            (身体障害者手帳等級一覧 == 身体障害者手帳等級パターン.一級) + \
+                (身体障害者手帳等級一覧 == 身体障害者手帳等級パターン.二級) + \
+                    (身体障害者手帳等級一覧 == 身体障害者手帳等級パターン.三級) + \
                         (療育手帳等級一覧 == 療育手帳等級パターン.A) + \
                             (療育手帳等級一覧 == 療育手帳等級パターン.B) + \
                                 (愛の手帳等級一覧 == 愛の手帳等級パターン.一度) + \

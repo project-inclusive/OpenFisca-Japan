@@ -5,7 +5,7 @@
 from openfisca_core.periods import MONTH, DAY
 from openfisca_core.variables import Variable
 from openfisca_japan.entities import 世帯
-from openfisca_japan.variables.障害.身体障害者手帳 import 身体障害者手帳等級認定パターン
+from openfisca_japan.variables.障害.身体障害者手帳 import 身体障害者手帳等級パターン
 from openfisca_japan.variables.障害.愛の手帳 import 愛の手帳等級パターン
 from openfisca_japan.variables.障害.脳性まひ_進行性筋萎縮症 import 脳性まひ_進行性筋萎縮症パターン
 
@@ -41,8 +41,8 @@ class 障害児童育成手当(Variable):
         上限年齢未満の児童 = 児童である * (年齢 < 障害児童育成手当.上限年齢)
 
         対象障害者手帳等級 = \
-            (身体障害者手帳等級一覧 == 身体障害者手帳等級認定パターン.一級) + \
-                (身体障害者手帳等級一覧 == 身体障害者手帳等級認定パターン.二級) + \
+            (身体障害者手帳等級一覧 == 身体障害者手帳等級パターン.一級) + \
+                (身体障害者手帳等級一覧 == 身体障害者手帳等級パターン.二級) + \
                     (愛の手帳等級一覧 == 愛の手帳等級パターン.一度) + \
                         (愛の手帳等級一覧 == 愛の手帳等級パターン.二度) + \
                             (愛の手帳等級一覧 == 愛の手帳等級パターン.三度) + \

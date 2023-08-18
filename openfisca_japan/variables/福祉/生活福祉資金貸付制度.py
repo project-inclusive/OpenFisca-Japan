@@ -7,7 +7,7 @@ from openfisca_core.periods import MONTH, DAY
 from openfisca_core.variables import Variable
 from openfisca_japan.entities import 世帯
 
-from openfisca_japan.variables.障害.身体障害者手帳 import 身体障害者手帳等級認定パターン
+from openfisca_japan.variables.障害.身体障害者手帳 import 身体障害者手帳等級パターン
 from openfisca_japan.variables.障害.療育手帳 import 療育手帳等級パターン
 from openfisca_japan.variables.障害.愛の手帳 import 愛の手帳等級パターン
 from openfisca_japan.variables.障害.精神障害者保健福祉手帳 import 精神障害者保健福祉手帳等級パターン
@@ -26,7 +26,7 @@ class 障害者手帳を持つ世帯員がいる(Variable):
         療育手帳等級一覧 = 対象世帯.members("療育手帳等級", 対象期間)
         愛の手帳等級一覧 = 対象世帯.members("愛の手帳等級", 対象期間)
 
-        障害者手帳を持つ世帯員 = ((身体障害者手帳等級一覧 != 身体障害者手帳等級認定パターン.無) + \
+        障害者手帳を持つ世帯員 = ((身体障害者手帳等級一覧 != 身体障害者手帳等級パターン.無) + \
                                 (精神障害者保健福祉手帳等級一覧 != 精神障害者保健福祉手帳等級パターン.無) + \
                                     (療育手帳等級一覧 != 療育手帳等級パターン.無) + \
                                         (愛の手帳等級一覧 != 愛の手帳等級パターン.無))

@@ -11,7 +11,7 @@ import numpy as np
 from openfisca_core.periods import MONTH, DAY
 from openfisca_core.variables import Variable
 from openfisca_japan.entities import 世帯, 人物
-from openfisca_japan.variables.障害.身体障害者手帳 import 身体障害者手帳等級認定パターン
+from openfisca_japan.variables.障害.身体障害者手帳 import 身体障害者手帳等級パターン
 from openfisca_core.indexed_enums import Enum
 
 
@@ -496,14 +496,14 @@ class 障害者加算(Variable):
 
     def formula(対象世帯, 対象期間, parameters):
         居住級地区分1 = 対象世帯("居住級地区分1", 対象期間)
-        身体障害者手帳等級認定一覧 = 対象世帯.members("身体障害者手帳等級認定", 対象期間)
+        身体障害者手帳等級一覧 = 対象世帯.members("身体障害者手帳等級", 対象期間)
         # 該当者(1級~3級)のみ抽出
-        身体障害者手帳等級認定一覧 = 身体障害者手帳等級認定一覧[
-            (身体障害者手帳等級認定一覧 == 身体障害者手帳等級認定パターン.一級) |
-            (身体障害者手帳等級認定一覧 == 身体障害者手帳等級認定パターン.二級) |
-            (身体障害者手帳等級認定一覧 == 身体障害者手帳等級認定パターン.三級)]
+        身体障害者手帳等級一覧 = 身体障害者手帳等級一覧[
+            (身体障害者手帳等級一覧 == 身体障害者手帳等級パターン.一級) |
+            (身体障害者手帳等級一覧 == 身体障害者手帳等級パターン.二級) |
+            (身体障害者手帳等級一覧 == 身体障害者手帳等級パターン.三級)]
 
-        return sum([int(障害者加算表[str(等級)][f'{居住級地区分1[0]}級地']) for 等級 in 身体障害者手帳等級認定一覧])
+        return sum([int(障害者加算表[str(等級)][f'{居住級地区分1[0]}級地']) for 等級 in 身体障害者手帳等級一覧])
 
 
 class 母子加算(Variable):

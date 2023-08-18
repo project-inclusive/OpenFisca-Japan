@@ -32,7 +32,7 @@ export const Income = ({
       setShownIncome(income / 10000);
     }
 
-    newHousehold.世帯員[personName].収入[currentDate] = income;
+    newHousehold.世帯員[personName].収入 = { [currentDate]: income };
     setHousehold(newHousehold);
   }, []);
 
@@ -44,19 +44,6 @@ export const Income = ({
   };
 
   return (
-    /*
-    <div className="input-group input-group-lg mb-3">
-      <span className="input-group-text">年収</span>
-      <input
-        name="年収"
-        className="form-control"
-        type="number"
-        value={shownIncome}
-        onChange={onChange}
-      />
-      <span className="input-group-text">万円</span>
-    </div>
-    */
     <>
       {mustInput && <ErrorMessage condition={shownIncome === ""} />}
       <FormControl>

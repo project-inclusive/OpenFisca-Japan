@@ -62,23 +62,21 @@ class Process(ProcessBase):
             if row[self.titles[f'{p}_身体障害者手帳等級']]:
                 disability = row[self.titles[f'{p}_身体障害者手帳等級']]
                 if disability == '0':
-                    p_dict['身体障害者手帳等級認定'] = '無'
+                    p_dict['身体障害者手帳等級'] = '無'
                 elif disability == '1':
-                    p_dict['身体障害者手帳等級認定'] = '一級'
+                    p_dict['身体障害者手帳等級'] = '一級'
                 elif disability == '2':
-                    p_dict['身体障害者手帳等級認定'] = '二級'
+                    p_dict['身体障害者手帳等級'] = '二級'
                 elif disability == '3':
-                    p_dict['身体障害者手帳等級認定'] = '三級'
+                    p_dict['身体障害者手帳等級'] = '三級'
                 elif disability == '4':
-                    p_dict['身体障害者手帳等級認定'] = '四級'
+                    p_dict['身体障害者手帳等級'] = '四級'
                 elif disability == '5':
-                    p_dict['身体障害者手帳等級認定'] = '五級'
+                    p_dict['身体障害者手帳等級'] = '五級'
                 elif disability == '6':
-                    p_dict['身体障害者手帳等級認定'] = '六級'
+                    p_dict['身体障害者手帳等級'] = '六級'
                 elif disability == '7':
-                    p_dict['身体障害者手帳等級認定'] = '七級'
-
-                p_dict['身体障害者手帳交付年月日'] = self.period
+                    p_dict['身体障害者手帳等級'] = '七級'
 
             if row[self.titles[f'{p}_療育手帳等級']]:
                 disability = row[self.titles[f'{p}_療育手帳等級']]
