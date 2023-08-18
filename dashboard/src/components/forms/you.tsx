@@ -17,7 +17,6 @@ import { NursingHome } from "./attributes/NursingHome";
 import { Pregnant } from "./attributes/Pregnant";
 
 export const FormYou = () => {
-
   const location = useLocation();
   const isSimpleCalculation = location.pathname === "/calculate-simple";
 
@@ -33,17 +32,19 @@ export const FormYou = () => {
           {configData.calculationForm.youDescription}
         </Center>
         <PrefectureMunicipality mustInput={true} />
-        {!isSimpleCalculation && <Birthday personName={yourName} mustInput={true} />}
+        {!isSimpleCalculation && (
+          <Birthday personName={yourName} mustInput={true} />
+        )}
         <Income personName={yourName} mustInput={true} />
         {!isSimpleCalculation && <Student personName={yourName} />}
         {!isSimpleCalculation && <Working personName={yourName} />}
         {!isSimpleCalculation && <Disability personName={yourName} />}
         {!isSimpleCalculation && <Recuperation personName={yourName} />}
         {!isSimpleCalculation && <NursingHome personName={yourName} />}
-        {!isSimpleCalculation && <Pregnant personName={yourName} />}
         <SpouseExists />
         <ChildrenNum />
         {!isSimpleCalculation && <ParentsNum />}
+        {!isSimpleCalculation && <Pregnant personName={yourName} />}
         {!isSimpleCalculation && <RentingHouse />}
       </Box>
     </>

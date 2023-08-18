@@ -1,5 +1,5 @@
 import { useState, useCallback, useContext, useEffect } from "react";
-import { Select, FormControl, FormLabel } from "@chakra-ui/react";
+import { Select, Checkbox, Box } from "@chakra-ui/react";
 
 import { HouseholdContext } from "../../../contexts/HouseholdContext";
 import { CurrentDateContext } from "../../../contexts/CurrentDateContext";
@@ -7,45 +7,74 @@ import { CurrentDateContext } from "../../../contexts/CurrentDateContext";
 export const Pregnant = ({ personName }: { personName: string }) => {
   const currentDate = useContext(CurrentDateContext);
   const { household, setHousehold } = useContext(HouseholdContext);
+  const [isChecked, setIsChecked] = useState(false);
 
   // ラベルとOpenFiscaの表記違いを明記
-  const items = [
-    ["", "無"],
-    ["妊娠6ヵ月未満", "妊娠6ヵ月未満"],
-    ["妊娠6ヵ月以上", "妊娠6ヵ月以上"],
-    ["産後6ヵ月以内", "産後6ヵ月以内"],
+  const pregnantStatusArray = [
+    "妊娠6ヵ月未満",
+    "妊娠6ヵ月以上",
+    "産後6ヵ月以内",
   ];
-  const [selectedItemIndex, setSelectedItemIndex] = useState(0);
+  const [selectedStatus, setSelectedStatus] = useState("");
+
+  // チェックボックスの値が変更された時
+  const onCheckChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (!event.target.checked) {
+        const newHousehold = { ...household };
+        newHousehold.世帯員[personName].妊産婦 = {
+          [currentDate]: "無",
+        };
+        setHousehold({ ...newHousehold });
+        setSelectedStatus("");
+      }
+      setIsChecked(event.target.checked);
+    },
+    []
+  );
 
   // コンボボックスの値が変更された時
-  const onChange = useCallback(
+  const onSelectChange = useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) => {
-      setSelectedItemIndex(parseInt(event.currentTarget.value));
+      const pregnantStatus = String(event.currentTarget.value);
+      setSelectedStatus(pregnantStatus);
       const newHousehold = { ...household };
-      newHousehold.世帯員[personName].妊産婦 =
-        { [currentDate]: items[parseInt(event.currentTarget.value)][1] };
+      if (pregnantStatus) {
+        newHousehold.世帯員[personName].妊産婦 = {
+          [currentDate]: pregnantStatus,
+        };
+      } else {
+        newHousehold.世帯員[personName].妊産婦 = {
+          [currentDate]: "無",
+        };
+      }
+
       setHousehold({ ...newHousehold });
     },
     []
   );
 
   return (
-    <>
-      <FormControl>
-        <FormLabel fontWeight="Regular">妊娠している、または産後6ヵ月以内</FormLabel>
-        <Select
-          value={selectedItemIndex}
-          className="form-select"
-          onChange={onChange}
-          mb={3}
-        >
-          {items.map((item, index) => (
-            <option value={index} key={index}>
-              {item[0]}
-            </option>
-          ))}
-        </Select>
-      </FormControl>
-    </>
+    <Box mb={4}>
+      <Checkbox colorScheme="cyan" checked={isChecked} onChange={onCheckChange}>
+        自分または配偶者が妊娠中あるいは産後6ヵ月以内
+      </Checkbox>
+
+      {isChecked && (
+        <Box mt={2} ml={4} mr={4} mb={4}>
+          <Select
+            value={selectedStatus}
+            onChange={onSelectChange}
+            placeholder="いずれかを選択"
+          >
+            {pregnantStatusArray.map((val, index) => (
+              <option value={val} key={index}>
+                {val}
+              </option>
+            ))}
+          </Select>
+        </Box>
+      )}
+    </Box>
   );
 };

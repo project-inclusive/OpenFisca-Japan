@@ -32,7 +32,7 @@ export const Disability = ({ personName }: { personName: string }) => {
         "無";
       newHousehold.世帯員[personName].内部障害.ETERNITY = "無";
       newHousehold.世帯員[personName].脳性まひ_進行性筋萎縮症.ETERNITY = "無";
-      newHousehold.世帯員[personName].放射線障害 = { [currentDate]: "無"};
+      newHousehold.世帯員[personName].放射線障害 = { [currentDate]: "無" };
       setHousehold({ ...newHousehold });
     }
 
@@ -44,14 +44,6 @@ export const Disability = ({ personName }: { personName: string }) => {
       <Checkbox colorScheme="cyan" checked={isChecked} onChange={onChange}>
         障害がある
       </Checkbox>
-      {/*
-        <input
-          className="form-check-input"
-          type="checkbox"
-          checked={isChecked}
-          id="flexCheckDefault"
-          onChange={onChange}
-        />*/}
 
       <Box mt={2} ml={4} mr={4} mb={4}>
         {isChecked && (
