@@ -168,7 +168,7 @@ sudo apt install xdg-utils
 
 ### 自動build, deploy
 - Google CloudのCloud Buildにより、mainブランチ、developブランチにpull (push) されたとき、`Dockerfile_cloud`を元にそれぞれ自動でbuildされ、Cloud Runによりdeployされる。
-- mainブランチ、developブランチでbuild, deployされるAPIは別々。`dashboard/src/components/forms/caluculationForm.tsx`の`apiURL`を、mainブランチとdevelopブランチpull (push)時に、`configData.URL.OpenFisca_API.production`と`configData.URL.OpenFisca_API.dev`に手動で切り替えている。
+- mainブランチ、developブランチでbuild, deployされるAPIは別々。`dashboard/src/hooks/calculate.ts`の`apiURL`を、mainブランチとdevelopブランチpull (push)時に、`configData.URL.OpenFisca_API.production`と`configData.URL.OpenFisca_API.dev`に手動で切り替えている。
 
 #### ローカルでdockerイメージを作りcloud runにデプロイする（参考）
 - `docker build -t gcr.io/openfisca-shibuya/openfisca-shibuya-deploy-test -f Dockerfile_cloud --platform amd64 .`

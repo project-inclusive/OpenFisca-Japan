@@ -1,23 +1,15 @@
 import { useState } from "react";
 
 import ScrollToTop from "../scrollToTop";
-import configData from "../../config/app_config.json";
 import { FormContent } from "./formContent";
 import { HouseholdContext } from "../../contexts/HouseholdContext";
 import { CurrentDateContext } from "../../contexts/CurrentDateContext";
-import { APIServerURLContext } from "../../contexts/APIServerURLContext";
 
 function CaluculationForm() {
   // 日付は「YYYY-MM-DD」の桁数フォーマットでないとOpenFisca APIが正常動作しない
   const currentDate = `${new Date().getFullYear()}-${(new Date().getMonth() + 1)
     .toString()
     .padStart(2, "0")}-${new Date().getDate().toString().padStart(2, "0")}`;
-
-  const apiURL =
-    import.meta.env.MODE === "production"
-      ? // configData.URL.OpenFisca_API.production // mainブランチマージ時にビルドされるバックエンドAPI。Cloud Run
-        configData.URL.OpenFisca_API.dev // developブランチプッシュ時にビルドされるバックエンドAPI。Cloud Run
-      : "http://localhost:50000";
 
   // NOTE: 計算したい制度については、予めここに設定する必要がある
   const [household, setHousehold] = useState({
@@ -93,14 +85,12 @@ function CaluculationForm() {
   };
 
   return (
-    <APIServerURLContext.Provider value={apiURL}>
-      <CurrentDateContext.Provider value={currentDate}>
-        <HouseholdContext.Provider value={householdContextValue}>
-          <ScrollToTop />
-          <FormContent />
-        </HouseholdContext.Provider>
-      </CurrentDateContext.Provider>
-    </APIServerURLContext.Provider>
+    <CurrentDateContext.Provider value={currentDate}>
+      <HouseholdContext.Provider value={householdContextValue}>
+        <ScrollToTop />
+        <FormContent />
+      </HouseholdContext.Provider>
+    </CurrentDateContext.Provider>
   );
 }
 

@@ -1,9 +1,10 @@
 import { Link as RouterLink, useLocation } from "react-router-dom";
-import { Center, Button } from "@chakra-ui/react";
-import { useRef, useState } from "react";
+import { Center, Button, Spinner } from "@chakra-ui/react";
+import { useRef, useState, useEffect } from "react";
 import * as htmlToImage from "html-to-image";
 
 import configData from "../../config/app_config.json";
+import { useCalculate } from "../../hooks/calculate";
 import { Benefit } from "./benefit";
 import { Loan } from "./loan";
 import { CalculationLabel } from "../forms/calculationLabel";
@@ -18,11 +19,22 @@ const createFileName = (extension: string = "", ...names: string[]) => {
 
 export const Result = () => {
   const location = useLocation();
-  const { result, currentDate, isSimpleCalculation } = location.state as {
-    result: any;
+  // TODO: decode household from URL
+  const { household, currentDate, isSimpleCalculation } = location.state as {
+    household: any;
     currentDate: string;
     isSimpleCalculation: boolean;
   };
+
+  const [result, calculate] = useCalculate();
+
+  let calcOnce = true;
+  useEffect(() => {
+    if (calcOnce) {
+      calculate(household);
+      calcOnce = false;
+    }
+  }, []);
 
   const divRef = useRef<HTMLDivElement | null>(null);
   const [loadingScreenshotDownload, setLoadingScreenshotDownload] =
@@ -63,91 +75,100 @@ export const Result = () => {
 
   return (
     <div ref={divRef}>
-      <CalculationLabel
-        text={
-          isSimpleCalculation
-            ? configData.calculationForm.simpleCalculation
-            : configData.calculationForm.detailedCalculation
-        }
-        colour={isSimpleCalculation ? "teal" : "blue"}
-      />
-
-      <Center
-        fontSize={configData.style.subTitleFontSize}
-        fontWeight="medium"
-        mt={2}
-        mb={2}
-      >
-        {configData.result.topDescription}
-      </Center>
-
-      <Benefit result={result} currentDate={currentDate} />
-      <Loan result={result} currentDate={currentDate} />
-
-      {isSimpleCalculation && (
+      {!result && (
+        <Center>
+          <Spinner mt={20} thickness="4px" size="xl" color="cyan.600" />
+        </Center>
+      )}
+      {result && (
         <>
-          <Center pr={4} pl={4} pb={4}>
-            {configData.result.detailedCalculationDescription}
+          <CalculationLabel
+            text={
+              isSimpleCalculation
+                ? configData.calculationForm.simpleCalculation
+                : configData.calculationForm.detailedCalculation
+            }
+            colour={isSimpleCalculation ? "teal" : "blue"}
+          />
+
+          <Center
+            fontSize={configData.style.subTitleFontSize}
+            fontWeight="medium"
+            mt={2}
+            mb={2}
+          >
+            {configData.result.topDescription}
           </Center>
+
+          <Benefit result={result} currentDate={currentDate} />
+          <Loan result={result} currentDate={currentDate} />
+
+          {isSimpleCalculation && (
+            <>
+              <Center pr={4} pl={4} pb={4}>
+                {configData.result.detailedCalculationDescription}
+              </Center>
+
+              <Center pr={4} pl={4} pb={4}>
+                <Button
+                  as={RouterLink}
+                  to="/calculate"
+                  fontSize={configData.style.subTitleFontSize}
+                  borderRadius="xl"
+                  height="2em"
+                  width="100%"
+                  bg="blue.500"
+                  color="white"
+                  _hover={{ bg: "blue.600" }}
+                >
+                  {configData.calculationForm.detailedCalculation}
+                </Button>
+              </Center>
+            </>
+          )}
 
           <Center pr={4} pl={4} pb={4}>
             <Button
-              as={RouterLink}
-              to="/calculate"
+              onClick={downloadScreenshot}
+              loadingText={"読み込み中..."}
+              isLoading={loadingScreenshotDownload}
+              as="button"
               fontSize={configData.style.subTitleFontSize}
               borderRadius="xl"
               height="2em"
               width="100%"
-              bg="blue.500"
+              bg="gray.500"
               color="white"
-              _hover={{ bg: "blue.600" }}
+              _hover={{ bg: "gray.600" }}
             >
-              {configData.calculationForm.detailedCalculation}
+              {configData.result.screenshotButtonText}
+            </Button>
+          </Center>
+
+          <Center pr={4} pl={4} pb={4}>
+            {configData.result.questionnaireDescription[0]}
+          </Center>
+
+          <Center pr={4} pl={4} pb={4}>
+            {/* When returning to this calculation result page from the questionnaire form on a PC browser (Chrome, Edge) deployed by Netlify, it will be 404, so open it in a new tab */}
+            <Button
+              as="a"
+              href={configData.URL.questionnaire_form}
+              fontSize={configData.style.subTitleFontSize}
+              borderRadius="xl"
+              height="2em"
+              width="100%"
+              bg="cyan.600"
+              color="white"
+              _hover={{ bg: "cyan.700" }}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              アンケートに答える
             </Button>
           </Center>
         </>
       )}
-
-      <Center pr={4} pl={4} pb={4}>
-        <Button
-          onClick={downloadScreenshot}
-          loadingText={"読み込み中..."}
-          isLoading={loadingScreenshotDownload}
-          as="button"
-          fontSize={configData.style.subTitleFontSize}
-          borderRadius="xl"
-          height="2em"
-          width="100%"
-          bg="gray.500"
-          color="white"
-          _hover={{ bg: "gray.600" }}
-        >
-          {configData.result.screenshotButtonText}
-        </Button>
-      </Center>
-
-      <Center pr={4} pl={4} pb={4}>
-        {configData.result.questionnaireDescription[0]}
-      </Center>
-
-      <Center pr={4} pl={4} pb={4}>
-        {/* When returning to this calculation result page from the questionnaire form on a PC browser (Chrome, Edge) deployed by Netlify, it will be 404, so open it in a new tab */}
-        <Button
-          as="a"
-          href={configData.URL.questionnaire_form}
-          fontSize={configData.style.subTitleFontSize}
-          borderRadius="xl"
-          height="2em"
-          width="100%"
-          bg="cyan.600"
-          color="white"
-          _hover={{ bg: "cyan.700" }}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          アンケートに答える
-        </Button>
-      </Center>
     </div>
   );
 };
