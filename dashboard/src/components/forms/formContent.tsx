@@ -4,7 +4,6 @@ import { Center, Button } from "@chakra-ui/react";
 
 import configData from "../../config/app_config.json";
 import { ShowAlertMessageContext } from "../../contexts/ShowAlertMessageContext";
-import { CurrentDateContext } from "../../contexts/CurrentDateContext";
 import { HouseholdContext } from "../../contexts/HouseholdContext";
 import { useValidate } from "../../hooks/validate";
 import { FormYou } from "./you";
@@ -20,7 +19,6 @@ export const FormContent = () => {
   const [ShowAlertMessage, setShowAlertMessage] = useState(false);
   const validated = useValidate();
   const navigate = useNavigate();
-  const currentDate = useContext(CurrentDateContext);
   const { household, setHousehold } = useContext(HouseholdContext);
 
   return (
@@ -71,7 +69,6 @@ export const FormContent = () => {
               navigate("/result", {
                 state: {
                   household: household,
-                  currentDate: currentDate,
                   isSimpleCalculation: isSimpleCalculation,
                 },
               });

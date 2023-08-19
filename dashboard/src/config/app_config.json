@@ -94,11 +94,11 @@
   "result": {
     "topDescription": "計算結果",
     "detailedCalculationDescription": "「くわしく計算」モードでは、より正確な結果が表示されます。金額が上がる場合もあります。",
-    "screenshotButtonText":"このページを画像で保存",
+    "screenshotButtonText": "このページを画像で保存",
     "questionnaireDescription": [
       "よろしければ改善のための簡単なアンケートにご協力ください。"
     ],
-    "benefitDescription": "給付されるお金",
+    "benefitDescription": "給付される可能性のあるお金",
     "給付制度": {
       "caption": [
         "詳細な給付条件や申請方法については市町村の窓口にお問い合わせください。"
@@ -139,7 +139,7 @@
         }
       }
     },
-    "loanDescription": "借りられるお金",
+    "loanDescription": "借りられる可能性のあるお金",
     "貸付制度": {
       "caption": [
         "原則無利子・無担保でお金を借りられ、サポーターの支援も受けられる制度。",

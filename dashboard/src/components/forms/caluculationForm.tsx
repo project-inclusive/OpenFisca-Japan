@@ -85,12 +85,10 @@ function CaluculationForm() {
   };
 
   return (
-    <CurrentDateContext.Provider value={currentDate}>
-      <HouseholdContext.Provider value={householdContextValue}>
-        <ScrollToTop />
-        <FormContent />
-      </HouseholdContext.Provider>
-    </CurrentDateContext.Provider>
+    <HouseholdContext.Provider value={householdContextValue}>
+      <ScrollToTop />
+      <FormContent />
+    </HouseholdContext.Provider>
   );
 }
 

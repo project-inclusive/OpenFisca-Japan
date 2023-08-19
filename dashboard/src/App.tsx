@@ -5,8 +5,13 @@ import Description from "./components/Description";
 import { Result } from "./components/result/result";
 import { GenericError } from "./components/errors/GenericError";
 import { NotFoundError } from "./components/errors/NotFoundError";
+import { CurrentDateContext } from "./contexts/CurrentDateContext";
 
 function App() {
+  const currentDate = `${new Date().getFullYear()}-${(new Date().getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}-${new Date().getDate().toString().padStart(2, "0")}`;
+
   return (
     <AbsoluteCenter
       width={{
@@ -18,36 +23,38 @@ function App() {
       }}
       axis="horizontal"
     >
-      <RouterProvider
-        fallbackElement={<GenericError />}
-        router={createBrowserRouter(
-          [
+      <CurrentDateContext.Provider value={currentDate}>
+        <RouterProvider
+          fallbackElement={<GenericError />}
+          router={createBrowserRouter(
+            [
+              {
+                path: "/",
+                element: <Description />,
+              },
+              {
+                path: "/calculate",
+                element: <CaluculationForm />,
+              },
+              {
+                path: "/calculate-simple",
+                element: <CaluculationForm />,
+              },
+              {
+                path: "/result",
+                element: <Result />,
+              },
+              {
+                path: "/*",
+                element: <NotFoundError />,
+              },
+            ],
             {
-              path: "/",
-              element: <Description />,
-            },
-            {
-              path: "/calculate",
-              element: <CaluculationForm />,
-            },
-            {
-              path: "/calculate-simple",
-              element: <CaluculationForm />,
-            },
-            {
-              path: "/result",
-              element: <Result />,
-            },
-            {
-              path: "/*",
-              element: <NotFoundError />,
-            },
-          ],
-          {
-            basename: import.meta.env.BASE_URL,
-          }
-        )}
-      />
+              basename: import.meta.env.BASE_URL,
+            }
+          )}
+        />
+      </CurrentDateContext.Provider>
     </AbsoluteCenter>
   );
 }

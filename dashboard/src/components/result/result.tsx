@@ -1,9 +1,10 @@
 import { Link as RouterLink, useLocation } from "react-router-dom";
 import { Center, Button, Spinner } from "@chakra-ui/react";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
 import * as htmlToImage from "html-to-image";
 
 import configData from "../../config/app_config.json";
+import { CurrentDateContext } from "../../contexts/CurrentDateContext";
 import { useCalculate } from "../../hooks/calculate";
 import { Benefit } from "./benefit";
 import { Loan } from "./loan";
@@ -20,12 +21,12 @@ const createFileName = (extension: string = "", ...names: string[]) => {
 export const Result = () => {
   const location = useLocation();
   // TODO: decode household from URL
-  const { household, currentDate, isSimpleCalculation } = location.state as {
+  const { household, isSimpleCalculation } = location.state as {
     household: any;
-    currentDate: string;
     isSimpleCalculation: boolean;
   };
 
+  const currentDate = useContext(CurrentDateContext);
   const [result, calculate] = useCalculate();
 
   let calcOnce = true;
@@ -77,7 +78,13 @@ export const Result = () => {
     <div ref={divRef}>
       {!result && (
         <Center>
-          <Spinner mt={20} thickness="4px" size="xl" color="cyan.600" />
+          <Spinner
+            mt={20}
+            thickness="4px"
+            size="xl"
+            color="cyan.600"
+            speed="0.7s"
+          />
         </Center>
       )}
       {result && (
