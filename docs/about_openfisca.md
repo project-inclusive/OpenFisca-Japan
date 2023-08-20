@@ -99,7 +99,9 @@
 - メソッド名 formula の代わりに forluma\_{年} や formula\_{年\}\_{月}\_{日} を使うと、指定した時刻以降のperiodの場合にのみ呼び出されます
 - つまり、periodの場合分けでif文を使わずに済むようになります
   - [参考実装](https://github.com/openfisca/openfisca-core/blob/fad5f69a91435c767cb6bca73de6a7d1b666c082/openfisca_core/variables/variable.py#L246)
-- `対象世帯(変数名, 対象期間)` `対象世帯.members(変数名, 対象期間)` 等で別のVariableの値を参照できます
+- `対象世帯(変数名, 対象期間)` `対象人物(変数名, 対象期間)` 等で別のVariableの値を参照できます
+  - 対象世帯の各世帯員のVariableを参照する場合は `対象世帯.members(変数名, 対象期間)`
+  - 対象人物の世帯のVariableを参照する場合は `対象人物.世帯(変数名, 対象期間)`
   - ただし、取得した値を式に用いる場合 **複合演算子 (`+=`, `-=` 等)を使用すると参照元の変数そのものが書き変わり計算に不整合が生じてしまいます**
     - NG: `a += b` (`a` で参照しているvariableの計算結果自体を書き換えてしまう)
     - OK: `a = a + b` (variableを変えずに、(Pythonのローカル変数) `a` のみを上書き)
