@@ -6,6 +6,8 @@ A variable is a property of an Entity such as a 人物, a 世帯…
 See https://openfisca.org/doc/key-concepts/variables.html
 """
 
+import csv
+
 import numpy as np
 
 # Import from openfisca-core the Python objects used to code the legislation in OpenFisca
@@ -19,6 +21,13 @@ from openfisca_japan.variables.障害.身体障害者手帳 import 身体障害�
 from openfisca_japan.variables.障害.療育手帳 import 療育手帳等級パターン
 from openfisca_japan.variables.障害.愛の手帳 import 愛の手帳等級パターン
 from openfisca_japan.variables.障害.精神障害者保健福祉手帳 import 精神障害者保健福祉手帳等級パターン
+
+
+# NOTE: 項目数が多い金額表は可読性の高いCSV形式としている。
+with open('openfisca_japan/parameters/所得/配偶者特別控除額.csv') as f:
+    reader = csv.DictReader(f)
+    # 配偶者特別控除額表[配偶者の所得区分][納税者本人の所得区分] の形で参照可能
+    配偶者特別控除額表 = {row[""]: row for row in reader}
 
 
 class 所得(Variable):
@@ -124,25 +133,8 @@ class 障害者控除(Variable):
     reference = "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1160.htm"
 
     def formula(対象世帯, 対象期間, parameters):
-        身体障害者手帳等級一覧 = 対象世帯.members("身体障害者手帳等級", 対象期間)
-        精神障害者保健福祉手帳等級一覧 = 対象世帯.members("精神障害者保健福祉手帳等級", 対象期間)
-        療育手帳等級一覧 = 対象世帯.members("療育手帳等級", 対象期間)
-        愛の手帳等級一覧 = 対象世帯.members("愛の手帳等級", 対象期間)
-
-        特別障害者控除対象 = \
-            (身体障害者手帳等級一覧 == 身体障害者手帳等級パターン.一級) + \
-                (身体障害者手帳等級一覧 == 身体障害者手帳等級パターン.二級) + \
-                    (精神障害者保健福祉手帳等級一覧 == 精神障害者保健福祉手帳等級パターン.一級) + \
-                        (療育手帳等級一覧 == 療育手帳等級パターン.A) + \
-                            (愛の手帳等級一覧 == 愛の手帳等級パターン.一度) + \
-                                (愛の手帳等級一覧 == 愛の手帳等級パターン.二度)
-        
-        障害者控除対象 = \
-            ~特別障害者控除対象 *  \
-                ((身体障害者手帳等級一覧 != 身体障害者手帳等級パターン.無) + \
-                    (精神障害者保健福祉手帳等級一覧 != 精神障害者保健福祉手帳等級パターン.無) + \
-                        (療育手帳等級一覧 != 療育手帳等級パターン.無) + \
-                            (愛の手帳等級一覧 != 愛の手帳等級パターン.無))
+        特別障害者控除対象 = 対象世帯.members("特別障害者控除対象", 対象期間)
+        障害者控除対象 = 対象世帯.members("障害者控除対象", 対象期間)
 
         # 障害者控除額は対象人数分が算出される
         # https://www.city.hirakata.osaka.jp/kosodate/0000000544.html
@@ -153,7 +145,56 @@ class 障害者控除(Variable):
         障害者控除額 = parameters(対象期間).所得.障害者控除額
         
         return 特別障害者控除対象人数 * 特別障害者控除額 + 障害者控除対象人数 * 障害者控除額
+
+
+class 障害者控除対象(Variable):
+    value_type = bool
+    entity = 人物
+    definition_period = DAY
+    label = "障害者控除の対象になるか否か"
+    reference = "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1160.htm"
+
+    def formula(対象人物, 対象期間, parameters):
+        身体障害者手帳等級 = 対象人物("身体障害者手帳等級", 対象期間)
+        精神障害者保健福祉手帳等級 = 対象人物("精神障害者保健福祉手帳等級", 対象期間)
+        療育手帳等級 = 対象人物("療育手帳等級", 対象期間)
+        愛の手帳等級 = 対象人物("愛の手帳等級", 対象期間)
+
+        特別障害者控除対象 = 対象人物("特別障害者控除対象", 対象期間)
+
+        障害者控除対象 = \
+            ~特別障害者控除対象 *  \
+                ((身体障害者手帳等級 != 身体障害者手帳等級パターン.無) + \
+                    (精神障害者保健福祉手帳等級 != 精神障害者保健福祉手帳等級パターン.無) + \
+                        (療育手帳等級 != 療育手帳等級パターン.無) + \
+                            (愛の手帳等級 != 愛の手帳等級パターン.無))
+
+        return 障害者控除対象
+
+
+class 特別障害者控除対象(Variable):
+    value_type = bool
+    entity = 人物
+    definition_period = DAY
+    label = "特別障害者控除の対象になるか否か"
+    reference = "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1160.htm"
+
+    def formula(対象人物, 対象期間, parameters):
+        身体障害者手帳等級 = 対象人物("身体障害者手帳等級", 対象期間)
+        精神障害者保健福祉手帳等級 = 対象人物("精神障害者保健福祉手帳等級", 対象期間)
+        療育手帳等級 = 対象人物("療育手帳等級", 対象期間)
+        愛の手帳等級 = 対象人物("愛の手帳等級", 対象期間)
+
+        特別障害者控除対象 = \
+            (身体障害者手帳等級 == 身体障害者手帳等級パターン.一級) + \
+                (身体障害者手帳等級 == 身体障害者手帳等級パターン.二級) + \
+                    (精神障害者保健福祉手帳等級 == 精神障害者保健福祉手帳等級パターン.一級) + \
+                        (療育手帳等級 == 療育手帳等級パターン.A) + \
+                            (愛の手帳等級 == 愛の手帳等級パターン.一度) + \
+                                (愛の手帳等級 == 愛の手帳等級パターン.二度)
         
+        return 特別障害者控除対象
+
 
 class ひとり親控除(Variable):
     value_type = float
@@ -187,7 +228,7 @@ class 寡婦控除(Variable):
         寡婦控除_所得制限額 = parameters(対象期間).所得.寡婦控除_所得制限額
 
         return 寡婦控除額 * 寡婦 * (世帯高所得 <= 寡婦控除_所得制限額)
-            
+
 
 class 学生(Variable):
     value_type = bool
@@ -216,7 +257,55 @@ class 勤労学生控除(Variable):
         所得条件 = (世帯高所得 > 0) * (世帯高所得 <= 勤労学生_所得制限額)
 
         return 所得条件 * 学生 * 勤労学生控除額
+
+
+class 配偶者特別控除(Variable):
+    value_type = float
+    entity = 世帯
+    definition_period = DAY
+    label = "配偶者特別控除"
+    reference = "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1195.htm"
+
+    def formula(対象世帯, 対象期間, parameters):
+        自分の所得 = 対象世帯.自分("所得", 対象期間)
+        配偶者の所得 = 対象世帯.配偶者("所得", 対象期間)
+
+        # 所得が高いほうが控除を受ける対象となる
+        納税者の所得 = np.max([自分の所得[0], 配偶者の所得[0]])
+        納税者の配偶者の所得 = np.min([自分の所得[0], 配偶者の所得[0]])
+
+        納税者の所得区分 = np.select(
+            [納税者の所得 <= 9000000, 納税者の所得 > 9000000 and 納税者の所得 <= 9500000, 納税者の所得 > 9500000 and 納税者の所得 <= 10000000],
+            ["~9000000", "~9500000", "~10000000"],
+            None)
         
+        納税者の配偶者の所得区分 = np.select(
+            [納税者の配偶者の所得 > 480000 and 納税者の配偶者の所得 <= 950000,
+             納税者の配偶者の所得 > 950000 and 納税者の配偶者の所得 <= 1000000,
+             納税者の配偶者の所得 > 1000000 and 納税者の配偶者の所得 <= 1050000,
+             納税者の配偶者の所得 > 1050000 and 納税者の配偶者の所得 <= 1100000,
+             納税者の配偶者の所得 > 1100000 and 納税者の配偶者の所得 <= 1150000,
+             納税者の配偶者の所得 > 1150000 and 納税者の配偶者の所得 <= 1200000,
+             納税者の配偶者の所得 > 1200000 and 納税者の配偶者の所得 <= 1250000,
+             納税者の配偶者の所得 > 1250000 and 納税者の配偶者の所得 <= 1300000,
+             納税者の配偶者の所得 > 1300000 and 納税者の配偶者の所得 <= 1330000],
+            ["~950000",
+             "~1000000",
+             "~1050000",
+             "~1100000",
+             "~1150000",
+             "~1200000",
+             "~1250000",
+             "~1300000",
+             "~1330000"],
+            None)
+
+        if 納税者の所得区分 == None or 納税者の配偶者の所得区分 == None:
+            # 該当しない場合
+            return 0
+
+        return 配偶者特別控除額表[str(納税者の配偶者の所得区分)][str(納税者の所得区分)]
+
 
 class 控除後世帯高所得(Variable):
     value_type = float
@@ -240,7 +329,7 @@ class 控除後世帯高所得(Variable):
 
         # 負の数にならないよう、0円未満になった場合は0円に補正
         return np.clip(世帯高所得 - 総控除額, 0.0, None)
-    
+
 
 class 児童扶養手当の控除後世帯高所得(Variable):
     value_type = float
@@ -263,7 +352,7 @@ class 児童扶養手当の控除後世帯高所得(Variable):
 
         # 負の数にならないよう、0円未満になった場合は0円に補正
         return np.clip(世帯高所得 - 総控除額, 0.0, None)
-    
+
 
 class 住民税非課税世帯(Variable):
     value_type = bool
