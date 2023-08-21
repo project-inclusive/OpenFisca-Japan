@@ -4,6 +4,7 @@ import { Box, HStack, Input, FormControl, FormLabel } from "@chakra-ui/react";
 import { CurrentDateContext } from "../../../contexts/CurrentDateContext";
 import { HouseholdContext } from "../../../contexts/HouseholdContext";
 import { ErrorMessage } from "./validation/ErrorMessage";
+import { yourName } from '../you';
 
 export const Income = ({
   personName,
@@ -15,7 +16,9 @@ export const Income = ({
   const currentDate = useContext(CurrentDateContext);
   const { household, setHousehold } = useContext(HouseholdContext);
 
-  const [shownIncome, setShownIncome] = useState<string | number>("");
+  const defaultIncomeValue = personName === yourName && household.世帯員[personName].収入 ? household.世帯員[personName].収入[currentDate] / 10000 : "";
+
+  const [shownIncome, setShownIncome] = useState<string | number>(defaultIncomeValue || "");
 
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const newHousehold = {

@@ -18,10 +18,11 @@ export const PrefectureMunicipality = ({
     [key: string]: string[];
   }
   const pmObj = { ...pmJson } as pmType;
-
+  
   const currentDate = useContext(CurrentDateContext);
-  const [selectedPrefecture, setSelectedPrefecture] = useState("");
-  const [selectedMunicipality, setSelectedMunicipality] = useState("");
+
+  const [selectedPrefecture, setSelectedPrefecture] = useState(household.世帯.世帯1.居住都道府県 && household.世帯.世帯1.居住都道府県[currentDate] || "");
+  const [selectedMunicipality, setSelectedMunicipality] = useState(household.世帯.世帯1.居住市区町村 && household.世帯.世帯1.居住市区町村[currentDate] || "");
   const prefectureArray = Object.keys(pmObj);
 
   // prefectureの値が変更された時

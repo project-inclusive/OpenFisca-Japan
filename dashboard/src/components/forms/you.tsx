@@ -16,11 +16,11 @@ import { Recuperation } from "./attributes/Recuperation";
 import { NursingHome } from "./attributes/NursingHome";
 import { Pregnant } from "./attributes/Pregnant";
 
+export const yourName = "あなた";
 export const FormYou = () => {
   const location = useLocation();
   const isSimpleCalculation = location.pathname === "/calculate-simple";
 
-  const yourName = "あなた";
   return (
     <>
       <Box bg="white" borderRadius="xl" p={4} mb={4} ml={4} mr={4}>
