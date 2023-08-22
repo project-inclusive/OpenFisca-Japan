@@ -37,7 +37,7 @@ class 重度心身障害者手当(Variable):
         受給条件 = 年齢条件 & 障害条件 & 所得条件
         対象人数 = np.count_nonzero(受給条件)
 
-        return 対象人数 * 60000
+        return 対象人数 * parameters(対象期間).東京都.福祉.重度心身障害者手当.重度心身障害者手当額
 
 
 class 重度心身障害者手当所得制限(Variable):
