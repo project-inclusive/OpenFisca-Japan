@@ -1,0 +1,14 @@
+description: 東京都の重度心身障害者手当の所得制限限度額(扶養人数が0人から増えるごとに増額する)
+metadata:
+  threshold_unit: person
+  rate_unit: 1
+  reference: https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/juudo.html
+values:
+  2000-05-01:
+    value:
+      - 3604000
+      - 3984000
+      - 4364000
+      - 4744000
+      - 5124000
+      - 5504000
