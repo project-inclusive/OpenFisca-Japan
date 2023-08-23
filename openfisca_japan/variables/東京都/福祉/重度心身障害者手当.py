@@ -8,29 +8,69 @@ from openfisca_core.periods import MONTH, DAY
 from openfisca_core.variables import Variable
 from openfisca_japan.entities import 世帯, 人物
 from openfisca_japan.variables.障害.愛の手帳 import 愛の手帳等級パターン
-from openfisca_core.indexed_enums import Enum
+from openfisca_japan.variables.障害.身体障害者手帳 import 身体障害者手帳等級パターン
 
 
-class 重度心身障害者手当(Variable):
+
+class 重度心身障害者手当_最大(Variable):
     value_type = float
     entity = 世帯
     definition_period = DAY
-    label = "重度心身障害者手当"
+    label = "重度心身障害者手当の最大額"
     reference = "https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/juudo.html"
     documentation = """
-    重度心身障害者手当
     東京都の制度
+    厳密な判定には詳細な症状が必要なため、愛の手帳等級、身体障害者手帳等から推定可能な最小値、最大値を算出
+
+    算出方法は以下リンクも参考になる。
+    https://www.mhlw.go.jp/file/06-Seisakujouhou-12200000-Shakaiengokyokushougaihokenfukushibu/0000172197.pdf
     """
 
     def formula(対象世帯, 対象期間, parameters):
         年齢 = 対象世帯.members("年齢", 対象期間)
         年齢条件 = 年齢 < 65
 
-        # 実際には詳細な条件があるが、入力が煩雑になってしまうため等級のみを参照
-        # 1号要件が「愛の手帳1、2度相当」、2号要件が「愛の手帳1、2度かつ身体障害者手帳1、2級相当」のため、愛の手帳のみ参照すれば判定可能
-        # 3号要件は詳細な身体機能の情報が必要なため省略
         愛の手帳等級 = 対象世帯.members("愛の手帳等級", 対象期間)
-        障害条件 = (愛の手帳等級 == 愛の手帳等級パターン.一度) | (愛の手帳等級 == 愛の手帳等級パターン.二度)
+        身体障害者手帳等級 = 対象世帯.members("身体障害者手帳等級", 対象期間)
+        # 該当する可能性のある条件
+        一号要件 = (愛の手帳等級 == 愛の手帳等級パターン.一度) | (愛の手帳等級 == 愛の手帳等級パターン.二度)
+        二号要件 = ((愛の手帳等級 == 愛の手帳等級パターン.一度) | (愛の手帳等級 == 愛の手帳等級パターン.二度)) & \
+            ((身体障害者手帳等級 == 身体障害者手帳等級パターン.一級) | (身体障害者手帳等級 == 身体障害者手帳等級パターン.二級))
+        三号要件 = 身体障害者手帳等級 == 身体障害者手帳等級パターン.一級
+        障害条件 = 一号要件 | 二号要件 | 三号要件
+
+        所得条件 = 対象世帯.members("重度心身障害者手当所得制限", 対象期間)
+
+        受給条件 = 年齢条件 & 障害条件 & 所得条件
+        対象人数 = np.count_nonzero(受給条件)
+
+        return 対象人数 * parameters(対象期間).東京都.福祉.重度心身障害者手当.重度心身障害者手当額
+
+
+class 重度心身障害者手当_最小(Variable):
+    value_type = float
+    entity = 世帯
+    definition_period = DAY
+    label = "重度心身障害者手当の最小額"
+    reference = "https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/juudo.html"
+    documentation = """
+    東京都の制度
+    厳密な判定には詳細な症状が必要なため、愛の手帳等級、身体障害者手帳等から推定可能な最小値、最大値を算出
+
+    算出方法は以下リンクも参考になる。
+    https://www.mhlw.go.jp/file/06-Seisakujouhou-12200000-Shakaiengokyokushougaihokenfukushibu/0000172197.pdf
+    """
+
+    def formula(対象世帯, 対象期間, parameters):
+        年齢 = 対象世帯.members("年齢", 対象期間)
+        年齢条件 = 年齢 < 65
+
+        愛の手帳等級 = 対象世帯.members("愛の手帳等級", 対象期間)
+        身体障害者手帳等級 = 対象世帯.members("身体障害者手帳等級", 対象期間)
+        # 1号要件,3号要件は愛の手帳、身体障害者手帳のみでは該当しない可能性があるため最小額は0
+        二号要件 = ((愛の手帳等級 == 愛の手帳等級パターン.一度) | (愛の手帳等級 == 愛の手帳等級パターン.二度)) & \
+            ((身体障害者手帳等級 == 身体障害者手帳等級パターン.一級) | (身体障害者手帳等級 == 身体障害者手帳等級パターン.二級))
+        障害条件 = 二号要件
 
         所得条件 = 対象世帯.members("重度心身障害者手当所得制限", 対象期間)
 
