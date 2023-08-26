@@ -47,10 +47,10 @@ class 居住級地区分1(Variable):
     def formula(対象世帯, 対象期間, parameters):
         居住都道府県 = 対象世帯("居住都道府県", 対象期間)[0]
         居住市区町村 = 対象世帯("居住市区町村", 対象期間)[0]
-        if 居住市区町村 == 'その他':
-            return 3
-        else:
+        if 居住市区町村 in 市区町村級地区分[居住都道府県]:
             return 市区町村級地区分[居住都道府県][居住市区町村][0]
+        else:
+            return 3
         
     
 class 居住級地区分2(Variable):
@@ -64,10 +64,10 @@ class 居住級地区分2(Variable):
     def formula(対象世帯, 対象期間, parameters):
         居住都道府県 = 対象世帯("居住都道府県", 対象期間)[0]
         居住市区町村 = 対象世帯("居住市区町村", 対象期間)[0]
-        if 居住市区町村 == 'その他':
-            return 2
-        else:
+        if 居住市区町村 in 市区町村級地区分[居住都道府県]:
             return 市区町村級地区分[居住都道府県][居住市区町村][1]
+        else:
+            return 2
 
 
 # This variable is a pure input: it doesn't have a formula
