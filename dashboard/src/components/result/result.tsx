@@ -1,5 +1,5 @@
 import { Link as RouterLink, useLocation } from "react-router-dom";
-import { Box, Center, Button, Spinner, Text } from "@chakra-ui/react";
+import { Box, Center, Button, Spinner, Text, Tooltip } from "@chakra-ui/react";
 import { InfoIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 import { useRef, useState, useEffect, useContext } from "react";
 import * as htmlToImage from "html-to-image";
@@ -159,7 +159,9 @@ export const Result = () => {
           <Center pr={4} pl={4} pb={4}>
               <Text style={{fontSize: "14px", fontWeight: 400 }}>
                 きっとあなたの相談に寄り添ってくれるはずです!
-                <InfoIcon style={{marginLeft: "6px", color: "#3182CE"}}/>
+                <Tooltip label='他の制度や関係する窓口を紹介してもらえる可能性もあります' >  
+                  <InfoIcon style={{marginLeft: "6px", color: "#3182CE"}}/>
+                </Tooltip>
               </Text>
           </Center>
 
