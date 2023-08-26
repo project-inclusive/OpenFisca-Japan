@@ -5,6 +5,7 @@ import { useRef, useState, useEffect, useContext } from "react";
 import * as htmlToImage from "html-to-image";
 
 import configData from "../../config/app_config.json";
+import { data as SocialWelfareData } from "../../config/社会福祉協議会";
 import { CurrentDateContext } from "../../contexts/CurrentDateContext";
 import { useCalculate } from "../../hooks/calculate";
 import { Benefit } from "./benefit";
@@ -75,19 +76,44 @@ export const Result = () => {
     }
   };
 
-  const mockData = {
-    nameOfSocialWelfareCouncil: "新宿区社会福祉協議会",
-    websiteurl: "https://www.shinjuku-shakyo.jp/",
-    postcode: "160-8484",
-    address: "新宿区歌舞伎町1-4-1",
-    mapsLink: encodeURI(`https://google.com/maps/search/新宿区社会福祉協議会+新宿区歌舞伎町1-4-1`),
-    telephone: "03-0209-1111"
-  };
+  const prefecture = household.世帯.世帯1.居住都道府県[currentDate];
+
+  const city = household.世帯.世帯1.居住市区町村[currentDate];
+  
+  const getSocialWelfareCouncilData = () => {
+    if(prefecture === "東京都" && SocialWelfareData.東京都.hasOwnProperty(city)) {
+      const { 施設名, 郵便番号, 所在地, 経度, 緯度, 座標系, 電話番号, WebサイトURL } = SocialWelfareData.東京都[city];
+
+      return {
+        施設名, 
+        郵便番号, 
+        所在地, 
+        経度, 
+        緯度, 
+        座標系, 
+        電話番号, 
+        WebサイトURL,
+        googleMapsURL: encodeURI(`https://www.google.com/maps/search/${施設名}+${所在地}`)
+      }
+    }
+
+    return {
+        施設名: null, 
+        郵便番号: null, 
+        所在地: null, 
+        経度: null, 
+        緯度: null, 
+        座標系: null, 
+        電話番号: null, 
+        WebサイトURL: "",
+        googleMapsURL: ""
+      }
+  }
 
   const aboutLink = {
     link: "https://www.zcwvc.net/about/list.html",
     title: "全国の社会福祉協議会一覧",
-  }
+  };
 
   return (
     <div ref={divRef}>
@@ -148,18 +174,18 @@ export const Result = () => {
                 border: "1px solid black", 
                 borderRadius: "6px",
                 padding: "8px 12px" }}>
-                {household.世帯.世帯1.居住都道府県[currentDate] === "東京都" ? 
+                {prefecture === "東京都" ? 
 
                 <div>
-                  {mockData.websiteurl ? 
-                  <a href={mockData.websiteurl} style={{ color: "#0017C1", fontWeight: 600 }} 
+                  {getSocialWelfareCouncilData().WebサイトURL ? 
+                  <a href={getSocialWelfareCouncilData().WebサイトURL} style={{ color: "#0017C1", fontWeight: 600 }} 
                   target="_blank"
                   rel="noopener noreferrer">
-                    {mockData.nameOfSocialWelfareCouncil}
+                    {getSocialWelfareCouncilData().施設名}
                   </a> :
-                  <Text style={{ fontWeight: 600 }}>{mockData.nameOfSocialWelfareCouncil}</Text>}
-                <Text>〒{mockData.postcode}</Text>
-                <a href={mockData.mapsLink} style={{ color: "#0017C1"}} 
+                  <Text style={{ fontWeight: 600 }}>{getSocialWelfareCouncilData().施設名}</Text>}
+                <Text>〒{getSocialWelfareCouncilData().郵便番号}</Text>
+                <a href={getSocialWelfareCouncilData().googleMapsURL} style={{ color: "#0017C1"}} 
                   target="_blank"
                   rel="noopener noreferrer">
                     地図を開く
@@ -167,7 +193,7 @@ export const Result = () => {
                 </a>
                 <br />
                 <Text>
-                  TEL: <a href={`tel:${mockData.telephone}`} style={{ color: "#0017C1"}}>{mockData.telephone}</a>
+                  TEL: <a href={`tel:${getSocialWelfareCouncilData().電話番号}`} style={{ color: "#0017C1"}}>{getSocialWelfareCouncilData().電話番号}</a>
                 </Text>
                 </div> :
                 <div>
