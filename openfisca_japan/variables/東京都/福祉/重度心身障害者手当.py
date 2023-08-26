@@ -11,7 +11,6 @@ from openfisca_japan.variables.障害.愛の手帳 import 愛の手帳等級パ�
 from openfisca_japan.variables.障害.身体障害者手帳 import 身体障害者手帳等級パターン
 
 
-
 class 重度心身障害者手当_最大(Variable):
     value_type = float
     entity = 世帯
@@ -27,6 +26,11 @@ class 重度心身障害者手当_最大(Variable):
     """
 
     def formula(対象世帯, 対象期間, parameters):
+        居住都道府県 = 対象世帯("居住都道府県", 対象期間)
+        # 東京都以外は対象外
+        if 居住都道府県 != "東京都":
+            return 0
+
         年齢 = 対象世帯.members("年齢", 対象期間)
         年齢条件 = 年齢 < 65
 
@@ -62,6 +66,11 @@ class 重度心身障害者手当_最小(Variable):
     """
 
     def formula(対象世帯, 対象期間, parameters):
+        居住都道府県 = 対象世帯("居住都道府県", 対象期間)
+        # 東京都以外は対象外
+        if 居住都道府県 != "東京都":
+            return 0
+
         年齢 = 対象世帯.members("年齢", 対象期間)
         年齢条件 = 年齢 < 65
 
