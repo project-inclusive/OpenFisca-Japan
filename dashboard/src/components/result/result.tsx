@@ -1,5 +1,6 @@
 import { Link as RouterLink, useLocation } from "react-router-dom";
-import { Center, Button, Spinner } from "@chakra-ui/react";
+import { Center, Button, Spinner, Text } from "@chakra-ui/react";
+import { InfoIcon } from "@chakra-ui/icons";
 import { useRef, useState, useEffect, useContext } from "react";
 import * as htmlToImage from "html-to-image";
 
@@ -74,6 +75,16 @@ export const Result = () => {
     }
   };
 
+  const mockData = {
+    nameOfSocialWelfareCouncil: "新宿区社会福祉協議会",
+    postcode: "160-8484",
+    address: "新宿区歌舞伎町1-4-1",
+    mapsLink: encodeURI(`https://google.com/maps/search/新宿区社会福祉協議会+新宿区歌舞伎町1-4-1`),
+    telephone: "03-0209-1111"
+  };
+
+  const aboutLink = "https://www.zcwvc.net/about/list.html";
+
   return (
     <div ref={divRef}>
       {!result && (
@@ -109,6 +120,18 @@ export const Result = () => {
 
           <Benefit result={result} currentDate={currentDate} />
           <Loan result={result} currentDate={currentDate} />
+
+          <Center pr={4} pl={4} pb={4}>
+              <Text style={{color: "#1F3C58", fontSize: "24px", fontWeight: 600 }}>
+                まずは近くの社会福祉協議会に相談してみませんか？
+              </Text>
+          </Center>
+          <Center pr={4} pl={4} pb={4}>
+              <Text style={{fontSize: "14px", fontWeight: 400 }}>
+                きっとあなたの相談に寄り添ってくれるはずです!
+                <InfoIcon style={{marginLeft: "10px"}}/>
+              </Text>
+          </Center>
 
           {isSimpleCalculation && (
             <>
