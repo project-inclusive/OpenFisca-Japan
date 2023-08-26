@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { AbsoluteCenter } from "@chakra-ui/react";
 import CaluculationForm from "./components/forms/caluculationForm";
@@ -86,10 +86,26 @@ function App() {
 
   // NOTE: 計算したい制度については、予めここに設定する必要がある
   const [household, setHousehold] = useState(defaultHouseholdValues);
+  console.log("APP", household)
   const householdContextValue = {
     household,
     setHousehold,
   };
+
+  useEffect(()=>{
+    if(household.世帯.世帯1.hasOwnProperty("居住都道府県") ||
+    household.世帯.世帯1.hasOwnProperty("居住市区町村") ||
+    household.世帯員.あなた.hasOwnProperty("収入")) {
+      setHousehold(
+        {
+          ...defaultHouseholdValues,
+          ...household.世帯,
+          ...household.世帯員,
+        })
+    }
+
+  }, [])
+
 
   return (
     <AbsoluteCenter
