@@ -34,6 +34,21 @@ export const PrefectureMunicipality = ({
       newHousehold.世帯.世帯1.居住都道府県 = {
         [currentDate]: prefecture,
       };
+      if (prefecture === "東京都") {
+        newHousehold.世帯.世帯1.児童育成手当 = {
+          [currentDate]: null,
+        };
+        newHousehold.世帯.世帯1.障害児童育成手当 = {
+          [currentDate]: null,
+        };
+      } else {
+        if ("児童育成手当" in newHousehold.世帯.世帯1) {
+          delete newHousehold.世帯.世帯1.児童育成手当;
+        }
+        if ("障害児童育成手当" in newHousehold.世帯.世帯1) {
+          delete newHousehold.世帯.世帯1.障害児童育成手当;
+        }
+      }
       setHousehold({ ...newHousehold });
     },
     []

@@ -131,6 +131,18 @@
           ],
           "reference": "https://www.mhlw.go.jp/bunya/shougaihoken/jidou/hukushi.html"
         },
+        "児童育成手当": {
+          "unit": "円/月",
+          "caption": ["ひとり親家庭に給付される手当"],
+          "reference": "https://www.fukushi.metro.tokyo.lg.jp/kodomo/kosodate/teate/zidouikuseiteate.html"
+        },
+        "障害児童育成手当": {
+          "unit": "円/月",
+          "caption": [
+            "精神又は身体に障害をもつ20歳未満の児童を養育している方に給付される手当"
+          ],
+          "reference": "https://www.fukushi.metro.tokyo.lg.jp/kodomo/kosodate/teate/zidouikuseiteate.html"
+        },
         "生活保護": {
           "unit": "円/月",
           "caption": [
