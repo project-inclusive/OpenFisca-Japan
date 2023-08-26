@@ -161,6 +161,13 @@
             "算出された額に加え、医療費・介護費等が実費で給付されます。"
           ],
           "reference": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsuhogopage.html"
+        },
+        "高等学校奨学給付金": {
+          "unit": "円/月",
+          "caption": [
+            "教材費、通学用品費等、高校で安心して教育を受けるために必要なお金の給付"
+          ],
+          "reference": "https://www.kyoiku.metro.tokyo.lg.jp/admission/tuition/tuition/scholarship_public_school.html"
         }
       }
     },

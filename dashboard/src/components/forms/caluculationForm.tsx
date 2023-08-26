@@ -40,6 +40,12 @@ function CaluculationForm() {
         障害児福祉手当: {
           [currentDate]: null,
         },
+        高等学校奨学給付金_最小: {
+          [currentDate]: null,
+        },
+        高等学校奨学給付金_最大: {
+          [currentDate]: null,
+        },
         生活支援費: {
           [currentDate]: null,
         },

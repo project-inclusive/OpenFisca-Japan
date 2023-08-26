@@ -10,6 +10,7 @@ import { AgeInput } from "./attributes/AgeInput";
 import { Working } from "./attributes/Working";
 import { Recuperation } from "./attributes/Recuperation";
 import { NursingHome } from "./attributes/NursingHome";
+import { HighSchool } from "./attributes/HighSchool";
 
 export const FormChildren = () => {
   const location = useLocation();
@@ -36,6 +37,7 @@ export const FormChildren = () => {
               ) : (
                 <Birthday personName={childName} mustInput={true} />
               )}
+              {!isSimpleCalculation && <HighSchool personName={childName} />}
               {!isSimpleCalculation && <Working personName={childName} />}
               {!isSimpleCalculation && <Disability personName={childName} />}
               {!isSimpleCalculation && <Recuperation personName={childName} />}
