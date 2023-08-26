@@ -1,6 +1,6 @@
 import { Link as RouterLink, useLocation } from "react-router-dom";
-import { Center, Button, Spinner, Text } from "@chakra-ui/react";
-import { InfoIcon } from "@chakra-ui/icons";
+import { Box, Center, Button, Spinner, Text } from "@chakra-ui/react";
+import { InfoIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 import { useRef, useState, useEffect, useContext } from "react";
 import * as htmlToImage from "html-to-image";
 
@@ -77,13 +77,17 @@ export const Result = () => {
 
   const mockData = {
     nameOfSocialWelfareCouncil: "新宿区社会福祉協議会",
+    websiteURI: "https://www.shinjuku-shakyo.jp/",
     postcode: "160-8484",
     address: "新宿区歌舞伎町1-4-1",
     mapsLink: encodeURI(`https://google.com/maps/search/新宿区社会福祉協議会+新宿区歌舞伎町1-4-1`),
     telephone: "03-0209-1111"
   };
 
-  const aboutLink = "https://www.zcwvc.net/about/list.html";
+  const aboutLink = {
+    link: "https://www.zcwvc.net/about/list.html",
+    title: "全国の社会福祉協議会一覧",
+  }
 
   return (
     <div ref={divRef}>
@@ -129,9 +133,62 @@ export const Result = () => {
           <Center pr={4} pl={4} pb={4}>
               <Text style={{fontSize: "14px", fontWeight: 400 }}>
                 きっとあなたの相談に寄り添ってくれるはずです!
-                <InfoIcon style={{marginLeft: "10px"}}/>
+                <InfoIcon style={{marginLeft: "6px", color: "#3182CE"}}/>
               </Text>
           </Center>
+
+
+          {household.世帯.世帯1.居住都道府県[currentDate] === "東京都" ? 
+          <Center pr={4} pl={4} pb={4}>
+              <Box 
+              style={{
+              fontSize: "14px", 
+              width:"100%",
+              backgroundColor: "white",
+              fontWeight: 400, 
+              border: "1px solid black", 
+              borderRadius: "6px",
+              padding: "8px 12px" }}>
+
+                {mockData.websiteURI ? 
+                  <a href={mockData.websiteURI} style={{ color: "#0017C1", fontWeight: 600 }} 
+                  target="_blank"
+                  rel="noopener noreferrer">
+                    {mockData.nameOfSocialWelfareCouncil}
+                  </a> :
+                  <Text style={{ fontWeight: 600 }}>{mockData.nameOfSocialWelfareCouncil}</Text>}
+                <Text>〒{mockData.postcode}</Text>
+                <a href={mockData.mapsLink} style={{ color: "#0017C1"}} 
+                  target="_blank"
+                  rel="noopener noreferrer">地図を開く
+                  <ExternalLinkIcon style={{ marginLeft: "6px" }} />
+                </a>
+                <br />
+                <Text>
+                  TEL: <a href={`tel:${mockData.telephone}`} style={{ color: "#0017C1"}}>{mockData.telephone}</a>
+                </Text>
+              </Box>
+          </Center>
+          :
+          <Center pr={4} pl={4} pb={4}>
+              <Box 
+              style={{
+              fontSize: "14px", 
+              width:"100%",
+              backgroundColor: "white",
+              fontWeight: 400, 
+              border: "1px solid black", 
+              borderRadius: "6px",
+              padding: "8px 12px" }}>
+                <Text style={{ fontWeight: 600 }}>社会福祉協議会の調べ方</Text>
+                <Text>下記のページからお住まいの社会福祉協議会を選択してください</Text>
+                <a href={aboutLink.link} style={{ color: "#0017C1"}}>
+                  {aboutLink.title}
+                  <ExternalLinkIcon style={{ marginLeft: "6px" }} />
+                </a>
+                
+              </Box>
+          </Center>}
 
           {isSimpleCalculation && (
             <>
