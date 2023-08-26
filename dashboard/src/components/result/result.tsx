@@ -1,5 +1,5 @@
 import { Link as RouterLink, useLocation } from "react-router-dom";
-import { Center, Button, Spinner } from "@chakra-ui/react";
+import { Center, Button, Spinner, Box } from "@chakra-ui/react";
 import { useRef, useState, useEffect, useContext } from "react";
 import * as htmlToImage from "html-to-image";
 
@@ -151,6 +151,17 @@ export const Result = () => {
               {configData.result.screenshotButtonText}
             </Button>
           </Center>
+
+          <Center pr={4} pl={4} pt={4} pb={4}>
+            {configData.result.chatbotDescription[0]}
+          </Center>
+          <Box bg="white" borderRadius="xl" p={4} mb={4} ml={4} mr={4}>
+            <iframe
+              src="https://miibo.jp/chat/7eaf9ab0-e179-4857-8ff8-3f83e46f6251189dd2e771a157?name=%E3%83%A4%E3%83%89%E3%82%AB%E3%83%AA%E3%81%8F%E3%82%93"
+              width="100%"
+              height="400px"
+            ></iframe>
+          </Box>
 
           <Center pr={4} pl={4} pb={4}>
             {configData.result.questionnaireDescription[0]}
