@@ -77,7 +77,7 @@ export const Result = () => {
 
   const mockData = {
     nameOfSocialWelfareCouncil: "新宿区社会福祉協議会",
-    websiteURI: "https://www.shinjuku-shakyo.jp/",
+    websiteurl: "https://www.shinjuku-shakyo.jp/",
     postcode: "160-8484",
     address: "新宿区歌舞伎町1-4-1",
     mapsLink: encodeURI(`https://google.com/maps/search/新宿区社会福祉協議会+新宿区歌舞伎町1-4-1`),
@@ -138,20 +138,21 @@ export const Result = () => {
           </Center>
 
 
-          {household.世帯.世帯1.居住都道府県[currentDate] === "東京都" ? 
           <Center pr={4} pl={4} pb={4}>
               <Box 
               style={{
-              fontSize: "14px", 
-              width:"100%",
-              backgroundColor: "white",
-              fontWeight: 400, 
-              border: "1px solid black", 
-              borderRadius: "6px",
-              padding: "8px 12px" }}>
+                fontSize: "14px", 
+                width:"100%",
+                backgroundColor: "white",
+                fontWeight: 400, 
+                border: "1px solid black", 
+                borderRadius: "6px",
+                padding: "8px 12px" }}>
+                {household.世帯.世帯1.居住都道府県[currentDate] === "東京都" ? 
 
-                {mockData.websiteURI ? 
-                  <a href={mockData.websiteURI} style={{ color: "#0017C1", fontWeight: 600 }} 
+                <div>
+                  {mockData.websiteurl ? 
+                  <a href={mockData.websiteurl} style={{ color: "#0017C1", fontWeight: 600 }} 
                   target="_blank"
                   rel="noopener noreferrer">
                     {mockData.nameOfSocialWelfareCouncil}
@@ -160,35 +161,29 @@ export const Result = () => {
                 <Text>〒{mockData.postcode}</Text>
                 <a href={mockData.mapsLink} style={{ color: "#0017C1"}} 
                   target="_blank"
-                  rel="noopener noreferrer">地図を開く
+                  rel="noopener noreferrer">
+                    地図を開く
                   <ExternalLinkIcon style={{ marginLeft: "6px" }} />
                 </a>
                 <br />
                 <Text>
                   TEL: <a href={`tel:${mockData.telephone}`} style={{ color: "#0017C1"}}>{mockData.telephone}</a>
                 </Text>
-              </Box>
-          </Center>
-          :
-          <Center pr={4} pl={4} pb={4}>
-              <Box 
-              style={{
-              fontSize: "14px", 
-              width:"100%",
-              backgroundColor: "white",
-              fontWeight: 400, 
-              border: "1px solid black", 
-              borderRadius: "6px",
-              padding: "8px 12px" }}>
-                <Text style={{ fontWeight: 600 }}>社会福祉協議会の調べ方</Text>
+                </div> :
+                <div>
+                  <Text style={{ fontWeight: 600 }}>社会福祉協議会の調べ方</Text>
                 <Text>下記のページからお住まいの社会福祉協議会を選択してください</Text>
-                <a href={aboutLink.link} style={{ color: "#0017C1"}}>
+                <a href={aboutLink.link} 
+                style={{ color: "#0017C1"}} 
+                target="_blank"
+                  rel="noopener noreferrer">
                   {aboutLink.title}
                   <ExternalLinkIcon style={{ marginLeft: "6px" }} />
                 </a>
-                
+                </div>
+                }
               </Box>
-          </Center>}
+          </Center>
 
           {isSimpleCalculation && (
             <>
