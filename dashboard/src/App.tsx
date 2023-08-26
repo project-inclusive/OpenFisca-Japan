@@ -9,13 +9,12 @@ import { NotFoundError } from "./components/errors/NotFoundError";
 import { HouseholdContext } from "./contexts/HouseholdContext";
 import { CurrentDateContext } from "./contexts/CurrentDateContext";
 
-function App() {
+
   const currentDate = `${new Date().getFullYear()}-${(new Date().getMonth() + 1)
     .toString()
     .padStart(2, "0")}-${new Date().getDate().toString().padStart(2, "0")}`;
 
-  // NOTE: 計算したい制度については、予めここに設定する必要がある
-  const [household, setHousehold] = useState({
+  const defaultHouseholdValues = {
     世帯員: {
       あなた: {},
     },
@@ -81,13 +80,16 @@ function App() {
         },
       },
     },
-  });
+  };
+
+function App() {
+
+  // NOTE: 計算したい制度については、予めここに設定する必要がある
+  const [household, setHousehold] = useState(defaultHouseholdValues);
   const householdContextValue = {
     household,
     setHousehold,
   };
-
-  console.log("APPP", household)
 
   return (
     <AbsoluteCenter
