@@ -1,10 +1,10 @@
 /// <reference types="cypress" />
-describe('Loads homepage', () => {
+describe('Renders main page and ', () => {
   beforeEach(() => {
     cy.visit('/')
   })
 
-  it('Renders main page and navigates to detailed calculate page', () => {
+  it('navigates to detailed calculate page', () => {
     cy.contains('お金サポート ヤドカリくん');
     cy.contains('くわしく計算');
     cy.get('.css-1icvf0w').click();
