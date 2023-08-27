@@ -3,7 +3,7 @@
 """
 
 import csv
-from enum import Enum
+from enum import Enum as OriginalEnum
 
 import numpy as np
 
@@ -104,7 +104,7 @@ class 高校種別(Variable):
     definition_period = DAY
     label = "高校種別"
 
-class 高校生学年(Enum):
+class 高校生学年(OriginalEnum):
     一年生 = 10
     二年生 = 11
     三年生 = 12
