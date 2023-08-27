@@ -28,11 +28,6 @@ function CaluculationForm() {
         児童扶養手当_最小: {
           [currentDate]: null,
         },
-        /* 児童育成手当は東京都のみの制度のため除外
-        児童育成手当: {
-          [currentDate]: null,
-        },
-        */
         特別児童扶養手当_最小: {
           [currentDate]: null,
         },
@@ -42,11 +37,6 @@ function CaluculationForm() {
         生活保護: {
           [currentDate]: null,
         },
-        /* 障害児童育成手当は東京都のみの制度のため除外
-        障害児童育成手当: {
-          [currentDate]: null,
-        },
-        */
         障害児福祉手当: {
           [currentDate]: null,
         },
