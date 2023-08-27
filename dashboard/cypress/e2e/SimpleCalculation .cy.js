@@ -4,16 +4,11 @@ describe('Loads homepage', () => {
     cy.visit('/')
   })
 
-  it('Renders main title', () => {
+  it('Renders main page and navigates to simple calculate page', () => {
     cy.contains('お金サポート ヤドカリくん');
-  })
-
-  it('Renders かんたん計算 button', () => {
     cy.contains('かんたん計算');
-    cy.click('かんたん計算');
-  })
-
-  it('Navigates to /calculate-simple page', () => {
-    cy.url().should('include', '/calculate-simple')
+    cy.get('.css-s00sbd').click();
+    cy.url().should('include', '/calculate-simple');
+    cy.contains('あなたについて');
   })
 })
