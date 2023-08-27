@@ -18,7 +18,7 @@ function Description() {
           mb="0.5em"
         >
           {configData.description.title}
-        <Image src={yadokariKunIcon} alt="yadokari kun icon" boxSize="3em" />
+        <Image src={yadokariKunIcon} alt="yadokari kun icon" boxSize="3em" ml="15px"/>
         </Center>
 
 
