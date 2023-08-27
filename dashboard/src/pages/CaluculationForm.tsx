@@ -39,7 +39,6 @@ function CaluculationForm() {
         精神障害者保健福祉手帳等級: { ETERNITY: "無" },
         内部障害: { ETERNITY: "無" },
         脳性まひ_進行性筋萎縮症: { ETERNITY: "無" },
-        重度心身障害者認定: { ETERNITY: "無" },
       },
     },
     世帯: {
@@ -74,6 +73,12 @@ function CaluculationForm() {
         },
         */
         障害児福祉手当: {
+          [currentDate]: null,
+        },
+        重度心身障害者手当_最小: {
+          [currentDate]: null,
+        },
+        重度心身障害者手当_最大: {
           [currentDate]: null,
         },
       },
