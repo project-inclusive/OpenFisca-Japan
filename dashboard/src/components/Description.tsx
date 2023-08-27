@@ -6,7 +6,7 @@ import { FaGithub } from "react-icons/fa";
 
 import configData from "../config/app_config.json";
 import bokyuIcon from "../assets/bokyu_lab_icon_cyan.png";
-import yadokariKunIcon from "../assets/yadokaru-kun.png";
+import yadokariKunIcon from "../assets/yadokari-kun.png";
 
 function Description() {
   return (
