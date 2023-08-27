@@ -1,6 +1,6 @@
 import { Link as RouterLink, useLocation } from "react-router-dom";
 
-import { Box, Center, Button, Spinner, Text, Tooltip } from "@chakra-ui/react";
+import { Box, Center, Button, Spinner, Text, Tooltip, Link } from "@chakra-ui/react";
 import { InfoIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 import { useRef, useState, useEffect, useContext } from "react";
 import * as htmlToImage from "html-to-image";
@@ -169,47 +169,55 @@ export const Result = () => {
 
           <Center pr={4} pl={4} pb={4}>
               <Box 
-              style={{
-                fontSize: "14px", 
-                width:"100%",
-                backgroundColor: "white",
-                fontWeight: 400, 
-                border: "1px solid black", 
-                borderRadius: "6px",
-                padding: "8px 12px" }}>
+                  bg="white"
+                  borderRadius="xl"
+                  fontSize="14px"
+                  w="100%"
+                  p="8px 12px"
+                  border="1px solid black">
                 {prefecture === "東京都" ? 
-
-                <div>
+                <Box>
                   {getSocialWelfareCouncilData().WebサイトURL ? 
-                  <a href={getSocialWelfareCouncilData().WebサイトURL} style={{ color: "#0017C1", fontWeight: 600 }} 
+                  <Link href={getSocialWelfareCouncilData().WebサイトURL} 
+                  color="blue.500"
+                  fontWeight={"semibold"}
                   target="_blank"
                   rel="noopener noreferrer">
                     {getSocialWelfareCouncilData().施設名}
-                  </a> :
-                  <Text style={{ fontWeight: 600 }}>{getSocialWelfareCouncilData().施設名}</Text>}
+                  </Link> :
+                  <Text fontWeight={"semibold"}>{getSocialWelfareCouncilData().施設名}</Text>}
                 <Text>〒{getSocialWelfareCouncilData().郵便番号}</Text>
-                <a href={getSocialWelfareCouncilData().googleMapsURL} style={{ color: "#0017C1"}} 
+                <Link href={getSocialWelfareCouncilData().googleMapsURL}
+                  color="blue.500"
+                  fontWeight={"semibold"}
                   target="_blank"
                   rel="noopener noreferrer">
                     地図を開く
-                  <ExternalLinkIcon style={{ marginLeft: "6px" }} />
-                </a>
+                  <ExternalLinkIcon ml="5px" />
+                </Link>
                 <br />
                 <Text>
-                  TEL: <a href={`tel:${getSocialWelfareCouncilData().電話番号}`} style={{ color: "#0017C1"}}>{getSocialWelfareCouncilData().電話番号}</a>
+                  TEL: 
+                  <Link href={`tel:${getSocialWelfareCouncilData().電話番号}`} 
+                  color="blue.500"
+                  fontWeight={"semibold"}>
+                    {getSocialWelfareCouncilData().電話番号}
+                  </Link>
                 </Text>
-                </div> :
-                <div>
-                  <Text style={{ fontWeight: 600 }}>社会福祉協議会の調べ方</Text>
+                </Box> 
+                :
+                <Box>
+                  <Text fontWeight={"semibold"}>社会福祉協議会の調べ方</Text>
                 <Text>下記のページからお住まいの社会福祉協議会を選択してください</Text>
-                <a href={aboutLink.link} 
-                style={{ color: "#0017C1"}} 
+                <Link href={aboutLink.link} 
+                color="blue.500"
+                fontWeight={"semibold"}
                 target="_blank"
                   rel="noopener noreferrer">
                   {aboutLink.title}
-                  <ExternalLinkIcon style={{ marginLeft: "6px" }} />
-                </a>
-                </div>
+                  <ExternalLinkIcon ml="5px" />
+                </Link>
+                </Box>
                 }
               </Box>
           </Center>
