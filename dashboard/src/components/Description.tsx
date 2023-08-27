@@ -10,7 +10,7 @@ import yadokariKunIcon from "../assets/yadokari-kun.png";
 
 const screenWidth = window.innerWidth;
 const isMobile = screenWidth <= 768;
-console.log(screenWidth)
+
 function Description() {
   return (
     <>
