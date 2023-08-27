@@ -8,17 +8,21 @@ import configData from "../config/app_config.json";
 import bokyuIcon from "../assets/bokyu_lab_icon_cyan.png";
 import yadokariKunIcon from "../assets/yadokari-kun.png";
 
+const screenWidth = window.innerWidth;
+const isMobile = screenWidth <= 768;
+console.log(screenWidth)
 function Description() {
   return (
     <>
       <Box bg="white" borderRadius="xl" p={4} m={4}>
+        {isMobile && <Image src={yadokariKunIcon} alt="yadokari kun icon" boxSize="3em" ml="15px"/>}
         <Center
           fontSize={configData.style.titleFontSize}
           fontWeight="semibold"
           mb="0.5em"
         >
           {configData.description.title}
-        <Image src={yadokariKunIcon} alt="yadokari kun icon" boxSize="3em" ml="15px"/>
+        {!isMobile && <Image src={yadokariKunIcon} alt="yadokari kun icon" boxSize="3em" ml="15px"/>}
         </Center>
 
 
