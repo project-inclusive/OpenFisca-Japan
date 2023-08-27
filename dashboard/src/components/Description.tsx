@@ -6,6 +6,7 @@ import { FaGithub } from "react-icons/fa";
 
 import configData from "../config/app_config.json";
 import bokyuIcon from "../assets/bokyu_lab_icon_cyan.png";
+import yadokariKunIcon from "../assets/yadokaru-kun.png";
 
 function Description() {
   return (
@@ -17,7 +18,9 @@ function Description() {
           mb="0.5em"
         >
           {configData.description.title}
+        <Image src={yadokariKunIcon} alt="yadokari kun icon" boxSize="3em" />
         </Center>
+
 
         <Center
           fontSize={configData.style.subTitleFontSize}
