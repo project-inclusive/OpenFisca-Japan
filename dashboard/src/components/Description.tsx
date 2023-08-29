@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { Box, Center, Button, VStack, Image } from "@chakra-ui/react";
 import { Icon } from "@chakra-ui/react";
@@ -8,17 +9,37 @@ import configData from "../config/app_config.json";
 import bokyuIcon from "../assets/bokyu_lab_icon_cyan.png";
 import yadokariKunIcon from "../assets/yadokari-kun.png";
 
+const defaultInnerWidth = window.innerWidth;
+
 function Description() {
+  const [screenWidth, setScreenWidth] = useState(defaultInnerWidth);
+  const [isMobile, setIsMobile] = useState(defaultInnerWidth <= 800);
+
+  useEffect(() => {
+    function handleResize() {
+
+      setScreenWidth(window.innerWidth);
+
+      if(screenWidth <= 800) {
+      setIsMobile(true);
+      } else {
+        setIsMobile(false);
+      }
+    }
+    window.addEventListener('resize', handleResize)
+  })
+
   return (
     <>
       <Box bg="white" borderRadius="xl" p={4} m={4}>
+        {isMobile && <Image src={yadokariKunIcon} alt="yadokari kun icon" boxSize="3em" margin="auto"/>}
         <Center
           fontSize={configData.style.titleFontSize}
           fontWeight="semibold"
           mb="0.5em"
         >
           {configData.description.title}
-        <Image src={yadokariKunIcon} alt="yadokari kun icon" boxSize="3em" ml="15px"/>
+        {!isMobile && <Image src={yadokariKunIcon} alt="yadokari kun icon" boxSize="3em" ml="15px"/>}
         </Center>
 
 
