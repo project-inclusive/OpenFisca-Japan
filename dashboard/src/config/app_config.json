@@ -143,6 +143,13 @@
           ],
           "reference": "https://www.fukushi.metro.tokyo.lg.jp/kodomo/kosodate/teate/zidouikuseiteate.html"
         },
+        "重度心身障害者手当":{
+          "unit": "円/月",
+          "caption": [
+            "精神又は身体に重度の障害を持ち、常時複雑な介護を必要とする方に給付される手当"
+          ],
+          "reference": "https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/juudo.html"
+        },
         "生活保護": {
           "unit": "円/月",
           "caption": [

@@ -41,6 +41,12 @@ export const PrefectureMunicipality = ({
         newHousehold.世帯.世帯1.障害児童育成手当 = {
           [currentDate]: null,
         };
+        newHousehold.世帯.世帯1.重度心身障害者手当_最小 = {
+          [currentDate]: null,
+        };
+        newHousehold.世帯.世帯1.重度心身障害者手当_最大 = {
+          [currentDate]: null,
+        };
       } else {
         if ("児童育成手当" in newHousehold.世帯.世帯1) {
           delete newHousehold.世帯.世帯1.児童育成手当;
@@ -48,7 +54,14 @@ export const PrefectureMunicipality = ({
         if ("障害児童育成手当" in newHousehold.世帯.世帯1) {
           delete newHousehold.世帯.世帯1.障害児童育成手当;
         }
+        if ("重度心身障害者手当_最小" in newHousehold.世帯.世帯1) {
+          delete newHousehold.世帯.世帯1.重度心身障害者手当_最小;
+        }
+        if ("重度心身障害者手当_最大" in newHousehold.世帯.世帯1) {
+          delete newHousehold.世帯.世帯1.重度心身障害者手当_最大;
+        }
       }
+console.log(newHousehold);
       setHousehold({ ...newHousehold });
     },
     []
