@@ -1,6 +1,14 @@
 import { Link as RouterLink, useLocation } from "react-router-dom";
 
-import { Box, Center, Button, Spinner, Text, Tooltip, Link } from "@chakra-ui/react";
+import {
+  Box,
+  Center,
+  Button,
+  Spinner,
+  Text,
+  Tooltip,
+  Link,
+} from "@chakra-ui/react";
 import { InfoIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 import { useRef, useState, useEffect, useContext } from "react";
 import * as htmlToImage from "html-to-image";
@@ -80,36 +88,50 @@ export const Result = () => {
   const prefecture = household.世帯.世帯1.居住都道府県[currentDate];
 
   const city = household.世帯.世帯1.居住市区町村[currentDate];
-  
+
   const getSocialWelfareCouncilData = () => {
-    if(prefecture === "東京都" && SocialWelfareData.東京都.hasOwnProperty(city)) {
-      const { 施設名, 郵便番号, 所在地, 経度, 緯度, 座標系, 電話番号, WebサイトURL } = SocialWelfareData.東京都[city];
+    if (
+      prefecture === "東京都" &&
+      SocialWelfareData.東京都.hasOwnProperty(city)
+    ) {
+      const {
+        施設名,
+        郵便番号,
+        所在地,
+        経度,
+        緯度,
+        座標系,
+        電話番号,
+        WebサイトURL,
+      } = SocialWelfareData.東京都[city];
 
       return {
-        施設名, 
-        郵便番号, 
-        所在地, 
-        経度, 
-        緯度, 
-        座標系, 
-        電話番号, 
+        施設名,
+        郵便番号,
+        所在地,
+        経度,
+        緯度,
+        座標系,
+        電話番号,
         WebサイトURL,
-        googleMapsURL: encodeURI(`https://www.google.com/maps/search/${施設名}+${所在地}`)
-      }
+        googleMapsURL: encodeURI(
+          `https://www.google.com/maps/search/${施設名}+${所在地}`
+        ),
+      };
     }
 
     return {
-        施設名: null, 
-        郵便番号: null, 
-        所在地: null, 
-        経度: null, 
-        緯度: null, 
-        座標系: null, 
-        電話番号: null, 
-        WebサイトURL: "",
-        googleMapsURL: ""
-      }
-  }
+      施設名: null,
+      郵便番号: null,
+      所在地: null,
+      経度: null,
+      緯度: null,
+      座標系: null,
+      電話番号: null,
+      WebサイトURL: "",
+      googleMapsURL: "",
+    };
+  };
 
   const aboutLink = {
     link: "https://www.zcwvc.net/about/list.html",
@@ -152,74 +174,90 @@ export const Result = () => {
           <Benefit result={result} currentDate={currentDate} />
           <Loan result={result} currentDate={currentDate} />
 
-          <Center pr={4} pl={4} pb={4}>
-              <Text style={{color: "#1F3C58", fontSize: "24px", fontWeight: 600 }}>
-                まずは近くの社会福祉協議会に相談してみませんか？
-              </Text>
+          <Center pr={4} pl={4} pb={2}>
+            <Text color="blue.900" fontSize="1.3em" fontWeight="semibold">
+              {configData.result.consultationDescription1}
+            </Text>
           </Center>
           <Center pr={4} pl={4} pb={4}>
-              <Text style={{fontSize: "14px", fontWeight: 400 }}>
-                きっとあなたの相談に寄り添ってくれるはずです!
-                <Tooltip label='他の制度や関係する窓口を紹介してもらえる可能性もあります' >  
-                  <InfoIcon style={{marginLeft: "6px", color: "#3182CE"}}/>
-                </Tooltip>
-              </Text>
+            <Text>
+              {configData.result.consultationDescription2}
+              <Tooltip label={configData.result.consultationDescription3}>
+                <InfoIcon ml={1} color="blue.500" />
+              </Tooltip>
+            </Text>
           </Center>
 
-
           <Center pr={4} pl={4} pb={4}>
-              <Box 
-                  bg="white"
-                  borderRadius="xl"
-                  fontSize="14px"
-                  w="100%"
-                  p="8px 12px"
-                  border="1px solid black">
-                {prefecture === "東京都" ? 
+            <Box
+              bg="white"
+              borderRadius="xl"
+              w="100%"
+              pt={4}
+              pb={4}
+              pr={4}
+              pl={4}
+              border="1px solid black"
+            >
+              {prefecture === "東京都" ? (
                 <Box>
-                  {getSocialWelfareCouncilData().WebサイトURL ? 
-                  <Link href={getSocialWelfareCouncilData().WebサイトURL} 
-                  color="blue.500"
-                  fontWeight={"semibold"}
-                  target="_blank"
-                  rel="noopener noreferrer">
-                    {getSocialWelfareCouncilData().施設名}
-                  </Link> :
-                  <Text fontWeight={"semibold"}>{getSocialWelfareCouncilData().施設名}</Text>}
-                <Text>〒{getSocialWelfareCouncilData().郵便番号}</Text>
-                <Link href={getSocialWelfareCouncilData().googleMapsURL}
-                  color="blue.500"
-                  fontWeight={"semibold"}
-                  target="_blank"
-                  rel="noopener noreferrer">
+                  {getSocialWelfareCouncilData().WebサイトURL ? (
+                    <Link
+                      href={getSocialWelfareCouncilData().WebサイトURL}
+                      color="blue.500"
+                      fontWeight={"semibold"}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {getSocialWelfareCouncilData().施設名}
+                    </Link>
+                  ) : (
+                    <Text fontWeight={"semibold"}>
+                      {getSocialWelfareCouncilData().施設名}
+                    </Text>
+                  )}
+                  <Text>〒{getSocialWelfareCouncilData().郵便番号}</Text>
+                  <Link
+                    href={getSocialWelfareCouncilData().googleMapsURL}
+                    color="blue.500"
+                    fontWeight={"semibold"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     地図を開く
-                  <ExternalLinkIcon ml="5px" />
-                </Link>
-                <br />
-                <Text>
-                  TEL: 
-                  <Link href={`tel:${getSocialWelfareCouncilData().電話番号}`} 
-                  color="blue.500"
-                  fontWeight={"semibold"}>
-                    {getSocialWelfareCouncilData().電話番号}
+                    <ExternalLinkIcon ml={1} />
                   </Link>
-                </Text>
-                </Box> 
-                :
+                  <br />
+                  <Text>
+                    TEL:
+                    <Link
+                      href={`tel:${getSocialWelfareCouncilData().電話番号}`}
+                      color="blue.500"
+                      fontWeight={"semibold"}
+                    >
+                      {getSocialWelfareCouncilData().電話番号}
+                    </Link>
+                  </Text>
+                </Box>
+              ) : (
                 <Box>
                   <Text fontWeight={"semibold"}>社会福祉協議会の調べ方</Text>
-                <Text>下記のページからお住まいの社会福祉協議会を選択してください</Text>
-                <Link href={aboutLink.link} 
-                color="blue.500"
-                fontWeight={"semibold"}
-                target="_blank"
-                  rel="noopener noreferrer">
-                  {aboutLink.title}
-                  <ExternalLinkIcon ml="5px" />
-                </Link>
+                  <Text>
+                    下記のページからお住まいの社会福祉協議会を選択してください
+                  </Text>
+                  <Link
+                    href={aboutLink.link}
+                    color="blue.500"
+                    fontWeight={"semibold"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {aboutLink.title}
+                    <ExternalLinkIcon ml={1} />
+                  </Link>
                 </Box>
-                }
-              </Box>
+              )}
+            </Box>
           </Center>
 
           {isSimpleCalculation && (
