@@ -37,6 +37,8 @@ export const Result = () => {
     isSimpleCalculation: boolean;
   };
 
+  const [isLabelOpen, setIsLabelOpen] = useState(false);
+
   const currentDate = useContext(CurrentDateContext);
   const [result, calculate] = useCalculate();
 
@@ -182,8 +184,18 @@ export const Result = () => {
           <Center pr={4} pl={4} pb={4}>
             <Text>
               {configData.result.consultationDescription2}
-              <Tooltip label={configData.result.consultationDescription3}>
-                <InfoIcon ml={1} color="blue.500" />
+              <Tooltip
+                label={configData.result.consultationDescription3}
+                isOpen={isLabelOpen}
+                bg="gray.600"
+              >
+                <InfoIcon
+                  ml={1}
+                  color="blue.500"
+                  onMouseEnter={() => setIsLabelOpen(true)}
+                  onMouseLeave={() => setIsLabelOpen(false)}
+                  onClick={() => setIsLabelOpen(true)}
+                />
               </Tooltip>
             </Text>
           </Center>
