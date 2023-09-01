@@ -96,6 +96,7 @@ export const PrefectureMunicipality = ({
 
         <HStack mb={4}>
           <Select
+            data-testid="select-prefecture"
             value={selectedPrefecture}
             onChange={onPrefectureChange}
             fontSize={configData.style.itemFontSize}
@@ -110,6 +111,7 @@ export const PrefectureMunicipality = ({
           </Select>
 
           <Select
+            data-testid="select-city"
             value={selectedMunicipality}
             onChange={onMunicipalityChange}
             fontSize={configData.style.itemFontSize}
