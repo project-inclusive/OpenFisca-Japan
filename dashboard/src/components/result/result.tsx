@@ -1,4 +1,4 @@
-import { Link as RouterLink, useLocation } from "react-router-dom";
+import { Navigate, Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 
 import {
   Box,
@@ -38,6 +38,7 @@ export const Result = () => {
   };
 
   const [isLabelOpen, setIsLabelOpen] = useState(false);
+  const navigate = useNavigate();
 
   const currentDate = useContext(CurrentDateContext);
   const [result, calculate] = useCalculate();
@@ -45,7 +46,14 @@ export const Result = () => {
   let calcOnce = true;
   useEffect(() => {
     if (calcOnce) {
-      calculate(household);
+      calculate(household).catch((e: any) => {
+        // 想定外のエラーレスポンスを受け取り結果が取得できなかった場合、エラー画面へ遷移
+        navigate("/response-error", {
+          state: {
+            isSimpleCalculation: isSimpleCalculation,
+          },
+        });
+      });
       calcOnce = false;
     }
   }, []);
