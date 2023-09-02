@@ -24,6 +24,15 @@ export const useCalculate = () => {
       },
       body: JSON.stringify(household),
     });
+
+    // NOTE: エラーレスポンスを受け取った場合resultの生成ができないため、例外を出し終了
+    if (!newResultRes.ok) {
+      const errBody = await newResultRes.text();
+      const errMsg = `unexpected error response: status: ${newResultRes.status}, body: ${errBody}`
+      console.log(errMsg); // debug log
+      throw new Error(errMsg);
+    }
+
     const newResultJson = await newResultRes.json();
     console.log(newResultJson); // debug log
     delete newResultJson.世帯.世帯1.自分一覧;
