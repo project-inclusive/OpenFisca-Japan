@@ -13,6 +13,7 @@ from datetime import date
 # Import from numpy the operations you need to apply on OpenFisca's population vectors
 # Import from openfisca-core the Python objects used to code the legislation in OpenFisca
 from numpy import where
+import numpy as np
 from openfisca_core.indexed_enums import Enum
 from openfisca_core.periods import DAY, ETERNITY
 from openfisca_core.variables import Variable
@@ -51,7 +52,10 @@ class 年齢(Variable):
 
         誕生日を過ぎている = (誕生月 < 対象期間.start.month) + (誕生月 == 対象期間.start.month) * (誕生日 <= 対象期間.start.day)
 
-        return (対象期間.start.year - 誕生年) - where(誕生日を過ぎている, 0, 1)  # If the birthday is not passed this year, subtract one year
+        年齢 = (対象期間.start.year - 誕生年) - where(誕生日を過ぎている, 0, 1)  # If the birthday is not passed this year, subtract one year
+        
+        # NOTE: 誕生日が未来であった場合便宜上0歳として扱う(誤った情報が指定された場合でもOpenFiscaがクラッシュするのを防ぐため)
+        return np.clip(年齢, 0, None)
 
 
 # 小学n年生はn, 中学m年生はm+6, 高校l年生はl+9, 
