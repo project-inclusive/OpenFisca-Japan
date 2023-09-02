@@ -113,3 +113,68 @@
   - `paths` : APIのエンドポイント
 - テスト用APIでは日付の月と日は0埋めの2桁でなくても正しく計算されるが、web APIでは月と日は0埋めの2桁でないと正しく計算されずエラーも出ない
   - 即ち、日付は「YYYY-MM-DD」のフォーマットで入力する必要がある
+
+- API POST specification
+  - Strings enclosed in " " cannot be changed.
+  - A `parent` means a parent of `you` and a grandparent of a `child`.
+  - \<period\> means the period during which an attribute has its value.   
+  So attributes that do not change permanently (only birthday as of 2023/9/2) are `ETERNITY`, and other attributes set the input date (YYYY-MM-DD).
+  - Household attributes are attributes that apply to all members of the household. (For example, the prefecture of residence.)
+  - Please set the value of \<allowance to be calculated\> to null when POST. The value calculated by the backend API is set there and returned.  
+  Only attributes that are set when POST is calculated by the backend API. Therefore, any allowances that may be displayed on the frontend need to be set to null in the json when POSTed.
+
+  ```
+  {
+    "世帯員": {
+      <you>: {
+        <personal attribute>: {
+          <period>: value
+        },
+        <personal attribute>: {
+          <period>: value
+        },
+      },
+      <spouse>: {
+        <personal attribute>: {
+          <period>: value
+        },
+      },
+      <child1>: {
+        <personal attribute>: {
+          <period>: value
+        },
+      },
+      <child2>: {
+        <personal attribute>: {
+          <period>: value
+        },
+      },
+      <parent1>: {
+        <personal attribute>: {
+          <period>: value
+        },
+      }
+    },
+    "世帯": {
+      "世帯1": {
+        "自分一覧": [<you>],
+        "配偶者一覧": [<spouse>],
+        "子一覧": [<child1>, <child2>],
+        "親一覧": [<parent1>]
+        <household attribute>: {
+          <period>: value
+        },
+        <household attribute>: {
+          <period>: value
+        },
+        <allowance to be calculated>: {
+          <period>: null
+        },
+        <allowance to be calculated>: {
+          <period>: null
+        },
+      }
+    }
+  }
+
+  ```
