@@ -109,6 +109,7 @@ console.log(newHousehold);
 
         <HStack mb={4}>
           <Select
+            data-testid="select-prefecture"
             value={selectedPrefecture}
             onChange={onPrefectureChange}
             fontSize={configData.style.itemFontSize}
@@ -123,6 +124,7 @@ console.log(newHousehold);
           </Select>
 
           <Select
+            data-testid="select-city"
             value={selectedMunicipality}
             onChange={onMunicipalityChange}
             fontSize={configData.style.itemFontSize}

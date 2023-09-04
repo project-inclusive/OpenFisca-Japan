@@ -60,6 +60,7 @@ export const Income = ({
 
         <HStack mb={4}>
           <Input
+            data-testid="income-input"
             type="number"
             value={shownIncome}
             onChange={onChange}
