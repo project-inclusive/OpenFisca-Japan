@@ -660,9 +660,9 @@ class 母子世帯等に係る経過的加算(Variable):
         if 年齢区分 == None:
             return 0
         
-        世帯区分 = np.clip(世帯人数[0], None, 5)
+        世帯人数区分 = np.clip(世帯人数[0], None, 5)
 
-        return 母子世帯等に係る経過的加算表[世帯区分][str(年齢区分)][居住級地区分]
+        return 母子世帯等に係る経過的加算表[世帯人数区分][str(年齢区分)][居住級地区分]
 
 
 class 入院中(Variable):
