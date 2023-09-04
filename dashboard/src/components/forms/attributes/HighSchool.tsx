@@ -11,11 +11,10 @@ export const HighSchool = ({ personName }: { personName: string }) => {
 
   // ラベルとOpenFiscaの表記違いを明記
   const highSchoolStatusArray = [
-    ["", "無"],
-    ["全日制課程", "全日制課程"],
-    ["定時制課程", "定時制課程"],
-    ["通信制課程", "通信制課程"],
-    ["専攻科", "専攻科"],
+    "全日制課程",
+    "定時制課程",
+    "通信制課程",
+    "専攻科",
   ];
   const [selectedStatus, setSelectedStatus] = useState("");
 
@@ -41,16 +40,15 @@ export const HighSchool = ({ personName }: { personName: string }) => {
       const highSchoolStatus = String(event.currentTarget.value);
       setSelectedStatus(highSchoolStatus);
       const newHousehold = { ...household };
-
-      highSchoolStatusArray.map((item, index) => {
-        if (
-          item[0] === highSchoolStatus
-        ) {
-          newHousehold.世帯員[personName].高校種別 = {
-            [currentDate]: item[1],
-          };
-        }
-      });
+      if (highSchoolStatus) {
+        newHousehold.世帯員[personName].高校種別 = {
+          [currentDate]: highSchoolStatus,
+        };
+      } else {
+        newHousehold.世帯員[personName].高校種別 = {
+          [currentDate]: "無",
+        };
+      }
 
       setHousehold({ ...newHousehold });
     },
@@ -72,8 +70,8 @@ export const HighSchool = ({ personName }: { personName: string }) => {
               onChange={onSelectChange}
             >
               {highSchoolStatusArray.map((val, index) => (
-                <option value={val[0]} key={index}>
-                  {val[0]}
+                <option value={val} key={index}>
+                  {val}
                 </option>
               ))}
             </Select>
