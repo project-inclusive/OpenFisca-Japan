@@ -1,5 +1,11 @@
 import { useState, useCallback, useContext } from "react";
-import { Select, Checkbox, Box, FormControl, FormLabel } from "@chakra-ui/react";
+import {
+  Select,
+  Checkbox,
+  Box,
+  FormControl,
+  FormLabel,
+} from "@chakra-ui/react";
 
 import { HouseholdContext } from "../../../contexts/HouseholdContext";
 import { CurrentDateContext } from "../../../contexts/CurrentDateContext";
@@ -16,19 +22,21 @@ export const HighSchool = ({ personName }: { personName: string }) => {
     "通信制課程",
     "専攻科",
   ];
-  const [selectedStatus, setSelectedStatus] = useState("");
 
   // チェックボックスの値が変更された時
   const onCheckChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      if (!event.target.checked) {
-        const newHousehold = { ...household };
+      const newHousehold = { ...household };
+      if (event.target.checked) {
+        newHousehold.世帯員[personName].高校種別 = {
+          [currentDate]: highSchoolStatusArray[0],
+        };
+      } else {
         newHousehold.世帯員[personName].高校種別 = {
           [currentDate]: "無",
         };
-        setHousehold({ ...newHousehold });
-        setSelectedStatus("");
       }
+      setHousehold({ ...newHousehold });
       setIsChecked(event.target.checked);
     },
     []
@@ -38,18 +46,10 @@ export const HighSchool = ({ personName }: { personName: string }) => {
   const onSelectChange = useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) => {
       const highSchoolStatus = String(event.currentTarget.value);
-      setSelectedStatus(highSchoolStatus);
       const newHousehold = { ...household };
-      if (highSchoolStatus) {
-        newHousehold.世帯員[personName].高校種別 = {
-          [currentDate]: highSchoolStatus,
-        };
-      } else {
-        newHousehold.世帯員[personName].高校種別 = {
-          [currentDate]: "無",
-        };
-      }
-
+      newHousehold.世帯員[personName].高校種別 = {
+        [currentDate]: highSchoolStatus,
+      };
       setHousehold({ ...newHousehold });
     },
     []
@@ -63,12 +63,11 @@ export const HighSchool = ({ personName }: { personName: string }) => {
 
       {isChecked && (
         <FormControl>
-          <FormLabel mt={2} ml={4} mr={4} mb={2} fontWeight="Regular">高校の種類</FormLabel>
+          <FormLabel mt={2} ml={4} mr={4} mb={2} fontWeight="Regular">
+            高校の種類
+          </FormLabel>
           <Box mt={2} ml={4} mr={4} mb={4}>
-            <Select
-              value={selectedStatus}
-              onChange={onSelectChange}
-            >
+            <Select onChange={onSelectChange}>
               {highSchoolStatusArray.map((val, index) => (
                 <option value={val} key={index}>
                   {val}
@@ -77,7 +76,6 @@ export const HighSchool = ({ personName }: { personName: string }) => {
             </Select>
           </Box>
         </FormControl>
-
       )}
     </Box>
   );

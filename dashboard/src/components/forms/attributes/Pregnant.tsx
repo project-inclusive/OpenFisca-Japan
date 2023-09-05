@@ -15,7 +15,6 @@ export const Pregnant = ({ personName }: { personName: string }) => {
     "妊娠6ヵ月以上",
     "産後6ヵ月以内",
   ];
-  const [selectedStatus, setSelectedStatus] = useState("");
 
   // チェックボックスの値が変更された時
   const onCheckChange = useCallback(
@@ -26,7 +25,6 @@ export const Pregnant = ({ personName }: { personName: string }) => {
           [currentDate]: "無",
         };
         setHousehold({ ...newHousehold });
-        setSelectedStatus("");
       }
       setIsChecked(event.target.checked);
     },
@@ -37,7 +35,6 @@ export const Pregnant = ({ personName }: { personName: string }) => {
   const onSelectChange = useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) => {
       const pregnantStatus = String(event.currentTarget.value);
-      setSelectedStatus(pregnantStatus);
       const newHousehold = { ...household };
       if (pregnantStatus) {
         newHousehold.世帯員[personName].妊産婦 = {
@@ -62,11 +59,7 @@ export const Pregnant = ({ personName }: { personName: string }) => {
 
       {isChecked && (
         <Box mt={2} ml={4} mr={4} mb={4}>
-          <Select
-            value={selectedStatus}
-            onChange={onSelectChange}
-            placeholder="いずれかを選択"
-          >
+          <Select onChange={onSelectChange} placeholder="いずれかを選択">
             {pregnantStatusArray.map((val, index) => (
               <option value={val} key={index}>
                 {val}
