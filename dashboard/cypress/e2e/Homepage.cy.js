@@ -5,7 +5,7 @@ describe('Loads homepage', () => {
   })
 
   it('Renders main title', () => {
-    cy.contains('お金サポート ヤドカリくん');
+    cy.contains('支援みつもりヤドカリくん');
   })
 
   it('Renders かんたん計算 button', () => {
