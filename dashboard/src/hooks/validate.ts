@@ -7,7 +7,7 @@ export const useValidate = () => {
   useEffect(() => {
     // HACK: バリデーションエラーを起こしたクラスの数を数えることで不正な入力を検知
     setValidated(document.getElementsByClassName('invalid').length === 0);
-  });
+  }, []);
 
   return validated;
 };

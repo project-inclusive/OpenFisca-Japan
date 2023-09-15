@@ -1,4 +1,4 @@
-import { Navigate, Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 
 import { Box, Center, Button, Spinner, Text, Tooltip, Link } from '@chakra-ui/react';
 import { InfoIcon, ExternalLinkIcon } from '@chakra-ui/icons';
@@ -25,7 +25,7 @@ export const Result = () => {
   const location = useLocation();
   // TODO: decode household from URL
   const { household, isSimpleCalculation } = location.state as {
-    household: any;
+    household: unknown;
     isSimpleCalculation: boolean;
   };
 
@@ -34,11 +34,11 @@ export const Result = () => {
 
   const currentDate = useContext(CurrentDateContext);
   const [result, calculate] = useCalculate();
+  const [calcOnce, setCalcOnce] = useState(true);
 
-  let calcOnce = true;
   useEffect(() => {
     if (calcOnce) {
-      calculate(household).catch((e: any) => {
+      calculate(household).catch(() => {
         // 想定外のエラーレスポンスを受け取り結果が取得できなかった場合、エラー画面へ遷移
         navigate('/response-error', {
           state: {
@@ -46,9 +46,9 @@ export const Result = () => {
           },
         });
       });
-      calcOnce = false;
+      setCalcOnce(false);
     }
-  }, []);
+  }, [calcOnce, calculate, household, isSimpleCalculation, navigate]);
 
   const divRef = useRef<HTMLDivElement | null>(null);
   const [loadingScreenshotDownload, setLoadingScreenshotDownload] = useState(false);
@@ -86,6 +86,7 @@ export const Result = () => {
   const city = household.世帯.世帯1.居住市区町村[currentDate];
 
   const getSocialWelfareCouncilData = () => {
+    // eslint-disable-next-line no-prototype-builtins
     if (prefecture === '東京都' && SocialWelfareData.東京都.hasOwnProperty(city)) {
       const { 施設名, 郵便番号, 所在地, 経度, 緯度, 座標系, 電話番号, WebサイトURL } = SocialWelfareData.東京都[city];
 
@@ -271,6 +272,7 @@ export const Result = () => {
           </Center>
           <Box bg="white" borderRadius="xl" p={4} mb={4} ml={4} mr={4}>
             <iframe
+              title="Chatbot LINE"
               src="https://miibo.jp/chat/7eaf9ab0-e179-4857-8ff8-3f83e46f6251189dd2e771a157?name=%E3%83%A4%E3%83%89%E3%82%AB%E3%83%AA%E3%81%8F%E3%82%93"
               width="100%"
               height="400px"

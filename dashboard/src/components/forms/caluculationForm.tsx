@@ -3,7 +3,6 @@ import { useState } from 'react';
 import ScrollToTop from '../scrollToTop';
 import { FormContent } from './formContent';
 import { HouseholdContext } from '../../contexts/HouseholdContext';
-import { CurrentDateContext } from '../../contexts/CurrentDateContext';
 
 function CaluculationForm() {
   // 日付は「YYYY-MM-DD」の桁数フォーマットでないとOpenFisca APIが正常動作しない

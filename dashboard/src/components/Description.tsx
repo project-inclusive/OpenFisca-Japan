@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { Box, Center, Button, VStack, Image } from '@chakra-ui/react';
-import { Icon } from '@chakra-ui/react';
+import { Box, Center, Button, VStack, Image, Icon } from '@chakra-ui/react';
 import { CheckCircleIcon } from '@chakra-ui/icons';
 import { FaGithub } from 'react-icons/fa';
 

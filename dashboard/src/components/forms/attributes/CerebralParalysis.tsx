@@ -10,21 +10,24 @@ export const CerebralParalysis = ({ personName }: { personName: string }) => {
   const [isChecked, setIsChecked] = useState(false);
 
   // チェックボックスの値が変更された時
-  const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const newHousehold = { ...household };
-    if (event.target.checked) {
-      newHousehold.世帯員[personName].脳性まひ_進行性筋萎縮症 = {
-        [currentDate]: '有',
-      };
-    } else {
-      newHousehold.世帯員[personName].脳性まひ_進行性筋萎縮症 = {
-        [currentDate]: '無',
-      };
-    }
+  const onChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const newHousehold = { ...household };
+      if (event.target.checked) {
+        newHousehold.世帯員[personName].脳性まひ_進行性筋萎縮症 = {
+          [currentDate]: '有',
+        };
+      } else {
+        newHousehold.世帯員[personName].脳性まひ_進行性筋萎縮症 = {
+          [currentDate]: '無',
+        };
+      }
 
-    setHousehold({ ...newHousehold });
-    setIsChecked(event.target.checked);
-  }, []);
+      setHousehold({ ...newHousehold });
+      setIsChecked(event.target.checked);
+    },
+    [currentDate, household, personName, setHousehold],
+  );
 
   return (
     <Checkbox checked={isChecked} onChange={onChange} colorScheme="cyan" mb={2}>

@@ -13,16 +13,19 @@ export const Recuperation = ({ personName }: { personName: string }) => {
   const { household, setHousehold } = useContext(HouseholdContext);
 
   // チェックボックスの値が変更された時
-  const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!event.target.checked) {
-      const newHousehold = { ...household };
-      newHousehold.世帯員[personName].在宅療養中 = { [currentDate]: false };
-      newHousehold.世帯員[personName].入院中 = { [currentDate]: false };
-      setHousehold({ ...newHousehold });
-    }
+  const onChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (!event.target.checked) {
+        const newHousehold = { ...household };
+        newHousehold.世帯員[personName].在宅療養中 = { [currentDate]: false };
+        newHousehold.世帯員[personName].入院中 = { [currentDate]: false };
+        setHousehold({ ...newHousehold });
+      }
 
-    setIsChecked(event.target.checked);
-  }, []);
+      setIsChecked(event.target.checked);
+    },
+    [currentDate, household, personName, setHousehold],
+  );
 
   return (
     <Box mb={4}>

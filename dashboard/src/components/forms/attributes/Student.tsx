@@ -10,16 +10,19 @@ export const Student = ({ personName }: { personName: string }) => {
   const { household, setHousehold } = useContext(HouseholdContext);
 
   // チェックボックスの値が変更された時
-  const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const newHousehold = { ...household };
-    if (event.target.checked) {
-      newHousehold.世帯員[personName].学生 = { [currentDate]: true };
-    } else {
-      newHousehold.世帯員[personName].学生 = { [currentDate]: false };
-    }
-    setHousehold({ ...newHousehold });
-    setIsChecked(event.target.checked);
-  }, []);
+  const onChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const newHousehold = { ...household };
+      if (event.target.checked) {
+        newHousehold.世帯員[personName].学生 = { [currentDate]: true };
+      } else {
+        newHousehold.世帯員[personName].学生 = { [currentDate]: false };
+      }
+      setHousehold({ ...newHousehold });
+      setIsChecked(event.target.checked);
+    },
+    [currentDate, household, personName, setHousehold],
+  );
 
   return (
     <>

@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Box, Center, Checkbox } from '@chakra-ui/react';
+import { Center } from '@chakra-ui/react';
 
 import { ShowAlertMessageContext } from '../../../../contexts/ShowAlertMessageContext';
 

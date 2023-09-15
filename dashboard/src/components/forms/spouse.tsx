@@ -23,22 +23,25 @@ export const FormSpouse = () => {
   const spouseName = '配偶者';
 
   // チェックボックスの値が変更された時
-  const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const newHousehold = { ...household };
+  const onChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const newHousehold = { ...household };
 
-    if (event.target.checked) {
-      newHousehold.世帯.世帯1.配偶者がいるがひとり親に該当 = {
-        [currentDate]: true,
-      };
-    } else {
-      newHousehold.世帯.世帯1.配偶者がいるがひとり親に該当 = {
-        [currentDate]: false,
-      };
-    }
+      if (event.target.checked) {
+        newHousehold.世帯.世帯1.配偶者がいるがひとり親に該当 = {
+          [currentDate]: true,
+        };
+      } else {
+        newHousehold.世帯.世帯1.配偶者がいるがひとり親に該当 = {
+          [currentDate]: false,
+        };
+      }
 
-    setHousehold({ ...newHousehold });
-    setIsChecked(event.target.checked);
-  }, []);
+      setHousehold({ ...newHousehold });
+      setIsChecked(event.target.checked);
+    },
+    [currentDate, household, setHousehold],
+  );
 
   return (
     <>

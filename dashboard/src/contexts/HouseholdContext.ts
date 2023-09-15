@@ -1,3 +1,3 @@
 import React from 'react';
 
-export const HouseholdContext = React.createContext<any>(undefined);
+export const HouseholdContext = React.createContext<unknown>(undefined);

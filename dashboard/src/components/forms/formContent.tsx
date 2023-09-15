@@ -19,7 +19,7 @@ export const FormContent = () => {
   const [ShowAlertMessage, setShowAlertMessage] = useState(false);
   const validated = useValidate();
   const navigate = useNavigate();
-  const { household, setHousehold } = useContext(HouseholdContext);
+  const { household } = useContext(HouseholdContext);
 
   return (
     <ShowAlertMessageContext.Provider value={ShowAlertMessage}>

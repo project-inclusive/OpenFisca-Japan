@@ -11,24 +11,27 @@ export const Income = ({ personName, mustInput }: { personName: string; mustInpu
 
   const [shownIncome, setShownIncome] = useState<string | number>('');
 
-  const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const newHousehold = {
-      ...household,
-    };
+  const onChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const newHousehold = {
+        ...household,
+      };
 
-    // 「万円」単位を「円」に換算
-    let income = parseInt(event.currentTarget.value) * 10000;
-    // 正の整数以外は0に変換
-    if (isNaN(income) || income < 0) {
-      income = 0;
-      setShownIncome('');
-    } else {
-      setShownIncome(income / 10000);
-    }
+      // 「万円」単位を「円」に換算
+      let income = parseInt(event.currentTarget.value) * 10000;
+      // 正の整数以外は0に変換
+      if (isNaN(income) || income < 0) {
+        income = 0;
+        setShownIncome('');
+      } else {
+        setShownIncome(income / 10000);
+      }
 
-    newHousehold.世帯員[personName].収入 = { [currentDate]: income };
-    setHousehold(newHousehold);
-  }, []);
+      newHousehold.世帯員[personName].収入 = { [currentDate]: income };
+      setHousehold(newHousehold);
+    },
+    [currentDate, household, personName, setHousehold],
+  );
 
   const onKeyDown = (e: KeyboardEvent<HTMLElement>) => {
     // 入力確定した際にページ遷移しないようにする

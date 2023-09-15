@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext, useMemo, useEffect } from 'react';
+import { useState, useCallback, useContext } from 'react';
 import { Box, Select, HStack, FormControl, FormLabel } from '@chakra-ui/react';
 
 import configData from '../../../config/app_config.json';
@@ -21,56 +21,62 @@ export const PrefectureMunicipality = ({ mustInput }: { mustInput: boolean }) =>
   const prefectureArray = Object.keys(pmObj);
 
   // prefectureの値が変更された時
-  const onPrefectureChange = useCallback((event: React.ChangeEvent<HTMLSelectElement>) => {
-    const prefecture = String(event.currentTarget.value);
-    setSelectedPrefecture(prefecture);
-    setSelectedMunicipality('');
-    const newHousehold = { ...household };
-    newHousehold.世帯.世帯1.居住都道府県 = {
-      [currentDate]: prefecture,
-    };
-    if (prefecture === '東京都') {
-      newHousehold.世帯.世帯1.児童育成手当 = {
-        [currentDate]: null,
+  const onPrefectureChange = useCallback(
+    (event: React.ChangeEvent<HTMLSelectElement>) => {
+      const prefecture = String(event.currentTarget.value);
+      setSelectedPrefecture(prefecture);
+      setSelectedMunicipality('');
+      const newHousehold = { ...household };
+      newHousehold.世帯.世帯1.居住都道府県 = {
+        [currentDate]: prefecture,
       };
-      newHousehold.世帯.世帯1.障害児童育成手当 = {
-        [currentDate]: null,
-      };
-      newHousehold.世帯.世帯1.重度心身障害者手当_最小 = {
-        [currentDate]: null,
-      };
-      newHousehold.世帯.世帯1.重度心身障害者手当_最大 = {
-        [currentDate]: null,
-      };
-    } else {
-      if ('児童育成手当' in newHousehold.世帯.世帯1) {
-        delete newHousehold.世帯.世帯1.児童育成手当;
+      if (prefecture === '東京都') {
+        newHousehold.世帯.世帯1.児童育成手当 = {
+          [currentDate]: null,
+        };
+        newHousehold.世帯.世帯1.障害児童育成手当 = {
+          [currentDate]: null,
+        };
+        newHousehold.世帯.世帯1.重度心身障害者手当_最小 = {
+          [currentDate]: null,
+        };
+        newHousehold.世帯.世帯1.重度心身障害者手当_最大 = {
+          [currentDate]: null,
+        };
+      } else {
+        if ('児童育成手当' in newHousehold.世帯.世帯1) {
+          delete newHousehold.世帯.世帯1.児童育成手当;
+        }
+        if ('障害児童育成手当' in newHousehold.世帯.世帯1) {
+          delete newHousehold.世帯.世帯1.障害児童育成手当;
+        }
+        if ('重度心身障害者手当_最小' in newHousehold.世帯.世帯1) {
+          delete newHousehold.世帯.世帯1.重度心身障害者手当_最小;
+        }
+        if ('重度心身障害者手当_最大' in newHousehold.世帯.世帯1) {
+          delete newHousehold.世帯.世帯1.重度心身障害者手当_最大;
+        }
       }
-      if ('障害児童育成手当' in newHousehold.世帯.世帯1) {
-        delete newHousehold.世帯.世帯1.障害児童育成手当;
-      }
-      if ('重度心身障害者手当_最小' in newHousehold.世帯.世帯1) {
-        delete newHousehold.世帯.世帯1.重度心身障害者手当_最小;
-      }
-      if ('重度心身障害者手当_最大' in newHousehold.世帯.世帯1) {
-        delete newHousehold.世帯.世帯1.重度心身障害者手当_最大;
-      }
-    }
-    console.log(newHousehold);
-    setHousehold({ ...newHousehold });
-  }, []);
+      console.log(newHousehold);
+      setHousehold({ ...newHousehold });
+    },
+    [currentDate, household, setHousehold],
+  );
 
   // municipalityの値が変更された時
-  const onMunicipalityChange = useCallback((event: React.ChangeEvent<HTMLSelectElement>) => {
-    const municipality = String(event.currentTarget.value);
-    setSelectedMunicipality(municipality);
+  const onMunicipalityChange = useCallback(
+    (event: React.ChangeEvent<HTMLSelectElement>) => {
+      const municipality = String(event.currentTarget.value);
+      setSelectedMunicipality(municipality);
 
-    const newHousehold = { ...household };
-    newHousehold.世帯.世帯1.居住市区町村 = {
-      [currentDate]: municipality,
-    };
-    setHousehold({ ...newHousehold });
-  }, []);
+      const newHousehold = { ...household };
+      newHousehold.世帯.世帯1.居住市区町村 = {
+        [currentDate]: municipality,
+      };
+      setHousehold({ ...newHousehold });
+    },
+    [currentDate, household, setHousehold],
+  );
 
   return (
     <>

@@ -12,7 +12,7 @@ import { Recuperation } from './attributes/Recuperation';
 import { NursingHome } from './attributes/NursingHome';
 
 export const FormParents = () => {
-  const { household, setHousehold } = useContext(HouseholdContext);
+  const { household } = useContext(HouseholdContext);
   return (
     <>
       {household.世帯.世帯1.親一覧 &&

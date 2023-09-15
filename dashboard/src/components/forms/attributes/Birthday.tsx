@@ -65,7 +65,7 @@ export const Birthday = ({ personName, mustInput }: { personName: string; mustIn
     };
     newHousehold.世帯員[personName].誕生年月日 = { ETERNITY: birthday };
     setHousehold(newHousehold);
-  }, [selectedYear, selectedMonth, selectedDate]);
+  }, [selectedYear, selectedMonth, selectedDate, household, personName, setHousehold]);
 
   return (
     <>

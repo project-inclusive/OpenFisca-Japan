@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext } from 'react';
+import { useState, useContext } from 'react';
 import { Select, Checkbox, Box, FormControl, FormLabel } from '@chakra-ui/react';
 
 import { HouseholdContext } from '../../../contexts/HouseholdContext';
@@ -13,7 +13,7 @@ export const HighSchool = ({ personName }: { personName: string }) => {
   const highSchoolStatusArray = ['全日制課程', '定時制課程', '通信制課程', '専攻科'];
 
   // チェックボックスの値が変更された時
-  const onCheckChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+  const onCheckChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newHousehold = { ...household };
     if (event.target.checked) {
       newHousehold.世帯員[personName].高校種別 = {
@@ -26,17 +26,17 @@ export const HighSchool = ({ personName }: { personName: string }) => {
     }
     setHousehold({ ...newHousehold });
     setIsChecked(event.target.checked);
-  }, []);
+  };
 
   // コンボボックスの値が変更された時
-  const onSelectChange = useCallback((event: React.ChangeEvent<HTMLSelectElement>) => {
+  const onSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const highSchoolStatus = String(event.currentTarget.value);
     const newHousehold = { ...household };
     newHousehold.世帯員[personName].高校種別 = {
       [currentDate]: highSchoolStatus,
     };
     setHousehold({ ...newHousehold });
-  }, []);
+  };
 
   return (
     <Box mb={4}>

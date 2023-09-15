@@ -29,7 +29,7 @@ export const AgeInput = ({ personName, mustInput }: { personName: string; mustIn
     };
     newHousehold.世帯員[personName].誕生年月日 = { ETERNITY: birthday };
     setHousehold(newHousehold);
-  }, [age]);
+  }, [age, household, personName, setHousehold]);
 
   return (
     <>

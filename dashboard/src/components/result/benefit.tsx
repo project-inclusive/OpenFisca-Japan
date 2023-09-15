@@ -11,12 +11,12 @@ import {
 
 import configData from '../../config/app_config.json';
 
-export const Benefit = ({ result, currentDate }: { result: any; currentDate: string }) => {
+export const Benefit = ({ result, currentDate }: { result: unknown; currentDate: string }) => {
   const [totalAllowance, setTotalAllowance] = useState<string>('0');
-  const [displayedResult, setDisplayedResult] = useState<any>();
+  const [displayedResult, setDisplayedResult] = useState<unknown>();
 
   interface Obj {
-    [prop: string]: any; // これを記述することで、どんなプロパティでも持てるようになる
+    [prop: string]: unknown; // これを記述することで、どんなプロパティでも持てるようになる
   }
 
   useEffect(() => {
@@ -78,10 +78,10 @@ export const Benefit = ({ result, currentDate }: { result: any; currentDate: str
       }
 
       // 表示のため最大額が小さい順にソート
-      const sortedMinMaxResult = Object.values(minMaxResult).sort((a: any, b: any) => a.maxMoney - b.maxMoney);
+      const sortedMinMaxResult = Object.values(minMaxResult).sort((a: unknown, b: unknown) => a.maxMoney - b.maxMoney);
       setDisplayedResult(sortedMinMaxResult);
     }
-  }, [result]);
+  }, [currentDate, result]);
 
   return (
     <>
@@ -107,7 +107,7 @@ export const Benefit = ({ result, currentDate }: { result: any; currentDate: str
           </AccordionItem>
 
           {displayedResult &&
-            displayedResult.map((val: any, index: any) => (
+            displayedResult.map((val: unknown, index: unknown) => (
               <AccordionItem key={index}>
                 <h2>
                   <AccordionButton>
@@ -121,7 +121,7 @@ export const Benefit = ({ result, currentDate }: { result: any; currentDate: str
                   </AccordionButton>
                 </h2>
                 <AccordionPanel pb={4}>
-                  {val.caption.map((line: string, index: any) => (
+                  {val.caption.map((line: string, index: unknown) => (
                     <span key={index}>
                       {line}
                       <br />

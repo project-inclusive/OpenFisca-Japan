@@ -3,7 +3,7 @@ import { useState } from 'react';
 import configData from '../config/app_config.json';
 
 export const useCalculate = () => {
-  const [result, setResult] = useState<any>();
+  const [result, setResult] = useState<unknown>();
   const apiURL =
     import.meta.env.MODE === 'production'
       ? // configData.URL.OpenFisca_API.production // mainブランチマージ時にビルドされるバックエンドAPI。Cloud Run
@@ -11,7 +11,7 @@ export const useCalculate = () => {
       : 'http://localhost:50000';
 
   // HTTPリクエストを必要最小限にするため、明示的に関数を呼び出した時のみ結果を更新
-  const calculate = async (household: any) => {
+  const calculate = async (household: unknown) => {
     if (!household) {
       return;
     }

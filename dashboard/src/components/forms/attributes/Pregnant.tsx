@@ -13,33 +13,39 @@ export const Pregnant = ({ personName }: { personName: string }) => {
   const pregnantStatusArray = ['妊娠6ヵ月未満', '妊娠6ヵ月以上', '産後6ヵ月以内'];
 
   // チェックボックスの値が変更された時
-  const onCheckChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!event.target.checked) {
-      const newHousehold = { ...household };
-      newHousehold.世帯員[personName].妊産婦 = {
-        [currentDate]: '無',
-      };
-      setHousehold({ ...newHousehold });
-    }
-    setIsChecked(event.target.checked);
-  }, []);
+  const onCheckChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (!event.target.checked) {
+        const newHousehold = { ...household };
+        newHousehold.世帯員[personName].妊産婦 = {
+          [currentDate]: '無',
+        };
+        setHousehold({ ...newHousehold });
+      }
+      setIsChecked(event.target.checked);
+    },
+    [currentDate, household, personName, setHousehold],
+  );
 
   // コンボボックスの値が変更された時
-  const onSelectChange = useCallback((event: React.ChangeEvent<HTMLSelectElement>) => {
-    const pregnantStatus = String(event.currentTarget.value);
-    const newHousehold = { ...household };
-    if (pregnantStatus) {
-      newHousehold.世帯員[personName].妊産婦 = {
-        [currentDate]: pregnantStatus,
-      };
-    } else {
-      newHousehold.世帯員[personName].妊産婦 = {
-        [currentDate]: '無',
-      };
-    }
+  const onSelectChange = useCallback(
+    (event: React.ChangeEvent<HTMLSelectElement>) => {
+      const pregnantStatus = String(event.currentTarget.value);
+      const newHousehold = { ...household };
+      if (pregnantStatus) {
+        newHousehold.世帯員[personName].妊産婦 = {
+          [currentDate]: pregnantStatus,
+        };
+      } else {
+        newHousehold.世帯員[personName].妊産婦 = {
+          [currentDate]: '無',
+        };
+      }
 
-    setHousehold({ ...newHousehold });
-  }, []);
+      setHousehold({ ...newHousehold });
+    },
+    [currentDate, household, personName, setHousehold],
+  );
 
   return (
     <Box mb={4}>

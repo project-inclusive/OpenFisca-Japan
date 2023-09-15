@@ -10,17 +10,20 @@ export const RentingHouse = () => {
   const { household, setHousehold } = useContext(HouseholdContext);
 
   // チェックボックスの値が変更された時
-  const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const newHousehold = { ...household };
-    if (event.target.checked) {
-      // レスポンスとして住宅入居費を受け取るため、空オブジェクトを設定
-      newHousehold.世帯.世帯1.住宅入居費 = { [currentDate]: null };
-    } else {
-      delete newHousehold.世帯.世帯1.住宅入居費;
-    }
-    setHousehold({ ...newHousehold });
-    setIsChecked(event.target.checked);
-  }, []);
+  const onChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const newHousehold = { ...household };
+      if (event.target.checked) {
+        // レスポンスとして住宅入居費を受け取るため、空オブジェクトを設定
+        newHousehold.世帯.世帯1.住宅入居費 = { [currentDate]: null };
+      } else {
+        delete newHousehold.世帯.世帯1.住宅入居費;
+      }
+      setHousehold({ ...newHousehold });
+      setIsChecked(event.target.checked);
+    },
+    [currentDate, household, setHousehold],
+  );
 
   return (
     <>

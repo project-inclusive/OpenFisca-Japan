@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext, useEffect } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { Select, FormControl, FormLabel } from '@chakra-ui/react';
 
 import { HouseholdContext } from '../../../contexts/HouseholdContext';
@@ -9,6 +9,7 @@ export const RadiationDamage = ({ personName }: { personName: string }) => {
   const { household, setHousehold } = useContext(HouseholdContext);
 
   // ラベルとOpenFiscaの表記違いを明記
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const items = [
     ['', '無'],
     ['現罹患者', '現罹患者'],
@@ -17,12 +18,12 @@ export const RadiationDamage = ({ personName }: { personName: string }) => {
   const [selectedItemIndex, setSelectedItemIndex] = useState(0);
 
   // コンボボックスの値が変更された時
-  const onChange = useCallback((event: React.ChangeEvent<HTMLSelectElement>) => {
+  const onChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedItemIndex(parseInt(event.currentTarget.value));
     const newHousehold = { ...household };
     newHousehold.世帯員[personName].放射線障害 = { [currentDate]: items[parseInt(event.currentTarget.value)][1] };
     setHousehold({ ...newHousehold });
-  }, []);
+  };
 
   // 「あなた」の「子どもの数」が変更されたときに全ての子どもの放射線障害が「無」に
   // リセットされるため、コンボボックスも空白に戻す
@@ -35,7 +36,7 @@ export const RadiationDamage = ({ personName }: { personName: string }) => {
         }
       });
     }
-  }, [household.世帯員[personName].放射線障害]);
+  }, [household.世帯員, items, personName]);
 
   return (
     <>

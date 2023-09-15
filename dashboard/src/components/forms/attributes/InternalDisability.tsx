@@ -10,21 +10,24 @@ export const InternalDisability = ({ personName }: { personName: string }) => {
   const [isChecked, setIsChecked] = useState(false);
 
   // チェックボックスの値が変更された時
-  const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const newHousehold = { ...household };
-    if (event.target.checked) {
-      newHousehold.世帯員[personName].内部障害 = {
-        [currentDate]: '有',
-      };
-    } else {
-      newHousehold.世帯員[personName].内部障害 = {
-        [currentDate]: '無',
-      };
-    }
+  const onChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const newHousehold = { ...household };
+      if (event.target.checked) {
+        newHousehold.世帯員[personName].内部障害 = {
+          [currentDate]: '有',
+        };
+      } else {
+        newHousehold.世帯員[personName].内部障害 = {
+          [currentDate]: '無',
+        };
+      }
 
-    setHousehold({ ...newHousehold });
-    setIsChecked(event.target.checked);
-  }, []);
+      setHousehold({ ...newHousehold });
+      setIsChecked(event.target.checked);
+    },
+    [currentDate, household, personName, setHousehold],
+  );
 
   return (
     <>

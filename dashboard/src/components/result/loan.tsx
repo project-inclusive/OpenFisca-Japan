@@ -11,11 +11,11 @@ import {
 
 import configData from '../../config/app_config.json';
 
-export const Loan = ({ result, currentDate }: { result: any; currentDate: string }) => {
-  const [displayedResult, setDisplayedResult] = useState<any>();
+export const Loan = ({ result, currentDate }: { result: unknown; currentDate: string }) => {
+  const [displayedResult, setDisplayedResult] = useState<unknown>();
 
   interface Obj {
-    [prop: string]: any; // これを記述することで、どんなプロパティでも持てるようになる
+    [prop: string]: unknown; // これを記述することで、どんなプロパティでも持てるようになる
   }
 
   useEffect(() => {
@@ -39,7 +39,7 @@ export const Loan = ({ result, currentDate }: { result: any; currentDate: string
       setDisplayedResult(loanResult);
       console.log(`display ${JSON.stringify(displayedResult)}`);
     }
-  }, [result]);
+  }, [currentDate, displayedResult, result]);
 
   return (
     <>
@@ -54,7 +54,7 @@ export const Loan = ({ result, currentDate }: { result: any; currentDate: string
             生活福祉資金貸付制度
           </Box>
 
-          {configData.result.貸付制度.caption.map((line: string, index: any) => (
+          {configData.result.貸付制度.caption.map((line: string, index: unknown) => (
             <span key={index}>
               {line}
               <br />
@@ -66,7 +66,7 @@ export const Loan = ({ result, currentDate }: { result: any; currentDate: string
 
           <Accordion allowMultiple>
             {displayedResult &&
-              Object.values(displayedResult).map((val: any, index) => (
+              Object.values(displayedResult).map((val: unknown, index) => (
                 <AccordionItem key={index}>
                   <h2>
                     <AccordionButton>
@@ -80,7 +80,7 @@ export const Loan = ({ result, currentDate }: { result: any; currentDate: string
                     </AccordionButton>
                   </h2>
                   <AccordionPanel pb={4}>
-                    {val.caption.map((line: string, index: any) => (
+                    {val.caption.map((line: string, index: unknown) => (
                       <span key={index}>
                         {line}
                         <br />

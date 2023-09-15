@@ -10,18 +10,21 @@ export const ParentsNum = () => {
 
   const [isChecked, setIsChecked] = useState(false);
   // チェックボックスの値が変更された時
-  const onCheckChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!event.target.checked && household.世帯.世帯1.親一覧) {
-      const newHousehold = { ...household };
-      household.世帯.世帯1.親一覧.map((name: string) => {
-        delete newHousehold.世帯員[name];
-      });
-      delete newHousehold.世帯.世帯1.親一覧;
-      setShownLivingToghtherNum('');
-      setHousehold({ ...newHousehold });
-    }
-    setIsChecked(event.target.checked);
-  }, []);
+  const onCheckChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (!event.target.checked && household.世帯.世帯1.親一覧) {
+        const newHousehold = { ...household };
+        household.世帯.世帯1.親一覧.map((name: string) => {
+          delete newHousehold.世帯員[name];
+        });
+        delete newHousehold.世帯.世帯1.親一覧;
+        setShownLivingToghtherNum('');
+        setHousehold({ ...newHousehold });
+      }
+      setIsChecked(event.target.checked);
+    },
+    [household, setHousehold],
+  );
 
   // チェックされたときに人数フォームにフォーカス
   useEffect(() => {
@@ -31,37 +34,40 @@ export const ParentsNum = () => {
   }, [isChecked]);
 
   // 人数フォーム変更時
-  const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    let LivingToghtherNum = parseInt(event.currentTarget.value);
-    // 正の整数以外は0に変換
-    if (isNaN(LivingToghtherNum) || LivingToghtherNum < 0) {
-      LivingToghtherNum = 0;
-      setShownLivingToghtherNum('');
-      // TODO: 算出に必要な最大人数に設定する
-    } else if (LivingToghtherNum > 10) {
-      LivingToghtherNum = 10;
-      setShownLivingToghtherNum(LivingToghtherNum);
-    } else {
-      setShownLivingToghtherNum(LivingToghtherNum);
-    }
+  const onChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      let LivingToghtherNum = parseInt(event.currentTarget.value);
+      // 正の整数以外は0に変換
+      if (isNaN(LivingToghtherNum) || LivingToghtherNum < 0) {
+        LivingToghtherNum = 0;
+        setShownLivingToghtherNum('');
+        // TODO: 算出に必要な最大人数に設定する
+      } else if (LivingToghtherNum > 10) {
+        LivingToghtherNum = 10;
+        setShownLivingToghtherNum(LivingToghtherNum);
+      } else {
+        setShownLivingToghtherNum(LivingToghtherNum);
+      }
 
-    // 変更前の親または祖父母の情報を削除
-    const newHousehold = { ...household };
-    if (household.世帯.世帯1.親一覧) {
-      household.世帯.世帯1.親一覧.map((name: string) => {
-        delete newHousehold.世帯員[name];
-      });
-    }
+      // 変更前の親または祖父母の情報を削除
+      const newHousehold = { ...household };
+      if (household.世帯.世帯1.親一覧) {
+        household.世帯.世帯1.親一覧.map((name: string) => {
+          delete newHousehold.世帯員[name];
+        });
+      }
 
-    // 新しい親または祖父母の情報を追加
-    newHousehold.世帯.世帯1.親一覧 = [...Array(LivingToghtherNum)].map((val, i) => `親${i}`);
-    if (newHousehold.世帯.世帯1.親一覧) {
-      newHousehold.世帯.世帯1.親一覧.map((name: string) => {
-        newHousehold.世帯員[name] = {};
-      });
-    }
-    setHousehold({ ...newHousehold });
-  }, []);
+      // 新しい親または祖父母の情報を追加
+      newHousehold.世帯.世帯1.親一覧 = [...Array(LivingToghtherNum)].map((val, i) => `親${i}`);
+      if (newHousehold.世帯.世帯1.親一覧) {
+        newHousehold.世帯.世帯1.親一覧.map((name: string) => {
+          newHousehold.世帯員[name] = {};
+        });
+      }
+      setHousehold({ ...newHousehold });
+    },
+    [household, setHousehold],
+  );
 
   return (
     <>

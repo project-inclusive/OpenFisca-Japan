@@ -1,8 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { ChakraProvider, defineStyleConfig } from '@chakra-ui/react';
+import { ChakraProvider, defineStyleConfig, extendTheme } from '@chakra-ui/react';
 import App from './App';
-import { extendTheme } from '@chakra-ui/react';
 
 const baseStyle = {
   borderRadius: 'md',

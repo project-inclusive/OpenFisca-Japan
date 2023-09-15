@@ -15,7 +15,7 @@ import { HighSchool } from './attributes/HighSchool';
 export const FormChildren = () => {
   const location = useLocation();
   const isSimpleCalculation = location.pathname === '/calculate-simple';
-  const { household, setHousehold } = useContext(HouseholdContext);
+  const { household } = useContext(HouseholdContext);
 
   return (
     <>

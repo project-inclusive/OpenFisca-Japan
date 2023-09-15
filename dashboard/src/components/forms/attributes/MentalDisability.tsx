@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext, useEffect } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { Select, FormControl, FormLabel } from '@chakra-ui/react';
 
 import { HouseholdContext } from '../../../contexts/HouseholdContext';
@@ -9,6 +9,7 @@ export const MentalDisability = ({ personName }: { personName: string }) => {
   const currentDate = useContext(CurrentDateContext);
 
   // ラベルとOpenFiscaの表記違いを明記(pythonは数字を頭にした変数名をつけられない)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const items = [
     ['', '無'],
     ['1級', '一級'],
@@ -18,14 +19,14 @@ export const MentalDisability = ({ personName }: { personName: string }) => {
   const [selectedItemIndex, setSelectedItemIndex] = useState(0);
 
   // コンボボックスの値が変更された時
-  const onChange = useCallback((event: React.ChangeEvent<HTMLSelectElement>) => {
+  const onChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedItemIndex(parseInt(event.currentTarget.value));
     const newHousehold = { ...household };
     newHousehold.世帯員[personName].精神障害者保健福祉手帳等級 = {
       [currentDate]: items[parseInt(event.currentTarget.value)][1],
     };
     setHousehold({ ...newHousehold });
-  }, []);
+  };
 
   // 「あなた」の「子どもの数」が変更されたときに全ての子どもの精神障害者保健福祉手帳等級が「無」に
   // リセットされるため、コンボボックスも空白に戻す
@@ -37,7 +38,7 @@ export const MentalDisability = ({ personName }: { personName: string }) => {
         }
       });
     }
-  }, [household.世帯員[personName].精神障害者保健福祉手帳等級]);
+  }, [currentDate, household.世帯員, items, personName]);
 
   return (
     <>

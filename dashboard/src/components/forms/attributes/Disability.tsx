@@ -16,27 +16,30 @@ export const Disability = ({ personName }: { personName: string }) => {
   const currentDate = useContext(CurrentDateContext);
 
   // チェックボックスの値が変更された時
-  const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!event.target.checked) {
-      const newHousehold = { ...household };
-      newHousehold.世帯員[personName].身体障害者手帳等級 = {
-        [currentDate]: '無',
-      };
-      newHousehold.世帯員[personName].療育手帳等級 = { [currentDate]: '無' };
-      newHousehold.世帯員[personName].愛の手帳等級 = { [currentDate]: '無' };
-      newHousehold.世帯員[personName].精神障害者保健福祉手帳等級 = {
-        [currentDate]: '無',
-      };
-      newHousehold.世帯員[personName].内部障害 = { [currentDate]: '無' };
-      newHousehold.世帯員[personName].脳性まひ_進行性筋萎縮症 = {
-        [currentDate]: '無',
-      };
-      newHousehold.世帯員[personName].放射線障害 = { [currentDate]: '無' };
-      setHousehold({ ...newHousehold });
-    }
+  const onChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (!event.target.checked) {
+        const newHousehold = { ...household };
+        newHousehold.世帯員[personName].身体障害者手帳等級 = {
+          [currentDate]: '無',
+        };
+        newHousehold.世帯員[personName].療育手帳等級 = { [currentDate]: '無' };
+        newHousehold.世帯員[personName].愛の手帳等級 = { [currentDate]: '無' };
+        newHousehold.世帯員[personName].精神障害者保健福祉手帳等級 = {
+          [currentDate]: '無',
+        };
+        newHousehold.世帯員[personName].内部障害 = { [currentDate]: '無' };
+        newHousehold.世帯員[personName].脳性まひ_進行性筋萎縮症 = {
+          [currentDate]: '無',
+        };
+        newHousehold.世帯員[personName].放射線障害 = { [currentDate]: '無' };
+        setHousehold({ ...newHousehold });
+      }
 
-    setIsChecked(event.target.checked);
-  }, []);
+      setIsChecked(event.target.checked);
+    },
+    [currentDate, household, personName, setHousehold],
+  );
 
   return (
     <>

@@ -9,6 +9,7 @@ export const PhysicalDisability = ({ personName }: { personName: string }) => {
   const currentDate = useContext(CurrentDateContext);
 
   // ラベルとOpenFiscaの表記違いを明記(pythonは数字を頭にした変数名をつけられない)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const items = [
     ['', '無'],
     ['1級', '一級'],
@@ -18,14 +19,17 @@ export const PhysicalDisability = ({ personName }: { personName: string }) => {
   const [selectedItemIndex, setSelectedItemIndex] = useState(0);
 
   // コンボボックスの値が変更された時
-  const onChange = useCallback((event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedItemIndex(parseInt(event.currentTarget.value));
-    const newHousehold = { ...household };
-    newHousehold.世帯員[personName].身体障害者手帳等級 = {
-      [currentDate]: items[parseInt(event.currentTarget.value)][1],
-    };
-    setHousehold({ ...newHousehold });
-  }, []);
+  const onChange = useCallback(
+    (event: React.ChangeEvent<HTMLSelectElement>) => {
+      setSelectedItemIndex(parseInt(event.currentTarget.value));
+      const newHousehold = { ...household };
+      newHousehold.世帯員[personName].身体障害者手帳等級 = {
+        [currentDate]: items[parseInt(event.currentTarget.value)][1],
+      };
+      setHousehold({ ...newHousehold });
+    },
+    [currentDate, household, items, personName, setHousehold],
+  );
 
   // 「あなた」の「子どもの数」が変更されたときに全ての子どもの身体障害者手帳等級が「無」に
   // リセットされるため、コンボボックスも「なし」に戻す
@@ -37,7 +41,7 @@ export const PhysicalDisability = ({ personName }: { personName: string }) => {
         }
       });
     }
-  }, [household.世帯員[personName].身体障害者手帳等級]);
+  }, [currentDate, household.世帯員, items, personName]);
 
   return (
     <>

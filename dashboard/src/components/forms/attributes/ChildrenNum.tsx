@@ -10,18 +10,21 @@ export const ChildrenNum = () => {
 
   const [isChecked, setIsChecked] = useState(false);
   // チェックボックスの値が変更された時
-  const onCheckChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!event.target.checked && household.世帯.世帯1.子一覧) {
-      const newHousehold = { ...household };
-      household.世帯.世帯1.子一覧.map((childName: string) => {
-        delete newHousehold.世帯員[childName];
-      });
-      delete newHousehold.世帯.世帯1.子一覧;
-      setShownChildrenNum('');
-      setHousehold({ ...newHousehold });
-    }
-    setIsChecked(event.target.checked);
-  }, []);
+  const onCheckChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (!event.target.checked && household.世帯.世帯1.子一覧) {
+        const newHousehold = { ...household };
+        household.世帯.世帯1.子一覧.map((childName: string) => {
+          delete newHousehold.世帯員[childName];
+        });
+        delete newHousehold.世帯.世帯1.子一覧;
+        setShownChildrenNum('');
+        setHousehold({ ...newHousehold });
+      }
+      setIsChecked(event.target.checked);
+    },
+    [household, setHousehold],
+  );
 
   // チェックされたときに「子どもの数」フォームにフォーカス
   useEffect(() => {
@@ -31,36 +34,39 @@ export const ChildrenNum = () => {
   }, [isChecked]);
 
   // 「子どもの数」フォームの変更時
-  const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    let childrenNum = parseInt(event.currentTarget.value);
-    // 正の整数以外は0に変換
-    if (isNaN(childrenNum) || childrenNum < 0) {
-      childrenNum = 0;
-      setShownChildrenNum('');
-    } else if (childrenNum > 5) {
-      childrenNum = 5;
-      setShownChildrenNum(childrenNum);
-    } else {
-      setShownChildrenNum(childrenNum);
-    }
+  const onChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      let childrenNum = parseInt(event.currentTarget.value);
+      // 正の整数以外は0に変換
+      if (isNaN(childrenNum) || childrenNum < 0) {
+        childrenNum = 0;
+        setShownChildrenNum('');
+      } else if (childrenNum > 5) {
+        childrenNum = 5;
+        setShownChildrenNum(childrenNum);
+      } else {
+        setShownChildrenNum(childrenNum);
+      }
 
-    // 変更前の子どもの情報を削除
-    const newHousehold = { ...household };
-    if (household.世帯.世帯1.子一覧) {
-      household.世帯.世帯1.子一覧.map((childName: string) => {
-        delete newHousehold.世帯員[childName];
-      });
-    }
+      // 変更前の子どもの情報を削除
+      const newHousehold = { ...household };
+      if (household.世帯.世帯1.子一覧) {
+        household.世帯.世帯1.子一覧.map((childName: string) => {
+          delete newHousehold.世帯員[childName];
+        });
+      }
 
-    // 新しい子どもの情報を追加
-    newHousehold.世帯.世帯1.子一覧 = [...Array(childrenNum)].map((val, i) => `子ども${i}`);
-    if (newHousehold.世帯.世帯1.子一覧) {
-      newHousehold.世帯.世帯1.子一覧.map((childName: string) => {
-        newHousehold.世帯員[childName] = {};
-      });
-    }
-    setHousehold({ ...newHousehold });
-  }, []);
+      // 新しい子どもの情報を追加
+      newHousehold.世帯.世帯1.子一覧 = [...Array(childrenNum)].map((val, i) => `子ども${i}`);
+      if (newHousehold.世帯.世帯1.子一覧) {
+        newHousehold.世帯.世帯1.子一覧.map((childName: string) => {
+          newHousehold.世帯員[childName] = {};
+        });
+      }
+      setHousehold({ ...newHousehold });
+    },
+    [household, setHousehold],
+  );
 
   return (
     <>
