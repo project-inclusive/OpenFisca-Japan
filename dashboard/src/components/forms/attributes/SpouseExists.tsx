@@ -1,14 +1,14 @@
-import { useCallback, useContext, useState } from "react";
-import { Checkbox } from "@chakra-ui/react";
+import { useCallback, useContext, useState } from 'react';
+import { Checkbox } from '@chakra-ui/react';
 
-import { HouseholdContext } from "../../../contexts/HouseholdContext";
-import { CurrentDateContext } from "../../../contexts/CurrentDateContext";
+import { HouseholdContext } from '../../../contexts/HouseholdContext';
+import { CurrentDateContext } from '../../../contexts/CurrentDateContext';
 
 export const SpouseExists = () => {
   const currentDate = useContext(CurrentDateContext);
   const { household, setHousehold } = useContext(HouseholdContext);
   const [isChecked, setIsChecked] = useState(false);
-  const spouseName = "配偶者";
+  const spouseName = '配偶者';
 
   // チェックボックスの値が変更された時
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,12 +29,7 @@ export const SpouseExists = () => {
 
   return (
     <>
-      <Checkbox
-        colorScheme="cyan"
-        checked={isChecked}
-        onChange={onChange}
-        mb={4}
-      >
+      <Checkbox colorScheme="cyan" checked={isChecked} onChange={onChange} mb={4}>
         配偶者がいる（事実婚の場合も含む）
       </Checkbox>
       <br></br>

@@ -1,8 +1,8 @@
-import { useState, useCallback, useContext } from "react";
-import { Checkbox } from "@chakra-ui/react";
+import { useState, useCallback, useContext } from 'react';
+import { Checkbox } from '@chakra-ui/react';
 
-import { HouseholdContext } from "../../../contexts/HouseholdContext";
-import { CurrentDateContext } from "../../../contexts/CurrentDateContext";
+import { HouseholdContext } from '../../../contexts/HouseholdContext';
+import { CurrentDateContext } from '../../../contexts/CurrentDateContext';
 
 export const Student = ({ personName }: { personName: string }) => {
   const currentDate = useContext(CurrentDateContext);
@@ -23,12 +23,7 @@ export const Student = ({ personName }: { personName: string }) => {
 
   return (
     <>
-      <Checkbox
-        colorScheme="cyan"
-        checked={isChecked}
-        onChange={onChange}
-        mb={4}
-      >
+      <Checkbox colorScheme="cyan" checked={isChecked} onChange={onChange} mb={4}>
         小・中・高校、大学、専門学校、職業訓練学校等の学生である
       </Checkbox>
       <br></br>

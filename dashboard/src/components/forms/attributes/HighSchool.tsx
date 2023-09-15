@@ -1,14 +1,8 @@
-import { useState, useCallback, useContext } from "react";
-import {
-  Select,
-  Checkbox,
-  Box,
-  FormControl,
-  FormLabel,
-} from "@chakra-ui/react";
+import { useState, useCallback, useContext } from 'react';
+import { Select, Checkbox, Box, FormControl, FormLabel } from '@chakra-ui/react';
 
-import { HouseholdContext } from "../../../contexts/HouseholdContext";
-import { CurrentDateContext } from "../../../contexts/CurrentDateContext";
+import { HouseholdContext } from '../../../contexts/HouseholdContext';
+import { CurrentDateContext } from '../../../contexts/CurrentDateContext';
 
 export const HighSchool = ({ personName }: { personName: string }) => {
   const currentDate = useContext(CurrentDateContext);
@@ -16,44 +10,33 @@ export const HighSchool = ({ personName }: { personName: string }) => {
   const [isChecked, setIsChecked] = useState(false);
 
   // ラベルとOpenFiscaの表記違いを明記
-  const highSchoolStatusArray = [
-    "全日制課程",
-    "定時制課程",
-    "通信制課程",
-    "専攻科",
-  ];
+  const highSchoolStatusArray = ['全日制課程', '定時制課程', '通信制課程', '専攻科'];
 
   // チェックボックスの値が変更された時
-  const onCheckChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const newHousehold = { ...household };
-      if (event.target.checked) {
-        newHousehold.世帯員[personName].高校種別 = {
-          [currentDate]: highSchoolStatusArray[0],
-        };
-      } else {
-        newHousehold.世帯員[personName].高校種別 = {
-          [currentDate]: "無",
-        };
-      }
-      setHousehold({ ...newHousehold });
-      setIsChecked(event.target.checked);
-    },
-    []
-  );
+  const onCheckChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    const newHousehold = { ...household };
+    if (event.target.checked) {
+      newHousehold.世帯員[personName].高校種別 = {
+        [currentDate]: highSchoolStatusArray[0],
+      };
+    } else {
+      newHousehold.世帯員[personName].高校種別 = {
+        [currentDate]: '無',
+      };
+    }
+    setHousehold({ ...newHousehold });
+    setIsChecked(event.target.checked);
+  }, []);
 
   // コンボボックスの値が変更された時
-  const onSelectChange = useCallback(
-    (event: React.ChangeEvent<HTMLSelectElement>) => {
-      const highSchoolStatus = String(event.currentTarget.value);
-      const newHousehold = { ...household };
-      newHousehold.世帯員[personName].高校種別 = {
-        [currentDate]: highSchoolStatus,
-      };
-      setHousehold({ ...newHousehold });
-    },
-    []
-  );
+  const onSelectChange = useCallback((event: React.ChangeEvent<HTMLSelectElement>) => {
+    const highSchoolStatus = String(event.currentTarget.value);
+    const newHousehold = { ...household };
+    newHousehold.世帯員[personName].高校種別 = {
+      [currentDate]: highSchoolStatus,
+    };
+    setHousehold({ ...newHousehold });
+  }, []);
 
   return (
     <Box mb={4}>

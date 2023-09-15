@@ -1,32 +1,24 @@
-import { Navigate, Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
+import { Navigate, Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 
-import {
-  Box,
-  Center,
-  Button,
-  Spinner,
-  Text,
-  Tooltip,
-  Link,
-} from "@chakra-ui/react";
-import { InfoIcon, ExternalLinkIcon } from "@chakra-ui/icons";
-import { useRef, useState, useEffect, useContext } from "react";
-import * as htmlToImage from "html-to-image";
+import { Box, Center, Button, Spinner, Text, Tooltip, Link } from '@chakra-ui/react';
+import { InfoIcon, ExternalLinkIcon } from '@chakra-ui/icons';
+import { useRef, useState, useEffect, useContext } from 'react';
+import * as htmlToImage from 'html-to-image';
 
-import configData from "../../config/app_config.json";
-import { data as SocialWelfareData } from "../../config/社会福祉協議会";
-import { CurrentDateContext } from "../../contexts/CurrentDateContext";
-import { useCalculate } from "../../hooks/calculate";
-import { Benefit } from "./benefit";
-import { Loan } from "./loan";
-import { CalculationLabel } from "../forms/calculationLabel";
+import configData from '../../config/app_config.json';
+import { data as SocialWelfareData } from '../../config/社会福祉協議会';
+import { CurrentDateContext } from '../../contexts/CurrentDateContext';
+import { useCalculate } from '../../hooks/calculate';
+import { Benefit } from './benefit';
+import { Loan } from './loan';
+import { CalculationLabel } from '../forms/calculationLabel';
 
-const createFileName = (extension: string = "", ...names: string[]) => {
+const createFileName = (extension: string = '', ...names: string[]) => {
   if (!extension) {
-    return "";
+    return '';
   }
 
-  return `${names.join("")}.${extension}`;
+  return `${names.join('')}.${extension}`;
 };
 
 export const Result = () => {
@@ -48,7 +40,7 @@ export const Result = () => {
     if (calcOnce) {
       calculate(household).catch((e: any) => {
         // 想定外のエラーレスポンスを受け取り結果が取得できなかった場合、エラー画面へ遷移
-        navigate("/response-error", {
+        navigate('/response-error', {
           state: {
             isSimpleCalculation: isSimpleCalculation,
           },
@@ -59,30 +51,24 @@ export const Result = () => {
   }, []);
 
   const divRef = useRef<HTMLDivElement | null>(null);
-  const [loadingScreenshotDownload, setLoadingScreenshotDownload] =
-    useState(false);
+  const [loadingScreenshotDownload, setLoadingScreenshotDownload] = useState(false);
 
-  const takeScreenShot = async (
-    node: HTMLDivElement | null
-  ): Promise<string> => {
+  const takeScreenShot = async (node: HTMLDivElement | null): Promise<string> => {
     setLoadingScreenshotDownload(true);
     if (!node) {
-      throw new Error("Invalid element reference.");
+      throw new Error('Invalid element reference.');
     }
     const dataURI = await htmlToImage.toPng(node, {
-      backgroundColor: "#C4F1F9",
+      backgroundColor: '#C4F1F9',
     });
     return dataURI;
   };
 
   const download = (
     image: string,
-    {
-      name = "お金サポート_結果",
-      extension = "png",
-    }: { name?: string; extension?: string } = {}
+    { name = 'お金サポート_結果', extension = 'png' }: { name?: string; extension?: string } = {},
   ): void => {
-    const a = document.createElement("a");
+    const a = document.createElement('a');
     a.href = image;
     a.download = createFileName(extension, name);
     a.click();
@@ -100,20 +86,8 @@ export const Result = () => {
   const city = household.世帯.世帯1.居住市区町村[currentDate];
 
   const getSocialWelfareCouncilData = () => {
-    if (
-      prefecture === "東京都" &&
-      SocialWelfareData.東京都.hasOwnProperty(city)
-    ) {
-      const {
-        施設名,
-        郵便番号,
-        所在地,
-        経度,
-        緯度,
-        座標系,
-        電話番号,
-        WebサイトURL,
-      } = SocialWelfareData.東京都[city];
+    if (prefecture === '東京都' && SocialWelfareData.東京都.hasOwnProperty(city)) {
+      const { 施設名, 郵便番号, 所在地, 経度, 緯度, 座標系, 電話番号, WebサイトURL } = SocialWelfareData.東京都[city];
 
       return {
         施設名,
@@ -124,9 +98,7 @@ export const Result = () => {
         座標系,
         電話番号,
         WebサイトURL,
-        googleMapsURL: encodeURI(
-          `https://www.google.com/maps/search/${施設名}+${所在地}`
-        ),
+        googleMapsURL: encodeURI(`https://www.google.com/maps/search/${施設名}+${所在地}`),
       };
     }
 
@@ -138,27 +110,21 @@ export const Result = () => {
       緯度: null,
       座標系: null,
       電話番号: null,
-      WebサイトURL: "",
-      googleMapsURL: "",
+      WebサイトURL: '',
+      googleMapsURL: '',
     };
   };
 
   const aboutLink = {
-    link: "https://www.zcwvc.net/about/list.html",
-    title: "全国の社会福祉協議会一覧",
+    link: 'https://www.zcwvc.net/about/list.html',
+    title: '全国の社会福祉協議会一覧',
   };
 
   return (
     <div ref={divRef}>
       {!result && (
         <Center>
-          <Spinner
-            mt={20}
-            thickness="4px"
-            size="xl"
-            color="cyan.600"
-            speed="0.7s"
-          />
+          <Spinner mt={20} thickness="4px" size="xl" color="cyan.600" speed="0.7s" />
         </Center>
       )}
       {result && (
@@ -169,15 +135,10 @@ export const Result = () => {
                 ? configData.calculationForm.simpleCalculation
                 : configData.calculationForm.detailedCalculation
             }
-            colour={isSimpleCalculation ? "teal" : "blue"}
+            colour={isSimpleCalculation ? 'teal' : 'blue'}
           />
 
-          <Center
-            fontSize={configData.style.subTitleFontSize}
-            fontWeight="medium"
-            mt={2}
-            mb={2}
-          >
+          <Center fontSize={configData.style.subTitleFontSize} fontWeight="medium" mt={2} mb={2}>
             {configData.result.topDescription}
           </Center>
 
@@ -192,11 +153,7 @@ export const Result = () => {
           <Center pr={4} pl={4} pb={4}>
             <Text>
               {configData.result.consultationDescription2}
-              <Tooltip
-                label={configData.result.consultationDescription3}
-                isOpen={isLabelOpen}
-                bg="gray.600"
-              >
+              <Tooltip label={configData.result.consultationDescription3} isOpen={isLabelOpen} bg="gray.600">
                 <InfoIcon
                   ml={1}
                   color="blue.500"
@@ -209,38 +166,27 @@ export const Result = () => {
           </Center>
 
           <Center pr={4} pl={4} pb={4}>
-            <Box
-              bg="white"
-              borderRadius="xl"
-              w="100%"
-              pt={4}
-              pb={4}
-              pr={4}
-              pl={4}
-              border="1px solid black"
-            >
-              {prefecture === "東京都" ? (
+            <Box bg="white" borderRadius="xl" w="100%" pt={4} pb={4} pr={4} pl={4} border="1px solid black">
+              {prefecture === '東京都' ? (
                 <Box>
                   {getSocialWelfareCouncilData().WebサイトURL ? (
                     <Link
                       href={getSocialWelfareCouncilData().WebサイトURL}
                       color="blue.500"
-                      fontWeight={"semibold"}
+                      fontWeight={'semibold'}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
                       {getSocialWelfareCouncilData().施設名}
                     </Link>
                   ) : (
-                    <Text fontWeight={"semibold"}>
-                      {getSocialWelfareCouncilData().施設名}
-                    </Text>
+                    <Text fontWeight={'semibold'}>{getSocialWelfareCouncilData().施設名}</Text>
                   )}
                   <Text>〒{getSocialWelfareCouncilData().郵便番号}</Text>
                   <Link
                     href={getSocialWelfareCouncilData().googleMapsURL}
                     color="blue.500"
-                    fontWeight={"semibold"}
+                    fontWeight={'semibold'}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -253,7 +199,7 @@ export const Result = () => {
                     <Link
                       href={`tel:${getSocialWelfareCouncilData().電話番号}`}
                       color="blue.500"
-                      fontWeight={"semibold"}
+                      fontWeight={'semibold'}
                     >
                       {getSocialWelfareCouncilData().電話番号}
                     </Link>
@@ -261,14 +207,12 @@ export const Result = () => {
                 </Box>
               ) : (
                 <Box>
-                  <Text fontWeight={"semibold"}>社会福祉協議会の調べ方</Text>
-                  <Text>
-                    下記のページからお住まいの社会福祉協議会を選択してください
-                  </Text>
+                  <Text fontWeight={'semibold'}>社会福祉協議会の調べ方</Text>
+                  <Text>下記のページからお住まいの社会福祉協議会を選択してください</Text>
                   <Link
                     href={aboutLink.link}
                     color="blue.500"
-                    fontWeight={"semibold"}
+                    fontWeight={'semibold'}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -296,7 +240,7 @@ export const Result = () => {
                   width="100%"
                   bg="blue.500"
                   color="white"
-                  _hover={{ bg: "blue.600" }}
+                  _hover={{ bg: 'blue.600' }}
                 >
                   {configData.calculationForm.detailedCalculation}
                 </Button>
@@ -307,7 +251,7 @@ export const Result = () => {
           <Center pr={4} pl={4} pb={4}>
             <Button
               onClick={downloadScreenshot}
-              loadingText={"読み込み中..."}
+              loadingText={'読み込み中...'}
               isLoading={loadingScreenshotDownload}
               as="button"
               fontSize={configData.style.subTitleFontSize}
@@ -316,7 +260,7 @@ export const Result = () => {
               width="100%"
               bg="gray.500"
               color="white"
-              _hover={{ bg: "gray.600" }}
+              _hover={{ bg: 'gray.600' }}
             >
               {configData.result.screenshotButtonText}
             </Button>
@@ -348,7 +292,7 @@ export const Result = () => {
               width="100%"
               bg="cyan.600"
               color="white"
-              _hover={{ bg: "cyan.700" }}
+              _hover={{ bg: 'cyan.700' }}
               target="_blank"
               rel="noopener noreferrer"
             >

@@ -98,17 +98,11 @@
     "consultationDescription1": "まずは近くの社会福祉協議会に相談してみませんか？",
     "consultationDescription2": "きっとあなたの相談に寄り添ってくれるはずです",
     "consultationDescription3": "社会福祉協議会はさまざまな福祉サービスや相談活動、市民と行政の橋渡しを行う民間組織です。他の制度や関係する窓口を紹介してもらえる可能性もあります。",
-    "chatbotDescription": [
-      "追加で知りたいことがあればヤドカリくんにも聞いてみましょう。"
-    ],
-    "questionnaireDescription": [
-      "よろしければ改善のための簡単なアンケートにご協力ください。"
-    ],
+    "chatbotDescription": ["追加で知りたいことがあればヤドカリくんにも聞いてみましょう。"],
+    "questionnaireDescription": ["よろしければ改善のための簡単なアンケートにご協力ください。"],
     "benefitDescription": "給付される可能性のあるお金",
     "給付制度": {
-      "caption": [
-        "詳細な給付条件や申請方法については市町村の窓口にお問い合わせください。"
-      ],
+      "caption": ["詳細な給付条件や申請方法については市町村の窓口にお問い合わせください。"],
       "制度一覧": {
         "児童手当": {
           "unit": "円/月",
@@ -122,16 +116,12 @@
         },
         "特別児童扶養手当": {
           "unit": "円/月",
-          "caption": [
-            "精神又は身体に障害をもつ20歳未満の児童を養育している方に給付される手当"
-          ],
+          "caption": ["精神又は身体に障害をもつ20歳未満の児童を養育している方に給付される手当"],
           "reference": "https://www.mhlw.go.jp/bunya/shougaihoken/jidou/huyou.html"
         },
         "障害児福祉手当": {
           "unit": "円/月",
-          "caption": [
-            "精神又は身体に重度の障害をもつ20歳未満の方に給付される手当"
-          ],
+          "caption": ["精神又は身体に重度の障害をもつ20歳未満の方に給付される手当"],
           "reference": "https://www.mhlw.go.jp/bunya/shougaihoken/jidou/hukushi.html"
         },
         "児童育成手当": {
@@ -141,16 +131,12 @@
         },
         "障害児童育成手当": {
           "unit": "円/月",
-          "caption": [
-            "精神又は身体に障害をもつ20歳未満の児童を養育している方に給付される手当"
-          ],
+          "caption": ["精神又は身体に障害をもつ20歳未満の児童を養育している方に給付される手当"],
           "reference": "https://www.fukushi.metro.tokyo.lg.jp/kodomo/kosodate/teate/zidouikuseiteate.html"
         },
         "重度心身障害者手当": {
           "unit": "円/月",
-          "caption": [
-            "精神又は身体に重度の障害を持ち、常時複雑な介護を必要とする方に給付される手当"
-          ],
+          "caption": ["精神又は身体に重度の障害を持ち、常時複雑な介護を必要とする方に給付される手当"],
           "reference": "https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/juudo.html"
         },
         "生活保護": {
@@ -164,9 +150,7 @@
         },
         "高等学校奨学給付金": {
           "unit": "円/月",
-          "caption": [
-            "教材費、通学用品費等、高校で安心して教育を受けるために必要なお金の給付"
-          ],
+          "caption": ["教材費、通学用品費等、高校で安心して教育を受けるために必要なお金の給付"],
           "reference": "https://www.mext.go.jp/a_menu/shotou/mushouka/1344089.htm"
         }
       }
@@ -231,28 +215,17 @@
         },
         "教育支援費": {
           "unit": "円/月",
-          "caption": [
-            "高校、大学等で学ぶために必要な費用",
-            "返済期限：20年以内",
-            "利子：無利子"
-          ],
+          "caption": ["高校、大学等で学ぶために必要な費用", "返済期限：20年以内", "利子：無利子"],
           "reference": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/kashitsukejoken.html"
         },
         "就学支度費": {
           "unit": "円 　",
-          "caption": [
-            "高校、大学等の入学に必要な費用",
-            "返済期限：20年以内",
-            "利子：無利子"
-          ],
+          "caption": ["高校、大学等の入学に必要な費用", "返済期限：20年以内", "利子：無利子"],
           "reference": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/kashitsukejoken.html"
         },
         "不動産担保型生活資金": {
           "unit": "円/月",
-          "caption": [
-            "不動産を担保として借りられる生活資金",
-            "利子：年3%、または長期プライムレートのいずれか低い利率"
-          ],
+          "caption": ["不動産を担保として借りられる生活資金", "利子：年3%、または長期プライムレートのいずれか低い利率"],
           "reference": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/kashitsukejoken.html"
         }
       }

@@ -1,8 +1,8 @@
-import { useState, useCallback, useContext } from "react";
-import { Checkbox } from "@chakra-ui/react";
+import { useState, useCallback, useContext } from 'react';
+import { Checkbox } from '@chakra-ui/react';
 
-import { HouseholdContext } from "../../../contexts/HouseholdContext";
-import { CurrentDateContext } from "../../../contexts/CurrentDateContext";
+import { HouseholdContext } from '../../../contexts/HouseholdContext';
+import { CurrentDateContext } from '../../../contexts/CurrentDateContext';
 
 export const Working = ({ personName }: { personName: string }) => {
   const currentDate = useContext(CurrentDateContext);
@@ -23,12 +23,7 @@ export const Working = ({ personName }: { personName: string }) => {
 
   return (
     <>
-      <Checkbox
-        colorScheme="cyan"
-        checked={isChecked}
-        onChange={onChange}
-        mb={4}
-      >
+      <Checkbox colorScheme="cyan" checked={isChecked} onChange={onChange} mb={4}>
         6か月以内に新しい仕事を始めた
       </Checkbox>
       <br></br>

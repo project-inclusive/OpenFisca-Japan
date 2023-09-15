@@ -1,37 +1,27 @@
-import { useCallback, useContext, useState, useRef, useEffect } from "react";
-import {
-  Checkbox,
-  Box,
-  HStack,
-  Input,
-  FormControl,
-  FormLabel,
-} from "@chakra-ui/react";
+import { useCallback, useContext, useState, useRef, useEffect } from 'react';
+import { Checkbox, Box, HStack, Input, FormControl, FormLabel } from '@chakra-ui/react';
 
-import { HouseholdContext } from "../../../contexts/HouseholdContext";
+import { HouseholdContext } from '../../../contexts/HouseholdContext';
 
 export const ChildrenNum = () => {
   const { household, setHousehold } = useContext(HouseholdContext);
-  const [shownChildrenNum, setShownChildrenNum] = useState<string | number>("");
+  const [shownChildrenNum, setShownChildrenNum] = useState<string | number>('');
   const inputEl = useRef<HTMLInputElement>(null);
 
   const [isChecked, setIsChecked] = useState(false);
   // チェックボックスの値が変更された時
-  const onCheckChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      if (!event.target.checked && household.世帯.世帯1.子一覧) {
-        const newHousehold = { ...household };
-        household.世帯.世帯1.子一覧.map((childName: string) => {
-          delete newHousehold.世帯員[childName];
-        });
-        delete newHousehold.世帯.世帯1.子一覧;
-        setShownChildrenNum("");
-        setHousehold({ ...newHousehold });
-      }
-      setIsChecked(event.target.checked);
-    },
-    []
-  );
+  const onCheckChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!event.target.checked && household.世帯.世帯1.子一覧) {
+      const newHousehold = { ...household };
+      household.世帯.世帯1.子一覧.map((childName: string) => {
+        delete newHousehold.世帯員[childName];
+      });
+      delete newHousehold.世帯.世帯1.子一覧;
+      setShownChildrenNum('');
+      setHousehold({ ...newHousehold });
+    }
+    setIsChecked(event.target.checked);
+  }, []);
 
   // チェックされたときに「子どもの数」フォームにフォーカス
   useEffect(() => {
@@ -46,7 +36,7 @@ export const ChildrenNum = () => {
     // 正の整数以外は0に変換
     if (isNaN(childrenNum) || childrenNum < 0) {
       childrenNum = 0;
-      setShownChildrenNum("");
+      setShownChildrenNum('');
     } else if (childrenNum > 5) {
       childrenNum = 5;
       setShownChildrenNum(childrenNum);
@@ -63,9 +53,7 @@ export const ChildrenNum = () => {
     }
 
     // 新しい子どもの情報を追加
-    newHousehold.世帯.世帯1.子一覧 = [...Array(childrenNum)].map(
-      (val, i) => `子ども${i}`
-    );
+    newHousehold.世帯.世帯1.子一覧 = [...Array(childrenNum)].map((val, i) => `子ども${i}`);
     if (newHousehold.世帯.世帯1.子一覧) {
       newHousehold.世帯.世帯1.子一覧.map((childName: string) => {
         newHousehold.世帯員[childName] = {};
@@ -77,24 +65,14 @@ export const ChildrenNum = () => {
   return (
     <>
       <Box mb={4}>
-        <Checkbox
-          colorScheme="cyan"
-          checked={isChecked}
-          onChange={onCheckChange}
-        >
+        <Checkbox colorScheme="cyan" checked={isChecked} onChange={onCheckChange}>
           子どもがいる
         </Checkbox>
         {isChecked && (
           <FormControl mt={2} ml={4} mr={4} mb={4}>
             <FormLabel fontWeight="Regular">子どもの数</FormLabel>
             <HStack mb={4}>
-              <Input
-                type="number"
-                value={shownChildrenNum}
-                onChange={onChange}
-                width="9em"
-                ref={inputEl}
-              />
+              <Input type="number" value={shownChildrenNum} onChange={onChange} width="9em" ref={inputEl} />
               <Box>人</Box>
             </HStack>
           </FormControl>

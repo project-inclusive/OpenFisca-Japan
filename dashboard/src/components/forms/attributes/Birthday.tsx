@@ -1,17 +1,11 @@
-import { useState, useCallback, useContext, useMemo, useEffect } from "react";
-import { Box, Select, HStack, FormControl, FormLabel } from "@chakra-ui/react";
+import { useState, useCallback, useContext, useMemo, useEffect } from 'react';
+import { Box, Select, HStack, FormControl, FormLabel } from '@chakra-ui/react';
 
-import configData from "../../../config/app_config.json";
-import { HouseholdContext } from "../../../contexts/HouseholdContext";
-import { ErrorMessage } from "./validation/ErrorMessage";
+import configData from '../../../config/app_config.json';
+import { HouseholdContext } from '../../../contexts/HouseholdContext';
+import { ErrorMessage } from './validation/ErrorMessage';
 
-export const Birthday = ({
-  personName,
-  mustInput,
-}: {
-  personName: string;
-  mustInput: boolean;
-}) => {
+export const Birthday = ({ personName, mustInput }: { personName: string; mustInput: boolean }) => {
   const { household, setHousehold } = useContext(HouseholdContext);
 
   const thisYear = new Date().getFullYear();
@@ -20,9 +14,7 @@ export const Birthday = ({
   const [selectedDate, setSelectedDate] = useState(NaN);
 
   // 年月日のドロップダウンリスト
-  const yearArray = [...Array(thisYear - 1900)].map((_, i) =>
-    String(thisYear - i)
-  );
+  const yearArray = [...Array(thisYear - 1900)].map((_, i) => String(thisYear - i));
   const monthArray = [...Array(12)].map((_, i) => String(i + 1));
 
   // 月末の日付は年・月によって変わる
@@ -35,32 +27,23 @@ export const Birthday = ({
     return [...Array(lastDate.getDate())].map((_, i) => String(i + 1));
   }, [selectedYear, selectedMonth]);
 
-  const handleYearChange = useCallback(
-    (event: React.ChangeEvent<HTMLSelectElement>) => {
-      setSelectedYear(parseInt(event.currentTarget.value));
-    },
-    []
-  );
+  const handleYearChange = useCallback((event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedYear(parseInt(event.currentTarget.value));
+  }, []);
 
-  const handleMonthChange = useCallback(
-    (event: React.ChangeEvent<HTMLSelectElement>) => {
-      setSelectedMonth(parseInt(event.currentTarget.value));
-    },
-    []
-  );
+  const handleMonthChange = useCallback((event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedMonth(parseInt(event.currentTarget.value));
+  }, []);
 
-  const handleDateChange = useCallback(
-    (event: React.ChangeEvent<HTMLSelectElement>) => {
-      setSelectedDate(parseInt(event.currentTarget.value));
-    },
-    []
-  );
+  const handleDateChange = useCallback((event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedDate(parseInt(event.currentTarget.value));
+  }, []);
 
   // 年月日が変更された時OpenFiscaの計算を行う
   useEffect(() => {
     let birthday;
     if (isNaN(selectedYear) || isNaN(selectedMonth) || isNaN(selectedDate)) {
-      birthday = "";
+      birthday = '';
     } else {
       // 年・月が変更され選択されていた日が月末より大きい場合、1日に変更
       // （例）2020年2月29日（閏年）から年を2021に変更した場合、GUIのフォームと内部状態は2021年2月1日に年と日を変更
@@ -72,9 +55,9 @@ export const Birthday = ({
         setSelectedDate(1);
       }
 
-      birthday = `${selectedYear.toString().padStart(4, "0")}-${selectedMonth
+      birthday = `${selectedYear.toString().padStart(4, '0')}-${selectedMonth
         .toString()
-        .padStart(2, "0")}-${selectedDate.toString().padStart(2, "0")}`;
+        .padStart(2, '0')}-${selectedDate.toString().padStart(2, '0')}`;
     }
 
     const newHousehold = {
@@ -86,18 +69,9 @@ export const Birthday = ({
 
   return (
     <>
-      {mustInput && (
-        <ErrorMessage
-          condition={
-            isNaN(selectedYear) || isNaN(selectedMonth) || isNaN(selectedDate)
-          }
-        />
-      )}
+      {mustInput && <ErrorMessage condition={isNaN(selectedYear) || isNaN(selectedMonth) || isNaN(selectedDate)} />}
       <FormControl>
-        <FormLabel
-          fontSize={configData.style.itemFontSize}
-          fontWeight="Regular"
-        >
+        <FormLabel fontSize={configData.style.itemFontSize} fontWeight="Regular">
           <HStack>
             <Box>生年月日</Box>
             {mustInput && (
@@ -114,17 +88,14 @@ export const Birthday = ({
             fontSize={configData.style.itemFontSize}
             width={configData.style.selectYearSize}
           >
-            <option value={""} key={0}></option>
+            <option value={''} key={0}></option>
             {yearArray.map((year) => (
               <option value={year} key={year}>
                 {year}
               </option>
             ))}
           </Select>
-          <Box
-            fontSize={configData.style.itemFontSize}
-            mt={configData.style.unitMt}
-          >
+          <Box fontSize={configData.style.itemFontSize} mt={configData.style.unitMt}>
             年
           </Box>
 
@@ -134,17 +105,14 @@ export const Birthday = ({
             fontSize={configData.style.itemFontSize}
             width={configData.style.selectMonthDateSize}
           >
-            <option value={""} key={0}></option>
+            <option value={''} key={0}></option>
             {monthArray.map((month) => (
               <option value={month} key={month}>
                 {month}
               </option>
             ))}
           </Select>
-          <Box
-            fontSize={configData.style.itemFontSize}
-            mt={configData.style.unitMt}
-          >
+          <Box fontSize={configData.style.itemFontSize} mt={configData.style.unitMt}>
             月
           </Box>
 
@@ -154,17 +122,14 @@ export const Birthday = ({
             fontSize={configData.style.itemFontSize}
             width={configData.style.selectMonthDateSize}
           >
-            <option value={""} key={0}></option>
+            <option value={''} key={0}></option>
             {dateArray.map((date) => (
               <option value={date} key={date}>
                 {date}
               </option>
             ))}
           </Select>
-          <Box
-            fontSize={configData.style.itemFontSize}
-            mt={configData.style.unitMt}
-          >
+          <Box fontSize={configData.style.itemFontSize} mt={configData.style.unitMt}>
             日
           </Box>
         </HStack>

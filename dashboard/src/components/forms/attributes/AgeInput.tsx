@@ -1,29 +1,21 @@
-import { useState, useContext, useEffect } from "react";
-import { Box, HStack, FormControl, FormLabel, Input } from "@chakra-ui/react";
+import { useState, useContext, useEffect } from 'react';
+import { Box, HStack, FormControl, FormLabel, Input } from '@chakra-ui/react';
 
-import configData from "../../../config/app_config.json";
-import { HouseholdContext } from "../../../contexts/HouseholdContext";
-import { ErrorMessage } from "./validation/ErrorMessage";
+import configData from '../../../config/app_config.json';
+import { HouseholdContext } from '../../../contexts/HouseholdContext';
+import { ErrorMessage } from './validation/ErrorMessage';
 
-export const AgeInput = ({
-  personName,
-  mustInput,
-}: {
-  personName: string;
-  mustInput: boolean;
-}) => {
+export const AgeInput = ({ personName, mustInput }: { personName: string; mustInput: boolean }) => {
   const { household, setHousehold } = useContext(HouseholdContext);
-  const [age, setAge] = useState("");
+  const [age, setAge] = useState('');
 
   const handleAgeChange = (event: React.ChangeEvent<HTMLInputElement>) =>
-    parseInt(event.currentTarget.value) < 0
-      ? setAge("0")
-      : setAge(event.currentTarget.value);
+    parseInt(event.currentTarget.value) < 0 ? setAge('0') : setAge(event.currentTarget.value);
 
   useEffect(() => {
     let birthday;
     if (!age) {
-      birthday = "";
+      birthday = '';
     } else {
       const today = new Date();
       const currentYear = today.getFullYear();
@@ -43,10 +35,7 @@ export const AgeInput = ({
     <>
       {mustInput && <ErrorMessage condition={!age} />}
       <FormControl>
-        <FormLabel
-          fontSize={configData.style.itemFontSize}
-          fontWeight="Regular"
-        >
+        <FormLabel fontSize={configData.style.itemFontSize} fontWeight="Regular">
           <HStack>
             <Box>年齢</Box>
             {mustInput && (
@@ -58,12 +47,7 @@ export const AgeInput = ({
         </FormLabel>
 
         <HStack mb={4}>
-          <Input
-            width="6em"
-            type="number"
-            value={age}
-            onChange={handleAgeChange}
-          />
+          <Input width="6em" type="number" value={age} onChange={handleAgeChange} />
           <Box>歳</Box>
         </HStack>
       </FormControl>

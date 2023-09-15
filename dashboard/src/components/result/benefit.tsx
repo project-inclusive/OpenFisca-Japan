@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import {
   Box,
   Center,
@@ -7,18 +7,12 @@ import {
   AccordionIcon,
   AccordionButton,
   AccordionPanel,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 
-import configData from "../../config/app_config.json";
+import configData from '../../config/app_config.json';
 
-export const Benefit = ({
-  result,
-  currentDate,
-}: {
-  result: any;
-  currentDate: string;
-}) => {
-  const [totalAllowance, setTotalAllowance] = useState<string>("0");
+export const Benefit = ({ result, currentDate }: { result: any; currentDate: string }) => {
+  const [totalAllowance, setTotalAllowance] = useState<string>('0');
   const [displayedResult, setDisplayedResult] = useState<any>();
 
   interface Obj {
@@ -29,9 +23,7 @@ export const Benefit = ({
     const minMaxResult: Obj = {};
 
     if (result) {
-      for (const [allowanceName, allowanceInfo] of Object.entries(
-        configData.result.給付制度.制度一覧
-      )) {
+      for (const [allowanceName, allowanceInfo] of Object.entries(configData.result.給付制度.制度一覧)) {
         if (allowanceName in result.世帯.世帯1) {
           if (result.世帯.世帯1[allowanceName][currentDate] > 0) {
             minMaxResult[allowanceName] = {
@@ -82,9 +74,7 @@ export const Benefit = ({
       if (totalAllowanceMax === totalAllowanceMin) {
         setTotalAllowance(totalAllowanceMax.toLocaleString());
       } else {
-        setTotalAllowance(
-          `${totalAllowanceMin.toLocaleString()}~${totalAllowanceMax.toLocaleString()}`
-        );
+        setTotalAllowance(`${totalAllowanceMin.toLocaleString()}~${totalAllowanceMax.toLocaleString()}`);
       }
 
       // 表示のため最大額が小さい順にソート
@@ -96,11 +86,7 @@ export const Benefit = ({
   return (
     <>
       <Box bg="white" borderRadius="xl" p={4} mb={4} ml={4} mr={4}>
-        <Center
-          fontSize={configData.style.subTitleFontSize}
-          fontWeight="medium"
-          mb={2}
-        >
+        <Center fontSize={configData.style.subTitleFontSize} fontWeight="medium" mb={2}>
           {configData.result.benefitDescription}
         </Center>
 
@@ -109,11 +95,7 @@ export const Benefit = ({
         <Accordion allowMultiple>
           <AccordionItem>
             <h2>
-              <AccordionButton
-                bg="yellow.100"
-                fontWeight="semibold"
-                _hover={{ bg: "yellow.100" }}
-              >
+              <AccordionButton bg="yellow.100" fontWeight="semibold" _hover={{ bg: 'yellow.100' }}>
                 <Box flex="1" textAlign="left">
                   合計
                 </Box>
@@ -139,14 +121,12 @@ export const Benefit = ({
                   </AccordionButton>
                 </h2>
                 <AccordionPanel pb={4}>
-                  {val.caption.map(
-                    (line: string, index: any) => (
-                      <span key={index}>
-                        {line}
-                        <br />
-                      </span>
-                    )
-                  )}
+                  {val.caption.map((line: string, index: any) => (
+                    <span key={index}>
+                      {line}
+                      <br />
+                    </span>
+                  ))}
                   <Box color="blue">
                     <a href={val.reference}>詳細リンク</a>
                   </Box>

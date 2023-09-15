@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import {
   Box,
   Center,
@@ -7,17 +7,11 @@ import {
   AccordionIcon,
   AccordionButton,
   AccordionPanel,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 
-import configData from "../../config/app_config.json";
+import configData from '../../config/app_config.json';
 
-export const Loan = ({
-  result,
-  currentDate,
-}: {
-  result: any;
-  currentDate: string;
-}) => {
+export const Loan = ({ result, currentDate }: { result: any; currentDate: string }) => {
   const [displayedResult, setDisplayedResult] = useState<any>();
 
   interface Obj {
@@ -28,9 +22,7 @@ export const Loan = ({
     const loanResult: Obj = {};
 
     if (result) {
-      for (const [loanName, loanInfo] of Object.entries(
-        configData.result.貸付制度.制度一覧
-      )) {
+      for (const [loanName, loanInfo] of Object.entries(configData.result.貸付制度.制度一覧)) {
         if (loanName in result.世帯.世帯1) {
           if (result.世帯.世帯1[loanName][currentDate] > 0) {
             loanResult[loanName] = {
@@ -53,11 +45,7 @@ export const Loan = ({
     <>
       {displayedResult && Object.keys(displayedResult).length > 0 && (
         <Box bg="white" borderRadius="xl" p={4} mb={4} ml={4} mr={4}>
-          <Center
-            fontSize={configData.style.subTitleFontSize}
-            fontWeight="medium"
-            mb={2}
-          >
+          <Center fontSize={configData.style.subTitleFontSize} fontWeight="medium" mb={2}>
             {configData.result.loanDescription}
           </Center>
 
@@ -66,14 +54,12 @@ export const Loan = ({
             生活福祉資金貸付制度
           </Box>
 
-          {configData.result.貸付制度.caption.map(
-            (line: string, index: any) => (
-              <span key={index}>
-                {line}
-                <br />
-              </span>
-            )
-          )}
+          {configData.result.貸付制度.caption.map((line: string, index: any) => (
+            <span key={index}>
+              {line}
+              <br />
+            </span>
+          ))}
           <Box color="blue">
             <a href={configData.result.貸付制度.reference}>詳細リンク</a>
           </Box>
@@ -89,8 +75,7 @@ export const Loan = ({
                         {val.name}
                       </Box>
                       <Box flex="1" textAlign="right">
-                        {/* １万円単位で表示 */}~{val.displayedMoney / 10_000}{" "}
-                        万{val.unit}
+                        {/* １万円単位で表示 */}~{val.displayedMoney / 10_000} 万{val.unit}
                       </Box>
                     </AccordionButton>
                   </h2>
