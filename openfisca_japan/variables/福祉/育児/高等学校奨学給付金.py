@@ -28,6 +28,10 @@ class 高等学校奨学給付金_最小(Variable):
     (東京都HP)https://www.kyoiku.metro.tokyo.lg.jp/admission/tuition/tuition/scholarship_public_school.html
     """
 
+    # TODO: 国のHPでは公立・私立によって支給額が異なり、このvariableでは公立の場合の給付額を算出している。
+    # 東京都のHPも公立の場合のみ記載している。
+    # そのため、私立の場合の支給額も算出する必要がある。
+
     def formula(対象世帯, 対象期間, parameters):
         年間支給金額 = 0
         生活保護受給可能 = 対象世帯("生活保護", 対象期間) > 0

@@ -21,6 +21,9 @@ class 障害児福祉手当(Variable):
     障害児童福祉手当
     """
 
+    # TODO: 重度心身障害者手当所得制限と同じ控除を適用する
+    # https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/jidou.html
+
     def formula(対象世帯, 対象期間, parameters):
         障害児福祉手当 = parameters(対象期間).福祉.育児.障害児福祉手当
 

@@ -31,13 +31,6 @@ class 誕生年月日(Variable):
     reference = "https://en.wiktionary.org/wiki/birthdate"
 
 
-class 死亡年月日(Variable):
-    value_type = date
-    entity = 人物
-    label = "人物の死亡年月日"
-    definition_period = ETERNITY  # This variable cannot change over time.
-
-
 class 年齢(Variable):
     value_type = int
     entity = 人物
@@ -113,24 +106,3 @@ class 世帯人数(Variable):
         return len(対象世帯.members("年齢", 対象期間))
 
 
-class 行方不明年月日(Variable):
-    value_type = bool
-    entity = 人物
-    definition_period = DAY
-    label = "行方不明になった年月日"
-
-
-class 生存状況パターン(Enum):
-    __order__ = "生存 死亡 不明"
-    生存 = "生存"
-    死亡 = "死亡"
-    不明 = "不明"
-
-
-class 生存状況(Variable):
-    value_type = Enum
-    possible_values = 生存状況パターン
-    default_value = 生存状況パターン.生存
-    entity = 人物
-    definition_period = DAY
-    label = "人物の生存状況"

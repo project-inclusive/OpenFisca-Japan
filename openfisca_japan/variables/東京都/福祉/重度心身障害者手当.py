@@ -96,6 +96,10 @@ class 重度心身障害者手当所得制限(Variable):
     label = "重度心身障害者手当の所得制限"
     reference = "https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/juudo.html"
 
+    # TODO: 障害児福祉手当も同じ控除を適用する。
+    # https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/jidou.html
+    # 心身障害者手当も同じ控除になるか要調査
+
     def formula(対象人物, 対象期間, parameters):
         重度心身障害者手当 = parameters(対象期間).東京都.福祉.重度心身障害者手当
         扶養人数 = 対象人物.世帯("扶養人数", 対象期間)[0]

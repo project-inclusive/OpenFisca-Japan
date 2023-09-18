@@ -1,9 +1,0 @@
-description: ハッピーマザー出産助成金制度の金額
-metadata:
-  reference: https://www.city.shibuya.tokyo.jp/kodomo/ninshin/teate/happy_josei.html
-  unit: currency-JPY
-values:
-  2022-05-01:
-    value: 100000
-    metadata:
-      reference: https://www.city.shibuya.tokyo.jp/kodomo/ninshin/teate/happy_josei.html

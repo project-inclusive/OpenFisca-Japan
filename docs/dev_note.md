@@ -112,7 +112,7 @@ make serve-local
 - バックエンドのdocker環境に入る
 
 #### テスト実行
-- 全てのテストを実行（2023/2/25時点でエラーになるため、下の「一部のテストを実行」で確認）
+- 全てのテストを実行 (変更内容の影響範囲が大きい場合またはmainブランチマージ時は、デグレードを検知するため実行してください。)
   - `make test` 
 - 一部のテストを実行
   - `openfisca test --country-package openfisca_japan openfisca_japan/tests/<実行したいテストファイル或いはディレクトリパス>`
@@ -166,7 +166,7 @@ sudo apt install xdg-utils
 
 ### バックエンド（OpenFisca Python APIサーバー）
 
-### 自動build, deploy
+#### 自動build, deploy
 - Google CloudのCloud Buildにより、mainブランチ、developブランチにpull (push) されたとき、`Dockerfile_cloud`を元にそれぞれ自動でbuildされ、Cloud Runによりdeployされる。
 - mainブランチ、developブランチでbuild, deployされるAPIは別々。`dashboard/src/hooks/calculate.ts`の`apiURL`を、mainブランチとdevelopブランチpull (push)時に、`configData.URL.OpenFisca_API.production`と`configData.URL.OpenFisca_API.dev`に手動で切り替えている。
 
