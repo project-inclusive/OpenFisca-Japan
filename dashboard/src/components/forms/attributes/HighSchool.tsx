@@ -5,6 +5,7 @@ import {
   Box,
   FormControl,
   FormLabel,
+  HStack
 } from "@chakra-ui/react";
 
 import { HouseholdContext } from "../../../contexts/HouseholdContext";
@@ -16,11 +17,17 @@ export const HighSchool = ({ personName }: { personName: string }) => {
   const [isChecked, setIsChecked] = useState(false);
 
   // ラベルとOpenFiscaの表記違いを明記
-  const highSchoolStatusArray = [
+  const highSchoolCourseStatusArray = [
     "全日制課程",
     "定時制課程",
     "通信制課程",
     "専攻科",
+  ];
+
+  const highSchoolManagementStatusArray = [
+    "国立",
+    "公立",
+    "私立"
   ];
 
   // チェックボックスの値が変更された時
@@ -28,13 +35,19 @@ export const HighSchool = ({ personName }: { personName: string }) => {
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const newHousehold = { ...household };
       if (event.target.checked) {
-        newHousehold.世帯員[personName].高校種別 = {
-          [currentDate]: highSchoolStatusArray[0],
+        newHousehold.世帯員[personName].高校履修種別 = {
+          [currentDate]: highSchoolCourseStatusArray[0],
+        };
+        newHousehold.世帯員[personName].高校運営種別 = {
+          [currentDate]: highSchoolManagementStatusArray[0]
         };
       } else {
-        newHousehold.世帯員[personName].高校種別 = {
+        newHousehold.世帯員[personName].高校履修種別 = {
           [currentDate]: "無",
         };
+        newHousehold.世帯員[personName].高校運営種別 = {
+          [currentDate]: "無",
+        }
       }
       setHousehold({ ...newHousehold });
       setIsChecked(event.target.checked);
@@ -42,13 +55,26 @@ export const HighSchool = ({ personName }: { personName: string }) => {
     []
   );
 
-  // コンボボックスの値が変更された時
-  const onSelectChange = useCallback(
+  // 高校履修種別コンボボックスの値が変更された時
+  const onhighSchoolCourseSelectChange = useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) => {
-      const highSchoolStatus = String(event.currentTarget.value);
+      const highSchoolCourseStatus = String(event.currentTarget.value);
       const newHousehold = { ...household };
-      newHousehold.世帯員[personName].高校種別 = {
-        [currentDate]: highSchoolStatus,
+      newHousehold.世帯員[personName].高校履修種別 = {
+        [currentDate]: highSchoolCourseStatus,
+      };
+      setHousehold({ ...newHousehold });
+    },
+    []
+  );
+
+  // 高校運営種別コンボボックスの値が変更された時
+  const onhighSchoolManagementSelectChange = useCallback(
+    (event: React.ChangeEvent<HTMLSelectElement>) => {
+      const highSchoolManagementStatus = String(event.currentTarget.value);
+      const newHousehold = { ...household };
+      newHousehold.世帯員[personName].高校運営種別 = {
+        [currentDate]: highSchoolManagementStatus,
       };
       setHousehold({ ...newHousehold });
     },
@@ -66,15 +92,22 @@ export const HighSchool = ({ personName }: { personName: string }) => {
           <FormLabel mt={2} ml={4} mr={4} mb={2} fontWeight="Regular">
             高校の種類
           </FormLabel>
-          <Box mt={2} ml={4} mr={4} mb={4}>
-            <Select onChange={onSelectChange}>
-              {highSchoolStatusArray.map((val, index) => (
+          <HStack mt={2} ml={4} mr={4} mb={2}>
+            <Select onChange={onhighSchoolCourseSelectChange}>
+              {highSchoolCourseStatusArray.map((val, index) => (
                 <option value={val} key={index}>
                   {val}
                 </option>
               ))}
             </Select>
-          </Box>
+            <Select onChange={onhighSchoolManagementSelectChange}>
+              {highSchoolManagementStatusArray.map((val, index) => (
+                <option value={val} key={index}>
+                  {val}
+                </option>
+              ))}
+            </Select>
+          </HStack>
         </FormControl>
       )}
     </Box>
