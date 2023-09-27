@@ -15,5 +15,21 @@ Lineチャットボットは、メッセージングアプリ「LINE」上で動
 ここで指定したリンクから情報を検索して、GPTを利用して返答するというシステムです。
 chat gptとは違い、テキストの検索・収集・整形を行うため、間違った情報を防ぐのが特徴です。
 
+## ラインチャットボットと連携している自治体のLINE
+
+- [足立区](https://line.me/R/ti/p/%40adachicity)
+- [新宿区](https://line.me/R/ti/p/%40shinjukucity)
+- [渋谷区](https://www.city.shibuya.tokyo.jp/kusei/koho/line/line_about.html)
+- [中央区](https://www.city.chuo.lg.jp/kusei/kouhoukouchou/kouhou/sns/line.html)
+- [台東区](https://www.city.taito.lg.jp/kusei/sanka/sns/line-taito.html)
+- [墨田区](https://www.city.sumida.lg.jp/wadai/050703.html)
+- [江東区](https://www.city.koto.lg.jp/kouhou/kusei/kouhou/line2.html)
+- [目黒区](https://www.city.meguro.tokyo.jp/kouhou/kusei/kouhou/line.html)
+- [大田区](https://www.city.ota.tokyo.jp/aboutweb/ota_line.html)
+- [世田谷区](https://line.me/R/ti/p/@setagayacity)
+- [港区](https://www.city.minato.tokyo.jp/shisei/shiseikoho/sns/line.html)
+- [豊島区](https://www.city.toshima.lg.jp/340/shisei/shiseikoho/sns/line.html)
+
+
 
 ## ラインチャットボットのGASリンク
