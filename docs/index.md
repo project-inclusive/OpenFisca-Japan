@@ -17,8 +17,8 @@
 - [デプロイ方法](./dev_note.md##デプロイ方法)
 - [ChatGPT_Retrieval_Pluginについて](./GPT_retrieval_plugin.md#ChatGPT_Retrieval_Pluginについて)
 - [Google_custom_search_APIについて](./Google_custom_search_API.md#Google_custom_search_APIについて)
-- [miiboについて](./dev_note#miiboについて)
-- [LINEチャットボットについて](./dev_note#LINEチャットボットについて)
+- [miiboについて](./miibo.md#miiboについて)
+- [LINEチャットボットについて](./LineChatBot.md#ラインチャットボットについて)
 
 
 ### [変更履歴 (Change log)](./change_log)
