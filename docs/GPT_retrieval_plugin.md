@@ -1,4 +1,4 @@
-# ChatGPT Retrieval Pluginについて
+# ChatGPT_Retrieval_Pluginについて
 
 ## ChatGPT Retrieval Pluginの概要
 
