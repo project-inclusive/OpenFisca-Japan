@@ -1,4 +1,4 @@
-# Google custom search APIについて
+# Google_custom_search_APIについて
 
 ## Google custom search APIの概要
 Google Custom Search APIは、Googleの検索技術をウェブサイトやアプリに統合するためのAPIです。
