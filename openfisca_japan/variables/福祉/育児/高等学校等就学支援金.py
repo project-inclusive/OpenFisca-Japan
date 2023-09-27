@@ -1,5 +1,5 @@
 """
-高等学校奨学支援金の実装
+高等学校等就学支援金の実装
 """
 
 import numpy as np
@@ -8,11 +8,11 @@ from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
 from openfisca_japan.entities import 世帯
 
-class 高等学校奨学支援金_最小(Variable):
+class 高等学校等就学支援金_最小(Variable):
     value_type = int
     entity = 世帯
     definition_period = DAY
-    label = "高等学校奨学支援金"
+    label = "高等学校等就学支援金"
     reference = "https://www.mext.go.jp/a_menu/shotou/mushouka/1342674.htm"
     documentation = """
     算出方法は以下リンクも参考になる。
@@ -25,11 +25,11 @@ class 高等学校奨学支援金_最小(Variable):
         return 0
 
 
-class 高等学校奨学支援金_最大(Variable):
+class 高等学校等就学支援金_最大(Variable):
     value_type = int
     entity = 世帯
     definition_period = DAY
-    label = "高等学校奨学支援金"
+    label = "高等学校等就学支援金"
     reference = "https://www.mext.go.jp/a_menu/shotou/mushouka/1342674.htm"
     documentation = """
     算出方法は以下リンクも参考になる。
