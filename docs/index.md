@@ -15,10 +15,11 @@
 - [環境構築](./dev_note#環境構築)
 - [開発方法](./dev_note#開発方法)
 - [デプロイ方法](./dev_note#デプロイ方法)
-- [Google retrieval pluginについ](./dev_note#Google retrieval pluginについて)
-- [Google custom search APIについて](./dev_note#Google custom search APIについて)
+- [デプロイ方法](./dev_note#デプロイ方法)
+- [ChatGPT_Retrieval_Pluginについて](./dev_note#ChatGPT_Retrieval_Pluginについて)
+- [Google custom search APIについて](./dev_note#GooglecustomsearchAPIについて)
 - [miiboについて](./dev_note#miiboについて)
-- [LINEチャットボットについて](./dev_note# LINEチャットボットについて)
+- [LINEチャットボットについて](./dev_note#LINEチャットボットについて)
 
 
 ### [変更履歴 (Change log)](./change_log)
