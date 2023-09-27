@@ -1,6 +1,6 @@
 name: Test Backend Openfisca
 
-on: [ push ]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -33,7 +33,7 @@ jobs:
   # openfisca_japan/tests 配下のテストを実行
   test:
     runs-on: ubuntu-latest
-    needs: [ build ]
+    needs: [build]
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python
