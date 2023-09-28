@@ -30,6 +30,3 @@ chat gptとは違い、テキストの検索・収集・整形を行うため、
 - [港区](https://www.city.minato.tokyo.jp/shisei/shiseikoho/sns/line.html)
 - [豊島区](https://www.city.toshima.lg.jp/340/shisei/shiseikoho/sns/line.html)
 
-
-
-## ラインチャットボットのGASリンク
