@@ -364,29 +364,3 @@ class 特別児童扶養手当の控除後世帯高所得(Variable):
         # 負の数にならないよう、0円未満になった場合は0円に補正
         return np.clip(世帯高所得 - 総控除額, 0.0, None)
 
-
-class 住民税非課税世帯(Variable):
-    value_type = bool
-    default_value = False
-    entity = 世帯
-    definition_period = DAY
-    label = "住民税非課税世帯か否か（東京23区で所得割と均等割両方が非課税になる世帯）"
-    reference = "https://financial-field.com/tax/entry-173575"
-
-    # 市町村の級地により住民税均等割における非課税限度額が異なる
-    # https://www.soumu.go.jp/main_content/000758656.pdf
-
-    def formula(対象世帯, 対象期間, parameters):
-        世帯高所得 = 対象世帯("世帯高所得", 対象期間)
-        世帯人数 = 対象世帯("世帯人数", 対象期間)         
-        居住級地区分1 = 対象世帯("居住級地区分1", 対象期間)[0]
-
-        級地区分倍率 = np.select([居住級地区分1 == 1, 居住級地区分1 == 2, 居住級地区分1 == 3],
-                         [1, 0.9, 0.8],
-                         1)
-        
-        加算額 = np.select([世帯人数 == 1, 世帯人数 > 1],
-                         [0, 210000 * 級地区分倍率],
-                         0)
-
-        return 世帯高所得 <= 350000 * 級地区分倍率 * 世帯人数 + 100000 + 加算額

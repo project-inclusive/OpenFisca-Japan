@@ -1,0 +1,7 @@
+description: 住民税における寡婦控除額
+metadata:
+  reference: https://www.town.hinode.tokyo.jp/0000000519.html
+  unit: currency-JPY
+values:
+  2020-01-01:
+    value: 260000
