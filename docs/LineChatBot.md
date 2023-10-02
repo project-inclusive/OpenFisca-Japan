@@ -8,7 +8,7 @@ Lineチャットボットは、メッセージングアプリ「LINE」上で動
 ラインチャットボットのシステム構成図は以下のようになっています。
 
 <p align="center">
-  <img src="https://github.com/You8006/OpenFisca-Japan/assets/126801078/b94802e8-8358-48d8-ac96-5f7ab0c26f68">
+  <img src="https://github.com/You8006/OpenFisca-Japan/assets/126801078/fe19317c-b1b4-4deb-acfb-19bc3ed2a6e9">
 
 </p>
 
