@@ -30,14 +30,3 @@ chat gptとは違い、テキストの検索・収集・整形を行うため、
 - [港区](https://www.city.minato.tokyo.jp/shisei/shiseikoho/sns/line.html)
 - [豊島区](https://www.city.toshima.lg.jp/340/shisei/shiseikoho/sns/line.html)
 
-  ## ラインチャットボットQ&Aについて
-
-  以下の情報をもとにラインチャットボットのQ&Aに対応しています。
-- [東京都国公立高等学校等奨学のための給付金事業のお知らせ](https://www.kyoiku.metro.tokyo.lg.jp/admission/tuition/tuition/scholarship_public_school.html)
-- [令和５年度 東京都私立高等学校等 奨学給付金](https://www.shigaku-tokyo.or.jp/pdf/parents/faq_s.pdf?2023)
-- [厚生労働省 生活保護制度に関するQ&A](https://www.mhlw.go.jp/content/001106332.pdf)
-- [練馬区 児童育成手当](https://www.city.nerima.tokyo.jp/kosodatekyoiku/kodomo/teateiryo/ikuseiteate.html)
-- [重度心身障害者手当（東京都の制度）](https://www.city.adachi.tokyo.jp/shogai/fukushi-kenko/shinshin/teate-judoshinshin.html)
-- [高等学校等就学支援金制度に関するQ＆A](https://www.mext.go.jp/a_menu/shotou/mushouka/1342600.htm)
-- [受験生チャレンジ支援制度](https://jukenchallenge.jp/qa)
-
