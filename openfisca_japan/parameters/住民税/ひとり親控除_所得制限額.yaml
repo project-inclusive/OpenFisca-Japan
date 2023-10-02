@@ -1,0 +1,7 @@
+description: 住民税におけるひとり親控除の所得制限額
+metadata:
+  reference: https://www.city.machida.tokyo.jp/kurashi/tax/shimin/kaiseiten/R3Kaisei/hitorioya.html
+  unit: currency-JPY
+values:
+  2020-01-01:
+    value: 5000000
