@@ -17,31 +17,44 @@ function Description() {
 
   useEffect(() => {
     function handleResize() {
-
       setScreenWidth(window.innerWidth);
 
-      if(screenWidth <= 800) {
-      setIsMobile(true);
+      if (screenWidth <= 800) {
+        setIsMobile(true);
       } else {
         setIsMobile(false);
       }
     }
-    window.addEventListener('resize', handleResize)
-  })
+    window.addEventListener("resize", handleResize);
+  });
 
   return (
     <>
       <Box bg="white" borderRadius="xl" p={4} m={4}>
-        {isMobile && <Image src={yadokariKunIcon} alt="yadokari kun icon" boxSize="3em" margin="auto"/>}
         <Center
           fontSize={configData.style.titleFontSize}
           fontWeight="semibold"
+          color="blue.800"
           mb="0.5em"
         >
           {configData.description.title}
-        {!isMobile && <Image src={yadokariKunIcon} alt="yadokari kun icon" boxSize="3em" ml="15px"/>}
+          {!isMobile && (
+            <Image
+              src={yadokariKunIcon}
+              alt="yadokari kun icon"
+              boxSize="3em"
+              ml="15px"
+            />
+          )}
         </Center>
-
+        {isMobile && (
+          <Image
+            src={yadokariKunIcon}
+            alt="yadokari kun icon"
+            boxSize="3em"
+            margin="auto"
+          />
+        )}
 
         <Center
           fontSize={configData.style.subTitleFontSize}
