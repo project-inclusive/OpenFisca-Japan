@@ -1,8 +1,8 @@
-import { useState, useCallback, useContext, useEffect } from "react";
-import { Select, FormControl, FormLabel } from "@chakra-ui/react";
+import { useState, useCallback, useContext, useEffect } from 'react';
+import { Select, FormControl, FormLabel } from '@chakra-ui/react';
 
-import { HouseholdContext } from "../../../contexts/HouseholdContext";
-import { CurrentDateContext } from "../../../contexts/CurrentDateContext";
+import { HouseholdContext } from '../../../contexts/HouseholdContext';
+import { CurrentDateContext } from '../../../contexts/CurrentDateContext';
 
 export const IntellectualDisability = ({
   personName,
@@ -14,16 +14,16 @@ export const IntellectualDisability = ({
 
   // ラベルとOpenFiscaの表記違いを明記
   const aiItems = [
-    ["", "無"],
-    ["1度", "一度"],
-    ["2度", "二度"],
-    ["3度", "三度"],
-    ["4度", "四度"],
+    ['', '無'],
+    ['1度', '一度'],
+    ['2度', '二度'],
+    ['3度', '三度'],
+    ['4度', '四度'],
   ];
   const ryoikuItems = [
-    ["", "無"],
-    ["A", "A"],
-    ["B", "B"],
+    ['', '無'],
+    ['A', 'A'],
+    ['B', 'B'],
   ];
   const [selectedAiItemIndex, setSelectedAiItemIndex] = useState(0);
   const [selectedRyoikuItemIndex, setSelectedRyoikuItemIndex] = useState(0);

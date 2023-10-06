@@ -1,14 +1,14 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-import configData from "../config/app_config.json";
+import configData from '../config/app_config.json';
 
 export const useCalculate = () => {
   const [result, setResult] = useState<any>();
   const apiURL =
-    import.meta.env.MODE === "production"
+    import.meta.env.MODE === 'production'
       ? // configData.URL.OpenFisca_API.production // mainブランチマージ時にビルドされるバックエンドAPI。Cloud Run
         configData.URL.OpenFisca_API.dev // developブランチプッシュ時にビルドされるバックエンドAPI。Cloud Run
-      : "http://localhost:50000";
+      : 'http://localhost:50000';
 
   // HTTPリクエストを必要最小限にするため、明示的に関数を呼び出した時のみ結果を更新
   const calculate = async (household: any) => {
@@ -18,9 +18,9 @@ export const useCalculate = () => {
     console.log(household); // debug log
 
     const newResultRes = await fetch(`${apiURL}/calculate`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(household),
     });
@@ -28,7 +28,7 @@ export const useCalculate = () => {
     // NOTE: エラーレスポンスを受け取った場合resultの生成ができないため、例外を出し終了
     if (!newResultRes.ok) {
       const errBody = await newResultRes.text();
-      const errMsg = `unexpected error response: status: ${newResultRes.status}, body: ${errBody}`
+      const errMsg = `unexpected error response: status: ${newResultRes.status}, body: ${errBody}`;
       console.log(errMsg); // debug log
       throw new Error(errMsg);
     }

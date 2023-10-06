@@ -1,8 +1,8 @@
-import { useState, useCallback, useContext, useEffect } from "react";
-import { Select, FormControl, FormLabel } from "@chakra-ui/react";
+import { useState, useCallback, useContext, useEffect } from 'react';
+import { Select, FormControl, FormLabel } from '@chakra-ui/react';
 
-import { HouseholdContext } from "../../../contexts/HouseholdContext";
-import { CurrentDateContext } from "../../../contexts/CurrentDateContext";
+import { HouseholdContext } from '../../../contexts/HouseholdContext';
+import { CurrentDateContext } from '../../../contexts/CurrentDateContext';
 
 export const RadiationDamage = ({ personName }: { personName: string }) => {
   const currentDate = useContext(CurrentDateContext);
@@ -10,9 +10,9 @@ export const RadiationDamage = ({ personName }: { personName: string }) => {
 
   // ラベルとOpenFiscaの表記違いを明記
   const items = [
-    ["", "無"],
-    ["現罹患者", "現罹患者"],
-    ["元罹患者", "元罹患者"],
+    ['', '無'],
+    ['現罹患者', '現罹患者'],
+    ['元罹患者', '元罹患者'],
   ];
   const [selectedItemIndex, setSelectedItemIndex] = useState(0);
 
@@ -21,8 +21,9 @@ export const RadiationDamage = ({ personName }: { personName: string }) => {
     (event: React.ChangeEvent<HTMLSelectElement>) => {
       setSelectedItemIndex(parseInt(event.currentTarget.value));
       const newHousehold = { ...household };
-      newHousehold.世帯員[personName].放射線障害 =
-        { [currentDate]: items[parseInt(event.currentTarget.value)][1] };
+      newHousehold.世帯員[personName].放射線障害 = {
+        [currentDate]: items[parseInt(event.currentTarget.value)][1],
+      };
       setHousehold({ ...newHousehold });
     },
     []
@@ -33,10 +34,8 @@ export const RadiationDamage = ({ personName }: { personName: string }) => {
   useEffect(() => {
     if (household.世帯員[personName].放射線障害) {
       items.map((item, index) => {
-        const {currentDate: value} = household.世帯員[personName].放射線障害;
-        if (
-          item[1] === value
-        ) {
+        const { currentDate: value } = household.世帯員[personName].放射線障害;
+        if (item[1] === value) {
           setSelectedItemIndex(index);
         }
       });

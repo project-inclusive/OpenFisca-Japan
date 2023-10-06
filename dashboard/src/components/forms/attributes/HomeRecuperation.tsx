@@ -1,8 +1,8 @@
-import { useState, useCallback, useContext } from "react";
-import { Checkbox } from "@chakra-ui/react";
+import { useState, useCallback, useContext } from 'react';
+import { Checkbox } from '@chakra-ui/react';
 
-import { HouseholdContext } from "../../../contexts/HouseholdContext";
-import { CurrentDateContext } from "../../../contexts/CurrentDateContext";
+import { HouseholdContext } from '../../../contexts/HouseholdContext';
+import { CurrentDateContext } from '../../../contexts/CurrentDateContext';
 
 export const HomeRecuperation = ({ personName }: { personName: string }) => {
   const currentDate = useContext(CurrentDateContext);
@@ -25,7 +25,12 @@ export const HomeRecuperation = ({ personName }: { personName: string }) => {
 
   return (
     <>
-      <Checkbox checked={isChecked} onChange={onChange} colorScheme="cyan" mb={2}>
+      <Checkbox
+        checked={isChecked}
+        onChange={onChange}
+        colorScheme="cyan"
+        mb={2}
+      >
         在宅療養中（結核、または治療に3か月以上かかるもの）
       </Checkbox>
       <br />

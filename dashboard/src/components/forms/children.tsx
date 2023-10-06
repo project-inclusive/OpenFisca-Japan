@@ -1,20 +1,20 @@
-import { useContext } from "react";
-import { useLocation } from "react-router-dom";
-import { Box, Center } from "@chakra-ui/react";
+import { useContext } from 'react';
+import { useLocation } from 'react-router-dom';
+import { Box, Center } from '@chakra-ui/react';
 
-import configData from "../../config/app_config.json";
-import { HouseholdContext } from "../../contexts/HouseholdContext";
-import { Birthday } from "./attributes/Birthday";
-import { Disability } from "./attributes/Disability";
-import { AgeInput } from "./attributes/AgeInput";
-import { Working } from "./attributes/Working";
-import { Recuperation } from "./attributes/Recuperation";
-import { NursingHome } from "./attributes/NursingHome";
-import { HighSchool } from "./attributes/HighSchool";
+import configData from '../../config/app_config.json';
+import { HouseholdContext } from '../../contexts/HouseholdContext';
+import { Birthday } from './attributes/Birthday';
+import { Disability } from './attributes/Disability';
+import { AgeInput } from './attributes/AgeInput';
+import { Working } from './attributes/Working';
+import { Recuperation } from './attributes/Recuperation';
+import { NursingHome } from './attributes/NursingHome';
+import { HighSchool } from './attributes/HighSchool';
 
 export const FormChildren = () => {
   const location = useLocation();
-  const isSimpleCalculation = location.pathname === "/calculate-simple";
+  const isSimpleCalculation = location.pathname === '/calculate-simple';
   const { household, setHousehold } = useContext(HouseholdContext);
 
   return (
