@@ -7,7 +7,8 @@
     "build": "tsc && vite build",
     "preview": "vite preview --port 30000 --host 0.0.0.0",
     "cy:open": "./node_modules/.bin/cypress open",
-    "cy:run": "./node_modules/.bin/cypress run"
+    "cy:run": "./node_modules/.bin/cypress run",
+    "pretty": "prettier --write --ignore-unknown ."
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.0.19",
