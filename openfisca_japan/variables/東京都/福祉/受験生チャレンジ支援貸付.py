@@ -3,7 +3,6 @@
 """
 
 from enum import Enum as OriginalEnum
-import math
 import numpy as np
 
 from openfisca_core.periods import DAY
@@ -41,7 +40,7 @@ class 受験生チャレンジ支援貸付(Variable):
             elif 子供の学年 == 高校生学年.三年生.value:
                 年間支給金額 += parameters(対象期間).東京都.福祉.受験生チャレンジ支援貸付.大学受験料
 
-        return 月間支給金額へ変換(年間支給金額)
+        return 年間支給金額
 
 class 塾に通っている(Variable):
     value_type = bool
@@ -99,6 +98,3 @@ def 受給可能である(対象世帯, 対象期間):
         )
 
     return 受給可能
-
-def 月間支給金額へ変換(年間支給金額):
-    return math.floor(年間支給金額 / 12)
