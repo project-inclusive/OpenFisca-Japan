@@ -65,7 +65,7 @@ def 受給可能である(対象世帯, 対象期間):
     if 居住都道府県 != "東京都":
         return False
 
-    預貯金 = np.sum(対象世帯.members("預貯金", 対象期間))
+    預貯金 = 対象世帯.sum(対象世帯.members("預貯金", 対象期間))
     if 預貯金 > 6000000:
         return False
 
