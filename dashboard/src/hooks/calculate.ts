@@ -6,9 +6,9 @@ export const useCalculate = () => {
   const [result, setResult] = useState<any>();
   const apiURL =
     import.meta.env.MODE === 'production'
-      ? // configData.URL.OpenFisca_API.production // mainブランチマージ時にビルドされるバックエンドAPI。Cloud Run
-        configData.URL.OpenFisca_API.dev // developブランチプッシュ時にビルドされるバックエンドAPI。Cloud Run
-      : 'http://localhost:50000';
+      ? configData.URL.OpenFisca_API.production // mainブランチマージ時にビルドされるバックエンドAPI。Cloud Run
+      : //  configData.URL.OpenFisca_API.dev // developブランチプッシュ時にビルドされるバックエンドAPI。Cloud Run
+        'http://localhost:50000';
 
   // HTTPリクエストを必要最小限にするため、明示的に関数を呼び出した時のみ結果を更新
   const calculate = async (household: any) => {

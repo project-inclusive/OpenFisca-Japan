@@ -181,7 +181,7 @@ sudo apt install xdg-utils
 ### フロントエンド
 - Netlifyでmainブランチ、developブランチにpull (push)時にbuild, deployされる。
 
-- developブランチのデプロイURLは[https://develop--myseido-simulator.netlify.app/](https://develop--myseido-simulator.netlify.app/)
+- developブランチのデプロイURLは[https://develop--shien-yadokari.netlify.app/](https://develop--shien-yadokari.netlify.app/)
 
 
 
