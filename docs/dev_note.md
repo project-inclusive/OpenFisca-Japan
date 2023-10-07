@@ -164,6 +164,10 @@ sudo apt install xdg-utils
 
 ## デプロイ方法
 
+### デプロイ前の確認
+- `dashboard/src/hooks/calculate.ts`の`apiURL`変更
+- docs/change_log.mdの更新
+
 ### バックエンド（OpenFisca Python APIサーバー）
 
 #### 自動build, deploy
