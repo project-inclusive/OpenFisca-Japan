@@ -18,9 +18,6 @@ class 受験生チャレンジ支援貸付(Variable):
     reference = "https://www.fukushi.metro.tokyo.lg.jp/seikatsu/teisyotokusyataisaku/jukenseichallenge.html"
 
     def formula(対象世帯, 対象期間, parameters):
-        if not 受給可能である(対象世帯, 対象期間):
-            return 0
-
         子供である = 対象世帯.has_role(世帯.子)
         子供の学年一覧 = 対象世帯.members("学年", 対象期間)[子供である]
         子供が塾に通っているか一覧 = 対象世帯.members("塾に通っている", 対象期間)[子供である]
@@ -40,7 +37,8 @@ class 受験生チャレンジ支援貸付(Variable):
             elif 子供の学年 == 高校生学年.三年生.value:
                 年間支給金額 += parameters(対象期間).東京都.福祉.受験生チャレンジ支援貸付.大学受験料
 
-        return 年間支給金額
+        受験生チャレンジ支援貸付可能 = 対象世帯("受験生チャレンジ支援貸付可能", 対象期間)
+        return 年間支給金額 * 受験生チャレンジ支援貸付可能
 
 class 塾に通っている(Variable):
     value_type = bool
@@ -60,41 +58,48 @@ class 高校生学年(OriginalEnum):
     二年生 = 11
     三年生 = 12
 
-def 受給可能である(対象世帯, 対象期間):
-    居住都道府県 = 対象世帯("居住都道府県", 対象期間)
-    if 居住都道府県 != "東京都":
-        return False
+class 受験生チャレンジ支援貸付可能(Variable):
+    value_type = int
+    default_value = 0
+    entity = 世帯
+    definition_period = DAY
+    label = "受験生チャレンジ支援貸付可能"
+    reference = "https://www.fukushi.metro.tokyo.lg.jp/seikatsu/teisyotokusyataisaku/jukenseichallenge.html"
 
-    預貯金 = 対象世帯.sum(対象世帯.members("預貯金", 対象期間))
-    if 預貯金 > 6000000:
-        return False
+    def formula(対象世帯, 対象期間, parameters):
+        居住都道府県 = 対象世帯("居住都道府県", 対象期間)
+        if 居住都道府県 != "東京都":
+            return 0
 
-    ひとり親である = 対象世帯("ひとり親", 対象期間)
-    世帯所得 = 対象世帯("世帯所得", 対象期間)
-    世帯人数 = 対象世帯("世帯人数", 対象期間)
+        預貯金 = 対象世帯.sum(対象世帯.members("預貯金", 対象期間))
+        if 預貯金 > 6000000:
+            return 0
 
-    受給可能 = False
-    if ひとり親である:
-        受給可能 = np.select(
-            [
-                世帯人数 == 2 and 世帯所得 <= 2805000, 
-                世帯人数 == 3 and 世帯所得 <= 3532000, 
-                世帯人数 == 4 and 世帯所得 <= 4175000, 
-                世帯人数 == 5 and 世帯所得 <= 4674000
-            ],
-            [True, True, True, True],
-            False
-        )
-    else:
-        受給可能 = np.select(
-            [
-                世帯人数 == 3 and 世帯所得 <= 3087000, 
-                世帯人数 == 4 and 世帯所得 <= 3599000, 
-                世帯人数 == 5 and 世帯所得 <= 4149000, 
-                世帯人数 == 6 and 世帯所得 <= 4776000
-            ],
-            [True, True, True, True],
-            False
-        )
+        ひとり親である = 対象世帯("ひとり親", 対象期間)
+        世帯所得 = 対象世帯("世帯所得", 対象期間)
+        世帯人数 = 対象世帯("世帯人数", 対象期間)
 
-    return 受給可能
+        受給可能 = 0
+        if ひとり親である:
+            受給可能 = np.select(
+                [
+                    世帯人数 == 2 and 世帯所得 <= 2805000, 
+                    世帯人数 == 3 and 世帯所得 <= 3532000, 
+                    世帯人数 == 4 and 世帯所得 <= 4175000, 
+                    世帯人数 == 5 and 世帯所得 <= 4674000
+                ],
+                [1, 1, 1, 1],
+                0
+            )
+        else:
+            受給可能 = np.select(
+                [
+                    世帯人数 == 3 and 世帯所得 <= 3087000, 
+                    世帯人数 == 4 and 世帯所得 <= 3599000, 
+                    世帯人数 == 5 and 世帯所得 <= 4149000, 
+                    世帯人数 == 6 and 世帯所得 <= 4776000
+                ],
+                [1, 1, 1, 1],
+                0
+            )
+        return 受給可能
