@@ -333,24 +333,18 @@ export const Result = () => {
             </Button>
           </Center>
 
-          <Box
-            bg="white"
-            borderRadius="xl"
-            display={isDisplayChat}
-            p={4}
-            mb={4}
-            ml={4}
-            mr={4}
-          >
+          <Box display={isDisplayChat}>
             <Center pr={4} pl={4} pt={4} pb={4}>
               {configData.result.chatbotDescription[0]}
             </Center>
-            <iframe
-              src={configData.URL.chatbot}
-              width="100%"
-              height="400px"
-              onLoad={() => displayChat()}
-            ></iframe>
+            <Box bg="white" borderRadius="xl" p={4} mb={4} ml={4} mr={4}>
+              <iframe
+                src={configData.URL.chatbot}
+                width="100%"
+                height="400px"
+                onLoad={() => displayChat()}
+              ></iframe>
+            </Box>
           </Box>
 
           <Center pr={4} pl={4} pb={4}>
