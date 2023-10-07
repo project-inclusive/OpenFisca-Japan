@@ -164,9 +164,12 @@ sudo apt install xdg-utils
 
 ## デプロイ方法
 
-### デプロイ前の確認
-- `dashboard/src/hooks/calculate.ts`の`apiURL`変更
+### mainブランチマージ前の作業
+- `dashboard/src/hooks/calculate.ts`の`apiURL`を`configData.URL.OpenFisca_API.production`に変更
 - docs/change_log.mdの更新
+
+### mainブランチマージ後に初めてdevelopブランチプッシュするときの作業
+- `dashboard/src/hooks/calculate.ts`の`apiURL`を`configData.URL.OpenFisca_API.dev`に変更
 
 ### バックエンド（OpenFisca Python APIサーバー）
 
