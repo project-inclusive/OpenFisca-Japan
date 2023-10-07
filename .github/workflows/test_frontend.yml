@@ -12,6 +12,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
+      - name: Install packages
+        run: npm ci
+      - name: Prettier
+        run: npm run pretty:check
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:

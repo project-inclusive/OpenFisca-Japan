@@ -54,7 +54,7 @@
       # docker環境を構築
       docker build ./ -t openfisca_japan_dashboard
       # docker環境を起動
-      docker run -it --rm -p 30000:30000 -v "$(pwd)/src:/app/src" -u user openfisca_japan_dashboard
+      docker run -it --rm -p 30000:30000 -v "$(pwd)/src:/app/src" openfisca_japan_dashboard
       # docker環境を終了
       exit
       # 元のディレクトリに戻る
