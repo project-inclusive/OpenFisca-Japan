@@ -1,7 +1,8 @@
-import { useState, useCallback, useContext, useEffect } from "react";
-import { Select, FormControl, FormLabel } from "@chakra-ui/react";
+import { useState, useCallback, useContext, useEffect } from 'react';
+import { Select, FormControl, FormLabel } from '@chakra-ui/react';
 
-import { HouseholdContext } from "../../../contexts/HouseholdContext";
+import { HouseholdContext } from '../../../contexts/HouseholdContext';
+import { CurrentDateContext } from '../../../contexts/CurrentDateContext';
 
 export const IntellectualDisability = ({
   personName,
@@ -9,19 +10,20 @@ export const IntellectualDisability = ({
   personName: string;
 }) => {
   const { household, setHousehold } = useContext(HouseholdContext);
+  const currentDate = useContext(CurrentDateContext);
 
   // ラベルとOpenFiscaの表記違いを明記
   const aiItems = [
-    ["", "無"],
-    ["1度", "一度"],
-    ["2度", "二度"],
-    ["3度", "三度"],
-    ["4度", "四度"],
+    ['', '無'],
+    ['1度', '一度'],
+    ['2度', '二度'],
+    ['3度', '三度'],
+    ['4度', '四度'],
   ];
   const ryoikuItems = [
-    ["", "無"],
-    ["A", "A"],
-    ["B", "B"],
+    ['', '無'],
+    ['A', 'A'],
+    ['B', 'B'],
   ];
   const [selectedAiItemIndex, setSelectedAiItemIndex] = useState(0);
   const [selectedRyoikuItemIndex, setSelectedRyoikuItemIndex] = useState(0);
@@ -31,8 +33,9 @@ export const IntellectualDisability = ({
     (event: React.ChangeEvent<HTMLSelectElement>) => {
       setSelectedAiItemIndex(parseInt(event.currentTarget.value));
       const newHousehold = { ...household };
-      newHousehold.世帯員[personName].愛の手帳等級.ETERNITY =
-        aiItems[parseInt(event.currentTarget.value)][1];
+      newHousehold.世帯員[personName].愛の手帳等級 = {
+        [currentDate]: aiItems[parseInt(event.currentTarget.value)][1],
+      };
       setHousehold({ ...newHousehold });
     },
     []
@@ -42,8 +45,9 @@ export const IntellectualDisability = ({
     (event: React.ChangeEvent<HTMLSelectElement>) => {
       setSelectedRyoikuItemIndex(parseInt(event.currentTarget.value));
       const newHousehold = { ...household };
-      newHousehold.世帯員[personName].療育手帳等級.ETERNITY =
-        ryoikuItems[parseInt(event.currentTarget.value)][1];
+      newHousehold.世帯員[personName].療育手帳等級 = {
+        [currentDate]: ryoikuItems[parseInt(event.currentTarget.value)][1],
+      };
       setHousehold({ ...newHousehold });
     },
     []
@@ -54,7 +58,9 @@ export const IntellectualDisability = ({
   useEffect(() => {
     if (household.世帯員[personName].愛の手帳等級) {
       aiItems.map((item, index) => {
-        if (item[1] === household.世帯員[personName].愛の手帳等級.ETERNITY) {
+        if (
+          item[1] === household.世帯員[personName].愛の手帳等級[currentDate]
+        ) {
           setSelectedAiItemIndex(index);
         }
       });
@@ -64,7 +70,9 @@ export const IntellectualDisability = ({
   useEffect(() => {
     if (household.世帯員[personName].療育手帳等級) {
       ryoikuItems.map((item, index) => {
-        if (item[1] === household.世帯員[personName].療育手帳等級.ETERNITY) {
+        if (
+          item[1] === household.世帯員[personName].療育手帳等級[currentDate]
+        ) {
           setSelectedRyoikuItemIndex(index);
         }
       });

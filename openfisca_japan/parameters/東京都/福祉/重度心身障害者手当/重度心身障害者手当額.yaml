@@ -1,0 +1,9 @@
+description: 重度心身障害者手当の金額
+metadata:
+  reference: https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/juudo.html
+  unit: currency-JPY
+values:
+  2000-05-01:
+    value: 60000
+    metadata:
+      reference: https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/juudo.html

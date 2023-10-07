@@ -1,57 +1,38 @@
-import { useContext, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { Tag, Center, Button } from "@chakra-ui/react";
+import { useContext, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Center, Button } from '@chakra-ui/react';
 
-import configData from "../../config/app_config.json";
-import { useCalculate } from "../../hooks/calculate";
-import { FormYou } from "./you";
-import { FormSpouse } from "./spouse";
-import { FormChildren } from "./children";
-import { useValidate } from "../../hooks/validate";
-import { ShowAlertMessageContext } from "../../contexts/ShowAlertMessageContext";
-import { useNavigate } from "react-router-dom";
-import { CurrentDateContext } from "../../contexts/CurrentDateContext";
-import { FormParents } from "./parents";
+import configData from '../../config/app_config.json';
+import { ShowAlertMessageContext } from '../../contexts/ShowAlertMessageContext';
+import { HouseholdContext } from '../../contexts/HouseholdContext';
+import { useValidate } from '../../hooks/validate';
+import { FormYou } from './you';
+import { FormSpouse } from './spouse';
+import { FormChildren } from './children';
+import { FormParents } from './parents';
 import { CalculationLabel } from './calculationLabel';
 
 export const FormContent = () => {
-  
   const location = useLocation();
-  const isSimpleCalculation = location.pathname === "/calculate-simple";
+  const isSimpleCalculation = location.pathname === '/calculate-simple';
 
-  const [result, calculate] = useCalculate();
   const [ShowAlertMessage, setShowAlertMessage] = useState(false);
-  const [showResult, setShowResult] = useState(false);
-  const [loading, setLoading] = useState(false);
   const validated = useValidate();
   const navigate = useNavigate();
-  const currentDate = useContext(CurrentDateContext);
-
-  useEffect(() => {
-    if (showResult && result) {
-      // HACK: レスポンスを受け取ってからページ遷移（クリック時点で遷移するとresultの更新が反映されない）
-      navigate("/result", {
-        state: {
-          result: result,
-          currentDate: currentDate,
-          isSimpleCalculation: isSimpleCalculation,
-        },
-      });
-    }
-  }, [result]);
+  const { household, setHousehold } = useContext(HouseholdContext);
 
   return (
     <ShowAlertMessageContext.Provider value={ShowAlertMessage}>
       <div>
-        <CalculationLabel 
-        text={isSimpleCalculation ? 
-          configData.calculationForm.simpleCalculation 
-          :
-          configData.calculationForm.detailedCalculation
-        } 
-        colour={isSimpleCalculation ? "teal" : "blue"} 
+        <CalculationLabel
+          text={
+            isSimpleCalculation
+              ? configData.calculationForm.simpleCalculation
+              : configData.calculationForm.detailedCalculation
+          }
+          colour={isSimpleCalculation ? 'teal' : 'blue'}
         />
-        
+
         <Center
           fontSize={configData.style.subTitleFontSize}
           fontWeight="medium"
@@ -70,7 +51,6 @@ export const FormContent = () => {
 
         <Center pr={4} pl={4} pb={4}>
           <Button
-            isLoading={loading}
             loadingText="計算する"
             fontSize={configData.style.subTitleFontSize}
             borderRadius="xl"
@@ -78,7 +58,7 @@ export const FormContent = () => {
             width="100%"
             bg="cyan.600"
             color="white"
-            _hover={{ bg: "cyan.700" }}
+            _hover={{ bg: 'cyan.700' }}
             onClick={() => {
               // 必須項目が入力されていない場合、結果は表示されずトップへ戻る
               if (!validated) {
@@ -86,9 +66,12 @@ export const FormContent = () => {
                 scrollTo(0, 0);
                 return;
               }
-              setLoading(true);
-              calculate();
-              setShowResult(true);
+              navigate('/result', {
+                state: {
+                  household: household,
+                  isSimpleCalculation: isSimpleCalculation,
+                },
+              });
             }}
           >
             計算する

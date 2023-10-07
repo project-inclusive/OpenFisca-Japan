@@ -6,7 +6,7 @@ import numpy as np
 from openfisca_core.periods import MONTH, DAY
 from openfisca_core.variables import Variable
 from openfisca_japan.entities import 世帯
-from openfisca_japan.variables.障害.身体障害者手帳 import 身体障害者手帳等級認定パターン
+from openfisca_japan.variables.障害.身体障害者手帳 import 身体障害者手帳等級パターン
 from openfisca_japan.variables.障害.療育手帳 import 療育手帳等級パターン
 from openfisca_japan.variables.障害.愛の手帳 import 愛の手帳等級パターン
 
@@ -21,6 +21,9 @@ class 障害児福祉手当(Variable):
     障害児童福祉手当
     """
 
+    # TODO: 重度心身障害者手当所得制限と同じ控除を適用する
+    # https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/jidou.html
+
     def formula(対象世帯, 対象期間, parameters):
         障害児福祉手当 = parameters(対象期間).福祉.育児.障害児福祉手当
 
@@ -34,8 +37,8 @@ class 障害児福祉手当(Variable):
         上限年齢未満 = 年齢 < 障害児福祉手当.上限年齢
 
         対象障害者手帳等級 = \
-            (身体障害者手帳等級一覧 == 身体障害者手帳等級認定パターン.一級) + \
-                (身体障害者手帳等級一覧 == 身体障害者手帳等級認定パターン.二級) + \
+            (身体障害者手帳等級一覧 == 身体障害者手帳等級パターン.一級) + \
+                (身体障害者手帳等級一覧 == 身体障害者手帳等級パターン.二級) + \
                     (療育手帳等級一覧 == 療育手帳等級パターン.A) + \
                         (療育手帳等級一覧 == 療育手帳等級パターン.B) + \
                             (愛の手帳等級一覧 == 愛の手帳等級パターン.一度) + \

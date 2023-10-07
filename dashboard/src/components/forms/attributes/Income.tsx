@@ -1,9 +1,9 @@
-import { KeyboardEvent, useCallback, useContext, useState } from "react";
-import { Box, HStack, Input, FormControl, FormLabel } from "@chakra-ui/react";
+import { KeyboardEvent, useCallback, useContext, useState } from 'react';
+import { Box, HStack, Input, FormControl, FormLabel } from '@chakra-ui/react';
 
-import { CurrentDateContext } from "../../../contexts/CurrentDateContext";
-import { HouseholdContext } from "../../../contexts/HouseholdContext";
-import { ErrorMessage } from "./validation/ErrorMessage";
+import { CurrentDateContext } from '../../../contexts/CurrentDateContext';
+import { HouseholdContext } from '../../../contexts/HouseholdContext';
+import { ErrorMessage } from './validation/ErrorMessage';
 
 export const Income = ({
   personName,
@@ -15,7 +15,7 @@ export const Income = ({
   const currentDate = useContext(CurrentDateContext);
   const { household, setHousehold } = useContext(HouseholdContext);
 
-  const [shownIncome, setShownIncome] = useState<string | number>("");
+  const [shownIncome, setShownIncome] = useState<string | number>('');
 
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const newHousehold = {
@@ -27,38 +27,25 @@ export const Income = ({
     // 正の整数以外は0に変換
     if (isNaN(income) || income < 0) {
       income = 0;
-      setShownIncome("");
+      setShownIncome('');
     } else {
       setShownIncome(income / 10000);
     }
 
-    newHousehold.世帯員[personName].収入[currentDate] = income;
+    newHousehold.世帯員[personName].収入 = { [currentDate]: income };
     setHousehold(newHousehold);
   }, []);
 
   const onKeyDown = (e: KeyboardEvent<HTMLElement>) => {
     // 入力確定した際にページ遷移しないようにする
-    if (e.key == "Enter") {
+    if (e.key == 'Enter') {
       e.preventDefault();
     }
   };
 
   return (
-    /*
-    <div className="input-group input-group-lg mb-3">
-      <span className="input-group-text">年収</span>
-      <input
-        name="年収"
-        className="form-control"
-        type="number"
-        value={shownIncome}
-        onChange={onChange}
-      />
-      <span className="input-group-text">万円</span>
-    </div>
-    */
     <>
-      {mustInput && <ErrorMessage condition={shownIncome === ""} />}
+      {mustInput && <ErrorMessage condition={shownIncome === ''} />}
       <FormControl>
         <FormLabel fontWeight="Regular">
           <HStack>
@@ -73,6 +60,7 @@ export const Income = ({
 
         <HStack mb={4}>
           <Input
+            data-testid="income-input"
             type="number"
             value={shownIncome}
             onChange={onChange}

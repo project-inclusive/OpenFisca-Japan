@@ -13,8 +13,9 @@ from datetime import date
 # Import from numpy the operations you need to apply on OpenFisca's population vectors
 # Import from openfisca-core the Python objects used to code the legislation in OpenFisca
 from numpy import where
+import numpy as np
 from openfisca_core.indexed_enums import Enum
-from openfisca_core.periods import DAY, ETERNITY, MONTH
+from openfisca_core.periods import DAY, ETERNITY
 from openfisca_core.variables import Variable
 # Import the Entities specifically defined for this tax and benefit system
 from openfisca_japan.entities import 人物, 世帯
@@ -30,17 +31,9 @@ class 誕生年月日(Variable):
     reference = "https://en.wiktionary.org/wiki/birthdate"
 
 
-class 死亡年月日(Variable):
-    value_type = date
-    entity = 人物
-    label = "人物の死亡年月日"
-    definition_period = ETERNITY  # This variable cannot change over time.
-
-
 class 年齢(Variable):
     value_type = int
     entity = 人物
-    #definition_period = DAY
     definition_period = DAY
     label = "人物の年齢"
 
@@ -52,7 +45,10 @@ class 年齢(Variable):
 
         誕生日を過ぎている = (誕生月 < 対象期間.start.month) + (誕生月 == 対象期間.start.month) * (誕生日 <= 対象期間.start.day)
 
-        return (対象期間.start.year - 誕生年) - where(誕生日を過ぎている, 0, 1)  # If the birthday is not passed this year, subtract one year
+        年齢 = (対象期間.start.year - 誕生年) - where(誕生日を過ぎている, 0, 1)  # If the birthday is not passed this year, subtract one year
+        
+        # NOTE: 誕生日が未来であった場合便宜上0歳として扱う(誤った情報が指定された場合でもOpenFiscaがクラッシュするのを防ぐため)
+        return np.clip(年齢, 0, None)
 
 
 # 小学n年生はn, 中学m年生はm+6, 高校l年生はl+9, 
@@ -110,24 +106,3 @@ class 世帯人数(Variable):
         return len(対象世帯.members("年齢", 対象期間))
 
 
-class 行方不明年月日(Variable):
-    value_type = bool
-    entity = 人物
-    definition_period = DAY
-    label = "行方不明になった年月日"
-
-
-class 生存状況パターン(Enum):
-    __order__ = "生存 死亡 不明"
-    生存 = "生存"
-    死亡 = "死亡"
-    不明 = "不明"
-
-
-class 生存状況(Variable):
-    value_type = Enum
-    possible_values = 生存状況パターン
-    default_value = 生存状況パターン.生存
-    entity = 人物
-    definition_period = DAY
-    label = "人物の生存状況"

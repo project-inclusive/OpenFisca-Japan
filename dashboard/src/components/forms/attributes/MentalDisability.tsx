@@ -1,17 +1,19 @@
-import { useState, useCallback, useContext, useEffect } from "react";
-import { Select, FormControl, FormLabel } from "@chakra-ui/react";
+import { useState, useCallback, useContext, useEffect } from 'react';
+import { Select, FormControl, FormLabel } from '@chakra-ui/react';
 
-import { HouseholdContext } from "../../../contexts/HouseholdContext";
+import { HouseholdContext } from '../../../contexts/HouseholdContext';
+import { CurrentDateContext } from '../../../contexts/CurrentDateContext';
 
 export const MentalDisability = ({ personName }: { personName: string }) => {
   const { household, setHousehold } = useContext(HouseholdContext);
+  const currentDate = useContext(CurrentDateContext);
 
   // ラベルとOpenFiscaの表記違いを明記(pythonは数字を頭にした変数名をつけられない)
   const items = [
-    ["", "無"],
-    ["1級", "一級"],
-    ["2級", "二級"],
-    ["3級", "三級"],
+    ['', '無'],
+    ['1級', '一級'],
+    ['2級', '二級'],
+    ['3級', '三級'],
   ];
   const [selectedItemIndex, setSelectedItemIndex] = useState(0);
 
@@ -20,8 +22,9 @@ export const MentalDisability = ({ personName }: { personName: string }) => {
     (event: React.ChangeEvent<HTMLSelectElement>) => {
       setSelectedItemIndex(parseInt(event.currentTarget.value));
       const newHousehold = { ...household };
-      newHousehold.世帯員[personName].精神障害者保健福祉手帳等級.ETERNITY =
-        items[parseInt(event.currentTarget.value)][1];
+      newHousehold.世帯員[personName].精神障害者保健福祉手帳等級 = {
+        [currentDate]: items[parseInt(event.currentTarget.value)][1],
+      };
       setHousehold({ ...newHousehold });
     },
     []
@@ -34,7 +37,7 @@ export const MentalDisability = ({ personName }: { personName: string }) => {
       items.map((item, index) => {
         if (
           item[1] ===
-          household.世帯員[personName].精神障害者保健福祉手帳等級.ETERNITY
+          household.世帯員[personName].精神障害者保健福祉手帳等級[currentDate]
         ) {
           setSelectedItemIndex(index);
         }

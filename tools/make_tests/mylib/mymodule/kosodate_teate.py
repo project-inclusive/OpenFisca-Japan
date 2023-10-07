@@ -48,12 +48,18 @@ class Process(ProcessBase):
 
         if self.titles.get("控除後世帯高所得") and row[self.titles[f'控除後世帯高所得']]:
             income = int(row[self.titles[f'控除後世帯高所得']].replace(',', ''))
-            if allowance == '児童手当' or allowance == '障害児福祉手当' or allowance == '特別児童扶養手当':
+            if allowance == '児童手当' or allowance == '障害児福祉手当':
                 d_input['世帯']["控除後世帯高所得"] = {self.period: income}
             elif allowance == '児童扶養手当':
                 d_input['世帯']["児童扶養手当の控除後世帯高所得"] = {self.period: income}
+            elif allowance == '特別児童扶養手当' or allowance == '児童育成手当' or allowance == '障害児童育成手当':
+                d_input['世帯']["特別児童扶養手当の控除後世帯高所得"] = {self.period: income}
             else:
                 d_input['世帯']["世帯高所得"] = {self.period: income}
+
+        # 東京都のみの制度
+        if allowance == '児童育成手当' or allowance == '障害児童育成手当':
+            d_input['世帯']['居住都道府県'] = {self.period: '東京都'}
 
         # 世帯員の属性
         for p in people:
@@ -72,23 +78,21 @@ class Process(ProcessBase):
             if row[self.titles[f'{p}_身体障害者手帳等級']]:
                 disability = row[self.titles[f'{p}_身体障害者手帳等級']]
                 if disability == '0':
-                    p_dict['身体障害者手帳等級認定'] = '無'
+                    p_dict['身体障害者手帳等級'] = '無'
                 elif disability == '1':
-                    p_dict['身体障害者手帳等級認定'] = '一級'
+                    p_dict['身体障害者手帳等級'] = '一級'
                 elif disability == '2':
-                    p_dict['身体障害者手帳等級認定'] = '二級'
+                    p_dict['身体障害者手帳等級'] = '二級'
                 elif disability == '3':
-                    p_dict['身体障害者手帳等級認定'] = '三級'
+                    p_dict['身体障害者手帳等級'] = '三級'
                 elif disability == '4':
-                    p_dict['身体障害者手帳等級認定'] = '四級'
+                    p_dict['身体障害者手帳等級'] = '四級'
                 elif disability == '5':
-                    p_dict['身体障害者手帳等級認定'] = '五級'
+                    p_dict['身体障害者手帳等級'] = '五級'
                 elif disability == '6':
-                    p_dict['身体障害者手帳等級認定'] = '六級'
+                    p_dict['身体障害者手帳等級'] = '六級'
                 elif disability == '7':
-                    p_dict['身体障害者手帳等級認定'] = '七級'
-
-                p_dict['身体障害者手帳交付年月日'] = self.period
+                    p_dict['身体障害者手帳等級'] = '七級'
 
             if row[self.titles[f'{p}_療育手帳等級']]:
                 disability = row[self.titles[f'{p}_療育手帳等級']]

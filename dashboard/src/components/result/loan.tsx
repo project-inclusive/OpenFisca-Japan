@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import {
   Box,
   Center,
@@ -7,9 +7,9 @@ import {
   AccordionIcon,
   AccordionButton,
   AccordionPanel,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 
-import configData from "../../config/app_config.json";
+import configData from '../../config/app_config.json';
 
 export const Loan = ({
   result,
@@ -89,7 +89,7 @@ export const Loan = ({
                         {val.name}
                       </Box>
                       <Box flex="1" textAlign="right">
-                        {/* １万円単位で表示 */}~{val.displayedMoney / 10_000}{" "}
+                        {/* １万円単位で表示 */}~{val.displayedMoney / 10_000}{' '}
                         万{val.unit}
                       </Box>
                     </AccordionButton>

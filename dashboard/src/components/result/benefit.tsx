@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import {
   Box,
   Center,
@@ -7,9 +7,9 @@ import {
   AccordionIcon,
   AccordionButton,
   AccordionPanel,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 
-import configData from "../../config/app_config.json";
+import configData from '../../config/app_config.json';
 
 export const Benefit = ({
   result,
@@ -18,7 +18,7 @@ export const Benefit = ({
   result: any;
   currentDate: string;
 }) => {
-  const [totalAllowance, setTotalAllowance] = useState<string>("0");
+  const [totalAllowance, setTotalAllowance] = useState<string>('0');
   const [displayedResult, setDisplayedResult] = useState<any>();
 
   interface Obj {
@@ -60,16 +60,23 @@ export const Benefit = ({
       let totalAllowanceMax = 0;
       let totalAllowanceMin = 0;
       for (const [key, value] of Object.entries(minMaxResult)) {
-        totalAllowanceMax += value.max;
-        totalAllowanceMin += value.min;
+        // 表示を整えるため整数に変換
+        const min = Math.floor(Number(value.min));
+        const max = Math.floor(Number(value.max));
+
+        totalAllowanceMax += max;
+        totalAllowanceMin += min;
+
+        // 後で金額順にソートするため、最大額を格納
+        minMaxResult[key].maxMoney = max;
 
         if (value.max === value.min) {
-          minMaxResult[key].displayedMoney = Number(value.max).toLocaleString();
+          minMaxResult[key].displayedMoney = max.toLocaleString();
         } else {
           // 最小額と最大額が異なる場合は「（最小額）〜（最大額）」の文字列を格納
-          minMaxResult[key].displayedMoney = `${Number(
-            value.min
-          ).toLocaleString()}~${Number(value.max).toLocaleString()}`;
+          minMaxResult[
+            key
+          ].displayedMoney = `${min.toLocaleString()}~${max.toLocaleString()}`;
         }
       }
 
@@ -82,7 +89,11 @@ export const Benefit = ({
         );
       }
 
-      setDisplayedResult(minMaxResult);
+      // 表示のため最大額が小さい順にソート
+      const sortedMinMaxResult = Object.values(minMaxResult).sort(
+        (a: any, b: any) => a.maxMoney - b.maxMoney
+      );
+      setDisplayedResult(sortedMinMaxResult);
     }
   }, [result]);
 
@@ -105,7 +116,7 @@ export const Benefit = ({
               <AccordionButton
                 bg="yellow.100"
                 fontWeight="semibold"
-                _hover={{ bg: "yellow.100" }}
+                _hover={{ bg: 'yellow.100' }}
               >
                 <Box flex="1" textAlign="left">
                   合計
@@ -118,7 +129,7 @@ export const Benefit = ({
           </AccordionItem>
 
           {displayedResult &&
-            Object.values(displayedResult).map((val: any, index) => (
+            displayedResult.map((val: any, index: any) => (
               <AccordionItem key={index}>
                 <h2>
                   <AccordionButton>
@@ -132,8 +143,12 @@ export const Benefit = ({
                   </AccordionButton>
                 </h2>
                 <AccordionPanel pb={4}>
-                  {val.caption[0]}
-                  <br></br>
+                  {val.caption.map((line: string, index: any) => (
+                    <span key={index}>
+                      {line}
+                      <br />
+                    </span>
+                  ))}
                   <Box color="blue">
                     <a href={val.reference}>詳細リンク</a>
                   </Box>

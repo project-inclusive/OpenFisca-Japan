@@ -1,7 +1,7 @@
-import { useContext } from "react";
-import { Box, Center, Checkbox } from "@chakra-ui/react";
+import { useContext } from 'react';
+import { Box, Center, Checkbox } from '@chakra-ui/react';
 
-import { ShowAlertMessageContext } from "../../../../contexts/ShowAlertMessageContext";
+import { ShowAlertMessageContext } from '../../../../contexts/ShowAlertMessageContext';
 
 export const ErrorMessage = ({ condition }: { condition: boolean }) => {
   const showAlertMessage = useContext(ShowAlertMessageContext);
@@ -16,7 +16,7 @@ export const ErrorMessage = ({ condition }: { condition: boolean }) => {
       <span className="invalid"></span>
       {showAlertMessage && (
         <Center
-          style={showAlertMessage ? {} : { display: "none" }}
+          style={showAlertMessage ? {} : { display: 'none' }}
           bg="red.100"
           color="red.800"
           border="1px"

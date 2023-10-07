@@ -1,9 +1,9 @@
-import { useState, useCallback, useContext, useMemo, useEffect } from "react";
-import { Box, Select, HStack, FormControl, FormLabel } from "@chakra-ui/react";
+import { useState, useCallback, useContext, useMemo, useEffect } from 'react';
+import { Box, Select, HStack, FormControl, FormLabel } from '@chakra-ui/react';
 
-import configData from "../../../config/app_config.json";
-import { HouseholdContext } from "../../../contexts/HouseholdContext";
-import { ErrorMessage } from "./validation/ErrorMessage";
+import configData from '../../../config/app_config.json';
+import { HouseholdContext } from '../../../contexts/HouseholdContext';
+import { ErrorMessage } from './validation/ErrorMessage';
 
 export const Birthday = ({
   personName,
@@ -60,7 +60,7 @@ export const Birthday = ({
   useEffect(() => {
     let birthday;
     if (isNaN(selectedYear) || isNaN(selectedMonth) || isNaN(selectedDate)) {
-      birthday = "";
+      birthday = '';
     } else {
       // 年・月が変更され選択されていた日が月末より大きい場合、1日に変更
       // （例）2020年2月29日（閏年）から年を2021に変更した場合、GUIのフォームと内部状態は2021年2月1日に年と日を変更
@@ -72,15 +72,15 @@ export const Birthday = ({
         setSelectedDate(1);
       }
 
-      birthday = `${selectedYear.toString().padStart(4, "0")}-${selectedMonth
+      birthday = `${selectedYear.toString().padStart(4, '0')}-${selectedMonth
         .toString()
-        .padStart(2, "0")}-${selectedDate.toString().padStart(2, "0")}`;
+        .padStart(2, '0')}-${selectedDate.toString().padStart(2, '0')}`;
     }
 
     const newHousehold = {
       ...household,
     };
-    newHousehold.世帯員[personName]["誕生年月日"].ETERNITY = birthday;
+    newHousehold.世帯員[personName].誕生年月日 = { ETERNITY: birthday };
     setHousehold(newHousehold);
   }, [selectedYear, selectedMonth, selectedDate]);
 
@@ -114,7 +114,7 @@ export const Birthday = ({
             fontSize={configData.style.itemFontSize}
             width={configData.style.selectYearSize}
           >
-            <option value={""} key={0}></option>
+            <option value={''} key={0}></option>
             {yearArray.map((year) => (
               <option value={year} key={year}>
                 {year}
@@ -134,7 +134,7 @@ export const Birthday = ({
             fontSize={configData.style.itemFontSize}
             width={configData.style.selectMonthDateSize}
           >
-            <option value={""} key={0}></option>
+            <option value={''} key={0}></option>
             {monthArray.map((month) => (
               <option value={month} key={month}>
                 {month}
@@ -154,7 +154,7 @@ export const Birthday = ({
             fontSize={configData.style.itemFontSize}
             width={configData.style.selectMonthDateSize}
           >
-            <option value={""} key={0}></option>
+            <option value={''} key={0}></option>
             {dateArray.map((date) => (
               <option value={date} key={date}>
                 {date}
