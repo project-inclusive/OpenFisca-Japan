@@ -44,14 +44,6 @@ class 受験生チャレンジ支援貸付(Variable):
 
         return 月間支給金額へ変換(年間支給金額)
 
-class 預貯金(Variable):
-    value_type = int
-    default_value = 0
-    entity = 人物
-    definition_period = DAY
-    label = "預貯金"
-    reference = "https://www.fukushi.metro.tokyo.lg.jp/seikatsu/teisyotokusyataisaku/jukenseichallenge.html"
-
 class 塾に通っている(Variable):
     value_type = bool
     default_value = False
