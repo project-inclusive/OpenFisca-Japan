@@ -1,32 +1,32 @@
-import { useContext, useState, useCallback } from "react";
-import { useLocation } from "react-router-dom";
+import { useContext, useState, useCallback } from 'react';
+import { useLocation } from 'react-router-dom';
 import {
   Box,
   Center,
   Checkbox,
   UnorderedList,
   ListItem,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 
-import configData from "../../config/app_config.json";
-import { HouseholdContext } from "../../contexts/HouseholdContext";
-import { CurrentDateContext } from "../../contexts/CurrentDateContext";
-import { Birthday } from "./attributes/Birthday";
-import { Income } from "./attributes/Income";
-import { Disability } from "./attributes/Disability";
-import { Student } from "./attributes/Student";
-import { Working } from "./attributes/Working";
-import { Recuperation } from "./attributes/Recuperation";
-import { NursingHome } from "./attributes/NursingHome";
+import configData from '../../config/app_config.json';
+import { HouseholdContext } from '../../contexts/HouseholdContext';
+import { CurrentDateContext } from '../../contexts/CurrentDateContext';
+import { Birthday } from './attributes/Birthday';
+import { Income } from './attributes/Income';
+import { Disability } from './attributes/Disability';
+import { Student } from './attributes/Student';
+import { Working } from './attributes/Working';
+import { Recuperation } from './attributes/Recuperation';
+import { NursingHome } from './attributes/NursingHome';
 
 export const FormSpouse = () => {
   const location = useLocation();
-  const isSimpleCalculation = location.pathname === "/calculate-simple";
+  const isSimpleCalculation = location.pathname === '/calculate-simple';
 
   const currentDate = useContext(CurrentDateContext);
   const [isChecked, setIsChecked] = useState(false);
   const { household, setHousehold } = useContext(HouseholdContext);
-  const spouseName = "配偶者";
+  const spouseName = '配偶者';
 
   // チェックボックスの値が変更された時
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {

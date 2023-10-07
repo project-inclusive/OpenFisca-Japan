@@ -1,20 +1,20 @@
-import { useContext, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { Center, Button } from "@chakra-ui/react";
+import { useContext, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Center, Button } from '@chakra-ui/react';
 
-import configData from "../../config/app_config.json";
-import { ShowAlertMessageContext } from "../../contexts/ShowAlertMessageContext";
-import { HouseholdContext } from "../../contexts/HouseholdContext";
-import { useValidate } from "../../hooks/validate";
-import { FormYou } from "./you";
-import { FormSpouse } from "./spouse";
-import { FormChildren } from "./children";
-import { FormParents } from "./parents";
-import { CalculationLabel } from "./calculationLabel";
+import configData from '../../config/app_config.json';
+import { ShowAlertMessageContext } from '../../contexts/ShowAlertMessageContext';
+import { HouseholdContext } from '../../contexts/HouseholdContext';
+import { useValidate } from '../../hooks/validate';
+import { FormYou } from './you';
+import { FormSpouse } from './spouse';
+import { FormChildren } from './children';
+import { FormParents } from './parents';
+import { CalculationLabel } from './calculationLabel';
 
 export const FormContent = () => {
   const location = useLocation();
-  const isSimpleCalculation = location.pathname === "/calculate-simple";
+  const isSimpleCalculation = location.pathname === '/calculate-simple';
 
   const [ShowAlertMessage, setShowAlertMessage] = useState(false);
   const validated = useValidate();
@@ -30,7 +30,7 @@ export const FormContent = () => {
               ? configData.calculationForm.simpleCalculation
               : configData.calculationForm.detailedCalculation
           }
-          colour={isSimpleCalculation ? "teal" : "blue"}
+          colour={isSimpleCalculation ? 'teal' : 'blue'}
         />
 
         <Center
@@ -58,7 +58,7 @@ export const FormContent = () => {
             width="100%"
             bg="cyan.600"
             color="white"
-            _hover={{ bg: "cyan.700" }}
+            _hover={{ bg: 'cyan.700' }}
             onClick={() => {
               // 必須項目が入力されていない場合、結果は表示されずトップへ戻る
               if (!validated) {
@@ -66,7 +66,7 @@ export const FormContent = () => {
                 scrollTo(0, 0);
                 return;
               }
-              navigate("/result", {
+              navigate('/result', {
                 state: {
                   household: household,
                   isSimpleCalculation: isSimpleCalculation,

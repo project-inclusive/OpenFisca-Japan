@@ -1,9 +1,9 @@
-import { useState, useContext, useEffect } from "react";
-import { Box, HStack, FormControl, FormLabel, Input } from "@chakra-ui/react";
+import { useState, useContext, useEffect } from 'react';
+import { Box, HStack, FormControl, FormLabel, Input } from '@chakra-ui/react';
 
-import configData from "../../../config/app_config.json";
-import { HouseholdContext } from "../../../contexts/HouseholdContext";
-import { ErrorMessage } from "./validation/ErrorMessage";
+import configData from '../../../config/app_config.json';
+import { HouseholdContext } from '../../../contexts/HouseholdContext';
+import { ErrorMessage } from './validation/ErrorMessage';
 
 export const AgeInput = ({
   personName,
@@ -13,17 +13,17 @@ export const AgeInput = ({
   mustInput: boolean;
 }) => {
   const { household, setHousehold } = useContext(HouseholdContext);
-  const [age, setAge] = useState("");
+  const [age, setAge] = useState('');
 
   const handleAgeChange = (event: React.ChangeEvent<HTMLInputElement>) =>
     parseInt(event.currentTarget.value) < 0
-      ? setAge("0")
+      ? setAge('0')
       : setAge(event.currentTarget.value);
 
   useEffect(() => {
     let birthday;
     if (!age) {
-      birthday = "";
+      birthday = '';
     } else {
       const today = new Date();
       const currentYear = today.getFullYear();
