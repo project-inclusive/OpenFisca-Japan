@@ -17,6 +17,7 @@ jobs:
         working-directory: ./dashboard
       - name: Prettier
         run: npm run pretty:check
+        working-directory: ./dashboard
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
