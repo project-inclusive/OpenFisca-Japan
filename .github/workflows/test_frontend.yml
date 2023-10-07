@@ -13,7 +13,7 @@ jobs:
         with:
           node-version: 18.16.0
       - name: Install packages
-        run: npm ci
+        run: npm i
       - name: Prettier
         run: npm run pretty:check
       - name: Cypress run
