@@ -1,10 +1,5 @@
-import {
-  Navigate,
-  Link as RouterLink,
-  useLocation,
-  useNavigate,
-} from 'react-router-dom';
-
+import { useRef, useState, useEffect, useContext, useCallback } from 'react';
+import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 import {
   Box,
   Center,
@@ -15,7 +10,6 @@ import {
   Link,
 } from '@chakra-ui/react';
 import { InfoIcon, ExternalLinkIcon } from '@chakra-ui/icons';
-import { useRef, useState, useEffect, useContext } from 'react';
 import * as htmlToImage from 'html-to-image';
 
 import configData from '../../config/app_config.json';
@@ -47,6 +41,7 @@ export const Result = () => {
 
   const currentDate = useContext(CurrentDateContext);
   const [result, calculate] = useCalculate();
+  const [isDisplayChat, setIsDisplayChat] = useState('none');
 
   let calcOnce = true;
   useEffect(() => {
@@ -152,6 +147,17 @@ export const Result = () => {
     link: 'https://www.zcwvc.net/about/list.html',
     title: '全国の社会福祉協議会一覧',
   };
+
+  const displayChat = useCallback(async (sec: number = 5) => {
+    const sleep = (second: number) =>
+      new Promise((resolve) => setTimeout(resolve, second * 1000));
+
+    // wait some seconds because the page is auto scrolled to chatbot
+    // in first few seconds of chatbot preparation
+    await sleep(sec);
+    console.log('display chatbot');
+    setIsDisplayChat('');
+  }, []);
 
   return (
     <div ref={divRef}>
@@ -327,14 +333,23 @@ export const Result = () => {
             </Button>
           </Center>
 
-          <Center pr={4} pl={4} pt={4} pb={4}>
-            {configData.result.chatbotDescription[0]}
-          </Center>
-          <Box bg="white" borderRadius="xl" p={4} mb={4} ml={4} mr={4}>
+          <Box
+            bg="white"
+            borderRadius="xl"
+            display={isDisplayChat}
+            p={4}
+            mb={4}
+            ml={4}
+            mr={4}
+          >
+            <Center pr={4} pl={4} pt={4} pb={4}>
+              {configData.result.chatbotDescription[0]}
+            </Center>
             <iframe
-              src="https://miibo.jp/chat/7eaf9ab0-e179-4857-8ff8-3f83e46f6251189dd2e771a157?name=%E3%83%A4%E3%83%89%E3%82%AB%E3%83%AA%E3%81%8F%E3%82%93"
+              src={configData.URL.chatbot}
               width="100%"
               height="400px"
+              onLoad={() => displayChat()}
             ></iframe>
           </Box>
 
