@@ -192,3 +192,28 @@ class 住民税非課税世帯(Variable):
                          0)
 
         return 世帯高所得 <= 350000 * 級地区分倍率 * 世帯人数 + 100000 + 加算額
+
+
+class 住民税調整控除(Variable):
+    value_type = float
+    entity = 世帯
+    definition_period = DAY
+    label = "住民税における調整控除"
+    reference = "https://money-bu-jpx.com/news/article043882/"
+    documentation = """
+    所得税控除と住民税控除の差額（一部例外あり）。
+    調整控除算出の例外に関しては以下リンクも参考になる。
+    https://www.town.hinode.tokyo.jp/0000000519.html
+    """
+
+    def formula(対象世帯, 対象期間, parameters):
+        # TODO: 実装
+        return 0
+
+        世帯高所得 = 対象世帯("世帯高所得", 対象期間)
+        学生 = np.any(対象世帯.members("学生", 対象期間))
+        勤労学生控除額 = parameters(対象期間).住民税.勤労学生控除額
+        勤労学生_所得制限額 = parameters(対象期間).住民税.勤労学生_所得制限額
+        所得条件 = (世帯高所得 > 0) * (世帯高所得 <= 勤労学生_所得制限額)
+
+        return 所得条件 * 学生 * 勤労学生控除額
