@@ -6,8 +6,8 @@ import numpy as np
 
 from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
-from openfisca_japan.variables.全般 import 中学生学年, 高校生学年
 from openfisca_japan.entities import 世帯, 人物
+from openfisca_japan.variables.全般 import 中学生学年, 高校生学年
 
 class 受験生チャレンジ支援貸付(Variable):
     value_type = int
