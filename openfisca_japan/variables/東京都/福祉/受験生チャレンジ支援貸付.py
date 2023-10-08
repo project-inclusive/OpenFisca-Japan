@@ -2,11 +2,11 @@
 受験生チャレンジ支援貸付の実装
 """
 
-from enum import Enum as OriginalEnum
 import numpy as np
 
 from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
+from openfisca_japan.variables.全般 import 中学生学年, 高校生学年
 from openfisca_japan.entities import 世帯, 人物
 
 class 受験生チャレンジ支援貸付(Variable):
@@ -47,16 +47,6 @@ class 塾に通っている(Variable):
     definition_period = DAY
     label = "塾に通っている"
     reference = "https://www.fukushi.metro.tokyo.lg.jp/seikatsu/teisyotokusyataisaku/jukenseichallenge.html"
-
-class 中学生学年(OriginalEnum):
-    一年生 = 7
-    二年生 = 8
-    三年生 = 9
-
-class 高校生学年(OriginalEnum):
-    一年生 = 10
-    二年生 = 11
-    三年生 = 12
 
 class 受験生チャレンジ支援貸付可能(Variable):
     value_type = int

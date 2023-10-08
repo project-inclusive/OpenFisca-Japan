@@ -9,6 +9,7 @@ import numpy as np
 
 from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
+from openfisca_japan.variables.全般 import 高校生学年
 from openfisca_japan.entities import 世帯, 人物
 from openfisca_core.indexed_enums import Enum
 
@@ -207,11 +208,6 @@ class 高校運営種別(Variable):
     entity = 人物
     definition_period = DAY
     label = "高校運営種別"
-
-class 高校生学年(OriginalEnum):
-    一年生 = 10
-    二年生 = 11
-    三年生 = 12
 
 class 支給対象世帯(OriginalEnum):
     生活保護世帯 = "生活保護（生業扶助）受給世帯"
