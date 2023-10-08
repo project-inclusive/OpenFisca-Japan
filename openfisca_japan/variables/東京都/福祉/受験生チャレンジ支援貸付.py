@@ -36,14 +36,6 @@ class 受験生チャレンジ支援貸付(Variable):
         受験生チャレンジ支援貸付可能 = 対象世帯("受験生チャレンジ支援貸付可能", 対象期間)
         return 年間支給金額 * 受験生チャレンジ支援貸付可能
 
-class 塾に通っている(Variable):
-    value_type = bool
-    default_value = False
-    entity = 人物
-    definition_period = DAY
-    label = "塾に通っている"
-    reference = "https://www.fukushi.metro.tokyo.lg.jp/seikatsu/teisyotokusyataisaku/jukenseichallenge.html"
-
 class 受験生チャレンジ支援貸付可能(Variable):
     value_type = int
     default_value = 0
