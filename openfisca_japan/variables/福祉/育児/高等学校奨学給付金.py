@@ -3,14 +3,15 @@
 """
 
 import csv
-from enum import Enum as OriginalEnum
 import math
 import numpy as np
 
+from openfisca_core.indexed_enums import Enum
 from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
+
 from openfisca_japan.entities import 世帯, 人物
-from openfisca_core.indexed_enums import Enum
+from openfisca_japan.variables.全般 import 高校生学年
 
 with open('openfisca_japan/parameters/福祉/育児/高等学校奨学給付金/国立高等学校奨学給付金額.csv') as f:
     reader = csv.DictReader(f)
@@ -208,12 +209,8 @@ class 高校運営種別(Variable):
     definition_period = DAY
     label = "高校運営種別"
 
-class 高校生学年(OriginalEnum):
-    一年生 = 10
-    二年生 = 11
-    三年生 = 12
-
-class 支給対象世帯(OriginalEnum):
+class 支給対象世帯(Enum):
+    __order__ = "生活保護世帯 非課税世帯1 非課税世帯2"
     生活保護世帯 = "生活保護（生業扶助）受給世帯"
     非課税世帯1 = "非課税世帯（第1子）"
     非課税世帯2 = "非課税世帯（第2子）"
