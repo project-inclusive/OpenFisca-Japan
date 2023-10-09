@@ -1,0 +1,7 @@
+description: 扶養控除額_特定扶養親族(その年の12月31日時点で19歳以上23歳未満の者)
+metadata:
+  reference: https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1180.htm
+  unit: currency-JPY
+values:
+  2020-01-01:
+    value: 630000

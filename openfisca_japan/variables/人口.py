@@ -74,27 +74,6 @@ class 学年(Variable):
         return (対象期間.start.year - 誕生年) + 繰り上げ年数 - 7
 
 
-class 扶養人数(Variable):
-    value_type = int
-    entity = 世帯
-    definition_period = DAY
-    label = "扶養人数"
-
-    def formula(対象世帯, 対象期間, parameters):
-        扶養親族所得金額 = parameters(対象期間).所得.扶養親族所得金額
-
-        # 扶養人数が1人ではない場合を考慮する
-        世帯所得一覧 = 対象世帯.members("所得", 対象期間)
-        児童である = 対象世帯.has_role(世帯.子)
-        # 扶養親族に配偶者は含まれない。(親等の児童以外を扶養する場合はそれらも含む必要あり)
-        # 扶養親族の定義(参考): https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1180.htm
-        扶養親族である = 児童である * (世帯所得一覧 < 扶養親族所得金額)
-        扶養人数 = 対象世帯.sum(扶養親族である)
-
-        # この時点でndarrayからスカラーに変換しても、他から扶養人数を取得する際はndarrayに変換されて返されてしまう
-        return 扶養人数
-
-
 class 世帯人数(Variable):
     value_type = int
     entity = 世帯
@@ -104,5 +83,3 @@ class 世帯人数(Variable):
     def formula(対象世帯, 対象期間, parameters):
         # 世帯人数を直接出す方法がOpenFiscaにあるかもしれないが、一旦以下の方法で出す
         return len(対象世帯.members("年齢", 対象期間))
-
-

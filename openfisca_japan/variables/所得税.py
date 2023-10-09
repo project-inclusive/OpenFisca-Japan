@@ -12,7 +12,7 @@ import numpy as np
 
 # Import from openfisca-core the Python objects used to code the legislation in OpenFisca
 from openfisca_core.holders import set_input_divide_by_period
-from openfisca_core.periods import DAY
+from openfisca_core.periods import DAY, period
 from openfisca_core.variables import Variable
 # Import the Entities specifically defined for this tax and benefit system
 from openfisca_japan.entities import 人物, 世帯
@@ -236,6 +236,81 @@ class 配偶者特別控除(Variable):
             return 0
 
         return 配偶者特別控除額表[str(納税者の配偶者の所得区分)][str(納税者の所得区分)]
+
+
+class 扶養控除(Variable):
+    value_type = float
+    entity = 世帯
+    definition_period = DAY
+    label = "扶養控除"
+    reference = "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1180.htm"
+    
+
+    def formula(対象世帯, 対象期間, parameters):
+        扶養親族である = 対象世帯.members("扶養親族である", 対象期間)
+
+        # NOTE: その年の12/31時点の年齢を参照
+        # https://www.nta.go.jp/taxes/shiraberu/taxanswer/yogo/senmon.htm#word5
+        該当年12月31日 = period(f'{対象期間.start.year}-12-31')
+        年齢 = 対象世帯.members("年齢", 該当年12月31日)
+
+        控除対象扶養親族である = 扶養親族である * (年齢 >= 16)
+
+        特定扶養親族である = 控除対象扶養親族である * (年齢 >= 19) * (年齢 < 23)
+        老人扶養親族である = 控除対象扶養親族である * (年齢 >= 70)
+
+        # NOTE: 入院中の親族は同居扱いだが老人ホーム等への入居は除く
+        # TODO: 「同居していない親族」も世帯内で扱うようになったら同居老親かどうかの判定追加
+        介護施設入所中 = 対象世帯.members("介護施設入所中", 対象期間)
+        同居している老人扶養親族である = 老人扶養親族である * np.logical_not(介護施設入所中)
+        同居していない老人扶養親族である = 老人扶養親族である * 介護施設入所中
+        
+        # NOTE: np.selectのcondlistは最初に該当した条件で計算される
+        扶養控除一覧 = np.select(
+            [特定扶養親族である,
+             同居している老人扶養親族である,
+             同居していない老人扶養親族である,
+             控除対象扶養親族である],
+             [parameters(対象期間).所得.扶養控除_特定扶養親族,
+              parameters(対象期間).所得.扶養控除_老人扶養親族_同居老親等,
+              parameters(対象期間).所得.扶養控除_老人扶養親族_同居老親等以外の者,
+              parameters(対象期間).所得.扶養控除_一般],
+            0)
+        
+        return 対象世帯.sum(扶養控除一覧)
+
+
+class 扶養親族である(Variable):
+    value_type = bool
+    default_value = False
+    entity = 人物
+    definition_period = DAY
+    label = "扶養親族であるか否か"
+    reference = "https://www.nta.go.jp/taxes/shiraberu/taxanswer/yogo/senmon.htm"
+
+
+    def formula(対象人物, 対象期間, parameters):
+        扶養親族所得金額 = parameters(対象期間).所得.扶養親族所得金額
+
+        # 扶養人数が1人ではない場合を考慮する
+        世帯所得一覧 = 対象人物("所得", 対象期間)
+        自分である = 対象人物.has_role(世帯.自分)
+        配偶者である = 対象人物.has_role(世帯.配偶者)
+        # 扶養親族に配偶者は含まれない。(親等の児童以外を扶養する場合はそれらも含む必要あり)
+        # 扶養親族の定義(参考): https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1180.htm
+        return np.logical_not(自分である) * np.logical_not(配偶者である) * (世帯所得一覧 <= 扶養親族所得金額)
+
+
+class 扶養人数(Variable):
+    value_type = int
+    entity = 世帯
+    definition_period = DAY
+    label = "扶養人数"
+
+    def formula(対象世帯, 対象期間, parameters):
+        扶養親族である = 対象世帯.members("扶養親族である", 対象期間)
+        # この時点でndarrayからスカラーに変換しても、他から扶養人数を取得する際はndarrayに変換されて返されてしまう
+        return 対象世帯.sum(扶養親族である)
 
 
 class 控除後世帯高所得(Variable):
