@@ -72,6 +72,11 @@ Google Custom Search APIは、Googleの検索技術をウェブサイトやア�
 - [重度心身障害者手当（東京都の制度）](https://www.city.adachi.tokyo.jp/shogai/fukushi-kenko/shinshin/teate-judoshinshin.html)
 - [高等学校等就学支援金制度に関するQ＆A](https://www.mext.go.jp/a_menu/shotou/mushouka/1342600.htm)
 - [受験生チャレンジ支援制度](https://jukenchallenge.jp/qa)
+- [児童手当](https://jukenchallenge.jp/qa)
+- [児童扶養手当](https://www.city.asaka.lg.jp/soshiki/22/jidoufuyouqa.html)
+- [特別児童扶養手当](https://info-obihiro.sukoyakanet.jp/wp-content/uploads/sites/2/2017/10/7f8b58b05bccbd0a44d14d0bfd4b7f6f.pdf)
+- [障害児福祉手当](https://www.city.adachi.tokyo.jp/shogai/fukushi-kenko/shinshin/teate-shogaiji.html)
+- [生活福祉資金貸付制度](https://www.gov-online.go.jp/useful/article/201001/3.html)
 
 
 # miiboについて
