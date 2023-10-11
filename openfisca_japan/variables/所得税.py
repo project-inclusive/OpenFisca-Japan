@@ -214,6 +214,9 @@ class 配偶者控除(Variable):
     """
 
     def formula(対象世帯, 対象期間, parameters):
+        if 対象世帯.nb_persons(世帯.配偶者) == 0:
+            return 0
+
         自分の所得 = 対象世帯.自分("所得", 対象期間)
         配偶者の所得 = 対象世帯.配偶者("所得", 対象期間)
 
@@ -257,6 +260,9 @@ class 配偶者特別控除(Variable):
     reference = "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1195.htm"
 
     def formula(対象世帯, 対象期間, parameters):
+        if 対象世帯.nb_persons(世帯.配偶者) == 0:
+            return 0
+
         自分の所得 = 対象世帯.自分("所得", 対象期間)
         配偶者の所得 = 対象世帯.配偶者("所得", 対象期間)
 
@@ -380,6 +386,9 @@ class 控除後世帯高所得(Variable):
     reference = "https://www.city.himeji.lg.jp/waku2child/0000013409.html"
 
     def formula(対象世帯, 対象期間, parameters):
+        # TODO: 所得税等の計算にも使用する場合、配偶者控除等も考慮する(現在の実装は児童手当の世帯高所得額)
+        # https://www.nta.go.jp/publication/pamph/koho/kurashi/html/01_1.htm
+
         世帯高所得 = 対象世帯("世帯高所得", 対象期間)
         社会保険料 = parameters(対象期間).所得.社会保険料相当額
         給与所得及び雑所得からの控除額 = parameters(対象期間).所得.給与所得及び雑所得からの控除額
@@ -443,4 +452,3 @@ class 特別児童扶養手当の控除後世帯高所得(Variable):
 
         # 負の数にならないよう、0円未満になった場合は0円に補正
         return np.clip(世帯高所得 - 総控除額, 0.0, None)
-

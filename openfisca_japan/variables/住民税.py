@@ -14,9 +14,11 @@ import numpy as np
 from openfisca_core.holders import set_input_divide_by_period
 from openfisca_core.periods import DAY, period
 from openfisca_core.variables import Variable
+
 # Import the Entities specifically defined for this tax and benefit system
 from openfisca_japan.entities import 人物, 世帯
 
+from openfisca_japan.variables.全般 import 性別パターン
 
 # NOTE: 項目数が多い金額表は可読性の高いCSV形式としている。
 with open('openfisca_japan/parameters/住民税/配偶者控除額.csv') as f:
@@ -143,6 +145,9 @@ class 住民税配偶者控除(Variable):
     """
 
     def formula(対象世帯, 対象期間, parameters):
+        if 対象世帯.nb_persons(世帯.配偶者) == 0:
+            return 0
+
         自分の所得 = 対象世帯.自分("所得", 対象期間)
         配偶者の所得 = 対象世帯.配偶者("所得", 対象期間)
 
@@ -190,6 +195,9 @@ class 住民税配偶者特別控除(Variable):
     """
 
     def formula(対象世帯, 対象期間, parameters):
+        if 対象世帯.nb_persons(世帯.配偶者) == 0:
+            return 0
+
         自分の所得 = 対象世帯.自分("所得", 対象期間)
         配偶者の所得 = 対象世帯.配偶者("所得", 対象期間)
 
@@ -273,6 +281,54 @@ class 住民税扶養控除(Variable):
         return 対象世帯.sum(扶養控除一覧)
 
 
+class 住民税基礎控除(Variable):
+    value_type = float
+    entity = 世帯
+    definition_period = DAY
+    label = "住民税における基礎控除"
+    reference = "https://www.city.yokohama.lg.jp/kurashi/koseki-zei-hoken/zeikin/y-shizei/kojin-shiminzei-kenminzei/kaisei/R3zeiseikaisei.html"
+
+    def formula(対象世帯, 対象期間, parameters):
+        世帯高所得 = 対象世帯("世帯高所得", 対象期間)
+        
+        return np.select(
+            [世帯高所得 <= 24000000,
+             世帯高所得 > 24000000 and 世帯高所得 <= 24500000,
+             世帯高所得 > 24500000 and 世帯高所得 <= 25000000],
+            [430000,
+             250000,
+             190000],
+            0)
+
+
+class 控除後住民税世帯高所得(Variable):
+    value_type = float
+    entity = 世帯
+    definition_period = DAY
+    label = "住民税計算において、各種控除が適用された後の世帯高所得額"
+    reference = "https://www.town.hinode.tokyo.jp/0000000516.html"
+
+    def formula(対象世帯, 対象期間, parameters):
+        # TODO: 社会保険料を追加
+        世帯高所得 = 対象世帯("世帯高所得", 対象期間)
+        配偶者控除 = 対象世帯("住民税配偶者控除", 対象期間)
+        配偶者特別控除 = 対象世帯("住民税配偶者特別控除", 対象期間)
+        扶養控除 = 対象世帯("住民税扶養控除", 対象期間)
+        障害者控除 = 対象世帯("住民税障害者控除", 対象期間)
+        ひとり親控除 = 対象世帯("住民税ひとり親控除", 対象期間)
+        寡婦控除 = 対象世帯("住民税寡婦控除", 対象期間)
+        勤労学生控除 = 対象世帯("住民税勤労学生控除", 対象期間)
+        基礎控除 = 対象世帯("住民税基礎控除", 対象期間)
+
+        # 他の控除（雑損控除・医療費控除等）は定額でなく実費を元に算出するため除外する    
+
+        総控除額 = 配偶者控除 + 配偶者特別控除 + 扶養控除 + 障害者控除 + \
+            ひとり親控除 + 寡婦控除 + 勤労学生控除 + 基礎控除
+
+        # 負の数にならないよう、0円未満になった場合は0円に補正
+        return np.clip(世帯高所得 - 総控除額, 0.0, None)
+
+
 class 住民税非課税世帯(Variable):
     value_type = bool
     default_value = False
@@ -298,3 +354,62 @@ class 住民税非課税世帯(Variable):
                          0)
 
         return 世帯高所得 <= 350000 * 級地区分倍率 * 世帯人数 + 100000 + 加算額
+
+
+class 人的控除額の差(Variable):
+    value_type = float
+    entity = 世帯
+    definition_period = DAY
+    label = "所得税と住民税の控除の差額"
+    reference = "https://money-bu-jpx.com/news/article043882/"
+    documentation = """
+    差額計算には一部例外あり
+    例外についての詳細は https://www.town.hinode.tokyo.jp/0000000519.html も参考になる
+    """
+
+    def formula(対象世帯, 対象期間, parameters):
+        障害者控除差額 = 対象世帯("障害者控除", 対象期間) - 対象世帯("住民税障害者控除", 対象期間)
+        寡婦控除差額 = 対象世帯("寡婦控除", 対象期間) - 対象世帯("住民税寡婦控除", 対象期間)
+        勤労学生控除差額 = 対象世帯("勤労学生控除", 対象期間) - 対象世帯("住民税勤労学生控除", 対象期間)
+        配偶者控除差額 = 対象世帯("配偶者控除", 対象期間) - 対象世帯("住民税配偶者控除", 対象期間)
+        配偶者特別控除差額 = 対象世帯("配偶者特別控除", 対象期間) - 対象世帯("住民税配偶者特別控除", 対象期間)
+        扶養控除差額 = 対象世帯("扶養控除", 対象期間) - 対象世帯("住民税扶養控除", 対象期間)
+
+        # NOTE: 以下は実際の差額とは異なる計算式を使用 https://www.town.hinode.tokyo.jp/0000000519.html
+        世帯高所得 = 対象世帯("世帯高所得", 対象期間)
+        基礎控除差額 = np.where(世帯高所得 <= 25000000, 50000, 0)
+
+        ひとり親控除差額 = 対象世帯("ひとり親控除", 対象期間) - 対象世帯("住民税ひとり親控除", 対象期間)
+        # ひとり親（父）の場合のみ差額が異なる
+        if ひとり親控除差額[0] > 0 and 対象世帯.自分("性別", 対象期間) == 性別パターン.男性:
+            ひとり親控除差額 = 10000
+
+        return 障害者控除差額 + 寡婦控除差額 + 勤労学生控除差額 + 配偶者控除差額 + 配偶者特別控除差額 + 扶養控除差額 + 基礎控除差額 + ひとり親控除差額
+
+
+class 調整控除(Variable):
+    value_type = float
+    entity = 世帯
+    definition_period = DAY
+    label = "調整控除"
+    reference = "https://money-bu-jpx.com/news/article043882/"
+    documentation = """
+    所得税と住民税の控除の差額（一部例外あり）
+    例外についての詳細は https://www.town.hinode.tokyo.jp/0000000519.html も参考になる
+    """
+
+    def formula(対象世帯, 対象期間, parameters):
+        人的控除額の差 = 対象世帯("人的控除額の差", 対象期間)
+
+        # 課税所得金額に相当
+        控除後住民税世帯高所得 = 対象世帯("控除後住民税世帯高所得", 対象期間)
+
+        控除額 =  np.select(
+            [控除後住民税世帯高所得 <= 2000000,
+             控除後住民税世帯高所得 > 2000000 and 控除後住民税世帯高所得 < 25000000],
+            [np.min([控除後住民税世帯高所得[0], 人的控除額の差[0]]) * 0.05,
+             (人的控除額の差 - (控除後住民税世帯高所得 - 2000000)) * 0.05],
+            0)
+
+        # 負の数にならないよう、0円未満になった場合は0円に補正
+        return np.clip(控除額, 0.0, None)
