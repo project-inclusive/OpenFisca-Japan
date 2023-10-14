@@ -64,7 +64,7 @@ export const FormSpouse = () => {
               <Birthday personName={spouseName} mustInput={true} />
             )}
             <Income personName={spouseName} mustInput={true} />
-            <Deposit personName={spouseName} mustInput={false} />
+            <Deposit personName={spouseName} />
             {!isSimpleCalculation && <Student personName={spouseName} />}
             {!isSimpleCalculation && <Working personName={spouseName} />}
             {!isSimpleCalculation && <Disability personName={spouseName} />}
