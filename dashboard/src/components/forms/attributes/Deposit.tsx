@@ -5,11 +5,7 @@ import { CurrentDateContext } from '../../../contexts/CurrentDateContext';
 import { HouseholdContext } from '../../../contexts/HouseholdContext';
 import { ErrorMessage } from './validation/ErrorMessage';
 
-export const Deposit = ({
-  personName
-}: {
-  personName: string;
-}) => {
+export const Deposit = ({ personName }: { personName: string }) => {
   const currentDate = useContext(CurrentDateContext);
   const { household, setHousehold } = useContext(HouseholdContext);
 
@@ -29,7 +25,7 @@ export const Deposit = ({
     } else {
       setShownDeposit(deposit / 10000);
     }
-    
+
     newHousehold.世帯員[personName].預貯金 = { [currentDate]: deposit };
     setHousehold(newHousehold);
   }, []);
@@ -65,4 +61,4 @@ export const Deposit = ({
       </FormControl>
     </>
   );
-}
+};
