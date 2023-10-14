@@ -14,5 +14,6 @@ describe('Renders main page and ', () => {
     cy.get('[data-testid="select-prefecture"]').select('東京都');
     cy.get('[data-testid="select-city"]').select('渋谷区');
     cy.get('[data-testid="income-input"]').type('150');
+    cy.get('[data-testid="deposit-input"]').type('10');
   });
 });

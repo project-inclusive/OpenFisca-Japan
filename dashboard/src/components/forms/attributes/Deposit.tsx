@@ -49,7 +49,7 @@ export const Deposit = ({ personName }: { personName: string }) => {
 
         <HStack mb={4}>
           <Input
-            data-testid="income-input"
+            data-testid="deposit-input"
             type="number"
             value={shownDeposit}
             onChange={onChange}
