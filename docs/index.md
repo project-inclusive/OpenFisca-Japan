@@ -19,8 +19,8 @@
 
 ### [チャットボット](./chat_bot.md)
 - [LINEチャットボットについて](./chat_bot.md#ラインチャットボットについて)
-- [ChatGPT_Retrieval_Pluginについて](./chat_bot.md#ChatGPT_Retrieval_Pluginについて)
-- [Google_custom_search_APIについて](./chat_bot.md#Google_custom_search_APIについて)
+- [ChatGPT_Retrieval_Pluginについて](./chat_bot.md#chatgpt_retrieval_pluginについて)
+- [Google_custom_search_APIについて](./chat_bot.md#google_custom_search_apiについて)
 - [miiboについて](./chat_bot.md#miiboについて)
 
 ### [変更履歴 (Change log)](./change_log)
