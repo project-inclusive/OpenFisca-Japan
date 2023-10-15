@@ -3,7 +3,6 @@ import { Box, HStack, Input, FormControl, FormLabel } from '@chakra-ui/react';
 
 import { CurrentDateContext } from '../../../contexts/CurrentDateContext';
 import { HouseholdContext } from '../../../contexts/HouseholdContext';
-import { ErrorMessage } from './validation/ErrorMessage';
 
 export const Deposit = ({ personName }: { personName: string }) => {
   const currentDate = useContext(CurrentDateContext);
@@ -39,7 +38,6 @@ export const Deposit = ({ personName }: { personName: string }) => {
 
   return (
     <>
-      {<ErrorMessage condition={shownDeposit === ''} />}
       <FormControl>
         <FormLabel fontWeight="Regular">
           <HStack>
@@ -55,6 +53,7 @@ export const Deposit = ({ personName }: { personName: string }) => {
             onChange={onChange}
             onKeyDown={onKeyDown}
             width="10em"
+            placeholder="0"
           />
           <Box>万円</Box>
         </HStack>
