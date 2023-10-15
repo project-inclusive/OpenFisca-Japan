@@ -21,7 +21,7 @@ type Question = {
 
 type Section = {
   heading: string;
-  question: Question[];
+  questions: Question[];
 };
 
 const App: React.FC = () => {
