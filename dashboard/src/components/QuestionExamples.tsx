@@ -66,7 +66,11 @@ const App: React.FC = () => {
         </Card>
       ))}
       <Center mt={2}>
-        <Button onClick={() => { navigate(-1) }}>
+        <Button
+          onClick={() => {
+            navigate(-1);
+          }}
+        >
           <Text>{configData.question_examples.backButtonText}</Text>
         </Button>
       </Center>
