@@ -46,8 +46,8 @@ class 住民税障害者控除(Variable):
     label = "住民税における障害者控除額"
     reference = "https://www.tax.metro.tokyo.lg.jp/kazei/kojin_ju.html#gaiyo_07"
     documentation = """
-    所得税における控除額とはことなるので注意
-    OpenFiscaではクラス名をアプリ全体で一意にする必要があるため、先頭に「住民税」を追加
+    所得税における控除額とはことなるので注意（金額が異なるだけで条件は同じ）。
+    OpenFiscaではクラス名をアプリ全体で一意にする必要があるため、先頭に「住民税」を追加。
     """
 
     def formula(対象世帯, 対象期間, parameters):
@@ -72,8 +72,8 @@ class 住民税ひとり親控除(Variable):
     label = "住民税におけるひとり親控除額"
     reference = "https://www.tax.metro.tokyo.lg.jp/kazei/kojin_ju.html#gaiyo_07"
     documentation = """
-    所得税における控除額とはことなるので注意
-    OpenFiscaではクラス名をアプリ全体で一意にする必要があるため、先頭に「住民税」を追加
+    所得税における控除額とはことなるので注意（金額が異なるだけで条件は同じ）。
+    OpenFiscaではクラス名をアプリ全体で一意にする必要があるため、先頭に「住民税」を追加。
     """
 
     def formula_2020_01_01(対象世帯, 対象期間, parameters):
@@ -94,8 +94,8 @@ class 住民税寡婦控除(Variable):
     label = "住民税における寡婦控除額"
     reference = "https://www.tax.metro.tokyo.lg.jp/kazei/kojin_ju.html#gaiyo_07"
     documentation = """
-    所得税における控除額とはことなるので注意
-    OpenFiscaではクラス名をアプリ全体で一意にする必要があるため、先頭に「住民税」を追加
+    所得税における控除額とはことなるので注意（金額が異なるだけで条件は同じ）。
+    OpenFiscaではクラス名をアプリ全体で一意にする必要があるため、先頭に「住民税」を追加。
     """
 
     def formula_2020_01_01(対象世帯, 対象期間, parameters):
@@ -114,8 +114,8 @@ class 住民税勤労学生控除(Variable):
     label = "住民税における勤労学生控除"
     reference = "https://www.tax.metro.tokyo.lg.jp/kazei/kojin_ju.html#gaiyo_07"
     documentation = """
-    所得税における控除額とはことなるので注意
-    OpenFiscaではクラス名をアプリ全体で一意にする必要があるため、先頭に「住民税」を追加
+    所得税における控除額とはことなるので注意（金額が異なるだけで条件は同じ）。
+    OpenFiscaではクラス名をアプリ全体で一意にする必要があるため、先頭に「住民税」を追加。
     """
 
     def formula(対象世帯, 対象期間, parameters):
@@ -136,8 +136,10 @@ class 住民税配偶者控除(Variable):
     entity = 世帯
     definition_period = DAY
     label = "住民税における配偶者控除"
-    reference = "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1191.htm"
+    reference = "https://www.city.hiroshima.lg.jp/soshiki/26/202040.html"
     documentation = """
+    所得税における控除額とはことなるので注意（金額が異なるだけで条件は同じ）。
+    OpenFiscaではクラス名をアプリ全体で一意にする必要があるため、先頭に「住民税」を追加。
     配偶者特別控除とは異なる。
     配偶者の所得が配偶者控除の所得制限を超えた場合でも、配偶者特別控除が適用される可能性がある。
     老人控除対象かどうかは以下を参照。
@@ -188,10 +190,10 @@ class 住民税配偶者特別控除(Variable):
     entity = 世帯
     definition_period = DAY
     label = "住民税における配偶者特別控除"
-    reference = "https://www.tax.metro.tokyo.lg.jp/kazei/kojin_ju.html#gaiyo_07"
+    reference = "https://www.city.hiroshima.lg.jp/soshiki/26/202040.html"
     documentation = """
-    所得税における控除額とはことなるので注意
-    OpenFiscaではクラス名をアプリ全体で一意にする必要があるため、先頭に「住民税」を追加
+    所得税における控除額とはことなるので注意（金額が異なるだけで条件は同じ）。
+    OpenFiscaではクラス名をアプリ全体で一意にする必要があるため、先頭に「住民税」を追加。
     """
 
     def formula(対象世帯, 対象期間, parameters):
@@ -243,8 +245,8 @@ class 住民税扶養控除(Variable):
     label = "住民税における扶養控除"
     reference = "https://www.town.hinode.tokyo.jp/0000000519.html"
     documentation = """
-    所得税における控除額とはことなるので注意
-    OpenFiscaではクラス名をアプリ全体で一意にする必要があるため、先頭に「住民税」を追加
+    所得税における控除額とはことなるので注意（金額が異なるだけで条件は同じ）。
+    OpenFiscaではクラス名をアプリ全体で一意にする必要があるため、先頭に「住民税」を追加。
     """
 
     def formula(対象世帯, 対象期間, parameters):
