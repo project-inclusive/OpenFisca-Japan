@@ -290,7 +290,7 @@ export const Result = () => {
               )}
             </Box>
           </Center>
-          
+
           <Center pr={4} pl={4} pb={4}>
             <Button
               as={RouterLink}
@@ -306,7 +306,6 @@ export const Result = () => {
             >
               {configData.result.questionExamplesButtonText}
             </Button>
-
           </Center>
 
           {isSimpleCalculation && (
