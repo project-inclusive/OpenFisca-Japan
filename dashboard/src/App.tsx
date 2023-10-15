@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { AbsoluteCenter } from '@chakra-ui/react';
 import CaluculationForm from './components/forms/caluculationForm';
 import Description from './components/Description';
+import QuestionExamples from './components/QuestionExamples';
 import { Result } from './components/result/result';
 import { GenericError } from './components/errors/GenericError';
 import { NotFoundError } from './components/errors/NotFoundError';
@@ -44,6 +45,10 @@ function App() {
               {
                 path: '/result',
                 element: <Result />,
+              },
+              {
+                path: '/question_examples',
+                element: <QuestionExamples />,
               },
               {
                 path: '/response-error',
