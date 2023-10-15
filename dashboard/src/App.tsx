@@ -47,7 +47,7 @@ function App() {
                 element: <Result />,
               },
               {
-                path: '/question_examples',
+                path: '/question-examples',
                 element: <QuestionExamples />,
               },
               {

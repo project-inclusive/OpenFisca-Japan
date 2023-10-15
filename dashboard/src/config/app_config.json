@@ -262,6 +262,6 @@
   },
   "question_examples": {
     "title": "窓口での質問例",
-    "closeButtonText": "閉じる"
+    "backButtonText": "戻る"
   }
 }

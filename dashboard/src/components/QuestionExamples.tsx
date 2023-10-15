@@ -10,6 +10,7 @@ import {
   Flex,
   Button,
 } from '@chakra-ui/react';
+import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 import { CloseIcon } from '@chakra-ui/icons';
 import configData from '../config/app_config.json';
 import questionExamples from '../config/question_examples.json';
@@ -25,6 +26,7 @@ type Section = {
 };
 
 const App: React.FC = () => {
+  const navigate = useNavigate();
   const [sections, setSections] = useState<Section[]>([]);
 
   useEffect(() => {
@@ -64,8 +66,8 @@ const App: React.FC = () => {
         </Card>
       ))}
       <Center mt={2}>
-        <Button leftIcon={<CloseIcon />} onClick={() => window.close()}>
-          <Text>{configData.question_examples.closeButtonText}</Text>
+        <Button onClick={() => { navigate(-1) }}>
+          <Text>{configData.question_examples.backButtonText}</Text>
         </Button>
       </Center>
     </Box>
