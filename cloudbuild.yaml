@@ -7,7 +7,8 @@ steps:
         "-t",
         "gcr.io/$PROJECT_ID/openfisca-japan:$COMMIT_SHA",
         "-f",
-        "./Dockerfile_cloud",
+        "Dockerfile_cloud",
+        ".",
       ]
   # Push the container image to Container Registry
   - name: "gcr.io/cloud-builders/docker"
