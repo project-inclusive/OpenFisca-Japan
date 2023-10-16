@@ -1,0 +1,7 @@
+description: 同居特別障害者控除額
+metadata:
+  reference: https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1160.htm
+  unit: currency-JPY
+values:
+  2000-04-01:
+    value: 750000

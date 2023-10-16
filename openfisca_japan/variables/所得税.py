@@ -76,18 +76,22 @@ class 障害者控除(Variable):
     reference = "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1160.htm"
 
     def formula(対象世帯, 対象期間, parameters):
+        同居特別障害者控除対象 = 対象世帯.members("同居特別障害者控除対象", 対象期間)
         特別障害者控除対象 = 対象世帯.members("特別障害者控除対象", 対象期間)
         障害者控除対象 = 対象世帯.members("障害者控除対象", 対象期間)
 
         # 障害者控除額は対象人数分が算出される
         # https://www.city.hirakata.osaka.jp/kosodate/0000000544.html
-        特別障害者控除対象人数 = 対象世帯.sum(特別障害者控除対象)
+        同居特別障害者控除対象人数 = 対象世帯.sum(同居特別障害者控除対象)
+        # 重複して該当しないよう、同居特別障害者控除対象の場合を除外
+        特別障害者控除対象人数 = 対象世帯.sum(特別障害者控除対象 * np.logical_not(同居特別障害者控除対象))
         障害者控除対象人数 = 対象世帯.sum(障害者控除対象)
 
+        同居特別障害者控除額 = parameters(対象期間).所得.同居特別障害者控除額
         特別障害者控除額 = parameters(対象期間).所得.特別障害者控除額
         障害者控除額 = parameters(対象期間).所得.障害者控除額
         
-        return 特別障害者控除対象人数 * 特別障害者控除額 + 障害者控除対象人数 * 障害者控除額
+        return 同居特別障害者控除対象人数 * 同居特別障害者控除額 + 特別障害者控除対象人数 * 特別障害者控除額 + 障害者控除対象人数 * 障害者控除額
 
 
 class 障害者控除対象(Variable):
@@ -137,6 +141,23 @@ class 特別障害者控除対象(Variable):
                                 (愛の手帳等級 == 愛の手帳等級パターン.二度)
         
         return 特別障害者控除対象
+
+
+class 同居特別障害者控除対象(Variable):
+    value_type = bool
+    entity = 人物
+    definition_period = DAY
+    label = "同居特別障害者控除の対象になるか否か"
+    reference = "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1160.htm"
+
+    def formula(対象人物, 対象期間, parameters):
+        特別障害者控除対象 = 対象人物("特別障害者控除対象", 対象期間)
+        同一生計配偶者である = 対象人物("同一生計配偶者である", 対象期間)
+        扶養親族である = 対象人物("扶養親族である", 対象期間)
+
+        # TODO: 「同居していない親族」も世帯内で扱うようになったら以下の判定追加（現状フロントエンドでは同居している親族しか扱っていない）
+        # 「納税者自身、配偶者、その納税者と生計を一にする親族のいずれかとの同居を常況としている」        
+        return 特別障害者控除対象 * (同一生計配偶者である | 扶養親族である)
 
 
 class ひとり親控除(Variable):
@@ -202,6 +223,21 @@ class 勤労学生控除(Variable):
         return 所得条件 * 学生 * 勤労学生控除額
 
 
+class 同一生計配偶者である(Variable):
+    value_type = bool
+    default_value = False
+    entity = 人物
+    definition_period = DAY
+    label = "同一生計配偶者であるか否か"
+    reference = "https://www.nta.go.jp/taxes/shiraberu/shinkoku/tebiki/2022/03/order3/yogo/3-3_y15.htm"
+
+
+    def formula(対象人物, 対象期間, parameters):
+        所得 = 対象人物("所得", 対象期間)
+        同一生計配偶者_所得制限額 = parameters(対象期間).所得.同一生計配偶者_所得制限額
+        return 対象人物.has_role(世帯.配偶者) * (所得 < 同一生計配偶者_所得制限額)
+
+
 class 配偶者控除(Variable):
     value_type = float
     entity = 世帯
@@ -229,8 +265,9 @@ class 配偶者控除(Variable):
             ["~9000000", "~9500000", "~10000000"],
             None)
         
+        同一生計配偶者_所得制限額 = parameters(対象期間).所得.同一生計配偶者_所得制限額
         納税者の配偶者の所得区分 = np.select(
-            [納税者の配偶者の所得 <= 480000],
+            [納税者の配偶者の所得 <= 同一生計配偶者_所得制限額],
             ["~480000"],
             None)
 
