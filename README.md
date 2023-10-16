@@ -39,4 +39,3 @@ project-inclusiveの開発方針やOpenFiscaそのもの等の情報は、[本�
 [防窮研究所](https://www.facebook.com/Institute.for.Poverty.Prevention)
 
 
-
