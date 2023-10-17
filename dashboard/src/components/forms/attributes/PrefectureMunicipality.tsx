@@ -47,6 +47,9 @@ export const PrefectureMunicipality = ({
         newHousehold.世帯.世帯1.重度心身障害者手当_最大 = {
           [currentDate]: null,
         };
+        newHousehold.世帯.世帯1.受験生チャレンジ支援貸付 = {
+          [currentDate]: null,
+        }
       } else {
         if ('児童育成手当' in newHousehold.世帯.世帯1) {
           delete newHousehold.世帯.世帯1.児童育成手当;
@@ -59,6 +62,9 @@ export const PrefectureMunicipality = ({
         }
         if ('重度心身障害者手当_最大' in newHousehold.世帯.世帯1) {
           delete newHousehold.世帯.世帯1.重度心身障害者手当_最大;
+        }
+        if ('受験生チャレンジ支援貸付' in newHousehold.世帯.世帯1) {
+          delete newHousehold.世帯.世帯1.受験生チャレンジ支援貸付;
         }
       }
       console.log(newHousehold);

@@ -255,15 +255,6 @@
             "利子：年3%、または長期プライムレートのいずれか低い利率"
           ],
           "reference": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/kashitsukejoken.html"
-        },
-        "受験生チャレンジ支援貸付": {
-          "unit": "円 　",
-          "caption": [
-            "高校や大学等の受験料や塾などの受講料",
-            "返済期限：5年以内（高校・大学等に入学した場合、返済が免除されます）",
-            "利子：無利子"
-          ],
-          "reference": "https://jukenchallenge.jp"
         }
       }
     }
