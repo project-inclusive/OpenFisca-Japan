@@ -1,6 +1,3 @@
-
-import numpy as np
-
 from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
 from openfisca_japan.entities import 世帯, 人物
@@ -27,4 +24,4 @@ class 子供の預貯金(Variable):
 
         子供である = 対象世帯.has_role(世帯.子)
         預貯金一覧 = 対象世帯.members("預貯金", 対象期間)
-        return np.sum(預貯金一覧[子供である])
+        return 対象世帯.sum(子供である * 預貯金一覧)
