@@ -95,6 +95,7 @@
   "result": {
     "topDescription": "計算結果",
     "detailedCalculationDescription": "「くわしく計算」モードでは、より正確な結果が表示されます。金額が上がる場合もあります。",
+    "questionExamplesButtonText": "窓口での質問例",
     "screenshotButtonText": "このページを画像で保存",
     "consultationDescription1": "まずは近くの社会福祉協議会に相談してみませんか？",
     "consultationDescription2": "きっとあなたの相談に寄り添ってくれるはずです",
@@ -258,5 +259,9 @@
         }
       }
     }
+  },
+  "question_examples": {
+    "title": "窓口での質問例",
+    "backButtonText": "戻る"
   }
 }
