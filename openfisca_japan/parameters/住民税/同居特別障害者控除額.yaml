@@ -1,0 +1,7 @@
+description: 住民税における同居特別障害者控除額
+metadata:
+  reference: https://www.tax.metro.tokyo.lg.jp/kazei/kojin_ju.html#gaiyo_07
+  unit: currency-JPY
+values:
+  2000-04-01:
+    value: 530000

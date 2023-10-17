@@ -1,0 +1,8 @@
+description: 扶養控除額_一般
+metadata:
+  # NOTE: 他市区町村も同額
+  reference: https://www.town.hinode.tokyo.jp/0000000519.html
+  unit: currency-JPY
+values:
+  2020-01-01:
+    value: 330000
