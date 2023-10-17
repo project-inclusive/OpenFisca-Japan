@@ -37,7 +37,7 @@ export const FormYou = () => {
           <Birthday personName={yourName} mustInput={true} />
         )}
         <Income personName={yourName} mustInput={true} />
-        <Deposit personName={yourName} />
+        {!isSimpleCalculation && <Deposit personName={yourName} />}
         {!isSimpleCalculation && <Student personName={yourName} />}
         {!isSimpleCalculation && <Working personName={yourName} />}
         {!isSimpleCalculation && <Disability personName={yourName} />}
