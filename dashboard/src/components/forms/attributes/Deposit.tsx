@@ -53,7 +53,7 @@ export const Deposit = ({ personName }: { personName: string }) => {
             onChange={onChange}
             onKeyDown={onKeyDown}
             width="10em"
-            placeholder="0"
+            placeholder="（例）0"
           />
           <Box>万円</Box>
         </HStack>
