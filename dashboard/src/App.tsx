@@ -15,7 +15,7 @@ function App() {
     .padStart(2, '0')}-${new Date().getDate().toString().padStart(2, '0')}`;
 
   // netlify環境変数の確認
-  console.log(`netlify env ${import.meta.env.VITE_BRANCH}`);
+  console.log(`netlify env  ${import.meta.env.VITE_BRANCH}`);
 
   return (
     <AbsoluteCenter
