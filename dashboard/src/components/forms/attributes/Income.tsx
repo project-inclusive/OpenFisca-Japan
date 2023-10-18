@@ -63,6 +63,13 @@ export const Income = ({
             data-testid="income-input"
             type="number"
             value={shownIncome}
+            pattern="[0-9]*"
+            onInput={(e) => {
+              e.currentTarget.value = e.currentTarget.value.replace(
+                /[^0-9]/g,
+                ''
+              );
+            }}
             onChange={onChange}
             onKeyDown={onKeyDown}
             width="10em"

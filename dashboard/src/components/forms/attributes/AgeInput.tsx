@@ -62,6 +62,13 @@ export const AgeInput = ({
             width="6em"
             type="number"
             value={age}
+            pattern="[0-9]*"
+            onInput={(e) => {
+              e.currentTarget.value = e.currentTarget.value.replace(
+                /[^0-9]/g,
+                ''
+              );
+            }}
             onChange={handleAgeChange}
           />
           <Box>歳</Box>
