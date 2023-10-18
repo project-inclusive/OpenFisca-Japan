@@ -16,6 +16,8 @@ function App() {
 
   // netlify環境変数の確認
   console.log(`netlify env ${import.meta.env.VITE_BRANCH}`);
+  console.log(`netlify default env ${process.env.CONTEXT}`);
+  console.log(`netlify default env2 ${import.meta.env.CONTEXT}`);
 
   return (
     <AbsoluteCenter
