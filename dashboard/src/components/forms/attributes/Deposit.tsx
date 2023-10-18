@@ -50,10 +50,16 @@ export const Deposit = ({ personName }: { personName: string }) => {
             data-testid="deposit-input"
             type="number"
             value={shownDeposit}
+            pattern="[0-9]*"
+            onInput={(e) => {
+              e.currentTarget.value = e.currentTarget.value.replace(
+                /[^0-9]/g,
+                ''
+              )
+            }}
             onChange={onChange}
             onKeyDown={onKeyDown}
             width="10em"
-            placeholder="（例）0"
           />
           <Box>万円</Box>
         </HStack>
