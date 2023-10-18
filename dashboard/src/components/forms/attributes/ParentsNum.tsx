@@ -97,6 +97,13 @@ export const ParentsNum = () => {
               <Input
                 type="number"
                 value={shownLivingToghtherNum}
+                pattern="[0-9]*"
+                onInput={(e) => {
+                  e.currentTarget.value = e.currentTarget.value.replace(
+                    /[^0-9]/g,
+                    ''
+                  );
+                }}
                 onChange={onChange}
                 width="9em"
                 ref={inputEl}
