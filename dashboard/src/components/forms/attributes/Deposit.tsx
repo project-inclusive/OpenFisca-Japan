@@ -55,7 +55,7 @@ export const Deposit = ({ personName }: { personName: string }) => {
               e.currentTarget.value = e.currentTarget.value.replace(
                 /[^0-9]/g,
                 ''
-              )
+              );
             }}
             onChange={onChange}
             onKeyDown={onKeyDown}
