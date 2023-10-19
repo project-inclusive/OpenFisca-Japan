@@ -18,6 +18,7 @@ import { Student } from './attributes/Student';
 import { Working } from './attributes/Working';
 import { Recuperation } from './attributes/Recuperation';
 import { NursingHome } from './attributes/NursingHome';
+import { Deposit } from './attributes/Deposit';
 
 export const FormSpouse = () => {
   const location = useLocation();
@@ -63,6 +64,7 @@ export const FormSpouse = () => {
               <Birthday personName={spouseName} mustInput={true} />
             )}
             <Income personName={spouseName} mustInput={true} />
+            {!isSimpleCalculation && <Deposit personName={spouseName} />}
             {!isSimpleCalculation && <Student personName={spouseName} />}
             {!isSimpleCalculation && <Working personName={spouseName} />}
             {!isSimpleCalculation && <Disability personName={spouseName} />}

@@ -72,6 +72,9 @@ function CaluculationForm() {
         不動産担保型生活資金: {
           [currentDate]: null,
         },
+        受験生チャレンジ支援貸付: {
+          [currentDate]: null,
+        },
       },
     },
   });
