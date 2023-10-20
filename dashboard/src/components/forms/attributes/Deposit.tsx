@@ -3,19 +3,12 @@ import { Box, HStack, Input, FormControl, FormLabel } from '@chakra-ui/react';
 
 import { CurrentDateContext } from '../../../contexts/CurrentDateContext';
 import { HouseholdContext } from '../../../contexts/HouseholdContext';
-import { ErrorMessage } from './validation/ErrorMessage';
 
-export const Income = ({
-  personName,
-  mustInput,
-}: {
-  personName: string;
-  mustInput: boolean;
-}) => {
+export const Deposit = ({ personName }: { personName: string }) => {
   const currentDate = useContext(CurrentDateContext);
   const { household, setHousehold } = useContext(HouseholdContext);
 
-  const [shownIncome, setShownIncome] = useState<string | number>('');
+  const [shownDeposit, setShownDeposit] = useState<string | number>('');
 
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const newHousehold = {
@@ -23,16 +16,16 @@ export const Income = ({
     };
 
     // 「万円」単位を「円」に換算
-    let income = parseInt(event.currentTarget.value) * 10000;
+    let deposit = parseInt(event.currentTarget.value) * 10000;
     // 正の整数以外は0に変換
-    if (isNaN(income) || income < 0) {
-      income = 0;
-      setShownIncome('');
+    if (isNaN(deposit) || deposit < 0) {
+      deposit = 0;
+      setShownDeposit('');
     } else {
-      setShownIncome(income / 10000);
+      setShownDeposit(deposit / 10000);
     }
 
-    newHousehold.世帯員[personName].収入 = { [currentDate]: income };
+    newHousehold.世帯員[personName].預貯金 = { [currentDate]: deposit };
     setHousehold(newHousehold);
   }, []);
 
@@ -45,24 +38,18 @@ export const Income = ({
 
   return (
     <>
-      {mustInput && <ErrorMessage condition={shownIncome === ''} />}
       <FormControl>
         <FormLabel fontWeight="Regular">
           <HStack>
-            <Box>年収</Box>
-            {mustInput && (
-              <Box color="red" fontSize="0.7em">
-                必須
-              </Box>
-            )}
+            <Box>預貯金</Box>
           </HStack>
         </FormLabel>
 
         <HStack mb={4}>
           <Input
-            data-testid="income-input"
+            data-testid="deposit-input"
             type="number"
-            value={shownIncome}
+            value={shownDeposit}
             pattern="[0-9]*"
             onInput={(e) => {
               e.currentTarget.value = e.currentTarget.value.replace(

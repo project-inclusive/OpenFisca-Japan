@@ -15,6 +15,7 @@
 - 児童育成手当（東京都）
 - 障害児童育成手当（東京都）
 - 重度心身障害者手当（東京都）
+- 受験生チャレンジ支援貸付事業（東京都）
 
 ## 作成Webアプリ
 [支援みつもりヤドカリくん](https://shien-yadokari.netlify.app/)に作成されたWebアプリが公開されています。  
@@ -37,3 +38,5 @@ project-inclusiveの開発方針やOpenFiscaそのもの等の情報は、[本�
 
 ## お問い合わせ
 [防窮研究所](https://www.facebook.com/Institute.for.Poverty.Prevention)
+
+

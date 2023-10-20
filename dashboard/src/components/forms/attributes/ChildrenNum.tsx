@@ -91,6 +91,13 @@ export const ChildrenNum = () => {
               <Input
                 type="number"
                 value={shownChildrenNum}
+                pattern="[0-9]*"
+                onInput={(e) => {
+                  e.currentTarget.value = e.currentTarget.value.replace(
+                    /[^0-9]/g,
+                    ''
+                  );
+                }}
                 onChange={onChange}
                 width="9em"
                 ref={inputEl}

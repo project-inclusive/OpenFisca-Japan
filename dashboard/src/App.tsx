@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { AbsoluteCenter } from '@chakra-ui/react';
 import CaluculationForm from './components/forms/caluculationForm';
 import Description from './components/Description';
+import QuestionExamples from './components/QuestionExamples';
 import { Result } from './components/result/result';
 import { GenericError } from './components/errors/GenericError';
 import { NotFoundError } from './components/errors/NotFoundError';
@@ -12,6 +13,8 @@ function App() {
   const currentDate = `${new Date().getFullYear()}-${(new Date().getMonth() + 1)
     .toString()
     .padStart(2, '0')}-${new Date().getDate().toString().padStart(2, '0')}`;
+
+  console.log(`deploy ${import.meta.env.VITE_BRANCH}`);
 
   return (
     <AbsoluteCenter
@@ -44,6 +47,10 @@ function App() {
               {
                 path: '/result',
                 element: <Result />,
+              },
+              {
+                path: '/question-examples',
+                element: <QuestionExamples />,
               },
               {
                 path: '/response-error',

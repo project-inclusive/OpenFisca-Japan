@@ -164,15 +164,15 @@ sudo apt install xdg-utils
 
 ## デプロイ方法
 
-### デプロイ前の確認
-- `dashboard/src/hooks/calculate.ts`の`apiURL`変更
+### mainブランチマージ前の作業
 - docs/change_log.mdの更新
 
 ### バックエンド（OpenFisca Python APIサーバー）
 
 #### 自動build, deploy
-- Google CloudのCloud Buildにより、mainブランチ、developブランチにpull (push) されたとき、`Dockerfile_cloud`を元にそれぞれ自動でbuildされ、Cloud Runによりdeployされる。
-- mainブランチ、developブランチでbuild, deployされるAPIは別々。`dashboard/src/hooks/calculate.ts`の`apiURL`を、mainブランチとdevelopブランチpull (push)時に、`configData.URL.OpenFisca_API.production`と`configData.URL.OpenFisca_API.dev`に手動で切り替えている。
+以下より、バックエンド・フロントエンドともにmain, developブランチが独立した環境で自動ビルド・デプロイされる。
+- Google CloudのCloud Buildにより、mainブランチ、developブランチにpull (push) されたとき、それぞれ`./cloudbuild.yaml`, `./cloudbuild-dev.yaml`をもとに`./Dockerfile_cloud`のイメージがビルドされ、Cloud Runにより異なるURLでdeployされる。
+- Netlifyの環境変数をmainブランチとdevelopブランチで変えることで、それぞれ上記の個別のバックエンドAPIにPOSTする。
 
 #### ローカルでdockerイメージを作りcloud runにデプロイする（参考）
 - `docker build -t gcr.io/openfisca-shibuya/openfisca-shibuya-deploy-test -f Dockerfile_cloud --platform amd64 .`

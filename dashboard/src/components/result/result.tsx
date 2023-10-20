@@ -219,7 +219,7 @@ export const Result = () => {
             </Text>
           </Center>
 
-          <Center pr={4} pl={4} pb={4}>
+          <Center pr={4} pl={4} pb={2}>
             <Box
               bg="white"
               borderRadius="xl"
@@ -289,6 +289,22 @@ export const Result = () => {
                 </Box>
               )}
             </Box>
+          </Center>
+
+          <Center pr={4} pl={4} pb={4}>
+            <Button
+              as={RouterLink}
+              to="/question-examples"
+              fontSize={configData.style.subTitleFontSize}
+              borderRadius="xl"
+              height="2em"
+              width="100%"
+              bg="gray.500"
+              color="white"
+              _hover={{ bg: 'gray.600' }}
+            >
+              {configData.result.questionExamplesButtonText}
+            </Button>
           </Center>
 
           {isSimpleCalculation && (

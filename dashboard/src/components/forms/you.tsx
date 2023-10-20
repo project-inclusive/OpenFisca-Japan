@@ -15,6 +15,7 @@ import { Working } from './attributes/Working';
 import { Recuperation } from './attributes/Recuperation';
 import { NursingHome } from './attributes/NursingHome';
 import { Pregnant } from './attributes/Pregnant';
+import { Deposit } from './attributes/Deposit';
 
 export const FormYou = () => {
   const location = useLocation();
@@ -36,6 +37,7 @@ export const FormYou = () => {
           <Birthday personName={yourName} mustInput={true} />
         )}
         <Income personName={yourName} mustInput={true} />
+        {!isSimpleCalculation && <Deposit personName={yourName} />}
         {!isSimpleCalculation && <Student personName={yourName} />}
         {!isSimpleCalculation && <Working personName={yourName} />}
         {!isSimpleCalculation && <Disability personName={yourName} />}

@@ -1104,19 +1104,20 @@ class 勤労控除(Variable):
     """
 
     def formula(対象世帯, 対象期間, parameters):
-        基礎控除 = 対象世帯("基礎控除", 対象期間)
+        基礎控除 = 対象世帯("生活保護基礎控除", 対象期間)
         新規就労控除 = 対象世帯("新規就労控除", 対象期間)
         未成年者控除 = 対象世帯("未成年者控除", 対象期間)
         return 基礎控除 + 新規就労控除 + 未成年者控除
 
 
-class 基礎控除(Variable):
+class 生活保護基礎控除(Variable):
     value_type = float
     entity = 世帯
     definition_period = DAY
-    label = "基礎控除"
+    label = "生活保護における基礎控除"
     reference = "https://www.mhlw.go.jp/content/12002000/000771098.pdf"
     documentation = """
+    所得税、住民税における基礎控除とは異なる。
     算出方法は以下リンクも参考になる。
     https://www.holos.jp/media/welfare-income-earn.php
     https://www.city.chiba.jp/hokenfukushi/hogo/documents/r3shinkijunngakuhyou.pdf

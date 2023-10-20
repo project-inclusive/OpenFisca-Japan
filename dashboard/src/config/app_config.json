@@ -1,12 +1,12 @@
 {
   "URL": {
     "OpenFisca_API": {
-      "production": "https://openfisca-japan-hymisxpzca-uc.a.run.app/",
-      "dev": "https://openfisca-japan-dev-hymisxpzca-uc.a.run.app/"
+      "production": "https://openfisca-japan-ijgkugdoka-uc.a.run.app",
+      "dev": "https://openfisca-japan-dev-ijgkugdoka-uc.a.run.app"
     },
     "Github": "https://github.com/project-inclusive/OpenFisca-Japan",
-    "contact": "https://www.facebook.com/Institute.for.Poverty.Prevention",
-    "chatbot": "https://miibo.jp/chat/7eaf9ab0-e179-4857-8ff8-3f83e46f6251189dd2e771a157?name=%E3%83%A4%E3%83%89%E3%82%AB%E3%83%AA%E3%81%8F%E3%82%93",
+    "contact": "https://www.poverty-prevention.net/",
+    "chatbot": "https://miibo.jp/chat/f791f806-10f2-493c-8ed5-0174ec3e483618afd9cdeff118?name=%E3%83%A4%E3%83%89%E3%82%AB%E3%83%AA%E3%81%8F%E3%82%93",
     "questionnaire_form": "https://forms.gle/fxztn7JGTuZ3v1mS9"
   },
   "style": {
@@ -95,6 +95,7 @@
   "result": {
     "topDescription": "計算結果",
     "detailedCalculationDescription": "「くわしく計算」モードでは、より正確な結果が表示されます。金額が上がる場合もあります。",
+    "questionExamplesButtonText": "窓口での質問例",
     "screenshotButtonText": "このページを画像で保存",
     "consultationDescription1": "まずは近くの社会福祉協議会に相談してみませんか？",
     "consultationDescription2": "きっとあなたの相談に寄り添ってくれるはずです",
@@ -255,8 +256,21 @@
             "利子：年3%、または長期プライムレートのいずれか低い利率"
           ],
           "reference": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/kashitsukejoken.html"
+        },
+        "受験生チャレンジ支援貸付": {
+          "unit": "円 　",
+          "caption": [
+            "高校や大学等の受験料や塾などの受講料",
+            "返済期限：5年以内（高校・大学等に入学した場合、返済が免除されます）",
+            "利子：無利子"
+          ],
+          "reference": "https://jukenchallenge.jp"
         }
       }
     }
+  },
+  "question_examples": {
+    "title": "窓口での質問例",
+    "backButtonText": "戻る"
   }
 }
