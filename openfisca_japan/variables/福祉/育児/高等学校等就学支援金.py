@@ -10,6 +10,7 @@ from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
 from openfisca_japan.entities import 世帯
 from openfisca_japan.variables.福祉.育児.高等学校奨学給付金 import 高校履修種別パターン, 高校運営種別パターン
+from openfisca_japan.variables.全般 import 高校生学年
 
 
 # NOTE: 項目数が多い金額表は可読性の高いCSV形式としている。
@@ -56,7 +57,7 @@ class 高等学校等就学支援金_最小(Variable):
     def formula(対象世帯, 対象期間, parameters):
         所得判定基準 = 対象世帯("高等学校等就学支援金_所得判定基準", 対象期間)
         学年一覧 = 対象世帯.members("学年", 対象期間)
-        高校生かどうかの一覧 = (学年一覧 >= 10) * (学年一覧 <= 12)
+        高校生かどうかの一覧 = (学年一覧 >= 高校生学年.一年生.value) * (学年一覧 <= 高校生学年.三年生.value)
 
         高校履修種別一覧 = 対象世帯.members("高校履修種別", 対象期間).decode()
         高校運営種別一覧 = 対象世帯.members("高校運営種別", 対象期間).decode()
@@ -94,7 +95,7 @@ class 高等学校等就学支援金_最大(Variable):
     def formula(対象世帯, 対象期間, parameters):
         所得判定基準 = 対象世帯("高等学校等就学支援金_所得判定基準", 対象期間)
         学年一覧 = 対象世帯.members("学年", 対象期間)
-        高校生かどうかの一覧 = (学年一覧 >= 10) * (学年一覧 <= 12)
+        高校生かどうかの一覧 = (学年一覧 >= 高校生学年.一年生.value) * (学年一覧 <= 高校生学年.三年生.value)
 
         高校履修種別一覧 = 対象世帯.members("高校履修種別", 対象期間).decode()
         高校運営種別一覧 = 対象世帯.members("高校運営種別", 対象期間).decode()
