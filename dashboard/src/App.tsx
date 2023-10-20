@@ -14,6 +14,8 @@ function App() {
     .toString()
     .padStart(2, '0')}-${new Date().getDate().toString().padStart(2, '0')}`;
 
+  console.log(`deploy ${import.meta.env.VITE_BRANCH}`);
+
   return (
     <AbsoluteCenter
       width={{
