@@ -15,7 +15,8 @@ from openfisca_japan.variables.全般 import 高校生学年
 # TODO: 専攻科の就学支援金についても実装する（高等学校等就学支援金制度では専攻科は対象外）
 
 # NOTE: 項目数が多い金額表は可読性の高いCSV形式としている。
-# TODO: 特別支援学校等の高校履修種別にも対応する https://www.mext.go.jp/a_menu/shotou/mushouka/__icsFiles/afieldfile/2020/04/30/100014428_4.pdf
+# NOTE: 特別支援学校等、一部の高校履修種別は非対応（網羅すると判別のために利用者の入力負担が増えてしまうため）
+# https://www.mext.go.jp/a_menu/shotou/mushouka/__icsFiles/afieldfile/2020/04/30/100014428_4.pdf
 with open('openfisca_japan/parameters/福祉/育児/高等学校等就学支援金/支給額/支給限度額_学年制.csv') as f:
     reader = csv.DictReader(f)
     # 支給限度額_学年制表[高校履修種別][高校運営種別] の形で参照可能
