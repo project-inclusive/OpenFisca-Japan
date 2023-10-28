@@ -12,6 +12,7 @@ from openfisca_japan.entities import 世帯
 from openfisca_japan.variables.福祉.育児.高等学校奨学給付金 import 高校履修種別パターン, 高校運営種別パターン
 from openfisca_japan.variables.全般 import 高校生学年
 
+# TODO: 専攻科の就学支援金についても実装する（高等学校等就学支援金制度では専攻科は対象外）
 
 # NOTE: 項目数が多い金額表は可読性の高いCSV形式としている。
 with open('openfisca_japan/parameters/福祉/育児/高等学校等就学支援金/支給額/支給限度額_学年制.csv') as f:
@@ -49,6 +50,7 @@ class 高等学校等就学支援金_最小(Variable):
     label = "高等学校等就学支援金"
     reference = "https://www.mext.go.jp/a_menu/shotou/mushouka/1342674.htm"
     documentation = """
+    専攻科は対象外。
     算出方法は以下リンクも参考になる。
     (条件) https://www.mext.go.jp/a_menu/shotou/mushouka/20220329-mxt_kouhou02-3.pdf
     (金額) https://www.mext.go.jp/a_menu/shotou/mushouka/__icsFiles/afieldfile/2020/04/30/100014428_4.pdf
@@ -87,6 +89,7 @@ class 高等学校等就学支援金_最大(Variable):
     label = "高等学校等就学支援金"
     reference = "https://www.mext.go.jp/a_menu/shotou/mushouka/1342674.htm"
     documentation = """
+    専攻科は対象外。
     算出方法は以下リンクも参考になる。
     (条件) https://www.mext.go.jp/a_menu/shotou/mushouka/20220329-mxt_kouhou02-3.pdf
     (金額) https://www.mext.go.jp/a_menu/shotou/mushouka/__icsFiles/afieldfile/2020/04/30/100014428_4.pdf
