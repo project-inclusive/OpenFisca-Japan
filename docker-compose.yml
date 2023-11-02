@@ -18,6 +18,8 @@ services:
       dockerfile: ./Dockerfile
     volumes:
       - ${LOCAL_WORKSPACE_FOLDER:-.}/dashboard/src:/app/src
+    environment:
+      - YADOKARI_GA_ID=${YADOKARI_GA_ID:-G-XXXXXX} # Google Analytics ID（OS環境変数が設定されていない場合は開発用のGoogle Analytics IDが設定される）
     #command: npm run dev
     #user: user:user
     ports:
