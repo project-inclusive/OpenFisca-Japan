@@ -1,15 +1,15 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-import ScrollToTop from "../scrollToTop";
-import { FormContent } from "./formContent";
-import { HouseholdContext } from "../../contexts/HouseholdContext";
-import { CurrentDateContext } from "../../contexts/CurrentDateContext";
+import ScrollToTop from '../scrollToTop';
+import { FormContent } from './formContent';
+import { HouseholdContext } from '../../contexts/HouseholdContext';
+import { CurrentDateContext } from '../../contexts/CurrentDateContext';
 
 function CaluculationForm() {
   // 日付は「YYYY-MM-DD」の桁数フォーマットでないとOpenFisca APIが正常動作しない
   const currentDate = `${new Date().getFullYear()}-${(new Date().getMonth() + 1)
     .toString()
-    .padStart(2, "0")}-${new Date().getDate().toString().padStart(2, "0")}`;
+    .padStart(2, '0')}-${new Date().getDate().toString().padStart(2, '0')}`;
 
   // NOTE: 計算したい制度については、予めここに設定する必要がある
   const [household, setHousehold] = useState({
@@ -18,7 +18,7 @@ function CaluculationForm() {
     },
     世帯: {
       世帯1: {
-        自分一覧: ["あなた"],
+        自分一覧: ['あなた'],
         児童手当: {
           [currentDate]: null,
         },
@@ -38,6 +38,12 @@ function CaluculationForm() {
           [currentDate]: null,
         },
         障害児福祉手当: {
+          [currentDate]: null,
+        },
+        高等学校奨学給付金_最小: {
+          [currentDate]: null,
+        },
+        高等学校奨学給付金_最大: {
           [currentDate]: null,
         },
         生活支援費: {
@@ -64,6 +70,9 @@ function CaluculationForm() {
           [currentDate]: null,
         },
         不動産担保型生活資金: {
+          [currentDate]: null,
+        },
+        受験生チャレンジ支援貸付: {
           [currentDate]: null,
         },
       },

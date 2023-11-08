@@ -1,20 +1,21 @@
 {
   "URL": {
     "OpenFisca_API": {
-      "production": "https://openfisca-japan-hymisxpzca-uc.a.run.app/",
-      "dev": "https://openfisca-japan-dev-hymisxpzca-uc.a.run.app/"
+      "production": "https://openfisca-japan-ijgkugdoka-uc.a.run.app",
+      "dev": "https://openfisca-japan-dev-ijgkugdoka-uc.a.run.app"
     },
     "Github": "https://github.com/project-inclusive/OpenFisca-Japan",
-    "contact": "https://www.facebook.com/Institute.for.Poverty.Prevention",
-    "questionnaire_form": "https://forms.gle/7G6XZKsGvf7VdNTR7"
+    "contact": "https://www.poverty-prevention.net/",
+    "chatbot": "https://miibo.jp/chat/f791f806-10f2-493c-8ed5-0174ec3e483618afd9cdeff118?name=%E3%83%A4%E3%83%89%E3%82%AB%E3%83%AA%E3%81%8F%E3%82%93",
+    "questionnaire_form": "https://forms.gle/fxztn7JGTuZ3v1mS9"
   },
   "style": {
     "titleFontSize": {
       "base": "1.5em",
-      "sm": "2.2em",
-      "md": "2.5em",
-      "lg": "2.8em",
-      "xl": "2.8em"
+      "sm": "2em",
+      "md": "2em",
+      "lg": "2em",
+      "xl": "2.2em"
     },
     "subTitleFontSize": {
       "base": "1.3em",
@@ -74,7 +75,7 @@
     }
   },
   "description": {
-    "title": "お金サポート ヤドカリくん",
+    "title": "支援みつもりヤドカリくん",
     "feature": ["わかりやすい", "窓口へ", "安心"],
     "description": [
       "世帯の情報をもとに、あなたが受けられる支援制度の給付額や貸付上限額をピンポイントで簡易的に算出します。",
@@ -94,12 +95,16 @@
   "result": {
     "topDescription": "計算結果",
     "detailedCalculationDescription": "「くわしく計算」モードでは、より正確な結果が表示されます。金額が上がる場合もあります。",
+    "questionExamplesButtonText": "窓口での質問例",
     "screenshotButtonText": "このページを画像で保存",
-    "questionnaireDescription": [
-      "よろしければ改善のための簡単なアンケートにご協力ください。"
-    ],
+    "consultationDescription1": "まずは近くの社会福祉協議会に相談してみませんか？",
+    "consultationDescription2": "きっとあなたの相談に寄り添ってくれるはずです",
+    "consultationDescription3": "社会福祉協議会はさまざまな福祉サービスや相談活動、市民と行政の橋渡しを行う民間組織です。他の制度や関係する窓口を紹介してもらえる可能性もあります。",
     "chatbotDescription": [
       "追加で知りたいことがあればヤドカリくんにも聞いてみましょう。"
+    ],
+    "questionnaireDescription": [
+      "よろしければ改善のための簡単なアンケートにご協力ください。"
     ],
     "benefitDescription": "給付される可能性のあるお金",
     "給付制度": {
@@ -143,6 +148,13 @@
           ],
           "reference": "https://www.fukushi.metro.tokyo.lg.jp/kodomo/kosodate/teate/zidouikuseiteate.html"
         },
+        "重度心身障害者手当": {
+          "unit": "円/月",
+          "caption": [
+            "精神又は身体に重度の障害を持ち、常時複雑な介護を必要とする方に給付される手当"
+          ],
+          "reference": "https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/juudo.html"
+        },
         "生活保護": {
           "unit": "円/月",
           "caption": [
@@ -151,6 +163,13 @@
             "算出された額に加え、医療費・介護費等が実費で給付されます。"
           ],
           "reference": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsuhogopage.html"
+        },
+        "高等学校奨学給付金": {
+          "unit": "円/月",
+          "caption": [
+            "教材費、通学用品費等、高校で安心して教育を受けるために必要なお金の給付"
+          ],
+          "reference": "https://www.mext.go.jp/a_menu/shotou/mushouka/1344089.htm"
         }
       }
     },
@@ -237,8 +256,21 @@
             "利子：年3%、または長期プライムレートのいずれか低い利率"
           ],
           "reference": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/kashitsukejoken.html"
+        },
+        "受験生チャレンジ支援貸付": {
+          "unit": "円 　",
+          "caption": [
+            "高校や大学等の受験料や塾などの受講料",
+            "返済期限：5年以内（高校・大学等に入学した場合、返済が免除されます）",
+            "利子：無利子"
+          ],
+          "reference": "https://jukenchallenge.jp"
         }
       }
     }
+  },
+  "question_examples": {
+    "title": "窓口での質問例",
+    "backButtonText": "戻る"
   }
 }

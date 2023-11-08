@@ -13,6 +13,7 @@ from datetime import date
 # Import from numpy the operations you need to apply on OpenFisca's population vectors
 # Import from openfisca-core the Python objects used to code the legislation in OpenFisca
 from numpy import where
+import numpy as np
 from openfisca_core.indexed_enums import Enum
 from openfisca_core.periods import DAY, ETERNITY
 from openfisca_core.variables import Variable
@@ -30,13 +31,6 @@ class 誕生年月日(Variable):
     reference = "https://en.wiktionary.org/wiki/birthdate"
 
 
-class 死亡年月日(Variable):
-    value_type = date
-    entity = 人物
-    label = "人物の死亡年月日"
-    definition_period = ETERNITY  # This variable cannot change over time.
-
-
 class 年齢(Variable):
     value_type = int
     entity = 人物
@@ -51,7 +45,10 @@ class 年齢(Variable):
 
         誕生日を過ぎている = (誕生月 < 対象期間.start.month) + (誕生月 == 対象期間.start.month) * (誕生日 <= 対象期間.start.day)
 
-        return (対象期間.start.year - 誕生年) - where(誕生日を過ぎている, 0, 1)  # If the birthday is not passed this year, subtract one year
+        年齢 = (対象期間.start.year - 誕生年) - where(誕生日を過ぎている, 0, 1)  # If the birthday is not passed this year, subtract one year
+        
+        # NOTE: 誕生日が未来であった場合便宜上0歳として扱う(誤った情報が指定された場合でもOpenFiscaがクラッシュするのを防ぐため)
+        return np.clip(年齢, 0, None)
 
 
 # 小学n年生はn, 中学m年生はm+6, 高校l年生はl+9, 
@@ -77,27 +74,6 @@ class 学年(Variable):
         return (対象期間.start.year - 誕生年) + 繰り上げ年数 - 7
 
 
-class 扶養人数(Variable):
-    value_type = int
-    entity = 世帯
-    definition_period = DAY
-    label = "扶養人数"
-
-    def formula(対象世帯, 対象期間, parameters):
-        扶養控除所得金額 = parameters(対象期間).税金.扶養控除所得金額
-
-        # 扶養人数が1人ではない場合を考慮する
-        世帯所得一覧 = 対象世帯.members("所得", 対象期間)
-        児童である = 対象世帯.has_role(世帯.子)
-        # 扶養親族に配偶者は含まれない。(親等の児童以外を扶養する場合はそれらも含む必要あり)
-        # 扶養親族の定義(参考): https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1180.htm
-        扶養親族である = 児童である * (世帯所得一覧 < 扶養控除所得金額)
-        扶養人数 = 対象世帯.sum(扶養親族である)
-
-        # この時点でndarrayからスカラーに変換しても、他から扶養人数を取得する際はndarrayに変換されて返されてしまう
-        return 扶養人数
-
-
 class 世帯人数(Variable):
     value_type = int
     entity = 世帯
@@ -107,26 +83,3 @@ class 世帯人数(Variable):
     def formula(対象世帯, 対象期間, parameters):
         # 世帯人数を直接出す方法がOpenFiscaにあるかもしれないが、一旦以下の方法で出す
         return len(対象世帯.members("年齢", 対象期間))
-
-
-class 行方不明年月日(Variable):
-    value_type = bool
-    entity = 人物
-    definition_period = DAY
-    label = "行方不明になった年月日"
-
-
-class 生存状況パターン(Enum):
-    __order__ = "生存 死亡 不明"
-    生存 = "生存"
-    死亡 = "死亡"
-    不明 = "不明"
-
-
-class 生存状況(Variable):
-    value_type = Enum
-    possible_values = 生存状況パターン
-    default_value = 生存状況パターン.生存
-    entity = 人物
-    definition_period = DAY
-    label = "人物の生存状況"

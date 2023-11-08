@@ -476,8 +476,9 @@ class 生活扶助本体に係る経過的加算(Variable):
              年齢 >= 75],
             ["0~2", "3~5", "6~11", "12~17", "18~19", "20~40", "41~59", "60~64", "65~69", "70~74", "75~"],
             0) for 年齢 in 各世帯員の年齢]
+        世帯人数区分 = np.clip(世帯人数, 1, 5).astype(str)
         return sum([
-            int(生活扶助本体に係る経過的加算表[f'{世帯人数[0]}人'][str(年齢区分)][f'{居住級地区分1[0]}級地-{居住級地区分2[0]}'])
+            int(生活扶助本体に係る経過的加算表[f'{世帯人数区分[0]}人'][str(年齢区分)][f'{居住級地区分1[0]}級地-{居住級地区分2[0]}'])
             for 年齢区分 in 各世帯員の年齢区分])
 
 
@@ -659,9 +660,9 @@ class 母子世帯等に係る経過的加算(Variable):
         if 年齢区分 == None:
             return 0
         
-        世帯区分 = np.clip(世帯人数[0], None, 5)
+        世帯人数区分 = np.clip(世帯人数[0], None, 5)
 
-        return 母子世帯等に係る経過的加算表[世帯区分][str(年齢区分)][居住級地区分]
+        return 母子世帯等に係る経過的加算表[世帯人数区分][str(年齢区分)][居住級地区分]
 
 
 class 入院中(Variable):
@@ -1103,19 +1104,20 @@ class 勤労控除(Variable):
     """
 
     def formula(対象世帯, 対象期間, parameters):
-        基礎控除 = 対象世帯("基礎控除", 対象期間)
+        基礎控除 = 対象世帯("生活保護基礎控除", 対象期間)
         新規就労控除 = 対象世帯("新規就労控除", 対象期間)
         未成年者控除 = 対象世帯("未成年者控除", 対象期間)
         return 基礎控除 + 新規就労控除 + 未成年者控除
 
 
-class 基礎控除(Variable):
+class 生活保護基礎控除(Variable):
     value_type = float
     entity = 世帯
     definition_period = DAY
-    label = "基礎控除"
+    label = "生活保護における基礎控除"
     reference = "https://www.mhlw.go.jp/content/12002000/000771098.pdf"
     documentation = """
+    所得税、住民税における基礎控除とは異なる。
     算出方法は以下リンクも参考になる。
     https://www.holos.jp/media/welfare-income-earn.php
     https://www.city.chiba.jp/hokenfukushi/hogo/documents/r3shinkijunngakuhyou.pdf

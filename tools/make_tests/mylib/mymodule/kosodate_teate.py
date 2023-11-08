@@ -48,12 +48,18 @@ class Process(ProcessBase):
 
         if self.titles.get("控除後世帯高所得") and row[self.titles[f'控除後世帯高所得']]:
             income = int(row[self.titles[f'控除後世帯高所得']].replace(',', ''))
-            if allowance == '児童手当' or allowance == '障害児福祉手当' or allowance == '特別児童扶養手当':
+            if allowance == '児童手当' or allowance == '障害児福祉手当':
                 d_input['世帯']["控除後世帯高所得"] = {self.period: income}
             elif allowance == '児童扶養手当':
                 d_input['世帯']["児童扶養手当の控除後世帯高所得"] = {self.period: income}
+            elif allowance == '特別児童扶養手当' or allowance == '児童育成手当' or allowance == '障害児童育成手当':
+                d_input['世帯']["特別児童扶養手当の控除後世帯高所得"] = {self.period: income}
             else:
                 d_input['世帯']["世帯高所得"] = {self.period: income}
+
+        # 東京都のみの制度
+        if allowance == '児童育成手当' or allowance == '障害児童育成手当':
+            d_input['世帯']['居住都道府県'] = {self.period: '東京都'}
 
         # 世帯員の属性
         for p in people:

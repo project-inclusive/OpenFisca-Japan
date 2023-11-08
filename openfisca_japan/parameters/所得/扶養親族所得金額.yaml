@@ -1,0 +1,9 @@
+description: 扶養親族となる所得の上限
+metadata:
+  reference: https://www.city.shibuya.tokyo.jp/kodomo/teate/teate/teate_gendogaku.html
+  unit: currency-JPY
+values:
+  2000-05-01:
+    value: 480000.0
+    metadata:
+      reference: https://www.city.shibuya.tokyo.jp/kodomo/teate/teate/teate_gendogaku.html

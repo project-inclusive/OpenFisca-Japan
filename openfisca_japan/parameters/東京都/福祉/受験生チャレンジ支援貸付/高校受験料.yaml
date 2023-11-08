@@ -1,0 +1,7 @@
+description: 高校受験料
+metadata:
+  reference: https://www.fukushi.metro.tokyo.lg.jp/seikatsu/teisyotokusyataisaku/jukenseichallenge.html
+  unit: currency-JPY
+values:
+  2023-04-01:
+    value: 27400

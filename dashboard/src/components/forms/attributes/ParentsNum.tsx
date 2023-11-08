@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState, useRef, useEffect } from "react";
+import { useCallback, useContext, useState, useRef, useEffect } from 'react';
 import {
   Checkbox,
   Box,
@@ -6,15 +6,15 @@ import {
   Input,
   FormControl,
   FormLabel,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 
-import { HouseholdContext } from "../../../contexts/HouseholdContext";
+import { HouseholdContext } from '../../../contexts/HouseholdContext';
 
 export const ParentsNum = () => {
   const { household, setHousehold } = useContext(HouseholdContext);
   const [shownLivingToghtherNum, setShownLivingToghtherNum] = useState<
     string | number
-  >("");
+  >('');
   const inputEl = useRef<HTMLInputElement>(null);
 
   const [isChecked, setIsChecked] = useState(false);
@@ -27,7 +27,7 @@ export const ParentsNum = () => {
           delete newHousehold.世帯員[name];
         });
         delete newHousehold.世帯.世帯1.親一覧;
-        setShownLivingToghtherNum("");
+        setShownLivingToghtherNum('');
         setHousehold({ ...newHousehold });
       }
       setIsChecked(event.target.checked);
@@ -48,7 +48,7 @@ export const ParentsNum = () => {
     // 正の整数以外は0に変換
     if (isNaN(LivingToghtherNum) || LivingToghtherNum < 0) {
       LivingToghtherNum = 0;
-      setShownLivingToghtherNum("");
+      setShownLivingToghtherNum('');
       // TODO: 算出に必要な最大人数に設定する
     } else if (LivingToghtherNum > 10) {
       LivingToghtherNum = 10;
@@ -97,6 +97,13 @@ export const ParentsNum = () => {
               <Input
                 type="number"
                 value={shownLivingToghtherNum}
+                pattern="[0-9]*"
+                onInput={(e) => {
+                  e.currentTarget.value = e.currentTarget.value.replace(
+                    /[^0-9]/g,
+                    ''
+                  );
+                }}
                 onChange={onChange}
                 width="9em"
                 ref={inputEl}

@@ -100,6 +100,7 @@
 - つまり、periodの場合分けでif文を使わずに済むようになります
   - [参考実装](https://github.com/openfisca/openfisca-core/blob/fad5f69a91435c767cb6bca73de6a7d1b666c082/openfisca_core/variables/variable.py#L246)
 - `対象世帯(変数名, 対象期間)` `対象人物(変数名, 対象期間)` 等で別のVariableの値を参照できます
+  - `対象人物`のvariableを取得した場合は世帯人数分のndarrayが返されるが、`対象世帯.members`で参照するときや最終的な結果やテスト時は世帯員ごとに処理される。
   - 対象世帯の各世帯員のVariableを参照する場合は `対象世帯.members(変数名, 対象期間)`
   - 対象人物の世帯のVariableを参照する場合は `対象人物.世帯(変数名, 対象期間)`
   - ただし、取得した値を式に用いる場合 **複合演算子 (`+=`, `-=` 等)を使用すると参照元の変数そのものが書き変わり計算に不整合が生じてしまいます**
@@ -113,3 +114,67 @@
   - `paths` : APIのエンドポイント
 - テスト用APIでは日付の月と日は0埋めの2桁でなくても正しく計算されるが、web APIでは月と日は0埋めの2桁でないと正しく計算されずエラーも出ない
   - 即ち、日付は「YYYY-MM-DD」のフォーマットで入力する必要がある
+
+- API POST specification
+  - Strings enclosed in " " cannot be changed.
+  - A `parent` means a parent of `you` and a grandparent of a `child`.
+  - \<period\> means the period during which an attribute has its value.   
+  So attributes that do not change permanently (only `誕生年月日` (birthday) as of 2023/9/2) are `ETERNITY`, and other attributes set the input date (YYYY-MM-DD).
+  - Please set the value of \<allowance to be calculated\> to `null` when POST. The value calculated by the backend API is set there and returned.  
+  Only attributes that are set when POST is calculated by the backend API. Therefore, any allowances that may be displayed on the frontend need to be set to `null` in the json when POSTed.
+
+  ```
+  {
+    "世帯員": {
+      <you>: {
+        <personal attribute>: {
+          <period>: value
+        },
+        <personal attribute>: {
+          <period>: value
+        },
+      },
+      <spouse>: {
+        <personal attribute>: {
+          <period>: value
+        },
+      },
+      <child1>: {
+        <personal attribute>: {
+          <period>: value
+        },
+      },
+      <child2>: {
+        <personal attribute>: {
+          <period>: value
+        },
+      },
+      <parent1>: {
+        <personal attribute>: {
+          <period>: value
+        },
+      }
+    },
+    "世帯": {
+      "世帯1": {
+        "自分一覧": [<you>],
+        "配偶者一覧": [<spouse>],
+        "子一覧": [<child1>, <child2>],
+        "親一覧": [<parent1>]
+        <household attribute>: {
+          <period>: value
+        },
+        <household attribute>: {
+          <period>: value
+        },
+        <allowance to be calculated>: {
+          <period>: null
+        },
+        <allowance to be calculated>: {
+          <period>: null
+        },
+      }
+    }
+  }
+
+  ```

@@ -25,7 +25,7 @@ class 居住都道府県(Variable):
     entity = 世帯
     label = "居住都道府県"
     definition_period = DAY
-    default_value = "東京都"
+    default_value = "北海道"
 
 
 class 居住市区町村(Variable):
@@ -69,47 +69,3 @@ class 居住級地区分2(Variable):
         else:
             return 2
 
-
-# This variable is a pure input: it doesn't have a formula
-class 課税床面積(Variable):
-    value_type = float
-    entity = 世帯
-    #definition_period = DAY
-    definition_period = MONTH
-    label = "世帯の住居の課税床面積"
-
-
-class 家賃(Variable):
-    value_type = float
-    entity = 世帯
-    definition_period = DAY
-    label = "世帯の家賃"
-
-
-# 居住状況パターンをEnumとして実装
-# See more at <https://openfisca.org/doc/coding-the-legislation/20_input_variables.html#advanced-example-enumerations-enum>
-class 居住状況パターン(Enum):
-    __order__ = "持ち家 借家 free_lodger homeless"
-    持ち家 = "持ち家"
-    借家 = "借家"
-    free_lodger = "Free lodger"
-    homeless = "Homeless"
-
-
-class 居住状況(Variable):
-    value_type = Enum
-    possible_values = 居住状況パターン
-    default_value = 居住状況パターン.借家
-    entity = 世帯
-    #definition_period = DAY
-    definition_period = MONTH
-    label = "世帯の居住状況"
-
-
-class postal_code(Variable):
-    value_type = str
-    max_length = 5
-    entity = 世帯
-    #definition_period = DAY
-    definition_period = MONTH
-    label = "世帯の郵便番号"

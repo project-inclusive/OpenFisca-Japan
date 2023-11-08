@@ -54,7 +54,7 @@
       # docker環境を構築
       docker build ./ -t openfisca_japan_dashboard
       # docker環境を起動
-      docker run -it --rm -p 30000:30000 -v "$(pwd)/src:/app/src" -u user openfisca_japan_dashboard
+      docker run -it --rm -p 30000:30000 -v "$(pwd)/src:/app/src" openfisca_japan_dashboard
       # docker環境を終了
       exit
       # 元のディレクトリに戻る
@@ -112,7 +112,7 @@ make serve-local
 - バックエンドのdocker環境に入る
 
 #### テスト実行
-- 全てのテストを実行（2023/2/25時点でエラーになるため、下の「一部のテストを実行」で確認）
+- 全てのテストを実行 (変更内容の影響範囲が大きい場合またはmainブランチマージ時は、デグレードを検知するため実行してください。)
   - `make test` 
 - 一部のテストを実行
   - `openfisca test --country-package openfisca_japan openfisca_japan/tests/<実行したいテストファイル或いはディレクトリパス>`
@@ -164,11 +164,15 @@ sudo apt install xdg-utils
 
 ## デプロイ方法
 
+### mainブランチマージ前の作業
+- docs/change_log.mdの更新
+
 ### バックエンド（OpenFisca Python APIサーバー）
 
-### 自動build, deploy
-- Google CloudのCloud Buildにより、mainブランチ、developブランチにpull (push) されたとき、`Dockerfile_cloud`を元にそれぞれ自動でbuildされ、Cloud Runによりdeployされる。
-- mainブランチ、developブランチでbuild, deployされるAPIは別々。`dashboard/src/hooks/calculate.ts`の`apiURL`を、mainブランチとdevelopブランチpull (push)時に、`configData.URL.OpenFisca_API.production`と`configData.URL.OpenFisca_API.dev`に手動で切り替えている。
+#### 自動build, deploy
+以下より、バックエンド・フロントエンドともにmain, developブランチが独立した環境で自動ビルド・デプロイされる。
+- Google CloudのCloud Buildにより、mainブランチ、developブランチにpull (push) されたとき、それぞれ`./cloudbuild.yaml`, `./cloudbuild-dev.yaml`をもとに`./Dockerfile_cloud`のイメージがビルドされ、Cloud Runにより異なるURLでdeployされる。
+- Netlifyの環境変数をmainブランチとdevelopブランチで変えることで、それぞれ上記の個別のバックエンドAPIにPOSTする。
 
 #### ローカルでdockerイメージを作りcloud runにデプロイする（参考）
 - `docker build -t gcr.io/openfisca-shibuya/openfisca-shibuya-deploy-test -f Dockerfile_cloud --platform amd64 .`
@@ -181,7 +185,7 @@ sudo apt install xdg-utils
 ### フロントエンド
 - Netlifyでmainブランチ、developブランチにpull (push)時にbuild, deployされる。
 
-- developブランチのデプロイURLは[https://develop--myseido-simulator.netlify.app/](https://develop--myseido-simulator.netlify.app/)
+- developブランチのデプロイURLは[https://develop--shien-yadokari.netlify.app/](https://develop--shien-yadokari.netlify.app/)
 
 
 
