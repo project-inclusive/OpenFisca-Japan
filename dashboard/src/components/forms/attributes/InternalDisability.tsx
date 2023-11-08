@@ -1,8 +1,8 @@
-import { useState, useCallback, useContext } from 'react';
-import { Checkbox } from '@chakra-ui/react';
+import { useState, useCallback, useContext } from "react";
+import { Checkbox } from "@chakra-ui/react";
 
-import { HouseholdContext } from '../../../contexts/HouseholdContext';
-import { CurrentDateContext } from '../../../contexts/CurrentDateContext';
+import { HouseholdContext } from "../../../contexts/HouseholdContext";
+import { CurrentDateContext } from "../../../contexts/CurrentDateContext";
 
 export const InternalDisability = ({ personName }: { personName: string }) => {
   const { household, setHousehold } = useContext(HouseholdContext);
@@ -14,11 +14,11 @@ export const InternalDisability = ({ personName }: { personName: string }) => {
     const newHousehold = { ...household };
     if (event.target.checked) {
       newHousehold.世帯員[personName].内部障害 = {
-        [currentDate]: '有',
+        [currentDate]: "有",
       };
     } else {
       newHousehold.世帯員[personName].内部障害 = {
-        [currentDate]: '無',
+        [currentDate]: "無",
       };
     }
 

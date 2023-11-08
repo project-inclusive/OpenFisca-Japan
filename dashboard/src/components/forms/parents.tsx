@@ -1,15 +1,15 @@
-import { useContext } from 'react';
-import { Box, Center } from '@chakra-ui/react';
+import { useContext } from "react";
+import { Box, Center } from "@chakra-ui/react";
 
-import configData from '../../config/app_config.json';
-import { HouseholdContext } from '../../contexts/HouseholdContext';
-import { Birthday } from './attributes/Birthday';
-import { Disability } from './attributes/Disability';
-import { Income } from './attributes/Income';
-import { Student } from './attributes/Student';
-import { Working } from './attributes/Working';
-import { Recuperation } from './attributes/Recuperation';
-import { NursingHome } from './attributes/NursingHome';
+import configData from "../../config/app_config.json";
+import { HouseholdContext } from "../../contexts/HouseholdContext";
+import { Birthday } from "./attributes/Birthday";
+import { Disability } from "./attributes/Disability";
+import { Income } from "./attributes/Income";
+import { Student } from "./attributes/Student";
+import { Working } from "./attributes/Working";
+import { Recuperation } from "./attributes/Recuperation";
+import { NursingHome } from "./attributes/NursingHome";
 
 export const FormParents = () => {
   const { household, setHousehold } = useContext(HouseholdContext);

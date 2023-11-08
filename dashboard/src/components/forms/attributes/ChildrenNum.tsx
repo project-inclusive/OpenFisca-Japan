@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState, useRef, useEffect } from 'react';
+import { useCallback, useContext, useState, useRef, useEffect } from "react";
 import {
   Checkbox,
   Box,
@@ -6,13 +6,13 @@ import {
   Input,
   FormControl,
   FormLabel,
-} from '@chakra-ui/react';
+} from "@chakra-ui/react";
 
-import { HouseholdContext } from '../../../contexts/HouseholdContext';
+import { HouseholdContext } from "../../../contexts/HouseholdContext";
 
 export const ChildrenNum = () => {
   const { household, setHousehold } = useContext(HouseholdContext);
-  const [shownChildrenNum, setShownChildrenNum] = useState<string | number>('');
+  const [shownChildrenNum, setShownChildrenNum] = useState<string | number>("");
   const inputEl = useRef<HTMLInputElement>(null);
 
   const [isChecked, setIsChecked] = useState(false);
@@ -25,12 +25,12 @@ export const ChildrenNum = () => {
           delete newHousehold.世帯員[childName];
         });
         delete newHousehold.世帯.世帯1.子一覧;
-        setShownChildrenNum('');
+        setShownChildrenNum("");
         setHousehold({ ...newHousehold });
       }
       setIsChecked(event.target.checked);
     },
-    []
+    [],
   );
 
   // チェックされたときに「子どもの数」フォームにフォーカス
@@ -46,7 +46,7 @@ export const ChildrenNum = () => {
     // 正の整数以外は0に変換
     if (isNaN(childrenNum) || childrenNum < 0) {
       childrenNum = 0;
-      setShownChildrenNum('');
+      setShownChildrenNum("");
     } else if (childrenNum > 5) {
       childrenNum = 5;
       setShownChildrenNum(childrenNum);
@@ -64,7 +64,7 @@ export const ChildrenNum = () => {
 
     // 新しい子どもの情報を追加
     newHousehold.世帯.世帯1.子一覧 = [...Array(childrenNum)].map(
-      (val, i) => `子ども${i}`
+      (val, i) => `子ども${i}`,
     );
     if (newHousehold.世帯.世帯1.子一覧) {
       newHousehold.世帯.世帯1.子一覧.map((childName: string) => {
@@ -95,7 +95,7 @@ export const ChildrenNum = () => {
                 onInput={(e) => {
                   e.currentTarget.value = e.currentTarget.value.replace(
                     /[^0-9]/g,
-                    ''
+                    "",
                   );
                 }}
                 onChange={onChange}

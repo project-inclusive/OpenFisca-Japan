@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import { Box, Center, Button, VStack, Image } from '@chakra-ui/react';
-import { Icon } from '@chakra-ui/react';
-import { CheckCircleIcon } from '@chakra-ui/icons';
-import { FaGithub } from 'react-icons/fa';
+import { useState, useEffect } from "react";
+import { Link as RouterLink } from "react-router-dom";
+import { Box, Center, Button, VStack, Image } from "@chakra-ui/react";
+import { Icon } from "@chakra-ui/react";
+import { CheckCircleIcon } from "@chakra-ui/icons";
+import { FaGithub } from "react-icons/fa";
 
-import configData from '../config/app_config.json';
-import bokyuIcon from '../assets/bokyu_lab_icon_cyan.png';
-import yadokariKunIcon from '../assets/yadokari-kun.png';
+import configData from "../config/app_config.json";
+import bokyuIcon from "../assets/bokyu_lab_icon_cyan.png";
+import yadokariKunIcon from "../assets/yadokari-kun.png";
 
 const defaultInnerWidth = window.innerWidth;
 
@@ -25,7 +25,7 @@ function Description() {
         setIsMobile(false);
       }
     }
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
   });
 
   return (
@@ -108,18 +108,18 @@ function Description() {
         </Center>
       </Box>
 
-      <Center pr={4} pl={4} pb={4} style={{ textAlign: 'center' }}>
+      <Center pr={4} pl={4} pb={4} style={{ textAlign: "center" }}>
         <Button
           as={RouterLink}
           to="/calculate"
-          style={{ marginRight: '8%' }}
+          style={{ marginRight: "8%" }}
           fontSize={configData.style.subTitleFontSize}
           borderRadius="xl"
           height="4em"
           width="45%"
           bg="blue.500"
           color="white"
-          _hover={{ bg: 'blue.600' }}
+          _hover={{ bg: "blue.600" }}
         >
           くわしく
           <br />
@@ -134,7 +134,7 @@ function Description() {
           width="45%"
           bg="teal.500"
           color="white"
-          _hover={{ bg: 'teal.600' }}
+          _hover={{ bg: "teal.600" }}
         >
           かんたん
           <br />

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Center,
@@ -9,11 +9,11 @@ import {
   Text,
   Flex,
   Button,
-} from '@chakra-ui/react';
-import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
-import { CloseIcon } from '@chakra-ui/icons';
-import configData from '../config/app_config.json';
-import questionExamples from '../config/question_examples.json';
+} from "@chakra-ui/react";
+import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
+import { CloseIcon } from "@chakra-ui/icons";
+import configData from "../config/app_config.json";
+import questionExamples from "../config/question_examples.json";
 
 type Question = {
   title: string;

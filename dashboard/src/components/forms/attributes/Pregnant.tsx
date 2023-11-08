@@ -1,8 +1,8 @@
-import { useState, useCallback, useContext } from 'react';
-import { Select, Checkbox, Box } from '@chakra-ui/react';
+import { useState, useCallback, useContext } from "react";
+import { Select, Checkbox, Box } from "@chakra-ui/react";
 
-import { HouseholdContext } from '../../../contexts/HouseholdContext';
-import { CurrentDateContext } from '../../../contexts/CurrentDateContext';
+import { HouseholdContext } from "../../../contexts/HouseholdContext";
+import { CurrentDateContext } from "../../../contexts/CurrentDateContext";
 
 export const Pregnant = ({ personName }: { personName: string }) => {
   const currentDate = useContext(CurrentDateContext);
@@ -11,9 +11,9 @@ export const Pregnant = ({ personName }: { personName: string }) => {
 
   // ラベルとOpenFiscaの表記違いを明記
   const pregnantStatusArray = [
-    '妊娠6ヵ月未満',
-    '妊娠6ヵ月以上',
-    '産後6ヵ月以内',
+    "妊娠6ヵ月未満",
+    "妊娠6ヵ月以上",
+    "産後6ヵ月以内",
   ];
 
   // チェックボックスの値が変更された時
@@ -22,13 +22,13 @@ export const Pregnant = ({ personName }: { personName: string }) => {
       if (!event.target.checked) {
         const newHousehold = { ...household };
         newHousehold.世帯員[personName].妊産婦 = {
-          [currentDate]: '無',
+          [currentDate]: "無",
         };
         setHousehold({ ...newHousehold });
       }
       setIsChecked(event.target.checked);
     },
-    []
+    [],
   );
 
   // コンボボックスの値が変更された時
@@ -42,13 +42,13 @@ export const Pregnant = ({ personName }: { personName: string }) => {
         };
       } else {
         newHousehold.世帯員[personName].妊産婦 = {
-          [currentDate]: '無',
+          [currentDate]: "無",
         };
       }
 
       setHousehold({ ...newHousehold });
     },
-    []
+    [],
   );
 
   return (

@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext } from 'react';
+import { useState, useCallback, useContext } from "react";
 import {
   Select,
   Checkbox,
@@ -6,10 +6,10 @@ import {
   FormControl,
   FormLabel,
   HStack,
-} from '@chakra-ui/react';
+} from "@chakra-ui/react";
 
-import { HouseholdContext } from '../../../contexts/HouseholdContext';
-import { CurrentDateContext } from '../../../contexts/CurrentDateContext';
+import { HouseholdContext } from "../../../contexts/HouseholdContext";
+import { CurrentDateContext } from "../../../contexts/CurrentDateContext";
 
 export const HighSchool = ({ personName }: { personName: string }) => {
   const currentDate = useContext(CurrentDateContext);
@@ -18,13 +18,13 @@ export const HighSchool = ({ personName }: { personName: string }) => {
 
   // ラベルとOpenFiscaの表記違いを明記
   const highSchoolCourseStatusArray = [
-    '全日制課程',
-    '定時制課程',
-    '通信制課程',
-    '専攻科',
+    "全日制課程",
+    "定時制課程",
+    "通信制課程",
+    "専攻科",
   ];
 
-  const highSchoolManagementStatusArray = ['国立', '公立', '私立'];
+  const highSchoolManagementStatusArray = ["国立", "公立", "私立"];
 
   // チェックボックスの値が変更された時
   const onCheckChange = useCallback(
@@ -39,16 +39,16 @@ export const HighSchool = ({ personName }: { personName: string }) => {
         };
       } else {
         newHousehold.世帯員[personName].高校履修種別 = {
-          [currentDate]: '無',
+          [currentDate]: "無",
         };
         newHousehold.世帯員[personName].高校運営種別 = {
-          [currentDate]: '無',
+          [currentDate]: "無",
         };
       }
       setHousehold({ ...newHousehold });
       setIsChecked(event.target.checked);
     },
-    []
+    [],
   );
 
   // 高校履修種別コンボボックスの値が変更された時
@@ -61,7 +61,7 @@ export const HighSchool = ({ personName }: { personName: string }) => {
       };
       setHousehold({ ...newHousehold });
     },
-    []
+    [],
   );
 
   // 高校運営種別コンボボックスの値が変更された時
@@ -74,7 +74,7 @@ export const HighSchool = ({ personName }: { personName: string }) => {
       };
       setHousehold({ ...newHousehold });
     },
-    []
+    [],
   );
 
   return (
