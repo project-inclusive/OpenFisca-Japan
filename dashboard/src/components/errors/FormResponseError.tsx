@@ -1,6 +1,6 @@
-import { Box, Button, Center } from '@chakra-ui/react';
-import { Link as RouterLink, useLocation } from 'react-router-dom';
-import configData from '../../config/app_config.json';
+import { Box, Button, Center } from "@chakra-ui/react";
+import { Link as RouterLink, useLocation } from "react-router-dom";
+import configData from "../../config/app_config.json";
 
 export const FormResponseError = () => {
   const location = useLocation();
@@ -17,7 +17,7 @@ export const FormResponseError = () => {
         <div>お手数ですがもう一度情報を入力してください。</div>
       </Center>
 
-      <Center pr={4} pl={4} pb={4} mt={8} style={{ textAlign: 'center' }}>
+      <Center pr={4} pl={4} pb={4} mt={8} style={{ textAlign: "center" }}>
         <Button
           fontSize={configData.style.subTitleFontSize}
           borderRadius="xl"
@@ -25,9 +25,9 @@ export const FormResponseError = () => {
           width="100%"
           bg="cyan.600"
           color="white"
-          _hover={{ bg: 'cyan.700' }}
+          _hover={{ bg: "cyan.700" }}
           as={RouterLink}
-          to={isSimpleCalculation ? '/calculate-simple' : '/calculate'}
+          to={isSimpleCalculation ? "/calculate-simple" : "/calculate"}
         >
           戻る
         </Button>

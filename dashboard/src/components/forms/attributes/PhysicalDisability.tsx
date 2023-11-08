@@ -1,8 +1,8 @@
-import { useState, useCallback, useContext, useEffect } from 'react';
-import { Select, FormControl, FormLabel } from '@chakra-ui/react';
+import { useState, useCallback, useContext, useEffect } from "react";
+import { Select, FormControl, FormLabel } from "@chakra-ui/react";
 
-import { HouseholdContext } from '../../../contexts/HouseholdContext';
-import { CurrentDateContext } from '../../../contexts/CurrentDateContext';
+import { HouseholdContext } from "../../../contexts/HouseholdContext";
+import { CurrentDateContext } from "../../../contexts/CurrentDateContext";
 
 export const PhysicalDisability = ({ personName }: { personName: string }) => {
   const { household, setHousehold } = useContext(HouseholdContext);
@@ -10,10 +10,10 @@ export const PhysicalDisability = ({ personName }: { personName: string }) => {
 
   // ラベルとOpenFiscaの表記違いを明記(pythonは数字を頭にした変数名をつけられない)
   const items = [
-    ['', '無'],
-    ['1級', '一級'],
-    ['2級', '二級'],
-    ['3級', '三級'],
+    ["", "無"],
+    ["1級", "一級"],
+    ["2級", "二級"],
+    ["3級", "三級"],
   ];
   const [selectedItemIndex, setSelectedItemIndex] = useState(0);
 
@@ -27,7 +27,7 @@ export const PhysicalDisability = ({ personName }: { personName: string }) => {
       };
       setHousehold({ ...newHousehold });
     },
-    []
+    [],
   );
 
   // 「あなた」の「子どもの数」が変更されたときに全ての子どもの身体障害者手帳等級が「無」に

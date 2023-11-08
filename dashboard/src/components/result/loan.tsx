@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import {
   Box,
   Center,
@@ -7,9 +7,9 @@ import {
   AccordionIcon,
   AccordionButton,
   AccordionPanel,
-} from '@chakra-ui/react';
+} from "@chakra-ui/react";
 
-import configData from '../../config/app_config.json';
+import configData from "../../config/app_config.json";
 
 export const Loan = ({
   result,
@@ -29,7 +29,7 @@ export const Loan = ({
 
     if (result) {
       for (const [loanName, loanInfo] of Object.entries(
-        configData.result.貸付制度.制度一覧
+        configData.result.貸付制度.制度一覧,
       )) {
         if (loanName in result.世帯.世帯1) {
           if (result.世帯.世帯1[loanName][currentDate] > 0) {
@@ -72,7 +72,7 @@ export const Loan = ({
                 {line}
                 <br />
               </span>
-            )
+            ),
           )}
           <Box color="blue">
             <a href={configData.result.貸付制度.reference}>詳細リンク</a>
@@ -89,7 +89,7 @@ export const Loan = ({
                         {val.name}
                       </Box>
                       <Box flex="1" textAlign="right">
-                        {/* １万円単位で表示 */}~{val.displayedMoney / 10_000}{' '}
+                        {/* １万円単位で表示 */}~{val.displayedMoney / 10_000}{" "}
                         万{val.unit}
                       </Box>
                     </AccordionButton>

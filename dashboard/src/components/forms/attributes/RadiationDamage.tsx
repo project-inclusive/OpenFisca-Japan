@@ -1,8 +1,8 @@
-import { useState, useCallback, useContext, useEffect } from 'react';
-import { Select, FormControl, FormLabel } from '@chakra-ui/react';
+import { useState, useCallback, useContext, useEffect } from "react";
+import { Select, FormControl, FormLabel } from "@chakra-ui/react";
 
-import { HouseholdContext } from '../../../contexts/HouseholdContext';
-import { CurrentDateContext } from '../../../contexts/CurrentDateContext';
+import { HouseholdContext } from "../../../contexts/HouseholdContext";
+import { CurrentDateContext } from "../../../contexts/CurrentDateContext";
 
 export const RadiationDamage = ({ personName }: { personName: string }) => {
   const currentDate = useContext(CurrentDateContext);
@@ -10,9 +10,9 @@ export const RadiationDamage = ({ personName }: { personName: string }) => {
 
   // ラベルとOpenFiscaの表記違いを明記
   const items = [
-    ['', '無'],
-    ['現罹患者', '現罹患者'],
-    ['元罹患者', '元罹患者'],
+    ["", "無"],
+    ["現罹患者", "現罹患者"],
+    ["元罹患者", "元罹患者"],
   ];
   const [selectedItemIndex, setSelectedItemIndex] = useState(0);
 
@@ -26,7 +26,7 @@ export const RadiationDamage = ({ personName }: { personName: string }) => {
       };
       setHousehold({ ...newHousehold });
     },
-    []
+    [],
   );
 
   // 「あなた」の「子どもの数」が変更されたときに全ての子どもの放射線障害が「無」に

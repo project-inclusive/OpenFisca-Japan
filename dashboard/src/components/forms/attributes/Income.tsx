@@ -1,9 +1,9 @@
-import { KeyboardEvent, useCallback, useContext, useState } from 'react';
-import { Box, HStack, Input, FormControl, FormLabel } from '@chakra-ui/react';
+import { KeyboardEvent, useCallback, useContext, useState } from "react";
+import { Box, HStack, Input, FormControl, FormLabel } from "@chakra-ui/react";
 
-import { CurrentDateContext } from '../../../contexts/CurrentDateContext';
-import { HouseholdContext } from '../../../contexts/HouseholdContext';
-import { ErrorMessage } from './validation/ErrorMessage';
+import { CurrentDateContext } from "../../../contexts/CurrentDateContext";
+import { HouseholdContext } from "../../../contexts/HouseholdContext";
+import { ErrorMessage } from "./validation/ErrorMessage";
 
 export const Income = ({
   personName,
@@ -15,7 +15,7 @@ export const Income = ({
   const currentDate = useContext(CurrentDateContext);
   const { household, setHousehold } = useContext(HouseholdContext);
 
-  const [shownIncome, setShownIncome] = useState<string | number>('');
+  const [shownIncome, setShownIncome] = useState<string | number>("");
 
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const newHousehold = {
@@ -27,7 +27,7 @@ export const Income = ({
     // 正の整数以外は0に変換
     if (isNaN(income) || income < 0) {
       income = 0;
-      setShownIncome('');
+      setShownIncome("");
     } else {
       setShownIncome(income / 10000);
     }
@@ -38,14 +38,14 @@ export const Income = ({
 
   const onKeyDown = (e: KeyboardEvent<HTMLElement>) => {
     // 入力確定した際にページ遷移しないようにする
-    if (e.key == 'Enter') {
+    if (e.key == "Enter") {
       e.preventDefault();
     }
   };
 
   return (
     <>
-      {mustInput && <ErrorMessage condition={shownIncome === ''} />}
+      {mustInput && <ErrorMessage condition={shownIncome === ""} />}
       <FormControl>
         <FormLabel fontWeight="Regular">
           <HStack>
@@ -67,7 +67,7 @@ export const Income = ({
             onInput={(e) => {
               e.currentTarget.value = e.currentTarget.value.replace(
                 /[^0-9]/g,
-                ''
+                "",
               );
             }}
             onChange={onChange}

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import {
   Box,
   Center,
@@ -7,9 +7,9 @@ import {
   AccordionIcon,
   AccordionButton,
   AccordionPanel,
-} from '@chakra-ui/react';
+} from "@chakra-ui/react";
 
-import configData from '../../config/app_config.json';
+import configData from "../../config/app_config.json";
 
 export const Benefit = ({
   result,
@@ -18,7 +18,7 @@ export const Benefit = ({
   result: any;
   currentDate: string;
 }) => {
-  const [totalAllowance, setTotalAllowance] = useState<string>('0');
+  const [totalAllowance, setTotalAllowance] = useState<string>("0");
   const [displayedResult, setDisplayedResult] = useState<any>();
 
   interface Obj {
@@ -30,7 +30,7 @@ export const Benefit = ({
 
     if (result) {
       for (const [allowanceName, allowanceInfo] of Object.entries(
-        configData.result.給付制度.制度一覧
+        configData.result.給付制度.制度一覧,
       )) {
         if (allowanceName in result.世帯.世帯1) {
           if (result.世帯.世帯1[allowanceName][currentDate] > 0) {
@@ -85,13 +85,13 @@ export const Benefit = ({
         setTotalAllowance(totalAllowanceMax.toLocaleString());
       } else {
         setTotalAllowance(
-          `${totalAllowanceMin.toLocaleString()}~${totalAllowanceMax.toLocaleString()}`
+          `${totalAllowanceMin.toLocaleString()}~${totalAllowanceMax.toLocaleString()}`,
         );
       }
 
       // 表示のため最大額が小さい順にソート
       const sortedMinMaxResult = Object.values(minMaxResult).sort(
-        (a: any, b: any) => a.maxMoney - b.maxMoney
+        (a: any, b: any) => a.maxMoney - b.maxMoney,
       );
       setDisplayedResult(sortedMinMaxResult);
     }
@@ -116,7 +116,7 @@ export const Benefit = ({
               <AccordionButton
                 bg="yellow.100"
                 fontWeight="semibold"
-                _hover={{ bg: 'yellow.100' }}
+                _hover={{ bg: "yellow.100" }}
               >
                 <Box flex="1" textAlign="left">
                   合計
