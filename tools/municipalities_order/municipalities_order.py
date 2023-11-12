@@ -6,6 +6,37 @@ from pandas import DataFrame
 import file_handling
 
 # ファイルパス
+PREF_CSV_PATH = 'csv/都道府県.csv'
+MUNIC_CSV_PATH = 'csv/市町村.csv'
+MUNIC_JSON_PATH = '../../dashboard/src/config/都道府県市区町村'
+RESULT = 'result/都道府県市区町村_50音順'
+
+# ファイルの読み込み
+pref_csv = pd.read_csv(PREF_CSV_PATH)
+munic_csv = pd.read_csv(MUNIC_CSV_PATH)
+munic_dict = file_handling.read_json(MUNIC_JSON_PATH)
+
+
+pref_df = pref_csv[['都道府県']]
+ruby_dict = {}
+
+output_dict = {}
+
+# print(pref_df.head())
+
+
+# 都道府県ごとに
+    # munic_csvから該当都道府県の行を抽出
+    # NaNだったら隣を参照して埋める
+    # 必要な列だけにする(ruby_df)
+    # munic_dictの該当都道府県のリストをmunic_dfに変換
+    # JSONに含まれる市町村名とそのふりがなのdfをマージ
+    # ふりがなでソート
+    # 市町村名のみの配列に変換し、書き出し用の辞書に追加
+
+
+'''
+# ファイルパス
 PREF_CSV_PATH = 'csv/都道府県'
 CITY_CSV_PATH = 'csv/市町村'
 CITY_JSON_PATH = '../都道府県市区町村'
@@ -53,3 +84,4 @@ for i in range(47):
 
 # JSONの書き出し
 file_handling.make_json(RESULT, output_dict)
+'''
