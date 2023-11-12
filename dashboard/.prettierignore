@@ -3,6 +3,7 @@ build
 coverage
 .git
 .gitignore
+.eslintrc.js
 node_modules
 package-lock.json
 **/*.html
