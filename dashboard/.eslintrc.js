@@ -44,7 +44,10 @@ module.exports = {
     },
     "ignorePatterns": [
         'build/',
-        'public/,',
+        'public/',
+        'components/',
+        'contexts/',
+        'hooks/',
         '**/node_modules/',
         '*.config.js',
         '.*lintrc.js',
