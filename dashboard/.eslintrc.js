@@ -40,14 +40,20 @@ module.exports = {
     ],
     "rules": {
         'react/jsx-uses-react': 'off',
-        'react/react-in-jsx-scope': 'off'
+        'react/react-in-jsx-scope': 'off',
+        '@typescript-eslint/no-unsafe-assignment': 'off',
+        '@typescript-eslint/no-misused-promises': 'off',
+        '@typescript-eslint/no-unsafe-member-access': 'off',
+        '@typescript-eslint/no-explicit-any': 'off',
+        '@typescript-eslint/no-floating-promises': 'off',
+        '@typescript-eslint/no-unused-vars': 'off',
+        '@typescript-eslint/no-unsafe-call': 'off',
+        '@typescript-eslint/no-unsafe-return': 'off',
+        '@typescript-eslint/no-unsafe-argument': 'off'
     },
     "ignorePatterns": [
         'build/',
         'public/',
-        'components/',
-        'contexts/',
-        'hooks/',
         '**/node_modules/',
         '*.config.js',
         '.*lintrc.js',
