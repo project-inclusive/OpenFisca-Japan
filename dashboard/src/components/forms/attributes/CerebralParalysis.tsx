@@ -2,11 +2,12 @@ import { useState, useCallback, useContext } from 'react';
 import { Checkbox } from '@chakra-ui/react';
 
 import { HouseholdContext } from '../../../contexts/HouseholdContext';
-import { CurrentDateContext } from '../../../contexts/CurrentDateContext';
+import { useRecoilValue } from 'recoil';
+import { currentDateAtom } from '../../../state';
 
 export const CerebralParalysis = ({ personName }: { personName: string }) => {
   const { household, setHousehold } = useContext(HouseholdContext);
-  const currentDate = useContext(CurrentDateContext);
+  const currentDate = useRecoilValue(currentDateAtom);
   const [isChecked, setIsChecked] = useState(false);
 
   // チェックボックスの値が変更された時

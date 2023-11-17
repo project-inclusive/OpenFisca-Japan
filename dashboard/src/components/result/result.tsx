@@ -14,11 +14,12 @@ import * as htmlToImage from 'html-to-image';
 
 import configData from '../../config/app_config.json';
 import { data as SocialWelfareData } from '../../config/社会福祉協議会';
-import { CurrentDateContext } from '../../contexts/CurrentDateContext';
 import { useCalculate } from '../../hooks/calculate';
 import { Benefit } from './benefit';
 import { Loan } from './loan';
 import { CalculationLabel } from '../forms/calculationLabel';
+import { currentDateAtom } from '../../state';
+import { useRecoilValue } from 'recoil';
 
 const createFileName = (extension: string = '', ...names: string[]) => {
   if (!extension) {
@@ -39,7 +40,7 @@ export const Result = () => {
   const [isLabelOpen, setIsLabelOpen] = useState(false);
   const navigate = useNavigate();
 
-  const currentDate = useContext(CurrentDateContext);
+  const currentDate = useRecoilValue(currentDateAtom);
   const [result, calculate] = useCalculate();
   const [isDisplayChat, setIsDisplayChat] = useState('none');
 
@@ -192,8 +193,8 @@ export const Result = () => {
             {configData.result.topDescription}
           </Center>
 
-          <Benefit result={result} currentDate={currentDate} />
-          <Loan result={result} currentDate={currentDate} />
+          <Benefit result={result} />
+          <Loan result={result} />
 
           <Center pr={4} pl={4} pb={2}>
             <Text color="blue.900" fontSize="1.3em" fontWeight="semibold">
