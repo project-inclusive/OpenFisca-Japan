@@ -9,10 +9,11 @@ import {
 } from '@chakra-ui/react';
 
 import { HouseholdContext } from '../../../contexts/HouseholdContext';
-import { CurrentDateContext } from '../../../contexts/CurrentDateContext';
+import { currentDateAtom } from '../../../state';
+import { useRecoilValue } from 'recoil';
 
 export const HighSchool = ({ personName }: { personName: string }) => {
-  const currentDate = useContext(CurrentDateContext);
+  const currentDate = useRecoilValue(currentDateAtom);
   const { household, setHousehold } = useContext(HouseholdContext);
   const [isChecked, setIsChecked] = useState(false);
 

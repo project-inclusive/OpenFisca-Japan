@@ -3,13 +3,13 @@ import { useState } from 'react';
 import ScrollToTop from '../scrollToTop';
 import { FormContent } from './formContent';
 import { HouseholdContext } from '../../contexts/HouseholdContext';
-import { CurrentDateContext } from '../../contexts/CurrentDateContext';
+import { useRecoilValue } from 'recoil';
+import { currentDateAtom } from '../../state';
 
 function CaluculationForm() {
   // 日付は「YYYY-MM-DD」の桁数フォーマットでないとOpenFisca APIが正常動作しない
-  const currentDate = `${new Date().getFullYear()}-${(new Date().getMonth() + 1)
-    .toString()
-    .padStart(2, '0')}-${new Date().getDate().toString().padStart(2, '0')}`;
+
+  const currentDate = useRecoilValue(currentDateAtom);
 
   // NOTE: 計算したい制度については、予めここに設定する必要がある
   const [household, setHousehold] = useState({

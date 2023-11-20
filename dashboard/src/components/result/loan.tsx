@@ -10,15 +10,12 @@ import {
 } from '@chakra-ui/react';
 
 import configData from '../../config/app_config.json';
+import { currentDateAtom } from '../../state';
+import { useRecoilValue } from 'recoil';
 
-export const Loan = ({
-  result,
-  currentDate,
-}: {
-  result: any;
-  currentDate: string;
-}) => {
+export const Loan = ({ result }: { result: any }) => {
   const [displayedResult, setDisplayedResult] = useState<any>();
+  const currentDate = useRecoilValue(currentDateAtom);
 
   interface Obj {
     [prop: string]: any; // これを記述することで、どんなプロパティでも持てるようになる

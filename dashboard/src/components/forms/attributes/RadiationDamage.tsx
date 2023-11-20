@@ -2,10 +2,11 @@ import { useState, useCallback, useContext, useEffect } from 'react';
 import { Select, FormControl, FormLabel } from '@chakra-ui/react';
 
 import { HouseholdContext } from '../../../contexts/HouseholdContext';
-import { CurrentDateContext } from '../../../contexts/CurrentDateContext';
+import { useRecoilValue } from 'recoil';
+import { currentDateAtom } from '../../../state';
 
 export const RadiationDamage = ({ personName }: { personName: string }) => {
-  const currentDate = useContext(CurrentDateContext);
+  const currentDate = useRecoilValue(currentDateAtom);
   const { household, setHousehold } = useContext(HouseholdContext);
 
   // ラベルとOpenFiscaの表記違いを明記

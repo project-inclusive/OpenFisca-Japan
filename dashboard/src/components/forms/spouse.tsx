@@ -10,7 +10,6 @@ import {
 
 import configData from '../../config/app_config.json';
 import { HouseholdContext } from '../../contexts/HouseholdContext';
-import { CurrentDateContext } from '../../contexts/CurrentDateContext';
 import { Birthday } from './attributes/Birthday';
 import { Income } from './attributes/Income';
 import { Disability } from './attributes/Disability';
@@ -19,12 +18,14 @@ import { Working } from './attributes/Working';
 import { Recuperation } from './attributes/Recuperation';
 import { NursingHome } from './attributes/NursingHome';
 import { Deposit } from './attributes/Deposit';
+import { useRecoilValue } from 'recoil';
+import { currentDateAtom } from '../../state';
 
 export const FormSpouse = () => {
   const location = useLocation();
   const isSimpleCalculation = location.pathname === '/calculate-simple';
 
-  const currentDate = useContext(CurrentDateContext);
+  const currentDate = useRecoilValue(currentDateAtom);
   const [isChecked, setIsChecked] = useState(false);
   const { household, setHousehold } = useContext(HouseholdContext);
   const spouseName = '配偶者';

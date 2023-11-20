@@ -4,8 +4,9 @@ import { Box, Select, HStack, FormControl, FormLabel } from '@chakra-ui/react';
 import configData from '../../../config/app_config.json';
 import pmJson from '../../../config/都道府県市区町村.json';
 import { HouseholdContext } from '../../../contexts/HouseholdContext';
-import { CurrentDateContext } from '../../../contexts/CurrentDateContext';
 import { ErrorMessage } from './validation/ErrorMessage';
+import { useRecoilValue } from 'recoil';
+import { currentDateAtom } from '../../../state';
 
 export const PrefectureMunicipality = ({
   mustInput,
@@ -19,7 +20,7 @@ export const PrefectureMunicipality = ({
   }
   const pmObj = { ...pmJson } as pmType;
 
-  const currentDate = useContext(CurrentDateContext);
+  const currentDate = useRecoilValue(currentDateAtom);
   const [selectedPrefecture, setSelectedPrefecture] = useState('');
   const [selectedMunicipality, setSelectedMunicipality] = useState('');
   const prefectureArray = Object.keys(pmObj);
