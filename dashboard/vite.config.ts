@@ -6,6 +6,8 @@ export default () => {
   // index.htmlの「%=」「%」で囲われた部分を環境変数値で置換する
   //   例: <title>%=ENV_NAME%</title> -> <title>ENV_NAME</title>
   const env = { ...process.env };
+  console.log('ENV_NAMES:' + Object.keys(env));
+  console.log('YADOKARI_GTM_ID:' + env['YADOKARI_GTM_ID']);
   const htmlPlugin = () => ({
     name: 'html-transform',
     transformIndexHtml: (html: string): string =>
