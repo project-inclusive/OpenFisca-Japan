@@ -1,13 +1,13 @@
-import { useCallback, useContext, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Checkbox } from '@chakra-ui/react';
 
-import { HouseholdContext } from '../../../contexts/HouseholdContext';
-import { currentDateAtom } from '../../../state';
-import { useRecoilValue } from 'recoil';
+import { currentDateAtom, householdAtom } from '../../../state';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 export const SpouseExists = () => {
   const currentDate = useRecoilValue(currentDateAtom);
-  const { household, setHousehold } = useContext(HouseholdContext);
+
+  const [household, setHousehold] = useRecoilState(householdAtom);
   const [isChecked, setIsChecked] = useState(false);
   const spouseName = '配偶者';
 

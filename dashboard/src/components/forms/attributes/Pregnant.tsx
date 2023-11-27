@@ -1,13 +1,13 @@
-import { useState, useCallback, useContext } from 'react';
+import { useState, useCallback } from 'react';
 import { Select, Checkbox, Box } from '@chakra-ui/react';
 
-import { HouseholdContext } from '../../../contexts/HouseholdContext';
-import { currentDateAtom } from '../../../state';
-import { useRecoilValue } from 'recoil';
+import { currentDateAtom, householdAtom } from '../../../state';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 export const Pregnant = ({ personName }: { personName: string }) => {
   const currentDate = useRecoilValue(currentDateAtom);
-  const { household, setHousehold } = useContext(HouseholdContext);
+
+  const [household, setHousehold] = useRecoilState(householdAtom);
   const [isChecked, setIsChecked] = useState(false);
 
   // ラベルとOpenFiscaの表記違いを明記

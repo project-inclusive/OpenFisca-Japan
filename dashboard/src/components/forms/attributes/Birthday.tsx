@@ -1,9 +1,10 @@
-import { useState, useCallback, useContext, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import { Box, Select, HStack, FormControl, FormLabel } from '@chakra-ui/react';
 
 import configData from '../../../config/app_config.json';
-import { HouseholdContext } from '../../../contexts/HouseholdContext';
 import { ErrorMessage } from './validation/ErrorMessage';
+import { householdAtom } from '../../../state';
+import { useRecoilState } from 'recoil';
 
 export const Birthday = ({
   personName,
@@ -12,7 +13,7 @@ export const Birthday = ({
   personName: string;
   mustInput: boolean;
 }) => {
-  const { household, setHousehold } = useContext(HouseholdContext);
+  const [household, setHousehold] = useRecoilState(householdAtom);
 
   const thisYear = new Date().getFullYear();
   const [selectedYear, setSelectedYear] = useState(NaN);

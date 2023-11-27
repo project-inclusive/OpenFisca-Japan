@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext } from 'react';
+import { useState, useCallback } from 'react';
 import { Checkbox, Box } from '@chakra-ui/react';
 
 import { PhysicalDisability } from './PhysicalDisability';
@@ -6,14 +6,14 @@ import { MentalDisability } from './MentalDisability';
 import { IntellectualDisability } from './IntellectualDisability';
 import { InternalDisability } from './InternalDisability';
 import { CerebralParalysis } from './CerebralParalysis';
-import { HouseholdContext } from '../../../contexts/HouseholdContext';
 import { RadiationDamage } from './RadiationDamage';
-import { useRecoilValue } from 'recoil';
-import { currentDateAtom } from '../../../state';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { currentDateAtom, householdAtom } from '../../../state';
 
 export const Disability = ({ personName }: { personName: string }) => {
   const [isChecked, setIsChecked] = useState(false);
-  const { household, setHousehold } = useContext(HouseholdContext);
+
+  const [household, setHousehold] = useRecoilState(householdAtom);
   const currentDate = useRecoilValue(currentDateAtom);
 
   // チェックボックスの値が変更された時

@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState, useRef, useEffect } from 'react';
+import { useCallback, useState, useRef, useEffect } from 'react';
 import {
   Checkbox,
   Box,
@@ -8,10 +8,11 @@ import {
   FormLabel,
 } from '@chakra-ui/react';
 
-import { HouseholdContext } from '../../../contexts/HouseholdContext';
+import { useRecoilState } from 'recoil';
+import { householdAtom } from '../../../state';
 
 export const ChildrenNum = () => {
-  const { household, setHousehold } = useContext(HouseholdContext);
+  const [household, setHousehold] = useRecoilState(householdAtom);
   const [shownChildrenNum, setShownChildrenNum] = useState<string | number>('');
   const inputEl = useRef<HTMLInputElement>(null);
 
