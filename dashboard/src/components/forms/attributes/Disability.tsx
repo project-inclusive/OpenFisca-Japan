@@ -7,13 +7,14 @@ import { IntellectualDisability } from './IntellectualDisability';
 import { InternalDisability } from './InternalDisability';
 import { CerebralParalysis } from './CerebralParalysis';
 import { HouseholdContext } from '../../../contexts/HouseholdContext';
-import { CurrentDateContext } from '../../../contexts/CurrentDateContext';
 import { RadiationDamage } from './RadiationDamage';
+import { useRecoilValue } from 'recoil';
+import { currentDateAtom } from '../../../state';
 
 export const Disability = ({ personName }: { personName: string }) => {
   const [isChecked, setIsChecked] = useState(false);
   const { household, setHousehold } = useContext(HouseholdContext);
-  const currentDate = useContext(CurrentDateContext);
+  const currentDate = useRecoilValue(currentDateAtom);
 
   // チェックボックスの値が変更された時
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {

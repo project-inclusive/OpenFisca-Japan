@@ -2,11 +2,12 @@ import { useState, useCallback, useContext, useEffect } from 'react';
 import { Select, FormControl, FormLabel } from '@chakra-ui/react';
 
 import { HouseholdContext } from '../../../contexts/HouseholdContext';
-import { CurrentDateContext } from '../../../contexts/CurrentDateContext';
+import { useRecoilValue } from 'recoil';
+import { currentDateAtom } from '../../../state';
 
 export const PhysicalDisability = ({ personName }: { personName: string }) => {
   const { household, setHousehold } = useContext(HouseholdContext);
-  const currentDate = useContext(CurrentDateContext);
+  const currentDate = useRecoilValue(currentDateAtom);
 
   // ラベルとOpenFiscaの表記違いを明記(pythonは数字を頭にした変数名をつけられない)
   const items = [

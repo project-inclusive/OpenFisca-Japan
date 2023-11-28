@@ -1,9 +1,10 @@
 import { KeyboardEvent, useCallback, useContext, useState } from 'react';
 import { Box, HStack, Input, FormControl, FormLabel } from '@chakra-ui/react';
 
-import { CurrentDateContext } from '../../../contexts/CurrentDateContext';
 import { HouseholdContext } from '../../../contexts/HouseholdContext';
 import { ErrorMessage } from './validation/ErrorMessage';
+import { useRecoilValue } from 'recoil';
+import { currentDateAtom } from '../../../state';
 
 export const Income = ({
   personName,
@@ -12,7 +13,7 @@ export const Income = ({
   personName: string;
   mustInput: boolean;
 }) => {
-  const currentDate = useContext(CurrentDateContext);
+  const currentDate = useRecoilValue(currentDateAtom);
   const { household, setHousehold } = useContext(HouseholdContext);
 
   const [shownIncome, setShownIncome] = useState<string | number>('');

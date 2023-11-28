@@ -6,13 +6,12 @@ import QuestionExamples from './components/QuestionExamples';
 import { Result } from './components/result/result';
 import { GenericError } from './components/errors/GenericError';
 import { NotFoundError } from './components/errors/NotFoundError';
-import { CurrentDateContext } from './contexts/CurrentDateContext';
 import { FormResponseError } from './components/errors/FormResponseError';
+import { useRecoilState } from 'recoil';
+import { currentDateAtom } from './state';
 
 function App() {
-  const currentDate = `${new Date().getFullYear()}-${(new Date().getMonth() + 1)
-    .toString()
-    .padStart(2, '0')}-${new Date().getDate().toString().padStart(2, '0')}`;
+  const currentDate = useRecoilState(currentDateAtom);
 
   console.log(`deploy ${import.meta.env.VITE_BRANCH}`);
 
@@ -27,46 +26,44 @@ function App() {
       }}
       axis="horizontal"
     >
-      <CurrentDateContext.Provider value={currentDate}>
-        <RouterProvider
-          fallbackElement={<GenericError />}
-          router={createBrowserRouter(
-            [
-              {
-                path: '/',
-                element: <Description />,
-              },
-              {
-                path: '/calculate',
-                element: <CaluculationForm />,
-              },
-              {
-                path: '/calculate-simple',
-                element: <CaluculationForm />,
-              },
-              {
-                path: '/result',
-                element: <Result />,
-              },
-              {
-                path: '/question-examples',
-                element: <QuestionExamples />,
-              },
-              {
-                path: '/response-error',
-                element: <FormResponseError />,
-              },
-              {
-                path: '/*',
-                element: <NotFoundError />,
-              },
-            ],
+      <RouterProvider
+        fallbackElement={<GenericError />}
+        router={createBrowserRouter(
+          [
             {
-              basename: import.meta.env.BASE_URL,
-            }
-          )}
-        />
-      </CurrentDateContext.Provider>
+              path: '/',
+              element: <Description />,
+            },
+            {
+              path: '/calculate',
+              element: <CaluculationForm />,
+            },
+            {
+              path: '/calculate-simple',
+              element: <CaluculationForm />,
+            },
+            {
+              path: '/result',
+              element: <Result />,
+            },
+            {
+              path: '/question-examples',
+              element: <QuestionExamples />,
+            },
+            {
+              path: '/response-error',
+              element: <FormResponseError />,
+            },
+            {
+              path: '/*',
+              element: <NotFoundError />,
+            },
+          ],
+          {
+            basename: import.meta.env.BASE_URL,
+          }
+        )}
+      />
     </AbsoluteCenter>
   );
 }

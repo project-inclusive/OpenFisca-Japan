@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { ChakraProvider, defineStyleConfig } from '@chakra-ui/react';
 import App from './App';
 import { extendTheme } from '@chakra-ui/react';
+import { RecoilRoot } from 'recoil';
 
 const baseStyle = {
   borderRadius: 'md',
@@ -34,8 +35,10 @@ export const theme = extendTheme({
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <ChakraProvider theme={theme}>
-      <App />
-    </ChakraProvider>
+    <RecoilRoot>
+      <ChakraProvider theme={theme}>
+        <App />
+      </ChakraProvider>
+    </RecoilRoot>
   </React.StrictMode>
 );

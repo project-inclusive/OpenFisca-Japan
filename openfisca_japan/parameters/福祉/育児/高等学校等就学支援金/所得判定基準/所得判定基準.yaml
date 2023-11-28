@@ -1,0 +1,7 @@
+description: 高等学校等就学支援金の所得判定基準
+metadata:
+  reference: https://www.mext.go.jp/a_menu/shotou/mushouka/20220329-mxt_kouhou02-3.pdf
+  unit: currency-JPY
+values:
+  2000-05-01:
+    value: 304200

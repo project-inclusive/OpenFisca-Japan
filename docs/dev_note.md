@@ -244,3 +244,10 @@ Powershell を起動し以下のコマンドを入力して下さい。
   ```
   $env:PYTHONUTF8=1
   ```
+
+- インストールされているPythonのバージョンが、OpenFiscaで使用しているものと異なる
+Dockerコンテナは正常動作するのにエディタ上構文エラーが表示される場合、ローカルにインストールしているPythonがOpenFiscaが要求するバージョンと異なる可能性があります。
+`Dockerfile` に記載されているバージョンのPythonをインストールしてください。
+`pyenv` を使うと、複数バージョンのPythonをコマンドで切り替えることが可能です
+
+https://github.com/pyenv/pyenv
