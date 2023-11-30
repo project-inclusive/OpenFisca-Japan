@@ -10,7 +10,7 @@ long_description = (this_directory / "README.md").read_text(encoding="utf-8")  #
 
 setup(
     name = "OpenFisca-Japan",
-    version = "3.13.2",
+    version = "1.1.1",
     author = "OpenFisca Team",
     author_email = "contact@openfisca.org",
     classifiers = [
@@ -18,9 +18,9 @@ setup(
         "License :: OSI Approved :: GNU Affero General Public License v3",
         "Operating System :: POSIX",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
         "Topic :: Scientific/Engineering :: Information Analysis",
         ],
     description = "OpenFisca tax and benefit system for japan",
@@ -38,7 +38,7 @@ setup(
             ),
         ],
     install_requires = [
-        "OpenFisca-Core[web-api] >= 35.0.0, < 36.0.0",
+        "OpenFisca-Core[web-api] >= 41.0.0, < 42.0.0",
         ],
     extras_require = {
         "dev": [

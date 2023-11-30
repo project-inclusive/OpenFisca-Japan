@@ -1,4 +1,4 @@
-FROM python:3.8-bullseye
+FROM python:3.11-bullseye
 USER root
 
 # comment out upgrade pip for avoiding error
