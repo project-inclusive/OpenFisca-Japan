@@ -5,6 +5,15 @@ from openfisca_core.variables import Variable
 from openfisca_japan.entities import 人物
 
 
+class 小学生学年(Enum):
+    __order__ = "一年生 二年生 三年生 四年生 五年生 六年生"
+    一年生 = 1
+    二年生 = 2
+    三年生 = 3
+    四年生 = 4
+    五年生 = 5
+    六年生 = 6
+
 class 中学生学年(Enum):
     __order__ = "一年生 二年生 三年生"
     一年生 = 7

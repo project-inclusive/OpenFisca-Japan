@@ -23,4 +23,6 @@
 - [Google_custom_search_APIについて](./chat_bot.md#google_custom_search_apiについて)
 - [miiboについて](./chat_bot.md#miiboについて)
 
+### [チュートリアル](./tutorial)
+
 ### [変更履歴 (Change log)](./change_log)
