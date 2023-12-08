@@ -490,7 +490,7 @@ export const data: { [key: string]: { [key: string]: TokyoCityTypes } } = {
       電話番号: '042-497-5061',
       WebサイトURL: 'https://www.n-csw.or.jp/',
     },
-    西多摩郡瑞穂町: {
+    瑞穂町: {
       施設名: '瑞穂町社会福祉協議会',
       郵便番号: '190-1211',
       所在地: '東京都西多摩郡瑞穂町大字石畑２００８ふれあいセンター１階',
@@ -500,7 +500,7 @@ export const data: { [key: string]: { [key: string]: TokyoCityTypes } } = {
       電話番号: '042-557-0159',
       WebサイトURL: 'https://mizuho-shakyo.com/',
     },
-    西多摩郡日の出町: {
+    日の出町: {
       施設名: '日の出町社会福祉協議会',
       郵便番号: '190-0182',
       所在地: '東京都西多摩郡日の出町大字平井２７８０',
@@ -510,7 +510,7 @@ export const data: { [key: string]: { [key: string]: TokyoCityTypes } } = {
       電話番号: '042-597-4848',
       WebサイトURL: 'https://hinodeshakyo.jimdofree.com/',
     },
-    西多摩郡檜原村: {
+    檜原村: {
       施設名: '檜原村社会福祉協議会',
       郵便番号: '190-0211',
       所在地: '東京都西多摩郡檜原村２７１７やすらぎの里ふれあい館３階',
@@ -520,7 +520,7 @@ export const data: { [key: string]: { [key: string]: TokyoCityTypes } } = {
       電話番号: '042-598-0085',
       WebサイトURL: 'https://hinoharasyakyo.jimdo.com/',
     },
-    西多摩郡奥多摩町: {
+    奥多摩町: {
       施設名: '奥多摩町社会福祉協議会',
       郵便番号: '198-0212',
       所在地: '東京都西多摩郡奥多摩町氷川１９９',
@@ -590,7 +590,7 @@ export const data: { [key: string]: { [key: string]: TokyoCityTypes } } = {
       電話番号: '04994-8-2508',
       WebサイトURL: 'https://www.mikura-shakyo.com/',
     },
-    八丈島八丈町: {
+    八丈町: {
       施設名: '八丈町社会福祉協議会',
       郵便番号: '100-1511',
       所在地: '東京都八丈島八丈町三根２',
