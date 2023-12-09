@@ -13,17 +13,17 @@ from openfisca_core.variables import Variable
 from openfisca_japan.entities import 世帯, 人物
 from openfisca_japan.variables.全般 import 高校生学年
 
-with open('openfisca_japan/parameters/福祉/育児/高等学校奨学給付金/国立高等学校奨学給付金額.csv') as f:
+with open('openfisca_japan/assets/福祉/育児/高等学校奨学給付金/国立高等学校奨学給付金額.csv') as f:
     reader = csv.DictReader(f)
     # 国立高等学校奨学給付金表[世帯区分][履修形態] の形で参照可能
     国立高等学校奨学給付金表 = {row[""]: row for row in reader}
 
-with open('openfisca_japan/parameters/福祉/育児/高等学校奨学給付金/公立高等学校奨学給付金額.csv') as f:
+with open('openfisca_japan/assets/福祉/育児/高等学校奨学給付金/公立高等学校奨学給付金額.csv') as f:
     reader = csv.DictReader(f)
     # 公立高等学校奨学給付金表[世帯区分][履修形態] の形で参照可能
     公立高等学校奨学給付金表 = {row[""]: row for row in reader}
 
-with open('openfisca_japan/parameters/福祉/育児/高等学校奨学給付金/私立高等学校奨学給付金額.csv') as f:
+with open('openfisca_japan/assets/福祉/育児/高等学校奨学給付金/私立高等学校奨学給付金額.csv') as f:
     reader = csv.DictReader(f)
     # 私立高等学校奨学給付金表[世帯区分][履修形態] の形で参照可能
     私立高等学校奨学給付金表 = {row[""]: row for row in reader}
@@ -47,7 +47,7 @@ class 高等学校奨学給付金_最小(Variable):
 
         # 私立高等学校で通信制課程の場合、他の給付金額の場合と異なり生活保護世帯の給付金の方が高くなっていた。
         # そのため、対象世帯が通信制課程の方の場合は、順番を逆にして支給金額を返しております。
-        # openfisca_japan/parameters/福祉/育児/高等学校奨学給付金/私立高等学校奨学給付金額.csv
+        # openfisca_japan/assets/福祉/育児/高等学校奨学給付金/私立高等学校奨学給付金額.csv
         if 私立で通信制課程のみ(対象世帯, 対象期間):
             if 住民税非課税世帯:
                 年間支給金額 = 対象世帯("住民税非課税世帯の高等学校奨学給付金", 対象期間)
@@ -80,7 +80,7 @@ class 高等学校奨学給付金_最大(Variable):
 
         # 私立高等学校で通信制課程の場合、他の給付金額の場合と異なり生活保護世帯の給付金の方が高くなっていた。
         # そのため、対象世帯が通信制課程の方の場合は、順番を逆にして支給金額を返しております。
-        # openfisca_japan/parameters/福祉/育児/高等学校奨学給付金/私立高等学校奨学給付金額.csv
+        # openfisca_japan/assets/福祉/育児/高等学校奨学給付金/私立高等学校奨学給付金額.csv
         if 私立で通信制課程のみ(対象世帯, 対象期間):
             if 生活保護受給可能:
                 年間支給金額 = 対象世帯("生活保護受給世帯の高等学校奨学給付金", 対象期間)

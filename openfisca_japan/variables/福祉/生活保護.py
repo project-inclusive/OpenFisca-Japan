@@ -19,43 +19,43 @@ from openfisca_core.indexed_enums import Enum
 # https://www.mhlw.go.jp/content/000776372.pdf を参照
 
 
-with open('openfisca_japan/parameters/福祉/生活保護/生活扶助基準額/第1類1.csv') as f:
+with open('openfisca_japan/assets/福祉/生活保護/生活扶助基準額/第1類1.csv') as f:
     reader = csv.DictReader(f)
     # 生活扶助基準1_第1類_基準額1表[年齢][居住級地区分] の形で参照可能
     生活扶助基準1_第1類_基準額1表 = {row[""]: row for row in reader}
 
 
-with open('openfisca_japan/parameters/福祉/生活保護/生活扶助基準額/逓減率1.csv') as f:
+with open('openfisca_japan/assets/福祉/生活保護/生活扶助基準額/逓減率1.csv') as f:
     reader = csv.DictReader(f)
     # 生活扶助基準1_逓減率1表[世帯人数][居住級地区分] の形で参照可能
     生活扶助基準1_逓減率1表 = {row[""]: row for row in reader}
 
 
-with open('openfisca_japan/parameters/福祉/生活保護/生活扶助基準額/第2類1.csv') as f:
+with open('openfisca_japan/assets/福祉/生活保護/生活扶助基準額/第2類1.csv') as f:
     reader = csv.DictReader(f)
     # 生活扶助基準1_第2類_基準額1表[世帯人数][居住級地区分] の形で参照可能
     生活扶助基準1_第2類_基準額1表 = {row[""]: row for row in reader}
 
 
-with open('openfisca_japan/parameters/福祉/生活保護/生活扶助基準額/第1類2.csv') as f:
+with open('openfisca_japan/assets/福祉/生活保護/生活扶助基準額/第1類2.csv') as f:
     reader = csv.DictReader(f)
     # 生活扶助基準2_第1類_基準額2表[年齢][居住級地区分] の形で参照可能
     生活扶助基準2_第1類_基準額2表 = {row[""]: row for row in reader}
 
 
-with open('openfisca_japan/parameters/福祉/生活保護/生活扶助基準額/逓減率2.csv') as f:
+with open('openfisca_japan/assets/福祉/生活保護/生活扶助基準額/逓減率2.csv') as f:
     reader = csv.DictReader(f)
     # 生活扶助基準2_逓減率2表[世帯人数][居住級地区分] の形で参照可能
     生活扶助基準2_逓減率2表 = {row[""]: row for row in reader}
 
 
-with open('openfisca_japan/parameters/福祉/生活保護/生活扶助基準額/第2類2.csv') as f:
+with open('openfisca_japan/assets/福祉/生活保護/生活扶助基準額/第2類2.csv') as f:
     reader = csv.DictReader(f)
     # 生活扶助基準2_第2類_基準額2表[世帯人数][居住級地区分] の形で参照可能
     生活扶助基準2_第2類_基準額2表 = {row[""]: row for row in reader}
 
 
-with open('openfisca_japan/parameters/福祉/生活保護/冬季加算/地域区分.json') as f:
+with open('openfisca_japan/assets/福祉/生活保護/冬季加算/地域区分.json') as f:
     d = json.load(f)
     # 地域区分表[都道府県] の形で参照可能
     # 該当しないものはすべて6区
@@ -71,18 +71,18 @@ with open('openfisca_japan/parameters/福祉/生活保護/冬季加算/地域区
 
 
 for i in range(1, 7):
-    with open(f'openfisca_japan/parameters/福祉/生活保護/冬季加算/{i}区.csv') as f:
+    with open(f'openfisca_japan/assets/福祉/生活保護/冬季加算/{i}区.csv') as f:
         reader = csv.DictReader(f)
         冬季加算表[f'{i}区'] = {row[""]: row for row in reader}
 
 
-with open('openfisca_japan/parameters/福祉/生活保護/住宅扶助基準額/市.csv') as f:
+with open('openfisca_japan/assets/福祉/生活保護/住宅扶助基準額/市.csv') as f:
     reader = csv.DictReader(f)
     # 都道府県ごとの住宅扶助限度額[市][世帯人員] の形で参照可能
     市ごとの住宅扶助限度額 = {row["市"]: row for row in reader}
 
 
-with open('openfisca_japan/parameters/福祉/生活保護/住宅扶助基準額/都道府県.csv') as f:
+with open('openfisca_japan/assets/福祉/生活保護/住宅扶助基準額/都道府県.csv') as f:
     reader = csv.DictReader(f)
     # 都道府県ごとの住宅扶助限度額[都道府県][居住級地区分1][世帯人員] の形で参照可能
     都道府県ごとの住宅扶助限度額 = {}
@@ -97,7 +97,7 @@ with open('openfisca_japan/parameters/福祉/生活保護/住宅扶助基準額/
 
 
 for i in range(1, 6):
-    with open(f'openfisca_japan/parameters/福祉/生活保護/生活扶助本体に係る経過的加算/{i}人世帯.csv') as f:
+    with open(f'openfisca_japan/assets/福祉/生活保護/生活扶助本体に係る経過的加算/{i}人世帯.csv') as f:
         reader = csv.DictReader(f)
         生活扶助本体に係る経過的加算表[f'{i}人'] = {row[""]: row for row in reader}
 
@@ -106,28 +106,28 @@ for i in range(1, 6):
 母子世帯等に係る経過的加算表 = {}
 
 
-with open('openfisca_japan/parameters/福祉/生活保護/母子世帯等に係る経過的加算/3人世帯.csv') as f:
+with open('openfisca_japan/assets/福祉/生活保護/母子世帯等に係る経過的加算/3人世帯.csv') as f:
     reader = csv.DictReader(f)
     母子世帯等に係る経過的加算表[3] = {row[""]: row for row in reader}
 
 
-with open('openfisca_japan/parameters/福祉/生活保護/母子世帯等に係る経過的加算/4人世帯.csv') as f:
+with open('openfisca_japan/assets/福祉/生活保護/母子世帯等に係る経過的加算/4人世帯.csv') as f:
     reader = csv.DictReader(f)
     母子世帯等に係る経過的加算表[4] = {row[""]: row for row in reader}
 
 
-with open('openfisca_japan/parameters/福祉/生活保護/母子世帯等に係る経過的加算/5人世帯.csv') as f:
+with open('openfisca_japan/assets/福祉/生活保護/母子世帯等に係る経過的加算/5人世帯.csv') as f:
     reader = csv.DictReader(f)
     母子世帯等に係る経過的加算表[5] = {row[""]: row for row in reader}
 
 
-with open('openfisca_japan/parameters/福祉/生活保護/障害者加算.csv') as f:
+with open('openfisca_japan/assets/福祉/生活保護/障害者加算.csv') as f:
     reader = csv.DictReader(f)
     # 障害者加算表[等級][居住級地区分1] の形で参照可能
     障害者加算表 = {row["等級"]: row for row in reader}
 
 
-with open('openfisca_japan/parameters/福祉/生活保護/期末一時扶助.csv') as f:
+with open('openfisca_japan/assets/福祉/生活保護/期末一時扶助.csv') as f:
     reader = csv.DictReader(f)
     # 期末一時扶助表[世帯人数][居住級地区分] の形で参照可能
     期末一時扶助表 = {row[""]: row for row in reader}
