@@ -16,7 +16,7 @@ from openfisca_core.variables import Variable
 # Import the Entities specifically defined for this tax and benefit system
 from openfisca_japan.entities import 世帯
 
-with open('openfisca_japan/parameters/市区町村級地区分.json') as f:
+with open('openfisca_japan/assets/市区町村級地区分.json') as f:
     市区町村級地区分 = json.load(f)
 
 

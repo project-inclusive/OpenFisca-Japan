@@ -21,19 +21,19 @@ from openfisca_japan.entities import 人物, 世帯
 from openfisca_japan.variables.全般 import 性別パターン
 
 # NOTE: 項目数が多い金額表は可読性の高いCSV形式としている。
-with open('openfisca_japan/parameters/住民税/配偶者控除額.csv') as f:
+with open('openfisca_japan/assets/住民税/配偶者控除額.csv') as f:
     reader = csv.DictReader(f)
     # 配偶者控除額表[配偶者の所得区分][納税者本人の所得区分] の形で参照可能
     配偶者控除額表 = {row[""]: row for row in reader}
 
 
-with open('openfisca_japan/parameters/住民税/配偶者控除額_老人控除対象配偶者.csv') as f:
+with open('openfisca_japan/assets/住民税/配偶者控除額_老人控除対象配偶者.csv') as f:
     reader = csv.DictReader(f)
     # 老人控除対象配偶者_配偶者控除額表[配偶者の所得区分][納税者本人の所得区分] の形で参照可能
     老人控除対象配偶者_配偶者控除額表 = {row[""]: row for row in reader}
 
 
-with open('openfisca_japan/parameters/住民税/配偶者特別控除額.csv') as f:
+with open('openfisca_japan/assets/住民税/配偶者特別控除額.csv') as f:
     reader = csv.DictReader(f)
     # 配偶者特別控除額表[配偶者の所得区分][納税者本人の所得区分] の形で参照可能
     配偶者特別控除額表 = {row[""]: row for row in reader}
