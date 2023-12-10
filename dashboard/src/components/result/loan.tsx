@@ -35,7 +35,9 @@ export const Loan = ({ result }: { result: any }) => {
               unit: loanInfo.unit,
               caption: loanInfo.caption,
               reference: loanInfo.reference,
-              displayedMoney: Number(result.世帯一覧.世帯1[loanName][currentDate]),
+              displayedMoney: Number(
+                result.世帯一覧.世帯1[loanName][currentDate]
+              ),
             };
           }
         }

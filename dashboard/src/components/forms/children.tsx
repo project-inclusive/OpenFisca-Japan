@@ -20,31 +20,35 @@ export const FormChildren = () => {
   return (
     <>
       {household.世帯一覧.世帯1.子一覧 &&
-        household.世帯一覧.世帯1.子一覧.map((childName: string, index: number) => (
-          <div key={index}>
-            <Box bg="white" borderRadius="xl" p={4} m={4}>
-              <Center
-                fontSize={configData.style.subTitleFontSize}
-                fontWeight="medium"
-                mb="0.5em"
-              >
-                {index + 1}
-                {configData.calculationForm.childrenDescription}
-              </Center>
+        household.世帯一覧.世帯1.子一覧.map(
+          (childName: string, index: number) => (
+            <div key={index}>
+              <Box bg="white" borderRadius="xl" p={4} m={4}>
+                <Center
+                  fontSize={configData.style.subTitleFontSize}
+                  fontWeight="medium"
+                  mb="0.5em"
+                >
+                  {index + 1}
+                  {configData.calculationForm.childrenDescription}
+                </Center>
 
-              {isSimpleCalculation ? (
-                <AgeInput personName={childName} mustInput />
-              ) : (
-                <Birthday personName={childName} mustInput={true} />
-              )}
-              {!isSimpleCalculation && <HighSchool personName={childName} />}
-              {!isSimpleCalculation && <Working personName={childName} />}
-              {!isSimpleCalculation && <Disability personName={childName} />}
-              {!isSimpleCalculation && <Recuperation personName={childName} />}
-              {!isSimpleCalculation && <NursingHome personName={childName} />}
-            </Box>
-          </div>
-        ))}
+                {isSimpleCalculation ? (
+                  <AgeInput personName={childName} mustInput />
+                ) : (
+                  <Birthday personName={childName} mustInput={true} />
+                )}
+                {!isSimpleCalculation && <HighSchool personName={childName} />}
+                {!isSimpleCalculation && <Working personName={childName} />}
+                {!isSimpleCalculation && <Disability personName={childName} />}
+                {!isSimpleCalculation && (
+                  <Recuperation personName={childName} />
+                )}
+                {!isSimpleCalculation && <NursingHome personName={childName} />}
+              </Box>
+            </div>
+          )
+        )}
     </>
   );
 };
