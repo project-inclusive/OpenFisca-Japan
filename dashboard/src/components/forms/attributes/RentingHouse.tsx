@@ -15,9 +15,9 @@ export const RentingHouse = () => {
     const newHousehold = { ...household };
     if (event.target.checked) {
       // レスポンスとして住宅入居費を受け取るため、空オブジェクトを設定
-      newHousehold.世帯.世帯1.住宅入居費 = { [currentDate]: null };
+      newHousehold.世帯一覧.世帯1.住宅入居費 = { [currentDate]: null };
     } else {
-      delete newHousehold.世帯.世帯1.住宅入居費;
+      delete newHousehold.世帯一覧.世帯1.住宅入居費;
     }
     setHousehold({ ...newHousehold });
     setIsChecked(event.target.checked);
