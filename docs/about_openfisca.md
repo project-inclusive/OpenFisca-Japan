@@ -62,6 +62,9 @@
 - **variables**
   - 制度のロジック
   - 個人、世帯、法人の持つ属性情報
+- **entities**
+  - 制度計算の単位
+  - 世帯、人物（＝世帯員）
 
 ## Tips
 - OpenFiscaフレームワークは高機能ですが、それゆえ想定と異なる挙動を示すこともあります
@@ -128,6 +131,15 @@
 - 各要素の属性
   - `name`: 名前（属性名そのものが文字列で得られる）
   - `value`：値（定義するときに代入した値）
+
+#### Entities
+
+- 計算対象の単位を表わす
+  - `entities.py` で定義
+    - `人物`
+    - `世帯`
+- 名称を変更した場合、`openfisca_japan/situation_examples` 配下のJSONファイルも修正が必要
+  - 修正が漏れた場合 `SituationParsingError` でサーバーが起動しなくなる
 
 ### API
 - (APIのURL)/spec から仕様のjsonをgetできる

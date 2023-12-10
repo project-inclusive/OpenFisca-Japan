@@ -15,8 +15,8 @@ export const FormParents = () => {
   const { household, setHousehold } = useContext(HouseholdContext);
   return (
     <>
-      {household.世帯.世帯1.親一覧 &&
-        household.世帯.世帯1.親一覧.map((parentName: string, index: number) => (
+      {household.世帯一覧.世帯1.親一覧 &&
+        household.世帯一覧.世帯1.親一覧.map((parentName: string, index: number) => (
           <div key={index}>
             <Box bg="white" borderRadius="xl" p={4} m={4}>
               <Center

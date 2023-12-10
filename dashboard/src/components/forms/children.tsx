@@ -19,8 +19,8 @@ export const FormChildren = () => {
 
   return (
     <>
-      {household.世帯.世帯1.子一覧 &&
-        household.世帯.世帯1.子一覧.map((childName: string, index: number) => (
+      {household.世帯一覧.世帯1.子一覧 &&
+        household.世帯一覧.世帯1.子一覧.map((childName: string, index: number) => (
           <div key={index}>
             <Box bg="white" borderRadius="xl" p={4} m={4}>
               <Center

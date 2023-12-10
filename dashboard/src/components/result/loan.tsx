@@ -28,14 +28,14 @@ export const Loan = ({ result }: { result: any }) => {
       for (const [loanName, loanInfo] of Object.entries(
         configData.result.貸付制度.制度一覧
       )) {
-        if (loanName in result.世帯.世帯1) {
-          if (result.世帯.世帯1[loanName][currentDate] > 0) {
+        if (loanName in result.世帯一覧.世帯1) {
+          if (result.世帯一覧.世帯1[loanName][currentDate] > 0) {
             loanResult[loanName] = {
               name: loanName,
               unit: loanInfo.unit,
               caption: loanInfo.caption,
               reference: loanInfo.reference,
-              displayedMoney: Number(result.世帯.世帯1[loanName][currentDate]),
+              displayedMoney: Number(result.世帯一覧.世帯1[loanName][currentDate]),
             };
           }
         }
