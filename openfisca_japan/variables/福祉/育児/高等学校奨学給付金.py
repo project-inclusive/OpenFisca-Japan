@@ -4,6 +4,8 @@
 
 import csv
 import math
+from functools import cache
+
 import numpy as np
 
 from openfisca_core.indexed_enums import Enum
@@ -13,20 +15,30 @@ from openfisca_core.variables import Variable
 from openfisca_japan.entities import 世帯, 人物
 from openfisca_japan.variables.全般 import 高校生学年
 
-with open('openfisca_japan/assets/福祉/育児/高等学校奨学給付金/国立高等学校奨学給付金額.csv') as f:
-    reader = csv.DictReader(f)
-    # 国立高等学校奨学給付金表[世帯区分][履修形態] の形で参照可能
-    国立高等学校奨学給付金表 = {row[""]: row for row in reader}
 
-with open('openfisca_japan/assets/福祉/育児/高等学校奨学給付金/公立高等学校奨学給付金額.csv') as f:
-    reader = csv.DictReader(f)
-    # 公立高等学校奨学給付金表[世帯区分][履修形態] の形で参照可能
-    公立高等学校奨学給付金表 = {row[""]: row for row in reader}
+@cache
+def 国立高等学校奨学給付金表():
+    with open('openfisca_japan/assets/福祉/育児/高等学校奨学給付金/国立高等学校奨学給付金額.csv') as f:
+        reader = csv.DictReader(f)
+        # 国立高等学校奨学給付金表()[世帯区分][履修形態] の形で参照可能
+        return {row[""]: row for row in reader}
 
-with open('openfisca_japan/assets/福祉/育児/高等学校奨学給付金/私立高等学校奨学給付金額.csv') as f:
-    reader = csv.DictReader(f)
-    # 私立高等学校奨学給付金表[世帯区分][履修形態] の形で参照可能
-    私立高等学校奨学給付金表 = {row[""]: row for row in reader}
+
+@cache
+def 公立高等学校奨学給付金表():
+    with open('openfisca_japan/assets/福祉/育児/高等学校奨学給付金/公立高等学校奨学給付金額.csv') as f:
+        reader = csv.DictReader(f)
+        # 公立高等学校奨学給付金表()[世帯区分][履修形態] の形で参照可能
+        return {row[""]: row for row in reader}
+
+
+@cache
+def 私立高等学校奨学給付金表():
+    with open('openfisca_japan/assets/福祉/育児/高等学校奨学給付金/私立高等学校奨学給付金額.csv') as f:
+        reader = csv.DictReader(f)
+        # 私立高等学校奨学給付金表()[世帯区分][履修形態] の形で参照可能
+        return {row[""]: row for row in reader}
+
 
 class 高等学校奨学給付金_最小(Variable):
     value_type = int
@@ -233,10 +245,10 @@ def 私立で通信制課程のみ(対象世帯, 対象期間):
 def 高校運営種別に応じた給付金額取得(高校履修種別, 高校運営種別, 支給対象世帯):
     給付金額 = 0
     if 高校運営種別 == 高校運営種別パターン.国立:
-        給付金額 = int(国立高等学校奨学給付金表[支給対象世帯.value][高校履修種別.value])
+        給付金額 = int(国立高等学校奨学給付金表()[支給対象世帯.value][高校履修種別.value])
     elif 高校運営種別 == 高校運営種別パターン.公立:
-        給付金額 = int(公立高等学校奨学給付金表[支給対象世帯.value][高校履修種別.value])
+        給付金額 = int(公立高等学校奨学給付金表()[支給対象世帯.value][高校履修種別.value])
     elif 高校運営種別 == 高校運営種別パターン.私立:
-        給付金額 = int(私立高等学校奨学給付金表[支給対象世帯.value][高校履修種別.value])
+        給付金額 = int(私立高等学校奨学給付金表()[支給対象世帯.value][高校履修種別.value])
 
     return 給付金額

@@ -7,6 +7,7 @@ See https://openfisca.org/doc/key-concepts/variables.html
 """
 
 import csv
+from functools import cache
 
 import numpy as np
 
@@ -24,19 +25,28 @@ from openfisca_japan.variables.障害.精神障害者保健福祉手帳 import �
 
 
 # NOTE: 項目数が多い金額表は可読性の高いCSV形式としている。
-# 配偶者控除額表[配偶者の所得区分, 納税者本人の所得区分] の形で参照可能
-配偶者控除額表 = np.genfromtxt('openfisca_japan/assets/所得/配偶者控除額.csv', 
-                               delimiter=',', skip_header=1, dtype='int64')[np.newaxis, 1:]
-
-with open('openfisca_japan/assets/所得/配偶者特別控除額.csv') as f:
-    reader = csv.DictReader(f)
-    # 配偶者特別控除額表[配偶者の所得区分][納税者本人の所得区分] の形で参照可能
-    配偶者特別控除額表 = {row[""]: row for row in reader}
 
 
-# 老人控除対象配偶者_配偶者控除額表[配偶者の所得区分, 納税者本人の所得区分] の形で参照可能
-老人控除対象配偶者_配偶者控除額表 = np.genfromtxt('openfisca_japan/assets/所得/配偶者控除額_老人控除対象配偶者.csv', 
-                               delimiter=',', skip_header=1, dtype='int64')[np.newaxis, 1:]                             
+@cache
+def 配偶者控除額表():
+    # 配偶者控除額表()[配偶者の所得区分, 納税者本人の所得区分] の形で参照可能
+    return np.genfromtxt('openfisca_japan/assets/所得/配偶者控除額.csv', 
+                  delimiter=',', skip_header=1, dtype='int64')[np.newaxis, 1:]
+
+
+@cache
+def 配偶者特別控除額表():
+    with open('openfisca_japan/assets/所得/配偶者特別控除額.csv') as f:
+        reader = csv.DictReader(f)
+        # 配偶者特別控除額表()[配偶者の所得区分][納税者本人の所得区分] の形で参照可能
+        return {row[""]: row for row in reader}
+
+
+@cache
+def 老人控除対象配偶者_配偶者控除額表():
+    # 老人控除対象配偶者_配偶者控除額表()[配偶者の所得区分, 納税者本人の所得区分] の形で参照可能
+    return np.genfromtxt('openfisca_japan/assets/所得/配偶者控除額_老人控除対象配偶者.csv', 
+                         delimiter=',', skip_header=1, dtype='int64')[np.newaxis, 1:]
 
 
 class 給与所得控除額(Variable):
@@ -285,8 +295,8 @@ class 配偶者控除(Variable):
             [対象世帯.自分("年齢", 該当年12月31日), 対象世帯.配偶者("年齢", 該当年12月31日)],
             -1).astype(int)  # intにできるようデフォルトをNoneではなく-1
 
-        配偶者控除額 = 配偶者控除額表[納税者の配偶者の所得区分, 納税者の所得区分]  # ndarrayなので各次元で複数世帯arrayを入力可能
-        老人控除対象配偶者_配偶者控除額 = 老人控除対象配偶者_配偶者控除額表[納税者の配偶者の所得区分, 納税者の所得区分]
+        配偶者控除額 = 配偶者控除額表()[納税者の配偶者の所得区分, 納税者の所得区分]  # ndarrayなので各次元で複数世帯arrayを入力可能
+        老人控除対象配偶者_配偶者控除額 = 老人控除対象配偶者_配偶者控除額表()[納税者の配偶者の所得区分, 納税者の所得区分]
 
         # 早期リターンする条件は世帯ごとのbool arrayにし、最後にまとめて条件として掛ける
         所得区分あり = (納税者の所得区分 != -1) * (納税者の配偶者の所得区分 != -1)
@@ -345,7 +355,7 @@ class 配偶者特別控除(Variable):
             # 該当しない場合
             return 0
 
-        return 配偶者特別控除額表[str(納税者の配偶者の所得区分)][str(納税者の所得区分)]
+        return 配偶者特別控除額表()[str(納税者の配偶者の所得区分)][str(納税者の所得区分)]
 
 
 class 扶養控除(Variable):

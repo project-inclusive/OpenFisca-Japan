@@ -5,6 +5,7 @@
 import csv
 import json
 from collections import defaultdict
+from functools import cache
 
 import numpy as np
 
@@ -19,118 +20,145 @@ from openfisca_core.indexed_enums import Enum
 # https://www.mhlw.go.jp/content/000776372.pdf を参照
 
 
-with open('openfisca_japan/assets/福祉/生活保護/生活扶助基準額/第1類1.csv') as f:
-    reader = csv.DictReader(f)
-    # 生活扶助基準1_第1類_基準額1表[年齢][居住級地区分] の形で参照可能
-    生活扶助基準1_第1類_基準額1表 = {row[""]: row for row in reader}
-
-
-with open('openfisca_japan/assets/福祉/生活保護/生活扶助基準額/逓減率1.csv') as f:
-    reader = csv.DictReader(f)
-    # 生活扶助基準1_逓減率1表[世帯人数][居住級地区分] の形で参照可能
-    生活扶助基準1_逓減率1表 = {row[""]: row for row in reader}
-
-
-with open('openfisca_japan/assets/福祉/生活保護/生活扶助基準額/第2類1.csv') as f:
-    reader = csv.DictReader(f)
-    # 生活扶助基準1_第2類_基準額1表[世帯人数][居住級地区分] の形で参照可能
-    生活扶助基準1_第2類_基準額1表 = {row[""]: row for row in reader}
-
-
-with open('openfisca_japan/assets/福祉/生活保護/生活扶助基準額/第1類2.csv') as f:
-    reader = csv.DictReader(f)
-    # 生活扶助基準2_第1類_基準額2表[年齢][居住級地区分] の形で参照可能
-    生活扶助基準2_第1類_基準額2表 = {row[""]: row for row in reader}
-
-
-with open('openfisca_japan/assets/福祉/生活保護/生活扶助基準額/逓減率2.csv') as f:
-    reader = csv.DictReader(f)
-    # 生活扶助基準2_逓減率2表[世帯人数][居住級地区分] の形で参照可能
-    生活扶助基準2_逓減率2表 = {row[""]: row for row in reader}
-
-
-with open('openfisca_japan/assets/福祉/生活保護/生活扶助基準額/第2類2.csv') as f:
-    reader = csv.DictReader(f)
-    # 生活扶助基準2_第2類_基準額2表[世帯人数][居住級地区分] の形で参照可能
-    生活扶助基準2_第2類_基準額2表 = {row[""]: row for row in reader}
-
-
-with open('openfisca_japan/assets/福祉/生活保護/冬季加算/地域区分.json') as f:
-    d = json.load(f)
-    # 地域区分表[都道府県] の形で参照可能
-    # 該当しないものはすべて6区
-    地域区分表 = defaultdict(lambda: 6)
-    for 区, values in d.items():
-        for 都道府県 in values:
-            # 区分の名称から数値のみ抽出
-            地域区分表[都道府県] = int(区.replace("区", ""))
-
-
-# 冬季加算表[冬季加算地域区分][世帯人数][居住級地区分] の形で参照可能
-冬季加算表 = {}
-
-
-for i in range(1, 7):
-    with open(f'openfisca_japan/assets/福祉/生活保護/冬季加算/{i}区.csv') as f:
+@cache
+def 生活扶助基準1_第1類_基準額1表():
+    with open('openfisca_japan/assets/福祉/生活保護/生活扶助基準額/第1類1.csv') as f:
         reader = csv.DictReader(f)
-        冬季加算表[f'{i}区'] = {row[""]: row for row in reader}
+        # 生活扶助基準1_第1類_基準額1表()[年齢][居住級地区分] の形で参照可能
+        return {row[""]: row for row in reader}
 
 
-with open('openfisca_japan/assets/福祉/生活保護/住宅扶助基準額/市.csv') as f:
-    reader = csv.DictReader(f)
-    # 都道府県ごとの住宅扶助限度額[市][世帯人員] の形で参照可能
-    市ごとの住宅扶助限度額 = {row["市"]: row for row in reader}
-
-
-with open('openfisca_japan/assets/福祉/生活保護/住宅扶助基準額/都道府県.csv') as f:
-    reader = csv.DictReader(f)
-    # 都道府県ごとの住宅扶助限度額[都道府県][居住級地区分1][世帯人員] の形で参照可能
-    都道府県ごとの住宅扶助限度額 = {}
-    for row in reader:
-        if 都道府県ごとの住宅扶助限度額.get(row["都道府県"]) is None:
-            都道府県ごとの住宅扶助限度額[row["都道府県"]] = {}
-        都道府県ごとの住宅扶助限度額[row["都道府県"]][row["級地"]] = row
-
-
-# 生活扶助本体に係る経過的加算表[世帯人数][年齢][居住級地区分1] の形で参照可能
-生活扶助本体に係る経過的加算表 = {}
-
-
-for i in range(1, 6):
-    with open(f'openfisca_japan/assets/福祉/生活保護/生活扶助本体に係る経過的加算/{i}人世帯.csv') as f:
+@cache
+def 生活扶助基準1_逓減率1表():
+    with open('openfisca_japan/assets/福祉/生活保護/生活扶助基準額/逓減率1.csv') as f:
         reader = csv.DictReader(f)
-        生活扶助本体に係る経過的加算表[f'{i}人'] = {row[""]: row for row in reader}
+        # 生活扶助基準1_逓減率1表()[世帯人数][居住級地区分] の形で参照可能
+        return {row[""]: row for row in reader}
 
 
-# 母子世帯等に係る経過的加算表[世帯人数][年齢][居住級地区分] の形で参照可能
-母子世帯等に係る経過的加算表 = {}
+@cache
+def 生活扶助基準1_第2類_基準額1表():
+    with open('openfisca_japan/assets/福祉/生活保護/生活扶助基準額/第2類1.csv') as f:
+        reader = csv.DictReader(f)
+        # 生活扶助基準1_第2類_基準額1表()[世帯人数][居住級地区分] の形で参照可能
+        return {row[""]: row for row in reader}
 
 
-with open('openfisca_japan/assets/福祉/生活保護/母子世帯等に係る経過的加算/3人世帯.csv') as f:
-    reader = csv.DictReader(f)
-    母子世帯等に係る経過的加算表[3] = {row[""]: row for row in reader}
+@cache
+def 生活扶助基準2_第1類_基準額2表():
+    with open('openfisca_japan/assets/福祉/生活保護/生活扶助基準額/第1類2.csv') as f:
+        reader = csv.DictReader(f)
+        # 生活扶助基準2_第1類_基準額2表()[年齢][居住級地区分] の形で参照可能
+        return {row[""]: row for row in reader}
 
 
-with open('openfisca_japan/assets/福祉/生活保護/母子世帯等に係る経過的加算/4人世帯.csv') as f:
-    reader = csv.DictReader(f)
-    母子世帯等に係る経過的加算表[4] = {row[""]: row for row in reader}
+@cache
+def 生活扶助基準2_逓減率2表():
+    with open('openfisca_japan/assets/福祉/生活保護/生活扶助基準額/逓減率2.csv') as f:
+        reader = csv.DictReader(f)
+        # 生活扶助基準2_逓減率2表()[世帯人数][居住級地区分] の形で参照可能
+        return {row[""]: row for row in reader}
 
 
-with open('openfisca_japan/assets/福祉/生活保護/母子世帯等に係る経過的加算/5人世帯.csv') as f:
-    reader = csv.DictReader(f)
-    母子世帯等に係る経過的加算表[5] = {row[""]: row for row in reader}
+@cache
+def 生活扶助基準2_第2類_基準額2表():
+    with open('openfisca_japan/assets/福祉/生活保護/生活扶助基準額/第2類2.csv') as f:
+        reader = csv.DictReader(f)
+        # 生活扶助基準2_第2類_基準額2表()[世帯人数][居住級地区分] の形で参照可能
+        return {row[""]: row for row in reader}
 
 
-with open('openfisca_japan/assets/福祉/生活保護/障害者加算.csv') as f:
-    reader = csv.DictReader(f)
-    # 障害者加算表[等級][居住級地区分1] の形で参照可能
-    障害者加算表 = {row["等級"]: row for row in reader}
+@cache
+def 地域区分表():
+    with open('openfisca_japan/assets/福祉/生活保護/冬季加算/地域区分.json') as f:
+        d = json.load(f)
+        # 地域区分表()[都道府県] の形で参照可能
+        # 該当しないものはすべて6区
+        地域区分表 = defaultdict(lambda: 6)
+        for 区, values in d.items():
+            for 都道府県 in values:
+                # 区分の名称から数値のみ抽出
+                地域区分表[都道府県] = int(区.replace("区", ""))
+        return 地域区分表
 
 
-with open('openfisca_japan/assets/福祉/生活保護/期末一時扶助.csv') as f:
-    reader = csv.DictReader(f)
-    # 期末一時扶助表[世帯人数][居住級地区分] の形で参照可能
-    期末一時扶助表 = {row[""]: row for row in reader}
+@cache
+def 冬季加算表():
+    # 冬季加算表()[冬季加算地域区分][世帯人数][居住級地区分] の形で参照可能
+    冬季加算表 = {}
+    for i in range(1, 7):
+        with open(f'openfisca_japan/assets/福祉/生活保護/冬季加算/{i}区.csv') as f:
+            reader = csv.DictReader(f)
+            冬季加算表[f'{i}区'] = {row[""]: row for row in reader}
+    return 冬季加算表
+
+
+@cache
+def 市ごとの住宅扶助限度額():
+    with open('openfisca_japan/assets/福祉/生活保護/住宅扶助基準額/市.csv') as f:
+        reader = csv.DictReader(f)
+        # 都道府県ごとの住宅扶助限度額()[市][世帯人員] の形で参照可能
+        return {row["市"]: row for row in reader}
+
+
+@cache
+def 都道府県ごとの住宅扶助限度額():
+    with open('openfisca_japan/assets/福祉/生活保護/住宅扶助基準額/都道府県.csv') as f:
+        reader = csv.DictReader(f)
+        # 都道府県ごとの住宅扶助限度額()[都道府県][居住級地区分1][世帯人員] の形で参照可能
+        都道府県ごとの住宅扶助限度額 = {}
+        for row in reader:
+            if 都道府県ごとの住宅扶助限度額.get(row["都道府県"]) is None:
+                都道府県ごとの住宅扶助限度額[row["都道府県"]] = {}
+            都道府県ごとの住宅扶助限度額[row["都道府県"]][row["級地"]] = row
+        return 都道府県ごとの住宅扶助限度額
+
+
+@cache
+def 生活扶助本体に係る経過的加算表():
+    # 生活扶助本体に係る経過的加算表()[世帯人数][年齢][居住級地区分1] の形で参照可能
+    生活扶助本体に係る経過的加算表 = {}
+    for i in range(1, 6):
+        with open(f'openfisca_japan/assets/福祉/生活保護/生活扶助本体に係る経過的加算/{i}人世帯.csv') as f:
+            reader = csv.DictReader(f)
+            生活扶助本体に係る経過的加算表[f'{i}人'] = {row[""]: row for row in reader}
+    return 生活扶助本体に係る経過的加算表
+
+
+@cache
+def 母子世帯等に係る経過的加算表():
+    # 母子世帯等に係る経過的加算表()[世帯人数][年齢][居住級地区分] の形で参照可能
+    母子世帯等に係る経過的加算表 = {}
+
+    with open('openfisca_japan/assets/福祉/生活保護/母子世帯等に係る経過的加算/3人世帯.csv') as f:
+        reader = csv.DictReader(f)
+        母子世帯等に係る経過的加算表[3] = {row[""]: row for row in reader}
+
+    with open('openfisca_japan/assets/福祉/生活保護/母子世帯等に係る経過的加算/4人世帯.csv') as f:
+        reader = csv.DictReader(f)
+        母子世帯等に係る経過的加算表[4] = {row[""]: row for row in reader}
+
+    with open('openfisca_japan/assets/福祉/生活保護/母子世帯等に係る経過的加算/5人世帯.csv') as f:
+        reader = csv.DictReader(f)
+        母子世帯等に係る経過的加算表[5] = {row[""]: row for row in reader}
+
+    return 母子世帯等に係る経過的加算表
+
+
+@cache
+def 障害者加算表():
+    with open('openfisca_japan/assets/福祉/生活保護/障害者加算.csv') as f:
+        reader = csv.DictReader(f)
+        # 障害者加算表()[等級][居住級地区分1] の形で参照可能
+        return {row["等級"]: row for row in reader}
+
+
+@cache
+def 期末一時扶助表():
+    with open('openfisca_japan/assets/福祉/生活保護/期末一時扶助.csv') as f:
+        reader = csv.DictReader(f)
+        # 期末一時扶助表()[世帯人数][居住級地区分] の形で参照可能
+        return {row[""]: row for row in reader}
 
 
 class 生活保護(Variable):
@@ -265,7 +293,7 @@ class 生活扶助基準1_第1類_基準額1(Variable):
             0) for 年齢 in 各世帯員の年齢]
 
         return sum([
-            int(生活扶助基準1_第1類_基準額1表[str(年齢区分)][居住級地区分]) for 年齢区分 in 各世帯員の年齢区分])
+            int(生活扶助基準1_第1類_基準額1表()[str(年齢区分)][居住級地区分]) for 年齢区分 in 各世帯員の年齢区分])
 
 
 class 生活扶助基準1_逓減率1(Variable):
@@ -294,7 +322,7 @@ class 生活扶助基準1_逓減率1(Variable):
 
         世帯人数区分 = np.clip(世帯人数, 1, 5).astype(str)
 
-        return 生活扶助基準1_逓減率1表[世帯人数区分[0]][居住級地区分]
+        return 生活扶助基準1_逓減率1表()[世帯人数区分[0]][居住級地区分]
 
 
 class 生活扶助基準1_第2類_基準額1(Variable):
@@ -323,7 +351,7 @@ class 生活扶助基準1_第2類_基準額1(Variable):
 
         世帯人数区分 = np.clip(世帯人数, 1, 5).astype(str)
 
-        return 生活扶助基準1_第2類_基準額1表[世帯人数区分[0]][居住級地区分]
+        return 生活扶助基準1_第2類_基準額1表()[世帯人数区分[0]][居住級地区分]
 
 
 class 生活扶助基準2(Variable):
@@ -383,7 +411,7 @@ class 生活扶助基準2_第1類_基準額2(Variable):
             0) for 年齢 in 各世帯員の年齢]
 
         return sum([
-            int(生活扶助基準2_第1類_基準額2表[str(年齢区分)][居住級地区分]) for 年齢区分 in 各世帯員の年齢区分])
+            int(生活扶助基準2_第1類_基準額2表()[str(年齢区分)][居住級地区分]) for 年齢区分 in 各世帯員の年齢区分])
 
 
 class 生活扶助基準2_逓減率2(Variable):
@@ -412,7 +440,7 @@ class 生活扶助基準2_逓減率2(Variable):
 
         世帯人数区分 = np.clip(世帯人数, 1, 5).astype(str)
 
-        return 生活扶助基準2_逓減率2表[世帯人数区分[0]][居住級地区分]
+        return 生活扶助基準2_逓減率2表()[世帯人数区分[0]][居住級地区分]
 
 
 class 生活扶助基準2_第2類_基準額2(Variable):
@@ -441,7 +469,7 @@ class 生活扶助基準2_第2類_基準額2(Variable):
 
         世帯人数区分 = np.clip(世帯人数, 1, 5).astype(str)
 
-        return 生活扶助基準2_第2類_基準額2表[世帯人数区分[0]][居住級地区分]
+        return 生活扶助基準2_第2類_基準額2表()[世帯人数区分[0]][居住級地区分]
 
 
 class 生活扶助本体に係る経過的加算(Variable):
@@ -478,7 +506,7 @@ class 生活扶助本体に係る経過的加算(Variable):
             0) for 年齢 in 各世帯員の年齢]
         世帯人数区分 = np.clip(世帯人数, 1, 5).astype(str)
         return sum([
-            int(生活扶助本体に係る経過的加算表[f'{世帯人数区分[0]}人'][str(年齢区分)][f'{居住級地区分1[0]}級地-{居住級地区分2[0]}'])
+            int(生活扶助本体に係る経過的加算表()[f'{世帯人数区分[0]}人'][str(年齢区分)][f'{居住級地区分1[0]}級地-{居住級地区分2[0]}'])
             for 年齢区分 in 各世帯員の年齢区分])
 
 
@@ -504,7 +532,7 @@ class 障害者加算(Variable):
             (身体障害者手帳等級一覧 == 身体障害者手帳等級パターン.二級) |
             (身体障害者手帳等級一覧 == 身体障害者手帳等級パターン.三級)]
 
-        return sum([int(障害者加算表[str(等級)][f'{居住級地区分1[0]}級地']) for 等級 in 身体障害者手帳等級一覧])
+        return sum([int(障害者加算表()[str(等級)][f'{居住級地区分1[0]}級地']) for 等級 in 身体障害者手帳等級一覧])
 
 
 class 母子加算(Variable):
@@ -662,7 +690,7 @@ class 母子世帯等に係る経過的加算(Variable):
         
         世帯人数区分 = np.clip(世帯人数[0], None, 5)
 
-        return 母子世帯等に係る経過的加算表[世帯人数区分][str(年齢区分)][居住級地区分]
+        return 母子世帯等に係る経過的加算表()[世帯人数区分][str(年齢区分)][居住級地区分]
 
 
 class 入院中(Variable):
@@ -936,11 +964,11 @@ class 住宅扶助基準(Variable):
             "1人")
 
         # p.4~6までの市に居住している場合はp.4~6を適用
-        if 市ごとの住宅扶助限度額.get(居住市区町村[0]):
-            return 市ごとの住宅扶助限度額[居住市区町村[0]][世帯人員区分[0]]
+        if 市ごとの住宅扶助限度額().get(居住市区町村[0]):
+            return 市ごとの住宅扶助限度額()[居住市区町村[0]][世帯人員区分[0]]
 
         # それ以外の市区町村に居住している場合はp.1~3を適用
-        return 都道府県ごとの住宅扶助限度額[居住都道府県[0]][f'{居住級地区分1[0]}級地'][世帯人員区分[0]]
+        return 都道府県ごとの住宅扶助限度額()[居住都道府県[0]][f'{居住級地区分1[0]}級地'][世帯人員区分[0]]
 
 
 class 教育扶助基準(Variable):
@@ -1009,10 +1037,10 @@ class 冬季加算(Variable):
 
         if 世帯人数区分[0] == "10~":
             # 9人の場合の加算に人数ごとの加算を追加
-            return float(冬季加算表[f'{冬季加算地域区分1[0]}区']["9"][居住級地区分]) + \
-                (世帯人数[0] - 9) * float(冬季加算表[f'{冬季加算地域区分1[0]}区']["10~"][居住級地区分])
+            return float(冬季加算表()[f'{冬季加算地域区分1[0]}区']["9"][居住級地区分]) + \
+                (世帯人数[0] - 9) * float(冬季加算表()[f'{冬季加算地域区分1[0]}区']["10~"][居住級地区分])
 
-        return float(冬季加算表[f'{冬季加算地域区分1[0]}区'][世帯人数区分[0]][居住級地区分])
+        return float(冬季加算表()[f'{冬季加算地域区分1[0]}区'][世帯人数区分[0]][居住級地区分])
 
 
 class 冬季加算地域区分1(Variable):
@@ -1030,7 +1058,7 @@ class 冬季加算地域区分1(Variable):
 
     def formula(対象世帯, 対象期間, parameters):
         居住都道府県 = 対象世帯("居住都道府県", 対象期間)
-        return 地域区分表[居住都道府県[0]]
+        return 地域区分表()[居住都道府県[0]]
 
 
 class 冬季(Variable):
@@ -1086,10 +1114,10 @@ class 期末一時扶助(Variable):
 
         if 世帯人数区分[0] == "10~":
             # 9人の場合の加算に人数ごとの加算を追加
-            return float(期末一時扶助表["9"][居住級地区分]) + \
-                (世帯人数[0] - 9) * float(期末一時扶助表["10~"][居住級地区分])
+            return float(期末一時扶助表()["9"][居住級地区分]) + \
+                (世帯人数[0] - 9) * float(期末一時扶助表()["10~"][居住級地区分])
 
-        return 期末一時扶助表[世帯人数区分[0]][居住級地区分]
+        return 期末一時扶助表()[世帯人数区分[0]][居住級地区分]
 
 
 class 勤労控除(Variable):
