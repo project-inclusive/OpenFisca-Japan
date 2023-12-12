@@ -24,17 +24,7 @@ from openfisca_japan.variables.障害.精神障害者保健福祉手帳 import �
 
 
 # NOTE: 項目数が多い金額表は可読性の高いCSV形式としている。
-'''
-with open('openfisca_japan/assets/所得/配偶者控除額.csv') as f:
-#with open('openfisca_japan/assets/所得/配偶者控除額_content.csv') as f:
-    #reader = csv.DictReader(f)
-    reader = csv.reader(f)
-    header = next(reader)
-    # 配偶者控除額表[配偶者の所得区分][納税者本人の所得区分] の形で参照可能
-    # 配偶者控除額表 = {row[""]: row for row in reader}
-    配偶者控除額表 = np.array([row[1] for row in reader[1:]])
-'''
-
+# 配偶者控除額表[配偶者の所得区分, 納税者本人の所得区分] の形で参照可能
 配偶者控除額表 = np.genfromtxt('openfisca_japan/assets/所得/配偶者控除額.csv', 
                                delimiter=',', skip_header=1, dtype='int64')[np.newaxis, 1:]
 
@@ -43,16 +33,8 @@ with open('openfisca_japan/assets/所得/配偶者特別控除額.csv') as f:
     # 配偶者特別控除額表[配偶者の所得区分][納税者本人の所得区分] の形で参照可能
     配偶者特別控除額表 = {row[""]: row for row in reader}
 
-'''
-with open('openfisca_japan/assets/所得/配偶者控除額_老人控除対象配偶者.csv') as f:
-    #reader = csv.DictReader(f)
-    reader = csv.reader(f)
-    header = next(reader)
-    # 老人控除対象配偶者_配偶者控除額表[配偶者の所得区分][納税者本人の所得区分] の形で参照可能
-    #老人控除対象配偶者_配偶者控除額表 = {row[""]: row for row in reader}
-    老人控除対象配偶者_配偶者控除額表 = np.array([row[1] for row in reader[1:]])
-'''
 
+# 老人控除対象配偶者_配偶者控除額表[配偶者の所得区分, 納税者本人の所得区分] の形で参照可能
 老人控除対象配偶者_配偶者控除額表 = np.genfromtxt('openfisca_japan/assets/所得/配偶者控除額_老人控除対象配偶者.csv', 
                                delimiter=',', skip_header=1, dtype='int64')[np.newaxis, 1:]                             
 
