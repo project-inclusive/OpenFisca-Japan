@@ -7,6 +7,7 @@ See https://openfisca.org/doc/key-concepts/variables.html
 """
 
 import csv
+from functools import cache
 
 import numpy as np
 
@@ -21,22 +22,30 @@ from openfisca_japan.entities import 人物, 世帯
 from openfisca_japan.variables.全般 import 性別パターン
 
 # NOTE: 項目数が多い金額表は可読性の高いCSV形式としている。
-with open('openfisca_japan/assets/住民税/配偶者控除額.csv') as f:
-    reader = csv.DictReader(f)
-    # 配偶者控除額表[配偶者の所得区分][納税者本人の所得区分] の形で参照可能
-    配偶者控除額表 = {row[""]: row for row in reader}
 
 
-with open('openfisca_japan/assets/住民税/配偶者控除額_老人控除対象配偶者.csv') as f:
-    reader = csv.DictReader(f)
-    # 老人控除対象配偶者_配偶者控除額表[配偶者の所得区分][納税者本人の所得区分] の形で参照可能
-    老人控除対象配偶者_配偶者控除額表 = {row[""]: row for row in reader}
+@cache
+def 配偶者控除額表():
+    with open('openfisca_japan/assets/住民税/配偶者控除額.csv') as f:
+        reader = csv.DictReader(f)
+        # 配偶者控除額表()[配偶者の所得区分][納税者本人の所得区分] の形で参照可能
+        return {row[""]: row for row in reader}
 
 
-with open('openfisca_japan/assets/住民税/配偶者特別控除額.csv') as f:
-    reader = csv.DictReader(f)
-    # 配偶者特別控除額表[配偶者の所得区分][納税者本人の所得区分] の形で参照可能
-    配偶者特別控除額表 = {row[""]: row for row in reader}
+@cache
+def 老人控除対象配偶者_配偶者控除額表():
+    with open('openfisca_japan/assets/住民税/配偶者控除額_老人控除対象配偶者.csv') as f:
+        reader = csv.DictReader(f)
+        # 老人控除対象配偶者_配偶者控除額表()[配偶者の所得区分][納税者本人の所得区分] の形で参照可能
+        return {row[""]: row for row in reader}
+
+
+@cache
+def 配偶者特別控除額表():
+    with open('openfisca_japan/assets/住民税/配偶者特別控除額.csv') as f:
+        reader = csv.DictReader(f)
+        # 配偶者特別控除額表()[配偶者の所得区分][納税者本人の所得区分] の形で参照可能
+        return {row[""]: row for row in reader}
 
 
 class 住民税障害者控除(Variable):
@@ -188,9 +197,9 @@ class 住民税配偶者控除(Variable):
             return 0
 
         if 納税者の配偶者の年齢[0] >= 70:
-            return 老人控除対象配偶者_配偶者控除額表[str(納税者の配偶者の所得区分)][str(納税者の所得区分)]
+            return 老人控除対象配偶者_配偶者控除額表()[str(納税者の配偶者の所得区分)][str(納税者の所得区分)]
 
-        return 配偶者控除額表[str(納税者の配偶者の所得区分)][str(納税者の所得区分)]
+        return 配偶者控除額表()[str(納税者の配偶者の所得区分)][str(納税者の所得区分)]
 
 
 class 住民税配偶者特別控除(Variable):
@@ -243,7 +252,7 @@ class 住民税配偶者特別控除(Variable):
             # 該当しない場合
             return 0
 
-        return 配偶者特別控除額表[str(納税者の配偶者の所得区分)][str(納税者の所得区分)]
+        return 配偶者特別控除額表()[str(納税者の配偶者の所得区分)][str(納税者の所得区分)]
 
 
 class 住民税扶養控除(Variable):

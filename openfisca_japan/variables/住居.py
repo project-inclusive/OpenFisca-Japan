@@ -7,6 +7,7 @@ See https://openfisca.org/doc/key-concepts/variables.html
 """
 
 import json
+from functools import cache
 
 import numpy as np
 # Import from openfisca-core the Python objects used to code the legislation in OpenFisca
@@ -16,8 +17,11 @@ from openfisca_core.variables import Variable
 # Import the Entities specifically defined for this tax and benefit system
 from openfisca_japan.entities import 世帯
 
-with open('openfisca_japan/assets/市区町村級地区分.json') as f:
-    市区町村級地区分 = json.load(f)
+
+@cache
+def 市区町村級地区分():
+    with open('openfisca_japan/assets/市区町村級地区分.json') as f:
+        return json.load(f)
 
 
 class 居住都道府県(Variable):
@@ -47,8 +51,8 @@ class 居住級地区分1(Variable):
     def formula(対象世帯, 対象期間, parameters):
         居住都道府県 = 対象世帯("居住都道府県", 対象期間)[0]
         居住市区町村 = 対象世帯("居住市区町村", 対象期間)[0]
-        if 居住市区町村 in 市区町村級地区分[居住都道府県]:
-            return 市区町村級地区分[居住都道府県][居住市区町村][0]
+        if 居住市区町村 in 市区町村級地区分()[居住都道府県]:
+            return 市区町村級地区分()[居住都道府県][居住市区町村][0]
         else:
             return 3
         
@@ -64,8 +68,8 @@ class 居住級地区分2(Variable):
     def formula(対象世帯, 対象期間, parameters):
         居住都道府県 = 対象世帯("居住都道府県", 対象期間)[0]
         居住市区町村 = 対象世帯("居住市区町村", 対象期間)[0]
-        if 居住市区町村 in 市区町村級地区分[居住都道府県]:
-            return 市区町村級地区分[居住都道府県][居住市区町村][1]
+        if 居住市区町村 in 市区町村級地区分()[居住都道府県]:
+            return 市区町村級地区分()[居住都道府県][居住市区町村][1]
         else:
             return 2
 
