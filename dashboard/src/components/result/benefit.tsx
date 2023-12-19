@@ -29,23 +29,23 @@ export const Benefit = ({ result }: { result: any }) => {
       for (const [allowanceName, allowanceInfo] of Object.entries(
         configData.result.給付制度.制度一覧
       )) {
-        if (allowanceName in result.世帯.世帯1) {
-          if (result.世帯.世帯1[allowanceName][currentDate] > 0) {
+        if (allowanceName in result.世帯一覧.世帯1) {
+          if (result.世帯一覧.世帯1[allowanceName][currentDate] > 0) {
             minMaxResult[allowanceName] = {
               name: allowanceName,
-              max: result.世帯.世帯1[allowanceName][currentDate],
-              min: result.世帯.世帯1[allowanceName][currentDate],
+              max: result.世帯一覧.世帯1[allowanceName][currentDate],
+              min: result.世帯一覧.世帯1[allowanceName][currentDate],
               unit: allowanceInfo.unit,
               caption: allowanceInfo.caption,
               reference: allowanceInfo.reference,
             };
           }
-        } else if (`${allowanceName}_最大` in result.世帯.世帯1) {
-          if (result.世帯.世帯1[`${allowanceName}_最大`][currentDate] > 0) {
+        } else if (`${allowanceName}_最大` in result.世帯一覧.世帯1) {
+          if (result.世帯一覧.世帯1[`${allowanceName}_最大`][currentDate] > 0) {
             minMaxResult[allowanceName] = {
               name: allowanceName,
-              max: result.世帯.世帯1[`${allowanceName}_最大`][currentDate],
-              min: result.世帯.世帯1[`${allowanceName}_最小`][currentDate],
+              max: result.世帯一覧.世帯1[`${allowanceName}_最大`][currentDate],
+              min: result.世帯一覧.世帯1[`${allowanceName}_最小`][currentDate],
               unit: allowanceInfo.unit,
               caption: allowanceInfo.caption,
               reference: allowanceInfo.reference,

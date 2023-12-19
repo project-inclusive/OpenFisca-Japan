@@ -48,6 +48,8 @@ export const Result = () => {
   useEffect(() => {
     if (calcOnce) {
       calculate(household).catch((e: any) => {
+        console.log(e);
+
         // 想定外のエラーレスポンスを受け取り結果が取得できなかった場合、エラー画面へ遷移
         navigate('/response-error', {
           state: {
@@ -96,9 +98,9 @@ export const Result = () => {
     }
   };
 
-  const prefecture = household.世帯.世帯1.居住都道府県[currentDate];
+  const prefecture = household.世帯一覧.世帯1.居住都道府県[currentDate];
 
-  const city = household.世帯.世帯1.居住市区町村[currentDate];
+  const city = household.世帯一覧.世帯1.居住市区町村[currentDate];
 
   const getSocialWelfareCouncilData = () => {
     if (
