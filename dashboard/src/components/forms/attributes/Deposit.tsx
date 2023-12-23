@@ -1,13 +1,13 @@
-import { KeyboardEvent, useCallback, useContext, useState } from 'react';
+import { KeyboardEvent, useCallback, useState } from 'react';
 import { Box, HStack, Input, FormControl, FormLabel } from '@chakra-ui/react';
 
-import { HouseholdContext } from '../../../contexts/HouseholdContext';
-import { useRecoilValue } from 'recoil';
-import { currentDateAtom } from '../../../state';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { currentDateAtom, householdAtom } from '../../../state';
 
 export const Deposit = ({ personName }: { personName: string }) => {
   const currentDate = useRecoilValue(currentDateAtom);
-  const { household, setHousehold } = useContext(HouseholdContext);
+
+  const [household, setHousehold] = useRecoilState(householdAtom);
 
   const [shownDeposit, setShownDeposit] = useState<string | number>('');
 

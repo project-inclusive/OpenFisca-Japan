@@ -1,17 +1,17 @@
-import { useCallback, useContext, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Checkbox, Box } from '@chakra-ui/react';
 
-import { HouseholdContext } from '../../../contexts/HouseholdContext';
 import { HomeRecuperation } from './HomeRecuperation';
 import { Hospitalized } from './Hospitalized';
-import { useRecoilValue } from 'recoil';
-import { currentDateAtom } from '../../../state';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { currentDateAtom, householdAtom } from '../../../state';
 
 export const Recuperation = ({ personName }: { personName: string }) => {
   const currentDate = useRecoilValue(currentDateAtom);
 
   const [isChecked, setIsChecked] = useState(false);
-  const { household, setHousehold } = useContext(HouseholdContext);
+
+  const [household, setHousehold] = useRecoilState(householdAtom);
 
   // チェックボックスの値が変更された時
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
