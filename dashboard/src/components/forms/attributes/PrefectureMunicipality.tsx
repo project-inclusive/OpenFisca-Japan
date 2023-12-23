@@ -32,40 +32,40 @@ export const PrefectureMunicipality = ({
       setSelectedPrefecture(prefecture);
       setSelectedMunicipality('');
       const newHousehold = { ...household };
-      newHousehold.世帯.世帯1.居住都道府県 = {
+      newHousehold.世帯一覧.世帯1.居住都道府県 = {
         [currentDate]: prefecture,
       };
       if (prefecture === '東京都') {
-        newHousehold.世帯.世帯1.児童育成手当 = {
+        newHousehold.世帯一覧.世帯1.児童育成手当 = {
           [currentDate]: null,
         };
-        newHousehold.世帯.世帯1.障害児童育成手当 = {
+        newHousehold.世帯一覧.世帯1.障害児童育成手当 = {
           [currentDate]: null,
         };
-        newHousehold.世帯.世帯1.重度心身障害者手当_最小 = {
+        newHousehold.世帯一覧.世帯1.重度心身障害者手当_最小 = {
           [currentDate]: null,
         };
-        newHousehold.世帯.世帯1.重度心身障害者手当_最大 = {
+        newHousehold.世帯一覧.世帯1.重度心身障害者手当_最大 = {
           [currentDate]: null,
         };
-        newHousehold.世帯.世帯1.受験生チャレンジ支援貸付 = {
+        newHousehold.世帯一覧.世帯1.受験生チャレンジ支援貸付 = {
           [currentDate]: null,
         };
       } else {
-        if ('児童育成手当' in newHousehold.世帯.世帯1) {
-          delete newHousehold.世帯.世帯1.児童育成手当;
+        if ('児童育成手当' in newHousehold.世帯一覧.世帯1) {
+          delete newHousehold.世帯一覧.世帯1.児童育成手当;
         }
-        if ('障害児童育成手当' in newHousehold.世帯.世帯1) {
-          delete newHousehold.世帯.世帯1.障害児童育成手当;
+        if ('障害児童育成手当' in newHousehold.世帯一覧.世帯1) {
+          delete newHousehold.世帯一覧.世帯1.障害児童育成手当;
         }
-        if ('重度心身障害者手当_最小' in newHousehold.世帯.世帯1) {
-          delete newHousehold.世帯.世帯1.重度心身障害者手当_最小;
+        if ('重度心身障害者手当_最小' in newHousehold.世帯一覧.世帯1) {
+          delete newHousehold.世帯一覧.世帯1.重度心身障害者手当_最小;
         }
-        if ('重度心身障害者手当_最大' in newHousehold.世帯.世帯1) {
-          delete newHousehold.世帯.世帯1.重度心身障害者手当_最大;
+        if ('重度心身障害者手当_最大' in newHousehold.世帯一覧.世帯1) {
+          delete newHousehold.世帯一覧.世帯1.重度心身障害者手当_最大;
         }
-        if ('受験生チャレンジ支援貸付' in newHousehold.世帯.世帯1) {
-          delete newHousehold.世帯.世帯1.受験生チャレンジ支援貸付;
+        if ('受験生チャレンジ支援貸付' in newHousehold.世帯一覧.世帯1) {
+          delete newHousehold.世帯一覧.世帯1.受験生チャレンジ支援貸付;
         }
       }
       console.log(newHousehold);
@@ -81,7 +81,7 @@ export const PrefectureMunicipality = ({
       setSelectedMunicipality(municipality);
 
       const newHousehold = { ...household };
-      newHousehold.世帯.世帯1.居住市区町村 = {
+      newHousehold.世帯一覧.世帯1.居住市区町村 = {
         [currentDate]: municipality,
       };
       setHousehold({ ...newHousehold });

@@ -34,11 +34,11 @@ export const FormSpouse = () => {
     const newHousehold = { ...household };
 
     if (event.target.checked) {
-      newHousehold.世帯.世帯1.配偶者がいるがひとり親に該当 = {
+      newHousehold.世帯一覧.世帯1.配偶者がいるがひとり親に該当 = {
         [currentDate]: true,
       };
     } else {
-      newHousehold.世帯.世帯1.配偶者がいるがひとり親に該当 = {
+      newHousehold.世帯一覧.世帯1.配偶者がいるがひとり親に該当 = {
         [currentDate]: false,
       };
     }
@@ -49,7 +49,7 @@ export const FormSpouse = () => {
 
   return (
     <>
-      {household.世帯.世帯1.配偶者一覧 && (
+      {household.世帯一覧.世帯1.配偶者一覧 && (
         <>
           <Box bg="white" borderRadius="xl" p={4} m={4}>
             <Center

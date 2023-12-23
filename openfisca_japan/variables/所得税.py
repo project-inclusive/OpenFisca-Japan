@@ -7,6 +7,7 @@ See https://openfisca.org/doc/key-concepts/variables.html
 """
 
 import csv
+from functools import cache
 
 import numpy as np
 
@@ -24,22 +25,28 @@ from openfisca_japan.variables.障害.精神障害者保健福祉手帳 import �
 
 
 # NOTE: 項目数が多い金額表は可読性の高いCSV形式としている。
-with open('openfisca_japan/parameters/所得/配偶者控除額.csv') as f:
-    reader = csv.DictReader(f)
-    # 配偶者控除額表[配偶者の所得区分][納税者本人の所得区分] の形で参照可能
-    配偶者控除額表 = {row[""]: row for row in reader}
 
 
-with open('openfisca_japan/parameters/所得/配偶者特別控除額.csv') as f:
-    reader = csv.DictReader(f)
-    # 配偶者特別控除額表[配偶者の所得区分][納税者本人の所得区分] の形で参照可能
-    配偶者特別控除額表 = {row[""]: row for row in reader}
+@cache
+def 配偶者控除額表():
+    # 配偶者控除額表()[配偶者の所得区分, 納税者本人の所得区分] の形で参照可能
+    return np.genfromtxt('openfisca_japan/assets/所得/配偶者控除額.csv', 
+                  delimiter=',', skip_header=1, dtype='int64')[np.newaxis, 1:]
 
 
-with open('openfisca_japan/parameters/所得/配偶者控除額_老人控除対象配偶者.csv') as f:
-    reader = csv.DictReader(f)
-    # 老人控除対象配偶者_配偶者控除額表[配偶者の所得区分][納税者本人の所得区分] の形で参照可能
-    老人控除対象配偶者_配偶者控除額表 = {row[""]: row for row in reader}
+@cache
+def 配偶者特別控除額表():
+    with open('openfisca_japan/assets/所得/配偶者特別控除額.csv') as f:
+        reader = csv.DictReader(f)
+        # 配偶者特別控除額表()[配偶者の所得区分][納税者本人の所得区分] の形で参照可能
+        return {row[""]: row for row in reader}
+
+
+@cache
+def 老人控除対象配偶者_配偶者控除額表():
+    # 老人控除対象配偶者_配偶者控除額表()[配偶者の所得区分, 納税者本人の所得区分] の形で参照可能
+    return np.genfromtxt('openfisca_japan/assets/所得/配偶者控除額_老人控除対象配偶者.csv', 
+                         delimiter=',', skip_header=1, dtype='int64')[np.newaxis, 1:]
 
 
 class 給与所得控除額(Variable):
@@ -260,47 +267,44 @@ class 配偶者控除(Variable):
     """
 
     def formula(対象世帯, 対象期間, parameters):
-        if 対象世帯.nb_persons(世帯.配偶者) == 0:
-            return 0
+        # 複数世帯の前世帯員のうち、自分または配偶者のroleをもつ世帯員がTrueのarray
+        自分または配偶者である = 対象世帯.has_role(世帯.自分) + 対象世帯.has_role(世帯.配偶者)  # (全世帯員数)の長さのarray
+        所得一覧 = 対象世帯.members("所得", 対象期間)  # (全世帯員数)の長さのarray
+        自分または配偶者の所得 = 自分または配偶者である * 所得一覧
+        納税者の所得 = 対象世帯.max(自分または配偶者の所得)  # (世帯数)の長さのarray
+        納税者の配偶者の所得 = 対象世帯.min(自分または配偶者の所得)  # (世帯数)の長さのarray
 
-        自分の所得 = 対象世帯.自分("所得", 対象期間)
-        配偶者の所得 = 対象世帯.配偶者("所得", 対象期間)
-
-        # 所得が高いほうが控除を受ける対象となる
-        納税者の所得 = np.max([自分の所得[0], 配偶者の所得[0]])
-        納税者の配偶者の所得 = np.min([自分の所得[0], 配偶者の所得[0]])
-
-        納税者の所得区分 = np.select(
-            [納税者の所得 <= 9000000, 納税者の所得 > 9000000 and 納税者の所得 <= 9500000, 納税者の所得 > 9500000 and 納税者の所得 <= 10000000],
-            ["~9000000", "~9500000", "~10000000"],
-            None)
-        
         同一生計配偶者_所得制限額 = parameters(対象期間).所得.同一生計配偶者_所得制限額
         納税者の配偶者の所得区分 = np.select(
             [納税者の配偶者の所得 <= 同一生計配偶者_所得制限額],
-            ["~480000"],
-            None)
+            [0],
+            -1).astype(int)  # intにできるようデフォルトをNoneではなく-1
 
-        if 納税者の所得区分 == None or 納税者の配偶者の所得区分 == None:
-            # 該当しない場合
-            return 0
+        納税者の所得区分 = np.select(
+            [納税者の所得 <= 9000000, (納税者の所得 > 9000000) * (納税者の所得 <= 9500000), (納税者の所得 > 9500000) * (納税者の所得 <= 10000000)],  # 複数世帯のarrayのためand, orの代わりに *. +
+            [0, 1, 2],
+            -1).astype(int)  # intにできるようデフォルトをNoneではなく-1
 
         # NOTE: その年の12/31時点の年齢を参照
         # https://www.nta.go.jp/taxes/shiraberu/taxanswer/yogo/senmon.htm#word5
         該当年12月31日 = period(f'{対象期間.start.year}-12-31')
+        自分の所得 = 対象世帯.自分("所得", 対象期間)
+        配偶者の所得 = 対象世帯.配偶者("所得", 対象期間)
         納税者の配偶者の年齢 = np.select(
             [納税者の配偶者の所得 == 自分の所得, 納税者の配偶者の所得 == 配偶者の所得],
             [対象世帯.自分("年齢", 該当年12月31日), 対象世帯.配偶者("年齢", 該当年12月31日)],
-            None)
+            -1).astype(int)  # intにできるようデフォルトをNoneではなく-1
 
-        # この分岐には入らない想定
-        if 納税者の配偶者の年齢 == None:
-            return 0
+        配偶者控除額 = 配偶者控除額表()[納税者の配偶者の所得区分, 納税者の所得区分]  # ndarrayなので各次元で複数世帯arrayを入力可能
+        老人控除対象配偶者_配偶者控除額 = 老人控除対象配偶者_配偶者控除額表()[納税者の配偶者の所得区分, 納税者の所得区分]
 
-        if 納税者の配偶者の年齢[0] >= 70:
-            return 老人控除対象配偶者_配偶者控除額表[str(納税者の配偶者の所得区分)][str(納税者の所得区分)]
-
-        return 配偶者控除額表[str(納税者の配偶者の所得区分)][str(納税者の所得区分)]
+        # 早期リターンする条件は世帯ごとのbool arrayにし、最後にまとめて条件として掛ける
+        所得区分あり = (納税者の所得区分 != -1) * (納税者の配偶者の所得区分 != -1)
+        配偶者あり = 対象世帯.nb_persons(世帯.配偶者) != 0
+        配偶者の年齢あり = 納税者の配偶者の年齢 != -1
+        配偶者控除条件 = 所得区分あり * 配偶者あり * 配偶者の年齢あり
+        老人控除対象 = 納税者の配偶者の年齢 >= 70
+        return 配偶者控除条件 * (np.logical_not(老人控除対象) * 配偶者控除額 + 老人控除対象 * 老人控除対象配偶者_配偶者控除額)
 
 
 class 配偶者特別控除(Variable):
@@ -351,7 +355,7 @@ class 配偶者特別控除(Variable):
             # 該当しない場合
             return 0
 
-        return 配偶者特別控除額表[str(納税者の配偶者の所得区分)][str(納税者の所得区分)]
+        return 配偶者特別控除額表()[str(納税者の配偶者の所得区分)][str(納税者の所得区分)]
 
 
 class 扶養控除(Variable):

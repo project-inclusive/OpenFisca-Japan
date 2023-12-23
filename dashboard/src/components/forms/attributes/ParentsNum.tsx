@@ -21,12 +21,12 @@ export const ParentsNum = () => {
   // チェックボックスの値が変更された時
   const onCheckChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      if (!event.target.checked && household.世帯.世帯1.親一覧) {
+      if (!event.target.checked && household.世帯一覧.世帯1.親一覧) {
         const newHousehold = { ...household };
-        household.世帯.世帯1.親一覧.map((name: string) => {
+        household.世帯一覧.世帯1.親一覧.map((name: string) => {
           delete newHousehold.世帯員[name];
         });
-        delete newHousehold.世帯.世帯1.親一覧;
+        delete newHousehold.世帯一覧.世帯1.親一覧;
         setShownLivingToghtherNum('');
         setHousehold({ ...newHousehold });
       }
@@ -59,18 +59,18 @@ export const ParentsNum = () => {
 
     // 変更前の親または祖父母の情報を削除
     const newHousehold = { ...household };
-    if (household.世帯.世帯1.親一覧) {
-      household.世帯.世帯1.親一覧.map((name: string) => {
+    if (household.世帯一覧.世帯1.親一覧) {
+      household.世帯一覧.世帯1.親一覧.map((name: string) => {
         delete newHousehold.世帯員[name];
       });
     }
 
     // 新しい親または祖父母の情報を追加
-    newHousehold.世帯.世帯1.親一覧 = [...Array(LivingToghtherNum)].map(
+    newHousehold.世帯一覧.世帯1.親一覧 = [...Array(LivingToghtherNum)].map(
       (val, i) => `親${i}`
     );
-    if (newHousehold.世帯.世帯1.親一覧) {
-      newHousehold.世帯.世帯1.親一覧.map((name: string) => {
+    if (newHousehold.世帯一覧.世帯1.親一覧) {
+      newHousehold.世帯一覧.世帯1.親一覧.map((name: string) => {
         newHousehold.世帯員[name] = {};
       });
     }

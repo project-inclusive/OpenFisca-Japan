@@ -18,7 +18,7 @@ export const householdAtom = atom<any>({
       あなた: {},
     },
     // Household
-    世帯: {
+    世帯一覧: {
       // Household 1
       世帯1: {
         // Self List: ['You']

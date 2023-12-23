@@ -10,7 +10,7 @@ from openfisca_core.entities import build_entity
 
 世帯 = build_entity(
     key = "世帯",
-    plural = "世帯",
+    plural = "世帯一覧",
     label = "All the people in a family or group who live together in the same place.",
     doc = """
     世帯 is an example of a group entity.
