@@ -605,14 +605,14 @@
 ### 3. テストを実行する
 
 1. OpenFiscaのdockerコンテナに入る
+  - ※前提にも記載のとおり、docker composeでOpenFiscaコンテナが起動している必要があります。
 
     ```sh
     docker compose exec openfisca /bin/bash
     ```
 
 2. OpenFiscaのファイルをbuildする
-
-`variables/`配下のファイルを変更するたびに`make build`が必要となります。
+  - ※`variables/`配下のファイルを変更するたびに`make build`が必要となります。
 
     ```sh
     make build
@@ -629,7 +629,7 @@
 
 ### 1. ボーナス金額のパラメーターファイルを作成する
 
-1. 下記の内容で`parameters/チュートリアル/3の倍数給付金額_ボーナス.yaml` のファイルを作成する
+1. 下記の内容で`parameters/チュートリアル/三の倍数給付金額_ボーナス.yaml` のファイルを作成する
 
     ```yaml
     description: 3の倍数給付金額_ボーナス
