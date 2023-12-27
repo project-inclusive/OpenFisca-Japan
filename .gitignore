@@ -23,3 +23,8 @@ venv
 # debugging images
 tools/dependency_graph/dependency_graph
 tools/dependency_graph/dependency_graph.png
+
+# チュートリアル時の作成物
+openfisca_japan/parameters/チュートリアル
+openfisca_japan/tests/チュートリアル
+openfisca_japan/variables/チュートリアル
