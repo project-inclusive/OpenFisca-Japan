@@ -8,14 +8,14 @@ See https://openfisca.org/doc/key-concepts/variables.html
 
 # from cProfile import label
 # from xmlrpc.client import Boolean
-from datetime import date
+from datetime import date, datetime, time
 
 # Import from numpy the operations you need to apply on OpenFisca's population vectors
 # Import from openfisca-core the Python objects used to code the legislation in OpenFisca
 from numpy import where
 import numpy as np
 from openfisca_core.indexed_enums import Enum
-from openfisca_core.periods import DAY, ETERNITY
+from openfisca_core.periods import DAY, ETERNITY, instant
 from openfisca_core.variables import Variable
 # Import the Entities specifically defined for this tax and benefit system
 from openfisca_japan.entities import 人物, 世帯
@@ -49,6 +49,24 @@ class 年齢(Variable):
         
         # NOTE: 誕生日が未来であった場合便宜上0歳として扱う(誤った情報が指定された場合でもOpenFiscaがクラッシュするのを防ぐため)
         return np.clip(年齢, 0, None)
+
+# 出生順を算出する場合に用いる
+class 生まれてからの日数(Variable):
+    value_type = int
+    entity = 人物
+    definition_period = DAY
+    label = "生まれてからの日数"
+
+    def formula(対象人物, 対象期間, _parameters):
+        誕生年月日 = 対象人物("誕生年月日", 対象期間)  # date型
+        
+        # Period型 -> Instant型 -> date型  
+        # (参考) https://openfisca.org/doc/openfisca-python-api/periods.html#openfisca_core.periods.helpers.instant
+        対象日 = instant(対象期間).date
+
+        # timedeltaオブジェクトの日数
+        # (参考) https://docs.python.org/ja/3/library/datetime.html#timedelta-objects
+        return (対象日 - 誕生年月日).days
 
 
 # 小学n年生はn, 中学m年生はm+6, 高校l年生はl+9, 
