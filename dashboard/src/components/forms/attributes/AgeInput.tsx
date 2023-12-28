@@ -1,9 +1,11 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Box, HStack, FormControl, FormLabel, Input } from '@chakra-ui/react';
 
 import configData from '../../../config/app_config.json';
-import { HouseholdContext } from '../../../contexts/HouseholdContext';
+
 import { ErrorMessage } from './validation/ErrorMessage';
+import { householdAtom } from '../../../state';
+import { useRecoilState } from 'recoil';
 
 export const AgeInput = ({
   personName,
@@ -12,7 +14,7 @@ export const AgeInput = ({
   personName: string;
   mustInput: boolean;
 }) => {
-  const { household, setHousehold } = useContext(HouseholdContext);
+  const [household, setHousehold] = useRecoilState(householdAtom);
   const [age, setAge] = useState('');
 
   const handleAgeChange = (event: React.ChangeEvent<HTMLInputElement>) =>

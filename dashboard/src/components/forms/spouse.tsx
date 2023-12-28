@@ -1,4 +1,4 @@
-import { useContext, useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import {
   Box,
@@ -9,7 +9,6 @@ import {
 } from '@chakra-ui/react';
 
 import configData from '../../config/app_config.json';
-import { HouseholdContext } from '../../contexts/HouseholdContext';
 import { Birthday } from './attributes/Birthday';
 import { Income } from './attributes/Income';
 import { Disability } from './attributes/Disability';
@@ -18,8 +17,8 @@ import { Working } from './attributes/Working';
 import { Recuperation } from './attributes/Recuperation';
 import { NursingHome } from './attributes/NursingHome';
 import { Deposit } from './attributes/Deposit';
-import { useRecoilValue } from 'recoil';
-import { currentDateAtom } from '../../state';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { currentDateAtom, householdAtom } from '../../state';
 
 export const FormSpouse = () => {
   const location = useLocation();
@@ -27,7 +26,7 @@ export const FormSpouse = () => {
 
   const currentDate = useRecoilValue(currentDateAtom);
   const [isChecked, setIsChecked] = useState(false);
-  const { household, setHousehold } = useContext(HouseholdContext);
+  const [household, setHousehold] = useRecoilState(householdAtom);
   const spouseName = '配偶者';
 
   // チェックボックスの値が変更された時

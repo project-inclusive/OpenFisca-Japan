@@ -1,16 +1,17 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Center, Button } from '@chakra-ui/react';
 
 import configData from '../../config/app_config.json';
 import { ShowAlertMessageContext } from '../../contexts/ShowAlertMessageContext';
-import { HouseholdContext } from '../../contexts/HouseholdContext';
 import { useValidate } from '../../hooks/validate';
 import { FormYou } from './you';
 import { FormSpouse } from './spouse';
 import { FormChildren } from './children';
 import { FormParents } from './parents';
 import { CalculationLabel } from './calculationLabel';
+import { useRecoilValue } from 'recoil';
+import { householdAtom } from '../../state';
 
 export const FormContent = () => {
   const location = useLocation();
@@ -19,7 +20,8 @@ export const FormContent = () => {
   const [ShowAlertMessage, setShowAlertMessage] = useState(false);
   const validated = useValidate();
   const navigate = useNavigate();
-  const { household, setHousehold } = useContext(HouseholdContext);
+
+  const household = useRecoilValue(householdAtom);
 
   return (
     <ShowAlertMessageContext.Provider value={ShowAlertMessage}>
