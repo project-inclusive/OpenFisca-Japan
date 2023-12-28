@@ -50,6 +50,7 @@ class 年齢(Variable):
         # NOTE: 誕生日が未来であった場合便宜上0歳として扱う(誤った情報が指定された場合でもOpenFiscaがクラッシュするのを防ぐため)
         return np.clip(年齢, 0, None)
 
+
 # 出生順を算出する場合に用いる
 class 生まれてからの日数(Variable):
     value_type = int
@@ -58,15 +59,20 @@ class 生まれてからの日数(Variable):
     label = "生まれてからの日数"
 
     def formula(対象人物, 対象期間, _parameters):
-        誕生年月日 = 対象人物("誕生年月日", 対象期間)  # date型
-        
-        # Period型 -> Instant型 -> date型  
-        # (参考) https://openfisca.org/doc/openfisca-python-api/periods.html#openfisca_core.periods.helpers.instant
-        対象日 = instant(対象期間).date
+        誕生年月日 = 対象人物("誕生年月日", 対象期間)  # NOTE: 総世帯員分のndarray
+        生まれてからの日数 = np.zeros(len(誕生年月日), dtype=int)
 
-        # timedeltaオブジェクトの日数
-        # (参考) https://docs.python.org/ja/3/library/datetime.html#timedelta-objects
-        return (対象日 - 誕生年月日).days
+        for i, t in enumerate(誕生年月日):
+            # Period型 -> Instant型 -> date型  
+            # (参考) https://openfisca.org/doc/openfisca-python-api/periods.html#openfisca_core.periods.helpers.instant
+            対象日date = instant(対象期間).date
+            t_date = t.item() # datetime64型 -> date型
+
+            # timedeltaオブジェクトの日数
+            # (参考) https://docs.python.org/ja/3/library/datetime.html#timedelta-objects
+            生まれてからの日数[i] = (対象日date - t_date).days
+
+        return 生まれてからの日数
 
 
 # 小学n年生はn, 中学m年生はm+6, 高校l年生はl+9, 
