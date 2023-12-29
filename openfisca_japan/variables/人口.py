@@ -8,14 +8,13 @@ See https://openfisca.org/doc/key-concepts/variables.html
 
 # from cProfile import label
 # from xmlrpc.client import Boolean
-from datetime import date, datetime, time
+from datetime import date
 
 # Import from numpy the operations you need to apply on OpenFisca's population vectors
 # Import from openfisca-core the Python objects used to code the legislation in OpenFisca
 from numpy import where
 import numpy as np
-from openfisca_core.indexed_enums import Enum
-from openfisca_core.periods import DAY, ETERNITY, instant
+from openfisca_core.periods import DAY, ETERNITY
 from openfisca_core.variables import Variable
 # Import the Entities specifically defined for this tax and benefit system
 from openfisca_japan.entities import 人物, 世帯
