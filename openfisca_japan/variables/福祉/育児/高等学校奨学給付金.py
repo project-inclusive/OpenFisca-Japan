@@ -2,7 +2,6 @@
 高等学校奨学給付金の実装
 """
 
-import math
 from functools import cache
 
 import numpy as np
@@ -70,7 +69,7 @@ class 高等学校奨学給付金_最小(Variable):
             0)
 
         # 月間支給金額へ変換
-        return math.floor(年間支給金額 / 12)
+        return np.floor(年間支給金額 / 12)
 
 
 class 高等学校奨学給付金_最大(Variable):
@@ -103,7 +102,7 @@ class 高等学校奨学給付金_最大(Variable):
             0)
 
         # 月間支給金額へ変換
-        return math.floor(年間支給金額 / 12)
+        return np.floor(年間支給金額 / 12)
 
 class 生活保護受給世帯の高等学校奨学給付金(Variable):
     value_type = int
