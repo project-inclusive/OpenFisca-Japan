@@ -48,9 +48,9 @@ from openfisca_core.entities import build_entity
             "doc": "Other individuals living in the 世帯.",
             },
         {
-            "key": "親",  # 「自分」に対しての親または祖父母。「孫」から見ると祖父母・曽祖父母
-            "plural": "親一覧",
-            "label": "親",
+            "key": "祖父母",  # 「自分」に対しての親または祖父母。「孫」から見ると祖父母・曽祖父母
+            "plural": "祖父母一覧",
+            "label": "祖父母",
             "doc": "Other individuals living in the 世帯.",
             },
         ],
