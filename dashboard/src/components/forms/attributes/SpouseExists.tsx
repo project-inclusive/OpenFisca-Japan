@@ -19,7 +19,7 @@ export const SpouseExists = () => {
       newHousehold.世帯一覧.世帯1.親一覧.push(spouseName);
     } else {
       delete newHousehold.世帯員[spouseName];
-      let spouseIdx = newHousehold.世帯一覧.世帯1.親一覧.indexOf(spouseName);
+      const spouseIdx = newHousehold.世帯一覧.世帯1.親一覧.indexOf(spouseName);
       newHousehold.世帯一覧.世帯1.親一覧.splice(spouseIdx, spouseIdx);
       newHousehold.世帯一覧.世帯1.配偶者がいるがひとり親に該当 = {
         [currentDate]: false,
