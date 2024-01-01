@@ -49,7 +49,7 @@ export const FormSpouse = () => {
 
   return (
     <>
-      {household.世帯一覧.世帯1.配偶者一覧 && (
+      {household.世帯一覧.世帯1.親一覧.length == 2 && (
         <>
           <Box bg="white" borderRadius="xl" p={4} m={4}>
             <Center

@@ -22,7 +22,7 @@ export const householdAtom = atom<any>({
       // Household 1
       世帯1: {
         // Self List: ['You']
-        自分一覧: ['あなた'],
+        親一覧: ['あなた'],
         // Child Allowance
         児童手当: {
           [currentDate]: null,
