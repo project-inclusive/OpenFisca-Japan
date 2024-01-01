@@ -156,7 +156,6 @@
 
 - API POST specification
   - Strings enclosed in " " cannot be changed.
-  - A `parent` means a parent of `you` and a grandparent of a `child`.
   - \<period\> means the period during which an attribute has its value.   
   So attributes that do not change permanently (only `誕生年月日` (birthday) as of 2023/9/2) are `ETERNITY`, and other attributes set the input date (YYYY-MM-DD).
   - Please set the value of \<allowance to be calculated\> to `null` when POST. The value calculated by the backend API is set there and returned.  
@@ -165,7 +164,7 @@
   ```
   {
     "世帯員": {
-      <you>: {
+      <parent1>: {
         <personal attribute>: {
           <period>: value
         },
@@ -173,7 +172,10 @@
           <period>: value
         },
       },
-      <spouse>: {
+      <parent2>: {
+        <personal attribute>: {
+          <period>: value
+        },
         <personal attribute>: {
           <period>: value
         },
@@ -188,7 +190,7 @@
           <period>: value
         },
       },
-      <parent1>: {
+      <grandparent1>: {
         <personal attribute>: {
           <period>: value
         },
@@ -196,9 +198,9 @@
     },
     "世帯": {
       "世帯1": {
-        "親一覧": [<you>, <spouse>],
+        "親一覧": [<parent1>, <parent2>],
         "子一覧": [<child1>, <child2>],
-        "祖父母一覧": [<parent1>]
+        "祖父母一覧": [<grandparent1>]
         <household attribute>: {
           <period>: value
         },
