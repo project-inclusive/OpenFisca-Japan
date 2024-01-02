@@ -20,8 +20,7 @@ class Process(ProcessBase):
         res = super().process(row)
         d_input = dict()
         d_input['世帯'] = dict()
-        d_input['世帯']['自分一覧'] = []
-        d_input['世帯']['配偶者一覧'] = []
+        d_input['世帯']['親一覧'] = []
         d_input['世帯']['子一覧'] = []
         d_input['世帯員'] = dict()
         d_output = {'世帯': {}}
@@ -31,11 +30,11 @@ class Process(ProcessBase):
         ### 入力情報を追加 ###
         # 世帯の一覧属性
         if row[self.titles[f'{self.myself}_年齢']] or row[self.titles[f'{self.myself}_学年']]:
-            d_input['世帯']['自分一覧'].append(self.myself)
+            d_input['世帯']['親一覧'].append(self.myself)
             people.append(self.myself)
 
         if row[self.titles[f'{self.spouse}_年齢']] or row[self.titles[f'{self.spouse}_学年']]:
-            d_input['世帯']['配偶者一覧'].append(self.spouse)
+            d_input['世帯']['親一覧'].append(self.spouse)
             people.append(self.spouse)
                 
         for p in self.children:

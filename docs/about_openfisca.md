@@ -108,7 +108,7 @@
   - `対象人物`のvariableを取得した場合は世帯人数分のndarrayが返されるが、`対象世帯.members`で参照するときや最終的な結果やテスト時は世帯員ごとに処理される。
   - 対象世帯の各世帯員のVariableを参照する場合は `対象世帯.members(変数名, 対象期間)`
   - 対象人物の世帯のVariableを参照する場合は `対象人物.世帯(変数名, 対象期間)`
-  - 特定の役割の世帯員の値のみ抽出する場合は `対象世帯.配偶者(変数名, 対象期間)` (`配偶者` 以外も同様)
+  - 特定の役割の世帯員の値のみ抽出する場合は `対象世帯.親(変数名, 対象期間)` (`親` 以外も同様)
   - 取得した値を式に用いる場合 **複合演算子 (`+=`, `-=` 等)を使用すると参照元の変数そのものが書き変わり計算に不整合が生じてしまいます**
     - NG: `a += b` (`a` で参照しているvariableの計算結果自体を書き換えてしまう)
     - OK: `a = a + b` (variableを変えずに、(Pythonのローカル変数) `a` のみを上書き)
@@ -156,7 +156,6 @@
 
 - API POST specification
   - Strings enclosed in " " cannot be changed.
-  - A `parent` means a parent of `you` and a grandparent of a `child`.
   - \<period\> means the period during which an attribute has its value.   
   So attributes that do not change permanently (only `誕生年月日` (birthday) as of 2023/9/2) are `ETERNITY`, and other attributes set the input date (YYYY-MM-DD).
   - Please set the value of \<allowance to be calculated\> to `null` when POST. The value calculated by the backend API is set there and returned.  
@@ -165,7 +164,7 @@
   ```
   {
     "世帯員": {
-      <you>: {
+      <parent1>: {
         <personal attribute>: {
           <period>: value
         },
@@ -173,7 +172,10 @@
           <period>: value
         },
       },
-      <spouse>: {
+      <parent2>: {
+        <personal attribute>: {
+          <period>: value
+        },
         <personal attribute>: {
           <period>: value
         },
@@ -188,7 +190,7 @@
           <period>: value
         },
       },
-      <parent1>: {
+      <grandparent1>: {
         <personal attribute>: {
           <period>: value
         },
@@ -196,10 +198,9 @@
     },
     "世帯": {
       "世帯1": {
-        "自分一覧": [<you>],
-        "配偶者一覧": [<spouse>],
+        "親一覧": [<parent1>, <parent2>],
         "子一覧": [<child1>, <child2>],
-        "親一覧": [<parent1>]
+        "祖父母一覧": [<grandparent1>]
         <household attribute>: {
           <period>: value
         },

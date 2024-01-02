@@ -16,8 +16,8 @@ export const FormParents = () => {
   const household = useRecoilValue(householdAtom);
   return (
     <>
-      {household.世帯一覧.世帯1.親一覧 &&
-        household.世帯一覧.世帯1.親一覧.map(
+      {household.世帯一覧.世帯1.祖父母一覧 &&
+        household.世帯一覧.世帯1.祖父母一覧.map(
           (parentName: string, index: number) => (
             <div key={index}>
               <Box bg="white" borderRadius="xl" p={4} m={4}>

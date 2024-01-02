@@ -66,5 +66,5 @@ class 世帯高所得(Variable):
     label = "世帯で最も所得が高い人物の所得"
 
     def formula(対象世帯, 対象期間, _parameters):
-        各所得 = 対象世帯.members("所得", 対象期間)
-        return np.max(各所得)
+        所得一覧 = 対象世帯.members("所得", 対象期間)
+        return 対象世帯.max(所得一覧)
