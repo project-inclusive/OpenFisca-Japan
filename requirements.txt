@@ -72,6 +72,7 @@ requests==2.31.0
 requests-toolbelt==1.0.0
 rfc3986==2.0.0
 rich==13.4.2
+ruff==0.1.9
 SecretStorage==3.3.3
 six==1.16.0
 snowballstemmer==2.2.0
