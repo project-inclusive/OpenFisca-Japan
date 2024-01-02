@@ -15,8 +15,10 @@ export const SpouseExists = () => {
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const newHousehold = { ...household };
     if (event.target.checked) {
-      newHousehold.世帯員[spouseName] = {};
-      newHousehold.世帯一覧.世帯1.親一覧.push(spouseName);
+      if (newHousehold.世帯一覧.世帯1.親一覧.length == 1) {
+        newHousehold.世帯員[spouseName] = {};
+        newHousehold.世帯一覧.世帯1.親一覧.push(spouseName);
+      }
     } else {
       delete newHousehold.世帯員[spouseName];
       const spouseIdx = newHousehold.世帯一覧.世帯1.親一覧.indexOf(spouseName);
