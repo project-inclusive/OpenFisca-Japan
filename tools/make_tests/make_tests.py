@@ -1,9 +1,16 @@
-# -*- coding: utf-8 -*-
+"""
+テスト条件・結果を記載したCSVファイルから、OpenFisca用のyamlテストファイルを自動生成
+"""
+
 import argparse
 import os
 import sys
-sys.path.append(os.curdir)
+
 from mylib.utils import TestGenerator
+
+
+sys.path.append(os.curdir)
+
 
 if __name__ == "__main__":
     parse = argparse.ArgumentParser()

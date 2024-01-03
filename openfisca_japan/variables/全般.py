@@ -1,7 +1,10 @@
+"""
+全制度で汎用的に使用するVariableを定義
+"""
+
 from openfisca_core.indexed_enums import Enum
 from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
-
 from openfisca_japan.entities import 人物
 
 
@@ -14,11 +17,13 @@ class 小学生学年(Enum):
     五年生 = 5
     六年生 = 6
 
+
 class 中学生学年(Enum):
     __order__ = "一年生 二年生 三年生"
     一年生 = 7
     二年生 = 8
     三年生 = 9
+
 
 class 高校生学年(Enum):
     __order__ = "一年生 二年生 三年生"

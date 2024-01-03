@@ -2,13 +2,12 @@
 障害児福祉手当の実装
 """
 import numpy as np
-
-from openfisca_core.periods import MONTH, DAY
+from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
 from openfisca_japan.entities import 世帯
-from openfisca_japan.variables.障害.身体障害者手帳 import 身体障害者手帳等級パターン
-from openfisca_japan.variables.障害.療育手帳 import 療育手帳等級パターン
 from openfisca_japan.variables.障害.愛の手帳 import 愛の手帳等級パターン
+from openfisca_japan.variables.障害.療育手帳 import 療育手帳等級パターン
+from openfisca_japan.variables.障害.身体障害者手帳 import 身体障害者手帳等級パターン
 
 
 class 障害児福祉手当(Variable):
@@ -38,11 +37,11 @@ class 障害児福祉手当(Variable):
 
         対象障害者手帳等級 = \
             (身体障害者手帳等級一覧 == 身体障害者手帳等級パターン.一級) + \
-                (身体障害者手帳等級一覧 == 身体障害者手帳等級パターン.二級) + \
-                    (療育手帳等級一覧 == 療育手帳等級パターン.A) + \
-                        (療育手帳等級一覧 == 療育手帳等級パターン.B) + \
-                            (愛の手帳等級一覧 == 愛の手帳等級パターン.一度) + \
-                                (愛の手帳等級一覧 == 愛の手帳等級パターン.二度)
+            (身体障害者手帳等級一覧 == 身体障害者手帳等級パターン.二級) + \
+            (療育手帳等級一覧 == 療育手帳等級パターン.A) + \
+            (療育手帳等級一覧 == 療育手帳等級パターン.B) + \
+            (愛の手帳等級一覧 == 愛の手帳等級パターン.一度) + \
+            (愛の手帳等級一覧 == 愛の手帳等級パターン.二度)
 
         対象障害者である = 上限年齢未満 * 対象障害者手帳等級
         # 障害児はほとんど控除が該当しないと考える
@@ -54,9 +53,9 @@ class 障害児福祉手当(Variable):
         世帯高所得 = 対象世帯("控除後世帯高所得", 対象期間)
         扶養義務者の所得制限限度額 = 障害児福祉手当.所得制限限度額.扶養義務者[扶養人数]
         扶養義務者の所得条件 = 世帯高所得 < 扶養義務者の所得制限限度額
-        
+
         所得条件 = 受給者の所得条件 * 扶養義務者の所得条件
-                                
+
         # 障害児福祉手当は対象障害者が受給者のため、世帯では対象障害者の人数分支給される。
         手当金額 = 障害児福祉手当.金額 * 対象世帯.sum(対象障害者である)
 

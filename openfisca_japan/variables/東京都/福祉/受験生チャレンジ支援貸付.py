@@ -3,11 +3,11 @@
 """
 
 import numpy as np
-
 from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
-from openfisca_japan.entities import 世帯, 人物
+from openfisca_japan.entities import 世帯
 from openfisca_japan.variables.全般 import 中学生学年, 高校生学年
+
 
 class 受験生チャレンジ支援貸付(Variable):
     value_type = int
@@ -36,6 +36,7 @@ class 受験生チャレンジ支援貸付(Variable):
         受験生チャレンジ支援貸付可能 = 対象世帯("受験生チャレンジ支援貸付可能", 対象期間)
         return 年間支給金額 * 受験生チャレンジ支援貸付可能
 
+
 class 受験生チャレンジ支援貸付可能(Variable):
     value_type = int
     default_value = 0
@@ -63,23 +64,23 @@ class 受験生チャレンジ支援貸付可能(Variable):
         if ひとり親である:
             受給可能 = np.select(
                 [
-                    世帯人数 == 2 and 世帯所得 <= 2805000, 
-                    世帯人数 == 3 and 世帯所得 <= 3532000, 
-                    世帯人数 == 4 and 世帯所得 <= 4175000, 
-                    世帯人数 == 5 and 世帯所得 <= 4674000
+                    世帯人数 == 2 and 世帯所得 <= 2805000,
+                    世帯人数 == 3 and 世帯所得 <= 3532000,
+                    世帯人数 == 4 and 世帯所得 <= 4175000,
+                    世帯人数 == 5 and 世帯所得 <= 4674000,
                 ],
                 [1, 1, 1, 1],
-                0
+                0,
             )
         else:
             受給可能 = np.select(
                 [
-                    世帯人数 == 3 and 世帯所得 <= 3087000, 
-                    世帯人数 == 4 and 世帯所得 <= 3599000, 
-                    世帯人数 == 5 and 世帯所得 <= 4149000, 
-                    世帯人数 == 6 and 世帯所得 <= 4776000
+                    世帯人数 == 3 and 世帯所得 <= 3087000,
+                    世帯人数 == 4 and 世帯所得 <= 3599000,
+                    世帯人数 == 5 and 世帯所得 <= 4149000,
+                    世帯人数 == 6 and 世帯所得 <= 4776000,
                 ],
                 [1, 1, 1, 1],
-                0
+                0,
             )
         return 受給可能
