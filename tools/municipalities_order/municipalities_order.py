@@ -3,6 +3,7 @@
 """
 
 import json
+import logging
 
 import pandas as pd
 from pandas import DataFrame
@@ -62,7 +63,7 @@ for i in range(47):
     # ふりがなでソート
     munic_ruby_df = munic_ruby_df.sort_values("市区町村（ふりがな）")
 
-    print(f"{munic_ruby_df}\n")
+    logging.info(f"{munic_ruby_df}\n")
 
     # 市町村名のみの配列に変換し、書き出し用の辞書に追加
     output_dict[pref_name] = munic_ruby_df["市区町村"].values.tolist()

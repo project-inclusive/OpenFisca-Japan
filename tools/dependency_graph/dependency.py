@@ -5,6 +5,7 @@ Variable同士の依存関係を解析して、関係図として画像に出力
 import glob
 import importlib
 import inspect
+import logging
 import os
 import re
 
@@ -27,7 +28,7 @@ class DependencyFinder:
                 if name == "formula":
                     return inspect.getsource(method)
         except Exception as e:
-            print(f"failed to parse {cls}: {e}")
+            logging.info(f"failed to parse {cls}: {e}")
             return ""
 
         # if not found

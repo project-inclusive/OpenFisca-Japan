@@ -3,6 +3,7 @@
 """
 
 import argparse
+import logging
 import os
 import sys
 
@@ -24,4 +25,4 @@ if __name__ == "__main__":
     generator.clean()
     generator.prepare()
     generator.generate()
-    print("Done!")
+    logging.info("Done!")
