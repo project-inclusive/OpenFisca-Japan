@@ -1,8 +1,6 @@
 """
 身体障害者手帳の実装
 """
-
-from dateutil.relativedelta import relativedelta
 from openfisca_core.indexed_enums import Enum
 from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable

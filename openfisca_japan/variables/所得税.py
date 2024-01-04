@@ -6,22 +6,19 @@ A variable is a property of an Entity such as a 人物, a 世帯…
 See https://openfisca.org/doc/key-concepts/variables.html
 """
 
-import csv
 from functools import cache
 
 import numpy as np
-
 # Import from openfisca-core the Python objects used to code the legislation in OpenFisca
 from openfisca_core.holders import set_input_divide_by_period
 from openfisca_core.periods import DAY, period
 from openfisca_core.variables import Variable
 # Import the Entities specifically defined for this tax and benefit system
-from openfisca_japan.entities import 人物, 世帯
-
-from openfisca_japan.variables.障害.身体障害者手帳 import 身体障害者手帳等級パターン
-from openfisca_japan.variables.障害.療育手帳 import 療育手帳等級パターン
+from openfisca_japan.entities import 世帯, 人物
 from openfisca_japan.variables.障害.愛の手帳 import 愛の手帳等級パターン
+from openfisca_japan.variables.障害.療育手帳 import 療育手帳等級パターン
 from openfisca_japan.variables.障害.精神障害者保健福祉手帳 import 精神障害者保健福祉手帳等級パターン
+from openfisca_japan.variables.障害.身体障害者手帳 import 身体障害者手帳等級パターン
 
 
 # NOTE: 項目数が多い金額表は可読性の高いCSV形式としている。
@@ -29,23 +26,35 @@ from openfisca_japan.variables.障害.精神障害者保健福祉手帳 import �
 
 @cache
 def 配偶者控除額表():
-    # 配偶者控除額表()[配偶者の所得区分, 納税者本人の所得区分] の形で参照可能
-    return np.genfromtxt('openfisca_japan/assets/所得/配偶者控除額.csv', 
-                  delimiter=',', skip_header=1, dtype='int64')[np.newaxis, 1:]
+    """
+    csvファイルから値を読み込み
+
+    配偶者控除額表()[配偶者の所得区分, 納税者本人の所得区分] の形で参照可能
+    """
+    return np.genfromtxt("openfisca_japan/assets/所得/配偶者控除額.csv",
+                  delimiter=",", skip_header=1, dtype="int64")[np.newaxis, 1:]
 
 
 @cache
 def 配偶者特別控除額表():
-    # 配偶者特別控除額表()[配偶者の所得区分, 納税者本人の所得区分] の形で参照可能
-    return np.genfromtxt('openfisca_japan/assets/所得/配偶者特別控除額.csv', 
-                  delimiter=',', skip_header=1, dtype='int64')[:, 1:]
+    """
+    csvファイルから値を読み込み
+
+    配偶者特別控除額表()[配偶者の所得区分, 納税者本人の所得区分] の形で参照可能
+    """
+    return np.genfromtxt("openfisca_japan/assets/所得/配偶者特別控除額.csv",
+                  delimiter=",", skip_header=1, dtype="int64")[:, 1:]
 
 
 @cache
 def 老人控除対象配偶者_配偶者控除額表():
-    # 老人控除対象配偶者_配偶者控除額表()[配偶者の所得区分, 納税者本人の所得区分] の形で参照可能
-    return np.genfromtxt('openfisca_japan/assets/所得/配偶者控除額_老人控除対象配偶者.csv', 
-                         delimiter=',', skip_header=1, dtype='int64')[np.newaxis, 1:]
+    """
+    csvファイルから値を読み込み
+
+    老人控除対象配偶者_配偶者控除額表()[配偶者の所得区分, 納税者本人の所得区分] の形で参照可能
+    """
+    return np.genfromtxt("openfisca_japan/assets/所得/配偶者控除額_老人控除対象配偶者.csv",
+                         delimiter=",", skip_header=1, dtype="int64")[np.newaxis, 1:]
 
 
 class 給与所得控除額(Variable):
@@ -96,7 +105,7 @@ class 障害者控除(Variable):
         同居特別障害者控除額 = parameters(対象期間).所得.同居特別障害者控除額
         特別障害者控除額 = parameters(対象期間).所得.特別障害者控除額
         障害者控除額 = parameters(対象期間).所得.障害者控除額
-        
+
         return 同居特別障害者控除対象人数 * 同居特別障害者控除額 + 特別障害者控除対象人数 * 特別障害者控除額 + 障害者控除対象人数 * 障害者控除額
 
 
@@ -117,10 +126,10 @@ class 障害者控除対象(Variable):
 
         障害者控除対象 = \
             ~特別障害者控除対象 *  \
-                ((身体障害者手帳等級 != 身体障害者手帳等級パターン.無) + \
-                    (精神障害者保健福祉手帳等級 != 精神障害者保健福祉手帳等級パターン.無) + \
-                        (療育手帳等級 != 療育手帳等級パターン.無) + \
-                            (愛の手帳等級 != 愛の手帳等級パターン.無))
+            ((身体障害者手帳等級 != 身体障害者手帳等級パターン.無)
+             + (精神障害者保健福祉手帳等級 != 精神障害者保健福祉手帳等級パターン.無)
+         + (療育手帳等級 != 療育手帳等級パターン.無)
+                + (愛の手帳等級 != 愛の手帳等級パターン.無))
 
         return 障害者控除対象
 
@@ -140,12 +149,12 @@ class 特別障害者控除対象(Variable):
 
         特別障害者控除対象 = \
             (身体障害者手帳等級 == 身体障害者手帳等級パターン.一級) + \
-                (身体障害者手帳等級 == 身体障害者手帳等級パターン.二級) + \
-                    (精神障害者保健福祉手帳等級 == 精神障害者保健福祉手帳等級パターン.一級) + \
-                        (療育手帳等級 == 療育手帳等級パターン.A) + \
-                            (愛の手帳等級 == 愛の手帳等級パターン.一度) + \
-                                (愛の手帳等級 == 愛の手帳等級パターン.二度)
-        
+            (身体障害者手帳等級 == 身体障害者手帳等級パターン.二級) + \
+            (精神障害者保健福祉手帳等級 == 精神障害者保健福祉手帳等級パターン.一級) + \
+            (療育手帳等級 == 療育手帳等級パターン.A) + \
+            (愛の手帳等級 == 愛の手帳等級パターン.一度) + \
+            (愛の手帳等級 == 愛の手帳等級パターン.二度)
+
         return 特別障害者控除対象
 
 
@@ -162,7 +171,7 @@ class 同居特別障害者控除対象(Variable):
         扶養親族である = 対象人物("扶養親族である", 対象期間)
 
         # TODO: 「同居していない親族」も世帯内で扱うようになったら以下の判定追加（現状フロントエンドでは同居している親族しか扱っていない）
-        # 「納税者自身、配偶者、その納税者と生計を一にする親族のいずれかとの同居を常況としている」        
+        # 「納税者自身、配偶者、その納税者と生計を一にする親族のいずれかとの同居を常況としている」
         return 特別障害者控除対象 * (同一生計配偶者である | 扶養親族である)
 
 
@@ -177,7 +186,7 @@ class ひとり親控除(Variable):
         世帯高所得 = 対象世帯("世帯高所得", 対象期間)
         # 児童扶養手当の対象と異なり、父母の遺棄・DV等は考慮しない
         # (参考：児童扶養手当 https://www.city.hirakata.osaka.jp/0000026828.html)
-        対象ひとり親 = (対象世帯.nb_persons(世帯.親) == 1) * (対象世帯.nb_persons(世帯.子) >= 1) 
+        対象ひとり親 = (対象世帯.nb_persons(世帯.親) == 1) * (対象世帯.nb_persons(世帯.子) >= 1)
         ひとり親控除額 = parameters(対象期間).所得.ひとり親控除額
         ひとり親控除_所得制限額 = parameters(対象期間).所得.ひとり親控除_所得制限額
 
@@ -237,8 +246,7 @@ class 同一生計配偶者である(Variable):
     label = "同一生計配偶者であるか否か"
     reference = "https://www.nta.go.jp/taxes/shiraberu/shinkoku/tebiki/2022/03/order3/yogo/3-3_y15.htm"
 
-
-    def formula(対象人物, 対象期間, parameters):        
+    def formula(対象人物, 対象期間, parameters):
         所得 = 対象人物("所得", 対象期間)
         # 所得が高いほうが控除を受ける対象となる
         所得順位 = 対象人物.get_rank(対象人物.世帯, -所得, condition=対象人物.has_role(世帯.親))
@@ -278,24 +286,24 @@ class 配偶者控除(Variable):
             -1).astype(int)  # intにできるようデフォルトをNoneではなく-1
 
         納税者の所得区分 = np.select(
-            [納税者の所得 <= 9000000, 
-             (納税者の所得 > 9000000) * (納税者の所得 <= 9500000), 
+            [納税者の所得 <= 9000000,
+             (納税者の所得 > 9000000) * (納税者の所得 <= 9500000),
              (納税者の所得 > 9500000) * (納税者の所得 <= 10000000)],  # 複数世帯のarrayのためand, orの代わりに *. +
-            [i for i in range(3)],
+            list(range(3)),
             -1).astype(int)  # intにできるようデフォルトをNoneではなく-1
-        
+
         対象所得区分に該当する = (納税者の所得区分 != -1) * (納税者の配偶者の所得区分 != -1)  # 控除条件
 
         # NOTE: その年の12/31時点の年齢を参照
         # https://www.nta.go.jp/taxes/shiraberu/taxanswer/yogo/senmon.htm#word5
-        該当年12月31日 = period(f'{対象期間.start.year}-12-31')        
+        該当年12月31日 = period(f"{対象期間.start.year}-12-31")
         該当年12月31日の年齢一覧 = 対象世帯.members("年齢", 該当年12月31日)
         納税者の配偶者の年齢 = 対象世帯.sum(該当年12月31日の年齢一覧 * 納税者の配偶者である)
         老人控除対象である = 納税者の配偶者の年齢 >= 70
         老人控除対象配偶者控除額 = 老人控除対象配偶者_配偶者控除額表()[納税者の配偶者の所得区分, 納税者の所得区分]
 
         通常配偶者控除額 = 配偶者控除額表()[納税者の配偶者の所得区分, 納税者の所得区分]
-        
+
         配偶者控除額 = np.logical_not(老人控除対象である) * 通常配偶者控除額 + 老人控除対象である * 老人控除対象配偶者控除額
 
         配偶者がいる = 対象世帯.nb_persons(世帯.親) == 2  # 控除条件
@@ -320,12 +328,12 @@ class 配偶者特別控除(Variable):
         納税者の配偶者の所得 = 対象世帯.sum(所得一覧 * 納税者の配偶者である)
 
         納税者の所得区分 = np.select(
-            [納税者の所得 <= 9000000, 
-             (納税者の所得 > 9000000) * (納税者の所得 <= 9500000), 
+            [納税者の所得 <= 9000000,
+             (納税者の所得 > 9000000) * (納税者の所得 <= 9500000),
              (納税者の所得 > 9500000) * (納税者の所得 <= 10000000)],
-            [i for i in range(3)],
+            list(range(3)),
             -1).astype(int)
-        
+
         納税者の配偶者の所得区分 = np.select(
             [(納税者の配偶者の所得 > 480000) * (納税者の配偶者の所得 <= 950000),
              (納税者の配偶者の所得 > 950000) * (納税者の配偶者の所得 <= 1000000),
@@ -336,13 +344,13 @@ class 配偶者特別控除(Variable):
              (納税者の配偶者の所得 > 1200000) * (納税者の配偶者の所得 <= 1250000),
              (納税者の配偶者の所得 > 1250000) * (納税者の配偶者の所得 <= 1300000),
              (納税者の配偶者の所得 > 1300000) * (納税者の配偶者の所得 <= 1330000)],
-            [i for i in range(9)],
+            list(range(9)),
             -1).astype(int)
 
         対象所得区分に該当する = (納税者の所得区分 != -1) * (納税者の配偶者の所得区分 != -1)  # 控除条件
 
         配偶者がいる = 対象世帯.nb_persons(世帯.親) == 2  # 控除条件
-        
+
         return 配偶者がいる * 対象所得区分に該当する * 配偶者特別控除額表()[納税者の配偶者の所得区分, 納税者の所得区分]
 
 
@@ -352,14 +360,13 @@ class 扶養控除(Variable):
     definition_period = DAY
     label = "扶養控除"
     reference = "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1180.htm"
-    
 
     def formula(対象世帯, 対象期間, parameters):
         扶養親族である = 対象世帯.members("扶養親族である", 対象期間)
 
         # NOTE: その年の12/31時点の年齢を参照
         # https://www.nta.go.jp/taxes/shiraberu/taxanswer/yogo/senmon.htm#word5
-        該当年12月31日 = period(f'{対象期間.start.year}-12-31')
+        該当年12月31日 = period(f"{対象期間.start.year}-12-31")
         年齢 = 対象世帯.members("年齢", 該当年12月31日)
 
         控除対象扶養親族である = 扶養親族である * (年齢 >= 16)
@@ -372,19 +379,19 @@ class 扶養控除(Variable):
         介護施設入所中 = 対象世帯.members("介護施設入所中", 対象期間)
         同居している老人扶養親族である = 老人扶養親族である * np.logical_not(介護施設入所中)
         同居していない老人扶養親族である = 老人扶養親族である * 介護施設入所中
-        
+
         # NOTE: np.selectのcondlistは最初に該当した条件で計算される
         扶養控除一覧 = np.select(
             [特定扶養親族である,
              同居している老人扶養親族である,
              同居していない老人扶養親族である,
              控除対象扶養親族である],
-             [parameters(対象期間).所得.扶養控除_特定扶養親族,
-              parameters(対象期間).所得.扶養控除_老人扶養親族_同居老親等,
-              parameters(対象期間).所得.扶養控除_老人扶養親族_同居老親等以外の者,
-              parameters(対象期間).所得.扶養控除_一般],
+            [parameters(対象期間).所得.扶養控除_特定扶養親族,
+             parameters(対象期間).所得.扶養控除_老人扶養親族_同居老親等,
+             parameters(対象期間).所得.扶養控除_老人扶養親族_同居老親等以外の者,
+             parameters(対象期間).所得.扶養控除_一般],
             0)
-        
+
         return 対象世帯.sum(扶養控除一覧)
 
 
@@ -395,7 +402,6 @@ class 扶養親族である(Variable):
     definition_period = DAY
     label = "扶養親族であるか否か"
     reference = "https://www.nta.go.jp/taxes/shiraberu/taxanswer/yogo/senmon.htm"
-
 
     def formula(対象人物, 対象期間, parameters):
         扶養親族所得金額 = parameters(対象期間).所得.扶養親族所得金額
@@ -438,7 +444,7 @@ class 控除後世帯高所得(Variable):
         寡婦控除 = 対象世帯("寡婦控除", 対象期間)
         勤労学生控除 = 対象世帯("勤労学生控除", 対象期間)
 
-        # 他の控除（雑損控除・医療費控除等）は定額でなく実費を元に算出するため除外する    
+        # 他の控除（雑損控除・医療費控除等）は定額でなく実費を元に算出するため除外する
 
         総控除額 = 社会保険料 + 給与所得及び雑所得からの控除額 + 障害者控除 + ひとり親控除 + 寡婦控除 + 勤労学生控除
 
@@ -461,14 +467,14 @@ class 児童扶養手当の控除後世帯高所得(Variable):
         勤労学生控除 = 対象世帯("勤労学生控除", 対象期間)
         配偶者特別控除 = 対象世帯("配偶者特別控除", 対象期間)
 
-        # 他の控除（雑損控除・医療費控除等）は定額でなく実費を元に算出するため除外する    
+        # 他の控除（雑損控除・医療費控除等）は定額でなく実費を元に算出するため除外する
         # 養育者が児童の父母の場合は寡婦控除・ひとり親控除は加えられない
 
         総控除額 = 社会保険料 + 給与所得及び雑所得からの控除額 + 障害者控除 + 勤労学生控除 + 配偶者特別控除
 
         # 負の数にならないよう、0円未満になった場合は0円に補正
         return np.clip(世帯高所得 - 総控除額, 0.0, None)
-    
+
 
 class 特別児童扶養手当の控除後世帯高所得(Variable):
     value_type = float
@@ -487,7 +493,7 @@ class 特別児童扶養手当の控除後世帯高所得(Variable):
         寡婦控除 = 対象世帯("寡婦控除", 対象期間)
         配偶者特別控除 = 対象世帯("配偶者特別控除", 対象期間)
 
-        # 他の控除（雑損控除・医療費控除等）は定額でなく実費を元に算出するため除外する   
+        # 他の控除（雑損控除・医療費控除等）は定額でなく実費を元に算出するため除外する
 
         総控除額 = 社会保険料 + 給与所得及び雑所得からの控除額 + 障害者控除 + 勤労学生控除 + ひとり親控除 + 寡婦控除 + 配偶者特別控除
 

@@ -27,16 +27,15 @@ build: deps
 check-syntax-errors:
 	python -m compileall -q .
 
-format-style:
+format-style: encode-jananese-filename
 	@# Do not analyse .gitignored files.
 	@# `make` needs `$$` to output `$`. Ref: http://stackoverflow.com/questions/2382764.
 	autopep8 `git ls-files | grep "\.py$$"`
 
-check-style:
+check-style: encode-jananese-filename
 	@# Do not analyse .gitignored files.
 	@# `make` needs `$$` to output `$`. Ref: http://stackoverflow.com/questions/2382764.
 	flake8 `git ls-files | grep "\.py$$"`
-	pylint `git ls-files | grep "\.py$$"`
 	@# check variables meet openfisca coding style
 	@# `grep` cannot be used here because it ignores Japanese file names.
 	ruff check
@@ -54,3 +53,7 @@ serve-public:
 
 calc:
 	curl -s -X POST -H "Content-Type: application/json" -d @calculate_api_example.json http://localhost:50000/calculate | jq .
+
+encode-jananese-filename:
+	@# disable Japanese filename escape (by default Japanese characters are printed as `\346\211\200\345\276\227.py`)
+	git config --local core.quotepath false

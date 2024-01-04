@@ -5,34 +5,44 @@
 from functools import cache
 
 import numpy as np
-
 from openfisca_core.indexed_enums import Enum
 from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
-
 from openfisca_japan.entities import 世帯, 人物
 from openfisca_japan.variables.全般 import 高校生学年
 
 
 @cache
 def 国立高等学校奨学給付金表():
-    # 国立高等学校奨学給付金表()[世帯区分, 履修形態] の形で参照可能
-    return np.genfromtxt('openfisca_japan/assets/福祉/育児/高等学校奨学給付金/国立高等学校奨学給付金額.csv', 
-                         delimiter=',', skip_header=1, dtype='int64')[:, 1:]
+    """
+    csvファイルから値を読み込み
+
+    国立高等学校奨学給付金表()[世帯区分, 履修形態] の形で参照可能
+    """
+    return np.genfromtxt("openfisca_japan/assets/福祉/育児/高等学校奨学給付金/国立高等学校奨学給付金額.csv",
+                         delimiter=",", skip_header=1, dtype="int64")[:, 1:]
 
 
 @cache
 def 公立高等学校奨学給付金表():
-    # 公立高等学校奨学給付金表()[世帯区分, 履修形態] の形で参照可能
-    return np.genfromtxt('openfisca_japan/assets/福祉/育児/高等学校奨学給付金/公立高等学校奨学給付金額.csv', 
-                         delimiter=',', skip_header=1, dtype='int64')[:, 1:]
+    """
+    csvファイルから値を読み込み
+
+    公立高等学校奨学給付金表()[世帯区分, 履修形態] の形で参照可能
+    """
+    return np.genfromtxt("openfisca_japan/assets/福祉/育児/高等学校奨学給付金/公立高等学校奨学給付金額.csv",
+                         delimiter=",", skip_header=1, dtype="int64")[:, 1:]
 
 
 @cache
 def 私立高等学校奨学給付金表():
-    # 私立高等学校奨学給付金表()[世帯区分, 履修形態] の形で参照可能
-    return np.genfromtxt('openfisca_japan/assets/福祉/育児/高等学校奨学給付金/私立高等学校奨学給付金額.csv', 
-                         delimiter=',', skip_header=1, dtype='int64')[:, 1:]
+    """
+    csvファイルから値を読み込み
+
+    私立高等学校奨学給付金表()[世帯区分, 履修形態] の形で参照可能
+    """
+    return np.genfromtxt("openfisca_japan/assets/福祉/育児/高等学校奨学給付金/私立高等学校奨学給付金額.csv",
+                         delimiter=",", skip_header=1, dtype="int64")[:, 1:]
 
 
 class 高等学校奨学給付金_最小(Variable):
@@ -104,6 +114,7 @@ class 高等学校奨学給付金_最大(Variable):
         # 月間支給金額へ変換
         return np.floor(年間支給金額 / 12)
 
+
 class 生活保護受給世帯の高等学校奨学給付金(Variable):
     value_type = int
     entity = 人物
@@ -115,7 +126,7 @@ class 生活保護受給世帯の高等学校奨学給付金(Variable):
     (東京都HP)https://www.kyoiku.metro.tokyo.lg.jp/admission/tuition/tuition/scholarship_public_school.html
     (兵庫HP)https://web.pref.hyogo.lg.jp/kk35/shougakukyuuhukinn.html
     """
-    
+
     def formula(対象人物, 対象期間, parameters):
         子供である = 対象人物.has_role(世帯.子)
         高校生である = 対象人物("高校生である", 対象期間)
@@ -131,7 +142,7 @@ class 生活保護受給世帯の高等学校奨学給付金(Variable):
 
         高校運営種別 = 対象人物("高校運営種別", 対象期間).decode()
 
-        支給対象世帯区分 = 0 # 生活保護世帯に対応
+        支給対象世帯区分 = 0  # 生活保護世帯に対応
 
         年間給付金額 = np.select(
             [高校運営種別 == 高校運営種別パターン.国立,
@@ -141,7 +152,7 @@ class 生活保護受給世帯の高等学校奨学給付金(Variable):
              公立高等学校奨学給付金表()[支給対象世帯区分, 高校履修種別区分],
              私立高等学校奨学給付金表()[支給対象世帯区分, 高校履修種別区分]],
             0)
-        
+
         return 年間給付金額 * 高校生である * 子供である
 
 

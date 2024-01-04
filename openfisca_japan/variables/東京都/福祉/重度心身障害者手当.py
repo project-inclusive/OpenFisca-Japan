@@ -3,8 +3,7 @@
 """
 
 import numpy as np
-
-from openfisca_core.periods import MONTH, DAY
+from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
 from openfisca_japan.entities import 世帯, 人物
 from openfisca_japan.variables.障害.愛の手帳 import 愛の手帳等級パターン

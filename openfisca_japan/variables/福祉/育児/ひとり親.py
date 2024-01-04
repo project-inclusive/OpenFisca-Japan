@@ -2,9 +2,8 @@
 ひとり親の実装
 """
 
-from openfisca_core.periods import MONTH, DAY
+from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
-
 from openfisca_japan.entities import 世帯
 
 

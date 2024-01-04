@@ -7,13 +7,12 @@ See https://openfisca.org/doc/key-concepts/variables.html
 """
 
 import numpy as np
-
 # Import from openfisca-core the Python objects used to code the legislation in OpenFisca
 from openfisca_core.holders import set_input_divide_by_period
 from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
 # Import the Entities specifically defined for this tax and benefit system
-from openfisca_japan.entities import 人物, 世帯
+from openfisca_japan.entities import 世帯, 人物
 
 
 class 所得(Variable):
