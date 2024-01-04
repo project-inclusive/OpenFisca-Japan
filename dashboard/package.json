@@ -9,8 +9,8 @@
     "cy:open": "./node_modules/.bin/cypress open",
     "cy:run": "./node_modules/.bin/cypress run",
     "lint": "eslint src --ext .ts,.tsx",
-    "pretty": "prettier --write --ignore-unknown .",
-    "pretty:check": "prettier --check --ignore-unknown ."
+    "pretty": "prettier --write --ignore-unknown ..",
+    "pretty:check": "prettier --check --ignore-unknown .."
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.0.19",
