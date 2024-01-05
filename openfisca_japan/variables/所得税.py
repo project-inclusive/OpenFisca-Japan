@@ -230,7 +230,7 @@ class 勤労学生控除(Variable):
         # https://www.city.hirakata.osaka.jp/kosodate/0000000544.html
 
         世帯高所得 = 対象世帯("世帯高所得", 対象期間)
-        学生 = np.any(対象世帯.members("学生", 対象期間))
+        学生 = 対象世帯.any(対象世帯.members("学生", 対象期間))
         勤労学生控除額 = parameters(対象期間).所得.勤労学生控除額
         勤労学生_所得制限額 = parameters(対象期間).所得.勤労学生_所得制限額
         所得条件 = (世帯高所得 > 0) * (世帯高所得 <= 勤労学生_所得制限額)

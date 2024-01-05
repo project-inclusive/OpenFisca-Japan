@@ -49,13 +49,12 @@ class 居住級地区分1(Variable):
     definition_period = DAY
     reference = "https://best-selection.co.jp/media/wp-content/uploads/2021/03/seikatsuhogo-kyuchi2022.pdf"
 
-    def formula(対象世帯, 対象期間, parameters):
-        居住都道府県 = 対象世帯("居住都道府県", 対象期間)[0]
-        居住市区町村 = 対象世帯("居住市区町村", 対象期間)[0]
-        if 居住市区町村 in 市区町村級地区分()[居住都道府県]:
-            return 市区町村級地区分()[居住都道府県][居住市区町村][0]
-        else:
-            return 3
+    def formula(対象世帯, 対象期間, _parameters):
+        居住都道府県 = 対象世帯("居住都道府県", 対象期間)
+        居住市区町村 = 対象世帯("居住市区町村", 対象期間)
+        # NOTE: 市区町村級地区分()[都道府県][市区町村][0] が級地区分1を表す
+        return [市区町村級地区分()[都道府県][市区町村][0] if 市区町村 in 市区町村級地区分()[都道府県] else 3
+                for 都道府県, 市区町村 in zip(居住都道府県, 居住市区町村)]
 
 
 class 居住級地区分2(Variable):
@@ -67,9 +66,8 @@ class 居住級地区分2(Variable):
     reference = "https://best-selection.co.jp/media/wp-content/uploads/2021/03/seikatsuhogo-kyuchi2022.pdf"
 
     def formula(対象世帯, 対象期間, parameters):
-        居住都道府県 = 対象世帯("居住都道府県", 対象期間)[0]
-        居住市区町村 = 対象世帯("居住市区町村", 対象期間)[0]
-        if 居住市区町村 in 市区町村級地区分()[居住都道府県]:
-            return 市区町村級地区分()[居住都道府県][居住市区町村][1]
-        else:
-            return 2
+        居住都道府県 = 対象世帯("居住都道府県", 対象期間)
+        居住市区町村 = 対象世帯("居住市区町村", 対象期間)
+        # NOTE: 市区町村級地区分()[都道府県][市区町村][1] が級地区分2を表す
+        return [市区町村級地区分()[都道府県][市区町村][1] if 市区町村 in 市区町村級地区分()[都道府県] else 2
+                for 都道府県, 市区町村 in zip(居住都道府県, 居住市区町村)]

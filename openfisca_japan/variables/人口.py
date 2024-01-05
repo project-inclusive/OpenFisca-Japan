@@ -80,5 +80,5 @@ class 世帯人数(Variable):
     label = "世帯人数"
 
     def formula(対象世帯, 対象期間, parameters):
-        # 世帯人数を直接出す方法がOpenFiscaにあるかもしれないが、一旦以下の方法で出す
-        return len(対象世帯.members("年齢", 対象期間))
+        # NOTE: OpenFiscaの以下のメソッドで直接計算可能だが、テストのinputで人数を直接指定できるようVariable化
+        return 対象世帯.nb_persons()
