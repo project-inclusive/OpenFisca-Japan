@@ -34,7 +34,7 @@ export const SpouseExists = () => {
     setIsChecked(event.target.checked);
   }, []);
 
-  // stored states set checkbox when browser back
+  // stored states set checkbox when page transition
   useEffect(() => {
     console.log(navigationType);
     console.log(household);
