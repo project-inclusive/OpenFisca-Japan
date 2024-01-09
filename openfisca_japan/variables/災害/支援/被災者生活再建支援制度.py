@@ -34,11 +34,11 @@ def 加算支援金額表():
                   delimiter=",", skip_header=1, dtype="int64")[:, 1:]
 
 
-class 被災者生活再建支援法が適用されている(Variable):
-    value_type = int
+class 被災者生活再建支援法の適用地域である(Variable):
+    value_type = bool
     entity = 世帯
     definition_period = DAY
-    label = "被災者生活再建支援法が適用されているかどうか"
+    label = "被災者生活再建支援法の適用地域であるかどうか"
     reference = "https://www.bousai.go.jp/taisaku/seikatsusaiken/pdf/140612gaiyou.pdf"
     documentation = """
     自然災害ごとに、市区町村ごとに適用有無が決まる
@@ -62,7 +62,7 @@ class 被災者生活再建支援制度(Variable):
     """
 
     def formula(対象世帯, 対象期間, _parameters):
-        被災者生活再建支援法が適用されている = 対象世帯("被災者生活再建支援法が適用されている", 対象期間)
+        被災者生活再建支援法の適用地域である = 対象世帯("被災者生活再建支援法の適用地域である", 対象期間)
         基礎支援金 = 対象世帯("被災者生活再建支援制度_基礎支援金", 対象期間)
         加算支援金 = 対象世帯("被災者生活再建支援制度_加算支援金", 対象期間)
 
@@ -72,7 +72,7 @@ class 被災者生活再建支援制度(Variable):
             [0.75],
             1)
 
-        return 被災者生活再建支援法が適用されている * 世帯人数に応じた倍率 * (基礎支援金 + 加算支援金)
+        return 被災者生活再建支援法の適用地域である * 世帯人数に応じた倍率 * (基礎支援金 + 加算支援金)
 
 
 class 被災者生活再建支援制度_基礎支援金(Variable):
