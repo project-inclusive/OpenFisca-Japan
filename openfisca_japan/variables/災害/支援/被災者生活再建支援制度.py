@@ -58,7 +58,6 @@ class 被災者生活再建支援制度(Variable):
 
     算出方法は以下リンクも参考になる。
     https://www.bousai.go.jp/taisaku/hisaisyagyousei/pdf/kakusyuseido_tsuujou.pdf
-    https://www.bousai.go.jp/kaigirep/kentokai/saikenshien/pdf/kentou5/siryo3_2.pdf
     """
 
     def formula(対象世帯, 対象期間, _parameters):
