@@ -29,8 +29,8 @@ class 住宅被害(Variable):
 
 
 class 住宅再建方法パターン(Enum):
-    __order__ = "未定 建設または購入 補修 賃借"
-    未定 = "未定"
+    __order__ = "無 建設または購入 補修 賃借"
+    無 = "無"
     建設または購入 = "建設または購入"
     補修 = "補修"
     賃借 = "賃借"
@@ -39,7 +39,7 @@ class 住宅再建方法パターン(Enum):
 class 住宅再建方法(Variable):
     value_type = Enum
     possible_values = 住宅再建方法パターン
-    default_value = 住宅再建方法パターン.未定
+    default_value = 住宅再建方法パターン.無
     entity = 世帯
     definition_period = DAY
     label = "被災者の住宅再建方法"
