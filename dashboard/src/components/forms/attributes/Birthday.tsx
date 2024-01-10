@@ -66,7 +66,7 @@ export const Birthday = ({
     []
   );
 
-  // stored states set displayed year when page transition
+  // stored states set displayed birthday when page transition
   useEffect(() => {
     const birthdayObj = household.世帯員[personName].誕生年月日;
     if (birthdayObj) {
