@@ -42,7 +42,6 @@ export const AgeInput = ({
   // stored states set displayed age when page transition
   useEffect(() => {
     const birthdayObj = household.世帯員[personName].誕生年月日;
-    console.log(birthdayObj);
     if (birthdayObj && birthdayObj.ETERNITY) {
       const birthYear = parseInt(birthdayObj.ETERNITY.substring(0, 4));
       const today = new Date();

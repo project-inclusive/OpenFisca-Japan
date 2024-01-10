@@ -1,4 +1,5 @@
 import { useCallback, useState, useRef, useEffect } from 'react';
+import { useNavigationType } from 'react-router-dom';
 import {
   Checkbox,
   Box,
@@ -12,6 +13,7 @@ import { useRecoilState } from 'recoil';
 import { householdAtom } from '../../../state';
 
 export const ChildrenNum = () => {
+  const navigationType = useNavigationType();
   const [household, setHousehold] = useRecoilState(householdAtom);
   const [shownChildrenNum, setShownChildrenNum] = useState<string | number>('');
   const inputEl = useRef<HTMLInputElement>(null);
@@ -75,12 +77,21 @@ export const ChildrenNum = () => {
     setHousehold({ ...newHousehold });
   }, []);
 
+  // stored states set displayed value when page transition
+  useEffect(() => {
+    const storedChildrenObj = household.世帯一覧.世帯1.子一覧;
+    if (storedChildrenObj) {
+      setIsChecked(true);
+      setShownChildrenNum(storedChildrenObj.length);
+    }
+  }, [navigationType]);
+
   return (
     <>
       <Box mb={4}>
         <Checkbox
           colorScheme="cyan"
-          checked={isChecked}
+          isChecked={isChecked}
           onChange={onCheckChange}
         >
           子どもがいる

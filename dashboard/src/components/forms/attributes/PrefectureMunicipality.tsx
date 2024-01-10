@@ -1,4 +1,5 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
+import { useNavigationType } from 'react-router-dom';
 import { Box, Select, HStack, FormControl, FormLabel } from '@chakra-ui/react';
 
 import configData from '../../../config/app_config.json';
@@ -13,6 +14,7 @@ export const PrefectureMunicipality = ({
 }: {
   mustInput: boolean;
 }) => {
+  const navigationType = useNavigationType();
   const [household, setHousehold] = useRecoilState(householdAtom);
 
   interface pmType {
@@ -88,6 +90,17 @@ export const PrefectureMunicipality = ({
     },
     []
   );
+
+  // stored states set displayed value when page transition
+  useEffect(() => {
+    const householdObj = household.世帯一覧.世帯1;
+    if (householdObj.居住都道府県) {
+      setSelectedPrefecture(householdObj.居住都道府県[currentDate]);
+    }
+    if (householdObj.居住市区町村) {
+      setSelectedMunicipality(householdObj.居住市区町村[currentDate]);
+    }
+  }, [navigationType]);
 
   return (
     <>
