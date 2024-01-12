@@ -1,7 +1,0 @@
-description: 対象者が生計維持者と判定される場合の世帯所得制限額
-metadata:
-  reference: https://www.bousai.go.jp/taisaku/choui/pdf/siryo1-1.pdf
-  unit: currency-JPY
-values:
-  2000-04-01:
-    value: 380000
