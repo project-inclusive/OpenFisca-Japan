@@ -1,10 +1,12 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
+import { useNavigationType } from 'react-router-dom';
 import { Checkbox } from '@chakra-ui/react';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { currentDateAtom, householdAtom } from '../../../state';
 
 export const RentingHouse = () => {
+  const navigationType = useNavigationType();
   const currentDate = useRecoilValue(currentDateAtom);
   const [isChecked, setIsChecked] = useState(false);
 
@@ -23,11 +25,16 @@ export const RentingHouse = () => {
     setIsChecked(event.target.checked);
   }, []);
 
+  // stored states set checkbox when page transition
+  useEffect(() => {
+    setIsChecked(household.世帯一覧.世帯1.住宅入居費);
+  }, [navigationType]);
+
   return (
     <>
       <Checkbox
         colorScheme="cyan"
-        checked={isChecked}
+        isChecked={isChecked}
         onChange={onChange}
         mb={4}
       >

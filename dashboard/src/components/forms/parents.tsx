@@ -1,3 +1,4 @@
+import { useLocation } from 'react-router-dom';
 import { Box, Center } from '@chakra-ui/react';
 
 import configData from '../../config/app_config.json';
@@ -9,14 +10,18 @@ import { Student } from './attributes/Student';
 import { Working } from './attributes/Working';
 import { Recuperation } from './attributes/Recuperation';
 import { NursingHome } from './attributes/NursingHome';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { householdAtom } from '../../state';
 
 export const FormParents = () => {
-  const household = useRecoilValue(householdAtom);
+  const location = useLocation();
+  const isSimpleCalculation = location.pathname === '/calculate-simple';
+  const [household, setHousehold] = useRecoilState(householdAtom);
+
   return (
     <>
-      {household.世帯一覧.世帯1.祖父母一覧 &&
+      {!isSimpleCalculation &&
+        household.世帯一覧.世帯1.祖父母一覧 &&
         household.世帯一覧.世帯1.祖父母一覧.map(
           (parentName: string, index: number) => (
             <div key={index}>
