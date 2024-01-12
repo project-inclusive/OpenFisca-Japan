@@ -14,7 +14,7 @@ import { householdAtom } from '../../state';
 
 export const FormChildren = () => {
   const location = useLocation();
-  const isSimpleCalculation = location.pathname === '/calculate-simple';
+  const isDetailedCalculation = location.pathname === '/calculate';
 
   const household = useRecoilValue(householdAtom);
 
@@ -34,18 +34,20 @@ export const FormChildren = () => {
                   {configData.calculationForm.childrenDescription}
                 </Center>
 
-                {isSimpleCalculation ? (
-                  <AgeInput personName={childName} mustInput />
-                ) : (
+                {isDetailedCalculation ? (
                   <Birthday personName={childName} mustInput={true} />
+                ) : (
+                  <AgeInput personName={childName} mustInput />
                 )}
-                {!isSimpleCalculation && <HighSchool personName={childName} />}
-                {!isSimpleCalculation && <Working personName={childName} />}
-                {!isSimpleCalculation && <Disability personName={childName} />}
-                {!isSimpleCalculation && (
+                {isDetailedCalculation && <HighSchool personName={childName} />}
+                {isDetailedCalculation && <Working personName={childName} />}
+                {isDetailedCalculation && <Disability personName={childName} />}
+                {isDetailedCalculation && (
                   <Recuperation personName={childName} />
                 )}
-                {!isSimpleCalculation && <NursingHome personName={childName} />}
+                {isDetailedCalculation && (
+                  <NursingHome personName={childName} />
+                )}
               </Box>
             </div>
           )

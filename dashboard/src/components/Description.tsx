@@ -111,6 +111,24 @@ function Description() {
       <Center pr={4} pl={4} pb={4} style={{ textAlign: 'center' }}>
         <Button
           as={RouterLink}
+          to="/calculate-disaster"
+          fontSize={configData.style.subTitleFontSize}
+          borderRadius="xl"
+          height="4em"
+          width="100%"
+          bg="orange.400"
+          color="white"
+          _hover={{ bg: 'orange.500' }}
+        >
+          能登半島地震
+          <br />
+          被災者支援制度見積もり
+        </Button>
+      </Center>
+
+      <Center pr={4} pl={4} pb={4} style={{ textAlign: 'center' }}>
+        <Button
+          as={RouterLink}
           to="/calculate"
           style={{ marginRight: '8%' }}
           fontSize={configData.style.subTitleFontSize}
@@ -123,7 +141,7 @@ function Description() {
         >
           くわしく
           <br />
-          計算
+          見積もり
         </Button>
         <Button
           as={RouterLink}
@@ -138,7 +156,7 @@ function Description() {
         >
           かんたん
           <br />
-          計算
+          見積もり
         </Button>
       </Center>
     </>

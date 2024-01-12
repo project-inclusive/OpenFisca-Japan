@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useContext, useCallback } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -18,7 +18,7 @@ import { useCalculate } from '../../hooks/calculate';
 import { Benefit } from './benefit';
 import { Loan } from './loan';
 import { CalculationLabel } from '../forms/calculationLabel';
-import { currentDateAtom } from '../../state';
+import { currentDateAtom, householdAtom } from '../../state';
 import { useRecoilValue } from 'recoil';
 
 const createFileName = (extension: string = '', ...names: string[]) => {
@@ -32,15 +32,16 @@ const createFileName = (extension: string = '', ...names: string[]) => {
 export const Result = () => {
   const location = useLocation();
   // TODO: decode household from URL
-  const { household, isSimpleCalculation } = location.state as {
-    household: any;
+  const { isSimpleCalculation, isDisasterCalculation } = location.state as {
     isSimpleCalculation: boolean;
+    isDisasterCalculation: boolean;
   };
 
   const [isLabelOpen, setIsLabelOpen] = useState(false);
   const navigate = useNavigate();
 
   const currentDate = useRecoilValue(currentDateAtom);
+  const household = useRecoilValue(householdAtom);
   const [result, calculate] = useCalculate();
   const [isDisplayChat, setIsDisplayChat] = useState('none');
 
@@ -54,6 +55,7 @@ export const Result = () => {
         navigate('/response-error', {
           state: {
             isSimpleCalculation: isSimpleCalculation,
+            isDisasterCalculation: isDisasterCalculation,
           },
         });
       });

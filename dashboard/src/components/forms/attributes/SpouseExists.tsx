@@ -36,8 +36,6 @@ export const SpouseExists = () => {
 
   // stored states set checkbox when page transition
   useEffect(() => {
-    console.log(navigationType);
-    console.log(household);
     setIsChecked(household.世帯一覧.世帯1.親一覧.length === 2);
   }, [navigationType]);
 

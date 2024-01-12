@@ -15,12 +15,12 @@ import { householdAtom } from '../../state';
 
 export const FormParents = () => {
   const location = useLocation();
-  const isSimpleCalculation = location.pathname === '/calculate-simple';
+  const isDetailedCalculation = location.pathname === '/calculate';
   const [household, setHousehold] = useRecoilState(householdAtom);
 
   return (
     <>
-      {!isSimpleCalculation &&
+      {isDetailedCalculation &&
         household.世帯一覧.世帯1.祖父母一覧 &&
         household.世帯一覧.世帯1.祖父母一覧.map(
           (parentName: string, index: number) => (

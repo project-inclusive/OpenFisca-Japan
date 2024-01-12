@@ -89,8 +89,9 @@
     "spouseDescription": "配偶者について",
     "childrenDescription": "人目の子ども",
     "parentDescription": "同居している親または祖父母",
-    "simpleCalculation": "かんたん計算",
-    "detailedCalculation": "くわしく計算"
+    "simpleCalculation": "かんたん見積もり",
+    "detailedCalculation": "くわしく見積もり",
+    "disasterCalculation": "能登半島地震 被災者支援見積もり"
   },
   "result": {
     "topDescription": "計算結果",

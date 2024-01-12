@@ -16,7 +16,7 @@ import { householdAtom } from '../../state';
 
 export const FormSpouse = () => {
   const location = useLocation();
-  const isSimpleCalculation = location.pathname === '/calculate-simple';
+  const isDetailedCalculation = location.pathname === '/calculate';
   const [household, setHousehold] = useRecoilState(householdAtom);
 
   const spouseName = '配偶者';
@@ -34,17 +34,17 @@ export const FormSpouse = () => {
               {configData.calculationForm.spouseDescription}
             </Center>
 
-            {!isSimpleCalculation && (
+            {isDetailedCalculation && (
               <Birthday personName={spouseName} mustInput={true} />
             )}
             <Income personName={spouseName} mustInput={true} />
-            {!isSimpleCalculation && <Deposit personName={spouseName} />}
-            {!isSimpleCalculation && <Student personName={spouseName} />}
-            {!isSimpleCalculation && <Working personName={spouseName} />}
-            {!isSimpleCalculation && <Disability personName={spouseName} />}
-            {!isSimpleCalculation && <Recuperation personName={spouseName} />}
-            {!isSimpleCalculation && <NursingHome personName={spouseName} />}
-            {!isSimpleCalculation && (
+            {isDetailedCalculation && <Deposit personName={spouseName} />}
+            {isDetailedCalculation && <Student personName={spouseName} />}
+            {isDetailedCalculation && <Working personName={spouseName} />}
+            {isDetailedCalculation && <Disability personName={spouseName} />}
+            {isDetailedCalculation && <Recuperation personName={spouseName} />}
+            {isDetailedCalculation && <NursingHome personName={spouseName} />}
+            {isDetailedCalculation && (
               <SpouseExistsButSingleParent personName={spouseName} />
             )}
           </Box>
