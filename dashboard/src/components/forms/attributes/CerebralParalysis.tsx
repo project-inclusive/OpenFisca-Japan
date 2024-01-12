@@ -1,4 +1,5 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
+import { useNavigationType } from 'react-router-dom';
 import { Checkbox } from '@chakra-ui/react';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -7,6 +8,7 @@ import { currentDateAtom, householdAtom } from '../../../state';
 export const CerebralParalysis = ({ personName }: { personName: string }) => {
   const [household, setHousehold] = useRecoilState(householdAtom);
   const currentDate = useRecoilValue(currentDateAtom);
+  const navigationType = useNavigationType();
   const [isChecked, setIsChecked] = useState(false);
 
   // チェックボックスの値が変更された時
@@ -26,8 +28,22 @@ export const CerebralParalysis = ({ personName }: { personName: string }) => {
     setIsChecked(event.target.checked);
   }, []);
 
+  // stored states set checkbox when page transition
+  useEffect(() => {
+    const cerebralParalysisObj =
+      household.世帯員[personName].脳性まひ_進行性筋萎縮症;
+    setIsChecked(
+      cerebralParalysisObj && cerebralParalysisObj[currentDate] !== '無'
+    );
+  }, [navigationType]);
+
   return (
-    <Checkbox checked={isChecked} onChange={onChange} colorScheme="cyan" mb={2}>
+    <Checkbox
+      isChecked={isChecked}
+      onChange={onChange}
+      colorScheme="cyan"
+      mb={2}
+    >
       脳性まひ・進行性筋萎縮症
     </Checkbox>
   );

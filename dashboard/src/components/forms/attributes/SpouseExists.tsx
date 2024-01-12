@@ -1,4 +1,5 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
+import { useNavigationType } from 'react-router-dom';
 import { Checkbox } from '@chakra-ui/react';
 
 import { currentDateAtom, householdAtom } from '../../../state';
@@ -10,6 +11,8 @@ export const SpouseExists = () => {
   const [household, setHousehold] = useRecoilState(householdAtom);
   const [isChecked, setIsChecked] = useState(false);
   const spouseName = '配偶者';
+
+  const navigationType = useNavigationType();
 
   // チェックボックスの値が変更された時
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,11 +34,18 @@ export const SpouseExists = () => {
     setIsChecked(event.target.checked);
   }, []);
 
+  // stored states set checkbox when page transition
+  useEffect(() => {
+    console.log(navigationType);
+    console.log(household);
+    setIsChecked(household.世帯一覧.世帯1.親一覧.length === 2);
+  }, [navigationType]);
+
   return (
     <>
       <Checkbox
         colorScheme="cyan"
-        checked={isChecked}
+        isChecked={isChecked}
         onChange={onChange}
         mb={4}
       >

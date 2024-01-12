@@ -1,12 +1,5 @@
-import { useState, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
-import {
-  Box,
-  Center,
-  Checkbox,
-  UnorderedList,
-  ListItem,
-} from '@chakra-ui/react';
+import { Box, Center } from '@chakra-ui/react';
 
 import configData from '../../config/app_config.json';
 import { Birthday } from './attributes/Birthday';
@@ -17,39 +10,20 @@ import { Working } from './attributes/Working';
 import { Recuperation } from './attributes/Recuperation';
 import { NursingHome } from './attributes/NursingHome';
 import { Deposit } from './attributes/Deposit';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { currentDateAtom, householdAtom } from '../../state';
+import { SpouseExistsButSingleParent } from './attributes/SpouseExistsButSingleParent';
+import { useRecoilState } from 'recoil';
+import { householdAtom } from '../../state';
 
 export const FormSpouse = () => {
   const location = useLocation();
   const isSimpleCalculation = location.pathname === '/calculate-simple';
-
-  const currentDate = useRecoilValue(currentDateAtom);
-  const [isChecked, setIsChecked] = useState(false);
   const [household, setHousehold] = useRecoilState(householdAtom);
+
   const spouseName = '配偶者';
-
-  // チェックボックスの値が変更された時
-  const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const newHousehold = { ...household };
-
-    if (event.target.checked) {
-      newHousehold.世帯一覧.世帯1.配偶者がいるがひとり親に該当 = {
-        [currentDate]: true,
-      };
-    } else {
-      newHousehold.世帯一覧.世帯1.配偶者がいるがひとり親に該当 = {
-        [currentDate]: false,
-      };
-    }
-
-    setHousehold({ ...newHousehold });
-    setIsChecked(event.target.checked);
-  }, []);
 
   return (
     <>
-      {household.世帯一覧.世帯1.親一覧.length == 2 && (
+      {household.世帯一覧.世帯1.親一覧.length === 2 && (
         <>
           <Box bg="white" borderRadius="xl" p={4} m={4}>
             <Center
@@ -70,27 +44,8 @@ export const FormSpouse = () => {
             {!isSimpleCalculation && <Disability personName={spouseName} />}
             {!isSimpleCalculation && <Recuperation personName={spouseName} />}
             {!isSimpleCalculation && <NursingHome personName={spouseName} />}
-
             {!isSimpleCalculation && (
-              <>
-                <Checkbox
-                  colorScheme="cyan"
-                  checked={isChecked}
-                  onChange={onChange}
-                >
-                  以下のいずれかに当てはまる
-                </Checkbox>
-                <UnorderedList ml={8} mt={1}>
-                  <ul>
-                    <ListItem>重度の障害がある</ListItem>
-                    <ListItem>生死が不明</ListItem>
-                    <ListItem>子を1年以上遺棄している</ListItem>
-                    <ListItem>裁判所からのDV保護命令を受けた</ListItem>
-                    <ListItem>法令により1年以上拘禁されている</ListItem>
-                  </ul>
-                  <br></br>
-                </UnorderedList>
-              </>
+              <SpouseExistsButSingleParent personName={spouseName} />
             )}
           </Box>
         </>

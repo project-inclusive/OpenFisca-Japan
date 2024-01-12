@@ -1,4 +1,5 @@
-import { KeyboardEvent, useCallback, useState } from 'react';
+import { KeyboardEvent, useCallback, useState, useEffect } from 'react';
+import { useNavigationType } from 'react-router-dom';
 import { Box, HStack, Input, FormControl, FormLabel } from '@chakra-ui/react';
 
 import { ErrorMessage } from './validation/ErrorMessage';
@@ -12,10 +13,10 @@ export const Income = ({
   personName: string;
   mustInput: boolean;
 }) => {
+  const navigationType = useNavigationType();
   const currentDate = useRecoilValue(currentDateAtom);
 
   const [household, setHousehold] = useRecoilState(householdAtom);
-
   const [shownIncome, setShownIncome] = useState<string | number>('');
 
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,6 +44,14 @@ export const Income = ({
       e.preventDefault();
     }
   };
+
+  // stored states set displayed value when page transition
+  useEffect(() => {
+    const storedIncomeObj = household.世帯員[personName].収入;
+    if (storedIncomeObj) {
+      setShownIncome(storedIncomeObj[currentDate] / 10000);
+    }
+  }, [navigationType]);
 
   return (
     <>

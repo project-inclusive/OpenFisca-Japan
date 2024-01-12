@@ -7,10 +7,12 @@ import {
   FormControl,
   FormLabel,
 } from '@chakra-ui/react';
+import { useNavigationType } from 'react-router-dom';
 import { householdAtom } from '../../../state';
 import { useRecoilState } from 'recoil';
 
 export const ParentsNum = () => {
+  const navigationType = useNavigationType();
   const [household, setHousehold] = useRecoilState(householdAtom);
   const [shownLivingToghtherNum, setShownLivingToghtherNum] = useState<
     string | number
@@ -77,12 +79,21 @@ export const ParentsNum = () => {
     setHousehold({ ...newHousehold });
   }, []);
 
+  // stored states set displayed value when page transition
+  useEffect(() => {
+    const storedObj = household.世帯一覧.世帯1.祖父母一覧;
+    if (storedObj) {
+      setIsChecked(true);
+      setShownLivingToghtherNum(storedObj.length);
+    }
+  }, [navigationType]);
+
   return (
     <>
       <Box mb={4}>
         <Checkbox
           colorScheme="cyan"
-          checked={isChecked}
+          isChecked={isChecked}
           onChange={onCheckChange}
         >
           親または祖父母と同居している
