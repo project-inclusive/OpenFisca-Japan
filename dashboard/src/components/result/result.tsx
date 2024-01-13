@@ -183,9 +183,17 @@ export const Result = () => {
             text={
               isSimpleCalculation
                 ? configData.calculationForm.simpleCalculation
+                : isDisasterCalculation
+                ? configData.calculationForm.disasterCalculation
                 : configData.calculationForm.detailedCalculation
             }
-            colour={isSimpleCalculation ? 'teal' : 'blue'}
+            colour={
+              isSimpleCalculation
+                ? 'teal'
+                : isDisasterCalculation
+                ? 'orange'
+                : 'blue'
+            }
           />
 
           <Center
