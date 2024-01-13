@@ -208,6 +208,7 @@ export const Result = () => {
           <Benefit result={result} />
           <Loan result={result} />
 
+          {/* // 生活福祉資金貸付制度の結果欄に社会福祉協議会の説明ツールチップ、問い合わせ先説明欄を移行
           <Center pr={4} pl={4} pb={2}>
             <Text color="blue.900" fontSize="1.3em" fontWeight="semibold">
               {configData.result.consultationDescription1}
@@ -231,6 +232,7 @@ export const Result = () => {
               </Tooltip>
             </Text>
           </Center>
+          
 
           <Center pr={4} pl={4} pb={2}>
             <Box
@@ -303,6 +305,7 @@ export const Result = () => {
               )}
             </Box>
           </Center>
+          */}
 
           <Center pr={4} pl={4} pb={4}>
             <Button
