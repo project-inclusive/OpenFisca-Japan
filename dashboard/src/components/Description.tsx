@@ -1,6 +1,19 @@
 import { useState, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { Box, Center, Button, VStack, Image } from '@chakra-ui/react';
+import {
+  Box,
+  Center,
+  Button,
+  VStack,
+  Image,
+  Accordion,
+  AccordionItem,
+  AccordionIcon,
+  AccordionButton,
+  AccordionPanel,
+  UnorderedList,
+  ListItem,
+} from '@chakra-ui/react';
 import { Icon } from '@chakra-ui/react';
 import { CheckCircleIcon } from '@chakra-ui/icons';
 import { FaGithub } from 'react-icons/fa';
@@ -92,6 +105,39 @@ function Description() {
           {configData.description.description[2]}
         </Box>
 
+        {/* 見積もり対象制度一覧 */}
+        <Accordion mb={4} allowMultiple>
+          <AccordionItem>
+            <h2>
+              <AccordionButton>
+                <AccordionIcon />
+                <Box flex="1" textAlign="left" fontWeight="semibold">
+                  見積もり対象制度一覧
+                </Box>
+              </AccordionButton>
+            </h2>
+            <AccordionPanel pb={4}>
+              <UnorderedList ml={8} mt={1}>
+                <ul>
+                  {Object.entries(configData.result.給付制度.制度一覧).map(
+                    (entry: any, index: number) => (
+                      <ListItem>
+                        <Box color="blue">
+                          <a href={entry[1].reference}>
+                            {entry[0]}
+                            {entry[1].local && `(${entry[1].local})`}
+                          </a>
+                        </Box>
+                      </ListItem>
+                    )
+                  )}
+                </ul>
+              </UnorderedList>
+            </AccordionPanel>
+          </AccordionItem>
+        </Accordion>
+
+        {/* icon */}
         <Center>
           <a href={configData.URL.contact}>
             <VStack mr={4}>

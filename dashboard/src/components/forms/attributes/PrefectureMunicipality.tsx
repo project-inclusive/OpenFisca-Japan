@@ -70,7 +70,6 @@ export const PrefectureMunicipality = ({
           delete newHousehold.世帯一覧.世帯1.受験生チャレンジ支援貸付;
         }
       }
-      console.log(newHousehold);
       setHousehold({ ...newHousehold });
     },
     []
