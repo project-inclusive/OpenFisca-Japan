@@ -307,6 +307,11 @@ export const Result = () => {
           </Center>
           */}
 
+          <Center pr={4} pl={4} pb={2}>
+            <Text color="blue.900">
+              {configData.result.consultationDescription4}
+            </Text>
+          </Center>
           <Center pr={4} pl={4} pb={4}>
             <Button
               as={RouterLink}
