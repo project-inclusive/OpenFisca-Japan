@@ -121,7 +121,7 @@ function Description() {
                 <ul>
                   {Object.entries(configData.result.給付制度.制度一覧).map(
                     (entry: any, index: number) => (
-                      <ListItem>
+                      <ListItem key={index}>
                         <Box color="blue">
                           <a href={entry[1].reference}>
                             {entry[0]}
