@@ -1,4 +1,4 @@
-description: 世帯人数ごとの所得制限額
+description: 所得制限額_住居が滅失した場合
 metadata:
   threshold_unit: person
   rate_unit: 1
