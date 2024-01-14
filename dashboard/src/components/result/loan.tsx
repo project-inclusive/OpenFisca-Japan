@@ -85,24 +85,29 @@ export const Loan = ({ result }: { result: any }) => {
     const loanResult: Obj = {};
 
     if (result) {
-      for (const [loanName, loanInfo] of Object.entries(
-        configData.result.貸付制度.制度一覧
+      for (const [categoryName, categoryInfo] of Object.entries(
+        configData.result.貸付制度
       )) {
-        if (loanName in result.世帯一覧.世帯1) {
-          if (result.世帯一覧.世帯1[loanName][currentDate] > 0) {
-            loanResult[loanName] = {
-              name: loanName,
-              unit: loanInfo.unit,
-              caption: loanInfo.caption,
-              reference: loanInfo.reference,
-              displayedMoney: Number(
-                result.世帯一覧.世帯1[loanName][currentDate]
-              ),
-            };
+        loanResult[categoryName] = {};
+        for (const [loanName, loanInfo] of Object.entries(
+          categoryInfo.制度一覧
+        )) {
+          if (loanName in result.世帯一覧.世帯1) {
+            if (result.世帯一覧.世帯1[loanName][currentDate] > 0) {
+              loanResult[categoryName][loanName] = {
+                name: loanName,
+                unit: loanInfo.unit,
+                caption: loanInfo.caption,
+                reference: loanInfo.reference,
+                displayedMoney: Number(
+                  result.世帯一覧.世帯1[loanName][currentDate]
+                ),
+              };
+            }
           }
         }
       }
-
+      console.log(loanResult);
       setDisplayedResult(loanResult);
       console.log(`display ${JSON.stringify(displayedResult)}`);
     }
@@ -119,137 +124,162 @@ export const Loan = ({ result }: { result: any }) => {
           >
             {configData.result.loanDescription}
           </Center>
-
-          <Box fontWeight="medium" mb={2}>
-            {/* TODO: 他の貸付制度を追加したらconfigDataから読み込むようにする */}
-            生活福祉資金貸付制度
-          </Box>
-
-          <Text>
-            {configData.result.貸付制度.caption.map(
-              (line: string, index: any) => (
-                <span key={index}>{line}</span>
-              )
-            )}
-            <Tooltip
-              label={configData.result.consultationDescription3}
-              isOpen={isLabelOpen}
-              bg="gray.600"
-            >
-              <InfoIcon
-                ml={1}
-                color="blue.500"
-                onMouseEnter={() => setIsLabelOpen(true)}
-                onMouseLeave={() => setIsLabelOpen(false)}
-                onClick={() => setIsLabelOpen(true)}
-              />
-            </Tooltip>
-          </Text>
-
-          <Box
-            bg="white"
-            borderRadius="xl"
-            pt={1}
-            pb={1}
-            pr={2}
-            pl={2}
-            m={2}
-            border="1px solid black"
-          >
-            {prefecture === '東京都' ? (
-              <Box>
-                {getSocialWelfareCouncilData().WebサイトURL ? (
-                  <Link
-                    href={getSocialWelfareCouncilData().WebサイトURL}
-                    color="blue.500"
-                    fontWeight={'semibold'}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {getSocialWelfareCouncilData().施設名}
-                  </Link>
-                ) : (
-                  <Text fontWeight={'semibold'}>
-                    {getSocialWelfareCouncilData().施設名}
-                  </Text>
-                )}
-                <Text>〒{getSocialWelfareCouncilData().郵便番号}</Text>
-                <Link
-                  href={getSocialWelfareCouncilData().googleMapsURL}
-                  color="blue.500"
-                  fontWeight={'semibold'}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  地図を開く
-                  <ExternalLinkIcon ml={1} />
-                </Link>
-                <br />
-                <Text>
-                  TEL:
-                  <Link
-                    href={`tel:${getSocialWelfareCouncilData().電話番号}`}
-                    color="blue.500"
-                    fontWeight={'semibold'}
-                  >
-                    {getSocialWelfareCouncilData().電話番号}
-                  </Link>
-                </Text>
-              </Box>
-            ) : (
-              <Box>
-                <Text fontWeight={'semibold'}>社会福祉協議会の調べ方</Text>
-                <Text>
-                  下記のページからお住まいの社会福祉協議会を選択してください
-                </Text>
-                <Link
-                  href={aboutLink.link}
-                  color="blue.500"
-                  fontWeight={'semibold'}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {aboutLink.title}
-                  <ExternalLinkIcon ml={1} />
-                </Link>
-              </Box>
-            )}
-          </Box>
-
-          <Box color="blue">
-            <a href={configData.result.貸付制度.reference}>詳細リンク</a>
-          </Box>
-
-          <Accordion allowMultiple>
-            {displayedResult &&
-              Object.values(displayedResult).map((val: any, index) => (
-                <AccordionItem key={index}>
-                  <h2>
-                    <AccordionButton>
-                      <AccordionIcon />
-                      <Box flex="1" textAlign="left">
-                        {val.name}
-                      </Box>
-                      <Box flex="1" textAlign="right">
-                        {/* １万円単位で表示 */}~{val.displayedMoney / 10_000}{' '}
-                        万{val.unit}
-                      </Box>
-                    </AccordionButton>
-                  </h2>
-                  <AccordionPanel pb={4}>
-                    {val.caption.map((line: string, index: any) => (
-                      <span key={index}>
-                        {line}
-                        <br />
-                      </span>
-                    ))}
-                    <Box color="blue">
-                      <a href={val.reference}>詳細リンク</a>
+          {Object.entries(configData.result.貸付制度).map(
+            (category: any, indexCategory: number) => (
+              <>
+                {Boolean(Object.keys(displayedResult[category[0]]).length) && (
+                  <Box mt={4} key={indexCategory}>
+                    <Box fontWeight="medium" mb={2}>
+                      {/* TODO: 他の貸付制度を追加したらconfigDataから読み込むようにする */}
+                      {category[0]}
                     </Box>
-                  </AccordionPanel>
-                </AccordionItem>
-              ))}
-          </Accordion>
+
+                    <Text>
+                      {category[1].caption.map(
+                        (line: string, indexCategory: any) => (
+                          <span key={indexCategory}>{line}</span>
+                        )
+                      )}
+                      {category[0] === '生活福祉資金貸付制度' && (
+                        <Tooltip
+                          label={configData.result.consultationDescription3}
+                          isOpen={isLabelOpen}
+                          bg="gray.600"
+                        >
+                          <InfoIcon
+                            ml={1}
+                            color="blue.500"
+                            onMouseEnter={() => setIsLabelOpen(true)}
+                            onMouseLeave={() => setIsLabelOpen(false)}
+                            onClick={() => setIsLabelOpen(true)}
+                          />
+                        </Tooltip>
+                      )}
+                    </Text>
+
+                    {category[0] === '生活福祉資金貸付制度' && (
+                      <Box
+                        bg="white"
+                        borderRadius="xl"
+                        pt={1}
+                        pb={1}
+                        pr={2}
+                        pl={2}
+                        m={2}
+                        border="1px solid black"
+                      >
+                        {prefecture === '東京都' ? (
+                          <Box>
+                            {getSocialWelfareCouncilData().WebサイトURL ? (
+                              <Link
+                                href={
+                                  getSocialWelfareCouncilData().WebサイトURL
+                                }
+                                color="blue.500"
+                                fontWeight={'semibold'}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                {getSocialWelfareCouncilData().施設名}
+                              </Link>
+                            ) : (
+                              <Text fontWeight={'semibold'}>
+                                {getSocialWelfareCouncilData().施設名}
+                              </Text>
+                            )}
+                            <Text>
+                              〒{getSocialWelfareCouncilData().郵便番号}
+                            </Text>
+                            <Link
+                              href={getSocialWelfareCouncilData().googleMapsURL}
+                              color="blue.500"
+                              fontWeight={'semibold'}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              地図を開く
+                              <ExternalLinkIcon ml={1} />
+                            </Link>
+                            <br />
+                            <Text>
+                              TEL:
+                              <Link
+                                href={`tel:${
+                                  getSocialWelfareCouncilData().電話番号
+                                }`}
+                                color="blue.500"
+                                fontWeight={'semibold'}
+                              >
+                                {getSocialWelfareCouncilData().電話番号}
+                              </Link>
+                            </Text>
+                          </Box>
+                        ) : (
+                          <Box>
+                            <Text fontWeight={'semibold'}>
+                              社会福祉協議会の調べ方
+                            </Text>
+                            <Text>
+                              下記のページからお住まいの社会福祉協議会を選択してください
+                            </Text>
+                            <Link
+                              href={aboutLink.link}
+                              color="blue.500"
+                              fontWeight={'semibold'}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {aboutLink.title}
+                              <ExternalLinkIcon ml={1} />
+                            </Link>
+                          </Box>
+                        )}
+                      </Box>
+                    )}
+                    {category[1].reference && (
+                      <Box color="blue">
+                        <a href={category[1].reference}>詳細リンク</a>
+                      </Box>
+                    )}
+
+                    {/* 制度の算出結果 result value of loans */}
+                    <Accordion allowMultiple>
+                      {displayedResult[category[0]] &&
+                        Object.values(displayedResult[category[0]]).map(
+                          (val: any, index) => (
+                            <AccordionItem key={index}>
+                              <h2>
+                                <AccordionButton>
+                                  <AccordionIcon />
+                                  <Box flex="1" textAlign="left">
+                                    {val.name}
+                                  </Box>
+                                  <Box flex="1" textAlign="right">
+                                    {/* １万円単位で表示 */}~
+                                    {val.displayedMoney / 10_000} 万{val.unit}
+                                  </Box>
+                                </AccordionButton>
+                              </h2>
+                              <AccordionPanel pb={4}>
+                                {val.caption.map((line: string, index: any) => (
+                                  <span key={index}>
+                                    {line}
+                                    <br />
+                                  </span>
+                                ))}
+                                <Box color="blue">
+                                  <a href={val.reference}>詳細リンク</a>
+                                </Box>
+                              </AccordionPanel>
+                            </AccordionItem>
+                          )
+                        )}
+                    </Accordion>
+                  </Box>
+                )}
+              </>
+            )
+          )}
         </Box>
       )}
     </>
