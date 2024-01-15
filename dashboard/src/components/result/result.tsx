@@ -1,19 +1,9 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
-import {
-  Box,
-  Center,
-  Button,
-  Spinner,
-  Text,
-  Tooltip,
-  Link,
-} from '@chakra-ui/react';
-import { InfoIcon, ExternalLinkIcon } from '@chakra-ui/icons';
+import { Box, Center, Button, Spinner, Text } from '@chakra-ui/react';
 import * as htmlToImage from 'html-to-image';
 
 import configData from '../../config/app_config.json';
-import { data as SocialWelfareData } from '../../config/社会福祉協議会';
 import { useCalculate } from '../../hooks/calculate';
 import { Benefit } from './benefit';
 import { Loan } from './loan';
@@ -37,7 +27,6 @@ export const Result = () => {
     isDisasterCalculation: boolean;
   };
 
-  const [isLabelOpen, setIsLabelOpen] = useState(false);
   const navigate = useNavigate();
 
   const currentDate = useRecoilValue(currentDateAtom);
@@ -100,59 +89,6 @@ export const Result = () => {
     }
   };
 
-  const prefecture = household.世帯一覧.世帯1.居住都道府県[currentDate];
-
-  const city = household.世帯一覧.世帯1.居住市区町村[currentDate];
-
-  const getSocialWelfareCouncilData = () => {
-    if (
-      prefecture === '東京都' &&
-      SocialWelfareData.東京都.hasOwnProperty(city)
-    ) {
-      const {
-        施設名,
-        郵便番号,
-        所在地,
-        経度,
-        緯度,
-        座標系,
-        電話番号,
-        WebサイトURL,
-      } = SocialWelfareData.東京都[city];
-
-      return {
-        施設名,
-        郵便番号,
-        所在地,
-        経度,
-        緯度,
-        座標系,
-        電話番号,
-        WebサイトURL,
-        googleMapsURL: encodeURI(
-          `https://www.google.com/maps/search/${施設名}+${所在地}`
-        ),
-      };
-    }
-
-    return {
-      施設名: null,
-      郵便番号: null,
-      所在地: null,
-      経度: null,
-      緯度: null,
-      座標系: null,
-      電話番号: null,
-      WebサイトURL: '',
-      googleMapsURL: '',
-    };
-  };
-
-  const aboutLink = {
-    link: 'https://www.zcwvc.net/about/list.html',
-    title: '全国の社会福祉協議会一覧',
-  };
-
   const displayChat = useCallback(async (sec: number = 5) => {
     const sleep = (second: number) =>
       new Promise((resolve) => setTimeout(resolve, second * 1000));
@@ -207,105 +143,6 @@ export const Result = () => {
 
           <Benefit result={result} />
           <Loan result={result} />
-
-          {/* // 生活福祉資金貸付制度の結果欄に社会福祉協議会の説明ツールチップ、問い合わせ先説明欄を移行
-          <Center pr={4} pl={4} pb={2}>
-            <Text color="blue.900" fontSize="1.3em" fontWeight="semibold">
-              {configData.result.consultationDescription1}
-            </Text>
-          </Center>
-          <Center pr={4} pl={4} pb={4}>
-            <Text>
-              {configData.result.consultationDescription2}
-              <Tooltip
-                label={configData.result.consultationDescription3}
-                isOpen={isLabelOpen}
-                bg="gray.600"
-              >
-                <InfoIcon
-                  ml={1}
-                  color="blue.500"
-                  onMouseEnter={() => setIsLabelOpen(true)}
-                  onMouseLeave={() => setIsLabelOpen(false)}
-                  onClick={() => setIsLabelOpen(true)}
-                />
-              </Tooltip>
-            </Text>
-          </Center>
-          
-
-          <Center pr={4} pl={4} pb={2}>
-            <Box
-              bg="white"
-              borderRadius="xl"
-              w="100%"
-              pt={4}
-              pb={4}
-              pr={4}
-              pl={4}
-              border="1px solid black"
-            >
-              {prefecture === '東京都' ? (
-                <Box>
-                  {getSocialWelfareCouncilData().WebサイトURL ? (
-                    <Link
-                      href={getSocialWelfareCouncilData().WebサイトURL}
-                      color="blue.500"
-                      fontWeight={'semibold'}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {getSocialWelfareCouncilData().施設名}
-                    </Link>
-                  ) : (
-                    <Text fontWeight={'semibold'}>
-                      {getSocialWelfareCouncilData().施設名}
-                    </Text>
-                  )}
-                  <Text>〒{getSocialWelfareCouncilData().郵便番号}</Text>
-                  <Link
-                    href={getSocialWelfareCouncilData().googleMapsURL}
-                    color="blue.500"
-                    fontWeight={'semibold'}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    地図を開く
-                    <ExternalLinkIcon ml={1} />
-                  </Link>
-                  <br />
-                  <Text>
-                    TEL:
-                    <Link
-                      href={`tel:${getSocialWelfareCouncilData().電話番号}`}
-                      color="blue.500"
-                      fontWeight={'semibold'}
-                    >
-                      {getSocialWelfareCouncilData().電話番号}
-                    </Link>
-                  </Text>
-                </Box>
-              ) : (
-                <Box>
-                  <Text fontWeight={'semibold'}>社会福祉協議会の調べ方</Text>
-                  <Text>
-                    下記のページからお住まいの社会福祉協議会を選択してください
-                  </Text>
-                  <Link
-                    href={aboutLink.link}
-                    color="blue.500"
-                    fontWeight={'semibold'}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {aboutLink.title}
-                    <ExternalLinkIcon ml={1} />
-                  </Link>
-                </Box>
-              )}
-            </Box>
-          </Center>
-          */}
 
           <Center pr={4} pl={4} pb={2}>
             <Text color="blue.900">

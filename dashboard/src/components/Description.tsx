@@ -17,7 +17,9 @@ import {
 import { Icon } from '@chakra-ui/react';
 import { CheckCircleIcon } from '@chakra-ui/icons';
 import { FaGithub } from 'react-icons/fa';
+import { useResetRecoilState } from 'recoil';
 
+import { householdAtom } from '../state';
 import configData from '../config/app_config.json';
 import bokyuIcon from '../assets/bokyu_lab_icon_cyan.png';
 import yadokariKunIcon from '../assets/yadokari-kun.png';
@@ -27,6 +29,7 @@ const defaultInnerWidth = window.innerWidth;
 function Description() {
   const [screenWidth, setScreenWidth] = useState(defaultInnerWidth);
   const [isMobile, setIsMobile] = useState(defaultInnerWidth <= 800);
+  const resetHousehold = useResetRecoilState(householdAtom);
 
   useEffect(() => {
     function handleResize() {
