@@ -16,6 +16,7 @@ import { householdAtom } from '../../state';
 export const FormContent = () => {
   const location = useLocation();
   const isSimpleCalculation = location.pathname === '/calculate-simple';
+  const isDisasterCalculation = location.pathname === '/calculate-disaster';
 
   const [ShowAlertMessage, setShowAlertMessage] = useState(false);
   const validated = useValidate();
@@ -30,9 +31,17 @@ export const FormContent = () => {
           text={
             isSimpleCalculation
               ? configData.calculationForm.simpleCalculation
+              : isDisasterCalculation
+              ? configData.calculationForm.disasterCalculation
               : configData.calculationForm.detailedCalculation
           }
-          colour={isSimpleCalculation ? 'teal' : 'blue'}
+          colour={
+            isSimpleCalculation
+              ? 'teal'
+              : isDisasterCalculation
+              ? 'orange'
+              : 'blue'
+          }
         />
 
         <Center
@@ -53,7 +62,7 @@ export const FormContent = () => {
 
         <Center pr={4} pl={4} pb={4}>
           <Button
-            loadingText="計算する"
+            loadingText="見積もる"
             fontSize={configData.style.subTitleFontSize}
             borderRadius="xl"
             height="2em"
@@ -72,11 +81,12 @@ export const FormContent = () => {
                 state: {
                   household: household,
                   isSimpleCalculation: isSimpleCalculation,
+                  isDisasterCalculation: isDisasterCalculation,
                 },
               });
             }}
           >
-            計算する
+            見積もる
           </Button>
         </Center>
       </div>

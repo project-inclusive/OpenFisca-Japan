@@ -4,8 +4,9 @@ import configData from '../../config/app_config.json';
 
 export const FormResponseError = () => {
   const location = useLocation();
-  const { isSimpleCalculation } = location.state as {
+  const { isSimpleCalculation, isDisasterCalculation } = location.state as {
     isSimpleCalculation: boolean;
+    isDisasterCalculation: boolean;
   };
 
   return (
@@ -27,7 +28,13 @@ export const FormResponseError = () => {
           color="white"
           _hover={{ bg: 'cyan.700' }}
           as={RouterLink}
-          to={isSimpleCalculation ? '/calculate-simple' : '/calculate'}
+          to={
+            isSimpleCalculation
+              ? '/calculate-simple'
+              : isDisasterCalculation
+              ? '/calculate-disaster'
+              : '/calculate'
+          }
         >
           戻る
         </Button>
