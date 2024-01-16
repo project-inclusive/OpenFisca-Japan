@@ -5,7 +5,7 @@
 import numpy as np
 from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
-from openfisca_japan.entities import 世帯, 人物
+from openfisca_japan.entities import 世帯
 
 
 class 災害弔慰金(Variable):
@@ -25,13 +25,13 @@ class 災害弔慰金(Variable):
         災害で死亡した世帯員の人数 = 対象世帯("災害で死亡した世帯員の人数", 対象期間)
         災害で生計維持者が死亡した = 対象世帯("災害で生計維持者が死亡した", 対象期間)
 
-        生計維持者への支給額 = parameters(対象期間).災害.支援.災害弔慰金.生計維持者への支給額
-        生計維持者以外への支給額 = parameters(対象期間).災害.支援.災害弔慰金.生計維持者以外への支給額
+        生計維持者死亡の場合の支給額 = parameters(対象期間).災害.支援.災害弔慰金.生計維持者死亡の場合の支給額
+        生計維持者以外死亡の場合の支給額 = parameters(対象期間).災害.支援.災害弔慰金.生計維持者以外死亡の場合の支給額
 
         支給額 = np.select(
             [災害で生計維持者が死亡した],
-            [生計維持者への支給額 + (災害で死亡した世帯員の人数 - 1) * 生計維持者以外への支給額],
-            災害で死亡した世帯員の人数 * 生計維持者以外への支給額).astype(int)
+            [生計維持者死亡の場合の支給額 + (災害で死亡した世帯員の人数 - 1) * 生計維持者以外死亡の場合の支給額],
+            災害で死亡した世帯員の人数 * 生計維持者以外死亡の場合の支給額).astype(int)
 
         return 災害救助法の適用地域である * 支給額
 
@@ -56,4 +56,3 @@ class 災害で生計維持者が死亡した(Variable):
     documentation = """
     死亡した世帯員は世帯情報に含められない（含めると他の制度の対象になってしまう）ため、死亡者に関するVariableを別途用意
     """
-
