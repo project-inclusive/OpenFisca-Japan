@@ -1,0 +1,7 @@
+description: 生計維持者以外への支給額
+metadata:
+  reference: https://www.bousai.go.jp/taisaku/choui/pdf/siryo1-1.pdf
+  unit: currency-JPY
+values:
+  2000-04-01:
+    value: 1250000

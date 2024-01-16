@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState, useRef, useEffect } from 'react';
+import { useCallback, useState, useRef, useEffect } from 'react';
 import {
   Checkbox,
   Box,
@@ -7,11 +7,13 @@ import {
   FormControl,
   FormLabel,
 } from '@chakra-ui/react';
-
-import { HouseholdContext } from '../../../contexts/HouseholdContext';
+import { useNavigationType } from 'react-router-dom';
+import { householdAtom } from '../../../state';
+import { useRecoilState } from 'recoil';
 
 export const ParentsNum = () => {
-  const { household, setHousehold } = useContext(HouseholdContext);
+  const navigationType = useNavigationType();
+  const [household, setHousehold] = useRecoilState(householdAtom);
   const [shownLivingToghtherNum, setShownLivingToghtherNum] = useState<
     string | number
   >('');
@@ -21,12 +23,12 @@ export const ParentsNum = () => {
   // チェックボックスの値が変更された時
   const onCheckChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      if (!event.target.checked && household.世帯.世帯1.親一覧) {
+      if (!event.target.checked && household.世帯一覧.世帯1.祖父母一覧) {
         const newHousehold = { ...household };
-        household.世帯.世帯1.親一覧.map((name: string) => {
+        household.世帯一覧.世帯1.祖父母一覧.map((name: string) => {
           delete newHousehold.世帯員[name];
         });
-        delete newHousehold.世帯.世帯1.親一覧;
+        delete newHousehold.世帯一覧.世帯1.祖父母一覧;
         setShownLivingToghtherNum('');
         setHousehold({ ...newHousehold });
       }
@@ -59,30 +61,39 @@ export const ParentsNum = () => {
 
     // 変更前の親または祖父母の情報を削除
     const newHousehold = { ...household };
-    if (household.世帯.世帯1.親一覧) {
-      household.世帯.世帯1.親一覧.map((name: string) => {
+    if (household.世帯一覧.世帯1.祖父母一覧) {
+      household.世帯一覧.世帯1.祖父母一覧.map((name: string) => {
         delete newHousehold.世帯員[name];
       });
     }
 
     // 新しい親または祖父母の情報を追加
-    newHousehold.世帯.世帯1.親一覧 = [...Array(LivingToghtherNum)].map(
+    newHousehold.世帯一覧.世帯1.祖父母一覧 = [...Array(LivingToghtherNum)].map(
       (val, i) => `親${i}`
     );
-    if (newHousehold.世帯.世帯1.親一覧) {
-      newHousehold.世帯.世帯1.親一覧.map((name: string) => {
+    if (newHousehold.世帯一覧.世帯1.祖父母一覧) {
+      newHousehold.世帯一覧.世帯1.祖父母一覧.map((name: string) => {
         newHousehold.世帯員[name] = {};
       });
     }
     setHousehold({ ...newHousehold });
   }, []);
 
+  // stored states set displayed value when page transition
+  useEffect(() => {
+    const storedObj = household.世帯一覧.世帯1.祖父母一覧;
+    if (storedObj) {
+      setIsChecked(true);
+      setShownLivingToghtherNum(storedObj.length);
+    }
+  }, [navigationType]);
+
   return (
     <>
       <Box mb={4}>
         <Checkbox
           colorScheme="cyan"
-          checked={isChecked}
+          isChecked={isChecked}
           onChange={onCheckChange}
         >
           親または祖父母と同居している

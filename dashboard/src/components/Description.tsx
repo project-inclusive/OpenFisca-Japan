@@ -1,10 +1,25 @@
 import { useState, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { Box, Center, Button, VStack, Image } from '@chakra-ui/react';
+import {
+  Box,
+  Center,
+  Button,
+  VStack,
+  Image,
+  Accordion,
+  AccordionItem,
+  AccordionIcon,
+  AccordionButton,
+  AccordionPanel,
+  UnorderedList,
+  ListItem,
+} from '@chakra-ui/react';
 import { Icon } from '@chakra-ui/react';
 import { CheckCircleIcon } from '@chakra-ui/icons';
 import { FaGithub } from 'react-icons/fa';
+import { useResetRecoilState } from 'recoil';
 
+import { householdAtom } from '../state';
 import configData from '../config/app_config.json';
 import bokyuIcon from '../assets/bokyu_lab_icon_cyan.png';
 import yadokariKunIcon from '../assets/yadokari-kun.png';
@@ -14,6 +29,7 @@ const defaultInnerWidth = window.innerWidth;
 function Description() {
   const [screenWidth, setScreenWidth] = useState(defaultInnerWidth);
   const [isMobile, setIsMobile] = useState(defaultInnerWidth <= 800);
+  const resetHousehold = useResetRecoilState(householdAtom);
 
   useEffect(() => {
     function handleResize() {
@@ -92,6 +108,84 @@ function Description() {
           {configData.description.description[2]}
         </Box>
 
+        {/* 見積もり対象制度一覧 */}
+        <Accordion mb={4} allowMultiple>
+          <AccordionItem>
+            <h2>
+              <AccordionButton>
+                <AccordionIcon />
+                <Box flex="1" textAlign="left" fontWeight="semibold">
+                  見積もり対象制度一覧
+                </Box>
+              </AccordionButton>
+            </h2>
+            <AccordionPanel pb={4}>
+              <UnorderedList ml={8} mt={1}>
+                <ul>
+                  {/* benefit 給付制度 */}
+                  {Object.entries(configData.result.給付制度.制度一覧).map(
+                    (entry: any, index: number) => (
+                      <ListItem key={index}>
+                        <Box color="blue">
+                          <a href={entry[1].reference}>
+                            {entry[0]}
+                            {entry[1].local && `(${entry[1].local})`}
+                          </a>
+                        </Box>
+                      </ListItem>
+                    )
+                  )}
+
+                  {/* loan 貸付制度 */}
+                  {Object.entries(
+                    configData.result.貸付制度.その他.制度一覧
+                  ).map((entry: any, index: number) => (
+                    <ListItem key={index}>
+                      <Box color="blue">
+                        <a href={entry[1].reference}>
+                          {entry[0]}
+                          {entry[1].local && `(${entry[1].local})`}
+                        </a>
+                      </Box>
+                    </ListItem>
+                  ))}
+
+                  <ListItem>
+                    <Box color="blue">
+                      <a
+                        href={
+                          configData.result.貸付制度.生活福祉資金貸付制度
+                            .reference
+                        }
+                      >
+                        生活福祉資金貸付制度
+                      </a>
+                    </Box>
+                    <UnorderedList ml={8} mt={1}>
+                      <ul>
+                        {Object.entries(
+                          configData.result.貸付制度.生活福祉資金貸付制度
+                            .制度一覧
+                        ).map((entry: any, index: number) => (
+                          <ListItem key={index}>
+                            <Box color="blue">
+                              <a href={entry[1].reference}>
+                                {entry[0]}
+                                {entry[1].local && `(${entry[1].local})`}
+                              </a>
+                            </Box>
+                          </ListItem>
+                        ))}
+                      </ul>
+                    </UnorderedList>
+                  </ListItem>
+                </ul>
+              </UnorderedList>
+            </AccordionPanel>
+          </AccordionItem>
+        </Accordion>
+
+        {/* icon */}
         <Center>
           <a href={configData.URL.contact}>
             <VStack mr={4}>
@@ -111,6 +205,24 @@ function Description() {
       <Center pr={4} pl={4} pb={4} style={{ textAlign: 'center' }}>
         <Button
           as={RouterLink}
+          to="/calculate-disaster"
+          fontSize={configData.style.subTitleFontSize}
+          borderRadius="xl"
+          height="4em"
+          width="100%"
+          bg="orange.400"
+          color="white"
+          _hover={{ bg: 'orange.500' }}
+        >
+          能登半島地震
+          <br />
+          被災者支援制度見積もり
+        </Button>
+      </Center>
+
+      <Center pr={4} pl={4} pb={4} style={{ textAlign: 'center' }}>
+        <Button
+          as={RouterLink}
           to="/calculate"
           style={{ marginRight: '8%' }}
           fontSize={configData.style.subTitleFontSize}
@@ -123,7 +235,7 @@ function Description() {
         >
           くわしく
           <br />
-          計算
+          見積もり
         </Button>
         <Button
           as={RouterLink}
@@ -138,7 +250,7 @@ function Description() {
         >
           かんたん
           <br />
-          計算
+          見積もり
         </Button>
       </Center>
     </>

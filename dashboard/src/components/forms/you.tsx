@@ -19,7 +19,7 @@ import { Deposit } from './attributes/Deposit';
 
 export const FormYou = () => {
   const location = useLocation();
-  const isSimpleCalculation = location.pathname === '/calculate-simple';
+  const isDetailedCalculation = location.pathname === '/calculate';
 
   const yourName = 'あなた';
   return (
@@ -33,21 +33,21 @@ export const FormYou = () => {
           {configData.calculationForm.youDescription}
         </Center>
         <PrefectureMunicipality mustInput={true} />
-        {!isSimpleCalculation && (
+        {isDetailedCalculation && (
           <Birthday personName={yourName} mustInput={true} />
         )}
         <Income personName={yourName} mustInput={true} />
-        {!isSimpleCalculation && <Deposit personName={yourName} />}
-        {!isSimpleCalculation && <Student personName={yourName} />}
-        {!isSimpleCalculation && <Working personName={yourName} />}
-        {!isSimpleCalculation && <Disability personName={yourName} />}
-        {!isSimpleCalculation && <Recuperation personName={yourName} />}
-        {!isSimpleCalculation && <NursingHome personName={yourName} />}
+        {isDetailedCalculation && <Deposit personName={yourName} />}
+        {isDetailedCalculation && <Student personName={yourName} />}
+        {isDetailedCalculation && <Working personName={yourName} />}
+        {isDetailedCalculation && <Disability personName={yourName} />}
+        {isDetailedCalculation && <Recuperation personName={yourName} />}
+        {isDetailedCalculation && <NursingHome personName={yourName} />}
         <SpouseExists />
         <ChildrenNum />
-        {!isSimpleCalculation && <ParentsNum />}
-        {!isSimpleCalculation && <Pregnant personName={yourName} />}
-        {!isSimpleCalculation && <RentingHouse />}
+        {isDetailedCalculation && <ParentsNum />}
+        {isDetailedCalculation && <Pregnant personName={yourName} />}
+        {isDetailedCalculation && <RentingHouse />}
       </Box>
     </>
   );

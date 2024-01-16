@@ -2,9 +2,8 @@
 ひとり親の実装
 """
 
-from openfisca_core.periods import MONTH, DAY
+from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
-
 from openfisca_japan.entities import 世帯
 
 
@@ -31,9 +30,9 @@ class ひとり親(Variable):
     """
 
     def formula(対象世帯, 対象期間, parameters):
-        配偶者なし = 対象世帯.nb_persons(世帯.配偶者) == 0
+        配偶者がいない = 対象世帯.nb_persons(世帯.親) == 1
 
-        return 配偶者なし + 対象世帯("配偶者がいるがひとり親に該当", 対象期間)
+        return 配偶者がいない + 対象世帯("配偶者がいるがひとり親に該当", 対象期間)
 
 
 class 夫と離別死別(Variable):

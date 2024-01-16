@@ -1,13 +1,15 @@
-import { KeyboardEvent, useCallback, useContext, useState } from 'react';
+import { KeyboardEvent, useCallback, useState, useEffect } from 'react';
+import { useNavigationType } from 'react-router-dom';
 import { Box, HStack, Input, FormControl, FormLabel } from '@chakra-ui/react';
 
-import { HouseholdContext } from '../../../contexts/HouseholdContext';
-import { useRecoilValue } from 'recoil';
-import { currentDateAtom } from '../../../state';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { currentDateAtom, householdAtom } from '../../../state';
 
 export const Deposit = ({ personName }: { personName: string }) => {
+  const navigationType = useNavigationType();
   const currentDate = useRecoilValue(currentDateAtom);
-  const { household, setHousehold } = useContext(HouseholdContext);
+
+  const [household, setHousehold] = useRecoilState(householdAtom);
 
   const [shownDeposit, setShownDeposit] = useState<string | number>('');
 
@@ -36,6 +38,14 @@ export const Deposit = ({ personName }: { personName: string }) => {
       e.preventDefault();
     }
   };
+
+  // stored states set displayed value when page transition
+  useEffect(() => {
+    const storedDepositObj = household.世帯員[personName].預貯金;
+    if (storedDepositObj) {
+      setShownDeposit(storedDepositObj[currentDate] / 10000);
+    }
+  }, [navigationType]);
 
   return (
     <>

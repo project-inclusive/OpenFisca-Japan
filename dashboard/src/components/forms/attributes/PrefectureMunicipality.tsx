@@ -1,19 +1,21 @@
-import { useState, useCallback, useContext, useMemo, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
+import { useNavigationType } from 'react-router-dom';
 import { Box, Select, HStack, FormControl, FormLabel } from '@chakra-ui/react';
 
 import configData from '../../../config/app_config.json';
 import pmJson from '../../../config/都道府県市区町村.json';
-import { HouseholdContext } from '../../../contexts/HouseholdContext';
+
 import { ErrorMessage } from './validation/ErrorMessage';
-import { useRecoilValue } from 'recoil';
-import { currentDateAtom } from '../../../state';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { currentDateAtom, householdAtom } from '../../../state';
 
 export const PrefectureMunicipality = ({
   mustInput,
 }: {
   mustInput: boolean;
 }) => {
-  const { household, setHousehold } = useContext(HouseholdContext);
+  const navigationType = useNavigationType();
+  const [household, setHousehold] = useRecoilState(householdAtom);
 
   interface pmType {
     [key: string]: string[];
@@ -32,43 +34,42 @@ export const PrefectureMunicipality = ({
       setSelectedPrefecture(prefecture);
       setSelectedMunicipality('');
       const newHousehold = { ...household };
-      newHousehold.世帯.世帯1.居住都道府県 = {
+      newHousehold.世帯一覧.世帯1.居住都道府県 = {
         [currentDate]: prefecture,
       };
       if (prefecture === '東京都') {
-        newHousehold.世帯.世帯1.児童育成手当 = {
+        newHousehold.世帯一覧.世帯1.児童育成手当 = {
           [currentDate]: null,
         };
-        newHousehold.世帯.世帯1.障害児童育成手当 = {
+        newHousehold.世帯一覧.世帯1.障害児童育成手当 = {
           [currentDate]: null,
         };
-        newHousehold.世帯.世帯1.重度心身障害者手当_最小 = {
+        newHousehold.世帯一覧.世帯1.重度心身障害者手当_最小 = {
           [currentDate]: null,
         };
-        newHousehold.世帯.世帯1.重度心身障害者手当_最大 = {
+        newHousehold.世帯一覧.世帯1.重度心身障害者手当_最大 = {
           [currentDate]: null,
         };
-        newHousehold.世帯.世帯1.受験生チャレンジ支援貸付 = {
+        newHousehold.世帯一覧.世帯1.受験生チャレンジ支援貸付 = {
           [currentDate]: null,
         };
       } else {
-        if ('児童育成手当' in newHousehold.世帯.世帯1) {
-          delete newHousehold.世帯.世帯1.児童育成手当;
+        if ('児童育成手当' in newHousehold.世帯一覧.世帯1) {
+          delete newHousehold.世帯一覧.世帯1.児童育成手当;
         }
-        if ('障害児童育成手当' in newHousehold.世帯.世帯1) {
-          delete newHousehold.世帯.世帯1.障害児童育成手当;
+        if ('障害児童育成手当' in newHousehold.世帯一覧.世帯1) {
+          delete newHousehold.世帯一覧.世帯1.障害児童育成手当;
         }
-        if ('重度心身障害者手当_最小' in newHousehold.世帯.世帯1) {
-          delete newHousehold.世帯.世帯1.重度心身障害者手当_最小;
+        if ('重度心身障害者手当_最小' in newHousehold.世帯一覧.世帯1) {
+          delete newHousehold.世帯一覧.世帯1.重度心身障害者手当_最小;
         }
-        if ('重度心身障害者手当_最大' in newHousehold.世帯.世帯1) {
-          delete newHousehold.世帯.世帯1.重度心身障害者手当_最大;
+        if ('重度心身障害者手当_最大' in newHousehold.世帯一覧.世帯1) {
+          delete newHousehold.世帯一覧.世帯1.重度心身障害者手当_最大;
         }
-        if ('受験生チャレンジ支援貸付' in newHousehold.世帯.世帯1) {
-          delete newHousehold.世帯.世帯1.受験生チャレンジ支援貸付;
+        if ('受験生チャレンジ支援貸付' in newHousehold.世帯一覧.世帯1) {
+          delete newHousehold.世帯一覧.世帯1.受験生チャレンジ支援貸付;
         }
       }
-      console.log(newHousehold);
       setHousehold({ ...newHousehold });
     },
     []
@@ -81,13 +82,24 @@ export const PrefectureMunicipality = ({
       setSelectedMunicipality(municipality);
 
       const newHousehold = { ...household };
-      newHousehold.世帯.世帯1.居住市区町村 = {
+      newHousehold.世帯一覧.世帯1.居住市区町村 = {
         [currentDate]: municipality,
       };
       setHousehold({ ...newHousehold });
     },
     []
   );
+
+  // stored states set displayed value when page transition
+  useEffect(() => {
+    const householdObj = household.世帯一覧.世帯1;
+    if (householdObj.居住都道府県) {
+      setSelectedPrefecture(householdObj.居住都道府県[currentDate]);
+    }
+    if (householdObj.居住市区町村) {
+      setSelectedMunicipality(householdObj.居住市区町村[currentDate]);
+    }
+  }, [navigationType]);
 
   return (
     <>

@@ -1,26 +1,32 @@
-import { useCallback, useContext, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
+import { useNavigationType } from 'react-router-dom';
 import { Checkbox } from '@chakra-ui/react';
 
-import { HouseholdContext } from '../../../contexts/HouseholdContext';
-import { currentDateAtom } from '../../../state';
-import { useRecoilValue } from 'recoil';
+import { currentDateAtom, householdAtom } from '../../../state';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 export const SpouseExists = () => {
   const currentDate = useRecoilValue(currentDateAtom);
-  const { household, setHousehold } = useContext(HouseholdContext);
+
+  const [household, setHousehold] = useRecoilState(householdAtom);
   const [isChecked, setIsChecked] = useState(false);
   const spouseName = '配偶者';
+
+  const navigationType = useNavigationType();
 
   // チェックボックスの値が変更された時
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const newHousehold = { ...household };
     if (event.target.checked) {
-      newHousehold.世帯員[spouseName] = {};
-      newHousehold.世帯.世帯1.配偶者一覧 = [spouseName];
+      if (newHousehold.世帯一覧.世帯1.親一覧.length == 1) {
+        newHousehold.世帯員[spouseName] = {};
+        newHousehold.世帯一覧.世帯1.親一覧.push(spouseName);
+      }
     } else {
       delete newHousehold.世帯員[spouseName];
-      delete newHousehold.世帯.世帯1.配偶者一覧;
-      newHousehold.世帯.世帯1.配偶者がいるがひとり親に該当 = {
+      const spouseIdx = newHousehold.世帯一覧.世帯1.親一覧.indexOf(spouseName);
+      newHousehold.世帯一覧.世帯1.親一覧.splice(spouseIdx, 1);
+      newHousehold.世帯一覧.世帯1.配偶者がいるがひとり親に該当 = {
         [currentDate]: false,
       };
     }
@@ -28,11 +34,16 @@ export const SpouseExists = () => {
     setIsChecked(event.target.checked);
   }, []);
 
+  // stored states set checkbox when page transition
+  useEffect(() => {
+    setIsChecked(household.世帯一覧.世帯1.親一覧.length === 2);
+  }, [navigationType]);
+
   return (
     <>
       <Checkbox
         colorScheme="cyan"
-        checked={isChecked}
+        isChecked={isChecked}
         onChange={onChange}
         mb={4}
       >

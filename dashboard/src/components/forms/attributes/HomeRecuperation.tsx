@@ -1,14 +1,15 @@
-import { useState, useCallback, useContext } from 'react';
+import { useState, useCallback, useEffect } from 'react';
+import { useNavigationType } from 'react-router-dom';
 import { Checkbox } from '@chakra-ui/react';
 
-import { HouseholdContext } from '../../../contexts/HouseholdContext';
-import { useRecoilValue } from 'recoil';
-import { currentDateAtom } from '../../../state';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { currentDateAtom, householdAtom } from '../../../state';
 
 export const HomeRecuperation = ({ personName }: { personName: string }) => {
+  const navigationType = useNavigationType();
   const currentDate = useRecoilValue(currentDateAtom);
 
-  const { household, setHousehold } = useContext(HouseholdContext);
+  const [household, setHousehold] = useRecoilState(householdAtom);
   const [isChecked, setIsChecked] = useState(false);
 
   // チェックボックスの値が変更された時
@@ -24,10 +25,16 @@ export const HomeRecuperation = ({ personName }: { personName: string }) => {
     setIsChecked(event.target.checked);
   }, []);
 
+  // stored states set checkbox when page transition
+  useEffect(() => {
+    const homeRecuperationObj = household.世帯員[personName].在宅療養中;
+    setIsChecked(homeRecuperationObj && homeRecuperationObj[currentDate]);
+  }, [navigationType]);
+
   return (
     <>
       <Checkbox
-        checked={isChecked}
+        isChecked={isChecked}
         onChange={onChange}
         colorScheme="cyan"
         mb={2}

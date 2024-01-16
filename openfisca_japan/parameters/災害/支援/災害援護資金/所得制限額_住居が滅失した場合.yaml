@@ -1,0 +1,8 @@
+description: 所得制限額_住居が滅失した場合
+metadata:
+  threshold_unit: person
+  rate_unit: 1
+  reference: https://www.bousai.go.jp/taisaku/hisaisyagyousei/pdf/kakusyuseido_tsuujou.pdf
+values:
+  2023-04-01:
+    value: 12700000

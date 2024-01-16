@@ -1,25 +1,28 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Center, Button } from '@chakra-ui/react';
 
 import configData from '../../config/app_config.json';
 import { ShowAlertMessageContext } from '../../contexts/ShowAlertMessageContext';
-import { HouseholdContext } from '../../contexts/HouseholdContext';
 import { useValidate } from '../../hooks/validate';
 import { FormYou } from './you';
 import { FormSpouse } from './spouse';
 import { FormChildren } from './children';
 import { FormParents } from './parents';
 import { CalculationLabel } from './calculationLabel';
+import { useRecoilValue } from 'recoil';
+import { householdAtom } from '../../state';
 
 export const FormContent = () => {
   const location = useLocation();
   const isSimpleCalculation = location.pathname === '/calculate-simple';
+  const isDisasterCalculation = location.pathname === '/calculate-disaster';
 
   const [ShowAlertMessage, setShowAlertMessage] = useState(false);
   const validated = useValidate();
   const navigate = useNavigate();
-  const { household, setHousehold } = useContext(HouseholdContext);
+
+  const household = useRecoilValue(householdAtom);
 
   return (
     <ShowAlertMessageContext.Provider value={ShowAlertMessage}>
@@ -28,9 +31,17 @@ export const FormContent = () => {
           text={
             isSimpleCalculation
               ? configData.calculationForm.simpleCalculation
+              : isDisasterCalculation
+              ? configData.calculationForm.disasterCalculation
               : configData.calculationForm.detailedCalculation
           }
-          colour={isSimpleCalculation ? 'teal' : 'blue'}
+          colour={
+            isSimpleCalculation
+              ? 'teal'
+              : isDisasterCalculation
+              ? 'orange'
+              : 'blue'
+          }
         />
 
         <Center
@@ -51,7 +62,7 @@ export const FormContent = () => {
 
         <Center pr={4} pl={4} pb={4}>
           <Button
-            loadingText="計算する"
+            loadingText="見積もる"
             fontSize={configData.style.subTitleFontSize}
             borderRadius="xl"
             height="2em"
@@ -70,11 +81,12 @@ export const FormContent = () => {
                 state: {
                   household: household,
                   isSimpleCalculation: isSimpleCalculation,
+                  isDisasterCalculation: isDisasterCalculation,
                 },
               });
             }}
           >
-            計算する
+            見積もる
           </Button>
         </Center>
       </div>

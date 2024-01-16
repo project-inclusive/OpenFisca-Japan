@@ -43,6 +43,10 @@ function App() {
               element: <CaluculationForm />,
             },
             {
+              path: '/calculate-disaster',
+              element: <CaluculationForm />,
+            },
+            {
               path: '/result',
               element: <Result />,
             },

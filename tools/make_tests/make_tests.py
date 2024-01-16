@@ -1,9 +1,17 @@
-# -*- coding: utf-8 -*-
+"""
+テスト条件・結果を記載したCSVファイルから、OpenFisca用のyamlテストファイルを自動生成
+"""
+
 import argparse
+import logging
 import os
 import sys
-sys.path.append(os.curdir)
+
 from mylib.utils import TestGenerator
+
+
+sys.path.append(os.curdir)
+
 
 if __name__ == "__main__":
     parse = argparse.ArgumentParser()
@@ -17,4 +25,4 @@ if __name__ == "__main__":
     generator.clean()
     generator.prepare()
     generator.generate()
-    print("Done!")
+    logging.info("Done!")

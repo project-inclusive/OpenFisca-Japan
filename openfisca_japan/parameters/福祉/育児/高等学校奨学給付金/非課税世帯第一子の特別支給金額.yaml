@@ -1,7 +1,0 @@
-description: 当該世帯に通信制過程の高等学校等に在籍する高校生がいる場合の、非課税世帯(第一子)の支給金額
-metadata:
-  reference: https://www.mext.go.jp/a_menu/shotou/mushouka/1344089.htm
-  unit: year
-values:
-  2014-04-01:
-    value: 143700

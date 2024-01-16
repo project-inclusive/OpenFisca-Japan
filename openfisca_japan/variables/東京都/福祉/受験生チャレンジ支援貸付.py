@@ -3,11 +3,11 @@
 """
 
 import numpy as np
-
 from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
-from openfisca_japan.entities import 世帯, 人物
+from openfisca_japan.entities import 世帯
 from openfisca_japan.variables.全般 import 中学生学年, 高校生学年
+
 
 class 受験生チャレンジ支援貸付(Variable):
     value_type = int
@@ -36,6 +36,7 @@ class 受験生チャレンジ支援貸付(Variable):
         受験生チャレンジ支援貸付可能 = 対象世帯("受験生チャレンジ支援貸付可能", 対象期間)
         return 年間支給金額 * 受験生チャレンジ支援貸付可能
 
+
 class 受験生チャレンジ支援貸付可能(Variable):
     value_type = int
     default_value = 0
@@ -49,9 +50,10 @@ class 受験生チャレンジ支援貸付可能(Variable):
         if 居住都道府県 != "東京都":
             return 0
 
-        預貯金 = 対象世帯.自分("預貯金", 対象期間)[0] + 対象世帯.配偶者("預貯金", 対象期間)[0] + \
-                対象世帯("子供の預貯金", 対象期間)[0]
-        if 預貯金 > 6000000:
+        預貯金一覧 = 対象世帯.members("預貯金", 対象期間)
+        親または子である = 対象世帯.has_role(世帯.親) + 対象世帯.has_role(世帯.子)
+        親子の預貯金総額 = 対象世帯.sum(預貯金一覧 * 親または子である)
+        if 親子の預貯金総額 > 6000000:
             return 0
 
         ひとり親である = 対象世帯("ひとり親", 対象期間)
@@ -62,23 +64,23 @@ class 受験生チャレンジ支援貸付可能(Variable):
         if ひとり親である:
             受給可能 = np.select(
                 [
-                    世帯人数 == 2 and 世帯所得 <= 2805000, 
-                    世帯人数 == 3 and 世帯所得 <= 3532000, 
-                    世帯人数 == 4 and 世帯所得 <= 4175000, 
-                    世帯人数 == 5 and 世帯所得 <= 4674000
+                    世帯人数 == 2 and 世帯所得 <= 2805000,
+                    世帯人数 == 3 and 世帯所得 <= 3532000,
+                    世帯人数 == 4 and 世帯所得 <= 4175000,
+                    世帯人数 == 5 and 世帯所得 <= 4674000,
                 ],
                 [1, 1, 1, 1],
-                0
+                0,
             )
         else:
             受給可能 = np.select(
                 [
-                    世帯人数 == 3 and 世帯所得 <= 3087000, 
-                    世帯人数 == 4 and 世帯所得 <= 3599000, 
-                    世帯人数 == 5 and 世帯所得 <= 4149000, 
-                    世帯人数 == 6 and 世帯所得 <= 4776000
+                    世帯人数 == 3 and 世帯所得 <= 3087000,
+                    世帯人数 == 4 and 世帯所得 <= 3599000,
+                    世帯人数 == 5 and 世帯所得 <= 4149000,
+                    世帯人数 == 6 and 世帯所得 <= 4776000,
                 ],
                 [1, 1, 1, 1],
-                0
+                0,
             )
         return 受給可能

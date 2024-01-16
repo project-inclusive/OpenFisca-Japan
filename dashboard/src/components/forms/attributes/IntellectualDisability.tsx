@@ -1,17 +1,18 @@
-import { useState, useCallback, useContext, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
+import { useNavigationType } from 'react-router-dom';
 import { Select, FormControl, FormLabel } from '@chakra-ui/react';
 
-import { HouseholdContext } from '../../../contexts/HouseholdContext';
-import { useRecoilValue } from 'recoil';
-import { currentDateAtom } from '../../../state';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { currentDateAtom, householdAtom } from '../../../state';
 
 export const IntellectualDisability = ({
   personName,
 }: {
   personName: string;
 }) => {
-  const { household, setHousehold } = useContext(HouseholdContext);
+  const [household, setHousehold] = useRecoilState(householdAtom);
   const currentDate = useRecoilValue(currentDateAtom);
+  const navigationType = useNavigationType();
 
   // ラベルとOpenFiscaの表記違いを明記
   const aiItems = [
@@ -56,6 +57,7 @@ export const IntellectualDisability = ({
 
   // 「あなた」の「子どもの数」が変更されたときに全ての子どもの愛の手帳・療育等級が「無」に
   // リセットされるため、コンボボックスも空白に戻す
+  // stored states set displayed value when page transition
   useEffect(() => {
     if (household.世帯員[personName].愛の手帳等級) {
       aiItems.map((item, index) => {
@@ -66,7 +68,7 @@ export const IntellectualDisability = ({
         }
       });
     }
-  }, [household.世帯員[personName].愛の手帳等級]);
+  }, [navigationType, household.世帯員[personName].愛の手帳等級]);
 
   useEffect(() => {
     if (household.世帯員[personName].療育手帳等級) {
@@ -78,7 +80,7 @@ export const IntellectualDisability = ({
         }
       });
     }
-  }, [household.世帯員[personName].療育手帳等級]);
+  }, [navigationType, household.世帯員[personName].療育手帳等級]);
 
   return (
     <>
