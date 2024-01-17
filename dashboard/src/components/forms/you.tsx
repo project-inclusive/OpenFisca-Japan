@@ -16,10 +16,12 @@ import { Recuperation } from './attributes/Recuperation';
 import { NursingHome } from './attributes/NursingHome';
 import { Pregnant } from './attributes/Pregnant';
 import { Deposit } from './attributes/Deposit';
+import { DisasterDeath } from './attributes/DisasterDeath';
 
 export const FormYou = () => {
   const location = useLocation();
   const isDetailedCalculation = location.pathname === '/calculate';
+  const isDisasterCalculation = location.pathname === '/calculate-disaster';
 
   const yourName = 'あなた';
   return (
@@ -37,6 +39,7 @@ export const FormYou = () => {
           <Birthday personName={yourName} mustInput={true} />
         )}
         <Income personName={yourName} mustInput={true} />
+        {isDisasterCalculation && <DisasterDeath />}
         {isDetailedCalculation && <Deposit personName={yourName} />}
         {isDetailedCalculation && <Student personName={yourName} />}
         {isDetailedCalculation && <Working personName={yourName} />}

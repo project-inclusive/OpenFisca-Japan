@@ -175,6 +175,25 @@
             "教材費、通学用品費等、高校で安心して教育を受けるために必要なお金の給付"
           ],
           "reference": "https://www.mext.go.jp/a_menu/shotou/mushouka/1344089.htm"
+        },
+        "災害弔慰金": {
+          "unit": "円 　",
+          "caption": ["災害により亡くなられた方のご遺族に支給されるお金"],
+          "reference": "https://www.mhlw.go.jp/shinsai_jouhou/saigaishien.html"
+        },
+        "災害障害見舞金": {
+          "unit": "円 　",
+          "caption": [
+            "災害による負傷・疾病で精神又は身体に著しい障害が出た方に支給されるお金"
+          ],
+          "reference": "https://www.mhlw.go.jp/shinsai_jouhou/saigaishien.html"
+        },
+        "被災者生活再建支援制度": {
+          "unit": "円 　",
+          "caption": [
+            "災害により居住する住宅が全壊するなど、生活基盤に著しい被害を受けた世帯に対する支援金"
+          ],
+          "reference": "https://tkai.jp/reconstruction/tabid/82/Default.aspx"
         }
       }
     },
@@ -279,6 +298,15 @@
             ],
             "reference": "https://jukenchallenge.jp",
             "local": "東京都"
+          },
+          "災害援護資金": {
+            "unit": "円 　",
+            "caption": [
+              "生活の再建に必要な資金",
+              "返済期限：10年以内",
+              "利子：年3%以内"
+            ],
+            "reference": "https://www.mhlw.go.jp/shinsai_jouhou/saigaishien.html"
           }
         }
       }
