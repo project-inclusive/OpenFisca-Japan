@@ -35,26 +35,21 @@ export const HousingDamage = () => {
     []
   );
 
-  // 「あなた」の「子どもの数」が変更されたときに全ての子どもの身体障害者手帳等級が「無」に
-  // リセットされるため、コンボボックスも「なし」に戻す
   // stored states set displayed value when page transition
   useEffect(() => {
-    if (household.世帯員[personName].身体障害者手帳等級) {
+    if (household.世帯一覧.世帯1.住宅被害) {
       items.map((item, index) => {
-        if (
-          item[1] ===
-          household.世帯員[personName].身体障害者手帳等級[currentDate]
-        ) {
+        if (item[1] === household.世帯一覧.世帯1.住宅被害[currentDate]) {
           setSelectedItemIndex(index);
         }
       });
     }
-  }, [navigationType, household.世帯員[personName].身体障害者手帳等級]);
+  }, [navigationType, household.世帯一覧.世帯1.住宅被害]);
 
   return (
     <>
       <FormControl>
-        <FormLabel fontWeight="Regular">身体障害者手帳</FormLabel>
+        <FormLabel fontWeight="Regular">住宅被害</FormLabel>
         <Select
           value={selectedItemIndex}
           className="form-select"
