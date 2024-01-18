@@ -64,14 +64,22 @@ export const DisasterDeath = () => {
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     let memberNum = parseInt(event.currentTarget.value);
     // 正の整数以外は0に変換
-    if (isNaN(memberNum) || memberNum < 1) {
-      memberNum = 1;
+    if (isNaN(memberNum) || memberNum < 0) {
+      memberNum = 0;
       setShownMemberNum('');
     } else {
       setShownMemberNum(memberNum);
     }
 
     const newHousehold = { ...household };
+    // 「災害で死亡した世帯員の人数が0人」かつ「災害で生計維持者が死亡した」がTrue の状態にならないようにする
+    if (memberNum == 0) {
+      newHousehold.世帯一覧.世帯1.災害で生計維持者が死亡した = {
+        [currentDate]: false,
+      };
+      setIsMaintainerChecked(false);
+    }
+
     newHousehold.世帯一覧.世帯1.災害で死亡した世帯員の人数 = {
       [currentDate]: memberNum,
     };
@@ -82,12 +90,23 @@ export const DisasterDeath = () => {
   const onMaintainerCheckChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const newHousehold = { ...household };
+      const newHouseholdObj = newHousehold.世帯一覧.世帯1;
       if (event.target.checked) {
-        newHousehold.世帯一覧.世帯1.災害で生計維持者が死亡した = {
+        newHouseholdObj.災害で生計維持者が死亡した = {
           [currentDate]: true,
         };
+        if (
+          // 「災害で死亡した世帯員の人数が0人」かつ「災害で生計維持者が死亡した」がTrue の状態にならないようにする
+          !newHouseholdObj.災害で死亡した世帯員の人数 ||
+          newHouseholdObj.災害で死亡した世帯員の人数[currentDate] === 0
+        ) {
+          newHouseholdObj.災害で死亡した世帯員の人数 = {
+            [currentDate]: 1,
+          };
+          setShownMemberNum(1);
+        }
       } else {
-        newHousehold.世帯一覧.世帯1.災害で生計維持者が死亡した = {
+        newHouseholdObj.災害で生計維持者が死亡した = {
           [currentDate]: false,
         };
       }
@@ -108,9 +127,13 @@ export const DisasterDeath = () => {
         householdObj.災害で生計維持者が死亡した[currentDate])
     ) {
       setIsChecked(true);
-      setShownMemberNum(householdObj.災害で死亡した世帯員の人数[currentDate]);
+      setShownMemberNum(
+        householdObj.災害で死亡した世帯員の人数 &&
+          householdObj.災害で死亡した世帯員の人数[currentDate]
+      );
       setIsMaintainerChecked(
-        householdObj.災害で生計維持者が死亡した[currentDate]
+        householdObj.災害で生計維持者が死亡した &&
+          householdObj.災害で生計維持者が死亡した[currentDate]
       );
     }
   }, [navigationType]);

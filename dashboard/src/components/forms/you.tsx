@@ -17,6 +17,8 @@ import { NursingHome } from './attributes/NursingHome';
 import { Pregnant } from './attributes/Pregnant';
 import { Deposit } from './attributes/Deposit';
 import { DisasterDeath } from './attributes/DisasterDeath';
+import { DisasterDisability } from './attributes/DisasterDisability';
+import { HouseholdGoodsDamage } from './attributes/HouseholdGoodsDamage';
 
 export const FormYou = () => {
   const location = useLocation();
@@ -39,7 +41,10 @@ export const FormYou = () => {
           <Birthday personName={yourName} mustInput={true} />
         )}
         <Income personName={yourName} mustInput={true} />
+
         {isDisasterCalculation && <DisasterDeath />}
+        {isDisasterCalculation && <HouseholdGoodsDamage />}
+
         {isDetailedCalculation && <Deposit personName={yourName} />}
         {isDetailedCalculation && <Student personName={yourName} />}
         {isDetailedCalculation && <Working personName={yourName} />}
@@ -48,9 +53,11 @@ export const FormYou = () => {
         {isDetailedCalculation && <NursingHome personName={yourName} />}
         <SpouseExists />
         <ChildrenNum />
-        {isDetailedCalculation && <ParentsNum />}
+        {(isDetailedCalculation || isDisasterCalculation) && <ParentsNum />}
         {isDetailedCalculation && <Pregnant personName={yourName} />}
         {isDetailedCalculation && <RentingHouse />}
+
+        {isDisasterCalculation && <DisasterDisability personName={yourName} />}
       </Box>
     </>
   );
