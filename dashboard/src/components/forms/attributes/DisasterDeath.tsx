@@ -46,6 +46,7 @@ export const DisasterDeath = () => {
           [currentDate]: false,
         };
         setShownMemberNum('');
+        setIsMaintainerChecked(false);
         setHousehold({ ...newHousehold });
       }
       setIsChecked(event.target.checked);
@@ -139,47 +140,45 @@ export const DisasterDeath = () => {
   }, [navigationType]);
 
   return (
-    <>
-      <Box mb={4}>
-        <Checkbox
-          colorScheme="cyan"
-          isChecked={isChecked}
-          onChange={onCheckChange}
-        >
-          災害で世帯員が亡くなった
-        </Checkbox>
-        {isChecked && (
-          <FormControl mt={2} ml={4} mr={4} mb={4}>
-            <FormLabel fontWeight="Regular">亡くなった世帯員の数</FormLabel>
-            <HStack mb={4}>
-              <Input
-                type="number"
-                value={shownMemberNum}
-                pattern="[0-9]*"
-                onInput={(e) => {
-                  e.currentTarget.value = e.currentTarget.value.replace(
-                    /[^0-9]/g,
-                    ''
-                  );
-                }}
-                onChange={onChange}
-                width="9em"
-                ref={inputEl}
-              />
-              <Box>人</Box>
-            </HStack>
+    <Box mb={4}>
+      <Checkbox
+        colorScheme="cyan"
+        isChecked={isChecked}
+        onChange={onCheckChange}
+      >
+        災害で世帯員が亡くなった
+      </Checkbox>
+      {isChecked && (
+        <FormControl mt={2} ml={4} mr={4} mb={4}>
+          <FormLabel fontWeight="Regular">亡くなった世帯員の数</FormLabel>
+          <HStack mb={4}>
+            <Input
+              type="number"
+              value={shownMemberNum}
+              pattern="[0-9]*"
+              onInput={(e) => {
+                e.currentTarget.value = e.currentTarget.value.replace(
+                  /[^0-9]/g,
+                  ''
+                );
+              }}
+              onChange={onChange}
+              width="9em"
+              ref={inputEl}
+            />
+            <Box>人</Box>
+          </HStack>
 
-            <Checkbox
-              isChecked={isMaintainerChecked}
-              onChange={onMaintainerCheckChange}
-              colorScheme="cyan"
-              mb={2}
-            >
-              生計維持者（世帯で最も年収が多い方）が亡くなった
-            </Checkbox>
-          </FormControl>
-        )}
-      </Box>
-    </>
+          <Checkbox
+            isChecked={isMaintainerChecked}
+            onChange={onMaintainerCheckChange}
+            colorScheme="cyan"
+            mb={2}
+          >
+            生計維持者（世帯で最も年収が多い方）が亡くなった
+          </Checkbox>
+        </FormControl>
+      )}
+    </Box>
   );
 };

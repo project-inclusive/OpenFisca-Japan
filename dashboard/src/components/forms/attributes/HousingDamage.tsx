@@ -1,7 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useNavigationType } from 'react-router-dom';
 import { Select, FormControl, FormLabel } from '@chakra-ui/react';
-
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { currentDateAtom, householdAtom } from '../../../state';
 
@@ -47,22 +46,20 @@ export const HousingDamage = () => {
   }, [navigationType, household.世帯一覧.世帯1.住宅被害]);
 
   return (
-    <>
-      <FormControl>
-        <FormLabel fontWeight="Regular">住宅被害</FormLabel>
-        <Select
-          value={selectedItemIndex}
-          className="form-select"
-          onChange={onChange}
-          mb={3}
-        >
-          {items.map((item, index) => (
-            <option value={index} key={index}>
-              {item[0]}
-            </option>
-          ))}
-        </Select>
-      </FormControl>
-    </>
+    <FormControl>
+      <FormLabel fontWeight="Regular">住宅被害</FormLabel>
+      <Select
+        value={selectedItemIndex}
+        className="form-select"
+        onChange={onChange}
+        mb={3}
+      >
+        {items.map((item, index) => (
+          <option value={index} key={index}>
+            {item[0]}
+          </option>
+        ))}
+      </Select>
+    </FormControl>
   );
 };

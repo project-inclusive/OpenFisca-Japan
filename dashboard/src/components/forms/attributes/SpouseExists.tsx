@@ -6,6 +6,7 @@ import { currentDateAtom, householdAtom } from '../../../state';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 export const SpouseExists = () => {
+  const isDisasterCalculation = location.pathname === '/calculate-disaster';
   const currentDate = useRecoilValue(currentDateAtom);
 
   const [household, setHousehold] = useRecoilState(householdAtom);
@@ -47,7 +48,7 @@ export const SpouseExists = () => {
         onChange={onChange}
         mb={4}
       >
-        配偶者がいる（事実婚の場合も含む）
+        {isDisasterCalculation && '存命の'}配偶者がいる（事実婚の場合も含む）
       </Checkbox>
       <br></br>
     </>

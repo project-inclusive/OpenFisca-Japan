@@ -33,6 +33,7 @@ export const FormParents = () => {
                   fontWeight="medium"
                   mb="0.5em"
                 >
+                  {isDisasterCalculation && '存命の'}
                   {configData.calculationForm.parentDescription}
                   {`（${index + 1}人目）`}
                 </Center>

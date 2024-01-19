@@ -13,6 +13,7 @@ export const Income = ({
   personName: string;
   mustInput: boolean;
 }) => {
+  const isDisasterCalculation = location.pathname === '/calculate-disaster';
   const navigationType = useNavigationType();
   const currentDate = useRecoilValue(currentDateAtom);
 
@@ -59,7 +60,7 @@ export const Income = ({
       <FormControl>
         <FormLabel fontWeight="Regular">
           <HStack>
-            <Box>年収</Box>
+            <Box>{isDisasterCalculation && '被災前の'}年収</Box>
             {mustInput && (
               <Box color="red" fontSize="0.7em">
                 必須

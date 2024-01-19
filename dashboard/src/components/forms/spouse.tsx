@@ -34,6 +34,7 @@ export const FormSpouse = () => {
               fontWeight="medium"
               mb="0.5em"
             >
+              {isDisasterCalculation && '存命の'}
               {configData.calculationForm.spouseDescription}
             </Center>
 

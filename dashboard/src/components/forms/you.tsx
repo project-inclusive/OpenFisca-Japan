@@ -48,11 +48,11 @@ export const FormYou = () => {
         {isDisasterCalculation && <HousingDamage />}
         {isDisasterCalculation && <HousingReconstruction />}
         {isDisasterCalculation && <HouseholdGoodsDamage />}
-        {isDisasterCalculation && <DisasterDeath />}
         {isDisasterCalculation && (
           <DisasterInjuryPeriod personName={yourName} />
         )}
         {isDisasterCalculation && <DisasterDisability personName={yourName} />}
+        {isDisasterCalculation && <DisasterDeath />}
 
         {isDetailedCalculation && <Deposit personName={yourName} />}
         {isDetailedCalculation && <Student personName={yourName} />}

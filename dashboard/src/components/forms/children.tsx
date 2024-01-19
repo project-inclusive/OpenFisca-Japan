@@ -33,6 +33,7 @@ export const FormChildren = () => {
                   fontWeight="medium"
                   mb="0.5em"
                 >
+                  {isDisasterCalculation && '存命の'}
                   {index + 1}
                   {configData.calculationForm.childrenDescription}
                 </Center>
