@@ -12,6 +12,7 @@ import { Recuperation } from './attributes/Recuperation';
 import { NursingHome } from './attributes/NursingHome';
 import { HighSchool } from './attributes/HighSchool';
 import { DisasterDisability } from './attributes/DisasterDisability';
+import { DisasterInjuryPeriod } from './attributes/DisasterInjuryPeriod';
 
 export const FormChildren = () => {
   const location = useLocation();
@@ -41,6 +42,14 @@ export const FormChildren = () => {
                 ) : (
                   <AgeInput personName={childName} mustInput />
                 )}
+
+                {isDisasterCalculation && (
+                  <DisasterInjuryPeriod personName={childName} />
+                )}
+                {isDisasterCalculation && (
+                  <DisasterDisability personName={childName} />
+                )}
+
                 {isDetailedCalculation && <HighSchool personName={childName} />}
                 {isDetailedCalculation && <Working personName={childName} />}
                 {isDetailedCalculation && <Disability personName={childName} />}
@@ -49,10 +58,6 @@ export const FormChildren = () => {
                 )}
                 {isDetailedCalculation && (
                   <NursingHome personName={childName} />
-                )}
-
-                {isDisasterCalculation && (
-                  <DisasterDisability personName={childName} />
                 )}
               </Box>
             </div>

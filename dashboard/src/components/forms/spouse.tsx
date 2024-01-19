@@ -14,6 +14,7 @@ import { NursingHome } from './attributes/NursingHome';
 import { Deposit } from './attributes/Deposit';
 import { SpouseExistsButSingleParent } from './attributes/SpouseExistsButSingleParent';
 import { DisasterDisability } from './attributes/DisasterDisability';
+import { DisasterInjuryPeriod } from './attributes/DisasterInjuryPeriod';
 
 export const FormSpouse = () => {
   const location = useLocation();
@@ -40,6 +41,14 @@ export const FormSpouse = () => {
               <Birthday personName={spouseName} mustInput={true} />
             )}
             <Income personName={spouseName} mustInput={true} />
+
+            {isDisasterCalculation && (
+              <DisasterInjuryPeriod personName={spouseName} />
+            )}
+            {isDisasterCalculation && (
+              <DisasterDisability personName={spouseName} />
+            )}
+
             {isDetailedCalculation && <Deposit personName={spouseName} />}
             {isDetailedCalculation && <Student personName={spouseName} />}
             {isDetailedCalculation && <Working personName={spouseName} />}
@@ -48,10 +57,6 @@ export const FormSpouse = () => {
             {isDetailedCalculation && <NursingHome personName={spouseName} />}
             {isDetailedCalculation && (
               <SpouseExistsButSingleParent personName={spouseName} />
-            )}
-
-            {isDisasterCalculation && (
-              <DisasterDisability personName={spouseName} />
             )}
           </Box>
         </>

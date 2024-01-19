@@ -13,6 +13,7 @@ import { Working } from './attributes/Working';
 import { Recuperation } from './attributes/Recuperation';
 import { NursingHome } from './attributes/NursingHome';
 import { DisasterDisability } from './attributes/DisasterDisability';
+import { DisasterInjuryPeriod } from './attributes/DisasterInjuryPeriod';
 
 export const FormParents = () => {
   const location = useLocation();
@@ -35,6 +36,14 @@ export const FormParents = () => {
                   {configData.calculationForm.parentDescription}
                   {`（${index + 1}人目）`}
                 </Center>
+
+                {isDisasterCalculation && (
+                  <DisasterInjuryPeriod personName={parentName} />
+                )}
+                {isDisasterCalculation && (
+                  <DisasterDisability personName={parentName} />
+                )}
+
                 {isDetailedCalculation && (
                   <Birthday personName={parentName} mustInput={true} />
                 )}
@@ -51,10 +60,6 @@ export const FormParents = () => {
                 )}
                 {isDetailedCalculation && (
                   <NursingHome personName={parentName} />
-                )}
-
-                {isDisasterCalculation && (
-                  <DisasterDisability personName={parentName} />
                 )}
               </Box>
             </div>

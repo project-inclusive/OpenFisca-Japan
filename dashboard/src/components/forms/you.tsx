@@ -19,6 +19,9 @@ import { Deposit } from './attributes/Deposit';
 import { DisasterDeath } from './attributes/DisasterDeath';
 import { DisasterDisability } from './attributes/DisasterDisability';
 import { HouseholdGoodsDamage } from './attributes/HouseholdGoodsDamage';
+import { HousingDamage } from './attributes/HousingDamage';
+import { HousingReconstruction } from './attributes/HousingReconstruction';
+import { DisasterInjuryPeriod } from './attributes/DisasterInjuryPeriod';
 
 export const FormYou = () => {
   const location = useLocation();
@@ -42,8 +45,14 @@ export const FormYou = () => {
         )}
         <Income personName={yourName} mustInput={true} />
 
-        {isDisasterCalculation && <DisasterDeath />}
+        {isDisasterCalculation && <HousingDamage />}
+        {isDisasterCalculation && <HousingReconstruction />}
         {isDisasterCalculation && <HouseholdGoodsDamage />}
+        {isDisasterCalculation && <DisasterDeath />}
+        {isDisasterCalculation && (
+          <DisasterInjuryPeriod personName={yourName} />
+        )}
+        {isDisasterCalculation && <DisasterDisability personName={yourName} />}
 
         {isDetailedCalculation && <Deposit personName={yourName} />}
         {isDetailedCalculation && <Student personName={yourName} />}
@@ -56,8 +65,6 @@ export const FormYou = () => {
         {(isDetailedCalculation || isDisasterCalculation) && <ParentsNum />}
         {isDetailedCalculation && <Pregnant personName={yourName} />}
         {isDetailedCalculation && <RentingHouse />}
-
-        {isDisasterCalculation && <DisasterDisability personName={yourName} />}
       </Box>
     </>
   );

@@ -155,10 +155,10 @@ export const DisasterDeath = () => {
               <Input
                 type="number"
                 value={shownMemberNum}
-                pattern="[1-9]*"
+                pattern="[0-9]*"
                 onInput={(e) => {
                   e.currentTarget.value = e.currentTarget.value.replace(
-                    /[^1-9]/g,
+                    /[^0-9]/g,
                     ''
                   );
                 }}
