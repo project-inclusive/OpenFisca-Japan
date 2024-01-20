@@ -13,6 +13,7 @@ import { useRecoilState } from 'recoil';
 import { householdAtom } from '../../../state';
 
 export const ChildrenNum = () => {
+  const isDisasterCalculation = location.pathname === '/calculate-disaster';
   const navigationType = useNavigationType();
   const [household, setHousehold] = useRecoilState(householdAtom);
   const [shownChildrenNum, setShownChildrenNum] = useState<string | number>('');
@@ -94,7 +95,7 @@ export const ChildrenNum = () => {
           isChecked={isChecked}
           onChange={onCheckChange}
         >
-          子どもがいる
+          {isDisasterCalculation && '存命の'}子どもがいる
         </Checkbox>
         {isChecked && (
           <FormControl mt={2} ml={4} mr={4} mb={4}>

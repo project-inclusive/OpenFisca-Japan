@@ -16,10 +16,17 @@ import { Recuperation } from './attributes/Recuperation';
 import { NursingHome } from './attributes/NursingHome';
 import { Pregnant } from './attributes/Pregnant';
 import { Deposit } from './attributes/Deposit';
+import { DisasterDeath } from './attributes/DisasterDeath';
+import { DisasterDisability } from './attributes/DisasterDisability';
+import { HouseholdGoodsDamage } from './attributes/HouseholdGoodsDamage';
+import { HousingDamage } from './attributes/HousingDamage';
+import { HousingReconstruction } from './attributes/HousingReconstruction';
+import { DisasterInjuryPeriod } from './attributes/DisasterInjuryPeriod';
 
 export const FormYou = () => {
   const location = useLocation();
   const isDetailedCalculation = location.pathname === '/calculate';
+  const isDisasterCalculation = location.pathname === '/calculate-disaster';
 
   const yourName = 'あなた';
   return (
@@ -37,6 +44,16 @@ export const FormYou = () => {
           <Birthday personName={yourName} mustInput={true} />
         )}
         <Income personName={yourName} mustInput={true} />
+
+        {isDisasterCalculation && <HousingDamage />}
+        {isDisasterCalculation && <HousingReconstruction />}
+        {isDisasterCalculation && <HouseholdGoodsDamage />}
+        {isDisasterCalculation && (
+          <DisasterInjuryPeriod personName={yourName} />
+        )}
+        {isDisasterCalculation && <DisasterDisability personName={yourName} />}
+        {isDisasterCalculation && <DisasterDeath />}
+
         {isDetailedCalculation && <Deposit personName={yourName} />}
         {isDetailedCalculation && <Student personName={yourName} />}
         {isDetailedCalculation && <Working personName={yourName} />}
@@ -45,7 +62,7 @@ export const FormYou = () => {
         {isDetailedCalculation && <NursingHome personName={yourName} />}
         <SpouseExists />
         <ChildrenNum />
-        {isDetailedCalculation && <ParentsNum />}
+        {(isDetailedCalculation || isDisasterCalculation) && <ParentsNum />}
         {isDetailedCalculation && <Pregnant personName={yourName} />}
         {isDetailedCalculation && <RentingHouse />}
       </Box>

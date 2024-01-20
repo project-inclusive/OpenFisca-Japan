@@ -8,7 +8,7 @@ import { useCalculate } from '../../hooks/calculate';
 import { Benefit } from './benefit';
 import { Loan } from './loan';
 import { CalculationLabel } from '../forms/calculationLabel';
-import { currentDateAtom, householdAtom } from '../../state';
+import { householdAtom } from '../../state';
 import { useRecoilValue } from 'recoil';
 
 const createFileName = (extension: string = '', ...names: string[]) => {
@@ -29,7 +29,6 @@ export const Result = () => {
 
   const navigate = useNavigate();
 
-  const currentDate = useRecoilValue(currentDateAtom);
   const household = useRecoilValue(householdAtom);
   const [result, calculate] = useCalculate();
   const [isDisplayChat, setIsDisplayChat] = useState('none');

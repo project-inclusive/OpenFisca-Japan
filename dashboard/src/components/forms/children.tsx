@@ -1,5 +1,7 @@
 import { useLocation } from 'react-router-dom';
 import { Box, Center } from '@chakra-ui/react';
+import { useRecoilValue } from 'recoil';
+import { householdAtom } from '../../state';
 
 import configData from '../../config/app_config.json';
 import { Birthday } from './attributes/Birthday';
@@ -9,12 +11,13 @@ import { Working } from './attributes/Working';
 import { Recuperation } from './attributes/Recuperation';
 import { NursingHome } from './attributes/NursingHome';
 import { HighSchool } from './attributes/HighSchool';
-import { useRecoilValue } from 'recoil';
-import { householdAtom } from '../../state';
+import { DisasterDisability } from './attributes/DisasterDisability';
+import { DisasterInjuryPeriod } from './attributes/DisasterInjuryPeriod';
 
 export const FormChildren = () => {
   const location = useLocation();
   const isDetailedCalculation = location.pathname === '/calculate';
+  const isDisasterCalculation = location.pathname === '/calculate-disaster';
 
   const household = useRecoilValue(householdAtom);
 
@@ -30,6 +33,7 @@ export const FormChildren = () => {
                   fontWeight="medium"
                   mb="0.5em"
                 >
+                  {isDisasterCalculation && '存命の'}
                   {index + 1}
                   {configData.calculationForm.childrenDescription}
                 </Center>
@@ -39,6 +43,14 @@ export const FormChildren = () => {
                 ) : (
                   <AgeInput personName={childName} mustInput />
                 )}
+
+                {isDisasterCalculation && (
+                  <DisasterInjuryPeriod personName={childName} />
+                )}
+                {isDisasterCalculation && (
+                  <DisasterDisability personName={childName} />
+                )}
+
                 {isDetailedCalculation && <HighSchool personName={childName} />}
                 {isDetailedCalculation && <Working personName={childName} />}
                 {isDetailedCalculation && <Disability personName={childName} />}

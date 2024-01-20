@@ -1,5 +1,7 @@
 import { useLocation } from 'react-router-dom';
 import { Box, Center } from '@chakra-ui/react';
+import { useRecoilValue } from 'recoil';
+import { householdAtom } from '../../state';
 
 import configData from '../../config/app_config.json';
 import { Birthday } from './attributes/Birthday';
@@ -11,13 +13,14 @@ import { Recuperation } from './attributes/Recuperation';
 import { NursingHome } from './attributes/NursingHome';
 import { Deposit } from './attributes/Deposit';
 import { SpouseExistsButSingleParent } from './attributes/SpouseExistsButSingleParent';
-import { useRecoilState } from 'recoil';
-import { householdAtom } from '../../state';
+import { DisasterDisability } from './attributes/DisasterDisability';
+import { DisasterInjuryPeriod } from './attributes/DisasterInjuryPeriod';
 
 export const FormSpouse = () => {
   const location = useLocation();
   const isDetailedCalculation = location.pathname === '/calculate';
-  const [household, setHousehold] = useRecoilState(householdAtom);
+  const isDisasterCalculation = location.pathname === '/calculate-disaster';
+  const household = useRecoilValue(householdAtom);
 
   const spouseName = '配偶者';
 
@@ -31,6 +34,7 @@ export const FormSpouse = () => {
               fontWeight="medium"
               mb="0.5em"
             >
+              {isDisasterCalculation && '存命の'}
               {configData.calculationForm.spouseDescription}
             </Center>
 
@@ -38,6 +42,14 @@ export const FormSpouse = () => {
               <Birthday personName={spouseName} mustInput={true} />
             )}
             <Income personName={spouseName} mustInput={true} />
+
+            {isDisasterCalculation && (
+              <DisasterInjuryPeriod personName={spouseName} />
+            )}
+            {isDisasterCalculation && (
+              <DisasterDisability personName={spouseName} />
+            )}
+
             {isDetailedCalculation && <Deposit personName={spouseName} />}
             {isDetailedCalculation && <Student personName={spouseName} />}
             {isDetailedCalculation && <Working personName={spouseName} />}

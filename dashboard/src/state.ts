@@ -96,6 +96,26 @@ export const householdAtom = atom<any>({
         受験生チャレンジ支援貸付: {
           [currentDate]: null,
         },
+        // Disaster condolence money
+        災害弔慰金: {
+          [currentDate]: null,
+        },
+        // Disaster disability compensation money MAX
+        災害障害見舞金_最大: {
+          [currentDate]: null,
+        },
+        // Disaster disability compensation money MIN
+        災害障害見舞金_最小: {
+          [currentDate]: null,
+        },
+        // Disaster victim life reconstruction support system
+        被災者生活再建支援制度: {
+          [currentDate]: null,
+        },
+        // Disaster relief funds
+        災害援護資金: {
+          [currentDate]: null,
+        },
       },
     },
   },

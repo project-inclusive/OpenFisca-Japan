@@ -1,5 +1,7 @@
 import { useLocation } from 'react-router-dom';
 import { Box, Center } from '@chakra-ui/react';
+import { useRecoilValue } from 'recoil';
+import { householdAtom } from '../../state';
 
 import configData from '../../config/app_config.json';
 
@@ -10,18 +12,18 @@ import { Student } from './attributes/Student';
 import { Working } from './attributes/Working';
 import { Recuperation } from './attributes/Recuperation';
 import { NursingHome } from './attributes/NursingHome';
-import { useRecoilState } from 'recoil';
-import { householdAtom } from '../../state';
+import { DisasterDisability } from './attributes/DisasterDisability';
+import { DisasterInjuryPeriod } from './attributes/DisasterInjuryPeriod';
 
 export const FormParents = () => {
   const location = useLocation();
   const isDetailedCalculation = location.pathname === '/calculate';
-  const [household, setHousehold] = useRecoilState(householdAtom);
+  const isDisasterCalculation = location.pathname === '/calculate-disaster';
+  const household = useRecoilValue(householdAtom);
 
   return (
     <>
-      {isDetailedCalculation &&
-        household.世帯一覧.世帯1.祖父母一覧 &&
+      {household.世帯一覧.世帯1.祖父母一覧 &&
         household.世帯一覧.世帯1.祖父母一覧.map(
           (parentName: string, index: number) => (
             <div key={index}>
@@ -31,16 +33,35 @@ export const FormParents = () => {
                   fontWeight="medium"
                   mb="0.5em"
                 >
+                  {isDisasterCalculation && '存命の'}
                   {configData.calculationForm.parentDescription}
                   {`（${index + 1}人目）`}
                 </Center>
-                <Birthday personName={parentName} mustInput={true} />
-                <Income personName={parentName} mustInput={true} />
-                <Student personName={parentName} />
-                <Working personName={parentName} />
-                <Disability personName={parentName} />
-                <Recuperation personName={parentName} />
-                <NursingHome personName={parentName} />
+
+                {isDisasterCalculation && (
+                  <DisasterInjuryPeriod personName={parentName} />
+                )}
+                {isDisasterCalculation && (
+                  <DisasterDisability personName={parentName} />
+                )}
+
+                {isDetailedCalculation && (
+                  <Birthday personName={parentName} mustInput={true} />
+                )}
+                {isDetailedCalculation && (
+                  <Income personName={parentName} mustInput={true} />
+                )}
+                {isDetailedCalculation && <Student personName={parentName} />}
+                {isDetailedCalculation && <Working personName={parentName} />}
+                {isDetailedCalculation && (
+                  <Disability personName={parentName} />
+                )}
+                {isDetailedCalculation && (
+                  <Recuperation personName={parentName} />
+                )}
+                {isDetailedCalculation && (
+                  <NursingHome personName={parentName} />
+                )}
               </Box>
             </div>
           )
