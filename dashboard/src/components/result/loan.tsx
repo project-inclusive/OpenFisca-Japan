@@ -97,7 +97,7 @@ export const Loan = ({ result }: { result: any }) => {
                     )}
                     {category[1].reference && (
                       <Box color="blue" mb={2}>
-                        <a href={category[1].reference} target="_blank">
+                        <a href={category[1].reference} target="_blank" rel="noreferrer">
                           詳細リンク
                           <ExternalLinkIcon ml={1} />
                         </a>

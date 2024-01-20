@@ -36,7 +36,7 @@ export const LoanAccordion = ({ loanResult }: { loanResult: any }) => {
                   </span>
                 ))}
                 <Box color="blue">
-                  <a href={val.reference} target="_blank">
+                  <a href={val.reference} target="_blank" rel="noreferrer">
                     詳細リンク
                     <ExternalLinkIcon ml={1} />
                   </a>
