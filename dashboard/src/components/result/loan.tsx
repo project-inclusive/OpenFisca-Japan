@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Box, Center, Text, Tooltip } from '@chakra-ui/react';
-import { InfoIcon } from '@chakra-ui/icons';
+import { ExternalLinkIcon, InfoIcon } from '@chakra-ui/icons';
 
 import configData from '../../config/app_config.json';
 import { currentDateAtom } from '../../state';
@@ -97,7 +97,10 @@ export const Loan = ({ result }: { result: any }) => {
                     )}
                     {category[1].reference && (
                       <Box color="blue" mb={2}>
-                        <a href={category[1].reference}>詳細リンク</a>
+                        <a href={category[1].reference} target="_blank">
+                          詳細リンク
+                          <ExternalLinkIcon ml={1} />
+                        </a>
                       </Box>
                     )}
 

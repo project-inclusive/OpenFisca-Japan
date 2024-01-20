@@ -8,6 +8,7 @@ import {
   AccordionButton,
   AccordionPanel,
 } from '@chakra-ui/react';
+import { ExternalLinkIcon } from '@chakra-ui/icons';
 
 import configData from '../../config/app_config.json';
 import { useRecoilValue } from 'recoil';
@@ -147,7 +148,10 @@ export const Benefit = ({ result }: { result: any }) => {
                     </span>
                   ))}
                   <Box color="blue">
-                    <a href={val.reference}>詳細リンク</a>
+                    <a href={val.reference} target="_blank">
+                      詳細リンク
+                      <ExternalLinkIcon ml={1} />
+                    </a>
                   </Box>
                 </AccordionPanel>
               </AccordionItem>

@@ -6,6 +6,7 @@ import {
   AccordionButton,
   AccordionPanel,
 } from '@chakra-ui/react';
+import { ExternalLinkIcon } from '@chakra-ui/icons';
 
 // 制度の算出結果 result value of loans
 export const LoanAccordion = ({ loanResult }: { loanResult: any }) => {
@@ -35,7 +36,10 @@ export const LoanAccordion = ({ loanResult }: { loanResult: any }) => {
                   </span>
                 ))}
                 <Box color="blue">
-                  <a href={val.reference}>詳細リンク</a>
+                  <a href={val.reference} target="_blank">
+                    詳細リンク
+                    <ExternalLinkIcon ml={1} />
+                  </a>
                 </Box>
               </AccordionPanel>
             </AccordionItem>
