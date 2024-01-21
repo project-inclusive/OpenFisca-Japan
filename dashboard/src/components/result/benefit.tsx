@@ -58,9 +58,9 @@ export const Benefit = ({ result }: { result: any }) => {
       let totalAllowanceMax = 0;
       let totalAllowanceMin = 0;
       for (const [key, value] of Object.entries(minMaxResult)) {
-        // 表示を整えるため整数に変換
-        const min = Math.floor(Number(value.min));
-        const max = Math.floor(Number(value.max));
+        // 小数点1桁まで万円単位に変換 (1万円以下の給付もあり得るため)
+        const min = Math.floor(Number(value.min) / 1000) / 10;
+        const max = Math.floor(Number(value.max) / 1000) / 10;
 
         totalAllowanceMax += max;
         totalAllowanceMin += min;
@@ -69,12 +69,10 @@ export const Benefit = ({ result }: { result: any }) => {
         minMaxResult[key].maxMoney = max;
 
         if (value.max === value.min) {
-          minMaxResult[key].displayedMoney = max.toLocaleString();
+          minMaxResult[key].displayedMoney = max;
         } else {
           // 最小額と最大額が異なる場合は「（最小額）〜（最大額）」の文字列を格納
-          minMaxResult[
-            key
-          ].displayedMoney = `${min.toLocaleString()}~${max.toLocaleString()}`;
+          minMaxResult[key].displayedMoney = `${min}~${max}`;
         }
       }
 
@@ -139,7 +137,8 @@ export const Benefit = ({ result }: { result: any }) => {
                       {val.name}
                     </Box>
                     <Box flex="1" textAlign="right">
-                      {val.displayedMoney} {val.unit}
+                      {/* 小数点1桁まで万円単位で表示 */}
+                      {val.displayedMoney} 万{val.unit}
                     </Box>
                   </AccordionButton>
                 </h2>
