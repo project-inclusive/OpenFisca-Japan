@@ -109,6 +109,8 @@ export const Benefit = ({ result }: { result: any }) => {
         {configData.result.給付制度.caption[0]}
 
         <Accordion allowMultiple>
+          {/* // 一時金と継続支給が合算されていて紛らわしいため合計額は非表示。
+          // ただし今後、一時金と継続支給それぞれの合計表示はする可能性あり
           <AccordionItem>
             <h2>
               <AccordionButton
@@ -125,6 +127,7 @@ export const Benefit = ({ result }: { result: any }) => {
               </AccordionButton>
             </h2>
           </AccordionItem>
+          */}
 
           {displayedResult &&
             displayedResult.map((val: any, index: any) => (
