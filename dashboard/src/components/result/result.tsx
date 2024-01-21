@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 import { Box, Center, Button, Spinner, Text } from '@chakra-ui/react';
+import { ExternalLinkIcon } from '@chakra-ui/icons';
 import * as htmlToImage from 'html-to-image';
 
 import configData from '../../config/app_config.json';
@@ -142,6 +143,26 @@ export const Result = () => {
 
           <Benefit result={result} />
           <Loan result={result} />
+
+          {/* 被災者支援制度モードは他の支援制度も探せるリンクを載せる */}
+          {isDisasterCalculation && (
+            <Center pr={4} pl={4} pb={2}>
+              <Text color="blue.900">
+                他にも被災者支援制度はあります。詳しくは協力プロジェクトの
+                <Text as="span" color="blue">
+                  <a
+                    href={configData.URL.disaster_navi_sodegawara}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    災害支援ナビゲーター
+                    <ExternalLinkIcon ml={1} mr={1} />
+                  </a>
+                </Text>
+                (by Civic Tech Sodegaura)をご覧ください。
+              </Text>
+            </Center>
+          )}
 
           <Center pr={4} pl={4} pb={2}>
             <Text color="blue.900">
