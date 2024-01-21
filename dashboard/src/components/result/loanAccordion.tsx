@@ -23,8 +23,8 @@ export const LoanAccordion = ({ loanResult }: { loanResult: any }) => {
                     {val.name}
                   </Box>
                   <Box flex="1" textAlign="right">
-                    {/* １万円単位で表示 */}~{val.displayedMoney / 10_000} 万
-                    {val.unit}
+                    {/* 小数点1桁まで万円単位で表示 */}~
+                    {Math.floor(val.displayedMoney / 1_000) / 10} 万{val.unit}
                   </Box>
                 </AccordionButton>
               </h2>
