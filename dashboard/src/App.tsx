@@ -3,6 +3,8 @@ import { AbsoluteCenter } from '@chakra-ui/react';
 import CaluculationForm from './components/forms/caluculationForm';
 import Description from './components/Description';
 import QuestionExamples from './components/QuestionExamples';
+import Terms from './components/Terms';
+import PrivacyPolicy from './components/PrivacyPolicy';
 import { Result } from './components/result/result';
 import { GenericError } from './components/errors/GenericError';
 import { NotFoundError } from './components/errors/NotFoundError';
@@ -53,6 +55,14 @@ function App() {
             {
               path: '/question-examples',
               element: <QuestionExamples />,
+            },
+            {
+              path: '/terms',
+              element: <Terms />,
+            },
+            {
+              path: '/privacypolicy',
+              element: <PrivacyPolicy />,
             },
             {
               path: '/response-error',
