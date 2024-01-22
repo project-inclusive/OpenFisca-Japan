@@ -13,6 +13,7 @@ import {
   AccordionPanel,
   UnorderedList,
   ListItem,
+  Link as ChakraLink,
 } from '@chakra-ui/react';
 import { Icon } from '@chakra-ui/react';
 import { CheckCircleIcon } from '@chakra-ui/icons';
@@ -252,6 +253,15 @@ function Description() {
           <br />
           見積もり
         </Button>
+        <br />
+      </Center>
+      <Center mb="1em">
+        <ChakraLink as={RouterLink} to="/terms">
+          利用規約
+        </ChakraLink>
+        <ChakraLink as={RouterLink} to="/privacypolicy" ml="1.0em">
+          プライバシーポリシー
+        </ChakraLink>
       </Center>
     </>
   );
