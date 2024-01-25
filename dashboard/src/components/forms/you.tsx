@@ -23,7 +23,7 @@ import { HousingDamage } from './attributes/HousingDamage';
 import { HousingReconstruction } from './attributes/HousingReconstruction';
 import { DisasterInjuryPeriod } from './attributes/DisasterInjuryPeriod';
 import { useEffect } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { currentDateAtom, householdAtom } from '../../state';
 
 export const FormYou = () => {
@@ -32,13 +32,16 @@ export const FormYou = () => {
   const location = useLocation();
   const isDetailedCalculation = location.pathname === '/calculate';
   const isDisasterCalculation = location.pathname === '/calculate-disaster';
-  const household = useRecoilValue(householdAtom);
+  const [household, setHousehold] = useRecoilState(householdAtom);
 
   // stored states set value when page transition
   useEffect(() => {
-    household.世帯一覧.世帯1.被災している = {
+    const newHousehold = { ...household };
+    newHousehold.世帯一覧.世帯1.被災している = {
       [currentDate]: isDisasterCalculation,
     };
+
+    setHousehold({ ...newHousehold });
   }, [navigationType, isDisasterCalculation]);
 
   const yourName = 'あなた';
