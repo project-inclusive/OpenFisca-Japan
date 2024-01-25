@@ -1,5 +1,5 @@
 import { Box, Center } from '@chakra-ui/react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigationType } from 'react-router-dom';
 
 import configData from '../../config/app_config.json';
 import { PrefectureMunicipality } from './attributes/PrefectureMunicipality';
@@ -22,11 +22,27 @@ import { HouseholdGoodsDamage } from './attributes/HouseholdGoodsDamage';
 import { HousingDamage } from './attributes/HousingDamage';
 import { HousingReconstruction } from './attributes/HousingReconstruction';
 import { DisasterInjuryPeriod } from './attributes/DisasterInjuryPeriod';
+import { useEffect } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { currentDateAtom, householdAtom } from '../../state';
 
 export const FormYou = () => {
+  const navigationType = useNavigationType();
+  const currentDate = useRecoilValue(currentDateAtom);
   const location = useLocation();
   const isDetailedCalculation = location.pathname === '/calculate';
   const isDisasterCalculation = location.pathname === '/calculate-disaster';
+  const [household, setHousehold] = useRecoilState(householdAtom);
+
+  // stored states set value when page transition
+  useEffect(() => {
+    const newHousehold = { ...household };
+    newHousehold.世帯一覧.世帯1.被災している = {
+      [currentDate]: isDisasterCalculation,
+    };
+
+    setHousehold({ ...newHousehold });
+  }, [navigationType, isDisasterCalculation]);
 
   const yourName = 'あなた';
   return (
