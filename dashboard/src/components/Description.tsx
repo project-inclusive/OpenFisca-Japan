@@ -18,18 +18,20 @@ import {
 import { Icon } from '@chakra-ui/react';
 import { CheckCircleIcon } from '@chakra-ui/icons';
 import { FaGithub } from 'react-icons/fa';
-import { useResetRecoilState } from 'recoil';
+import { useRecoilValue, useResetRecoilState } from 'recoil';
 
-import { householdAtom } from '../state';
+import { agreedToTermsAtom, householdAtom } from '../state';
 import configData from '../config/app_config.json';
 import bokyuIcon from '../assets/bokyu_lab_icon_cyan.png';
 import yadokariKunIcon from '../assets/yadokari-kun.png';
+import TermsModal from './TermsModal';
 
 const defaultInnerWidth = window.innerWidth;
 
 function Description() {
   const [screenWidth, setScreenWidth] = useState(defaultInnerWidth);
   const [isMobile, setIsMobile] = useState(defaultInnerWidth <= 800);
+  const agreedToTerms = useRecoilValue(agreedToTermsAtom);
   const resetHousehold = useResetRecoilState(householdAtom);
 
   useEffect(() => {
@@ -203,62 +205,65 @@ function Description() {
         </Center>
       </Box>
 
-      <Center pr={4} pl={4} pb={4} style={{ textAlign: 'center' }}>
-        <Button
-          as={RouterLink}
-          to="/calculate-disaster"
-          fontSize={configData.style.subTitleFontSize}
-          borderRadius="xl"
-          height="4em"
-          width="100%"
-          bg="orange.400"
-          color="white"
-          _hover={{ bg: 'orange.500' }}
-        >
-          能登半島地震
-          <br />
-          被災者支援制度見積もり
-        </Button>
-      </Center>
+      <TermsModal />
 
-      <Center pr={4} pl={4} pb={4} style={{ textAlign: 'center' }}>
-        <Button
-          as={RouterLink}
-          to="/calculate"
-          style={{ marginRight: '8%' }}
-          fontSize={configData.style.subTitleFontSize}
-          borderRadius="xl"
-          height="4em"
-          width="45%"
-          bg="blue.500"
-          color="white"
-          _hover={{ bg: 'blue.600' }}
-        >
-          くわしく
+      {agreedToTerms && (
+        <Center pr={4} pl={4} pb={4} style={{ textAlign: 'center' }}>
+          <Button
+            as={RouterLink}
+            to="/calculate-disaster"
+            fontSize={configData.style.subTitleFontSize}
+            borderRadius="xl"
+            height="4em"
+            width="100%"
+            bg="orange.400"
+            color="white"
+            _hover={{ bg: 'orange.500' }}
+          >
+            能登半島地震
+            <br />
+            被災者支援制度見積もり
+          </Button>
+        </Center>
+      )}
+
+      {agreedToTerms && (
+        <Center pr={4} pl={4} pb={4} style={{ textAlign: 'center' }}>
+          <Button
+            as={RouterLink}
+            to="/calculate"
+            style={{ marginRight: '8%' }}
+            fontSize={configData.style.subTitleFontSize}
+            borderRadius="xl"
+            height="4em"
+            width="45%"
+            bg="blue.500"
+            color="white"
+            _hover={{ bg: 'blue.600' }}
+          >
+            くわしく
+            <br />
+            見積もり
+          </Button>
+          <Button
+            as={RouterLink}
+            to="/calculate-simple"
+            fontSize={configData.style.subTitleFontSize}
+            borderRadius="xl"
+            height="4em"
+            width="45%"
+            bg="teal.500"
+            color="white"
+            _hover={{ bg: 'teal.600' }}
+          >
+            かんたん
+            <br />
+            見積もり
+          </Button>
           <br />
-          見積もり
-        </Button>
-        <Button
-          as={RouterLink}
-          to="/calculate-simple"
-          fontSize={configData.style.subTitleFontSize}
-          borderRadius="xl"
-          height="4em"
-          width="45%"
-          bg="teal.500"
-          color="white"
-          _hover={{ bg: 'teal.600' }}
-        >
-          かんたん
-          <br />
-          見積もり
-        </Button>
-        <br />
-      </Center>
+        </Center>
+      )}
       <Center mb="1em">
-        <ChakraLink as={RouterLink} to="/terms">
-          利用規約
-        </ChakraLink>
         <ChakraLink as={RouterLink} to="/privacypolicy" ml="1.0em">
           プライバシーポリシー
         </ChakraLink>

@@ -6,6 +6,14 @@ describe('Renders main page and ', () => {
 
   it('navigates to simple calculate page, fill in mandatory fields', () => {
     cy.contains('支援みつもりヤドカリくん');
+    cy.contains('はじめる');
+    cy.get('.css-1ugyuc4').contains('はじめる').click();
+
+    cy.contains('利用規約に同意します。');
+    cy.get('.css-1vf3rrs').contains('利用規約に同意します。').click();
+    cy.contains('利用開始する');
+    cy.get('.css-p9zb1n').contains('利用開始する').click();
+
     cy.contains('かんたん見積もり');
     cy.get('.css-s00sbd').contains('かんたん見積もり').click();
     cy.url().should('include', '/calculate-simple');

@@ -12,19 +12,11 @@ import {
 import { useNavigate } from 'react-router-dom';
 import configData from '../config/app_config.json';
 
-const App: React.FC = () => {
+const Terms: React.FC = () => {
   const navigate = useNavigate();
 
   return (
     <Box bg="white" borderRadius="xl" p={4} m={4}>
-      <Center
-        fontSize={configData.style.titleFontSize}
-        fontWeight="semibold"
-        color="blue.800"
-        mb="0.5em"
-      >
-        利用規約
-      </Center>
       {/* 第1条 */}
       <Heading size="md" mt="0.5em">
         第1条（適用）
@@ -160,18 +152,8 @@ const App: React.FC = () => {
       </OrderedList>
       <br />
       <Text>制定日：2024年1月22日</Text>
-      {/* 戻るボタン */}
-      <Center mt={2}>
-        <Button
-          onClick={() => {
-            navigate(-1);
-          }}
-        >
-          戻る
-        </Button>
-      </Center>
     </Box>
   );
 };
 
-export default App;
+export default Terms;
