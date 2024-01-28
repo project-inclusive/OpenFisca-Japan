@@ -109,6 +109,20 @@ function Description() {
           {configData.description.description[2]}
         </Box>
 
+        <Center
+          fontSize={configData.style.subTitleFontSize}
+          mb="0.5em"
+          color="cyan.800"
+        >
+          <CheckCircleIcon color="cyan.600" mr="0.3em" />
+          {configData.description.feature[3]}
+        </Center>
+        <Box fontSize={configData.style.descriptionFontSize} mb="1.5em">
+          {configData.description.description[3]}
+          <br></br>
+          {configData.description.description[4]}
+        </Box>
+
         {/* 見積もり対象制度一覧 */}
         <Accordion mb={4} allowMultiple>
           <AccordionItem>
