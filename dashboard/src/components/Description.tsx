@@ -117,7 +117,7 @@ function Description() {
           <CheckCircleIcon color="cyan.600" mr="0.3em" />
           {configData.description.feature[3]}
         </Center>
-        <Box fontSize={configData.style.descriptionFontSize} mb="1.5em">
+        <Box fontSize={configData.style.descriptionFontSize} mb="0.5em">
           {configData.description.description[3]}
           <br></br>
           {configData.description.description[4]}
