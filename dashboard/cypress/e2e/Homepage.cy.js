@@ -8,7 +8,11 @@ describe('Loads homepage', () => {
     cy.contains('支援みつもりヤドカリくん');
   });
 
-  it('Renders はじめる button', () => {
-    cy.contains('はじめる');
+  it('Renders かんたん見積もり button', () => {
+    cy.contains('かんたん見積もり');
+  });
+
+  it('Renders くわしく見積もり button', () => {
+    cy.contains('くわしく見積もり');
   });
 });

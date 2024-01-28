@@ -14,6 +14,7 @@ import {
   UnorderedList,
   ListItem,
   Link as ChakraLink,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { Icon } from '@chakra-ui/react';
 import { CheckCircleIcon } from '@chakra-ui/icons';
@@ -32,6 +33,13 @@ function Description() {
   const [screenWidth, setScreenWidth] = useState(defaultInnerWidth);
   const [isMobile, setIsMobile] = useState(defaultInnerWidth <= 800);
   const agreedToTerms = useRecoilValue(agreedToTermsAtom);
+  const {
+    isOpen: isModalOpen,
+    onOpen: onModalOpen,
+    onClose: onModalClose,
+  } = useDisclosure();
+  const [modalLink, setModalLink] = useState('/');
+
   const resetHousehold = useResetRecoilState(householdAtom);
 
   useEffect(() => {
@@ -46,6 +54,9 @@ function Description() {
     }
     window.addEventListener('resize', handleResize);
   });
+
+  // 何もしない関数（onClickで発火する関数のデフォルト値として使用）
+  const noop = () => {};
 
   return (
     <>
@@ -205,64 +216,92 @@ function Description() {
         </Center>
       </Box>
 
-      <TermsModal />
+      <TermsModal
+        isOpen={isModalOpen}
+        onOpen={onModalOpen}
+        onClose={onModalClose}
+        to={modalLink}
+      />
 
-      {agreedToTerms && (
-        <Center pr={4} pl={4} pb={4} style={{ textAlign: 'center' }}>
-          <Button
-            as={RouterLink}
-            to="/calculate-disaster"
-            fontSize={configData.style.subTitleFontSize}
-            borderRadius="xl"
-            height="4em"
-            width="100%"
-            bg="orange.400"
-            color="white"
-            _hover={{ bg: 'orange.500' }}
-          >
-            能登半島地震
-            <br />
-            被災者支援制度見積もり
-          </Button>
-        </Center>
-      )}
-
-      {agreedToTerms && (
-        <Center pr={4} pl={4} pb={4} style={{ textAlign: 'center' }}>
-          <Button
-            as={RouterLink}
-            to="/calculate"
-            style={{ marginRight: '8%' }}
-            fontSize={configData.style.subTitleFontSize}
-            borderRadius="xl"
-            height="4em"
-            width="45%"
-            bg="blue.500"
-            color="white"
-            _hover={{ bg: 'blue.600' }}
-          >
-            くわしく
-            <br />
-            見積もり
-          </Button>
-          <Button
-            as={RouterLink}
-            to="/calculate-simple"
-            fontSize={configData.style.subTitleFontSize}
-            borderRadius="xl"
-            height="4em"
-            width="45%"
-            bg="teal.500"
-            color="white"
-            _hover={{ bg: 'teal.600' }}
-          >
-            かんたん
-            <br />
-            見積もり
-          </Button>
+      <Center pr={4} pl={4} pb={4} style={{ textAlign: 'center' }}>
+        <Button
+          as={RouterLink}
+          // 規約に同意していない場合のみモーダルが開く
+          to={agreedToTerms ? '/calculate-disaster' : '/'}
+          onClick={
+            agreedToTerms
+              ? noop
+              : () => {
+                  setModalLink('/calculate-disaster');
+                  onModalOpen();
+                }
+          }
+          fontSize={configData.style.subTitleFontSize}
+          borderRadius="xl"
+          height="4em"
+          width="100%"
+          bg="orange.400"
+          color="white"
+          _hover={{ bg: 'orange.500' }}
+        >
+          能登半島地震
           <br />
-        </Center>
-      )}
+          被災者支援制度見積もり
+        </Button>
+      </Center>
+
+      <Center pr={4} pl={4} pb={4} style={{ textAlign: 'center' }}>
+        <Button
+          as={RouterLink}
+          // 規約に同意していない場合のみモーダルが開く
+          to={agreedToTerms ? '/calculate' : '/'}
+          onClick={
+            agreedToTerms
+              ? noop
+              : () => {
+                  setModalLink('/calculate');
+                  onModalOpen();
+                }
+          }
+          style={{ marginRight: '8%' }}
+          fontSize={configData.style.subTitleFontSize}
+          borderRadius="xl"
+          height="4em"
+          width="45%"
+          bg="blue.500"
+          color="white"
+          _hover={{ bg: 'blue.600' }}
+        >
+          くわしく
+          <br />
+          見積もり
+        </Button>
+        <Button
+          as={RouterLink}
+          // 規約に同意していない場合のみモーダルが開く
+          to={agreedToTerms ? '/calculate-simple' : '/'}
+          onClick={
+            agreedToTerms
+              ? noop
+              : () => {
+                  setModalLink('/calculate-simple');
+                  onModalOpen();
+                }
+          }
+          fontSize={configData.style.subTitleFontSize}
+          borderRadius="xl"
+          height="4em"
+          width="45%"
+          bg="teal.500"
+          color="white"
+          _hover={{ bg: 'teal.600' }}
+        >
+          かんたん
+          <br />
+          見積もり
+        </Button>
+        <br />
+      </Center>
       <Center mb="1em">
         <ChakraLink as={RouterLink} to="/privacypolicy" ml="1.0em">
           プライバシーポリシー

@@ -9,18 +9,26 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  useDisclosure,
 } from '@chakra-ui/react';
-
-import configData from '../config/app_config.json';
-import Terms from './Terms';
 import { useCallback, useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
+import configData from '../config/app_config.json';
 import { agreedToTermsAtom } from '../state';
+import Terms from './Terms';
 
-function TermsModal() {
+function TermsModal({
+  isOpen,
+  onOpen,
+  onClose,
+  to,
+}: {
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
+  to: string;
+}) {
   const [agreedToTerms, setAgreedToTerms] = useRecoilState(agreedToTermsAtom);
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [isChecked, setIsChecked] = useState(false);
 
   // チェックボックスの値が変更された時
@@ -31,23 +39,6 @@ function TermsModal() {
 
   return (
     <>
-      <Center pr={4} pl={4} pb={4} style={{ textAlign: 'center' }}>
-        {!agreedToTerms && (
-          <Button
-            onClick={onOpen}
-            fontSize={configData.style.subTitleFontSize}
-            borderRadius="xl"
-            height="4em"
-            width="100%"
-            bg="blue.500"
-            color="white"
-            _hover={{ bg: 'blue.600' }}
-          >
-            はじめる
-          </Button>
-        )}
-      </Center>
-
       <Modal
         isOpen={isOpen}
         onClose={() => {
@@ -89,6 +80,8 @@ function TermsModal() {
           <Center>
             <ModalFooter>
               <Button
+                as={RouterLink}
+                to={to}
                 fontSize={configData.style.subTitleFontSize}
                 bg="blue.500"
                 color="white"
@@ -97,7 +90,6 @@ function TermsModal() {
                 height="2em"
                 width="100%"
                 isDisabled={!agreedToTerms}
-                onClick={onClose}
               >
                 利用開始する
               </Button>
