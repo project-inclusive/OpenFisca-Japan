@@ -10,9 +10,9 @@ describe('Renders main page and ', () => {
     cy.get('.css-1icvf0w').contains('くわしく見積もり').click();
 
     cy.contains('利用規約に同意します。');
-    cy.get('.css-1vf3rrs').contains('利用規約に同意します。').click();
+    cy.get('.css-hrbmuv').contains('利用規約に同意します。').click();
     cy.contains('利用開始する');
-    cy.get('.css-p9zb1n').contains('利用開始する').click();
+    cy.get('.css-c8mu6l').contains('利用開始する').click();
 
     cy.url().should('include', '/calculate');
     cy.contains('あなたについて');

@@ -16,7 +16,7 @@ const Terms: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <Box bg="white" borderRadius="xl" p={4} m={4}>
+    <Box bg="white" borderRadius="xl" p={4}>
       {/* 第1条 */}
       <Heading size="md" mt="0.5em">
         第1条（適用）

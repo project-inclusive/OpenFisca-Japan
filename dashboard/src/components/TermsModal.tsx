@@ -62,7 +62,7 @@ function TermsModal({
           </ModalHeader>
           <ModalCloseButton />
 
-          <ModalBody>
+          <ModalBody overflowY="scroll" maxHeight="40vh">
             <Terms />
           </ModalBody>
 
@@ -71,7 +71,8 @@ function TermsModal({
               isChecked={isChecked}
               onChange={onChange}
               colorScheme="cyan"
-              mb={2}
+              mt="1em"
+              mb="1em"
             >
               利用規約に同意します。
             </Checkbox>
@@ -85,9 +86,8 @@ function TermsModal({
                 fontSize={configData.style.subTitleFontSize}
                 bg="blue.500"
                 color="white"
-                p="1.5em"
+                p="1em"
                 borderRadius="xl"
-                height="2em"
                 width="100%"
                 isDisabled={!agreedToTerms}
               >
