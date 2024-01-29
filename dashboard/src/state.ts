@@ -9,6 +9,11 @@ export const currentDateAtom = atom<string>({
   default: currentDate,
 });
 
+export const agreedToTermsAtom = atom<boolean>({
+  key: 'agreedToTermsAtom',
+  default: false,
+});
+
 export const householdAtom = atom<any>({
   key: 'householdAtom',
   default: {

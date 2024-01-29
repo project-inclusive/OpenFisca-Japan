@@ -8,6 +8,12 @@ describe('Renders main page and ', () => {
     cy.contains('支援みつもりヤドカリくん');
     cy.contains('かんたん見積もり');
     cy.get('.css-s00sbd').contains('かんたん見積もり').click();
+
+    cy.contains('利用規約に同意します。');
+    cy.get('.css-hrbmuv').contains('利用規約に同意します。').click();
+    cy.contains('利用開始する');
+    cy.get('.css-uwksks').contains('利用開始する').click();
+
     cy.url().should('include', '/calculate-simple');
     cy.contains('あなたについて');
 

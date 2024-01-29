@@ -57,10 +57,6 @@ function App() {
               element: <QuestionExamples />,
             },
             {
-              path: '/terms',
-              element: <Terms />,
-            },
-            {
               path: '/privacypolicy',
               element: <PrivacyPolicy />,
             },
