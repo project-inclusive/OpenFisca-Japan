@@ -73,15 +73,7 @@ function Description() {
           />
         )}
 
-        <Center
-          fontSize={configData.style.subTitleFontSize}
-          mb="0.5em"
-          color="cyan.800"
-        >
-          <CheckCircleIcon color="cyan.600" mr="0.3em" />
-          {configData.description.feature[0]}
-        </Center>
-        <Box fontSize={configData.style.descriptionFontSize} mb="1.5em">
+        <Box fontSize={configData.style.descriptionFontSize} mb="1em">
           {configData.description.description[0]}
         </Box>
 
@@ -91,7 +83,7 @@ function Description() {
           color="cyan.800"
         >
           <CheckCircleIcon color="cyan.600" mr="0.3em" />
-          {configData.description.feature[1]}
+          {configData.description.feature[0]}
         </Center>
         <Box fontSize={configData.style.descriptionFontSize} mb="1.5em">
           {configData.description.description[1]}
@@ -103,7 +95,7 @@ function Description() {
           color="cyan.800"
         >
           <CheckCircleIcon color="cyan.600" mr="0.3em" />
-          {configData.description.feature[2]}
+          {configData.description.feature[1]}
         </Center>
         <Box fontSize={configData.style.descriptionFontSize} mb="1.5em">
           {configData.description.description[2]}
@@ -115,12 +107,24 @@ function Description() {
           color="cyan.800"
         >
           <CheckCircleIcon color="cyan.600" mr="0.3em" />
+          {configData.description.feature[2]}
+        </Center>
+        <Box fontSize={configData.style.descriptionFontSize} mb="1.5em">
+          {configData.description.description[3]}
+        </Box>
+
+        <Center
+          fontSize={configData.style.subTitleFontSize}
+          mb="0.5em"
+          color="cyan.800"
+        >
+          <CheckCircleIcon color="cyan.600" mr="0.3em" />
           {configData.description.feature[3]}
         </Center>
         <Box fontSize={configData.style.descriptionFontSize} mb="0.5em">
-          {configData.description.description[3]}
-          <br></br>
           {configData.description.description[4]}
+          <br></br>
+          {configData.description.description[5]}
         </Box>
 
         {/* 見積もり対象制度一覧 */}
