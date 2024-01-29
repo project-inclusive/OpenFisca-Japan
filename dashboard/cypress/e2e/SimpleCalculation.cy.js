@@ -12,7 +12,7 @@ describe('Renders main page and ', () => {
     cy.contains('利用規約に同意します。');
     cy.get('.css-hrbmuv').contains('利用規約に同意します。').click();
     cy.contains('利用開始する');
-    cy.get('.css-c8mu6l').contains('利用開始する').click();
+    cy.get('.css-uwksks').contains('利用開始する').click();
 
     cy.url().should('include', '/calculate-simple');
     cy.contains('あなたについて');

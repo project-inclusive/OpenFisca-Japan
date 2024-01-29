@@ -82,9 +82,10 @@ function TermsModal({
             <ModalFooter>
               <Button
                 as={RouterLink}
-                to={to}
+                // HACK: RouterLinkはisDisabledで遷移を防げないため、規約に同意するまで同じページに遷移するようにする
+                to={agreedToTerms ? to : '/'}
                 fontSize={configData.style.subTitleFontSize}
-                bg="blue.500"
+                bg="cyan.600"
                 color="white"
                 p="1em"
                 borderRadius="xl"
