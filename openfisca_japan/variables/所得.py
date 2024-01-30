@@ -7,13 +7,12 @@ See https://openfisca.org/doc/key-concepts/variables.html
 """
 
 import numpy as np
-
 # Import from openfisca-core the Python objects used to code the legislation in OpenFisca
 from openfisca_core.holders import set_input_divide_by_period
 from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
 # Import the Entities specifically defined for this tax and benefit system
-from openfisca_japan.entities import 人物, 世帯
+from openfisca_japan.entities import 世帯, 人物
 
 
 class 所得(Variable):
@@ -66,5 +65,5 @@ class 世帯高所得(Variable):
     label = "世帯で最も所得が高い人物の所得"
 
     def formula(対象世帯, 対象期間, _parameters):
-        各所得 = 対象世帯.members("所得", 対象期間)
-        return np.max(各所得)
+        所得一覧 = 対象世帯.members("所得", 対象期間)
+        return 対象世帯.max(所得一覧)

@@ -244,3 +244,15 @@ Powershell を起動し以下のコマンドを入力して下さい。
   ```
   $env:PYTHONUTF8=1
   ```
+
+- インストールされているPythonのバージョンが、OpenFiscaで使用しているものと異なる
+Dockerコンテナは正常動作するのにエディタ上構文エラーが表示される場合、ローカルにインストールしているPythonがOpenFiscaが要求するバージョンと異なる可能性があります。
+`Dockerfile` に記載されているバージョンのPythonをインストールしてください。
+`pyenv` を使うと、複数バージョンのPythonをコマンドで切り替えることが可能です
+
+https://github.com/pyenv/pyenv
+
+- `make build` 時に `ERROR: Failed building wheel for numpy` というエラーで失敗する
+古いバージョンのPython、OpenFiscaでビルドした生成物が残っていてエラーが発生している可能性があります。以下を試してみてください。
+  - (OpenFiscaコンテナ内で作業している場合) `docker compose down` して再度 `docker compose up -d --build`
+  - `dist` ディレクトリの中身を削除して再度 `make build`

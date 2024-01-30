@@ -1,12 +1,14 @@
-import { useState, useCallback, useContext, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
+import { useNavigationType } from 'react-router-dom';
 import { Select, FormControl, FormLabel } from '@chakra-ui/react';
 
-import { HouseholdContext } from '../../../contexts/HouseholdContext';
-import { CurrentDateContext } from '../../../contexts/CurrentDateContext';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { currentDateAtom, householdAtom } from '../../../state';
 
 export const MentalDisability = ({ personName }: { personName: string }) => {
-  const { household, setHousehold } = useContext(HouseholdContext);
-  const currentDate = useContext(CurrentDateContext);
+  const [household, setHousehold] = useRecoilState(householdAtom);
+  const currentDate = useRecoilValue(currentDateAtom);
+  const navigationType = useNavigationType();
 
   // ラベルとOpenFiscaの表記違いを明記(pythonは数字を頭にした変数名をつけられない)
   const items = [
@@ -32,6 +34,7 @@ export const MentalDisability = ({ personName }: { personName: string }) => {
 
   // 「あなた」の「子どもの数」が変更されたときに全ての子どもの精神障害者保健福祉手帳等級が「無」に
   // リセットされるため、コンボボックスも空白に戻す
+  // stored states set displayed value when page transition
   useEffect(() => {
     if (household.世帯員[personName].精神障害者保健福祉手帳等級) {
       items.map((item, index) => {
@@ -43,7 +46,7 @@ export const MentalDisability = ({ personName }: { personName: string }) => {
         }
       });
     }
-  }, [household.世帯員[personName].精神障害者保健福祉手帳等級]);
+  }, [navigationType, household.世帯員[personName].精神障害者保健福祉手帳等級]);
 
   return (
     <>

@@ -1,12 +1,15 @@
-import { useState, useCallback, useContext } from 'react';
+import { useState, useCallback, useEffect } from 'react';
+import { useNavigationType } from 'react-router-dom';
 import { Select, Checkbox, Box } from '@chakra-ui/react';
 
-import { HouseholdContext } from '../../../contexts/HouseholdContext';
-import { CurrentDateContext } from '../../../contexts/CurrentDateContext';
+import { currentDateAtom, householdAtom } from '../../../state';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 export const Pregnant = ({ personName }: { personName: string }) => {
-  const currentDate = useContext(CurrentDateContext);
-  const { household, setHousehold } = useContext(HouseholdContext);
+  const navigationType = useNavigationType();
+  const currentDate = useRecoilValue(currentDateAtom);
+
+  const [household, setHousehold] = useRecoilState(householdAtom);
   const [isChecked, setIsChecked] = useState(false);
 
   // ラベルとOpenFiscaの表記違いを明記
@@ -15,6 +18,7 @@ export const Pregnant = ({ personName }: { personName: string }) => {
     '妊娠6ヵ月以上',
     '産後6ヵ月以内',
   ];
+  const [pregnantStatus, setPregnantStatus] = useState('');
 
   // チェックボックスの値が変更された時
   const onCheckChange = useCallback(
@@ -25,6 +29,7 @@ export const Pregnant = ({ personName }: { personName: string }) => {
           [currentDate]: '無',
         };
         setHousehold({ ...newHousehold });
+        setPregnantStatus('');
       }
       setIsChecked(event.target.checked);
     },
@@ -34,11 +39,12 @@ export const Pregnant = ({ personName }: { personName: string }) => {
   // コンボボックスの値が変更された時
   const onSelectChange = useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) => {
-      const pregnantStatus = String(event.currentTarget.value);
+      const inputVal = String(event.currentTarget.value);
+      setPregnantStatus(inputVal);
       const newHousehold = { ...household };
-      if (pregnantStatus) {
+      if (inputVal) {
         newHousehold.世帯員[personName].妊産婦 = {
-          [currentDate]: pregnantStatus,
+          [currentDate]: inputVal,
         };
       } else {
         newHousehold.世帯員[personName].妊産婦 = {
@@ -51,15 +57,35 @@ export const Pregnant = ({ personName }: { personName: string }) => {
     []
   );
 
+  // stored states set value when page transition
+  useEffect(() => {
+    const personObj = household.世帯員[personName];
+    if (personObj.妊産婦 && personObj.妊産婦[currentDate] !== '無') {
+      setIsChecked(true);
+    }
+
+    if (personObj.妊産婦) {
+      setPregnantStatus(personObj.妊産婦[currentDate]);
+    }
+  }, [navigationType]);
+
   return (
     <Box mb={4}>
-      <Checkbox colorScheme="cyan" checked={isChecked} onChange={onCheckChange}>
+      <Checkbox
+        colorScheme="cyan"
+        isChecked={isChecked}
+        onChange={onCheckChange}
+      >
         自分または配偶者が妊娠中あるいは産後6ヵ月以内
       </Checkbox>
 
       {isChecked && (
         <Box mt={2} ml={4} mr={4} mb={4}>
-          <Select onChange={onSelectChange} placeholder="いずれかを選択">
+          <Select
+            value={pregnantStatus}
+            onChange={onSelectChange}
+            placeholder="いずれかを選択"
+          >
             {pregnantStatusArray.map((val, index) => (
               <option value={val} key={index}>
                 {val}

@@ -2,12 +2,12 @@
 障害児童育成手当の実装
 """
 
-from openfisca_core.periods import MONTH, DAY
+from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
 from openfisca_japan.entities import 世帯
-from openfisca_japan.variables.障害.身体障害者手帳 import 身体障害者手帳等級パターン
 from openfisca_japan.variables.障害.愛の手帳 import 愛の手帳等級パターン
 from openfisca_japan.variables.障害.脳性まひ_進行性筋萎縮症 import 脳性まひ_進行性筋萎縮症パターン
+from openfisca_japan.variables.障害.身体障害者手帳 import 身体障害者手帳等級パターン
 
 
 class 障害児童育成手当(Variable):
@@ -29,7 +29,7 @@ class 障害児童育成手当(Variable):
         # 東京都以外は対象外
         if 居住都道府県 != "東京都":
             return 0
-        
+
         障害児童育成手当 = parameters(対象期間).福祉.育児.障害児童育成手当
 
         # 世帯で最も高い所得の人が基準となる。特別児童扶養手当と同等の控除が適用される。
@@ -48,12 +48,12 @@ class 障害児童育成手当(Variable):
 
         対象障害者手帳等級 = \
             (身体障害者手帳等級一覧 == 身体障害者手帳等級パターン.一級) + \
-                (身体障害者手帳等級一覧 == 身体障害者手帳等級パターン.二級) + \
-                    (愛の手帳等級一覧 == 愛の手帳等級パターン.一度) + \
-                        (愛の手帳等級一覧 == 愛の手帳等級パターン.二度) + \
-                            (愛の手帳等級一覧 == 愛の手帳等級パターン.三度) + \
-                                (脳性まひ_進行性筋萎縮症一覧 == 脳性まひ_進行性筋萎縮症パターン.有)
-                                
+            (身体障害者手帳等級一覧 == 身体障害者手帳等級パターン.二級) + \
+            (愛の手帳等級一覧 == 愛の手帳等級パターン.一度) + \
+            (愛の手帳等級一覧 == 愛の手帳等級パターン.二度) + \
+            (愛の手帳等級一覧 == 愛の手帳等級パターン.三度) + \
+            (脳性まひ_進行性筋萎縮症一覧 == 脳性まひ_進行性筋萎縮症パターン.有)
+
         上限年齢未満の身体障害を持つ児童人数 = 対象世帯.sum(上限年齢未満の児童 & 対象障害者手帳等級)
         手当金額 = 障害児童育成手当.金額 * 上限年齢未満の身体障害を持つ児童人数
 

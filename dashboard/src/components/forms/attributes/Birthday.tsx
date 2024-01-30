@@ -1,9 +1,11 @@
-import { useState, useCallback, useContext, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useNavigationType } from 'react-router-dom';
 import { Box, Select, HStack, FormControl, FormLabel } from '@chakra-ui/react';
 
 import configData from '../../../config/app_config.json';
-import { HouseholdContext } from '../../../contexts/HouseholdContext';
 import { ErrorMessage } from './validation/ErrorMessage';
+import { householdAtom } from '../../../state';
+import { useRecoilState } from 'recoil';
 
 export const Birthday = ({
   personName,
@@ -12,7 +14,8 @@ export const Birthday = ({
   personName: string;
   mustInput: boolean;
 }) => {
-  const { household, setHousehold } = useContext(HouseholdContext);
+  const navigationType = useNavigationType();
+  const [household, setHousehold] = useRecoilState(householdAtom);
 
   const thisYear = new Date().getFullYear();
   const [selectedYear, setSelectedYear] = useState(NaN);
@@ -35,6 +38,13 @@ export const Birthday = ({
     return [...Array(lastDate.getDate())].map((_, i) => String(i + 1));
   }, [selectedYear, selectedMonth]);
 
+  // year, month and date are filled
+  const isFilledBirthday = useMemo(() => {
+    return (
+      !isNaN(selectedYear) && !isNaN(selectedMonth) && !isNaN(selectedDate)
+    );
+  }, [selectedYear, selectedMonth, selectedDate]);
+
   const handleYearChange = useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) => {
       setSelectedYear(parseInt(event.currentTarget.value));
@@ -56,12 +66,19 @@ export const Birthday = ({
     []
   );
 
+  // stored states set displayed birthday when page transition
+  useEffect(() => {
+    const birthdayObj = household.世帯員[personName].誕生年月日;
+    if (birthdayObj) {
+      setSelectedYear(parseInt(birthdayObj.ETERNITY.substring(0, 4)));
+      setSelectedMonth(parseInt(birthdayObj.ETERNITY.substring(5, 7)));
+      setSelectedDate(parseInt(birthdayObj.ETERNITY.substring(8, 10)));
+    }
+  }, [navigationType]);
+
   // 年月日が変更された時OpenFiscaの計算を行う
   useEffect(() => {
-    let birthday;
-    if (isNaN(selectedYear) || isNaN(selectedMonth) || isNaN(selectedDate)) {
-      birthday = '';
-    } else {
+    if (isFilledBirthday) {
       // 年・月が変更され選択されていた日が月末より大きい場合、1日に変更
       // （例）2020年2月29日（閏年）から年を2021に変更した場合、GUIのフォームと内部状態は2021年2月1日に年と日を変更
       // 年・月が変更され選択されていた日が月末以下の場合、日は変更しない
@@ -72,27 +89,23 @@ export const Birthday = ({
         setSelectedDate(1);
       }
 
-      birthday = `${selectedYear.toString().padStart(4, '0')}-${selectedMonth
+      const birthday = `${selectedYear
+        .toString()
+        .padStart(4, '0')}-${selectedMonth
         .toString()
         .padStart(2, '0')}-${selectedDate.toString().padStart(2, '0')}`;
-    }
 
-    const newHousehold = {
-      ...household,
-    };
-    newHousehold.世帯員[personName].誕生年月日 = { ETERNITY: birthday };
-    setHousehold(newHousehold);
+      const newHousehold = {
+        ...household,
+      };
+      newHousehold.世帯員[personName].誕生年月日 = { ETERNITY: birthday };
+      setHousehold(newHousehold);
+    }
   }, [selectedYear, selectedMonth, selectedDate]);
 
   return (
     <>
-      {mustInput && (
-        <ErrorMessage
-          condition={
-            isNaN(selectedYear) || isNaN(selectedMonth) || isNaN(selectedDate)
-          }
-        />
-      )}
+      {mustInput && <ErrorMessage condition={!isFilledBirthday} />}
       <FormControl>
         <FormLabel
           fontSize={configData.style.itemFontSize}
@@ -110,6 +123,7 @@ export const Birthday = ({
 
         <HStack mb={4}>
           <Select
+            value={selectedYear ? selectedYear : ''}
             onChange={(e) => handleYearChange(e)}
             fontSize={configData.style.itemFontSize}
             width={configData.style.selectYearSize}
@@ -129,6 +143,7 @@ export const Birthday = ({
           </Box>
 
           <Select
+            value={selectedMonth ? selectedMonth : ''}
             className="form-select"
             onChange={(e) => handleMonthChange(e)}
             fontSize={configData.style.itemFontSize}
@@ -149,6 +164,7 @@ export const Birthday = ({
           </Box>
 
           <Select
+            value={selectedDate ? selectedDate : ''}
             className="form-select"
             onChange={(e) => handleDateChange(e)}
             fontSize={configData.style.itemFontSize}

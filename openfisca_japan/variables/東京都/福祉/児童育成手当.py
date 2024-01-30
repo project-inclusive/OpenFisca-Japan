@@ -2,8 +2,7 @@
 児童育成手当の実装
 """
 
-import numpy as np
-from openfisca_core.periods import MONTH, DAY
+from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
 from openfisca_japan.entities import 世帯
 
@@ -27,7 +26,7 @@ class 児童育成手当(Variable):
         # 東京都以外は対象外
         if 居住都道府県 != "東京都":
             return 0
-        
+
         児童育成手当 = parameters(対象期間).福祉.育児.児童育成手当
 
         # 世帯で最も高い所得の人が基準となる。特別児童扶養手当と同等の控除が適用される。

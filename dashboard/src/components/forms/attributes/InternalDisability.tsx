@@ -1,12 +1,14 @@
-import { useState, useCallback, useContext } from 'react';
+import { useState, useCallback, useEffect } from 'react';
+import { useNavigationType } from 'react-router-dom';
 import { Checkbox } from '@chakra-ui/react';
 
-import { HouseholdContext } from '../../../contexts/HouseholdContext';
-import { CurrentDateContext } from '../../../contexts/CurrentDateContext';
+import { currentDateAtom, householdAtom } from '../../../state';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 export const InternalDisability = ({ personName }: { personName: string }) => {
-  const { household, setHousehold } = useContext(HouseholdContext);
-  const currentDate = useContext(CurrentDateContext);
+  const [household, setHousehold] = useRecoilState(householdAtom);
+  const currentDate = useRecoilValue(currentDateAtom);
+  const navigationType = useNavigationType();
   const [isChecked, setIsChecked] = useState(false);
 
   // チェックボックスの値が変更された時
@@ -26,10 +28,18 @@ export const InternalDisability = ({ personName }: { personName: string }) => {
     setIsChecked(event.target.checked);
   }, []);
 
+  // stored states set checkbox when page transition
+  useEffect(() => {
+    const internalDisabilityObj = household.世帯員[personName].内部障害;
+    setIsChecked(
+      internalDisabilityObj && internalDisabilityObj[currentDate] !== '無'
+    );
+  }, [navigationType]);
+
   return (
     <>
       <Checkbox
-        checked={isChecked}
+        isChecked={isChecked}
         onChange={onChange}
         colorScheme="cyan"
         mb={2}

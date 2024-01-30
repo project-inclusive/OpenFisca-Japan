@@ -1,5 +1,5 @@
 import { Box, Center } from '@chakra-ui/react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigationType } from 'react-router-dom';
 
 import configData from '../../config/app_config.json';
 import { PrefectureMunicipality } from './attributes/PrefectureMunicipality';
@@ -16,10 +16,33 @@ import { Recuperation } from './attributes/Recuperation';
 import { NursingHome } from './attributes/NursingHome';
 import { Pregnant } from './attributes/Pregnant';
 import { Deposit } from './attributes/Deposit';
+import { DisasterDeath } from './attributes/DisasterDeath';
+import { DisasterDisability } from './attributes/DisasterDisability';
+import { HouseholdGoodsDamage } from './attributes/HouseholdGoodsDamage';
+import { HousingDamage } from './attributes/HousingDamage';
+import { HousingReconstruction } from './attributes/HousingReconstruction';
+import { DisasterInjuryPeriod } from './attributes/DisasterInjuryPeriod';
+import { useEffect } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { currentDateAtom, householdAtom } from '../../state';
 
 export const FormYou = () => {
+  const navigationType = useNavigationType();
+  const currentDate = useRecoilValue(currentDateAtom);
   const location = useLocation();
-  const isSimpleCalculation = location.pathname === '/calculate-simple';
+  const isDetailedCalculation = location.pathname === '/calculate';
+  const isDisasterCalculation = location.pathname === '/calculate-disaster';
+  const [household, setHousehold] = useRecoilState(householdAtom);
+
+  // stored states set value when page transition
+  useEffect(() => {
+    const newHousehold = { ...household };
+    newHousehold.世帯一覧.世帯1.被災している = {
+      [currentDate]: isDisasterCalculation,
+    };
+
+    setHousehold({ ...newHousehold });
+  }, [navigationType, isDisasterCalculation]);
 
   const yourName = 'あなた';
   return (
@@ -33,21 +56,31 @@ export const FormYou = () => {
           {configData.calculationForm.youDescription}
         </Center>
         <PrefectureMunicipality mustInput={true} />
-        {!isSimpleCalculation && (
+        {isDetailedCalculation && (
           <Birthday personName={yourName} mustInput={true} />
         )}
         <Income personName={yourName} mustInput={true} />
-        {!isSimpleCalculation && <Deposit personName={yourName} />}
-        {!isSimpleCalculation && <Student personName={yourName} />}
-        {!isSimpleCalculation && <Working personName={yourName} />}
-        {!isSimpleCalculation && <Disability personName={yourName} />}
-        {!isSimpleCalculation && <Recuperation personName={yourName} />}
-        {!isSimpleCalculation && <NursingHome personName={yourName} />}
+
+        {isDisasterCalculation && <HousingDamage />}
+        {isDisasterCalculation && <HousingReconstruction />}
+        {isDisasterCalculation && <HouseholdGoodsDamage />}
+        {isDisasterCalculation && (
+          <DisasterInjuryPeriod personName={yourName} />
+        )}
+        {isDisasterCalculation && <DisasterDisability personName={yourName} />}
+        {isDisasterCalculation && <DisasterDeath />}
+
+        {isDetailedCalculation && <Deposit personName={yourName} />}
+        {isDetailedCalculation && <Student personName={yourName} />}
+        {isDetailedCalculation && <Working personName={yourName} />}
+        {isDetailedCalculation && <Disability personName={yourName} />}
+        {isDetailedCalculation && <Recuperation personName={yourName} />}
+        {isDetailedCalculation && <NursingHome personName={yourName} />}
         <SpouseExists />
         <ChildrenNum />
-        {!isSimpleCalculation && <ParentsNum />}
-        {!isSimpleCalculation && <Pregnant personName={yourName} />}
-        {!isSimpleCalculation && <RentingHouse />}
+        {(isDetailedCalculation || isDisasterCalculation) && <ParentsNum />}
+        {isDetailedCalculation && <Pregnant personName={yourName} />}
+        {isDetailedCalculation && <RentingHouse />}
       </Box>
     </>
   );

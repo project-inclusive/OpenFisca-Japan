@@ -1,4 +1,5 @@
-import { useCallback, useContext, useState, useRef, useEffect } from 'react';
+import { useCallback, useState, useRef, useEffect } from 'react';
+import { useNavigationType } from 'react-router-dom';
 import {
   Checkbox,
   Box,
@@ -8,10 +9,13 @@ import {
   FormLabel,
 } from '@chakra-ui/react';
 
-import { HouseholdContext } from '../../../contexts/HouseholdContext';
+import { useRecoilState } from 'recoil';
+import { householdAtom } from '../../../state';
 
 export const ChildrenNum = () => {
-  const { household, setHousehold } = useContext(HouseholdContext);
+  const isDisasterCalculation = location.pathname === '/calculate-disaster';
+  const navigationType = useNavigationType();
+  const [household, setHousehold] = useRecoilState(householdAtom);
   const [shownChildrenNum, setShownChildrenNum] = useState<string | number>('');
   const inputEl = useRef<HTMLInputElement>(null);
 
@@ -19,12 +23,12 @@ export const ChildrenNum = () => {
   // チェックボックスの値が変更された時
   const onCheckChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      if (!event.target.checked && household.世帯.世帯1.子一覧) {
+      if (!event.target.checked && household.世帯一覧.世帯1.子一覧) {
         const newHousehold = { ...household };
-        household.世帯.世帯1.子一覧.map((childName: string) => {
+        household.世帯一覧.世帯1.子一覧.map((childName: string) => {
           delete newHousehold.世帯員[childName];
         });
-        delete newHousehold.世帯.世帯1.子一覧;
+        delete newHousehold.世帯一覧.世帯1.子一覧;
         setShownChildrenNum('');
         setHousehold({ ...newHousehold });
       }
@@ -56,33 +60,42 @@ export const ChildrenNum = () => {
 
     // 変更前の子どもの情報を削除
     const newHousehold = { ...household };
-    if (household.世帯.世帯1.子一覧) {
-      household.世帯.世帯1.子一覧.map((childName: string) => {
+    if (household.世帯一覧.世帯1.子一覧) {
+      household.世帯一覧.世帯1.子一覧.map((childName: string) => {
         delete newHousehold.世帯員[childName];
       });
     }
 
     // 新しい子どもの情報を追加
-    newHousehold.世帯.世帯1.子一覧 = [...Array(childrenNum)].map(
+    newHousehold.世帯一覧.世帯1.子一覧 = [...Array(childrenNum)].map(
       (val, i) => `子ども${i}`
     );
-    if (newHousehold.世帯.世帯1.子一覧) {
-      newHousehold.世帯.世帯1.子一覧.map((childName: string) => {
+    if (newHousehold.世帯一覧.世帯1.子一覧) {
+      newHousehold.世帯一覧.世帯1.子一覧.map((childName: string) => {
         newHousehold.世帯員[childName] = {};
       });
     }
     setHousehold({ ...newHousehold });
   }, []);
 
+  // stored states set displayed value when page transition
+  useEffect(() => {
+    const storedChildrenObj = household.世帯一覧.世帯1.子一覧;
+    if (storedChildrenObj) {
+      setIsChecked(true);
+      setShownChildrenNum(storedChildrenObj.length);
+    }
+  }, [navigationType]);
+
   return (
     <>
       <Box mb={4}>
         <Checkbox
           colorScheme="cyan"
-          checked={isChecked}
+          isChecked={isChecked}
           onChange={onCheckChange}
         >
-          子どもがいる
+          {isDisasterCalculation && '存命の'}子どもがいる
         </Checkbox>
         {isChecked && (
           <FormControl mt={2} ml={4} mr={4} mb={4}>

@@ -1,9 +1,12 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigationType } from 'react-router-dom';
 import { Box, HStack, FormControl, FormLabel, Input } from '@chakra-ui/react';
 
 import configData from '../../../config/app_config.json';
-import { HouseholdContext } from '../../../contexts/HouseholdContext';
+
 import { ErrorMessage } from './validation/ErrorMessage';
+import { householdAtom } from '../../../state';
+import { useRecoilState } from 'recoil';
 
 export const AgeInput = ({
   personName,
@@ -12,7 +15,8 @@ export const AgeInput = ({
   personName: string;
   mustInput: boolean;
 }) => {
-  const { household, setHousehold } = useContext(HouseholdContext);
+  const navigationType = useNavigationType();
+  const [household, setHousehold] = useRecoilState(householdAtom);
   const [age, setAge] = useState('');
 
   const handleAgeChange = (event: React.ChangeEvent<HTMLInputElement>) =>
@@ -21,23 +25,30 @@ export const AgeInput = ({
       : setAge(event.currentTarget.value);
 
   useEffect(() => {
-    let birthday;
-    if (!age) {
-      birthday = '';
-    } else {
+    if (age) {
       const today = new Date();
       const currentYear = today.getFullYear();
       const birthYear = currentYear - parseInt(age);
-
-      birthday = `${birthYear.toString()}-01-01`;
+      const newHousehold = {
+        ...household,
+      };
+      newHousehold.世帯員[personName].誕生年月日 = {
+        ETERNITY: `${birthYear.toString()}-01-01`,
+      };
+      setHousehold(newHousehold);
     }
-
-    const newHousehold = {
-      ...household,
-    };
-    newHousehold.世帯員[personName].誕生年月日 = { ETERNITY: birthday };
-    setHousehold(newHousehold);
   }, [age]);
+
+  // stored states set displayed age when page transition
+  useEffect(() => {
+    const birthdayObj = household.世帯員[personName].誕生年月日;
+    if (birthdayObj && birthdayObj.ETERNITY) {
+      const birthYear = parseInt(birthdayObj.ETERNITY.substring(0, 4));
+      const today = new Date();
+      const currentYear = today.getFullYear();
+      setAge(String(currentYear - birthYear));
+    }
+  }, [navigationType]);
 
   return (
     <>

@@ -8,7 +8,6 @@ from openfisca_core.variables import Variable
 from openfisca_japan.entities import 人物
 
 
-
 class 脳性まひ_進行性筋萎縮症パターン(Enum):
     __order__ = "無 有"
     無 = "無"
@@ -22,4 +21,3 @@ class 脳性まひ_進行性筋萎縮症(Variable):
     entity = 人物
     definition_period = DAY
     label = "人物の脳性まひ・進行性筋萎縮症パターン"
-

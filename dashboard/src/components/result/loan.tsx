@@ -1,24 +1,17 @@
 import { useState, useEffect } from 'react';
-import {
-  Box,
-  Center,
-  Accordion,
-  AccordionItem,
-  AccordionIcon,
-  AccordionButton,
-  AccordionPanel,
-} from '@chakra-ui/react';
+import { Box, Center, Text, Tooltip } from '@chakra-ui/react';
+import { ExternalLinkIcon, InfoIcon } from '@chakra-ui/icons';
 
 import configData from '../../config/app_config.json';
+import { currentDateAtom } from '../../state';
+import { useRecoilValue } from 'recoil';
+import { HelpDesk } from './helpDesk';
+import { LoanAccordion } from './loanAccordion';
 
-export const Loan = ({
-  result,
-  currentDate,
-}: {
-  result: any;
-  currentDate: string;
-}) => {
+export const Loan = ({ result }: { result: any }) => {
   const [displayedResult, setDisplayedResult] = useState<any>();
+  const currentDate = useRecoilValue(currentDateAtom);
+  const [isLabelOpen, setIsLabelOpen] = useState(false);
 
   interface Obj {
     [prop: string]: any; // これを記述することで、どんなプロパティでも持てるようになる
@@ -28,22 +21,28 @@ export const Loan = ({
     const loanResult: Obj = {};
 
     if (result) {
-      for (const [loanName, loanInfo] of Object.entries(
-        configData.result.貸付制度.制度一覧
+      for (const [categoryName, categoryInfo] of Object.entries(
+        configData.result.貸付制度
       )) {
-        if (loanName in result.世帯.世帯1) {
-          if (result.世帯.世帯1[loanName][currentDate] > 0) {
-            loanResult[loanName] = {
-              name: loanName,
-              unit: loanInfo.unit,
-              caption: loanInfo.caption,
-              reference: loanInfo.reference,
-              displayedMoney: Number(result.世帯.世帯1[loanName][currentDate]),
-            };
+        loanResult[categoryName] = {};
+        for (const [loanName, loanInfo] of Object.entries(
+          categoryInfo.制度一覧
+        )) {
+          if (loanName in result.世帯一覧.世帯1) {
+            if (result.世帯一覧.世帯1[loanName][currentDate] > 0) {
+              loanResult[categoryName][loanName] = {
+                name: loanName,
+                unit: loanInfo.unit,
+                caption: loanInfo.caption,
+                reference: loanInfo.reference,
+                displayedMoney: Number(
+                  result.世帯一覧.世帯1[loanName][currentDate]
+                ),
+              };
+            }
           }
         }
       }
-
       setDisplayedResult(loanResult);
       console.log(`display ${JSON.stringify(displayedResult)}`);
     }
@@ -51,7 +50,7 @@ export const Loan = ({
 
   return (
     <>
-      {displayedResult && Object.keys(displayedResult).length > 0 && (
+      {displayedResult && (
         <Box bg="white" borderRadius="xl" p={4} mb={4} ml={4} mr={4}>
           <Center
             fontSize={configData.style.subTitleFontSize}
@@ -60,54 +59,63 @@ export const Loan = ({
           >
             {configData.result.loanDescription}
           </Center>
+          {Object.entries(configData.result.貸付制度).map(
+            (category: any, index: number) => (
+              <Box key={index}>
+                {Boolean(Object.keys(displayedResult[category[0]]).length) && (
+                  <Box mt={4}>
+                    <Box fontWeight="medium" mb={2}>
+                      {/* TODO: 他の貸付制度を追加したらconfigDataから読み込むようにする */}
+                      {category[0]}
+                    </Box>
 
-          <Box fontWeight="medium" mb={2}>
-            {/* TODO: 他の貸付制度を追加したらconfigDataから読み込むようにする */}
-            生活福祉資金貸付制度
-          </Box>
+                    <Text>
+                      {category[1].caption.map(
+                        (line: string, indexLine: any) => (
+                          <span key={indexLine}>{line}</span>
+                        )
+                      )}
+                      {category[0] === '生活福祉資金貸付制度' && (
+                        <Tooltip
+                          label={configData.result.consultationDescription3}
+                          isOpen={isLabelOpen}
+                          bg="gray.600"
+                        >
+                          <InfoIcon
+                            ml={1}
+                            color="blue.500"
+                            onMouseEnter={() => setIsLabelOpen(true)}
+                            onMouseLeave={() => setIsLabelOpen(false)}
+                            onClick={() => setIsLabelOpen(true)}
+                          />
+                        </Tooltip>
+                      )}
+                    </Text>
 
-          {configData.result.貸付制度.caption.map(
-            (line: string, index: any) => (
-              <span key={index}>
-                {line}
-                <br />
-              </span>
+                    {category[0] === '生活福祉資金貸付制度' && (
+                      <HelpDesk></HelpDesk>
+                    )}
+                    {category[1].reference && (
+                      <Box color="blue" mb={2}>
+                        <a
+                          href={category[1].reference}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          詳細リンク
+                          <ExternalLinkIcon ml={1} />
+                        </a>
+                      </Box>
+                    )}
+
+                    <LoanAccordion
+                      loanResult={displayedResult[category[0]]}
+                    ></LoanAccordion>
+                  </Box>
+                )}
+              </Box>
             )
           )}
-          <Box color="blue">
-            <a href={configData.result.貸付制度.reference}>詳細リンク</a>
-          </Box>
-
-          <Accordion allowMultiple>
-            {displayedResult &&
-              Object.values(displayedResult).map((val: any, index) => (
-                <AccordionItem key={index}>
-                  <h2>
-                    <AccordionButton>
-                      <AccordionIcon />
-                      <Box flex="1" textAlign="left">
-                        {val.name}
-                      </Box>
-                      <Box flex="1" textAlign="right">
-                        {/* １万円単位で表示 */}~{val.displayedMoney / 10_000}{' '}
-                        万{val.unit}
-                      </Box>
-                    </AccordionButton>
-                  </h2>
-                  <AccordionPanel pb={4}>
-                    {val.caption.map((line: string, index: any) => (
-                      <span key={index}>
-                        {line}
-                        <br />
-                      </span>
-                    ))}
-                    <Box color="blue">
-                      <a href={val.reference}>詳細リンク</a>
-                    </Box>
-                  </AccordionPanel>
-                </AccordionItem>
-              ))}
-          </Accordion>
         </Box>
       )}
     </>

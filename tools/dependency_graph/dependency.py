@@ -1,11 +1,16 @@
+"""
+Variable同士の依存関係を解析して、関係図として画像に出力
+"""
+
 import glob
 import importlib
 import inspect
+import logging
 import os
 import re
 
-from openfisca_core.variables import Variable
 import graphviz
+from openfisca_core.variables import Variable
 
 
 # Variable同士の依存関係を解析（継承はせず動的に読み込んでいるためソースコードから推定）
@@ -14,7 +19,7 @@ class DependencyFinder:
         self.module = module
 
     def _get_variables(self):
-        return {name: c for name, c in inspect.getmembers(self.module, inspect.isclass) if issubclass(c, Variable) and not c is Variable}
+        return {name: c for name, c in inspect.getmembers(self.module, inspect.isclass) if issubclass(c, Variable) and c is not Variable}
 
     # TODO: add expired formulas
     def _get_formula_method_source(self, cls):
@@ -23,7 +28,7 @@ class DependencyFinder:
                 if name == "formula":
                     return inspect.getsource(method)
         except Exception as e:
-            print(f'failed to parse {cls}: {e}')
+            logging.info(f"failed to parse {cls}: {e}")
             return ""
 
         # if not found
@@ -59,10 +64,10 @@ class DependencyFinder:
         return None
 
     def get_dependencies(self):
-        vars = self._get_variables()
+        variables = self._get_variables()
         dependencies = {}
 
-        for name, v in vars.items():
+        for name, v in variables.items():
             src = self._get_formula_method_source(v)
             deps = self._get_dependencies(src)
             # 新たに見つかった依存関係を追加
@@ -72,8 +77,10 @@ class DependencyFinder:
 
 
 def show_graph(dependencies):
-    # 依存関係をグラフとして描画
-    g = graphviz.Digraph(format='png', filename='dependency_graph', directory=os.path.dirname(__file__))
+    """
+    依存関係をグラフとして描画し表示
+    """
+    g = graphviz.Digraph(format="png", filename="dependency_graph", directory=os.path.dirname(__file__))
 
     # Variableを定義
     for name, deps in dependencies.items():
@@ -87,13 +94,14 @@ def show_graph(dependencies):
     # 表示
     g.view()
 
+
 if __name__ == "__main__":
     dependencies = {}
 
     # openfisca_japanのルートディレクトリ
     root_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "openfisca_japan")
 
-    filenames = glob.glob(f'{root_dir}/**/*.py', recursive=True)
+    filenames = glob.glob(f"{root_dir}/**/*.py", recursive=True)
     module_paths = [filename.replace(".py", "").replace("/", ".") for filename in filenames]
     # 動的にファイルをimport
     for path in module_paths:
@@ -102,4 +110,3 @@ if __name__ == "__main__":
         dependencies = {**dependencies, **finder.get_dependencies()}
 
     show_graph(dependencies)
-

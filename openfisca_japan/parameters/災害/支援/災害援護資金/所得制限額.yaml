@@ -1,0 +1,13 @@
+description: 世帯人数ごとの所得制限額
+metadata:
+  threshold_unit: person
+  rate_unit: 1
+  reference: https://www.bousai.go.jp/taisaku/hisaisyagyousei/pdf/kakusyuseido_tsuujou.pdf
+values:
+  2023-04-01:
+    value:
+      - 0 # HACK: インデックスは0始まりのため、数合わせに世帯0人の場合の金額を定義
+      - 2200000
+      - 4300000
+      - 6200000
+      - 7300000

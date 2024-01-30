@@ -8,18 +8,16 @@ import {
   AccordionButton,
   AccordionPanel,
 } from '@chakra-ui/react';
+import { ExternalLinkIcon } from '@chakra-ui/icons';
 
 import configData from '../../config/app_config.json';
+import { useRecoilValue } from 'recoil';
+import { currentDateAtom } from '../../state';
 
-export const Benefit = ({
-  result,
-  currentDate,
-}: {
-  result: any;
-  currentDate: string;
-}) => {
+export const Benefit = ({ result }: { result: any }) => {
   const [totalAllowance, setTotalAllowance] = useState<string>('0');
   const [displayedResult, setDisplayedResult] = useState<any>();
+  const currentDate = useRecoilValue(currentDateAtom);
 
   interface Obj {
     [prop: string]: any; // これを記述することで、どんなプロパティでも持てるようになる
@@ -32,23 +30,23 @@ export const Benefit = ({
       for (const [allowanceName, allowanceInfo] of Object.entries(
         configData.result.給付制度.制度一覧
       )) {
-        if (allowanceName in result.世帯.世帯1) {
-          if (result.世帯.世帯1[allowanceName][currentDate] > 0) {
+        if (allowanceName in result.世帯一覧.世帯1) {
+          if (result.世帯一覧.世帯1[allowanceName][currentDate] > 0) {
             minMaxResult[allowanceName] = {
               name: allowanceName,
-              max: result.世帯.世帯1[allowanceName][currentDate],
-              min: result.世帯.世帯1[allowanceName][currentDate],
+              max: result.世帯一覧.世帯1[allowanceName][currentDate],
+              min: result.世帯一覧.世帯1[allowanceName][currentDate],
               unit: allowanceInfo.unit,
               caption: allowanceInfo.caption,
               reference: allowanceInfo.reference,
             };
           }
-        } else if (`${allowanceName}_最大` in result.世帯.世帯1) {
-          if (result.世帯.世帯1[`${allowanceName}_最大`][currentDate] > 0) {
+        } else if (`${allowanceName}_最大` in result.世帯一覧.世帯1) {
+          if (result.世帯一覧.世帯1[`${allowanceName}_最大`][currentDate] > 0) {
             minMaxResult[allowanceName] = {
               name: allowanceName,
-              max: result.世帯.世帯1[`${allowanceName}_最大`][currentDate],
-              min: result.世帯.世帯1[`${allowanceName}_最小`][currentDate],
+              max: result.世帯一覧.世帯1[`${allowanceName}_最大`][currentDate],
+              min: result.世帯一覧.世帯1[`${allowanceName}_最小`][currentDate],
               unit: allowanceInfo.unit,
               caption: allowanceInfo.caption,
               reference: allowanceInfo.reference,
@@ -60,9 +58,9 @@ export const Benefit = ({
       let totalAllowanceMax = 0;
       let totalAllowanceMin = 0;
       for (const [key, value] of Object.entries(minMaxResult)) {
-        // 表示を整えるため整数に変換
-        const min = Math.floor(Number(value.min));
-        const max = Math.floor(Number(value.max));
+        // 小数点1桁まで万円単位に変換 (1万円以下の給付もあり得るため)
+        const min = Math.floor(Number(value.min) / 1000) / 10;
+        const max = Math.floor(Number(value.max) / 1000) / 10;
 
         totalAllowanceMax += max;
         totalAllowanceMin += min;
@@ -71,12 +69,10 @@ export const Benefit = ({
         minMaxResult[key].maxMoney = max;
 
         if (value.max === value.min) {
-          minMaxResult[key].displayedMoney = max.toLocaleString();
+          minMaxResult[key].displayedMoney = max;
         } else {
           // 最小額と最大額が異なる場合は「（最小額）〜（最大額）」の文字列を格納
-          minMaxResult[
-            key
-          ].displayedMoney = `${min.toLocaleString()}~${max.toLocaleString()}`;
+          minMaxResult[key].displayedMoney = `${min}~${max}`;
         }
       }
 
@@ -111,6 +107,8 @@ export const Benefit = ({
         {configData.result.給付制度.caption[0]}
 
         <Accordion allowMultiple>
+          {/* // 一時金と継続支給が合算されていて紛らわしいため合計額は非表示。
+          // ただし今後、一時金と継続支給それぞれの合計表示はする可能性あり
           <AccordionItem>
             <h2>
               <AccordionButton
@@ -127,6 +125,7 @@ export const Benefit = ({
               </AccordionButton>
             </h2>
           </AccordionItem>
+          */}
 
           {displayedResult &&
             displayedResult.map((val: any, index: any) => (
@@ -138,7 +137,8 @@ export const Benefit = ({
                       {val.name}
                     </Box>
                     <Box flex="1" textAlign="right">
-                      {val.displayedMoney} {val.unit}
+                      {/* 小数点1桁まで万円単位で表示 */}
+                      {val.displayedMoney} 万{val.unit}
                     </Box>
                   </AccordionButton>
                 </h2>
@@ -150,7 +150,10 @@ export const Benefit = ({
                     </span>
                   ))}
                   <Box color="blue">
-                    <a href={val.reference}>詳細リンク</a>
+                    <a href={val.reference} target="_blank" rel="noreferrer">
+                      詳細リンク
+                      <ExternalLinkIcon ml={1} />
+                    </a>
                   </Box>
                 </AccordionPanel>
               </AccordionItem>

@@ -1,12 +1,15 @@
-import { useState, useCallback, useContext, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
+import { useNavigationType } from 'react-router-dom';
 import { Select, FormControl, FormLabel } from '@chakra-ui/react';
 
-import { HouseholdContext } from '../../../contexts/HouseholdContext';
-import { CurrentDateContext } from '../../../contexts/CurrentDateContext';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { currentDateAtom, householdAtom } from '../../../state';
 
 export const RadiationDamage = ({ personName }: { personName: string }) => {
-  const currentDate = useContext(CurrentDateContext);
-  const { household, setHousehold } = useContext(HouseholdContext);
+  const currentDate = useRecoilValue(currentDateAtom);
+  const navigationType = useNavigationType();
+
+  const [household, setHousehold] = useRecoilState(householdAtom);
 
   // ラベルとOpenFiscaの表記違いを明記
   const items = [
@@ -31,16 +34,16 @@ export const RadiationDamage = ({ personName }: { personName: string }) => {
 
   // 「あなた」の「子どもの数」が変更されたときに全ての子どもの放射線障害が「無」に
   // リセットされるため、コンボボックスも空白に戻す
+  // stored states set displayed value when page transition
   useEffect(() => {
     if (household.世帯員[personName].放射線障害) {
       items.map((item, index) => {
-        const { currentDate: value } = household.世帯員[personName].放射線障害;
-        if (item[1] === value) {
+        if (item[1] === household.世帯員[personName].放射線障害[currentDate]) {
           setSelectedItemIndex(index);
         }
       });
     }
-  }, [household.世帯員[personName].放射線障害]);
+  }, [navigationType, household.世帯員[personName].放射線障害]);
 
   return (
     <>

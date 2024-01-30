@@ -11,7 +11,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.8.18 # Patch version must be specified to avoid any cache confusion, since the cache key depends on the full Python version. Any potentiel difference in patches between jobs will lead to a cache not found error.
+          python-version: 3.11.6 # Patch version must be specified to avoid any cache confusion, since the cache key depends on the full Python version. Any potentiel difference in patches between jobs will lead to a cache not found error.
       - name: Cache build
         id: restore-build
         uses: actions/cache@v3
@@ -39,11 +39,16 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.8.18
+          python-version: 3.11.6
       - name: Cache build
         id: restore-build
         uses: actions/cache@v3
         with:
           path: ${{ env.pythonLocation }}
           key: build-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}-${{ github.sha }}
-      - run: make test
+      - name: Lint source codes
+        run: make check-style
+        # TODO: 複数世帯対応が完了したら以下の指定を外す
+        continue-on-error: true
+      - name: Run backend tests
+        run: make test

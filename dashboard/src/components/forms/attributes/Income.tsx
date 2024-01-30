@@ -1,9 +1,10 @@
-import { KeyboardEvent, useCallback, useContext, useState } from 'react';
+import { KeyboardEvent, useCallback, useState, useEffect } from 'react';
+import { useNavigationType } from 'react-router-dom';
 import { Box, HStack, Input, FormControl, FormLabel } from '@chakra-ui/react';
 
-import { CurrentDateContext } from '../../../contexts/CurrentDateContext';
-import { HouseholdContext } from '../../../contexts/HouseholdContext';
 import { ErrorMessage } from './validation/ErrorMessage';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { currentDateAtom, householdAtom } from '../../../state';
 
 export const Income = ({
   personName,
@@ -12,9 +13,11 @@ export const Income = ({
   personName: string;
   mustInput: boolean;
 }) => {
-  const currentDate = useContext(CurrentDateContext);
-  const { household, setHousehold } = useContext(HouseholdContext);
+  const isDisasterCalculation = location.pathname === '/calculate-disaster';
+  const navigationType = useNavigationType();
+  const currentDate = useRecoilValue(currentDateAtom);
 
+  const [household, setHousehold] = useRecoilState(householdAtom);
   const [shownIncome, setShownIncome] = useState<string | number>('');
 
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,13 +46,21 @@ export const Income = ({
     }
   };
 
+  // stored states set displayed value when page transition
+  useEffect(() => {
+    const storedIncomeObj = household.世帯員[personName].収入;
+    if (storedIncomeObj) {
+      setShownIncome(storedIncomeObj[currentDate] / 10000);
+    }
+  }, [navigationType]);
+
   return (
     <>
       {mustInput && <ErrorMessage condition={shownIncome === ''} />}
       <FormControl>
         <FormLabel fontWeight="Regular">
           <HStack>
-            <Box>年収</Box>
+            <Box>{isDisasterCalculation && '被災前の'}年収</Box>
             {mustInput && (
               <Box color="red" fontSize="0.7em">
                 必須

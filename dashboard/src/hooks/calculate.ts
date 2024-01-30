@@ -36,10 +36,9 @@ export const useCalculate = () => {
 
     const newResultJson = await newResultRes.json();
     console.log(newResultJson); // debug log
-    delete newResultJson.世帯.世帯1.自分一覧;
-    delete newResultJson.世帯.世帯1.配偶者一覧;
-    delete newResultJson.世帯.世帯1.親一覧;
-    delete newResultJson.世帯.世帯1.子一覧;
+    delete newResultJson.世帯一覧.世帯1.親一覧;
+    delete newResultJson.世帯一覧.世帯1.祖父母一覧;
+    delete newResultJson.世帯一覧.世帯1.子一覧;
     setResult(newResultJson);
   };
 

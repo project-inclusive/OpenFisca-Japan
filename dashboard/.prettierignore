@@ -5,4 +5,4 @@ coverage
 .gitignore
 node_modules
 package-lock.json
-*.html
+**/*.html
