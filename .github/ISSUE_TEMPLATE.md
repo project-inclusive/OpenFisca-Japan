@@ -1,30 +1,15 @@
-Hi there!
+### As Is or how to reproduce if it's bug
+（今の状態を記載。不具合・バグの場合、可能であれば再現方法も記載してください。）
 
-I really enjoy OpenFisca, but I recently encountered an issue.
+### To Be 
+（理想の状態を記載。タスク完了の条件にもなる。）
 
-### Here is what I did:
+### Action
+（改善のための具体的なアクションを記載）
 
+### Problem
+（現状分かっている課題を記載）
 
-### Here is what I expected to happen:
-
-
-### Here is what actually happened:
-
-
-### Here is data (or links to it) that can help you reproduce this issue:
-
-
-
-## Context
-
-I identify more as a:
-
-- Analyst _(I make macroscopic computations on real populations)_.
-- Business expert _(I create tests and model legislation)_.
-- Commenter _(I make data visualisations)_.
-- Developer _(I create tools that use the existing OpenFisca code)_.
-- Historian _(I accumulate data based on past legislation values)_.
-- Lobbyist _(I model reforms to make them exist)_.
-- Producer _(I make computations on individual situations)_.
-
-(remove this line as well as all items in the list that don't fit your situation)
+### Note 
+<!-- 以下は消さないでください -->
+イシューに着手した方は、他コントリビューターと重複を防ぐために着手したことをコメントに記載お願いします
