@@ -166,6 +166,9 @@ sudo apt install xdg-utils
 
 ### mainブランチマージ前の作業
 - docs/change_log.mdの更新
+- バックエンド OpenFisca-Japanパッケージのバージョン表記の更新
+  - requirements.txt
+  - setup.py
 
 ### バックエンド（OpenFisca Python APIサーバー）
 
