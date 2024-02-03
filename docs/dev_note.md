@@ -169,6 +169,7 @@ sudo apt install xdg-utils
 - バックエンド OpenFisca-Japanパッケージのバージョン表記の更新
   - requirements.txt
   - setup.py
+- (必要であれば)README.mdの概要に対応制度追加
 
 ### バックエンド（OpenFisca Python APIサーバー）
 
