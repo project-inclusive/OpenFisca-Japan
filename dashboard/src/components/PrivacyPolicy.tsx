@@ -145,9 +145,7 @@ const App: React.FC = () => {
           本ポリシーに関するお問い合わせは、以下の連絡先までご連絡ください。
         </ListItem>
       </OrderedList>
-      <Text mt="0.5em">
-        E-mail：inst.poverty.prevention@gmail.com
-      </Text>
+      <Text mt="0.5em">E-mail：inst.poverty.prevention@gmail.com</Text>
       <br />
       <Text>制定日：2024年2月8日</Text>
       {/* 戻るボタン */}
