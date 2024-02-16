@@ -8,6 +8,7 @@ See https://openfisca.org/doc/key-concepts/variables.html
 
 from functools import cache
 import json
+import numpy as np
 
 # Import from openfisca-core the Python objects used to code the legislation in OpenFisca
 from openfisca_core.periods import DAY
@@ -17,12 +18,35 @@ from openfisca_japan.entities import 世帯
 
 
 @cache
-def 市区町村級地区分():
+def 市区町村級地区分_キー一覧():
     """
-    jsonファイルから値を取得
+    jsonファイルからキーを取得
+
+    各要素は [都道府県名, 市区町村名] の形式
     """
     with open("openfisca_japan/assets/市区町村級地区分.json") as f:
-        return json.load(f)
+        d = json.load(f)
+        キー一覧 = []
+        for 都道府県名, 都道府県データ in d.items():
+            for 市区町村名 in 都道府県データ.keys():
+                キー一覧.append([都道府県名, 市区町村名])
+        return np.array(キー一覧)
+
+
+@cache
+def 市区町村級地区分_値一覧():
+    """
+    jsonファイルから値を取得
+
+    市区町村級地区分_値一覧[市区町村級地区分キー, 区分]の形式で取得可能
+    """
+    with open("openfisca_japan/assets/市区町村級地区分.json") as f:
+        d = json.load(f)
+        値一覧 = []
+        for 都道府県データ in d.values():
+            for 市区町村データ in 都道府県データ.values():
+                値一覧.append(市区町村データ)
+        return np.array(値一覧)
 
 
 class 居住都道府県(Variable):
@@ -52,9 +76,19 @@ class 居住級地区分1(Variable):
     def formula(対象世帯, 対象期間, _parameters):
         居住都道府県 = 対象世帯("居住都道府県", 対象期間)
         居住市区町村 = 対象世帯("居住市区町村", 対象期間)
-        # NOTE: 市区町村級地区分()[都道府県][市区町村][0] が級地区分1を表す
-        return [市区町村級地区分()[都道府県][市区町村][0] if 市区町村 in 市区町村級地区分()[都道府県] else 3
-                for 都道府県, 市区町村 in zip(居住都道府県, 居住市区町村)]
+
+        級地区分キー一覧 = 市区町村級地区分_キー一覧()
+        級地区分インデックス = np.select([(居住都道府県 == キー[0]) * (居住市区町村 == キー[1]) for キー in 級地区分キー一覧],
+                                       list(range(len(級地区分キー一覧))),
+                                       -1).astype(int)
+
+        # NOTE: 市区町村級地区分()[級地区分インデックス, 0] が級地区分1を表す
+        区分 = 市区町村級地区分_値一覧()[級地区分インデックス, 0]
+
+        # 当てはまらない場合は3
+        return np.select([級地区分インデックス != -1],
+                         [区分],
+                         3)
 
 
 class 居住級地区分2(Variable):
@@ -68,6 +102,17 @@ class 居住級地区分2(Variable):
     def formula(対象世帯, 対象期間, parameters):
         居住都道府県 = 対象世帯("居住都道府県", 対象期間)
         居住市区町村 = 対象世帯("居住市区町村", 対象期間)
-        # NOTE: 市区町村級地区分()[都道府県][市区町村][1] が級地区分2を表す
-        return [市区町村級地区分()[都道府県][市区町村][1] if 市区町村 in 市区町村級地区分()[都道府県] else 2
-                for 都道府県, 市区町村 in zip(居住都道府県, 居住市区町村)]
+
+        級地区分キー一覧 = 市区町村級地区分_キー一覧()
+        級地区分インデックス = np.select([(居住都道府県 == キー[0]) * (居住市区町村 == キー[1]) for キー in 級地区分キー一覧],
+                                       list(range(len(級地区分キー一覧))),
+                                       -1).astype(int)
+
+        # NOTE: 市区町村級地区分()[級地区分インデックス, 1] が級地区分2を表す
+        区分 = 市区町村級地区分_値一覧()[級地区分インデックス, 1]
+
+        # 当てはまらない場合は2
+        return np.select([級地区分インデックス != -1],
+                         [区分],
+                         2)
+
