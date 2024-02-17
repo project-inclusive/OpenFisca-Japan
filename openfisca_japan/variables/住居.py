@@ -8,8 +8,8 @@ See https://openfisca.org/doc/key-concepts/variables.html
 
 from functools import cache
 import json
-import numpy as np
 
+import numpy as np
 # Import from openfisca-core the Python objects used to code the legislation in OpenFisca
 from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
@@ -78,9 +78,10 @@ class 居住級地区分1(Variable):
         居住市区町村 = 対象世帯("居住市区町村", 対象期間)
 
         級地区分キー一覧 = 市区町村級地区分_キー一覧()
-        級地区分インデックス = np.select([(居住都道府県 == キー[0]) * (居住市区町村 == キー[1]) for キー in 級地区分キー一覧],
-                                       list(range(len(級地区分キー一覧))),
-                                       -1).astype(int)
+        級地区分インデックス = np.select(
+            [(居住都道府県 == キー[0]) * (居住市区町村 == キー[1]) for キー in 級地区分キー一覧],
+            list(range(len(級地区分キー一覧))),
+            -1).astype(int)
 
         # NOTE: 市区町村級地区分()[級地区分インデックス, 0] が級地区分1を表す
         区分 = 市区町村級地区分_値一覧()[級地区分インデックス, 0]
@@ -104,15 +105,16 @@ class 居住級地区分2(Variable):
         居住市区町村 = 対象世帯("居住市区町村", 対象期間)
 
         級地区分キー一覧 = 市区町村級地区分_キー一覧()
-        級地区分インデックス = np.select([(居住都道府県 == キー[0]) * (居住市区町村 == キー[1]) for キー in 級地区分キー一覧],
-                                       list(range(len(級地区分キー一覧))),
-                                       -1).astype(int)
+        級地区分インデックス = np.select(
+            [(居住都道府県 == キー[0]) * (居住市区町村 == キー[1]) for キー in 級地区分キー一覧],
+            list(range(len(級地区分キー一覧))),
+            -1).astype(int)
 
         # NOTE: 市区町村級地区分()[級地区分インデックス, 1] が級地区分2を表す
         区分 = 市区町村級地区分_値一覧()[級地区分インデックス, 1]
 
         # 当てはまらない場合は2
-        return np.select([級地区分インデックス != -1],
-                         [区分],
-                         2)
-
+        return np.select(
+            [級地区分インデックス != -1],
+            [区分],
+            2)
