@@ -129,7 +129,7 @@ def 市ごとの住宅扶助限度額():
     """
     csvファイルから値を読み込み
 
-    都道府県ごとの住宅扶助限度額()[市, 世帯人員] の形で参照可能
+    市ごとの住宅扶助限度額()[市, 世帯人員] の形で参照可能
     """
     return np.genfromtxt("openfisca_japan/assets/福祉/生活保護/住宅扶助基準額/市.csv",
                          delimiter=",", skip_header=1, dtype="int64")[:, 1:]
@@ -152,7 +152,7 @@ def 都道府県ごとの住宅扶助限度額():
     """
     csvファイルから値を読み込み
 
-    都道府県ごとの住宅扶助限度額()[都道府県区分][世帯人員] の形で参照可能
+    都道府県ごとの住宅扶助限度額()[都道府県区分, 世帯人員] の形で参照可能
     """
     return np.genfromtxt("openfisca_japan/assets/福祉/生活保護/住宅扶助基準額/都道府県.csv",
                          delimiter=",", skip_header=1, dtype="int64")[:, 2:]
