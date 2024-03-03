@@ -2,6 +2,7 @@
 障害児童育成手当の実装
 """
 
+import numpy as np
 from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
 from openfisca_japan.entities import 世帯
@@ -26,17 +27,21 @@ class 障害児童育成手当(Variable):
 
     def formula(対象世帯, 対象期間, parameters):
         居住都道府県 = 対象世帯("居住都道府県", 対象期間)
-        # 東京都以外は対象外
-        if 居住都道府県 != "東京都":
-            return 0
+        居住地条件 = 居住都道府県 == "東京都"
 
         障害児童育成手当 = parameters(対象期間).福祉.育児.障害児童育成手当
 
         # 世帯で最も高い所得の人が基準となる。特別児童扶養手当と同等の控除が適用される。
         # （参考）https://www.city.adachi.tokyo.jp/oyako/k-kyoiku/kosodate/hitorioya-ikuse.html
         世帯高所得 = 対象世帯("特別児童扶養手当の控除後世帯高所得", 対象期間)
-        扶養人数 = 対象世帯("扶養人数", 対象期間)[0]
-        所得制限限度額 = 障害児童育成手当.所得制限限度額[扶養人数]
+        扶養人数 = 対象世帯("扶養人数", 対象期間)
+
+        # NOTE: 直接 `所得制限限度額[扶養人数]` のように要素参照すると型が合わず複数世帯の場合に計算できないためnp.selectを使用
+        所得制限限度額 = np.select(
+            [扶養人数 == i for i in range(6)],
+            [障害児童育成手当.所得制限限度額[i] for i in range(6)],
+            -1).astype(int)
+
         所得条件 = 世帯高所得 < 所得制限限度額
 
         身体障害者手帳等級一覧 = 対象世帯.members("身体障害者手帳等級", 対象期間)
@@ -57,4 +62,4 @@ class 障害児童育成手当(Variable):
         上限年齢未満の身体障害を持つ児童人数 = 対象世帯.sum(上限年齢未満の児童 & 対象障害者手帳等級)
         手当金額 = 障害児童育成手当.金額 * 上限年齢未満の身体障害を持つ児童人数
 
-        return 所得条件 * 手当金額
+        return 居住地条件 * 所得条件 * 手当金額
