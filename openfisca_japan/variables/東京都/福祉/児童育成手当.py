@@ -2,6 +2,7 @@
 児童育成手当の実装
 """
 
+import numpy as np
 from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
 from openfisca_japan.entities import 世帯
@@ -30,8 +31,14 @@ class 児童育成手当(Variable):
         # 世帯で最も高い所得の人が基準となる。特別児童扶養手当と同等の控除が適用される。
         # （参考）https://www.city.adachi.tokyo.jp/oyako/k-kyoiku/kosodate/hitorioya-ikuse.html
         世帯高所得 = 対象世帯("特別児童扶養手当の控除後世帯高所得", 対象期間)
-        扶養人数 = 対象世帯("扶養人数", 対象期間)[0]
-        所得制限限度額 = 児童育成手当.所得制限限度額[扶養人数]
+        扶養人数 = 対象世帯("扶養人数", 対象期間)
+
+        # NOTE: 直接 `所得制限限度額[扶養人数]` のように要素参照すると型が合わず複数世帯の場合に計算できないためnp.selectを使用
+        所得制限限度額 = np.select(
+            [扶養人数 == i for i in range(6)],
+            [児童育成手当.所得制限限度額[i] for i in range(6)],
+            -1).astype(int)
+
         所得条件 = 世帯高所得 < 所得制限限度額
 
         ひとり親世帯である = 対象世帯("ひとり親", 対象期間)
