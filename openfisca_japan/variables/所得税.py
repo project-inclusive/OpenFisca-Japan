@@ -433,6 +433,30 @@ class 控除後世帯高所得(Variable):
     reference = "https://www.city.himeji.lg.jp/waku2child/0000013409.html"
 
     def formula(対象世帯, 対象期間, parameters):
+        世帯高所得 = 対象世帯("世帯高所得", 対象期間)
+        社会保険料 = parameters(対象期間).所得.社会保険料相当額
+        給与所得及び雑所得からの控除額 = parameters(対象期間).所得.給与所得及び雑所得からの控除額
+        障害者控除 = 対象世帯("障害者控除", 対象期間)
+        ひとり親控除 = 対象世帯("ひとり親控除", 対象期間)
+        寡婦控除 = 対象世帯("寡婦控除", 対象期間)
+        勤労学生控除 = 対象世帯("勤労学生控除", 対象期間)
+
+        # 他の控除（雑損控除・医療費控除等）は定額でなく実費を元に算出するため除外する
+
+        総控除額 = 社会保険料 + 給与所得及び雑所得からの控除額 + 障害者控除 + ひとり親控除 + 寡婦控除 + 勤労学生控除
+
+        # 負の数にならないよう、0円未満になった場合は0円に補正
+        return np.clip(世帯高所得 - 総控除額, 0.0, None)
+
+
+class 児童手当の控除後世帯高所得(Variable):
+    value_type = float
+    entity = 世帯
+    definition_period = DAY
+    label = "各種控除が適用された後の児童手当における世帯高所得額"
+    reference = "https://www.city.himeji.lg.jp/waku2child/0000013409.html"
+
+    def formula(対象世帯, 対象期間, parameters):
         # TODO: 所得税等の計算にも使用する場合、配偶者控除等も考慮する(現在の実装は児童手当の世帯高所得額)
         # https://www.nta.go.jp/publication/pamph/koho/kurashi/html/01_1.htm
 
