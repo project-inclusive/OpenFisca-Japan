@@ -260,3 +260,7 @@ https://github.com/pyenv/pyenv
 古いバージョンのPython、OpenFiscaでビルドした生成物が残っていてエラーが発生している可能性があります。以下を試してみてください。
   - (OpenFiscaコンテナ内で作業している場合) `docker compose down` して再度 `docker compose up -d --build`
   - `dist` ディレクトリの中身を削除して再度 `make build`
+- PR作成時に、GitHub actionsの `make check-style` で失敗する
+  - linterの指示に従ってソースコードを整形してください
+  - `複数世帯の場合に正しく計算できないため...` というエラーが出た場合、[複数世帯に対応した実装方法](./about_openfisca.md#複数世帯に対応した実装方法) を参考に実装を修正してください
+    - linterの誤検知への対処等で指摘を意図的に無視したい場合はコメント `# noqa: {ルール名}` を記載
