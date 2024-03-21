@@ -289,6 +289,7 @@ function Description() {
           bg="blue.500"
           color="white"
           _hover={{ bg: 'blue.600' }}
+          data-testid="calculate-detail-button"
         >
           くわしく
           <br />
@@ -313,6 +314,7 @@ function Description() {
           bg="teal.500"
           color="white"
           _hover={{ bg: 'teal.600' }}
+          data-testid="calculate-simple-button"
         >
           かんたん
           <br />
