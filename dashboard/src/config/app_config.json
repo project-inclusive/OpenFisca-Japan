@@ -198,6 +198,13 @@
             "災害により居住する住宅が全壊するなど、生活基盤に著しい被害を受けた世帯に対する支援金。"
           ],
           "reference": "https://tkai.jp/reconstruction/tabid/82/Default.aspx"
+        },
+        "高等学校等就学支援金": {
+          "unit": "円/月",
+          "caption": [
+            "高校の授業料の支援金。本人が直接受け取る代わりに、授業料が減額されます。"
+          ],
+          "reference": "https://www.mext.go.jp/a_menu/shotou/mushouka/1342674.htm"
         }
       }
     },
