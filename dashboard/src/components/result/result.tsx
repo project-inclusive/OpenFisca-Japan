@@ -30,21 +30,8 @@ export const Result = () => {
   const location = useLocation();
   const [searchParams] = useSearchParams();
 
-  let isSimpleCalculation;
-  let isDisasterCalculation;
-
-  if (location.state !== null) {
-    const state = location.state as {
-      isSimpleCalculation: boolean;
-      isDisasterCalculation: boolean;
-    };
-    isSimpleCalculation = state.isSimpleCalculation;
-    isDisasterCalculation = state.isDisasterCalculation;
-  } else {
-    const calculationtype = calculationType();
-    isSimpleCalculation = calculationtype.isSimpleCalculation;
-    isDisasterCalculation = calculationtype.isDisasterCalculation;
-  }
+  const { isSimpleCalculation, isDisasterCalculation } =
+    location.state ?? calculationType();
 
   const navigate = useNavigate();
 
