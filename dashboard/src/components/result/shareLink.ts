@@ -26,7 +26,14 @@ export default function shortLink(
 ) {
   return `${window.location.protocol}//${
     window.location.host
-  }/result?share=${deflate(JSON.stringify(obj))}&isSimpleCalculation=${
+  }/result?share=${deflate(JSON.stringify(obj))}&1=${
     isSimpleCalculation ? 1 : 0
-  }&isDisasterCalculation=${isDisasterCalculation ? 1 : 0}`;
+  }&2=${isDisasterCalculation ? 1 : 0}`;
+}
+
+export function calculationType() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const isSimpleCalculation = urlParams.get('1') === '1';
+  const isDisasterCalculation = urlParams.get('2') === '1';
+  return { isSimpleCalculation, isDisasterCalculation };
 }

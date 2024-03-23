@@ -16,7 +16,7 @@ import { Loan } from './loan';
 import { CalculationLabel } from '../forms/calculationLabel';
 import { householdAtom } from '../../state';
 import { useRecoilValue } from 'recoil';
-import shortLink, { inflate } from './shareLink';
+import shortLink, { inflate, calculationType } from './shareLink';
 
 const createFileName = (extension: string = '', ...names: string[]) => {
   if (!extension) {
@@ -41,8 +41,9 @@ export const Result = () => {
     isSimpleCalculation = state.isSimpleCalculation;
     isDisasterCalculation = state.isDisasterCalculation;
   } else {
-    isSimpleCalculation = searchParams.get('isSimpleCalculation') === '1';
-    isDisasterCalculation = searchParams.get('isDisasterCalculation') === '1';
+    const calculationtype = calculationType();
+    isSimpleCalculation = calculationtype.isSimpleCalculation;
+    isDisasterCalculation = calculationtype.isDisasterCalculation;
   }
 
   const navigate = useNavigate();
