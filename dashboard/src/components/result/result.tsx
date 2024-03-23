@@ -1,5 +1,10 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
-import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
+import {
+  Link as RouterLink,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from 'react-router-dom';
 import { Box, Center, Button, Spinner, Text } from '@chakra-ui/react';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import * as htmlToImage from 'html-to-image';
@@ -11,6 +16,7 @@ import { Loan } from './loan';
 import { CalculationLabel } from '../forms/calculationLabel';
 import { householdAtom } from '../../state';
 import { useRecoilValue } from 'recoil';
+import shortLink, { inflate } from './shareLink';
 
 const createFileName = (extension: string = '', ...names: string[]) => {
   if (!extension) {
@@ -22,17 +28,39 @@ const createFileName = (extension: string = '', ...names: string[]) => {
 
 export const Result = () => {
   const location = useLocation();
-  // TODO: decode household from URL
-  const { isSimpleCalculation, isDisasterCalculation } = location.state as {
-    isSimpleCalculation: boolean;
-    isDisasterCalculation: boolean;
-  };
+  const [searchParams] = useSearchParams();
+
+  let isSimpleCalculation;
+  let isDisasterCalculation;
+
+  if (location.state !== null) {
+    const state = location.state as {
+      isSimpleCalculation: boolean;
+      isDisasterCalculation: boolean;
+    };
+    isSimpleCalculation = state.isSimpleCalculation;
+    isDisasterCalculation = state.isDisasterCalculation;
+  } else {
+    isSimpleCalculation = Boolean(searchParams.get('isSimpleCalculation'));
+    isDisasterCalculation = Boolean(searchParams.get('isDisasterCalculation'));
+  }
 
   const navigate = useNavigate();
 
-  const household = useRecoilValue(householdAtom);
+  let household = useRecoilValue(householdAtom);
   const [result, calculate] = useCalculate();
   const [isDisplayChat, setIsDisplayChat] = useState('none');
+  const [shareLink, setShareLink] = useState(false);
+
+  if (!household.世帯員.あなた.収入 && searchParams.get('share')) {
+    try {
+      // URLパラメータから受け取った圧縮されたデータを展開
+      const share = String(searchParams.get('share')).replaceAll(' ', '+');
+      household = JSON.parse(inflate(share));
+    } catch (error) {
+      console.error('Failed to inflate shared data:', error);
+    }
+  }
 
   let calcOnce = true;
   useEffect(() => {
@@ -99,6 +127,27 @@ export const Result = () => {
     console.log('display chatbot');
     setIsDisplayChat('');
   }, []);
+
+  const clipBoard = async (text: string): Promise<void> => {
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch (error) {
+      console.error('Failed to copy text:', error);
+    }
+  };
+
+  const shareLinkButton = () => {
+    clipBoard(shortLink(household, isSimpleCalculation, isDisasterCalculation))
+      .then(() => {
+        setShareLink(true);
+        setTimeout(() => {
+          setShareLink(false);
+        }, 3000);
+      })
+      .catch((e: any) => {
+        console.error('Failed to copy text:', e);
+      });
+  };
 
   return (
     <div ref={divRef}>
@@ -224,6 +273,26 @@ export const Result = () => {
               _hover={{ bg: 'gray.600' }}
             >
               {configData.result.screenshotButtonText}
+            </Button>
+          </Center>
+
+          <Center pr={4} pl={4} pb={4}>
+            <Button
+              onClick={() => shareLinkButton()}
+              loadingText={'読み込み中...'}
+              isLoading={loadingScreenshotDownload}
+              as="button"
+              fontSize={configData.style.subTitleFontSize}
+              borderRadius="xl"
+              height="2em"
+              width="100%"
+              bg="gray.500"
+              color="white"
+              _hover={{ bg: 'gray.600' }}
+            >
+              {shareLink
+                ? configData.result.shareLinkButtonCopiedToClipboard
+                : configData.result.shareLinkButtonText}
             </Button>
           </Center>
 
