@@ -267,8 +267,6 @@ export const Result = () => {
           <Center pr={4} pl={4} pb={4}>
             <Button
               onClick={() => shareLinkButton()}
-              loadingText={'読み込み中...'}
-              isLoading={loadingScreenshotDownload}
               as="button"
               fontSize={configData.style.subTitleFontSize}
               borderRadius="xl"
