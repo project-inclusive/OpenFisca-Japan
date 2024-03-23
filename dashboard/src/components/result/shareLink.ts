@@ -15,7 +15,7 @@ export function inflate(compressedString: string): string {
   const compressedBytes = Uint8Array.from(window.atob(compressedString), (c) =>
     c.charCodeAt(0)
   );
-  const inflatedBytes = pako.inflate(compressedBytes);
+  const inflatedBytes = pako.inflate(compressedBytes, { raw: true });
   return new TextDecoder().decode(inflatedBytes);
 }
 
@@ -26,7 +26,7 @@ export default function shortLink(
 ) {
   return `${window.location.protocol}//${
     window.location.host
-  }/result?share=${deflate(
-    JSON.stringify(obj)
-  )}&isSimpleCalculation=${isSimpleCalculation}&isDisasterCalculation=${isDisasterCalculation}`;
+  }/result?share=${deflate(JSON.stringify(obj))}&isSimpleCalculation=${
+    isSimpleCalculation ? 1 : 0
+  }&isDisasterCalculation=${isDisasterCalculation ? 1 : 0}`;
 }
