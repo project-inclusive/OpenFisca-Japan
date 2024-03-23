@@ -41,8 +41,8 @@ export const Result = () => {
     isSimpleCalculation = state.isSimpleCalculation;
     isDisasterCalculation = state.isDisasterCalculation;
   } else {
-    isSimpleCalculation = Boolean(searchParams.get('isSimpleCalculation'));
-    isDisasterCalculation = Boolean(searchParams.get('isDisasterCalculation'));
+    isSimpleCalculation = searchParams.get('isSimpleCalculation') === '1';
+    isDisasterCalculation = searchParams.get('isDisasterCalculation') === '1';
   }
 
   const navigate = useNavigate();
