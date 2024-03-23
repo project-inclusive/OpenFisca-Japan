@@ -3,7 +3,7 @@ import pako from 'pako';
 // JSON文字列を圧縮する関数
 export function deflate(jsonString: string): string {
   const utf8Bytes = new TextEncoder().encode(jsonString);
-  const compressedBytes = pako.deflate(utf8Bytes);
+  const compressedBytes = pako.deflate(utf8Bytes, { level: 9 });
   return window.btoa(String.fromCharCode(...compressedBytes));
 }
 
