@@ -9,7 +9,6 @@ export function deflate(jsonString: string): string {
 
 // 圧縮された文字列を解凍してJSON文字列に戻す関数
 export function inflate(compressedString: string): string {
-  console.log(compressedString);
   const compressedBytes = Uint8Array.from(window.atob(compressedString), (c) =>
     c.charCodeAt(0)
   );
