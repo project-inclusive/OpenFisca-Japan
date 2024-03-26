@@ -1,9 +1,11 @@
 import { useState } from 'react';
 
 import configData from '../config/app_config.json';
+import { useRecoilState } from 'recoil';
+import { householdAtom } from './../state';
 
 export const useCalculate = () => {
-  const [result, setResult] = useState<any>();
+  const [result, setResult] = useRecoilState(householdAtom);
   const apiURL =
     import.meta.env.VITE_BRANCH === 'production'
       ? configData.URL.OpenFisca_API.production // mainブランチマージ時にビルドされるバックエンドAPI。Cloud Run
@@ -36,9 +38,6 @@ export const useCalculate = () => {
 
     const newResultJson = await newResultRes.json();
     console.log(newResultJson); // debug log
-    delete newResultJson.世帯一覧.世帯1.親一覧;
-    delete newResultJson.世帯一覧.世帯1.祖父母一覧;
-    delete newResultJson.世帯一覧.世帯1.子一覧;
     setResult(newResultJson);
   };
 
