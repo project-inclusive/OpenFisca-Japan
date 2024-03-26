@@ -17,6 +17,7 @@ import { CalculationLabel } from '../forms/calculationLabel';
 import { householdAtom } from '../../state';
 import { useRecoilValue } from 'recoil';
 import shortLink, { inflate, calculationType } from './shareLink';
+import ShareModal from './ShareModal';
 
 const createFileName = (extension: string = '', ...names: string[]) => {
   if (!extension) {
@@ -39,6 +40,8 @@ export const Result = () => {
   const [result, calculate] = useCalculate();
   const [isDisplayChat, setIsDisplayChat] = useState('none');
   const [shareLink, setShareLink] = useState(false);
+  const [shareUrl, setShareUrl] = useState('');
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   if (!household.世帯員.あなた.収入 && searchParams.get('share')) {
     try {
@@ -119,13 +122,20 @@ export const Result = () => {
   const clipBoard = async (text: string): Promise<void> => {
     try {
       await navigator.clipboard.writeText(text);
+      setIsShareModalOpen(true);
     } catch (error) {
       console.error('Failed to copy text:', error);
     }
   };
 
   const shareLinkButton = () => {
-    clipBoard(shortLink(household, isSimpleCalculation, isDisasterCalculation))
+    const url = shortLink(
+      household,
+      isSimpleCalculation,
+      isDisasterCalculation
+    );
+    setShareUrl(url);
+    clipBoard(url)
       .then(() => {
         setShareLink(true);
         setTimeout(() => {
@@ -281,6 +291,13 @@ export const Result = () => {
                 : configData.result.shareLinkButtonText}
             </Button>
           </Center>
+
+          {/* QRコード表示部分 */}
+          <ShareModal
+            isOpen={isShareModalOpen}
+            onClose={() => setIsShareModalOpen(false)}
+            url={shareUrl}
+          />
 
           <Box display={isDisplayChat}>
             <Center pr={4} pl={4} pt={4} pb={4}>
