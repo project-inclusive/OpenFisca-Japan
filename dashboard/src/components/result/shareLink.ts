@@ -48,6 +48,19 @@ export default function shortLink(
 }
 
 /**
+ * Generates a share link based on the current URL parameters.
+ * @returns The share link.
+ */
+export function getShareLink() {
+  const urlParams = new URLSearchParams(window.location.search);
+  return `${window.location.protocol}//${
+    window.location.host
+  }/result?share=${urlParams.get('share')}&1=${urlParams.get(
+    '1'
+  )}&2=${urlParams.get('2')}`;
+}
+
+/**
  * Retrieves the calculation type based on the URL parameters.
  * @returns An object containing the calculation type information.
  */

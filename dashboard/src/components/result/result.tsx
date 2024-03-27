@@ -16,8 +16,8 @@ import { Loan } from './loan';
 import { CalculationLabel } from '../forms/calculationLabel';
 import { householdAtom } from '../../state';
 import { useRecoilValue } from 'recoil';
-import shortLink, { inflate, calculationType } from './shareLink';
-import ShareModal from './ShareModal';
+import shortLink, { inflate, calculationType, getShareLink } from './shareLink';
+import { QRCodeCanvas } from 'qrcode.react';
 
 const createFileName = (extension: string = '', ...names: string[]) => {
   if (!extension) {
@@ -40,18 +40,20 @@ export const Result = () => {
   const [result, calculate] = useCalculate();
   const [isDisplayChat, setIsDisplayChat] = useState('none');
   const [shareLink, setShareLink] = useState(false);
-  const [shareUrl, setShareUrl] = useState('');
-  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [shareUrl, setShareUrl] = useState<string>('');
 
-  if (!household.世帯員.あなた.収入 && searchParams.get('share')) {
-    try {
-      // URLパラメータから受け取った圧縮されたデータを展開
-      const share = String(searchParams.get('share')).replaceAll(' ', '+');
-      household = JSON.parse(inflate(share));
-    } catch (error) {
-      console.error('Failed to inflate shared data:', error);
+  useEffect(() => {
+    if (!household.世帯員.あなた.収入 && searchParams.get('share')) {
+      try {
+        // URLパラメータから受け取った圧縮されたデータを展開
+        const share = String(searchParams.get('share')).replaceAll(' ', '+');
+        setShareUrl(getShareLink());
+        household = JSON.parse(inflate(share));
+      } catch (error) {
+        console.error('Failed to inflate shared data:', error);
+      }
     }
-  }
+  }, []);
 
   let calcOnce = true;
   useEffect(() => {
@@ -122,7 +124,6 @@ export const Result = () => {
   const clipBoard = async (text: string): Promise<void> => {
     try {
       await navigator.clipboard.writeText(text);
-      setIsShareModalOpen(true);
     } catch (error) {
       console.error('Failed to copy text:', error);
     }
@@ -292,12 +293,14 @@ export const Result = () => {
             </Button>
           </Center>
 
-          {/* QRコード表示部分 */}
-          <ShareModal
-            isOpen={isShareModalOpen}
-            onClose={() => setIsShareModalOpen(false)}
-            url={shareUrl}
-          />
+          {shareUrl && (
+            <Box bg="white" borderRadius="xl" p={4} mb={4} ml={4} mr={4}>
+              <Center>
+                {/* QRコード表示部分 */}
+                <QRCodeCanvas value={shareUrl} size={200} />
+              </Center>
+            </Box>
+          )}
 
           <Box display={isDisplayChat}>
             <Center pr={4} pl={4} pt={4} pb={4}>
