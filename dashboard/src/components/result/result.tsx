@@ -16,7 +16,13 @@ import { Loan } from './loan';
 import { CalculationLabel } from '../forms/calculationLabel';
 import { householdAtom } from '../../state';
 import { useRecoilValue } from 'recoil';
-import shortLink, { inflate, calculationType } from './shareLink';
+import shortLink, {
+  inflate,
+  calculationType,
+  getShareLink,
+  getShareKey,
+} from './shareLink';
+import { QRCodeCanvas } from 'qrcode.react';
 
 const createFileName = (extension: string = '', ...names: string[]) => {
   if (!extension) {
@@ -39,16 +45,20 @@ export const Result = () => {
   const [result, calculate] = useCalculate();
   const [isDisplayChat, setIsDisplayChat] = useState('none');
   const [shareLink, setShareLink] = useState(false);
+  const [shareUrl, setShareUrl] = useState<string>('');
 
-  if (!household.世帯員.あなた.収入 && searchParams.get('share')) {
-    try {
-      // URLパラメータから受け取った圧縮されたデータを展開
-      const share = String(searchParams.get('share')).replaceAll(' ', '+');
-      household = JSON.parse(inflate(share));
-    } catch (error) {
-      console.error('Failed to inflate shared data:', error);
+  useEffect(() => {
+    const key = getShareKey();
+    if (!household.世帯員.あなた.収入 && key) {
+      try {
+        // URLパラメータから受け取った圧縮されたデータを展開
+        setShareUrl(getShareLink(key));
+        household = JSON.parse(inflate(key));
+      } catch (error) {
+        console.error('Failed to inflate shared data:', error);
+      }
     }
-  }
+  }, []);
 
   let calcOnce = true;
   useEffect(() => {
@@ -125,7 +135,13 @@ export const Result = () => {
   };
 
   const shareLinkButton = () => {
-    clipBoard(shortLink(household, isSimpleCalculation, isDisasterCalculation))
+    const url = shortLink(
+      household,
+      isSimpleCalculation,
+      isDisasterCalculation
+    );
+    setShareUrl(url);
+    clipBoard(url)
       .then(() => {
         setShareLink(true);
         setTimeout(() => {
@@ -281,6 +297,15 @@ export const Result = () => {
                 : configData.result.shareLinkButtonText}
             </Button>
           </Center>
+
+          {shareUrl && (
+            <Box bg="white" borderRadius="xl" p={4} mb={4} ml={4} mr={4}>
+              <Center>
+                {/* QRコード表示部分 */}
+                <QRCodeCanvas value={shareUrl} size={200} />
+              </Center>
+            </Box>
+          )}
 
           <Box display={isDisplayChat}>
             <Center pr={4} pl={4} pt={4} pb={4}>
