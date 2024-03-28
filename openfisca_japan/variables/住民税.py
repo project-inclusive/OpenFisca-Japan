@@ -137,9 +137,6 @@ class 住民税勤労学生控除(Variable):
     """
 
     def formula(対象人物, 対象期間, parameters):
-        # 勤労学生控除額は対象人数によらず定額そう
-        # https://www.city.hirakata.osaka.jp/kosodate/0000000544.html
-
         所得 = 対象人物("所得", 対象期間)
         学生である = 対象人物("学生", 対象期間)
         勤労学生控除額 = parameters(対象期間).住民税.勤労学生控除額
