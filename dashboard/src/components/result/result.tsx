@@ -16,7 +16,12 @@ import { Loan } from './loan';
 import { CalculationLabel } from '../forms/calculationLabel';
 import { householdAtom } from '../../state';
 import { useRecoilValue } from 'recoil';
-import shortLink, { inflate, calculationType, getShareLink } from './shareLink';
+import shortLink, {
+  inflate,
+  calculationType,
+  getShareLink,
+  getShareKey,
+} from './shareLink';
 import { QRCodeCanvas } from 'qrcode.react';
 
 const createFileName = (extension: string = '', ...names: string[]) => {
@@ -43,12 +48,12 @@ export const Result = () => {
   const [shareUrl, setShareUrl] = useState<string>('');
 
   useEffect(() => {
-    if (!household.世帯員.あなた.収入 && searchParams.get('share')) {
+    const key = getShareKey();
+    if (!household.世帯員.あなた.収入 && key) {
       try {
         // URLパラメータから受け取った圧縮されたデータを展開
-        const share = String(searchParams.get('share')).replaceAll(' ', '+');
-        setShareUrl(getShareLink());
-        household = JSON.parse(inflate(share));
+        setShareUrl(getShareLink(key));
+        household = JSON.parse(inflate(key));
       } catch (error) {
         console.error('Failed to inflate shared data:', error);
       }

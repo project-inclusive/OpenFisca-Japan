@@ -39,32 +39,47 @@ export default function shortLink(
   obj: object,
   isSimpleCalculation: boolean,
   isDisasterCalculation: boolean
-) {
+): string {
+  const key = deflate(JSON.stringify(obj));
+  console.log('[DEBUG] shortLink -> key: ', key);
   return `${window.location.protocol}//${
     window.location.host
-  }/result?share=${deflate(JSON.stringify(obj))}&1=${
-    isSimpleCalculation ? 1 : 0
-  }&2=${isDisasterCalculation ? 1 : 0}`;
+  }/result?share=${key}&1=${isSimpleCalculation ? 1 : 0}&2=${
+    isDisasterCalculation ? 1 : 0
+  }`;
 }
 
 /**
  * Generates a share link based on the current URL parameters.
  * @returns The share link.
  */
-export function getShareLink() {
+export function getShareLink(key?: string): string {
   const urlParams = new URLSearchParams(window.location.search);
+  const shareKey = key ?? getShareKey();
   return `${window.location.protocol}//${
     window.location.host
-  }/result?share=${urlParams.get('share')}&1=${urlParams.get(
-    '1'
-  )}&2=${urlParams.get('2')}`;
+  }/result?share=${shareKey}&1=${urlParams.get('1')}&2=${urlParams.get('2')}`;
+}
+
+/**
+ * Retrieves the share key from the URL query parameters.
+ * @returns The share key.
+ */
+export function getShareKey(): string {
+  const urlParams = new URLSearchParams(window.location.search);
+  const key = String(urlParams.get('share')).replaceAll(' ', '+');
+  console.log('[DEBUG] getShareKey -> key: ', key);
+  return key;
 }
 
 /**
  * Retrieves the calculation type based on the URL parameters.
  * @returns An object containing the calculation type information.
  */
-export function calculationType() {
+export function calculationType(): {
+  isSimpleCalculation: boolean;
+  isDisasterCalculation: boolean;
+} {
   const urlParams = new URLSearchParams(window.location.search);
   const isSimpleCalculation = urlParams.get('1') === '1';
   const isDisasterCalculation = urlParams.get('2') === '1';
