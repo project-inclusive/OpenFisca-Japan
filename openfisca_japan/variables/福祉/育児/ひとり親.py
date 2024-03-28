@@ -4,7 +4,7 @@
 
 from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
-from openfisca_japan.entities import 世帯
+from openfisca_japan.entities import 世帯, 人物
 
 
 class 配偶者がいるがひとり親に該当(Variable):
@@ -46,11 +46,12 @@ class 夫と離別死別(Variable):
 
 class 寡婦(Variable):
     value_type = bool
-    entity = 世帯
+    entity = 人物
     definition_period = DAY
     label = "寡婦に該当するか否か"
     reference = "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1170.htm"
 
-    def formula(対象世帯, 対象期間, parameters):
-        子供がいない = 対象世帯.nb_persons(世帯.子) == 0
-        return 子供がいない * 対象世帯("夫と離別死別", 対象期間)
+    def formula(対象人物, 対象期間, _parameters):
+        子供がいない = 対象人物.世帯.sum(対象人物.has_role(世帯.子)) == 0
+        親である = 対象人物.has_role(世帯.親)
+        return 子供がいない * 親である * 対象人物.世帯("夫と離別死別", 対象期間)
