@@ -131,7 +131,6 @@ export const SchoolYear = ({
         ETERNITY: `${date.getFullYear()}-01-01`,
       };
       setHousehold(newHousehold);
-      console.log(newHousehold);
     }
   }, [schoolYear]);
 
