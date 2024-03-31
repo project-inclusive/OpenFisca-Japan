@@ -41,6 +41,15 @@ export const Result = () => {
 
   const navigate = useNavigate();
 
+  const errorRedirect = () => {
+    navigate('/response-error', {
+      state: {
+        isSimpleCalculation: isSimpleCalculation,
+        isDisasterCalculation: isDisasterCalculation,
+      },
+    });
+  };
+
   let household = useRecoilValue(householdAtom);
   const [result, calculate] = useCalculate();
   const [isDisplayChat, setIsDisplayChat] = useState('none');
@@ -56,6 +65,7 @@ export const Result = () => {
         household = JSON.parse(inflate(key));
       } catch (error) {
         console.error('Failed to inflate shared data:', error);
+        errorRedirect();
       }
     }
   }, []);
@@ -67,12 +77,7 @@ export const Result = () => {
         console.log(e);
 
         // 想定外のエラーレスポンスを受け取り結果が取得できなかった場合、エラー画面へ遷移
-        navigate('/response-error', {
-          state: {
-            isSimpleCalculation: isSimpleCalculation,
-            isDisasterCalculation: isDisasterCalculation,
-          },
-        });
+        errorRedirect();
       });
       calcOnce = false;
     }
