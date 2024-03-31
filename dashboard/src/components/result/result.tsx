@@ -46,6 +46,7 @@ export const Result = () => {
       state: {
         isSimpleCalculation: isSimpleCalculation,
         isDisasterCalculation: isDisasterCalculation,
+        redirect: '/',
       },
     });
   };
