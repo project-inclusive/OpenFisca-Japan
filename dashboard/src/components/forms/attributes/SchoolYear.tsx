@@ -61,7 +61,7 @@ export const SchoolYear = ({
       maxAge: 18,
       building: '高等学校',
       diff: 15,
-      suffix: '年生',
+      suffix: '年生相当',
     },
     {
       minAge: 16,
