@@ -58,7 +58,8 @@ export const Result = () => {
 
   useEffect(() => {
     const key = getShareKey();
-    if (!household.世帯員.あなた.収入 && key) {
+    const required = resuiredHousehold(household);
+    if (!required && key) {
       try {
         // URLパラメータから受け取った圧縮されたデータを展開
         setShareUrl(getShareLink(key));
@@ -156,6 +157,22 @@ export const Result = () => {
       .catch((e: any) => {
         console.error('Failed to copy text:', e);
       });
+  };
+
+  const resuiredHousehold = (household: any) => {
+    if (typeof household !== 'object') {
+      return false;
+    }
+
+    if (
+      !household.世帯員.あなた.収入 ||
+      !household.世帯一覧.世帯1.居住市区町村 ||
+      !household.世帯一覧.世帯1.居住都道府県
+    ) {
+      return false;
+    }
+
+    return true;
   };
 
   return (
