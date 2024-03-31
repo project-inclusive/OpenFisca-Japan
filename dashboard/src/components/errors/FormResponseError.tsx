@@ -4,10 +4,12 @@ import configData from '../../config/app_config.json';
 
 export const FormResponseError = () => {
   const location = useLocation();
-  const { isSimpleCalculation, isDisasterCalculation } = location.state as {
-    isSimpleCalculation: boolean;
-    isDisasterCalculation: boolean;
-  };
+  const { isSimpleCalculation, isDisasterCalculation, redirect } =
+    location.state as {
+      isSimpleCalculation: boolean;
+      isDisasterCalculation: boolean;
+      redirect: string;
+    };
 
   return (
     <Box bg="white" borderRadius="xl" p={4} mt={4} mb={4} ml={4} mr={4}>
@@ -33,7 +35,7 @@ export const FormResponseError = () => {
               ? '/calculate-simple'
               : isDisasterCalculation
               ? '/calculate-disaster'
-              : '/calculate'
+              : redirect ?? '/calculate'
           }
         >
           戻る

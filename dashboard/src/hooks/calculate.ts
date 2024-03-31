@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import configData from '../config/app_config.json';
 import { useRecoilState } from 'recoil';
 import { householdAtom } from './../state';

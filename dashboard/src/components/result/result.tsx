@@ -41,6 +41,16 @@ export const Result = () => {
 
   const navigate = useNavigate();
 
+  const errorRedirect = () => {
+    navigate('/response-error', {
+      state: {
+        isSimpleCalculation: isSimpleCalculation,
+        isDisasterCalculation: isDisasterCalculation,
+        redirect: '/',
+      },
+    });
+  };
+
   let household = useRecoilValue(householdAtom);
   const [result, calculate] = useCalculate();
   const [isDisplayChat, setIsDisplayChat] = useState('none');
@@ -49,13 +59,15 @@ export const Result = () => {
 
   useEffect(() => {
     const key = getShareKey();
-    if (!household.世帯員.あなた.収入 && key) {
+    const required = resuiredHousehold(household);
+    if (!required && key) {
       try {
         // URLパラメータから受け取った圧縮されたデータを展開
         setShareUrl(getShareLink(key));
         household = JSON.parse(inflate(key));
       } catch (error) {
         console.error('Failed to inflate shared data:', error);
+        errorRedirect();
       }
     }
   }, []);
@@ -67,12 +79,7 @@ export const Result = () => {
         console.log(e);
 
         // 想定外のエラーレスポンスを受け取り結果が取得できなかった場合、エラー画面へ遷移
-        navigate('/response-error', {
-          state: {
-            isSimpleCalculation: isSimpleCalculation,
-            isDisasterCalculation: isDisasterCalculation,
-          },
-        });
+        errorRedirect();
       });
       calcOnce = false;
     }
@@ -151,6 +158,22 @@ export const Result = () => {
       .catch((e: any) => {
         console.error('Failed to copy text:', e);
       });
+  };
+
+  const resuiredHousehold = (household: any) => {
+    if (typeof household !== 'object') {
+      return false;
+    }
+
+    if (
+      !household.世帯員.あなた.収入 ||
+      !household.世帯一覧.世帯1.居住市区町村 ||
+      !household.世帯一覧.世帯1.居住都道府県
+    ) {
+      return false;
+    }
+
+    return true;
   };
 
   return (
