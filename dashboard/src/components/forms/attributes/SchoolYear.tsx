@@ -31,42 +31,44 @@ export const SchoolYear = ({
     setSchoolYear(event.currentTarget.value);
   }
 
+  const ignoreSchoolYear: Array<string> = ['高校卒業後相当', '小学校入学前'];
+
   // 教育機関の情報
   const schoolInfo = [
     {
       minAge: 0,
       maxAge: 6,
       building: '小学校入学前',
-      yearCalc: () => '',
-      suffix: () => '',
+      diff: 0,
+      suffix: '',
     },
     {
       minAge: 7,
       maxAge: 12,
       building: '小学校',
-      yearCalc: (age: number) => String(age - 6),
-      suffix: (age: number) => '年生',
+      diff: 6,
+      suffix: '年生',
     },
     {
       minAge: 13,
       maxAge: 15,
       building: '中学校',
-      yearCalc: (age: number) => String(age - 12),
-      suffix: () => '年生',
+      diff: 12,
+      suffix: '年生',
     },
     {
       minAge: 16,
       maxAge: 18,
       building: '高等学校',
-      yearCalc: (age: number) => String(age - 15),
-      suffix: () => '年生',
+      diff: 15,
+      suffix: '年生',
     },
     {
       minAge: 16,
       maxAge: 999,
       building: '高校卒業後相当',
-      yearCalc: () => '',
-      suffix: () => '',
+      diff: 0,
+      suffix: '',
     },
   ];
 
@@ -81,9 +83,9 @@ export const SchoolYear = ({
 
       for (const info of schoolInfo) {
         if (age >= info.minAge && age <= info.maxAge) {
-          setSchoolYear(info.yearCalc(age));
+          setSchoolYear(String(age - info.diff));
           setschoolEducationalAuthority(info.building);
-          setSuffix(info.suffix(age));
+          setSuffix(info.suffix);
           break;
         }
       }
@@ -101,6 +103,37 @@ export const SchoolYear = ({
       setHousehold(newHousehold);
     }
   }, [schoolYear, schoolEducationalAuthority]);
+
+  // 教育期間が変更された時に実行される処理
+  useEffect(() => {
+    setSuffix(
+      schoolInfo.find((info) => info.building === schoolEducationalAuthority)
+        ?.suffix
+    );
+  }, [schoolEducationalAuthority]);
+
+  // 学年が変更された際に誕生年月日を変更する処理
+  useEffect(() => {
+    if (schoolYear) {
+      const age =
+        Number(schoolYear) +
+        Number(
+          schoolInfo.find(
+            (info) => info.building === schoolEducationalAuthority
+          )?.diff
+        );
+      const date = new Date();
+      date.setFullYear(date.getFullYear() - age);
+      const newHousehold = {
+        ...household,
+      };
+      newHousehold.世帯員[personName].誕生年月日 = {
+        ETERNITY: `${date.getFullYear()}-01-01`,
+      };
+      setHousehold(newHousehold);
+      console.log(newHousehold);
+    }
+  }, [schoolYear]);
 
   return (
     <>
@@ -140,8 +173,8 @@ export const SchoolYear = ({
             ))}
           </Select>
 
-          {schoolEducationalAuthority !== '高校卒業後相当' &&
-            schoolEducationalAuthority !== '小学校入学前' && (
+          {!ignoreSchoolYear.includes(schoolEducationalAuthority as string) &&
+            schoolEducationalAuthority !== '' && (
               <Input
                 width="6em"
                 type="number"

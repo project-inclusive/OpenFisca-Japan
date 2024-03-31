@@ -48,7 +48,7 @@ export const AgeInput = ({
       const currentYear = today.getFullYear();
       setAge(String(currentYear - birthYear));
     }
-  }, [navigationType]);
+  }, [navigationType, household.世帯員[personName]?.誕生年月日]);
 
   return (
     <>
