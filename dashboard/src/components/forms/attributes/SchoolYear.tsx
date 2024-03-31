@@ -79,21 +79,13 @@ export const SchoolYear = ({
           household.世帯員[personName].誕生年月日?.ETERNITY
         ).getFullYear();
 
-      let found = false;
       for (const info of schoolInfo) {
         if (age >= info.minAge && age <= info.maxAge) {
           setSchoolYear(info.yearCalc(age));
           setschoolEducationalAuthority(info.building);
           setSuffix(info.suffix(age));
-          found = true;
           break;
         }
-      }
-
-      if (!found) {
-        setSchoolYear('その他');
-        setschoolEducationalAuthority('その他');
-        setSuffix('');
       }
     }
   }, [household.世帯員[personName].誕生年月日?.ETERNITY]);
