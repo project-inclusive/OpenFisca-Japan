@@ -13,6 +13,7 @@ import { NursingHome } from './attributes/NursingHome';
 import { HighSchool } from './attributes/HighSchool';
 import { DisasterDisability } from './attributes/DisasterDisability';
 import { DisasterInjuryPeriod } from './attributes/DisasterInjuryPeriod';
+import { SchoolYear } from './attributes/SchoolYear';
 
 export const FormChildren = () => {
   const location = useLocation();
@@ -38,11 +39,9 @@ export const FormChildren = () => {
                   {configData.calculationForm.childrenDescription}
                 </Center>
 
-                {isDetailedCalculation ? (
-                  <Birthday personName={childName} mustInput={true} />
-                ) : (
-                  <AgeInput personName={childName} mustInput />
-                )}
+                {/* <Birthday personName={childName} mustInput={true} /> */}
+                <AgeInput personName={childName} mustInput />
+                <SchoolYear personName={childName} mustInput />
 
                 {isDisasterCalculation && (
                   <DisasterInjuryPeriod personName={childName} />
