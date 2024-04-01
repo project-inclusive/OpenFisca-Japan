@@ -81,12 +81,12 @@ export const SchoolYear = ({
     for (const info of schoolInfo) {
       // 20歳以降は変化がないのでフィルタリング
       if (age >= info.minAge && age <= info.maxAge && age < 20) {
-        setSchoolYear(age - info.diff);
         setschoolEducationalAuthority(info.building);
         setSuffix(info.suffix);
         break;
       }
     }
+    console.log('[DEBUG] household -> ', household);
   }, [household.世帯員[personName].誕生年月日?.ETERNITY]);
 
   useEffect(() => {
