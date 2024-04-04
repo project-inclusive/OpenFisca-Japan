@@ -14,6 +14,7 @@ import { Recuperation } from './attributes/Recuperation';
 import { NursingHome } from './attributes/NursingHome';
 import { DisasterDisability } from './attributes/DisasterDisability';
 import { DisasterInjuryPeriod } from './attributes/DisasterInjuryPeriod';
+import { AgeInput } from './attributes/AgeInput';
 
 export const FormParents = () => {
   const location = useLocation();
@@ -46,7 +47,7 @@ export const FormParents = () => {
                 )}
 
                 {isDetailedCalculation && (
-                  <Birthday personName={parentName} mustInput={true} />
+                  <AgeInput personName={parentName} mustInput={true} />
                 )}
                 {isDetailedCalculation && (
                   <Income personName={parentName} mustInput={true} />
