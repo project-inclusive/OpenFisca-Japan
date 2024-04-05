@@ -131,8 +131,9 @@ export const SchoolYear = ({
     newHousehold.世帯員[personName].誕生年月日 = {
       ETERNITY: `${date.getFullYear()}-01-01`,
     };
-    newHousehold.世帯員[personName].学校教育機関 = schoolEducationalAuthority;
-    newHousehold.世帯員[personName].学年 = Number(schoolYear);
+    // 後ほど検討
+    // newHousehold.世帯員[personName].学校教育機関 = schoolEducationalAuthority;
+    // newHousehold.世帯員[personName].学年 = Number(schoolYear);
 
     setHousehold(newHousehold);
 
