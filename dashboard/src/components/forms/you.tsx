@@ -3,7 +3,7 @@ import { useLocation, useNavigationType } from 'react-router-dom';
 
 import configData from '../../config/app_config.json';
 import { PrefectureMunicipality } from './attributes/PrefectureMunicipality';
-import { Birthday } from './attributes/Birthday';
+import { AgeInput } from './attributes/AgeInput';
 import { Student } from './attributes/Student';
 import { ChildrenNum } from './attributes/ChildrenNum';
 import { ParentsNum } from './attributes/ParentsNum';
@@ -57,7 +57,7 @@ export const FormYou = () => {
         </Center>
         <PrefectureMunicipality mustInput={true} />
         {isDetailedCalculation && (
-          <Birthday personName={yourName} mustInput={true} />
+          <AgeInput personName={yourName} mustInput={true} />
         )}
         <Income personName={yourName} mustInput={true} />
 
