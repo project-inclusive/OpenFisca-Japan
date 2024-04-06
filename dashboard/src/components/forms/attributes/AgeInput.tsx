@@ -19,16 +19,19 @@ export const AgeInput = ({
   const [household, setHousehold] = useRecoilState(householdAtom);
   const [age, setAge] = useState('');
 
-  const handleAgeChange = (event: React.ChangeEvent<HTMLInputElement>) =>
-    parseInt(event.currentTarget.value) < 0
-      ? setAge('0')
-      : setAge(event.currentTarget.value);
+  const handleAgeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    let inputAge: string;
+    if (parseInt(event.currentTarget.value) < 0) {
+      inputAge = '0';
+    } else {
+      inputAge = event.currentTarget.value;
+    }
+    setAge(inputAge);
 
-  useEffect(() => {
-    if (age) {
+    if (inputAge) {
       const today = new Date();
       const currentYear = today.getFullYear();
-      const birthYear = currentYear - parseInt(age);
+      const birthYear = currentYear - parseInt(inputAge);
       const newHousehold = {
         ...household,
       };
@@ -36,17 +39,24 @@ export const AgeInput = ({
         ETERNITY: `${birthYear.toString()}-01-01`,
       };
       setHousehold(newHousehold);
+      console.log('[DEBUG] household -> ', newHousehold);
     }
-  }, [age]);
+  };
 
   // stored states set displayed age when page transition
   useEffect(() => {
     const birthdayObj = household.世帯員[personName].誕生年月日;
     if (birthdayObj && birthdayObj.ETERNITY) {
       const birthYear = parseInt(birthdayObj.ETERNITY.substring(0, 4));
+      const birthMonth = parseInt(birthdayObj.ETERNITY.substring(5, 7));
+      const birthDate = parseInt(birthdayObj.ETERNITY.substring(8));
+      const birthSum = 10000 * birthYear + 100 * birthMonth + birthDate;
       const today = new Date();
-      const currentYear = today.getFullYear();
-      setAge(String(currentYear - birthYear));
+      const todaySum =
+        10000 * today.getFullYear() +
+        100 * (today.getMonth() + 1) +
+        today.getDate();
+      setAge(String(Math.floor((todaySum - birthSum) / 10000)));
     }
   }, [navigationType, household.世帯員[personName]?.誕生年月日]);
 
