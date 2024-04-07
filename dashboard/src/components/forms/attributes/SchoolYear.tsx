@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useNavigationType } from 'react-router-dom';
 import {
   Box,
   HStack,
@@ -21,6 +22,7 @@ export const SchoolYear = ({
   personName: string;
   mustInput: boolean;
 }) => {
+  const navigationType = useNavigationType();
   const [household, setHousehold] = useRecoilState(householdAtom);
   const [schoolYear, setSchoolYear] = useState<number | string>('');
   const [schoolEducationalAuthority, setschoolEducationalAuthority] =
@@ -145,13 +147,15 @@ export const SchoolYear = ({
       new Date().getFullYear() -
       new Date(household.世帯員[personName].誕生年月日?.ETERNITY).getFullYear();
 
-    let birthday = new Date(household.世帯員[personName].誕生年月日?.ETERNITY);
-    let birthBeforeApril1th =
+    const birthday = new Date(
+      household.世帯員[personName].誕生年月日?.ETERNITY
+    );
+    const birthBeforeApril1th =
       birthday.getMonth() < 3 ||
       (birthday.getMonth() == 3 && birthday.getDate() == 1);
-    let afterApril = new Date().getMonth() >= 3;
+    const afterApril = new Date().getMonth() >= 3;
     // 小学L年生をL, 中学M年生をM+6, 高校N年生をN+9 で表す
-    let totalSchoolYear =
+    const totalSchoolYear =
       age + Number(birthBeforeApril1th) + Number(afterApril) - 7;
 
     for (const info of schoolInfo) {
@@ -169,7 +173,7 @@ export const SchoolYear = ({
       }
     }
     console.log('[DEBUG] household -> ', household);
-  }, [household.世帯員[personName].誕生年月日?.ETERNITY]);
+  }, [navigationType, household.世帯員[personName].誕生年月日?.ETERNITY]);
 
   // 学校教育機関と学年が変更された時に実行される処理
   useEffect(() => {
