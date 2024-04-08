@@ -384,18 +384,18 @@ class 配偶者特別控除(Variable):
 
 class 扶養控除(Variable):
     value_type = float
-    entity = 世帯
+    entity = 人物
     definition_period = DAY
     label = "扶養控除"
     reference = "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1180.htm"
 
-    def formula(対象世帯, 対象期間, parameters):
-        扶養親族である = 対象世帯.members("扶養親族である", 対象期間)
+    def formula(対象人物, 対象期間, parameters):
+        扶養親族である = 対象人物("扶養親族である", 対象期間)
 
         # NOTE: その年の12/31時点の年齢を参照
         # https://www.nta.go.jp/taxes/shiraberu/taxanswer/yogo/senmon.htm#word5
         該当年12月31日 = period(f"{対象期間.start.year}-12-31")
-        年齢 = 対象世帯.members("年齢", 該当年12月31日)
+        年齢 = 対象人物("年齢", 該当年12月31日)
 
         控除対象扶養親族である = 扶養親族である * (年齢 >= 16)
 
@@ -404,12 +404,12 @@ class 扶養控除(Variable):
 
         # NOTE: 入院中の親族は同居扱いだが老人ホーム等への入居は除く
         # TODO: 「同居していない親族」も世帯内で扱うようになったら同居老親かどうかの判定追加
-        介護施設入所中 = 対象世帯.members("介護施設入所中", 対象期間)
+        介護施設入所中 = 対象人物("介護施設入所中", 対象期間)
         同居している老人扶養親族である = 老人扶養親族である * np.logical_not(介護施設入所中)
         同居していない老人扶養親族である = 老人扶養親族である * 介護施設入所中
 
         # NOTE: np.selectのcondlistは最初に該当した条件で計算される
-        扶養控除一覧 = np.select(
+        扶養控除額 = np.select(
             [特定扶養親族である,
              同居している老人扶養親族である,
              同居していない老人扶養親族である,
@@ -420,7 +420,12 @@ class 扶養控除(Variable):
              parameters(対象期間).所得.扶養控除_一般],
             0)
 
-        return 対象世帯.sum(扶養控除一覧)
+        所得 = 対象人物("所得", 対象期間)
+        所得降順 = 対象人物.get_rank(対象人物.世帯, -所得)
+        # NOTE: 便宜上所得が最も多い世帯員が扶養者であるとする
+        扶養者である = 所得降順 == 0
+
+        return 扶養者である * 対象人物.世帯.sum(扶養控除額)
 
 
 class 扶養親族である(Variable):
@@ -474,7 +479,6 @@ class 控除後世帯高所得(Variable):
         勤労学生控除 = 対象世帯.sum(勤労学生控除一覧)
 
         # 他の控除（雑損控除・医療費控除等）は定額でなく実費を元に算出するため除外する
-
         総控除額 = 社会保険料 + 給与所得及び雑所得からの控除額 + 障害者控除 + ひとり親控除 + 寡婦控除 + 勤労学生控除
 
         # 負の数にならないよう、0円未満になった場合は0円に補正
