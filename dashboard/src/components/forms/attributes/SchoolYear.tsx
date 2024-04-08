@@ -83,7 +83,7 @@ export const SchoolYear = ({
   function handleSchoolYearChange(event: React.ChangeEvent<HTMLInputElement>) {
     if (event.currentTarget.value) {
       setSchoolYear(Number(event.currentTarget.value));
-      console.log('[DEBUG] schoolYear ->', schoolYear);
+      //console.log('[DEBUG] schoolYear ->', schoolYear);
       setBirthday(
         Number(event.currentTarget.value),
         schoolEducationalAuthority
@@ -132,10 +132,6 @@ export const SchoolYear = ({
         };
       }
 
-      // 後ほど検討
-      // newHousehold.世帯員[personName].学校教育機関 = schoolEducationalAuthority;
-      // newHousehold.世帯員[personName].学年 = Number(schoolYear);
-
       setHousehold(newHousehold);
     },
     []
@@ -160,7 +156,6 @@ export const SchoolYear = ({
 
     for (const info of schoolInfo) {
       // 20歳以降は変化がないのでフィルタリング
-      //if (age >= info.minAge && age <= info.maxAge && age < 20) {
       if (
         totalSchoolYear >= info.minTotalSchoolYear &&
         totalSchoolYear <= info.maxTotalSchoolYear &&
@@ -172,7 +167,7 @@ export const SchoolYear = ({
         break;
       }
     }
-    console.log('[DEBUG] household -> ', household);
+    //console.log('[DEBUG] household -> ', household);
   }, [navigationType, household.世帯員[personName].誕生年月日?.ETERNITY]);
 
   // 学校教育機関と学年が変更された時に実行される処理
@@ -186,7 +181,7 @@ export const SchoolYear = ({
     }
 
     if (!schoolYear) {
-      console.log('[DEBUG] schoolYear is not set');
+      //console.log('[DEBUG] schoolYear is not set');
       return;
     }
 
@@ -201,7 +196,7 @@ export const SchoolYear = ({
       ) +
       1;
 
-    console.log('[DEBUG] maximum -> ', maximum);
+    //console.log('[DEBUG] maximum -> ', maximum);
 
     // 学年が最大値を超えていた場合、最大値に設定
     if (Number(schoolYear) > maximum) {
@@ -209,11 +204,11 @@ export const SchoolYear = ({
     }
 
     // デバッグ用
-    console.log('[DEBUG] schoolYear -> ', schoolYear);
-    console.log(
-      '[DEBUG] schoolEducationalAuthority -> ',
-      schoolEducationalAuthority
-    );
+    //console.log('[DEBUG] schoolYear -> ', schoolYear);
+    // console.log(
+    //   '[DEBUG] schoolEducationalAuthority -> ',
+    //   schoolEducationalAuthority
+    // );
   }, [schoolYear, schoolEducationalAuthority]);
 
   return (
