@@ -158,8 +158,7 @@ export const SchoolYear = ({
       // 20歳以降は変化がないのでフィルタリング
       if (
         totalSchoolYear >= info.minTotalSchoolYear &&
-        totalSchoolYear <= info.maxTotalSchoolYear &&
-        age < 20
+        totalSchoolYear <= info.maxTotalSchoolYear
       ) {
         setschoolEducationalAuthority(info.building);
         setSchoolYear(totalSchoolYear - info.diff + 6);
