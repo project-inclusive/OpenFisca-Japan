@@ -41,7 +41,7 @@ export default function shortLink(
   isDisasterCalculation: boolean
 ): string {
   const key = deflate(JSON.stringify(obj));
-  console.log('[DEBUG] shortLink -> key: ', key);
+  //console.log('[DEBUG] shortLink -> key: ', key);
   return `${window.location.protocol}//${
     window.location.host
   }/result?share=${key}&1=${isSimpleCalculation ? 1 : 0}&2=${
@@ -68,7 +68,7 @@ export function getShareLink(key?: string): string {
 export function getShareKey(): string {
   const urlParams = new URLSearchParams(window.location.search);
   const key = String(urlParams.get('share')).replaceAll(' ', '+');
-  console.log('[DEBUG] getShareKey -> key: ', key);
+  //console.log('[DEBUG] getShareKey -> key: ', key);
   return key;
 }
 

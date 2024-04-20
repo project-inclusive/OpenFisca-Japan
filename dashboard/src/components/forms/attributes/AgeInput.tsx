@@ -39,7 +39,7 @@ export const AgeInput = ({
         ETERNITY: `${birthYear.toString()}-01-01`,
       };
       setHousehold(newHousehold);
-      console.log('[DEBUG] household -> ', newHousehold);
+      //console.log('[DEBUG] household -> ', newHousehold);
     }
   };
 

@@ -1,10 +1,5 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
-import {
-  Link as RouterLink,
-  useLocation,
-  useNavigate,
-  useSearchParams,
-} from 'react-router-dom';
+import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 import { Box, Center, Button, Spinner, Text } from '@chakra-ui/react';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import * as htmlToImage from 'html-to-image';
@@ -15,7 +10,7 @@ import { Benefit } from './benefit';
 import { Loan } from './loan';
 import { CalculationLabel } from '../forms/calculationLabel';
 import { householdAtom } from '../../state';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import shortLink, {
   inflate,
   calculationType,
@@ -34,7 +29,6 @@ const createFileName = (extension: string = '', ...names: string[]) => {
 
 export const Result = () => {
   const location = useLocation();
-  const [searchParams] = useSearchParams();
 
   const { isSimpleCalculation, isDisasterCalculation } =
     location.state ?? calculationType();
@@ -51,7 +45,9 @@ export const Result = () => {
     });
   };
 
-  let household = useRecoilValue(householdAtom);
+  const [household, setHousehold] = useRecoilState(householdAtom);
+  let householdByURL: any;
+
   const [result, calculate] = useCalculate();
   const [isDisplayChat, setIsDisplayChat] = useState('none');
   const [shareLink, setShareLink] = useState(false);
@@ -64,7 +60,8 @@ export const Result = () => {
       try {
         // URLパラメータから受け取った圧縮されたデータを展開
         setShareUrl(getShareLink(key));
-        household = JSON.parse(inflate(key));
+        householdByURL = JSON.parse(inflate(key));
+        setHousehold(householdByURL);
       } catch (error) {
         console.error('Failed to inflate shared data:', error);
         errorRedirect();
@@ -75,7 +72,8 @@ export const Result = () => {
   let calcOnce = true;
   useEffect(() => {
     if (calcOnce) {
-      calculate(household).catch((e: any) => {
+      // URLからhouseholdが展開された場合はそのhousehold, そうでない場合はフォームで入力されたhouseholdをPOST
+      calculate(householdByURL || household).catch((e: any) => {
         console.log(e);
 
         // 想定外のエラーレスポンスを受け取り結果が取得できなかった場合、エラー画面へ遷移
