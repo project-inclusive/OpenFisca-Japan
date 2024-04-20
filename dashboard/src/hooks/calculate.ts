@@ -1,9 +1,11 @@
 import configData from '../config/app_config.json';
-import { useRecoilState } from 'recoil';
-import { householdAtom } from './../state';
+import { useState } from 'react';
 
 export const useCalculate = () => {
-  const [result, setResult] = useRecoilState(householdAtom);
+  // recoilのhouseholdには結果を格納する制度の金額にnullでない数値が入力され、
+  // そのobjectをブラウザバックして再POSTするとOpenFiscaで計算されない。
+  // そのため結果はhouseholdに格納せず、localのstateとして管理する。
+  const [result, setResult] = useState<any>();
   const apiURL =
     import.meta.env.VITE_BRANCH === 'production'
       ? configData.URL.OpenFisca_API.production // mainブランチマージ時にビルドされるバックエンドAPI。Cloud Run
