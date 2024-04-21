@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Box, Link, Text } from '@chakra-ui/react';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 
@@ -8,10 +9,13 @@ import { useRecoilValue } from 'recoil';
 export const HelpDesk = () => {
   const currentDate = useRecoilValue(currentDateAtom);
   const household = useRecoilValue(householdAtom);
+  const [prefecture, setPrefecture] = useState('');
+  const [city, setCity] = useState('');
 
-  const prefecture = household.世帯一覧.世帯1.居住都道府県[currentDate];
-
-  const city = household.世帯一覧.世帯1.居住市区町村[currentDate];
+  useEffect(() => {
+    setPrefecture(household.世帯一覧.世帯1.居住都道府県[currentDate]);
+    setCity(household.世帯一覧.世帯1.居住市区町村[currentDate]);
+  }, [household]);
 
   const getSocialWelfareCouncilData = () => {
     if (

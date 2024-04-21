@@ -10,7 +10,14 @@ import { Benefit } from './benefit';
 import { Loan } from './loan';
 import { CalculationLabel } from '../forms/calculationLabel';
 import { householdAtom } from '../../state';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
+import shortLink, {
+  inflate,
+  calculationType,
+  getShareLink,
+  getShareKey,
+} from './shareLink';
+import { QRCodeCanvas } from 'qrcode.react';
 
 const createFileName = (extension: string = '', ...names: string[]) => {
   if (!extension) {
@@ -22,31 +29,55 @@ const createFileName = (extension: string = '', ...names: string[]) => {
 
 export const Result = () => {
   const location = useLocation();
-  // TODO: decode household from URL
-  const { isSimpleCalculation, isDisasterCalculation } = location.state as {
-    isSimpleCalculation: boolean;
-    isDisasterCalculation: boolean;
-  };
+
+  const { isSimpleCalculation, isDisasterCalculation } =
+    location.state ?? calculationType();
 
   const navigate = useNavigate();
 
-  const household = useRecoilValue(householdAtom);
+  const errorRedirect = () => {
+    navigate('/response-error', {
+      state: {
+        isSimpleCalculation: isSimpleCalculation,
+        isDisasterCalculation: isDisasterCalculation,
+        redirect: '/',
+      },
+    });
+  };
+
+  const [household, setHousehold] = useRecoilState(householdAtom);
+  let householdByURL: any;
+
   const [result, calculate] = useCalculate();
   const [isDisplayChat, setIsDisplayChat] = useState('none');
+  const [shareLink, setShareLink] = useState(false);
+  const [shareUrl, setShareUrl] = useState<string>('');
+
+  useEffect(() => {
+    const key = getShareKey();
+    const required = resuiredHousehold(household);
+    if (!required && key) {
+      try {
+        // URLパラメータから受け取った圧縮されたデータを展開
+        setShareUrl(getShareLink(key));
+        householdByURL = JSON.parse(inflate(key));
+        setHousehold(householdByURL);
+      } catch (error) {
+        console.error('Failed to inflate shared data:', error);
+        errorRedirect();
+      }
+    }
+  }, []);
 
   let calcOnce = true;
   useEffect(() => {
     if (calcOnce) {
-      calculate(household).catch((e: any) => {
+      // URLからhouseholdが展開された場合はそのhousehold, そうでない場合はフォームで入力されたhouseholdをPOST
+      calculate(householdByURL || household).catch((e: any) => {
         console.log(e);
 
         // 想定外のエラーレスポンスを受け取り結果が取得できなかった場合、エラー画面へ遷移
-        navigate('/response-error', {
-          state: {
-            isSimpleCalculation: isSimpleCalculation,
-            isDisasterCalculation: isDisasterCalculation,
-          },
-        });
+        errorRedirect();
       });
       calcOnce = false;
     }
@@ -99,6 +130,49 @@ export const Result = () => {
     console.log('display chatbot');
     setIsDisplayChat('');
   }, []);
+
+  const clipBoard = async (text: string): Promise<void> => {
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch (error) {
+      console.error('Failed to copy text:', error);
+    }
+  };
+
+  const shareLinkButton = () => {
+    const url = shortLink(
+      household,
+      isSimpleCalculation,
+      isDisasterCalculation
+    );
+    setShareUrl(url);
+    clipBoard(url)
+      .then(() => {
+        setShareLink(true);
+        setTimeout(() => {
+          setShareLink(false);
+        }, 3000);
+      })
+      .catch((e: any) => {
+        console.error('Failed to copy text:', e);
+      });
+  };
+
+  const resuiredHousehold = (household: any) => {
+    if (typeof household !== 'object') {
+      return false;
+    }
+
+    if (
+      !household.世帯員.あなた.収入 ||
+      !household.世帯一覧.世帯1.居住市区町村 ||
+      !household.世帯一覧.世帯1.居住都道府県
+    ) {
+      return false;
+    }
+
+    return true;
+  };
 
   return (
     <div ref={divRef}>
@@ -226,6 +300,33 @@ export const Result = () => {
               {configData.result.screenshotButtonText}
             </Button>
           </Center>
+
+          <Center pr={4} pl={4} pb={4}>
+            <Button
+              onClick={() => shareLinkButton()}
+              as="button"
+              fontSize={configData.style.subTitleFontSize}
+              borderRadius="xl"
+              height="2em"
+              width="100%"
+              bg="gray.500"
+              color="white"
+              _hover={{ bg: 'gray.600' }}
+            >
+              {shareLink
+                ? configData.result.shareLinkButtonCopiedToClipboard
+                : configData.result.shareLinkButtonText}
+            </Button>
+          </Center>
+
+          {shareUrl && (
+            <Box bg="white" borderRadius="xl" p={4} mb={4} ml={4} mr={4}>
+              <Center>
+                {/* QRコード表示部分 */}
+                <QRCodeCanvas value={shareUrl} size={200} />
+              </Center>
+            </Box>
+          )}
 
           <Box display={isDisplayChat}>
             <Center pr={4} pl={4} pt={4} pb={4}>

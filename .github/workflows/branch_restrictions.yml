@@ -1,0 +1,17 @@
+name: Branch Restrictions
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check_base_branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail if not from develop branch
+        run: |
+          if [[ "${{ github.event.pull_request.head.ref }}" != "develop" ]]; then
+            echo "Error: PRs to main must come from the develop branch."
+            exit 1
+          fi

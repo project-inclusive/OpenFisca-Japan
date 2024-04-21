@@ -22,6 +22,8 @@
     "eslint-config-prettier": "^9.0.0",
     "framer-motion": "^10.12.17",
     "html-to-image": "^1.11.11",
+    "pako": "^2.1.0",
+    "qrcode.react": "^3.1.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-icons": "^4.10.1",
@@ -30,6 +32,7 @@
   },
   "devDependencies": {
     "@types/node": "^18.13.0",
+    "@types/pako": "^2.0.3",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@types/react-scroll": "^1.8.7",

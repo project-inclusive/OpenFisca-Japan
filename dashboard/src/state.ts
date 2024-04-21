@@ -121,6 +121,18 @@ export const householdAtom = atom<any>({
         災害援護資金: {
           [currentDate]: null,
         },
+        居住都道府県: {
+          [currentDate]: '',
+        },
+        居住市区町村: {
+          [currentDate]: '',
+        },
+        高等学校等就学支援金_最大: {
+          [currentDate]: null,
+        },
+        高等学校等就学支援金_最小: {
+          [currentDate]: null,
+        },
       },
     },
   },

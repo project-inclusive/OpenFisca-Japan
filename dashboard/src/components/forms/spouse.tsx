@@ -4,7 +4,6 @@ import { useRecoilValue } from 'recoil';
 import { householdAtom } from '../../state';
 
 import configData from '../../config/app_config.json';
-import { Birthday } from './attributes/Birthday';
 import { Income } from './attributes/Income';
 import { Disability } from './attributes/Disability';
 import { Student } from './attributes/Student';
@@ -15,6 +14,7 @@ import { Deposit } from './attributes/Deposit';
 import { SpouseExistsButSingleParent } from './attributes/SpouseExistsButSingleParent';
 import { DisasterDisability } from './attributes/DisasterDisability';
 import { DisasterInjuryPeriod } from './attributes/DisasterInjuryPeriod';
+import { AgeInput } from './attributes/AgeInput';
 
 export const FormSpouse = () => {
   const location = useLocation();
@@ -39,7 +39,7 @@ export const FormSpouse = () => {
             </Center>
 
             {isDetailedCalculation && (
-              <Birthday personName={spouseName} mustInput={true} />
+              <AgeInput personName={spouseName} mustInput={true} />
             )}
             <Income personName={spouseName} mustInput={true} />
 

@@ -1,8 +1,10 @@
+import configData from '../config/app_config.json';
 import { useState } from 'react';
 
-import configData from '../config/app_config.json';
-
 export const useCalculate = () => {
+  // recoilのhouseholdには結果を格納する制度の金額にnullでない数値が入力され、
+  // そのobjectをブラウザバックして再POSTするとOpenFiscaで計算されない。
+  // そのため結果はhouseholdに格納せず、localのstateとして管理する。
   const [result, setResult] = useState<any>();
   const apiURL =
     import.meta.env.VITE_BRANCH === 'production'
@@ -36,9 +38,6 @@ export const useCalculate = () => {
 
     const newResultJson = await newResultRes.json();
     console.log(newResultJson); // debug log
-    delete newResultJson.世帯一覧.世帯1.親一覧;
-    delete newResultJson.世帯一覧.世帯1.祖父母一覧;
-    delete newResultJson.世帯一覧.世帯1.子一覧;
     setResult(newResultJson);
   };
 

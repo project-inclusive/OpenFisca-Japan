@@ -73,6 +73,7 @@ function TermsModal({
               colorScheme="cyan"
               mt="1em"
               mb="1em"
+              data-testid="terms-checkbox"
             >
               利用規約に同意します。
             </Checkbox>
@@ -91,6 +92,7 @@ function TermsModal({
                 borderRadius="xl"
                 width="100%"
                 isDisabled={!agreedToTerms}
+                data-testid="start-button"
               >
                 利用開始する
               </Button>
