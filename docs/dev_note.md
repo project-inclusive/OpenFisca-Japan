@@ -106,6 +106,24 @@ make serve-local
 
 ## 開発方法
 
+### ディレクトリ構成
+
+主なディレクトリ
+
+- `dashboard`: フロントエンド(React製)
+  - `cypress`: e2eテスト
+  - `src`: アプリのソースコード
+    - `assets`: 画像等のファイル
+    - `components`: UIを構成するReactコンポーネント
+    - `config`: 制度情報や自治体名等のデータ
+    - `contexts`: アプリ全体で共有するデータを保持するためのReact context
+    - `hooks`: 状態管理を行うためのReact hooks
+- `oepnfisca_japan`: バックエンド(OpenFisca製、詳細は[OpenFiscaについて](./about_openfisca))
+  - `assets`: 制度の計算に使用する金額等のデータ(csv)
+  - `parameters`: 制度計算に使用する金額等のデータ(yaml)
+  - `tests`: 制度のユニットテスト
+  - `variables`: 制度の計算式を表すクラス(Python)
+
 ### バックエンド
 
 #### 事前準備
