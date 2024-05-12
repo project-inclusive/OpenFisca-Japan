@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Center, Button } from '@chakra-ui/react';
 
@@ -73,10 +73,12 @@ export const FormContent = () => {
             onClick={() => {
               // 必須項目が入力されていない場合、結果は表示されずトップへ戻る
               if (!validated) {
+                console.log('validation error');
                 setShowAlertMessage(true);
                 scrollTo(0, 0);
                 return;
               }
+
               navigate('/result', {
                 state: {
                   household: household,
