@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Center, Button } from '@chakra-ui/react';
 
 import configData from '../../config/app_config.json';
 import { ShowAlertMessageContext } from '../../contexts/ShowAlertMessageContext';
-import { useValidate } from '../../hooks/validate';
 import { FormYou } from './you';
 import { FormSpouse } from './spouse';
 import { FormChildren } from './children';
@@ -19,10 +18,13 @@ export const FormContent = () => {
   const isDisasterCalculation = location.pathname === '/calculate-disaster';
 
   const [ShowAlertMessage, setShowAlertMessage] = useState(false);
-  const validated = useValidate();
   const navigate = useNavigate();
 
   const household = useRecoilValue(householdAtom);
+
+  function isValidation(): boolean {
+    return document.getElementsByClassName('invalid').length !== 0;
+  }
 
   return (
     <ShowAlertMessageContext.Provider value={ShowAlertMessage}>
@@ -72,7 +74,7 @@ export const FormContent = () => {
             _hover={{ bg: 'cyan.700' }}
             onClick={() => {
               // 必須項目が入力されていない場合、結果は表示されずトップへ戻る
-              if (!validated) {
+              if (isValidation()) {
                 console.log('validation error');
                 setShowAlertMessage(true);
                 scrollTo(0, 0);
