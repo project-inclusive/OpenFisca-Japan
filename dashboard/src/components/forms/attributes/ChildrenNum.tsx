@@ -110,6 +110,14 @@ export const ChildrenNum = () => {
                 type="text"
                 value={shownChildrenNum}
                 onChange={onChange}
+                onKeyDown={(e) => {
+                  if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    setShownChildrenNum(
+                      parseInt(shownChildrenNum as string) + 1
+                    );
+                  }
+                }}
                 width="9em"
                 ref={inputEl}
               />

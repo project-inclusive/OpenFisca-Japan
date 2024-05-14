@@ -50,6 +50,12 @@ export const Income = ({
     if (e.key == 'Enter') {
       e.preventDefault();
     }
+
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      const value = parseInt(shownIncome as string) + 1;
+      setShownIncome(value);
+    }
   };
 
   // stored states set displayed value when page transition
