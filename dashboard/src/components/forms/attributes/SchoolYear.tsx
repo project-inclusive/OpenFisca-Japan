@@ -15,6 +15,8 @@ import { ErrorMessage } from './validation/ErrorMessage';
 import { householdAtom } from '../../../state';
 import { useRecoilState } from 'recoil';
 
+import { toHalf } from '../../../utils/toHalf';
+
 export const SchoolYear = ({
   personName,
   mustInput,
@@ -81,13 +83,14 @@ export const SchoolYear = ({
   ];
 
   function handleSchoolYearChange(event: React.ChangeEvent<HTMLInputElement>) {
-    if (event.currentTarget.value) {
-      setSchoolYear(Number(event.currentTarget.value));
+    let value: number | string = toHalf(event.currentTarget.value);
+    value = value.replace(/[^0-9]/g, '');
+    value = parseInt(value);
+
+    if (value) {
+      setSchoolYear(value);
       //console.log('[DEBUG] schoolYear ->', schoolYear);
-      setBirthday(
-        Number(event.currentTarget.value),
-        schoolEducationalAuthority
-      );
+      setBirthday(Number(value), schoolEducationalAuthority);
     } else {
       setSchoolYear('');
     }
@@ -259,15 +262,8 @@ export const SchoolYear = ({
             schoolEducationalAuthority !== '' && (
               <Input
                 width="6em"
-                type="number"
+                type="text"
                 value={schoolYear}
-                pattern="[0-9]*"
-                onInput={(e) => {
-                  e.currentTarget.value = e.currentTarget.value.replace(
-                    /[^0-9]/g,
-                    ''
-                  );
-                }}
                 onChange={handleSchoolYearChange}
               />
             )}

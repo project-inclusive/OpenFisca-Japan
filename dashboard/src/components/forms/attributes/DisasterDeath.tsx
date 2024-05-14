@@ -12,11 +12,13 @@ import {
 import { useRecoilValue, useRecoilState } from 'recoil';
 import { currentDateAtom, householdAtom } from '../../../state';
 
+import { toHalf } from '../../../utils/toHalf';
+
 export const DisasterDeath = () => {
   const navigationType = useNavigationType();
   const currentDate = useRecoilValue(currentDateAtom);
   const [household, setHousehold] = useRecoilState(householdAtom);
-  const [shownMemberNum, setShownMemberNum] = useState<string | number>('');
+  const [shownMemberNum, setShownMemberNum] = useState<number>(0);
   const inputEl = useRef<HTMLInputElement>(null);
 
   const [isChecked, setIsChecked] = useState(false);
@@ -45,7 +47,7 @@ export const DisasterDeath = () => {
         newHousehold.世帯一覧.世帯1.災害で生計維持者が死亡した = {
           [currentDate]: false,
         };
-        setShownMemberNum('');
+        setShownMemberNum(0);
         setIsMaintainerChecked(false);
         setHousehold({ ...newHousehold });
       }
@@ -63,11 +65,14 @@ export const DisasterDeath = () => {
 
   // 「亡くなった世帯員の数」フォームの変更時
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    let memberNum = parseInt(event.currentTarget.value);
+    let memberNum: number | string = toHalf(event.target.value);
+    memberNum = memberNum.replace(/[^0-9]/g, '');
+    memberNum = parseInt(memberNum);
+
     // 正の整数以外は0に変換
     if (isNaN(memberNum) || memberNum < 0) {
       memberNum = 0;
-      setShownMemberNum('');
+      setShownMemberNum(0);
     } else {
       setShownMemberNum(memberNum);
     }
@@ -86,6 +91,18 @@ export const DisasterDeath = () => {
     };
     setHousehold({ ...newHousehold });
   }, []);
+
+  function onKeyDown(e: React.KeyboardEvent<HTMLElement>) {
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setShownMemberNum(shownMemberNum + 1);
+    }
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setShownMemberNum(Math.max(shownMemberNum - 1, 0));
+    }
+  }
 
   // 生計維持者のチェックボックスの値が変更された時
   const onMaintainerCheckChange = useCallback(
@@ -153,16 +170,10 @@ export const DisasterDeath = () => {
           <FormLabel fontWeight="Regular">亡くなった世帯員の数</FormLabel>
           <HStack mb={4}>
             <Input
-              type="number"
+              type="text"
               value={shownMemberNum}
-              pattern="[0-9]*"
-              onInput={(e) => {
-                e.currentTarget.value = e.currentTarget.value.replace(
-                  /[^0-9]/g,
-                  ''
-                );
-              }}
               onChange={onChange}
+              onKeyDown={onKeyDown}
               width="9em"
               ref={inputEl}
             />

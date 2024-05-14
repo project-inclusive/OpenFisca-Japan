@@ -11,13 +11,14 @@ import { useNavigationType } from 'react-router-dom';
 import { householdAtom } from '../../../state';
 import { useRecoilState } from 'recoil';
 
+import { toHalf } from '../../../utils/toHalf';
+
 export const ParentsNum = () => {
   const isDisasterCalculation = location.pathname === '/calculate-disaster';
   const navigationType = useNavigationType();
   const [household, setHousehold] = useRecoilState(householdAtom);
-  const [shownLivingToghtherNum, setShownLivingToghtherNum] = useState<
-    string | number
-  >('');
+  const [shownLivingToghtherNum, setShownLivingToghtherNum] =
+    useState<number>(0);
   const inputEl = useRef<HTMLInputElement>(null);
 
   const [isChecked, setIsChecked] = useState(false);
@@ -30,7 +31,7 @@ export const ParentsNum = () => {
           delete newHousehold.世帯員[name];
         });
         delete newHousehold.世帯一覧.世帯1.祖父母一覧;
-        setShownLivingToghtherNum('');
+        setShownLivingToghtherNum(0);
         setHousehold({ ...newHousehold });
       }
       setIsChecked(event.target.checked);
@@ -47,11 +48,14 @@ export const ParentsNum = () => {
 
   // 人数フォーム変更時
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    let LivingToghtherNum = parseInt(event.currentTarget.value);
+    let LivingToghtherNum: number | string = toHalf(event.target.value);
+    LivingToghtherNum = LivingToghtherNum.replace(/[^0-9]/g, '');
+    LivingToghtherNum = parseInt(LivingToghtherNum);
+
     // 正の整数以外は0に変換
     if (isNaN(LivingToghtherNum) || LivingToghtherNum < 0) {
       LivingToghtherNum = 0;
-      setShownLivingToghtherNum('');
+      setShownLivingToghtherNum(0);
       // TODO: 算出に必要な最大人数に設定する
     } else if (LivingToghtherNum > 10) {
       LivingToghtherNum = 10;
@@ -80,6 +84,18 @@ export const ParentsNum = () => {
     setHousehold({ ...newHousehold });
   }, []);
 
+  function onKeyDown(e: React.KeyboardEvent<HTMLElement>) {
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setShownLivingToghtherNum(shownLivingToghtherNum + 1);
+    }
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setShownLivingToghtherNum(Math.max(shownLivingToghtherNum - 1, 0));
+    }
+  }
+
   // stored states set displayed value when page transition
   useEffect(() => {
     const storedObj = household.世帯一覧.世帯1.祖父母一覧;
@@ -107,16 +123,10 @@ export const ParentsNum = () => {
 
             <HStack mb={4}>
               <Input
-                type="number"
+                type="text"
                 value={shownLivingToghtherNum}
-                pattern="[0-9]*"
-                onInput={(e) => {
-                  e.currentTarget.value = e.currentTarget.value.replace(
-                    /[^0-9]/g,
-                    ''
-                  );
-                }}
                 onChange={onChange}
+                onKeyDown={onKeyDown}
                 width="9em"
                 ref={inputEl}
               />
