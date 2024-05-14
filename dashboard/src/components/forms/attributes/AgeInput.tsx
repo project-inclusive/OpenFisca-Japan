@@ -8,6 +8,8 @@ import { ErrorMessage } from './validation/ErrorMessage';
 import { householdAtom } from '../../../state';
 import { useRecoilState } from 'recoil';
 
+import { toHalf } from '../../../utils/toHalf';
+
 export const AgeInput = ({
   personName,
   mustInput,
@@ -17,21 +19,20 @@ export const AgeInput = ({
 }) => {
   const navigationType = useNavigationType();
   const [household, setHousehold] = useRecoilState(householdAtom);
-  const [age, setAge] = useState('');
+  const [age, setAge] = useState<number>(0);
 
   const handleAgeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    let inputAge: string;
-    if (parseInt(event.currentTarget.value) < 0) {
-      inputAge = '0';
-    } else {
-      inputAge = event.currentTarget.value;
-    }
+    let value: number | string = toHalf(event.currentTarget.value) ?? 0;
+    value = value.replace(/[^0-9]/g, '');
+    value = Number(value);
+
+    const inputAge = value < 0 ? 0 : value;
     setAge(inputAge);
 
     if (inputAge) {
       const today = new Date();
       const currentYear = today.getFullYear();
-      const birthYear = currentYear - parseInt(inputAge);
+      const birthYear = currentYear - inputAge;
       const newHousehold = {
         ...household,
       };
@@ -56,7 +57,7 @@ export const AgeInput = ({
         10000 * today.getFullYear() +
         100 * (today.getMonth() + 1) +
         today.getDate();
-      setAge(String(Math.floor((todaySum - birthSum) / 10000)));
+      setAge(Math.floor((todaySum - birthSum) / 10000));
     }
   }, [navigationType, household.世帯員[personName]?.誕生年月日]);
 
@@ -81,16 +82,15 @@ export const AgeInput = ({
         <HStack mb={4}>
           <Input
             width="6em"
-            type="number"
+            type="text"
             value={age}
-            pattern="[0-9]*"
-            onInput={(e) => {
-              e.currentTarget.value = e.currentTarget.value.replace(
-                /[^0-9]/g,
-                ''
-              );
-            }}
             onChange={handleAgeChange}
+            onKeyDown={(event) => {
+              if (event.key === 'ArrowUp') {
+                event.preventDefault();
+                setAge(age + 1);
+              }
+            }}
           />
           <Box>歳</Box>
         </HStack>
