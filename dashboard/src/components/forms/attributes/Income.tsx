@@ -20,13 +20,23 @@ export const Income = ({
   const [household, setHousehold] = useRecoilState(householdAtom);
   const [shownIncome, setShownIncome] = useState<string | number>('');
 
+  function toHalf(str: string): string {
+    return str.replace(/[０-９]/g, function (m: string): string {
+      return '０１２３４５６７８９'.indexOf(m).toString();
+    });
+  }
+
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const newHousehold = {
       ...household,
     };
 
+    // 全角数字を半角数字に変換
+    let value = toHalf(event.target.value);
+    value = value.replace(/[^0-9]/g, '');
+
     // 「万円」単位を「円」に換算
-    let income = parseInt(event.currentTarget.value) * 10000;
+    let income = parseInt(value) * 10000;
     // 正の整数以外は0に変換
     if (isNaN(income) || income < 0) {
       income = 0;
@@ -72,15 +82,8 @@ export const Income = ({
         <HStack mb={4}>
           <Input
             data-testid="income-input"
-            type="number"
+            type="text"
             value={shownIncome}
-            pattern="[0-9]*"
-            onInput={(e) => {
-              e.currentTarget.value = e.currentTarget.value.replace(
-                /[^0-9]/g,
-                ''
-              );
-            }}
             onChange={onChange}
             onKeyDown={onKeyDown}
             width="10em"
