@@ -56,6 +56,15 @@ export const Income = ({
       const value = parseInt(shownIncome as string) + 1;
       setShownIncome(value);
     }
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      let value = parseInt(shownIncome as string) - 1;
+      if (value < 0) {
+        value = 0;
+      }
+      setShownIncome(value);
+    }
   };
 
   // stored states set displayed value when page transition

@@ -90,6 +90,11 @@ export const AgeInput = ({
                 event.preventDefault();
                 setAge(age + 1);
               }
+
+              if (event.key === 'ArrowDown') {
+                event.preventDefault();
+                setAge(Math.max(age - 1, 0));
+              }
             }}
           />
           <Box>歳</Box>

@@ -117,6 +117,16 @@ export const ChildrenNum = () => {
                       parseInt(shownChildrenNum as string) + 1
                     );
                   }
+
+                  if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    let newChildrenNum =
+                      parseInt(shownChildrenNum as string) - 1;
+                    if (newChildrenNum < 0) {
+                      newChildrenNum = 0;
+                    }
+                    setShownChildrenNum(newChildrenNum);
+                  }
                 }}
                 width="9em"
                 ref={inputEl}
