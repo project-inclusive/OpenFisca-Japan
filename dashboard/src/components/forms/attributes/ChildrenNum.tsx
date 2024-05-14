@@ -44,9 +44,18 @@ export const ChildrenNum = () => {
     }
   }, [isChecked]);
 
+  function toHalf(str: string): string {
+    return str.replace(/[０-９]/g, function (m: string): string {
+      return '０１２３４５６７８９'.indexOf(m).toString();
+    });
+  }
+
   // 「子どもの数」フォームの変更時
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    let childrenNum = parseInt(event.currentTarget.value);
+    let childrenNum: number | string = toHalf(event.target.value);
+    childrenNum = childrenNum.replace(/[^0-9]/g, '');
+    childrenNum = parseInt(childrenNum);
+
     // 正の整数以外は0に変換
     if (isNaN(childrenNum) || childrenNum < 0) {
       childrenNum = 0;
@@ -102,15 +111,8 @@ export const ChildrenNum = () => {
             <FormLabel fontWeight="Regular">子どもの数</FormLabel>
             <HStack mb={4}>
               <Input
-                type="number"
+                type="text"
                 value={shownChildrenNum}
-                pattern="[0-9]*"
-                onInput={(e) => {
-                  e.currentTarget.value = e.currentTarget.value.replace(
-                    /[^0-9]/g,
-                    ''
-                  );
-                }}
                 onChange={onChange}
                 width="9em"
                 ref={inputEl}
