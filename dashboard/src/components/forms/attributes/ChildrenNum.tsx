@@ -12,6 +12,8 @@ import {
 import { useRecoilState } from 'recoil';
 import { householdAtom } from '../../../state';
 
+import { toHalf } from '../../../utils/toHalf';
+
 export const ChildrenNum = () => {
   const isDisasterCalculation = location.pathname === '/calculate-disaster';
   const navigationType = useNavigationType();
@@ -43,12 +45,6 @@ export const ChildrenNum = () => {
       inputEl.current.focus();
     }
   }, [isChecked]);
-
-  function toHalf(str: string): string {
-    return str.replace(/[０-９]/g, function (m: string): string {
-      return '０１２３４５６７８９'.indexOf(m).toString();
-    });
-  }
 
   // 「子どもの数」フォームの変更時
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {

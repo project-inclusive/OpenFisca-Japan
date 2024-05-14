@@ -6,6 +6,8 @@ import { ErrorMessage } from './validation/ErrorMessage';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { currentDateAtom, householdAtom } from '../../../state';
 
+import { toHalf } from '../../../utils/toHalf';
+
 export const Income = ({
   personName,
   mustInput,
@@ -19,12 +21,6 @@ export const Income = ({
 
   const [household, setHousehold] = useRecoilState(householdAtom);
   const [shownIncome, setShownIncome] = useState<string | number>('');
-
-  function toHalf(str: string): string {
-    return str.replace(/[０-９]/g, function (m: string): string {
-      return '０１２３４５６７８９'.indexOf(m).toString();
-    });
-  }
 
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const newHousehold = {
