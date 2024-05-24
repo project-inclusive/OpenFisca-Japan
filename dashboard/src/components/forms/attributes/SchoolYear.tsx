@@ -16,6 +16,7 @@ import { householdAtom } from '../../../state';
 import { useRecoilState } from 'recoil';
 
 import { toHalf } from '../../../utils/toHalf';
+import { isMobile } from 'react-device-detect';
 
 export const SchoolYear = ({
   personName,
@@ -262,9 +263,10 @@ export const SchoolYear = ({
             schoolEducationalAuthority !== '' && (
               <Input
                 width="6em"
-                type="text"
+                type={isMobile ? 'number' : 'text'}
                 value={schoolYear}
                 onChange={handleSchoolYearChange}
+                {...(isMobile && { pattern: '[0-9]*' })}
               />
             )}
           {suffix && <Box>{suffix}</Box>}

@@ -6,6 +6,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { currentDateAtom, householdAtom } from '../../../state';
 
 import { toHalf } from '../../../utils/toHalf';
+import { isMobile } from 'react-device-detect';
 
 export const Deposit = ({ personName }: { personName: string }) => {
   const navigationType = useNavigationType();
@@ -78,11 +79,12 @@ export const Deposit = ({ personName }: { personName: string }) => {
         <HStack mb={4}>
           <Input
             data-testid="deposit-input"
-            type="text"
+            type={isMobile ? 'number' : 'text'}
             value={shownDeposit}
             onChange={onChange}
             onKeyDown={onKeyDown}
             width="10em"
+            {...(isMobile && { pattern: '[0-9]*' })}
           />
           <Box>万円</Box>
         </HStack>

@@ -7,6 +7,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { currentDateAtom, householdAtom } from '../../../state';
 
 import { toHalf } from '../../../utils/toHalf';
+import { isMobile } from 'react-device-detect';
 
 export const Income = ({
   personName,
@@ -93,11 +94,12 @@ export const Income = ({
         <HStack mb={4}>
           <Input
             data-testid="income-input"
-            type="text"
+            type={isMobile ? 'number' : 'text'}
             value={shownIncome}
             onChange={onChange}
             onKeyDown={onKeyDown}
             width="10em"
+            {...(isMobile && { pattern: '[0-9]*' })}
           />
           <Box>万円</Box>
         </HStack>

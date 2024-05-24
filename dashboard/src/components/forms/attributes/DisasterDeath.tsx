@@ -13,6 +13,7 @@ import { useRecoilValue, useRecoilState } from 'recoil';
 import { currentDateAtom, householdAtom } from '../../../state';
 
 import { toHalf } from '../../../utils/toHalf';
+import { isMobile } from 'react-device-detect';
 
 export const DisasterDeath = () => {
   const navigationType = useNavigationType();
@@ -170,12 +171,13 @@ export const DisasterDeath = () => {
           <FormLabel fontWeight="Regular">亡くなった世帯員の数</FormLabel>
           <HStack mb={4}>
             <Input
-              type="text"
+              type={isMobile ? 'number' : 'text'}
               value={shownMemberNum}
               onChange={onChange}
               onKeyDown={onKeyDown}
               width="9em"
               ref={inputEl}
+              {...(isMobile && { pattern: '[0-9]*' })}
             />
             <Box>人</Box>
           </HStack>

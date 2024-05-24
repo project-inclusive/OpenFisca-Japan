@@ -9,6 +9,7 @@ import { householdAtom } from '../../../state';
 import { useRecoilState } from 'recoil';
 
 import { toHalf } from '../../../utils/toHalf';
+import { isMobile } from 'react-device-detect';
 
 export const AgeInput = ({
   personName,
@@ -82,7 +83,7 @@ export const AgeInput = ({
         <HStack mb={4}>
           <Input
             width="6em"
-            type="text"
+            type={isMobile ? 'number' : 'text'}
             value={age}
             onChange={handleAgeChange}
             onKeyDown={(event) => {
@@ -96,6 +97,7 @@ export const AgeInput = ({
                 setAge(Math.max(age - 1, 0));
               }
             }}
+            {...(isMobile && { pattern: '[0-9]*' })}
           />
           <Box>歳</Box>
         </HStack>

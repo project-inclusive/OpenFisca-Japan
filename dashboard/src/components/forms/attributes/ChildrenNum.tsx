@@ -13,6 +13,7 @@ import { useRecoilState } from 'recoil';
 import { householdAtom } from '../../../state';
 
 import { toHalf } from '../../../utils/toHalf';
+import { isMobile } from 'react-device-detect';
 
 export const ChildrenNum = () => {
   const isDisasterCalculation = location.pathname === '/calculate-disaster';
@@ -107,7 +108,7 @@ export const ChildrenNum = () => {
             <FormLabel fontWeight="Regular">子どもの数</FormLabel>
             <HStack mb={4}>
               <Input
-                type="text"
+                type={isMobile ? 'number' : 'text'}
                 value={shownChildrenNum}
                 onChange={onChange}
                 onKeyDown={(e) => {
@@ -130,6 +131,7 @@ export const ChildrenNum = () => {
                 }}
                 width="9em"
                 ref={inputEl}
+                {...(isMobile && { pattern: '[0-9]*' })}
               />
               <Box>人</Box>
             </HStack>
