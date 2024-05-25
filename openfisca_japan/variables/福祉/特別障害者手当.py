@@ -1,0 +1,226 @@
+"""
+特別障害者手当の実装
+"""
+
+import numpy as np
+from openfisca_core.periods import DAY
+from openfisca_core.variables import Variable
+from openfisca_japan.entities import 世帯, 人物
+from openfisca_japan.variables.障害.精神障害者保健福祉手帳 import 精神障害者保健福祉手帳等級パターン
+from openfisca_japan.variables.障害.身体障害者手帳 import 身体障害者手帳等級パターン
+
+
+class 特別障害者手当_最大(Variable):
+    value_type = float
+    entity = 世帯
+    definition_period = DAY
+    label = "特別障害者手当の最大額"
+    reference = "https://www.mhlw.go.jp/bunya/shougaihoken/jidou/tokubetsu.html"
+    documentation = """
+    厳密な判定には詳細な症状が必要なため、身体障害者手帳、精神障害者保健福祉手帳等から推定可能な最小値、最大値を算出
+
+    算出方法は以下リンクも参考になる。
+    https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/toku_shou.html
+    """
+
+    def formula(対象世帯, 対象期間, parameters):
+        年齢 = 対象世帯.members("年齢", 対象期間)
+        年齢条件 = 年齢 >= 20
+
+        身体障害者手帳等級 = 対象世帯.members("身体障害者手帳等級", 対象期間)
+        精神障害者保健福祉手帳等級 = 対象世帯.members("精神障害者保健福祉手帳等級", 対象期間)
+        障害条件 = (身体障害者手帳等級 == 身体障害者手帳等級パターン.一級) | (身体障害者手帳等級 == 身体障害者手帳等級パターン.二級) | \
+            (精神障害者保健福祉手帳等級 == 精神障害者保健福祉手帳等級パターン.一級) | (精神障害者保健福祉手帳等級 == 精神障害者保健福祉手帳等級パターン.二級)
+
+        所得条件 = 対象世帯.members("特別障害者手当所得制限", 対象期間)
+
+        人物ごとの受給条件 = 年齢条件 * 障害条件 * 所得条件
+        対象人数 = 対象世帯.sum(人物ごとの受給条件)
+
+        return 対象人数 * parameters(対象期間).福祉.特別障害者手当.支給額
+
+
+class 特別障害者手当_最小(Variable):
+    value_type = float
+    entity = 世帯
+    definition_period = DAY
+    label = "特別障害者手当の最小額"
+    reference = "https://www.mhlw.go.jp/bunya/shougaihoken/jidou/tokubetsu.html"
+    documentation = """
+    厳密な判定には詳細な症状が必要なため、身体障害者手帳、精神障害者保健福祉手帳等から推定可能な最小値、最大値を算出
+
+    算出方法は以下リンクも参考になる。
+    https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/toku_shou.html
+    https://h-navi.jp/column/article/35029230
+    """
+
+    def formula(対象世帯, 対象期間, parameters):
+        年齢 = 対象世帯.members("年齢", 対象期間)
+        年齢条件 = 年齢 >= 20
+
+        身体障害者手帳等級 = 対象世帯.members("身体障害者手帳等級", 対象期間)
+        精神障害者保健福祉手帳等級 = 対象世帯.members("精神障害者保健福祉手帳等級", 対象期間)
+        # 障害が重複していることが条件のため、身体障害者手帳、精神障害者手帳両方持っている場合は最小額も満額とする
+        # https://h-navi.jp/column/article/35029230
+        障害条件 = ((身体障害者手帳等級 == 身体障害者手帳等級パターン.一級) | (身体障害者手帳等級 == 身体障害者手帳等級パターン.二級)) & \
+            ((精神障害者保健福祉手帳等級 == 精神障害者保健福祉手帳等級パターン.一級) | (精神障害者保健福祉手帳等級 == 精神障害者保健福祉手帳等級パターン.二級))
+
+        所得条件 = 対象世帯.members("特別障害者手当所得制限", 対象期間)
+
+        # 3か月以上継続して入院している場合対象外となるため、最小額は入院中でない場合のみ満額とする
+        入院条件 = np.logical_not(対象世帯.members("入院中", 対象期間))
+
+        人物ごとの受給条件 = 年齢条件 * 障害条件 * 所得条件 * 入院条件
+        対象人数 = 対象世帯.sum(人物ごとの受給条件)
+
+        return 対象人数 * parameters(対象期間).福祉.特別障害者手当.支給額
+
+
+class 特別障害者手当所得制限(Variable):
+    value_type = bool
+    entity = 人物
+    definition_period = DAY
+    label = "特別障害者手当の所得制限"
+    reference = "https://www.mhlw.go.jp/bunya/shougaihoken/jidou/tokubetsu.html"
+    documentation = """
+    算出方法は以下リンクも参考になる。
+    https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/toku_shou.html
+    """
+
+    def formula(対象人物, 対象期間, parameters):
+        扶養親族である = 対象人物("扶養親族である", 対象期間)
+        同一生計配偶者である = 対象人物("同一生計配偶者である", 対象期間)
+        被扶養者である = 扶養親族である + 同一生計配偶者である
+
+        特別障害者手当 = parameters(対象期間).福祉.特別障害者手当
+        扶養人数 = 対象人物.世帯("扶養人数", 対象期間)
+        # 複数世帯入力(2以上の長さのndarray入力)対応のためndarray化
+        本人所得を参照する場合の所得制限限度額 = np.array(特別障害者手当.所得制限限度額.本人)[np.clip(扶養人数, 0, 9)]
+        扶養義務者所得を参照する場合の所得制限限度額 = np.array(特別障害者手当.所得制限限度額.扶養義務者)[np.clip(扶養人数, 0, 9)]
+
+        # 加算額を考慮
+        # NOTE: += は使用不可（Variableの破壊的変更により正しく計算されない）
+        本人所得を参照する場合の所得制限限度額 = \
+            本人所得を参照する場合の所得制限限度額 + 対象人物.世帯("特別障害者手当_受給者の所得加算額", 対象期間)
+        扶養義務者所得を参照する場合の所得制限限度額 = \
+            扶養義務者所得を参照する場合の所得制限限度額 + (扶養人数 >= 2) * 対象人物.世帯("特別障害者手当_扶養義務者の所得加算額", 対象期間)
+
+        所得制限限度額 = np.select(
+            [被扶養者である],
+            [扶養義務者所得を参照する場合の所得制限限度額],
+            本人所得を参照する場合の所得制限限度額,
+        )
+
+        控除後所得 = 対象人物("特別障害者手当の控除後所得", 対象期間)
+
+        # 便宜上、世帯の最大の所得を扶養義務者の所得とする
+        扶養義務者の控除後所得 = 対象人物.世帯.max(控除後所得)
+        本人所得を参照 = np.logical_not(被扶養者である)
+        対象となる所得 = np.where(本人所得を参照, 控除後所得, 扶養義務者の控除後所得)
+
+        return 対象となる所得 <= 所得制限限度額
+
+
+class 特別障害者手当の控除後所得(Variable):
+    value_type = float
+    entity = 人物
+    definition_period = DAY
+    label = "各種控除が適用された後の特別障害者手当における世帯高所得額"
+    reference = "https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/toku_shou.html"
+
+    def formula(対象人物, 対象期間, parameters):
+        扶養親族である = 対象人物("扶養親族である", 対象期間)
+        同一生計配偶者である = 対象人物("同一生計配偶者である", 対象期間)
+        被扶養者である = 扶養親族である + 同一生計配偶者である
+
+        所得 = 対象人物("所得", 対象期間)
+
+        給与所得及び雑所得からの控除額 = parameters(対象期間).所得.給与所得及び雑所得からの控除額
+        本人所得を参照 = np.logical_not(被扶養者である)
+        社会保険料控除 = np.where(np.logical_not(本人所得を参照), parameters(対象期間).所得.社会保険料相当額, 0)
+        # 上限33万円
+        配偶者特別控除 = np.clip(対象人物("配偶者特別控除", 対象期間), 0, 330000)
+
+        障害者控除 = 対象人物("障害者控除", 対象期間)
+
+        # 障害者控除, 特別障害者控除については、本人所得の場合本人の分は適用しない
+        障害者控除対象 = 対象人物("障害者控除対象", 対象期間)
+        特別障害者控除対象 = 対象人物("特別障害者控除対象", 対象期間)
+        本人の控除 = np.select(
+            [障害者控除対象, 特別障害者控除対象],
+            [parameters(対象期間).所得.障害者控除額, parameters(対象期間).所得.特別障害者控除額],
+            0)
+        本人所得を参照 = np.logical_not(被扶養者である)
+        障害者控除 = 障害者控除 - 本人所得を参照 * 本人の控除
+
+        # TODO: 同居特別障害者の場合も通常の特別障害者と同じ額に補正する必要がある？
+        # 単純に記載を省略しているだけの可能性もあり (https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/toku_shou.html で国の制度を照会しているが同居特別障害者の記載はない)
+
+        寡婦控除 = 対象人物("寡婦控除", 対象期間)
+        ひとり親控除 = 対象人物("ひとり親控除", 対象期間)
+        勤労学生控除 = 対象人物("勤労学生控除", 対象期間)
+
+        # 他の控除（雑損控除・医療費控除等）は定額でなく実費を元に算出するため除外する
+        控除総額 = 給与所得及び雑所得からの控除額 + 社会保険料控除 + 配偶者特別控除 + 障害者控除 + 寡婦控除 + ひとり親控除 + 勤労学生控除
+        控除後所得 = 所得 - 控除総額
+
+        return 控除後所得
+
+
+class 特別障害者手当_受給者の所得加算額(Variable):
+    value_type = float
+    entity = 世帯
+    definition_period = DAY
+    label = "特別障害者手当_受給者の所得加算額"
+    reference = "https://www.mhlw.go.jp/bunya/shougaihoken/jidou/tokubetsu.html"
+
+    def formula(対象世帯, 対象期間, parameters):
+        年齢 = 対象世帯.members("年齢", 対象期間)
+        # 同一生計配偶者のうち70歳以上の者
+        配偶者である = 対象世帯.has_role(世帯.親)
+        配偶者の年齢 = 配偶者である * 年齢
+        配偶者が70歳以上 = 配偶者の年齢 >= 70
+        配偶者70歳以上の人数 = 対象世帯.sum(配偶者が70歳以上)
+
+        扶養親族である = 対象世帯.members("扶養親族である", 対象期間)
+
+        # 老人扶養親族
+        老人扶養親族である = 扶養親族である & (年齢 >= 70)
+        老人扶養親族の人数 = 対象世帯.sum(老人扶養親族である)
+
+        # 特定扶養親族又は控除対象扶養親族（19歳未満の者に限る。）
+        # 特定扶養親族と控除対象扶養親族の定義: https://www.nta.go.jp/taxes/shiraberu/taxanswer/yogo/senmon.htm#word9
+        # TODO: 特定扶養親族と控除対象扶養親族をvariableに切り出す
+        特定扶養親族である = 扶養親族である & (年齢 >= 19) & (年齢 < 23)
+        控除対象扶養親族である = 扶養親族である & (年齢 >= 16)
+        特定扶養親族又は控除対象扶養親族である = 特定扶養親族である | (控除対象扶養親族である & (年齢 < 19))
+        特定扶養親族又は控除対象扶養親族の人数 = 対象世帯.sum(特定扶養親族又は控除対象扶養親族である)
+
+        return (
+            (配偶者70歳以上の人数 + 老人扶養親族の人数) * parameters(対象期間).福祉.特別障害者手当.所得制限限度額.本人_老人扶養親族加算額
+            + 特定扶養親族又は控除対象扶養親族の人数 * parameters(対象期間).福祉.特別障害者手当.所得制限限度額.本人_特定扶養親族加算額
+        )
+
+
+class 特別障害者手当_扶養義務者の所得加算額(Variable):
+    value_type = float
+    entity = 世帯
+    definition_period = DAY
+    label = "特別障害者手当_扶養義務者の所得加算額"
+    reference = "https://www.mhlw.go.jp/bunya/shougaihoken/jidou/tokubetsu.html"
+
+    def formula(対象世帯, 対象期間, parameters):
+        年齢 = 対象世帯.members("年齢", 対象期間)
+
+        # 老人扶養親族
+        老人扶養親族である = 対象世帯.members("扶養親族である", 対象期間) & (年齢 >= 70)
+        老人扶養親族の人数 = 対象世帯.sum(老人扶養親族である)
+
+        # 老人扶養親族以外の人数
+        老人扶養親族以外の扶養親族の人数 = 対象世帯.sum(対象世帯.members("扶養親族である", 対象期間) & (np.logical_not(老人扶養親族である)))
+
+        # 老人扶養親族のみの場合、1人を除いた人数を加算
+        # それ以外の場合、老人扶養親族の人数を加算
+        加算人数 = np.where(老人扶養親族以外の扶養親族の人数 == 0, 老人扶養親族の人数 - 1, 老人扶養親族の人数)
+
+        return 加算人数 * parameters(対象期間).福祉.特別障害者手当.所得制限限度額.扶養義務者_老人扶養親族加算額
