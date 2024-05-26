@@ -20,7 +20,7 @@ export const AgeInput = ({
 }) => {
   const navigationType = useNavigationType();
   const [household, setHousehold] = useRecoilState(householdAtom);
-  const [age, setAge] = useState<number>(0);
+  const [age, setAge] = useState<string | number>('');
 
   const handleAgeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     let value: number | string = toHalf(event.currentTarget.value) ?? 0;
@@ -64,7 +64,7 @@ export const AgeInput = ({
 
   return (
     <>
-      {mustInput && <ErrorMessage condition={!age} />}
+      {mustInput && <ErrorMessage condition={age === ''} />}
       <FormControl>
         <FormLabel
           fontSize={configData.style.itemFontSize}
@@ -89,12 +89,15 @@ export const AgeInput = ({
             onKeyDown={(event) => {
               if (event.key === 'ArrowUp') {
                 event.preventDefault();
-                setAge(age + 1);
+                setAge(Number(age) + 1);
               }
 
               if (event.key === 'ArrowDown') {
                 event.preventDefault();
-                setAge(Math.max(age - 1, 0));
+                if (event.key === 'ArrowDown') {
+                  event.preventDefault();
+                  setAge(Math.max(Number(age) - 1, 0).toString());
+                }
               }
             }}
             {...(isMobile && { pattern: '[0-9]*' })}
