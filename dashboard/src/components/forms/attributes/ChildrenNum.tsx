@@ -64,7 +64,10 @@ export const ChildrenNum = () => {
       setShownChildrenNum(childrenNum);
     }
 
-    // 変更前の子どもの情報を削除
+    updateChildrenInfo(childrenNum);
+  }, []);
+
+  function updateChildrenInfo(childrenNum: number) {
     const newHousehold = { ...household };
     if (household.世帯一覧.世帯1.子一覧) {
       household.世帯一覧.世帯1.子一覧.map((childName: string) => {
@@ -82,7 +85,7 @@ export const ChildrenNum = () => {
       });
     }
     setHousehold({ ...newHousehold });
-  }, []);
+  }
 
   // stored states set displayed value when page transition
   useEffect(() => {
@@ -114,19 +117,19 @@ export const ChildrenNum = () => {
                 onKeyDown={(e) => {
                   if (e.key === 'ArrowUp') {
                     e.preventDefault();
-                    setShownChildrenNum(
-                      parseInt(shownChildrenNum as string) + 1
-                    );
+                    const newChildrenNum = Number(shownChildrenNum) + 1;
+                    setShownChildrenNum(newChildrenNum);
+                    updateChildrenInfo(newChildrenNum);
                   }
 
                   if (e.key === 'ArrowDown') {
                     e.preventDefault();
-                    let newChildrenNum =
-                      parseInt(shownChildrenNum as string) - 1;
+                    let newChildrenNum = Number(shownChildrenNum) - 1;
                     if (newChildrenNum < 0) {
                       newChildrenNum = 0;
                     }
                     setShownChildrenNum(newChildrenNum);
+                    updateChildrenInfo(newChildrenNum);
                   }
                 }}
                 width="9em"
