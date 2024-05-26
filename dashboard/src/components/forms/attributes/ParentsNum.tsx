@@ -18,8 +18,9 @@ export const ParentsNum = () => {
   const isDisasterCalculation = location.pathname === '/calculate-disaster';
   const navigationType = useNavigationType();
   const [household, setHousehold] = useRecoilState(householdAtom);
-  const [shownLivingToghtherNum, setShownLivingToghtherNum] =
-    useState<number>(0);
+  const [shownLivingToghtherNum, setShownLivingToghtherNum] = useState<
+    string | number
+  >('');
   const inputEl = useRef<HTMLInputElement>(null);
 
   const [isChecked, setIsChecked] = useState(false);
@@ -56,7 +57,7 @@ export const ParentsNum = () => {
     // 正の整数以外は0に変換
     if (isNaN(LivingToghtherNum) || LivingToghtherNum < 0) {
       LivingToghtherNum = 0;
-      setShownLivingToghtherNum(0);
+      setShownLivingToghtherNum('');
       // TODO: 算出に必要な最大人数に設定する
     } else if (LivingToghtherNum > 10) {
       LivingToghtherNum = 10;
@@ -88,12 +89,14 @@ export const ParentsNum = () => {
   function onKeyDown(e: React.KeyboardEvent<HTMLElement>) {
     if (e.key === 'ArrowUp') {
       e.preventDefault();
-      setShownLivingToghtherNum(shownLivingToghtherNum + 1);
+      setShownLivingToghtherNum(Number(shownLivingToghtherNum) + 1);
     }
 
     if (e.key === 'ArrowDown') {
       e.preventDefault();
-      setShownLivingToghtherNum(Math.max(shownLivingToghtherNum - 1, 0));
+      setShownLivingToghtherNum(
+        Math.max(Number(shownLivingToghtherNum) - 1, 0)
+      );
     }
   }
 
