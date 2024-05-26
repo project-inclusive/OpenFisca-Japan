@@ -27,7 +27,7 @@ export const AgeInput = ({
     value = value.replace(/[^0-9]/g, '');
     value = Number(value);
 
-    const inputAge = value < 0 ? 0 : value;
+    const inputAge = value <= 0 ? '' : value;
     setAge(inputAge);
 
     if (inputAge) {
@@ -96,7 +96,8 @@ export const AgeInput = ({
                 event.preventDefault();
                 if (event.key === 'ArrowDown') {
                   event.preventDefault();
-                  setAge(Math.max(Number(age) - 1, 0).toString());
+                  const newAge = Math.max(Number(age) - 1, 0);
+                  setAge(newAge === 0 ? '' : newAge);
                 }
               }
             }}
