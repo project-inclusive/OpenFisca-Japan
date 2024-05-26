@@ -216,7 +216,7 @@ export const SchoolYear = ({
 
   return (
     <>
-      {mustInput && (
+      {mustInput && schoolEducationalAuthority !== '小学校入学前' && (
         <ErrorMessage condition={!schoolEducationalAuthority || !schoolYear} />
       )}
       <FormControl>
