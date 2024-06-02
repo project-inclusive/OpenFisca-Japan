@@ -22,18 +22,13 @@ export const AgeInput = ({
   const [household, setHousehold] = useRecoilState(householdAtom);
   const [age, setAge] = useState<string | number>('');
 
-  const handleAgeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    let value: number | string = toHalf(event.currentTarget.value) ?? 0;
-    value = value.replace(/[^0-9]/g, '');
-    value = Number(value);
+  function changeAge(age: number) {
+    setAge(age);
 
-    const inputAge = value <= 0 ? '' : value;
-    setAge(inputAge);
-
-    if (inputAge) {
+    if (age) {
       const today = new Date();
       const currentYear = today.getFullYear();
-      const birthYear = currentYear - inputAge;
+      const birthYear = currentYear - age;
       const newHousehold = {
         ...household,
       };
@@ -43,6 +38,15 @@ export const AgeInput = ({
       setHousehold(newHousehold);
       //console.log('[DEBUG] household -> ', newHousehold);
     }
+  }
+
+  const handleAgeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    let value: number | string = toHalf(event.currentTarget.value) ?? 0;
+    value = value.replace(/[^0-9]/g, '');
+    value = Number(value);
+
+    const inputAge = value <= 0 ? '' : value;
+    changeAge(Number(inputAge));
   };
 
   // stored states set displayed age when page transition
@@ -89,7 +93,7 @@ export const AgeInput = ({
             onKeyDown={(event) => {
               if (event.key === 'ArrowUp') {
                 event.preventDefault();
-                setAge(Number(age) + 1);
+                changeAge(Number(age) + 1);
               }
 
               if (event.key === 'ArrowDown') {
@@ -97,7 +101,7 @@ export const AgeInput = ({
                 if (event.key === 'ArrowDown') {
                   event.preventDefault();
                   const newAge = Math.max(Number(age) - 1, 0);
-                  setAge(newAge === 0 ? '' : newAge);
+                  changeAge(Number(newAge === 0 ? '' : newAge));
                 }
               }
             }}
