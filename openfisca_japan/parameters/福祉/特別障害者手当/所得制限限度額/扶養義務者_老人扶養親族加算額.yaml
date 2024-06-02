@@ -1,0 +1,8 @@
+description: 特別障害者手当の所得制限限度額加算額(配偶者及び扶養義務者の場合。老人扶養親族1人につきこの金額が加算される)
+metadata:
+  threshold_unit: person
+  rate_unit: 1
+  reference: https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/toku_shou.html
+values:
+  2000-05-01:
+    value: 60000
