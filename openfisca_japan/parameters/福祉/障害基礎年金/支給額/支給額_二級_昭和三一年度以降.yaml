@@ -1,0 +1,7 @@
+description: 障害基礎年金の年金額(2級、昭和31年4月2日以後生まれ)
+metadata:
+  reference: https://www.nenkin.go.jp/service/jukyu/shougainenkin/jukyu-yoken/20150514.html
+  unit: currency-JPY
+values:
+  2024-04-01:
+    value: 816000
