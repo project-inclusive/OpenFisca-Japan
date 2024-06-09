@@ -6,6 +6,7 @@ import numpy as np
 from openfisca_core.periods import DAY, instant
 from openfisca_core.variables import Variable
 from openfisca_japan.entities import 世帯, 人物
+from openfisca_japan.variables.全般 import 高校生学年
 from openfisca_japan.variables.障害.愛の手帳 import 愛の手帳等級パターン
 from openfisca_japan.variables.障害.療育手帳 import 療育手帳等級パターン
 from openfisca_japan.variables.障害.精神障害者保健福祉手帳 import 精神障害者保健福祉手帳等級パターン
@@ -256,9 +257,10 @@ class 障害基礎年金の対象児童人数_最大(Variable):
         年齢 = 対象世帯.members("年齢", 対象期間)
         二十歳未満で障害等級二級以上の子 = 子である * (年齢 < 20) * ((障害等級 == 1) + (障害等級 == 2))
 
-        # NOTE: 入力情報では誕生年月日が分からないため年齢で近似
-        # （正確には18歳になった後の最初の3月31日までの子）
-        十八歳以下の子 = 子である * (年齢 <= 18)
+        # NOTE: 入力情報では誕生年月日が分からないため学年を使った計算で代替
+        # （18歳になった後の最初の3月31日までの子）
+        学年 = 対象世帯.members("学年", 対象期間)
+        十八歳以下の子 = 子である * (学年 <= 高校生学年.三年生.value)
 
         return 対象世帯.sum(十八歳以下の子 + 二十歳未満で障害等級二級以上の子)
 
@@ -280,8 +282,9 @@ class 障害基礎年金の対象児童人数_最小(Variable):
         # 障害等級は数字が小さいほど等級が高い
         二十歳未満で障害等級二級以上の子 = 子である * (年齢 < 20) * ((障害等級 == 1) + (障害等級 == 2))
 
-        # NOTE: 入力情報では誕生年月日が分からないため年齢で近似
-        # （正確には18歳になった後の最初の3月31日までの子）
-        十八歳以下の子 = 子である * (年齢 < 18)
+        # NOTE: 入力情報では誕生年月日が分からないため学年を使った計算で代替
+        # （18歳になった後の最初の3月31日までの子）
+        学年 = 対象世帯.members("学年", 対象期間)
+        十八歳以下の子 = 子である * (学年 <= 高校生学年.三年生.value)
 
         return 対象世帯.sum(十八歳以下の子 + 二十歳未満で障害等級二級以上の子)
