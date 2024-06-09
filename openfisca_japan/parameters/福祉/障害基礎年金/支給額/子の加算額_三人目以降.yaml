@@ -1,0 +1,7 @@
+description: 障害基礎年金の年金額に対する子の加算額（子の人数分加算、三人目以降）
+metadata:
+  reference: https://www.nenkin.go.jp/service/jukyu/shougainenkin/jukyu-yoken/20150514.html
+  unit: currency-JPY
+values:
+  2024-04-01:
+    value: 78300
