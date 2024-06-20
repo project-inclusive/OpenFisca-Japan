@@ -1,0 +1,8 @@
+description: 先天性の傷病治療によるC型肝炎患者に係るQOL向上等のための調査研究事業の調査研究協力謝金（月額）
+metadata:
+  threshold_unit: person
+  rate_unit: 1
+  reference: https://www.med.niigata-u.ac.jp/ifc/tebiki/blood/05.html
+values:
+  2000-05-01:
+    value: 51500
