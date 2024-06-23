@@ -12,7 +12,10 @@ class 先天性の傷病治療によるC型肝炎患者に係るQOL向上等の�
     entity = 人物
     definition_period = DAY
     label = "先天性の傷病治療によるC型肝炎患者に係るQOL向上等のための調査研究事業の調査研究協力謝金（最大額）"
-    reference = "https://www.med.niigata-u.ac.jp/ifc/tebiki/blood/05.html"
+    reference = "https://www.pmda.go.jp/relief-services/health-welfare/0006.html"
+    documentation = """
+    謝金の金額については https://www.med.niigata-u.ac.jp/ifc/tebiki/blood/05.html
+    """
 
     def formula(対象人物, 対象期間, parameters):
         先天性の血液凝固因子異常症である可能性がある = 対象人物("先天性の血液凝固因子異常症である可能性がある", 対象期間)
@@ -33,7 +36,10 @@ class 先天性の傷病治療によるC型肝炎患者に係るQOL向上等の�
     entity = 人物
     definition_period = DAY
     label = "先天性の傷病治療によるC型肝炎患者に係るQOL向上等のための調査研究事業の調査研究協力謝金（最小額）"
-    reference = "https://www.med.niigata-u.ac.jp/ifc/tebiki/blood/05.html"
+    reference = "https://www.pmda.go.jp/relief-services/health-welfare/0006.html"
+    documentation = """
+    謝金の金額については https://www.med.niigata-u.ac.jp/ifc/tebiki/blood/05.html
+    """
 
     def formula(対象人物, 対象期間, parameters):
         先天性の血液凝固因子異常症である = 対象人物("先天性の血液凝固因子異常症である", 対象期間)
