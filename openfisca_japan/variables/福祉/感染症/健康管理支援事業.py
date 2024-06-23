@@ -38,7 +38,6 @@ class 健康管理支援事業_最小(Variable):
 
 class 健康管理支援事業の対象である(Variable):
     value_type = bool
-    default_value = False
     entity = 人物
     definition_period = DAY
     label = "健康管理支援事業の対象であるか否か"
