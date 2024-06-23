@@ -1,0 +1,8 @@
+description: 健康管理費用の最大支給額（ CD4（T4）リンパ球が1マイクロリットル当たり200以下の方、月額）
+metadata:
+  threshold_unit: person
+  rate_unit: 1
+  reference: https://www.pmda.go.jp/relief-services/hiv-positives/0002.html
+values:
+  2024-04-01:
+    value: 54900
