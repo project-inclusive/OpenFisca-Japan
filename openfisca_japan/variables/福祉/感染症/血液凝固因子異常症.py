@@ -8,6 +8,20 @@ from openfisca_core.variables import Variable
 from openfisca_japan.entities import 人物
 
 
+class 先天性の血液凝固因子異常症である可能性がある(Variable):
+    value_type = bool
+    entity = 人物
+    definition_period = DAY
+    label = "先天性の血液凝固因子異常症である可能性がある"
+    documentation = """
+    「先天性の血液凝固因子異常症である」の場合と異なり、「その他」の場合も含める
+    """
+
+    def formula(対象人物, 対象期間, _parameters):
+        血液凝固因子異常症種別 = 対象人物("血液凝固因子異常症種別", 対象期間)
+        return 血液凝固因子異常症種別 != 血液凝固因子異常症種別パターン.無
+
+
 class 先天性の血液凝固因子異常症である(Variable):
     value_type = bool
     entity = 人物
@@ -16,7 +30,8 @@ class 先天性の血液凝固因子異常症である(Variable):
 
     def formula(対象人物, 対象期間, _parameters):
         血液凝固因子異常症種別 = 対象人物("血液凝固因子異常症種別", 対象期間)
-        return 血液凝固因子異常症種別 != 血液凝固因子異常症種別パターン.無
+        return (血液凝固因子異常症種別 != 血液凝固因子異常症種別パターン.無) * \
+            (血液凝固因子異常症種別 != 血液凝固因子異常症種別パターン.その他)
 
 
 class 血液凝固因子異常症種別パターン(Enum):
