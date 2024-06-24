@@ -1,0 +1,8 @@
+description: 健康管理支援事業の支給額(月額)
+metadata:
+  threshold_unit: person
+  rate_unit: 1
+  reference: https://www.pmda.go.jp/relief-services/hiv-positives/0002.html
+values:
+  2024-04-01:
+    value: 150000

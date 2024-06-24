@@ -34,6 +34,7 @@ class 家族に血液製剤によるHIV感染者がいる(Variable):
 
 class エイズを発症している(Variable):
     value_type = bool
+    default_value = False
     entity = 人物
     definition_period = DAY
     label = "エイズを発症している"
