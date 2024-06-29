@@ -27,7 +27,7 @@ export const AgeInput = ({
   function changeAge(age: number) {
     setAge(age);
 
-    if (age) {
+    if (typeof age === 'number' && age >= 0) {
       const today = new Date();
       const currentYear = today.getFullYear();
       const birthYear = currentYear - age;
@@ -38,7 +38,6 @@ export const AgeInput = ({
         ETERNITY: `${birthYear.toString()}-01-01`,
       };
       setHousehold(newHousehold);
-      //console.log('[DEBUG] household -> ', newHousehold);
     }
   }
 
@@ -55,9 +54,9 @@ export const AgeInput = ({
   useEffect(() => {
     const birthdayObj = household.世帯員[personName].誕生年月日;
     if (birthdayObj && birthdayObj.ETERNITY) {
-      const birthYear = parseInt(birthdayObj.ETERNITY.substring(0, 4));
-      const birthMonth = parseInt(birthdayObj.ETERNITY.substring(5, 7));
-      const birthDate = parseInt(birthdayObj.ETERNITY.substring(8));
+      const birthYear = Number(birthdayObj.ETERNITY.substring(0, 4));
+      const birthMonth = Number(birthdayObj.ETERNITY.substring(5, 7));
+      const birthDate = Number(birthdayObj.ETERNITY.substring(8));
       const birthSum = 10000 * birthYear + 100 * birthMonth + birthDate;
       const today = new Date();
       const todaySum =
