@@ -48,13 +48,13 @@ export const Deposit = ({ personName }: { personName: string }) => {
 
     if (e.key === 'ArrowUp') {
       e.preventDefault();
-      const value = parseInt(shownDeposit as string) + 1;
+      const value = Number(shownDeposit) + 1;
       setShownDeposit(value);
     }
 
     if (e.key === 'ArrowDown') {
       e.preventDefault();
-      const value = parseInt(shownDeposit as string) - 1;
+      const value = Number(shownDeposit) - 1;
       setShownDeposit(Math.max(value, 0));
     }
   };
