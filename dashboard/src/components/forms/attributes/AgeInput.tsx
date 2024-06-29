@@ -14,9 +14,11 @@ import { isMobile } from 'react-device-detect';
 export const AgeInput = ({
   personName,
   mustInput,
+  you = false,
 }: {
   personName: string;
   mustInput: boolean;
+  you?: boolean;
 }) => {
   const navigationType = useNavigationType();
   const [household, setHousehold] = useRecoilState(householdAtom);
@@ -68,7 +70,11 @@ export const AgeInput = ({
 
   return (
     <>
-      {mustInput && <ErrorMessage condition={age === ''} />}
+      {/* Child Time Error */}
+      {mustInput && !you && <ErrorMessage condition={age === ''} />}
+
+      {/* Error for the person's own time */}
+      {mustInput && you && <ErrorMessage condition={age === 0} />}
       <FormControl>
         <FormLabel
           fontSize={configData.style.itemFontSize}

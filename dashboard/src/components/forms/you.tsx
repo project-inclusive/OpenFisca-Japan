@@ -57,7 +57,7 @@ export const FormYou = () => {
         </Center>
         <PrefectureMunicipality mustInput={true} />
         {isDetailedCalculation && (
-          <AgeInput personName={yourName} mustInput={true} />
+          <AgeInput personName={yourName} mustInput={true} you={true} />
         )}
         <Income personName={yourName} mustInput={true} />
 
