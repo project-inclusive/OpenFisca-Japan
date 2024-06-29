@@ -1,0 +1,6 @@
+[[redirects]]
+  from = "/*"
+  to = "https://shien-yadokari.proj-inclusive.org/:splat"
+  status = 301
+  force = true
+  
