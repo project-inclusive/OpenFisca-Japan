@@ -6,6 +6,9 @@ import { ErrorMessage } from './validation/ErrorMessage';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { currentDateAtom, householdAtom } from '../../../state';
 
+import { toHalf } from '../../../utils/toHalf';
+import { isMobile } from 'react-device-detect';
+
 export const Income = ({
   personName,
   mustInput,
@@ -25,8 +28,12 @@ export const Income = ({
       ...household,
     };
 
+    // 全角数字を半角数字に変換
+    let value = toHalf(event.target.value);
+    value = value.replace(/[^0-9]/g, '');
+
     // 「万円」単位を「円」に換算
-    let income = parseInt(event.currentTarget.value) * 10000;
+    let income = parseInt(value) * 10000;
     // 正の整数以外は0に変換
     if (isNaN(income) || income < 0) {
       income = 0;
@@ -43,6 +50,20 @@ export const Income = ({
     // 入力確定した際にページ遷移しないようにする
     if (e.key == 'Enter') {
       e.preventDefault();
+    }
+
+    if (e.key === 'ArrowUp') {
+      const value = Number(shownIncome) + 1;
+      setShownIncome(value);
+    }
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      let value = Number(shownIncome) - 1;
+      if (value < 0) {
+        value = 0;
+      }
+      setShownIncome(value);
     }
   };
 
@@ -72,18 +93,12 @@ export const Income = ({
         <HStack mb={4}>
           <Input
             data-testid="income-input"
-            type="number"
+            type={isMobile ? 'number' : 'text'}
             value={shownIncome}
-            pattern="[0-9]*"
-            onInput={(e) => {
-              e.currentTarget.value = e.currentTarget.value.replace(
-                /[^0-9]/g,
-                ''
-              );
-            }}
             onChange={onChange}
             onKeyDown={onKeyDown}
             width="10em"
+            {...(isMobile && { pattern: '[0-9]*' })}
           />
           <Box>万円</Box>
         </HStack>
