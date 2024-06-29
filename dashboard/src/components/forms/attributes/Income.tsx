@@ -53,14 +53,13 @@ export const Income = ({
     }
 
     if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      const value = parseInt(shownIncome as string) + 1;
+      const value = Number(shownIncome) + 1;
       setShownIncome(value);
     }
 
     if (e.key === 'ArrowDown') {
       e.preventDefault();
-      let value = parseInt(shownIncome as string) - 1;
+      let value = Number(shownIncome) - 1;
       if (value < 0) {
         value = 0;
       }
