@@ -70,3 +70,31 @@ class 血液凝固因子異常症種別(Variable):
     entity = 人物
     definition_period = DAY
     label = "血液凝固因子異常症種別"
+
+
+class 血友病の可能性がある(Variable):
+    value_type = bool
+    entity = 人物
+    definition_period = DAY
+    label = "血友病の可能性がある"
+    documentation = """
+    血友病である場合に加え、分からない場合も含まれる
+    """
+
+    def formula(対象人物, 対象期間, _parameters):
+        血液凝固因子異常症種別 = 対象人物("血液凝固因子異常症種別", 対象期間)
+        return (血液凝固因子異常症種別 == 血液凝固因子異常症種別パターン.第VIII因子欠乏症) + \
+            (血液凝固因子異常症種別 == 血液凝固因子異常症種別パターン.第IX因子欠乏症) +\
+            (血液凝固因子異常症種別 == 血液凝固因子異常症種別パターン.その他)  # 分からない場合も選ばれる
+
+
+class 血友病である(Variable):
+    value_type = bool
+    entity = 人物
+    definition_period = DAY
+    label = "血友病である"
+
+    def formula(対象人物, 対象期間, _parameters):
+        血液凝固因子異常症種別 = 対象人物("血液凝固因子異常症種別", 対象期間)
+        return (血液凝固因子異常症種別 == 血液凝固因子異常症種別パターン.第VIII因子欠乏症) + \
+            (血液凝固因子異常症種別 == 血液凝固因子異常症種別パターン.第IX因子欠乏症)
