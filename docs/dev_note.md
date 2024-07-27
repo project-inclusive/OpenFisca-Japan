@@ -174,11 +174,26 @@ sudo apt install xdg-utils
 
 ### フロントエンド
 - ルートディレクトリで以下コマンドを打ち、フロントエンドとバックエンドのDocker環境を一括で起動する
-  - `docker-compose up --build`
+  - `docker compose up --build`
 - `cd dashboard` でdashboardディレクトリにて開発する。
 - http://localhost:30000/ をブラウザに打ち込み、ページを確認する。
 
+#### テスト、linter実行
 
+```
+# dashboardディレクトリに移動
+cd dashboard
+
+# linter
+npm run lint
+npm run pretty:check
+
+# formatter (上記でエラーが出た場合に解消)
+npm run pretty
+
+# テスト実行
+npm run cy:run
+```
 
 ## デプロイ方法
 
