@@ -209,7 +209,7 @@ npm run cy:run
 #### 自動build, deploy
 以下より、バックエンド・フロントエンドともにmain, developブランチが独立した環境で自動ビルド・デプロイされる。
 - Google CloudのCloud Buildにより、mainブランチ、developブランチにpull (push) されたとき、それぞれ`./cloudbuild.yaml`, `./cloudbuild-dev.yaml`をもとに`./Dockerfile_cloud`のイメージがビルドされ、Cloud Runにより異なるURLでdeployされる。
-- Netlifyの環境変数をmainブランチとdevelopブランチで変えることで、それぞれ上記の個別のバックエンドAPIにPOSTする。
+- Cloudflare Pagesの環境変数をmainブランチとdevelopブランチで変えることで、それぞれ上記の個別のバックエンドAPIにPOSTする。
 
 #### ローカルでdockerイメージを作りcloud runにデプロイする（参考）
 - `docker build -t gcr.io/openfisca-shibuya/openfisca-shibuya-deploy-test -f Dockerfile_cloud --platform amd64 .`
@@ -220,9 +220,9 @@ npm run cy:run
 - Makefile内の環境変数は`$hoge`では認識されない。他の記載方法がある？
 
 ### フロントエンド
-- Netlifyでmainブランチ、developブランチにpull (push)時にbuild, deployされる。
+- Cloudflare Pagesでmainブランチ、developブランチにpull (push)時にbuild, deployされる。
 
-- developブランチのデプロイURLは[https://develop--shien-yadokari.netlify.app/](https://develop--shien-yadokari.netlify.app/)
+- developブランチのデプロイURLは[https://develop.openfisca-japan.pages.dev/](https://develop.openfisca-japan.pages.dev/)
 
 
 
