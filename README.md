@@ -23,9 +23,9 @@
 - 災害援護資金（能登半島地震被災地）
 
 ## 作成Webアプリ
-[支援みつもりヤドカリくん](https://openfisca-japan.pages.dev/)に作成されたWebアプリが公開されています。  
+[支援みつもりヤドカリくん](https://shien-yadokari.proj-inclusive.org/)に作成されたWebアプリが公開されています。  
 mainブランチのソースコードがビルド・デプロイされています。  
-フロントエンド(React)はNetlifyとCloudflare Pages、バックエンド(OpenFisca)はGoogle CloudのCloud Runでビルド・デプロイされています。
+フロントエンド(React)はCloudflare Pages、バックエンド(OpenFisca)はGoogle CloudのCloud Runでビルド・デプロイされています。
 
 ## 開発参加方法
 - リポジトリをフォークし、**develop**ブランチ（あるいはそこから新たに切ったブランチ）にチェックアウトしてコミットを行ってください。（developブランチに最新の開発状況が反映されています。）
@@ -42,6 +42,6 @@ project-inclusiveの開発方針やOpenFiscaそのもの等の情報は、[本�
 
 
 ## お問い合わせ
-[防窮研究所](https://www.facebook.com/Institute.for.Poverty.Prevention)
-
+- [proj-inclusive](https://www.proj-inclusive.org/)
+- [防窮研究所](https://www.facebook.com/Institute.for.Poverty.Prevention)
 

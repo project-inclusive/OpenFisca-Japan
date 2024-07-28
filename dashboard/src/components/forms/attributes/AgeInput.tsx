@@ -8,30 +8,29 @@ import { ErrorMessage } from './validation/ErrorMessage';
 import { householdAtom } from '../../../state';
 import { useRecoilState } from 'recoil';
 
+import { toHalf } from '../../../utils/toHalf';
+import { isMobile } from 'react-device-detect';
+
 export const AgeInput = ({
   personName,
   mustInput,
+  you = false,
 }: {
   personName: string;
   mustInput: boolean;
+  you?: boolean;
 }) => {
   const navigationType = useNavigationType();
   const [household, setHousehold] = useRecoilState(householdAtom);
-  const [age, setAge] = useState('');
+  const [age, setAge] = useState<string | number>('');
 
-  const handleAgeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    let inputAge: string;
-    if (parseInt(event.currentTarget.value) < 0) {
-      inputAge = '0';
-    } else {
-      inputAge = event.currentTarget.value;
-    }
-    setAge(inputAge);
+  function changeAge(age: number) {
+    setAge(age);
 
-    if (inputAge) {
+    if (typeof age === 'number' && age >= 0) {
       const today = new Date();
       const currentYear = today.getFullYear();
-      const birthYear = currentYear - parseInt(inputAge);
+      const birthYear = currentYear - age;
       const newHousehold = {
         ...household,
       };
@@ -39,30 +38,42 @@ export const AgeInput = ({
         ETERNITY: `${birthYear.toString()}-01-01`,
       };
       setHousehold(newHousehold);
-      //console.log('[DEBUG] household -> ', newHousehold);
     }
+  }
+
+  const handleAgeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    let value: number | string = toHalf(event.currentTarget.value) ?? 0;
+    value = value.replace(/[^0-9]/g, '');
+    value = Number(value);
+
+    const inputAge = value <= 0 ? '' : value;
+    changeAge(Number(inputAge));
   };
 
   // stored states set displayed age when page transition
   useEffect(() => {
     const birthdayObj = household.世帯員[personName].誕生年月日;
     if (birthdayObj && birthdayObj.ETERNITY) {
-      const birthYear = parseInt(birthdayObj.ETERNITY.substring(0, 4));
-      const birthMonth = parseInt(birthdayObj.ETERNITY.substring(5, 7));
-      const birthDate = parseInt(birthdayObj.ETERNITY.substring(8));
+      const birthYear = Number(birthdayObj.ETERNITY.substring(0, 4));
+      const birthMonth = Number(birthdayObj.ETERNITY.substring(5, 7));
+      const birthDate = Number(birthdayObj.ETERNITY.substring(8));
       const birthSum = 10000 * birthYear + 100 * birthMonth + birthDate;
       const today = new Date();
       const todaySum =
         10000 * today.getFullYear() +
         100 * (today.getMonth() + 1) +
         today.getDate();
-      setAge(String(Math.floor((todaySum - birthSum) / 10000)));
+      setAge(Math.floor((todaySum - birthSum) / 10000));
     }
   }, [navigationType, household.世帯員[personName]?.誕生年月日]);
 
   return (
     <>
-      {mustInput && <ErrorMessage condition={!age} />}
+      {/* Child Time Error */}
+      {mustInput && !you && <ErrorMessage condition={age === ''} />}
+
+      {/* Error for the person's own time */}
+      {mustInput && you && <ErrorMessage condition={age === 0} />}
       <FormControl>
         <FormLabel
           fontSize={configData.style.itemFontSize}
@@ -81,16 +92,25 @@ export const AgeInput = ({
         <HStack mb={4}>
           <Input
             width="6em"
-            type="number"
+            type={isMobile ? 'number' : 'text'}
             value={age}
-            pattern="[0-9]*"
-            onInput={(e) => {
-              e.currentTarget.value = e.currentTarget.value.replace(
-                /[^0-9]/g,
-                ''
-              );
-            }}
             onChange={handleAgeChange}
+            onKeyDown={(event) => {
+              if (event.key === 'ArrowUp') {
+                event.preventDefault();
+                changeAge(Number(age) + 1);
+              }
+
+              if (event.key === 'ArrowDown') {
+                event.preventDefault();
+                if (event.key === 'ArrowDown') {
+                  event.preventDefault();
+                  const newAge = Math.max(Number(age) - 1, 0);
+                  changeAge(Number(newAge === 0 ? '' : newAge));
+                }
+              }
+            }}
+            {...(isMobile && { pattern: '[0-9]*' })}
           />
           <Box>歳</Box>
         </HStack>

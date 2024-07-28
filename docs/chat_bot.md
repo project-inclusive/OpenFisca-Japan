@@ -84,6 +84,10 @@ Google Custom Search APIは、Googleの検索技術をウェブサイトやア�
 - [特別児童扶養手当](https://info-obihiro.sukoyakanet.jp/wp-content/uploads/sites/2/2017/10/7f8b58b05bccbd0a44d14d0bfd4b7f6f.pdf)
 - [障害児福祉手当](https://www.city.adachi.tokyo.jp/shogai/fukushi-kenko/shinshin/teate-shogaiji.html)
 - [生活福祉資金貸付制度](https://www.gov-online.go.jp/useful/article/201001/3.html)
+- [災害弔慰金](https://www.mhlw.go.jp/shinsai_jouhou/saigaishien.html)
+- [災害障害見舞金](https://www.mhlw.go.jp/shinsai_jouhou/saigaishien.html)
+- [被災者生活再建支援制度](https://www.bousai.go.jp/taisaku/seikatsusaiken/pdf/140612gaiyou.pdf)
+- [災害援護資金](https://www.mhlw.go.jp/shinsai_jouhou/saigaishien.html)
 
 
 ## miiboについて

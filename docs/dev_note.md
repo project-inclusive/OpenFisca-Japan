@@ -106,6 +106,24 @@ make serve-local
 
 ## 開発方法
 
+### ディレクトリ構成
+
+主なディレクトリ
+
+- `dashboard`: フロントエンド(React製)
+  - `cypress`: e2eテスト
+  - `src`: アプリのソースコード
+    - `assets`: 画像等のファイル
+    - `components`: UIを構成するReactコンポーネント
+    - `config`: 制度情報や自治体名等のデータ
+    - `contexts`: アプリ全体で共有するデータを保持するためのReact context
+    - `hooks`: 状態管理を行うためのReact hooks
+- `oepnfisca_japan`: バックエンド(OpenFisca製、詳細は[OpenFiscaについて](./about_openfisca))
+  - `assets`: 制度の計算に使用する金額等のデータ(csv)
+  - `parameters`: 制度計算に使用する金額等のデータ(yaml)
+  - `tests`: 制度のユニットテスト
+  - `variables`: 制度の計算式を表すクラス(Python)
+
 ### バックエンド
 
 #### 事前準備
@@ -156,11 +174,26 @@ sudo apt install xdg-utils
 
 ### フロントエンド
 - ルートディレクトリで以下コマンドを打ち、フロントエンドとバックエンドのDocker環境を一括で起動する
-  - `docker-compose up --build`
+  - `docker compose up --build`
 - `cd dashboard` でdashboardディレクトリにて開発する。
 - http://localhost:30000/ をブラウザに打ち込み、ページを確認する。
 
+#### テスト、linter実行
 
+```
+# dashboardディレクトリに移動
+cd dashboard
+
+# linter
+npm run lint
+npm run pretty:check
+
+# formatter (上記でエラーが出た場合に解消)
+npm run pretty
+
+# テスト実行
+npm run cy:run
+```
 
 ## デプロイ方法
 
@@ -176,7 +209,7 @@ sudo apt install xdg-utils
 #### 自動build, deploy
 以下より、バックエンド・フロントエンドともにmain, developブランチが独立した環境で自動ビルド・デプロイされる。
 - Google CloudのCloud Buildにより、mainブランチ、developブランチにpull (push) されたとき、それぞれ`./cloudbuild.yaml`, `./cloudbuild-dev.yaml`をもとに`./Dockerfile_cloud`のイメージがビルドされ、Cloud Runにより異なるURLでdeployされる。
-- Netlifyの環境変数をmainブランチとdevelopブランチで変えることで、それぞれ上記の個別のバックエンドAPIにPOSTする。
+- Cloudflare Pagesの環境変数をmainブランチとdevelopブランチで変えることで、それぞれ上記の個別のバックエンドAPIにPOSTする。
 
 #### ローカルでdockerイメージを作りcloud runにデプロイする（参考）
 - `docker build -t gcr.io/openfisca-shibuya/openfisca-shibuya-deploy-test -f Dockerfile_cloud --platform amd64 .`
@@ -187,9 +220,9 @@ sudo apt install xdg-utils
 - Makefile内の環境変数は`$hoge`では認識されない。他の記載方法がある？
 
 ### フロントエンド
-- Netlifyでmainブランチ、developブランチにpull (push)時にbuild, deployされる。
+- Cloudflare Pagesでmainブランチ、developブランチにpull (push)時にbuild, deployされる。
 
-- developブランチのデプロイURLは[https://develop--shien-yadokari.netlify.app/](https://develop--shien-yadokari.netlify.app/)
+- developブランチのデプロイURLは[https://develop.openfisca-japan.pages.dev/](https://develop.openfisca-japan.pages.dev/)
 
 
 

@@ -1,0 +1,18 @@
+description: 特別障害者手当の所得制限限度額(配偶者及び扶養義務者の場合。扶養人数が0人から増えるごとに増額する。6人以上の場合は https://www.city.date.hokkaido.jp/hotnews/files/00000300/00000337/20130212173224.pdf 参照)
+metadata:
+  threshold_unit: person
+  rate_unit: 1
+  reference: https://www.mhlw.go.jp/bunya/shougaihoken/jidou/tokubetsu.html
+values:
+  2000-05-01:
+    value:
+      - 6287000
+      - 6536000
+      - 6749000
+      - 6962000
+      - 7175000
+      - 7388000
+      - 7768000
+      - 8148000
+      - 8528000
+      - 8908000

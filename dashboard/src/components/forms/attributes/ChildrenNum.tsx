@@ -12,6 +12,9 @@ import {
 import { useRecoilState } from 'recoil';
 import { householdAtom } from '../../../state';
 
+import { toHalf } from '../../../utils/toHalf';
+import { isMobile } from 'react-device-detect';
+
 export const ChildrenNum = () => {
   const isDisasterCalculation = location.pathname === '/calculate-disaster';
   const navigationType = useNavigationType();
@@ -46,7 +49,10 @@ export const ChildrenNum = () => {
 
   // 「子どもの数」フォームの変更時
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    let childrenNum = parseInt(event.currentTarget.value);
+    let childrenNum: number | string = toHalf(event.target.value);
+    childrenNum = childrenNum.replace(/[^0-9]/g, '');
+    childrenNum = parseInt(childrenNum);
+
     // 正の整数以外は0に変換
     if (isNaN(childrenNum) || childrenNum < 0) {
       childrenNum = 0;
@@ -58,7 +64,10 @@ export const ChildrenNum = () => {
       setShownChildrenNum(childrenNum);
     }
 
-    // 変更前の子どもの情報を削除
+    updateChildrenInfo(childrenNum);
+  }, []);
+
+  function updateChildrenInfo(childrenNum: number) {
     const newHousehold = { ...household };
     if (household.世帯一覧.世帯1.子一覧) {
       household.世帯一覧.世帯1.子一覧.map((childName: string) => {
@@ -76,7 +85,7 @@ export const ChildrenNum = () => {
       });
     }
     setHousehold({ ...newHousehold });
-  }, []);
+  }
 
   // stored states set displayed value when page transition
   useEffect(() => {
@@ -102,18 +111,30 @@ export const ChildrenNum = () => {
             <FormLabel fontWeight="Regular">子どもの数</FormLabel>
             <HStack mb={4}>
               <Input
-                type="number"
+                type={isMobile ? 'number' : 'text'}
                 value={shownChildrenNum}
-                pattern="[0-9]*"
-                onInput={(e) => {
-                  e.currentTarget.value = e.currentTarget.value.replace(
-                    /[^0-9]/g,
-                    ''
-                  );
-                }}
                 onChange={onChange}
+                onKeyDown={(e) => {
+                  if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    const newChildrenNum = Number(shownChildrenNum) + 1;
+                    setShownChildrenNum(newChildrenNum);
+                    updateChildrenInfo(newChildrenNum);
+                  }
+
+                  if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    let newChildrenNum = Number(shownChildrenNum) - 1;
+                    if (newChildrenNum < 0) {
+                      newChildrenNum = 0;
+                    }
+                    setShownChildrenNum(newChildrenNum);
+                    updateChildrenInfo(newChildrenNum);
+                  }
+                }}
                 width="9em"
                 ref={inputEl}
+                {...(isMobile && { pattern: '[0-9]*' })}
               />
               <Box>人</Box>
             </HStack>

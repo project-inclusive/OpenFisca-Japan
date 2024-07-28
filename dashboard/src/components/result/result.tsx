@@ -347,7 +347,7 @@ export const Result = () => {
           </Center>
 
           <Center pr={4} pl={4} pb={4}>
-            {/* When returning to this calculation result page from the questionnaire form on a PC browser (Chrome, Edge) deployed by Netlify, it will be 404, so open it in a new tab */}
+            {/* When returning to this calculation result page from the questionnaire form on a PC browser (Chrome, Edge) deployed by Cloudflare Pages, it will be 404, so open it in a new tab */}
             <Button
               as="a"
               href={configData.URL.questionnaire_form}
