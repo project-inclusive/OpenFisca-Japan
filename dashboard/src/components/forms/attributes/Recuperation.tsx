@@ -1,9 +1,13 @@
 import { useCallback, useState, useEffect } from 'react';
 import { useNavigationType } from 'react-router-dom';
-import { Checkbox, Box } from '@chakra-ui/react';
+import { Checkbox, Box, Text } from '@chakra-ui/react';
 
 import { HomeRecuperation } from './HomeRecuperation';
 import { Hospitalized } from './Hospitalized';
+import { Hemophilia } from './Hemophilia/Hemophilia';
+import { HIV } from './HIV/HIV';
+import { HepatitisC } from './HepatitisC/HepatitisC';
+import { RenalFailure } from './RenalFailure/RenalFailure';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { currentDateAtom, householdAtom } from '../../../state';
 
@@ -41,7 +45,7 @@ export const Recuperation = ({ personName }: { personName: string }) => {
   return (
     <Box mb={4}>
       <Checkbox colorScheme="cyan" isChecked={isChecked} onChange={onChange}>
-        病気がある
+        病気がある（または経過観察中）
       </Checkbox>
 
       {isChecked && (
@@ -49,6 +53,11 @@ export const Recuperation = ({ personName }: { personName: string }) => {
           <>
             <HomeRecuperation personName={personName} />
             <Hospitalized personName={personName} />
+            <Text my={4}>病気の種類</Text>
+            <HIV personName={personName} />
+            <Hemophilia personName={personName} />
+            <HepatitisC personName={personName} />
+            <RenalFailure personName={personName} />
           </>
         </Box>
       )}
