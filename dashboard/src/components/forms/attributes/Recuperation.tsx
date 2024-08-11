@@ -24,6 +24,7 @@ export const Recuperation = ({ personName }: { personName: string }) => {
       const newHousehold = { ...household };
       newHousehold.世帯員[personName].在宅療養中 = { [currentDate]: false };
       newHousehold.世帯員[personName].入院中 = { [currentDate]: false };
+      newHousehold.世帯員[personName].感染症歴 = { [currentDate]: false };
       setHousehold({ ...newHousehold });
     }
 
@@ -35,7 +36,8 @@ export const Recuperation = ({ personName }: { personName: string }) => {
     const personObj = household.世帯員[personName];
     if (
       (personObj.在宅療養中 && personObj.在宅療養中[currentDate] !== false) ||
-      (personObj.入院中 && personObj.入院中[currentDate] !== false)
+      (personObj.入院中 && personObj.入院中[currentDate] !== false) ||
+      (personObj.感染症歴 && personObj.感染症歴[currentDate] !== false)
     ) {
       setIsChecked(true);
     }
