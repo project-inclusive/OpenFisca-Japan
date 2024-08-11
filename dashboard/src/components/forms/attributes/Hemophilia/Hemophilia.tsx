@@ -27,66 +27,63 @@ export const Hemophilia = ({ personName }: { personName: string }) => {
   const [isChecked, setIsChecked] = useState(false);
   const [household, setHousehold] = useRecoilState(householdAtom);
 
-  // チェックボックスの値が変更された時
-  const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!event.target.checked) {
-      const newHousehold = { ...household };
-      newHousehold.世帯員[personName].第I因子欠乏症 = { [currentDate]: false };
-      newHousehold.世帯員[personName].第II因子欠乏症 = { [currentDate]: false };
-      newHousehold.世帯員[personName].第V因子欠乏症 = { [currentDate]: false };
-      newHousehold.世帯員[personName].第VII因子欠乏症 = {
-        [currentDate]: false,
-      };
-      newHousehold.世帯員[personName].第VIII因子欠乏症 = {
-        [currentDate]: false,
-      };
-      newHousehold.世帯員[personName].第IX因子欠乏症 = { [currentDate]: false };
-      newHousehold.世帯員[personName].第X因子欠乏症 = { [currentDate]: false };
-      newHousehold.世帯員[personName].第XI因子欠乏症 = { [currentDate]: false };
-      newHousehold.世帯員[personName].第XII因子欠乏症 = {
-        [currentDate]: false,
-      };
-      newHousehold.世帯員[personName].第XIII因子欠乏症 = {
-        [currentDate]: false,
-      };
-      newHousehold.世帯員[personName].フォンヴィルブランド病 = {
-        [currentDate]: false,
-      };
-      newHousehold.世帯員[personName].その他 = { [currentDate]: false };
-      setHousehold({ ...newHousehold });
-    }
+  const onChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (!event.target.checked) {
+        const newHousehold = { ...household };
+        const factors = [
+          '第I因子欠乏症',
+          '第II因子欠乏症',
+          '第V因子欠乏症',
+          '第VII因子欠乏症',
+          '第VIII因子欠乏症',
+          '第IX因子欠乏症',
+          '第X因子欠乏症',
+          '第XI因子欠乏症',
+          '第XII因子欠乏症',
+          '第XIII因子欠乏症',
+          'フォンヴィルブランド病',
+          'その他',
+        ];
 
-    setIsChecked(event.target.checked);
-  }, []);
+        factors.forEach((factor) => {
+          newHousehold.世帯員[personName].血液凝固因子異常症種別 = {
+            [currentDate]: factor,
+          };
+        });
 
-  // stored states set value when page transition
+        setHousehold(newHousehold);
+      }
+
+      setIsChecked(event.target.checked);
+    },
+    [household, personName, currentDate, setHousehold]
+  );
+
   useEffect(() => {
     const personObj = household.世帯員[personName];
-    if (
-      (personObj.第I因子欠乏症 &&
-        personObj.第I因子欠乏症[currentDate] !== false) ||
-      (personObj.第II因子欠乏症 &&
-        personObj.第II因子欠乏症[currentDate] !== false) ||
-      (personObj.第V因子欠乏症 &&
-        personObj.第V因子欠乏症[currentDate] !== false) ||
-      (personObj.第VII因子欠乏症 &&
-        personObj.第VII因子欠乏症[currentDate] !== false) ||
-      (personObj.第VIII因子欠乏症 &&
-        personObj.第VIII因子欠乏症[currentDate] !== false) ||
-      (personObj.第IX因子欠乏症 &&
-        personObj.第IX因子欠乏症[currentDate] !== false) ||
-      (personObj.第X因子欠乏症 &&
-        personObj.第X因子欠乏症[currentDate] !== false) ||
-      (personObj.第XI因子欠乏症 &&
-        personObj.第XI因子欠乏症[currentDate] !== false) ||
-      (personObj.第XII因子欠乏症 &&
-        personObj.第XII因子欠乏症[currentDate] !== false) ||
-      (personObj.第XIII因子欠乏症 &&
-        personObj.第XIII因子欠乏症[currentDate] !== false) ||
-      (personObj.フォンヴィルブランド病 &&
-        personObj.フォンヴィルブランド病[currentDate] !== false) ||
-      (personObj.その他 && personObj.その他[currentDate] !== false)
-    ) {
+    const factors = [
+      '第I因子欠乏症',
+      '第II因子欠乏症',
+      '第V因子欠乏症',
+      '第VII因子欠乏症',
+      '第VIII因子欠乏症',
+      '第IX因子欠乏症',
+      '第X因子欠乏症',
+      '第XI因子欠乏症',
+      '第XII因子欠乏症',
+      '第XIII因子欠乏症',
+      'フォンヴィルブランド病',
+      'その他',
+    ];
+
+    const hasAnyFactor = factors.some(
+      (factor) =>
+        personObj.血液凝固因子異常症種別 &&
+        personObj.血液凝固因子異常症種別[currentDate] !== factor
+    );
+
+    if (hasAnyFactor) {
       setIsChecked(true);
     }
   }, [navigationType]);

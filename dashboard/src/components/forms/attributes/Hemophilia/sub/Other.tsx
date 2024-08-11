@@ -18,9 +18,13 @@ export const Other = ({ personName }: { personName: string }) => {
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const newHousehold = { ...household };
     if (event.target.checked) {
-      newHousehold.世帯員[personName].その他 = { [currentDate]: true };
+      newHousehold.世帯員[personName].血液凝固因子異常症種別 = {
+        [currentDate]: 'その他',
+      };
     } else {
-      newHousehold.世帯員[personName].その他 = { [currentDate]: false };
+      newHousehold.世帯員[personName].血液凝固因子異常症種別 = {
+        [currentDate]: '',
+      };
     }
 
     setHousehold({ ...newHousehold });
@@ -29,8 +33,8 @@ export const Other = ({ personName }: { personName: string }) => {
 
   // stored states set checkbox when page transition
   useEffect(() => {
-    const otherObj = household.世帯員[personName].その他;
-    setIsChecked(otherObj && otherObj[currentDate]);
+    const otherObj = household.世帯員[personName].血液凝固因子異常症種別;
+    setIsChecked(otherObj && otherObj[currentDate] === 'その他');
   }, [navigationType]);
 
   return (
