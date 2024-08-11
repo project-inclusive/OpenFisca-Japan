@@ -1,17 +1,16 @@
-// Hemophilia（血友病）
+// Hepatitis C（C型肝炎）
 
 import { useCallback, useState, useEffect } from 'react';
 import { useNavigationType } from 'react-router-dom';
 import { Checkbox, Box } from '@chakra-ui/react';
 
-import { AIDS } from './sub/AIDS';
-import { HasFamily } from './sub/HasFamily';
-import { DueToBloodPrd } from './sub/DueToBloodPrd';
+import { BloodProduct } from './sub/BloodProduct';
+import { Affected } from './sub/Affected';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { currentDateAtom, householdAtom } from '../../../../state';
+import { currentDateAtom, householdAtom } from '../../../../../state';
 
-export const HIV = ({ personName }: { personName: string }) => {
+export const HepatitisC = ({ personName }: { personName: string }) => {
   const navigationType = useNavigationType();
   const currentDate = useRecoilValue(currentDateAtom);
 
@@ -22,13 +21,14 @@ export const HIV = ({ personName }: { personName: string }) => {
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.checked) {
       const newHousehold = { ...household };
-      newHousehold.世帯員[personName].血液製剤の投与によってHIVに感染した = {
+      newHousehold.世帯員[
+        personName
+      ].血液製剤の投与によってC型肝炎ウイルスに感染した = {
         [currentDate]: false,
       };
-      newHousehold.世帯員[personName].家族に血液製剤によるHIV感染者がいる = {
-        [currentDate]: false,
-      };
-      newHousehold.世帯員[personName].エイズを発症している = {
+      newHousehold.世帯員[
+        personName
+      ].肝硬変や肝がんに罹患しているまたは肝移植をおこなった = {
         [currentDate]: false,
       };
       setHousehold({ ...newHousehold });
@@ -41,12 +41,14 @@ export const HIV = ({ personName }: { personName: string }) => {
   useEffect(() => {
     const personObj = household.世帯員[personName];
     if (
-      (personObj.血液製剤の投与によってHIVに感染した &&
-        personObj.血液製剤の投与によってHIVに感染した[currentDate] !== false) ||
-      (personObj.家族に血液製剤によるHIV感染者がいる &&
-        personObj.家族に血液製剤によるHIV感染者がいる[currentDate] !== false) ||
-      (personObj.エイズを発症している &&
-        personObj.エイズを発症している[currentDate] !== false)
+      (personObj.血液製剤の投与によってC型肝炎ウイルスに感染した &&
+        personObj.血液製剤の投与によってC型肝炎ウイルスに感染した[
+          currentDate
+        ] !== false) ||
+      (personObj.肝硬変や肝がんに罹患しているまたは肝移植をおこなった &&
+        personObj.肝硬変や肝がんに罹患しているまたは肝移植をおこなった[
+          currentDate
+        ] !== false)
     ) {
       setIsChecked(true);
     }
@@ -55,15 +57,14 @@ export const HIV = ({ personName }: { personName: string }) => {
   return (
     <Box mb={4}>
       <Checkbox colorScheme="cyan" isChecked={isChecked} onChange={onChange}>
-        HIVに感染している
+        C型肝炎ウイルスに感染している
       </Checkbox>
 
       {isChecked && (
         <Box mt={2} ml={4} mr={4} mb={4}>
           <>
-            <AIDS personName={personName} />
-            <HasFamily personName={personName} />
-            <DueToBloodPrd personName={personName} />
+            <BloodProduct personName={personName} />
+            <Affected personName={personName} />
           </>
         </Box>
       )}

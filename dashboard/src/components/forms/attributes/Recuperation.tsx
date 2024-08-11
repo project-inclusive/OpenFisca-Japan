@@ -5,8 +5,7 @@ import { Checkbox, Box, Text } from '@chakra-ui/react';
 import { HomeRecuperation } from './HomeRecuperation';
 import { Hospitalized } from './Hospitalized';
 import { Hemophilia } from './Hemophilia/Hemophilia';
-import { HIV } from './HIV/HIV';
-import { HepatitisC } from './HepatitisC/HepatitisC';
+import { Contagion } from './Contagion/Contagion';
 import { RenalFailure } from './RenalFailure/RenalFailure';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { currentDateAtom, householdAtom } from '../../../state';
@@ -54,9 +53,8 @@ export const Recuperation = ({ personName }: { personName: string }) => {
             <HomeRecuperation personName={personName} />
             <Hospitalized personName={personName} />
             <Text my={4}>病気の種類</Text>
-            <HIV personName={personName} />
+            <Contagion personName={personName} />
             <Hemophilia personName={personName} />
-            <HepatitisC personName={personName} />
             <RenalFailure personName={personName} />
           </>
         </Box>

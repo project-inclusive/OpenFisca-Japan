@@ -1,13 +1,13 @@
-// AIDS
+// Has a family member infected with HIV due to blood products
 
 import { useState, useCallback, useEffect } from 'react';
 import { useNavigationType } from 'react-router-dom';
 import { Checkbox } from '@chakra-ui/react';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { currentDateAtom, householdAtom } from '../../../../../state';
+import { currentDateAtom, householdAtom } from '../../../../../../state';
 
-export const AIDS = ({ personName }: { personName: string }) => {
+export const HasFamily = ({ personName }: { personName: string }) => {
   const navigationType = useNavigationType();
   const currentDate = useRecoilValue(currentDateAtom);
 
@@ -18,11 +18,11 @@ export const AIDS = ({ personName }: { personName: string }) => {
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const newHousehold = { ...household };
     if (event.target.checked) {
-      newHousehold.世帯員[personName].エイズを発症している = {
+      newHousehold.世帯員[personName].家族に血液製剤によるHIV感染者がいる = {
         [currentDate]: true,
       };
     } else {
-      newHousehold.世帯員[personName].エイズを発症している = {
+      newHousehold.世帯員[personName].家族に血液製剤によるHIV感染者がいる = {
         [currentDate]: false,
       };
     }
@@ -33,8 +33,9 @@ export const AIDS = ({ personName }: { personName: string }) => {
 
   // stored states set checkbox when page transition
   useEffect(() => {
-    const aidsObj = household.世帯員[personName].エイズを発症している;
-    setIsChecked(aidsObj && aidsObj[currentDate]);
+    const hasFamilyObj =
+      household.世帯員[personName].家族に血液製剤によるHIV感染者がいる;
+    setIsChecked(hasFamilyObj && hasFamilyObj[currentDate]);
   }, [navigationType]);
 
   return (
@@ -45,7 +46,7 @@ export const AIDS = ({ personName }: { personName: string }) => {
         colorScheme="cyan"
         mb={2}
       >
-        エイズを発症している
+        家族に血液製剤によるHIV感染者がいる
       </Checkbox>
       <br />
     </>

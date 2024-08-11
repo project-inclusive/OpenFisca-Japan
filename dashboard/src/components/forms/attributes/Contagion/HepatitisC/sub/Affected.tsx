@@ -5,7 +5,7 @@ import { useNavigationType } from 'react-router-dom';
 import { Checkbox } from '@chakra-ui/react';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { currentDateAtom, householdAtom } from '../../../../../state';
+import { currentDateAtom, householdAtom } from '../../../../../../state';
 
 export const Affected = ({ personName }: { personName: string }) => {
   const navigationType = useNavigationType();
