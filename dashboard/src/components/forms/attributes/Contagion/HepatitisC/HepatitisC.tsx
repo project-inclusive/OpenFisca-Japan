@@ -19,8 +19,12 @@ export const HepatitisC = ({ personName }: { personName: string }) => {
 
   // チェックボックスの値が変更された時
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    const newHousehold = { ...household };
+
     if (!event.target.checked) {
-      const newHousehold = { ...household };
+      newHousehold.世帯員[personName].C型肝炎ウイルスに感染している = {
+        [currentDate]: false,
+      };
       newHousehold.世帯員[
         personName
       ].血液製剤の投与によってC型肝炎ウイルスに感染した = {
@@ -32,6 +36,11 @@ export const HepatitisC = ({ personName }: { personName: string }) => {
         [currentDate]: false,
       };
       setHousehold({ ...newHousehold });
+    } else {
+      newHousehold.世帯員[personName].C型肝炎ウイルスに感染している = {
+        [currentDate]: true,
+      };
+      setHousehold({ ...newHousehold });
     }
 
     setIsChecked(event.target.checked);
@@ -40,7 +49,11 @@ export const HepatitisC = ({ personName }: { personName: string }) => {
   // stored states set value when page transition
   useEffect(() => {
     const personObj = household.世帯員[personName];
+    console.log(personObj);
+
     if (
+      (personObj.C型肝炎ウイルスに感染している &&
+        personObj.C型肝炎ウイルスに感染している[currentDate] !== false) ||
       (personObj.血液製剤の投与によってC型肝炎ウイルスに感染した &&
         personObj.血液製剤の投与によってC型肝炎ウイルスに感染した[
           currentDate
