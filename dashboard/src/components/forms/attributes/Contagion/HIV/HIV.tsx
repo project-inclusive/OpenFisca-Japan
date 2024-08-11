@@ -20,8 +20,11 @@ export const HIV = ({ personName }: { personName: string }) => {
 
   // チェックボックスの値が変更された時
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    const newHousehold = { ...household };
     if (!event.target.checked) {
-      const newHousehold = { ...household };
+      newHousehold.世帯員[personName].HIV感染者である = {
+        [currentDate]: false,
+      };
       newHousehold.世帯員[personName].血液製剤の投与によってHIVに感染した = {
         [currentDate]: false,
       };
@@ -30,6 +33,11 @@ export const HIV = ({ personName }: { personName: string }) => {
       };
       newHousehold.世帯員[personName].エイズを発症している = {
         [currentDate]: false,
+      };
+      setHousehold({ ...newHousehold });
+    } else {
+      newHousehold.世帯員[personName].HIV感染者である = {
+        [currentDate]: true,
       };
       setHousehold({ ...newHousehold });
     }
@@ -41,6 +49,8 @@ export const HIV = ({ personName }: { personName: string }) => {
   useEffect(() => {
     const personObj = household.世帯員[personName];
     if (
+      (personObj.HIV感染者である &&
+        personObj.HIV感染者である[currentDate] !== false) ||
       (personObj.血液製剤の投与によってHIVに感染した &&
         personObj.血液製剤の投与によってHIVに感染した[currentDate] !== false) ||
       (personObj.家族に血液製剤によるHIV感染者がいる &&
