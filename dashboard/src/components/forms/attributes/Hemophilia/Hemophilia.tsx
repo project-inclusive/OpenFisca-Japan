@@ -91,7 +91,7 @@ export const Hemophilia = ({ personName }: { personName: string }) => {
   return (
     <Box mb={4}>
       <Checkbox colorScheme="cyan" isChecked={isChecked} onChange={onChange}>
-        先天性の血液凝固因子異常症(血友病等)である
+        先天性の血液凝固因子異常症(血友病等)
       </Checkbox>
 
       {isChecked && (
