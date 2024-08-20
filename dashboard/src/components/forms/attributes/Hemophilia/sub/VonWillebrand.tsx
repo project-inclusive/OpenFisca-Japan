@@ -18,12 +18,16 @@ export const VonWillebrand = ({ personName }: { personName: string }) => {
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const newHousehold = { ...household };
     if (event.target.checked) {
-      newHousehold.世帯員[personName].血液凝固因子異常症種別 = {
-        [currentDate]: 'フォンヴィルブランド病',
+      newHousehold.世帯員[
+        personName
+      ].血液凝固因子異常症_フォンヴィルブランド病 = {
+        [currentDate]: true,
       };
     } else {
-      newHousehold.世帯員[personName].血液凝固因子異常症種別 = {
-        [currentDate]: '',
+      newHousehold.世帯員[
+        personName
+      ].血液凝固因子異常症_フォンヴィルブランド病 = {
+        [currentDate]: false,
       };
     }
 
@@ -34,11 +38,8 @@ export const VonWillebrand = ({ personName }: { personName: string }) => {
   // stored states set checkbox when page transition
   useEffect(() => {
     const vonWillebrandObj =
-      household.世帯員[personName].血液凝固因子異常症種別;
-    setIsChecked(
-      vonWillebrandObj &&
-        vonWillebrandObj[currentDate] === 'フォンヴィルブランド病'
-    );
+      household.世帯員[personName].血液凝固因子異常症_フォンヴィルブランド病;
+    setIsChecked(vonWillebrandObj && vonWillebrandObj[currentDate] === true);
   }, [navigationType]);
 
   return (

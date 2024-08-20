@@ -18,12 +18,12 @@ export const Factor5 = ({ personName }: { personName: string }) => {
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const newHousehold = { ...household };
     if (event.target.checked) {
-      newHousehold.世帯員[personName].血液凝固因子異常症種別 = {
-        [currentDate]: '第V因子欠乏症',
+      newHousehold.世帯員[personName].血液凝固因子異常症_第V因子欠乏症 = {
+        [currentDate]: true,
       };
     } else {
-      newHousehold.世帯員[personName].血液凝固因子異常症種別 = {
-        [currentDate]: '',
+      newHousehold.世帯員[personName].血液凝固因子異常症_第V因子欠乏症 = {
+        [currentDate]: false,
       };
     }
 
@@ -33,8 +33,9 @@ export const Factor5 = ({ personName }: { personName: string }) => {
 
   // stored states set checkbox when page transition
   useEffect(() => {
-    const factorObj = household.世帯員[personName].血液凝固因子異常症種別;
-    setIsChecked(factorObj && factorObj[currentDate] === '第V因子欠乏症');
+    const factor5Obj =
+      household.世帯員[personName].血液凝固因子異常症_第V因子欠乏症;
+    setIsChecked(factor5Obj && factor5Obj[currentDate] === true);
   }, [navigationType]);
 
   return (
