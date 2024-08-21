@@ -1,7 +1,7 @@
 """
 This file defines the entities needed by our legislation.
 
-税金 and benefits can be calculated for different entities: 人物, 世帯, companies, etc.
+税金 and benefits can be calculated for different entities: 世帯, 人物, companies, etc.
 
 See https://openfisca.org/doc/key-concepts/人物,_entities,_role.html
 """
