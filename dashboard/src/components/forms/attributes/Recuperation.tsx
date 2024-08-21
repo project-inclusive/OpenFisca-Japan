@@ -1,9 +1,12 @@
 import { useCallback, useState, useEffect } from 'react';
 import { useNavigationType } from 'react-router-dom';
-import { Checkbox, Box } from '@chakra-ui/react';
+import { Checkbox, Box, Text } from '@chakra-ui/react';
 
 import { HomeRecuperation } from './HomeRecuperation';
 import { Hospitalized } from './Hospitalized';
+import { Hemophilia } from './Hemophilia/Hemophilia';
+import { Contagion } from './Contagion/Contagion';
+import { RenalFailure } from './RenalFailure/RenalFailure';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { currentDateAtom, householdAtom } from '../../../state';
 
@@ -21,6 +24,7 @@ export const Recuperation = ({ personName }: { personName: string }) => {
       const newHousehold = { ...household };
       newHousehold.世帯員[personName].在宅療養中 = { [currentDate]: false };
       newHousehold.世帯員[personName].入院中 = { [currentDate]: false };
+      newHousehold.世帯員[personName].感染症歴 = { [currentDate]: false };
       setHousehold({ ...newHousehold });
     }
 
@@ -32,7 +36,8 @@ export const Recuperation = ({ personName }: { personName: string }) => {
     const personObj = household.世帯員[personName];
     if (
       (personObj.在宅療養中 && personObj.在宅療養中[currentDate] !== false) ||
-      (personObj.入院中 && personObj.入院中[currentDate] !== false)
+      (personObj.入院中 && personObj.入院中[currentDate] !== false) ||
+      (personObj.感染症歴 && personObj.感染症歴[currentDate] !== false)
     ) {
       setIsChecked(true);
     }
@@ -41,7 +46,7 @@ export const Recuperation = ({ personName }: { personName: string }) => {
   return (
     <Box mb={4}>
       <Checkbox colorScheme="cyan" isChecked={isChecked} onChange={onChange}>
-        病気がある
+        病気がある（または経過観察中）
       </Checkbox>
 
       {isChecked && (
@@ -49,6 +54,10 @@ export const Recuperation = ({ personName }: { personName: string }) => {
           <>
             <HomeRecuperation personName={personName} />
             <Hospitalized personName={personName} />
+            <Text my={4}>病気の種類</Text>
+            <Contagion personName={personName} />
+            <Hemophilia personName={personName} />
+            <RenalFailure personName={personName} />
           </>
         </Box>
       )}
