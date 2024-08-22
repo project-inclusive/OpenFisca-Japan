@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react';
 
 import { useRecoilState } from 'recoil';
-import { householdAtom } from '../../../state';
+import { defaultMember, householdAtom } from '../../../state';
 
 import { toHalf } from '../../../utils/toHalf';
 import { isMobile } from 'react-device-detect';
@@ -81,7 +81,7 @@ export const ChildrenNum = () => {
     );
     if (newHousehold.世帯一覧.世帯1.子一覧) {
       newHousehold.世帯一覧.世帯1.子一覧.map((childName: string) => {
-        newHousehold.世帯員[childName] = {};
+        newHousehold.世帯員[childName] = defaultMember();
       });
     }
     setHousehold({ ...newHousehold });

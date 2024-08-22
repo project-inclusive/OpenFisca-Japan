@@ -14,23 +14,31 @@ export const agreedToTermsAtom = atom<boolean>({
   default: false,
 });
 
+// 世帯員のデフォルト値（世帯員単位で対象となる制度一覧を設定）
+// (世帯員はフォーム入力によって増減するため、各世帯員の追加時にこれらの要素を設定する)
+export const defaultMember = () => {
+  return {
+    特定疾病療養の対象者である: {
+      [currentDate]: null,
+    },
+    先天性血液凝固因子障害等治療研究事業の対象者である: {
+      [currentDate]: null,
+    },
+    重度心身障害者医療費助成制度の対象者である可能性がある: {
+      [currentDate]: null,
+    },
+  };
+};
+
+// 世帯情報（default値をもとに、フォームの入力内容で更新される）
+// NOTE: このオブジェクトにキーとして含まれている制度のみがバックエンドで計算対象となる
 export const householdAtom = atom<any>({
   key: 'householdAtom',
   default: {
     // Household members
     世帯員: {
       // You
-      あなた: {
-        特定疾病療養の対象者である: {
-          [currentDate]: null,
-        },
-        先天性血液凝固因子障害等治療研究事業の対象者である: {
-          [currentDate]: null,
-        },
-        重度心身障害者医療費助成制度の対象者である可能性がある: {
-          [currentDate]: null,
-        },
-      },
+      あなた: { ...defaultMember() },
     },
     // Household
     世帯一覧: {

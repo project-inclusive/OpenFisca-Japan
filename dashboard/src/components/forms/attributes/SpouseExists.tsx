@@ -2,7 +2,7 @@ import { useCallback, useState, useEffect } from 'react';
 import { useNavigationType } from 'react-router-dom';
 import { Checkbox } from '@chakra-ui/react';
 
-import { currentDateAtom, householdAtom } from '../../../state';
+import { currentDateAtom, defaultMember, householdAtom } from '../../../state';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 export const SpouseExists = () => {
@@ -20,7 +20,7 @@ export const SpouseExists = () => {
     const newHousehold = { ...household };
     if (event.target.checked) {
       if (newHousehold.世帯一覧.世帯1.親一覧.length == 1) {
-        newHousehold.世帯員[spouseName] = {};
+        newHousehold.世帯員[spouseName] = defaultMember();
         newHousehold.世帯一覧.世帯1.親一覧.push(spouseName);
       }
     } else {
