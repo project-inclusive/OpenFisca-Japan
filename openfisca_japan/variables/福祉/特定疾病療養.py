@@ -4,7 +4,19 @@
 
 from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
-from openfisca_japan.entities import 人物
+from openfisca_japan.entities import 世帯, 人物
+
+
+class 特定疾病療養の対象者がいる(Variable):
+    value_type = bool
+    entity = 世帯
+    definition_period = DAY
+    label = "特定疾病療養の対象者がいるか否か"
+    reference = "https://www.kyoukaikenpo.or.jp/shibu/shizuoka/cat080/20130225001/"
+
+    def formula(対象世帯, 対象期間, _parameters):
+        特定疾病療養の対象者である = 対象世帯.members("特定疾病療養の対象者である", 対象期間)
+        return 対象世帯.sum(特定疾病療養の対象者である)
 
 
 class 特定疾病療養の対象者である(Variable):

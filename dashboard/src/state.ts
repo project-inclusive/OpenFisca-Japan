@@ -133,6 +133,47 @@ export const householdAtom = atom<any>({
         高等学校等就学支援金_最小: {
           [currentDate]: null,
         },
+        健康管理費用_最大: {
+          [currentDate]: null,
+        },
+        健康管理費用_最小: {
+          [currentDate]: null,
+        },
+        健康管理支援事業_最大: {
+          [currentDate]: null,
+        },
+        健康管理支援事業_最小: {
+          [currentDate]: null,
+        },
+        先天性の傷病治療によるC型肝炎患者に係るQOL向上等のための調査研究事業_最大:
+          {
+            [currentDate]: null,
+          },
+        先天性の傷病治療によるC型肝炎患者に係るQOL向上等のための調査研究事業_最小:
+          {
+            [currentDate]: null,
+          },
+        障害基礎年金_最大: {
+          [currentDate]: null,
+        },
+        障害基礎年金_最小: {
+          [currentDate]: null,
+        },
+        特別障害者手当_最大: {
+          [currentDate]: null,
+        },
+        特別障害者手当_最小: {
+          [currentDate]: null,
+        },
+        特定疾病療養の対象者がいる: {
+          [currentDate]: null,
+        },
+        先天性血液凝固因子障害等治療研究事業の対象者がいる: {
+          [currentDate]: null,
+        },
+        重度心身障害者医療費助成制度の対象者がいる: {
+          [currentDate]: null,
+        },
       },
     },
   },

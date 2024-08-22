@@ -4,7 +4,19 @@
 
 from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
-from openfisca_japan.entities import 人物
+from openfisca_japan.entities import 世帯, 人物
+
+
+class 先天性血液凝固因子障害等治療研究事業の対象者がいる(Variable):
+    value_type = bool
+    entity = 世帯
+    definition_period = DAY
+    label = "先天性血液凝固因子障害等治療研究事業の対象者の対象者がいるか否か"
+    reference = "https://www.mhlw.go.jp/web/t_doc?dataId=00tb3840&dataType=1&pageNo=1"
+
+    def formula(対象世帯, 対象期間, _parameters):
+        先天性血液凝固因子障害等治療研究事業の対象者である = 対象世帯.members("先天性血液凝固因子障害等治療研究事業の対象者である", 対象期間)
+        return 対象世帯.sum(先天性血液凝固因子障害等治療研究事業の対象者である)
 
 
 class 先天性血液凝固因子障害等治療研究事業の対象者である(Variable):
