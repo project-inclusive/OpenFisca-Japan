@@ -8,7 +8,7 @@ import {
   FormLabel,
 } from '@chakra-ui/react';
 import { useNavigationType } from 'react-router-dom';
-import { defaultMember, householdAtom } from '../../../state';
+import { householdAtom } from '../../../state';
 import { useRecoilState } from 'recoil';
 
 import { toHalf } from '../../../utils/toHalf';
@@ -80,7 +80,7 @@ export const ParentsNum = () => {
     );
     if (newHousehold.世帯一覧.世帯1.祖父母一覧) {
       newHousehold.世帯一覧.世帯1.祖父母一覧.map((name: string) => {
-        newHousehold.世帯員[name] = defaultMember();
+        newHousehold.世帯員[name] = {};
       });
     }
     setHousehold({ ...newHousehold });
