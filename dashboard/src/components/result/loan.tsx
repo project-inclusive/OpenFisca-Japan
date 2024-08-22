@@ -5,7 +5,7 @@ import { ExternalLinkIcon, InfoIcon } from '@chakra-ui/icons';
 import configData from '../../config/app_config.json';
 import { currentDateAtom } from '../../state';
 import { useRecoilValue } from 'recoil';
-import { HelpDesk } from './helpDesk';
+import { SocialWelfareCouncilHelpDesk } from './helpDesk';
 import { LoanAccordion } from './loanAccordion';
 
 export const Loan = ({ result }: { result: any }) => {
@@ -93,7 +93,7 @@ export const Loan = ({ result }: { result: any }) => {
                     </Text>
 
                     {category[0] === '生活福祉資金貸付制度' && (
-                      <HelpDesk></HelpDesk>
+                      <SocialWelfareCouncilHelpDesk></SocialWelfareCouncilHelpDesk>
                     )}
                     {category[1].reference && (
                       <Box color="blue" mb={2}>
