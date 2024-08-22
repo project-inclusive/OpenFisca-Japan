@@ -20,17 +20,7 @@ export const householdAtom = atom<any>({
     // Household members
     世帯員: {
       // You
-      あなた: {
-        特定疾病療養の対象者である: {
-          [currentDate]: null,
-        },
-        先天性血液凝固因子障害等治療研究事業の対象者である: {
-          [currentDate]: null,
-        },
-        重度心身障害者医療費助成制度の対象者である可能性がある: {
-          [currentDate]: null,
-        },
-      },
+      あなた: {},
     },
     // Household
     世帯一覧: {
@@ -173,6 +163,15 @@ export const householdAtom = atom<any>({
           [currentDate]: null,
         },
         特別障害者手当_最小: {
+          [currentDate]: null,
+        },
+        特定疾病療養の対象者がいる: {
+          [currentDate]: null,
+        },
+        先天性血液凝固因子障害等治療研究事業の対象者がいる: {
+          [currentDate]: null,
+        },
+        重度心身障害者医療費助成制度の対象者がいる: {
           [currentDate]: null,
         },
       },
