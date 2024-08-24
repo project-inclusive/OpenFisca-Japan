@@ -7,12 +7,14 @@ import {
   AccordionIcon,
   AccordionButton,
   AccordionPanel,
+  Text,
 } from '@chakra-ui/react';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 
 import configData from '../../config/app_config.json';
 import { useRecoilValue } from 'recoil';
 import { currentDateAtom } from '../../state';
+import { HelpDesk } from './helpDesk';
 
 export const Benefit = ({ result }: { result: any }) => {
   const [totalAllowance, setTotalAllowance] = useState<string>('0');
@@ -39,6 +41,7 @@ export const Benefit = ({ result }: { result: any }) => {
               unit: allowanceInfo.unit,
               caption: allowanceInfo.caption,
               reference: allowanceInfo.reference,
+              helpDesk: allowanceInfo.helpDesk,
             };
           }
         } else if (`${allowanceName}_最大` in result.世帯一覧.世帯1) {
@@ -50,6 +53,7 @@ export const Benefit = ({ result }: { result: any }) => {
               unit: allowanceInfo.unit,
               caption: allowanceInfo.caption,
               reference: allowanceInfo.reference,
+              helpDesk: allowanceInfo.helpDesk,
             };
           }
         }
@@ -143,18 +147,21 @@ export const Benefit = ({ result }: { result: any }) => {
                   </AccordionButton>
                 </h2>
                 <AccordionPanel pb={4}>
-                  {val.caption.map((line: string, index: any) => (
-                    <span key={index}>
-                      {line}
-                      <br />
-                    </span>
-                  ))}
+                  <Text>
+                    {val.caption.map((line: string, index: any) => (
+                      <span key={index}>
+                        {line}
+                        <br />
+                      </span>
+                    ))}
+                  </Text>
                   <Box color="blue">
                     <a href={val.reference} target="_blank" rel="noreferrer">
                       詳細リンク
                       <ExternalLinkIcon ml={1} />
                     </a>
                   </Box>
+                  {val.helpDesk && <HelpDesk name={val.helpDesk} />}
                 </AccordionPanel>
               </AccordionItem>
             ))}
