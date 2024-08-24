@@ -77,7 +77,10 @@ export const Loan = ({ result }: { result: any }) => {
                       )}
                       {category[0] === '生活福祉資金貸付制度' && (
                         <Tooltip
-                          label={configData.result.consultationDescription3}
+                          label={
+                            configData.result.helpDeskDescription.社会福祉協議会
+                              .description3
+                          }
                           isOpen={isLabelOpen}
                           bg="gray.600"
                         >
@@ -92,9 +95,6 @@ export const Loan = ({ result }: { result: any }) => {
                       )}
                     </Text>
 
-                    {category[0] === '生活福祉資金貸付制度' && (
-                      <SocialWelfareCouncilHelpDesk></SocialWelfareCouncilHelpDesk>
-                    )}
                     {category[1].reference && (
                       <Box color="blue" mb={2}>
                         <a
@@ -106,6 +106,9 @@ export const Loan = ({ result }: { result: any }) => {
                           <ExternalLinkIcon ml={1} />
                         </a>
                       </Box>
+                    )}
+                    {category[0] === '生活福祉資金貸付制度' && (
+                      <SocialWelfareCouncilHelpDesk></SocialWelfareCouncilHelpDesk>
                     )}
 
                     <LoanAccordion

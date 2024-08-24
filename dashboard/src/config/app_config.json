@@ -104,10 +104,17 @@
     "screenshotButtonText": "このページを画像で保存",
     "shareLinkButtonText": "このページを共有",
     "shareLinkButtonCopiedToClipboard": "クリップボードにコピーしました",
-    "consultationDescription1": "まずは近くの社会福祉協議会に相談してみませんか？",
-    "consultationDescription2": "きっとあなたの相談に寄り添ってくれるはずです",
-    "consultationDescription3": "社会福祉協議会はさまざまな福祉サービスや相談活動、市民と行政の橋渡しを行う民間組織です。他の制度や関係する窓口を紹介してもらえる可能性もあります。",
-    "consultationDescription4": "まずは窓口に相談してみませんか？ きっとあなたの相談に寄り添ってくれるはずです",
+    "consultationDescription": "まずは窓口に相談してみませんか？ きっとあなたの相談に寄り添ってくれるはずです",
+    "helpDeskDescription": {
+      "社会福祉協議会": {
+        "description1": "まずは近くの社会福祉協議会に相談してみませんか？",
+        "description2": "きっとあなたの相談に寄り添ってくれるはずです",
+        "description3": "社会福祉協議会はさまざまな福祉サービスや相談活動、市民と行政の橋渡しを行う民間組織です。他の制度や関係する窓口を紹介してもらえる可能性もあります。"
+      },
+      "拠点病院": {
+        "description1": "お近くの拠点病院に相談してみましょう。"
+      }
+    },
     "chatbotDescription": [
       "追加で知りたいことがあればヤドカリくんにも聞いてみましょう。"
     ],

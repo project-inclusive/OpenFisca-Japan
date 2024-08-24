@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Box, Link, Text } from '@chakra-ui/react';
+import { Box, Center, Link, Text } from '@chakra-ui/react';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 
 import { data as SocialWelfareData } from '../../config/社会福祉協議会';
 import { baseHospitalData } from '../../config/拠点病院';
+import configData from '../../config/app_config.json';
 import { currentDateAtom, householdAtom } from '../../state';
 import { useRecoilValue } from 'recoil';
 import { blockOfPrefecture } from '../../config/拠点病院';
@@ -97,28 +98,30 @@ export const SocialWelfareCouncilHelpDesk = () => {
               {getSocialWelfareCouncilData().施設名}
             </Text>
           )}
-          <Text>〒{getSocialWelfareCouncilData().郵便番号}</Text>
-          <Link
-            href={getSocialWelfareCouncilData().googleMapsURL}
-            color="blue.500"
-            fontWeight={'semibold'}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            地図を開く
-            <ExternalLinkIcon ml={1} />
-          </Link>
-          <br />
-          <Text>
-            TEL:
+          <Box pl={4}>
+            <Text>{getSocialWelfareCouncilData().所在地}</Text>
             <Link
-              href={`tel:${getSocialWelfareCouncilData().電話番号}`}
+              href={getSocialWelfareCouncilData().googleMapsURL}
               color="blue.500"
               fontWeight={'semibold'}
+              target="_blank"
+              rel="noopener noreferrer"
             >
-              {getSocialWelfareCouncilData().電話番号}
+              地図を開く
+              <ExternalLinkIcon ml={1} />
             </Link>
-          </Text>
+            <br />
+            <Text>
+              TEL:
+              <Link
+                href={`tel:${getSocialWelfareCouncilData().電話番号}`}
+                color="blue.500"
+                fontWeight={'semibold'}
+              >
+                {getSocialWelfareCouncilData().電話番号}
+              </Link>
+            </Text>
+          </Box>
         </Box>
       ) : (
         <Box>
@@ -202,58 +205,65 @@ export const BaseHospitalHelpDesk = () => {
   };
 
   return (
-    <Box
-      bg="white"
-      borderRadius="xl"
-      pt={1}
-      pb={1}
-      pr={2}
-      pl={2}
-      m={2}
-      border="1px solid black"
-    >
-      {[...getCentralBaseHospitalData(), ...getBlockBaseHospitalData()].map(
-        (hospital, index) => (
-          <Box key={index} pt={1} pb={2}>
-            {hospital.WebサイトURL ? (
-              <Link
-                href={hospital.WebサイトURL}
-                color="blue.500"
-                fontWeight={'semibold'}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {hospital.施設名}
-              </Link>
-            ) : (
-              <Text fontWeight={'semibold'}>{hospital.施設名}</Text>
-            )}
-            <Text>〒{hospital.郵便番号}</Text>
-            <Link
-              href={hospital.googleMapsURL}
-              color="blue.500"
-              fontWeight={'semibold'}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              地図を開く
-              <ExternalLinkIcon ml={1} />
-            </Link>
-            <br />
-            <Text>
-              TEL:
-              <Link
-                href={`tel:${hospital.電話番号}`}
-                color="blue.500"
-                fontWeight={'semibold'}
-              >
-                {hospital.電話番号}
-              </Link>
-            </Text>
-          </Box>
-        )
-      )}
-    </Box>
+    <>
+      <Center pt={2}>
+        {configData.result.helpDeskDescription.拠点病院.description1}
+      </Center>
+      <Box
+        bg="white"
+        borderRadius="xl"
+        pt={1}
+        pb={1}
+        pr={2}
+        pl={2}
+        m={2}
+        border="1px solid black"
+      >
+        {[...getCentralBaseHospitalData(), ...getBlockBaseHospitalData()].map(
+          (hospital, index) => (
+            <Box key={index} pt={1} pb={2}>
+              {hospital.WebサイトURL ? (
+                <Link
+                  href={hospital.WebサイトURL}
+                  color="blue.500"
+                  fontWeight={'semibold'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {hospital.施設名}
+                </Link>
+              ) : (
+                <Text fontWeight={'semibold'}>{hospital.施設名}</Text>
+              )}
+              <Box pl={4}>
+                <Text>{hospital.所在地}</Text>
+                <Link
+                  href={hospital.googleMapsURL}
+                  color="blue.500"
+                  fontWeight={'semibold'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  地図を開く
+                  <ExternalLinkIcon ml={1} />
+                </Link>
+                <br />
+                <Text>
+                  TEL:
+                  <Link
+                    href={`tel:${hospital.電話番号}`}
+                    color="blue.500"
+                    fontWeight={'semibold'}
+                  >
+                    {hospital.電話番号}
+                  </Link>
+                </Text>
+              </Box>
+            </Box>
+          )
+        )}
+      </Box>
+    </>
   );
 };
 

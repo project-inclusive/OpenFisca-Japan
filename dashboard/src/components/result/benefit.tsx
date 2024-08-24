@@ -155,13 +155,13 @@ export const Benefit = ({ result }: { result: any }) => {
                       </span>
                     ))}
                   </Text>
-                  {val.helpDesk && <HelpDesk name={val.helpDesk} />}
                   <Box color="blue">
                     <a href={val.reference} target="_blank" rel="noreferrer">
                       詳細リンク
                       <ExternalLinkIcon ml={1} />
                     </a>
                   </Box>
+                  {val.helpDesk && <HelpDesk name={val.helpDesk} />}
                 </AccordionPanel>
               </AccordionItem>
             ))}
