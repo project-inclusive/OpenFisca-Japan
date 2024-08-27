@@ -3,7 +3,7 @@ import { Box, Center, Link, Text } from '@chakra-ui/react';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 
 import { data as SocialWelfareData } from '../../config/社会福祉協議会';
-import { baseHospitalData } from '../../config/拠点病院';
+import { baseHospitalData, HIVBaseHospital } from '../../config/拠点病院';
 import configData from '../../config/app_config.json';
 import { currentDateAtom, householdAtom } from '../../state';
 import { useRecoilValue } from 'recoil';
@@ -204,6 +204,15 @@ export const BaseHospitalHelpDesk = () => {
     });
   };
 
+  // ブロック拠点病院と中核拠点病院の重複を取り除く
+  const hospitals = [
+    ...getCentralBaseHospitalData(),
+    ...getBlockBaseHospitalData(),
+  ].filter((elem, index, arr) => {
+    const sameNameIndex = arr.findIndex((e) => e.施設名 === elem.施設名);
+    return sameNameIndex === index;
+  });
+
   return (
     <>
       <Center pt={2}>
@@ -219,49 +228,48 @@ export const BaseHospitalHelpDesk = () => {
         m={2}
         border="1px solid black"
       >
-        {[...getCentralBaseHospitalData(), ...getBlockBaseHospitalData()].map(
-          (hospital, index) => (
-            <Box key={index} pt={1} pb={2}>
-              {hospital.WebサイトURL ? (
+        {/* NOTE: ブロック拠点病院と中核拠点病院の重複を防ぐため unique() で重複削除 */}
+        {hospitals.map((hospital, index) => (
+          <Box key={index} pt={1} pb={2}>
+            {hospital.WebサイトURL ? (
+              <Link
+                href={hospital.WebサイトURL}
+                color="blue.500"
+                fontWeight={'semibold'}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {hospital.施設名}
+              </Link>
+            ) : (
+              <Text fontWeight={'semibold'}>{hospital.施設名}</Text>
+            )}
+            <Box pl={4}>
+              <Text>{hospital.所在地}</Text>
+              <Link
+                href={hospital.googleMapsURL}
+                color="blue.500"
+                fontWeight={'semibold'}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                地図を開く
+                <ExternalLinkIcon ml={1} />
+              </Link>
+              <br />
+              <Text>
+                TEL:
                 <Link
-                  href={hospital.WebサイトURL}
+                  href={`tel:${hospital.電話番号}`}
                   color="blue.500"
                   fontWeight={'semibold'}
-                  target="_blank"
-                  rel="noopener noreferrer"
                 >
-                  {hospital.施設名}
+                  {hospital.電話番号}
                 </Link>
-              ) : (
-                <Text fontWeight={'semibold'}>{hospital.施設名}</Text>
-              )}
-              <Box pl={4}>
-                <Text>{hospital.所在地}</Text>
-                <Link
-                  href={hospital.googleMapsURL}
-                  color="blue.500"
-                  fontWeight={'semibold'}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  地図を開く
-                  <ExternalLinkIcon ml={1} />
-                </Link>
-                <br />
-                <Text>
-                  TEL:
-                  <Link
-                    href={`tel:${hospital.電話番号}`}
-                    color="blue.500"
-                    fontWeight={'semibold'}
-                  >
-                    {hospital.電話番号}
-                  </Link>
-                </Text>
-              </Box>
+              </Text>
             </Box>
-          )
-        )}
+          </Box>
+        ))}
       </Box>
     </>
   );
