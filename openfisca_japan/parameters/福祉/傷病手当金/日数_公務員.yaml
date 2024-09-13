@@ -1,0 +1,8 @@
+description: 傷病手当金における一月当たりの日数（地方公務員の場合）
+metadata:
+  threshold_unit: person
+  rate_unit: 1
+  reference: https://www.chikyosai.or.jp/division/short/scene/works/01.html
+values:
+  2023-04-01:
+    value: 22

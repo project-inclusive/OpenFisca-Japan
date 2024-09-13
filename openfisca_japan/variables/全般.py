@@ -46,3 +46,21 @@ class 性別(Variable):
     entity = 人物
     definition_period = DAY
     label = "人物の性別"
+
+
+class 就労形態パターン(Enum):
+    __order__ = "無 会社員 公務員 自営業 その他"
+    無 = "無"
+    会社員 = "会社員"
+    公務員 = "公務員"
+    自営業 = "自営業"
+    その他 = "その他"
+
+
+class 就労形態(Variable):
+    value_type = Enum
+    possible_values = 就労形態パターン
+    default_value = 就労形態パターン.無
+    entity = 人物
+    definition_period = DAY
+    label = "人物の就労形態"
