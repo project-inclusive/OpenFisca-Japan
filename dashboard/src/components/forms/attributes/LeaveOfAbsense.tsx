@@ -4,11 +4,9 @@ import { Box, Checkbox } from '@chakra-ui/react';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { currentDateAtom, householdAtom } from '../../../state';
-import { NewJob } from './NewJob';
-import { LeaveOfAbsense } from './LeaveOfAbsense';
-import { Occupation } from './Occupation';
+import { LeaveOfAbsenseWithoutSalary } from './LeaveOfAbsenseWithoutSalary';
 
-export const Working = ({ personName }: { personName: string }) => {
+export const LeaveOfAbsense = ({ personName }: { personName: string }) => {
   const navigationType = useNavigationType();
   const currentDate = useRecoilValue(currentDateAtom);
   const [isChecked, setIsChecked] = useState(false);
@@ -19,11 +17,8 @@ export const Working = ({ personName }: { personName: string }) => {
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.checked) {
       const newHousehold = { ...household };
-      newHousehold.世帯員[personName].六か月以内に新規就労 = {
+      newHousehold.世帯員[personName].休業中に給与の支払いがない = {
         [currentDate]: false,
-      };
-      newHousehold.世帯員[personName].就労形態 = {
-        [currentDate]: '無',
       };
       setHousehold({ ...newHousehold });
     }
@@ -35,9 +30,8 @@ export const Working = ({ personName }: { personName: string }) => {
   useEffect(() => {
     const personObj = household.世帯員[personName];
     if (
-      (personObj.六か月以内に新規就労 &&
-        personObj.六か月以内に新規就労[currentDate] !== false) ||
-      (personObj.就労形態 && personObj.就労形態[currentDate] !== '無')
+      personObj.休業中に給与の支払いがない &&
+      personObj.休業中に給与の支払いがない[currentDate] !== false
     ) {
       setIsChecked(true);
     }
@@ -46,16 +40,12 @@ export const Working = ({ personName }: { personName: string }) => {
   return (
     <Box mb={4}>
       <Checkbox colorScheme="cyan" isChecked={isChecked} onChange={onChange}>
-        仕事をしている
+        休業中である
       </Checkbox>
 
       {isChecked && (
         <Box mt={2} ml={4} mr={4} mb={4}>
-          <>
-            <NewJob personName={personName} />
-            <LeaveOfAbsense personName={personName} />
-            <Occupation personName={personName} />
-          </>
+          <LeaveOfAbsenseWithoutSalary personName={personName} />
         </Box>
       )}
     </Box>

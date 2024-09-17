@@ -174,6 +174,12 @@ export const householdAtom = atom<any>({
         重度心身障害者医療費助成制度の対象者がいる: {
           [currentDate]: null,
         },
+        傷病手当金_最大: {
+          [currentDate]: null,
+        },
+        傷病手当金_最小: {
+          [currentDate]: null,
+        },
       },
     },
   },

@@ -9,6 +9,8 @@ import { Contagion } from './Contagion/Contagion';
 import { RenalFailure } from './RenalFailure/RenalFailure';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { currentDateAtom, householdAtom } from '../../../state';
+import { LeaveOfAbsenseByDisease } from './LeaveOfAbsenseByDisease';
+import { IndustrialAccidentDisease } from './IndustrialAccidentDisease';
 
 export const Recuperation = ({ personName }: { personName: string }) => {
   const navigationType = useNavigationType();
@@ -25,6 +27,12 @@ export const Recuperation = ({ personName }: { personName: string }) => {
       newHousehold.世帯員[personName].在宅療養中 = { [currentDate]: false };
       newHousehold.世帯員[personName].入院中 = { [currentDate]: false };
       newHousehold.世帯員[personName].感染症歴 = { [currentDate]: false };
+      newHousehold.世帯員[personName].病気によって連続三日以上休業している = {
+        [currentDate]: false,
+      };
+      newHousehold.世帯員[personName].業務によって病気になった = {
+        [currentDate]: false,
+      };
       setHousehold({ ...newHousehold });
     }
 
@@ -37,7 +45,12 @@ export const Recuperation = ({ personName }: { personName: string }) => {
     if (
       (personObj.在宅療養中 && personObj.在宅療養中[currentDate] !== false) ||
       (personObj.入院中 && personObj.入院中[currentDate] !== false) ||
-      (personObj.感染症歴 && personObj.感染症歴[currentDate] !== false)
+      (personObj.感染症歴 && personObj.感染症歴[currentDate] !== false) ||
+      (personObj.病気によって連続三日以上休業している &&
+        personObj.病気によって連続三日以上休業している[currentDate] !==
+          false) ||
+      (personObj.業務によって病気になった &&
+        personObj.業務によって病気になった[currentDate] !== false)
     ) {
       setIsChecked(true);
     }
@@ -54,6 +67,8 @@ export const Recuperation = ({ personName }: { personName: string }) => {
           <>
             <HomeRecuperation personName={personName} />
             <Hospitalized personName={personName} />
+            <LeaveOfAbsenseByDisease personName={personName} />
+            <IndustrialAccidentDisease personName={personName} />
             <Text my={4}>病気の種類</Text>
             <Contagion personName={personName} />
             <Hemophilia personName={personName} />

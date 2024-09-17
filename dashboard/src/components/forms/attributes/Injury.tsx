@@ -1,16 +1,16 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { useNavigationType } from 'react-router-dom';
-import { Box, Checkbox } from '@chakra-ui/react';
+import { Checkbox, Box } from '@chakra-ui/react';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { currentDateAtom, householdAtom } from '../../../state';
-import { NewJob } from './NewJob';
-import { LeaveOfAbsense } from './LeaveOfAbsense';
-import { Occupation } from './Occupation';
+import { LeaveOfAbsenseByInjury } from './LeaveOfAbsenseByInjury';
+import { IndustrialAccidentInjury } from './IndustrialAccidentInjury';
 
-export const Working = ({ personName }: { personName: string }) => {
+export const Injury = ({ personName }: { personName: string }) => {
   const navigationType = useNavigationType();
   const currentDate = useRecoilValue(currentDateAtom);
+
   const [isChecked, setIsChecked] = useState(false);
 
   const [household, setHousehold] = useRecoilState(householdAtom);
@@ -19,11 +19,11 @@ export const Working = ({ personName }: { personName: string }) => {
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.checked) {
       const newHousehold = { ...household };
-      newHousehold.世帯員[personName].六か月以内に新規就労 = {
+      newHousehold.世帯員[personName].けがによって連続三日以上休業している = {
         [currentDate]: false,
       };
-      newHousehold.世帯員[personName].就労形態 = {
-        [currentDate]: '無',
+      newHousehold.世帯員[personName].業務によってけがをした = {
+        [currentDate]: false,
       };
       setHousehold({ ...newHousehold });
     }
@@ -35,9 +35,11 @@ export const Working = ({ personName }: { personName: string }) => {
   useEffect(() => {
     const personObj = household.世帯員[personName];
     if (
-      (personObj.六か月以内に新規就労 &&
-        personObj.六か月以内に新規就労[currentDate] !== false) ||
-      (personObj.就労形態 && personObj.就労形態[currentDate] !== '無')
+      (personObj.けがによって連続三日以上休業している &&
+        personObj.けがによって連続三日以上休業している[currentDate] !==
+          false) ||
+      (personObj.業務によってけがをした &&
+        personObj.業務によってけがをした[currentDate] !== false)
     ) {
       setIsChecked(true);
     }
@@ -46,15 +48,14 @@ export const Working = ({ personName }: { personName: string }) => {
   return (
     <Box mb={4}>
       <Checkbox colorScheme="cyan" isChecked={isChecked} onChange={onChange}>
-        仕事をしている
+        けがをしている
       </Checkbox>
 
       {isChecked && (
         <Box mt={2} ml={4} mr={4} mb={4}>
           <>
-            <NewJob personName={personName} />
-            <LeaveOfAbsense personName={personName} />
-            <Occupation personName={personName} />
+            <LeaveOfAbsenseByInjury personName={personName} />
+            <IndustrialAccidentInjury personName={personName} />
           </>
         </Box>
       )}
