@@ -272,6 +272,15 @@
           ],
           "reference": "https://www.mhlw.go.jp/bunya/shougaihoken/jidou/tokubetsu.html",
           "helpDesk": null
+        },
+        "傷病手当金": {
+          "unit": "円/日",
+          "caption": [
+            "病気やケガで会社を休み、その期間の給与が無い場合に代わりに支給されるお金。",
+            "健康保険（会社員）や共済組合（公務員）等に加入している必要があります。"
+          ],
+          "reference": "https://www.kyoukaikenpo.or.jp/g3/sb3040/r139/",
+          "helpDesk": null
         }
       }
     },
