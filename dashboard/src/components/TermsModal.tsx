@@ -87,7 +87,7 @@ function TermsModal({
               colorScheme="cyan"
               mt="1em"
               mb="1em"
-              data-testid="terms-checkbox"
+              data-testid="restrictions-checkbox"
             >
               了解しました
             </Checkbox>
