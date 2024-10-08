@@ -10,6 +10,9 @@ import {
   ModalHeader,
   ModalOverlay,
   Box,
+  Link,
+  UnorderedList,
+  ListItem,
 } from '@chakra-ui/react';
 import { useCallback, useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
@@ -17,6 +20,7 @@ import { useRecoilState } from 'recoil';
 import configData from '../config/app_config.json';
 import { agreedToTermsAtom } from '../state';
 import Terms from './Terms';
+import { List } from './Description';
 
 function TermsModal({
   isOpen,
@@ -32,6 +36,9 @@ function TermsModal({
   const [agreedToTerms, setAgreedToTerms] = useRecoilState(agreedToTermsAtom);
   const [isChecked, setIsChecked] = useState(false);
   const [isRestrictionsChecked, setIsRestrictionsChecked] = useState(false);
+
+  // 見積もり対象制度一覧モーダルの開閉
+  const [isprogramListModalOpen, setProgramListModalOpen] = useState(false);
 
   useEffect(() => {
     if (isChecked && isRestrictionsChecked) {
@@ -52,6 +59,10 @@ function TermsModal({
     },
     []
   );
+
+  function programListModalChange() {
+    setProgramListModalOpen(!isprogramListModalOpen);
+  }
 
   return (
     <>
@@ -75,10 +86,37 @@ function TermsModal({
 
           <ModalBody overflowY="scroll" maxHeight="40vh">
             <Box bg="white" borderRadius="xl" p={4}>
-              ・見積もり対象となるのは一覧の制度のみです。各制度をタップ・クリックして表示される公式サイトの情報をもとに見積もりを行います。
+              ・見積もり対象となるのは
+              <Link color="cyan.600" onClick={programListModalChange}>
+                一覧
+              </Link>
+              の制度のみです。各制度をタップ・クリックして表示される公式サイトの情報をもとに見積もりを行います。
               ・最新かつ正確な情報が本サイトに反映されていない場合があり、必ずしも見積もり結果の通り支援が受けられることを保証するものではありません。
             </Box>
           </ModalBody>
+
+          {/* List of systems eligible for quotation */}
+          <Modal
+            isOpen={isprogramListModalOpen}
+            onClose={programListModalChange}
+            closeOnOverlayClick={false}
+          >
+            <ModalOverlay />
+            <ModalContent maxW={900} bg="cyan.100" pb="5">
+              {/* Close Button */}
+              <ModalCloseButton />
+
+              <ModalHeader color="teal.500" fontWeight="semibold">
+                <h2>見積もり対象制度一覧</h2>
+              </ModalHeader>
+
+              <ModalBody overflowY="scroll">
+                <Box bg="white" borderRadius="xl" p={4}>
+                  <List />
+                </Box>
+              </ModalBody>
+            </ModalContent>
+          </Modal>
 
           <Center>
             <Checkbox
