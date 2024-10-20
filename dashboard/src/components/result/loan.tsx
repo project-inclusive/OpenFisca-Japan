@@ -48,9 +48,18 @@ export const Loan = ({ result }: { result: any }) => {
     }
   }, [result]);
 
+  const existsResult = () => {
+    return (
+      displayedResult &&
+      Object.values(displayedResult).some(
+        (category: any) => Object.keys(category).length !== 0
+      )
+    );
+  };
+
   return (
     <>
-      {displayedResult && (
+      {existsResult() && (
         <Box bg="white" borderRadius="xl" p={4} mb={4} ml={4} mr={4}>
           <Center
             fontSize={configData.style.subTitleFontSize}

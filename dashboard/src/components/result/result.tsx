@@ -18,6 +18,7 @@ import shortLink, {
   getShareKey,
 } from './shareLink';
 import { QRCodeCanvas } from 'qrcode.react';
+import { EmptyResults } from './emptyResults';
 
 const createFileName = (extension: string = '', ...names: string[]) => {
   if (!extension) {
@@ -215,6 +216,7 @@ export const Result = () => {
             {configData.result.topDescription}
           </Center>
 
+          <EmptyResults result={result} />
           <Benefit result={result} />
           <Loan result={result} />
 
