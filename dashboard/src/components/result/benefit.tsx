@@ -128,21 +128,26 @@ export const Benefit = ({ result }: { result: any }) => {
     }
   }, [result]);
 
+  const existsResult = () => {
+    return displayedResult && Object.keys(displayedResult).length !== 0;
+  };
+
   return (
     <>
-      <Box bg="white" borderRadius="xl" p={4} mb={4} ml={4} mr={4}>
-        <Center
-          fontSize={configData.style.subTitleFontSize}
-          fontWeight="medium"
-          mb={2}
-        >
-          {configData.result.benefitDescription}
-        </Center>
+      {existsResult() && (
+        <Box bg="white" borderRadius="xl" p={4} mb={4} ml={4} mr={4}>
+          <Center
+            fontSize={configData.style.subTitleFontSize}
+            fontWeight="medium"
+            mb={2}
+          >
+            {configData.result.benefitDescription}
+          </Center>
 
-        {configData.result.給付制度.caption[0]}
+          {configData.result.給付制度.caption[0]}
 
-        <Accordion allowMultiple>
-          {/* // 一時金と継続支給が合算されていて紛らわしいため合計額は非表示。
+          <Accordion allowMultiple>
+            {/* // 一時金と継続支給が合算されていて紛らわしいため合計額は非表示。
           // ただし今後、一時金と継続支給それぞれの合計表示はする可能性あり
           <AccordionItem>
             <h2>
@@ -162,8 +167,7 @@ export const Benefit = ({ result }: { result: any }) => {
           </AccordionItem>
           */}
 
-          {displayedResult &&
-            displayedResult.map((val: any, index: any) => (
+            {displayedResult.map((val: any, index: any) => (
               <AccordionItem key={index}>
                 <h2>
                   <AccordionButton>
@@ -196,8 +200,9 @@ export const Benefit = ({ result }: { result: any }) => {
                 </AccordionPanel>
               </AccordionItem>
             ))}
-        </Accordion>
-      </Box>
+          </Accordion>
+        </Box>
+      )}
     </>
   );
 };
