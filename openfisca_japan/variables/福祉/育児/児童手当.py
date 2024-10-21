@@ -2,11 +2,10 @@
 児童手当の実装
 """
 
-import numpy as np
 from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
 from openfisca_japan.entities import 世帯
-from openfisca_japan.variables.全般 import 中学生学年, 小学生学年, 高校生学年
+from openfisca_japan.variables.全般 import 高校生学年
 
 
 class 児童手当(Variable):
@@ -36,7 +35,6 @@ class 児童手当(Variable):
 
         三歳未満かつ第二子以前である = (年齢 < 3) * 第二子以前である
         三歳以上かつ高校生以下かつ第二子以前である = (年齢 >= 3) * 高校生以下である * 第二子以前である
-        
         児童手当金額 = 対象世帯.sum(高校生以下かつ第三子以降である * 児童手当.金額.高校生以下かつ第三子以降
                           + 三歳未満かつ第二子以前である * 児童手当.金額.三歳未満かつ第二子以前
                           + 三歳以上かつ高校生以下かつ第二子以前である * 児童手当.金額.三歳以上かつ高校生以下かつ第二子以前)
