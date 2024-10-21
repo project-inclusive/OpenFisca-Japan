@@ -1,0 +1,9 @@
+description: 児童手当の金額
+metadata:
+  reference: https://www.city.shibuya.tokyo.jp/kodomo/kodomo-teate-josei/kodomo-teate/R6jidouteate_seidokaisei.html
+  unit: currency-JPY
+values:
+  2024-10-01:
+    value: 10000
+    metadata:
+      reference: https://www.city.shibuya.tokyo.jp/kodomo/kodomo-teate-josei/kodomo-teate/R6jidouteate_seidokaisei.html
