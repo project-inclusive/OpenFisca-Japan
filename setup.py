@@ -10,7 +10,7 @@ long_description = (this_directory / "README.md").read_text(encoding="utf-8")  #
 
 setup(
     name = "OpenFisca-Japan",
-    version = "1.2.2",
+    version = "1.2.3",
     author = "OpenFisca Team",
     author_email = "contact@openfisca.org",
     classifiers = [
