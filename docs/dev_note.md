@@ -197,12 +197,22 @@ npm run cy:run
 
 ## デプロイ方法
 
-### mainブランチマージ前の作業
-- docs/change_log.mdの更新
-- バックエンド OpenFisca-Japanパッケージのバージョン表記の更新
-  - requirements.txt
-  - setup.py
-- (必要であれば)README.mdの概要に対応制度追加
+### 新バージョンのリリース
+
+- 以下の内容を `develop` ブランチへマージ
+  - `docs/change_log.md` の更新
+  - バックエンド `OpenFisca-Japan` パッケージのバージョン表記の更新
+    - `requirements.txt`
+    - `setup.py`
+  - (必要であれば) `README.md` の概要に対応制度追加
+- [開発版のページ](https://develop.openfisca-japan.pages.dev/)で見積もり結果が正常に表示されることを確認
+- developブランチからmainブランチへのPR作成、マージ
+- [本番のページ](https://shien-yadokari.proj-inclusive.org/)で見積もり結果が正常に表示されることを確認
+  - mainブランチマージ後1分程度切り替わりのためバックエンドの404エラーが発生する可能性あり
+- TagとReleaseの作成
+  - `Releases` -> `Draft a new release` を選択
+  - `Choose a tag` へリリースしたいバージョンを入力し `Create a new tag`
+  - タイトルにバージョン、本文にリリースの概要を記載し `Publish release`
 
 ### バックエンド（OpenFisca Python APIサーバー）
 
