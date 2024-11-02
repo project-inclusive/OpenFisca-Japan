@@ -1,0 +1,8 @@
+description: 傷病手当金における一月当たりの日数（会社員の場合）
+metadata:
+  threshold_unit: person
+  rate_unit: 1
+  reference: https://www.kyoukaikenpo.or.jp/g7/cat710/sb3160/sb3170/sbb31710/1950-271/
+values:
+  2023-04-01:
+    value: 30

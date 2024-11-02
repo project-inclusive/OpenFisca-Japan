@@ -1,9 +1,12 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useNavigationType } from 'react-router-dom';
-import { Checkbox } from '@chakra-ui/react';
+import { Box, Checkbox } from '@chakra-ui/react';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { currentDateAtom, householdAtom } from '../../../state';
+import { NewJob } from './NewJob';
+import { LeaveOfAbsense } from './LeaveOfAbsense';
+import { Occupation } from './Occupation';
 
 export const Working = ({ personName }: { personName: string }) => {
   const navigationType = useNavigationType();
@@ -14,37 +17,47 @@ export const Working = ({ personName }: { personName: string }) => {
 
   // チェックボックスの値が変更された時
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const newHousehold = { ...household };
-    if (event.target.checked) {
-      newHousehold.世帯員[personName].六か月以内に新規就労 = {
-        [currentDate]: true,
-      };
-    } else {
+    if (!event.target.checked) {
+      const newHousehold = { ...household };
       newHousehold.世帯員[personName].六か月以内に新規就労 = {
         [currentDate]: false,
       };
+      newHousehold.世帯員[personName].就労形態 = {
+        [currentDate]: '無',
+      };
+      setHousehold({ ...newHousehold });
     }
-    setHousehold({ ...newHousehold });
+
     setIsChecked(event.target.checked);
   }, []);
 
-  // stored states set checkbox when page transition
+  // stored states set value when page transition
   useEffect(() => {
-    const workingObj = household.世帯員[personName].六か月以内に新規就労;
-    setIsChecked(workingObj && workingObj[currentDate]);
+    const personObj = household.世帯員[personName];
+    if (
+      (personObj.六か月以内に新規就労 &&
+        personObj.六か月以内に新規就労[currentDate] !== false) ||
+      (personObj.就労形態 && personObj.就労形態[currentDate] !== '無')
+    ) {
+      setIsChecked(true);
+    }
   }, [navigationType]);
 
   return (
-    <>
-      <Checkbox
-        colorScheme="cyan"
-        isChecked={isChecked}
-        onChange={onChange}
-        mb={4}
-      >
-        6か月以内に新しい仕事を始めた
+    <Box mb={4}>
+      <Checkbox colorScheme="cyan" isChecked={isChecked} onChange={onChange}>
+        仕事をしている
       </Checkbox>
-      <br></br>
-    </>
+
+      {isChecked && (
+        <Box mt={2} ml={4} mr={4} mb={4}>
+          <>
+            <NewJob personName={personName} />
+            <LeaveOfAbsense personName={personName} />
+            <Occupation personName={personName} />
+          </>
+        </Box>
+      )}
+    </Box>
   );
 };

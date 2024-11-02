@@ -2,7 +2,6 @@
 血液凝固因子異常症の実装
 """
 
-from openfisca_core.indexed_enums import Enum
 from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
 from openfisca_japan.entities import 人物
@@ -18,8 +17,9 @@ class 先天性の血液凝固因子異常症である可能性がある(Variabl
     """
 
     def formula(対象人物, 対象期間, _parameters):
-        血液凝固因子異常症種別 = 対象人物("血液凝固因子異常症種別", 対象期間)
-        return 血液凝固因子異常症種別 != 血液凝固因子異常症種別パターン.無
+        先天性の血液凝固因子異常症である = 対象人物("先天性の血液凝固因子異常症である", 対象期間)
+        その他 = 対象人物("血液凝固因子異常症_その他", 対象期間)
+        return 先天性の血液凝固因子異常症である + その他
 
 
 class 先天性の血液凝固因子異常症である(Variable):
@@ -29,47 +29,153 @@ class 先天性の血液凝固因子異常症である(Variable):
     label = "先天性の血液凝固因子異常症である"
 
     def formula(対象人物, 対象期間, _parameters):
-        血液凝固因子異常症種別 = 対象人物("血液凝固因子異常症種別", 対象期間)
-        return (血液凝固因子異常症種別 != 血液凝固因子異常症種別パターン.無) * \
-            (血液凝固因子異常症種別 != 血液凝固因子異常症種別パターン.その他)
+        第I因子欠乏症 = 対象人物("血液凝固因子異常症_第I因子欠乏症", 対象期間)
+        第II因子欠乏症 = 対象人物("血液凝固因子異常症_第II因子欠乏症", 対象期間)
+        第V因子欠乏症 = 対象人物("血液凝固因子異常症_第V因子欠乏症", 対象期間)
+        第VII因子欠乏症 = 対象人物("血液凝固因子異常症_第VII因子欠乏症", 対象期間)
+        第VIII因子欠乏症 = 対象人物("血液凝固因子異常症_第VIII因子欠乏症", 対象期間)
+        第IX因子欠乏症 = 対象人物("血液凝固因子異常症_第IX因子欠乏症", 対象期間)
+        第X因子欠乏症 = 対象人物("血液凝固因子異常症_第X因子欠乏症", 対象期間)
+        第XI因子欠乏症 = 対象人物("血液凝固因子異常症_第XI因子欠乏症", 対象期間)
+        第XII因子欠乏症 = 対象人物("血液凝固因子異常症_第XII因子欠乏症", 対象期間)
+        第XIII因子欠乏症 = 対象人物("血液凝固因子異常症_第XIII因子欠乏症", 対象期間)
+        フォンヴィルブランド病 = 対象人物("血液凝固因子異常症_フォンヴィルブランド病", 対象期間)
+
+        return 第I因子欠乏症 + 第II因子欠乏症 + 第V因子欠乏症 + 第VII因子欠乏症 + 第VIII因子欠乏症 +\
+            第IX因子欠乏症 + 第X因子欠乏症 + 第XI因子欠乏症 + 第XII因子欠乏症 + 第XIII因子欠乏症 + フォンヴィルブランド病
 
 
-class 血液凝固因子異常症種別パターン(Enum):
-    __order__ = "無 第I因子欠乏症 第II因子欠乏症 第V因子欠乏症 第VII因子欠乏症 第VIII因子欠乏症 第IX因子欠乏症 第X因子欠乏症 第XI因子欠乏症 第XII因子欠乏症 第XIII因子欠乏症 フォンヴィルブランド病 その他"
-    無 = "無"
-    # フィブリノゲン欠乏症
-    第I因子欠乏症 = "第I因子欠乏症"
-    # プロトロビン欠乏症
-    第II因子欠乏症 = "第II因子欠乏症"
-    # 不安定因子欠乏症
-    第V因子欠乏症 = "第V因子欠乏症"
-    # 安定因子欠乏症
-    第VII因子欠乏症 = "第VII因子欠乏症"
-    # 血友病A
-    第VIII因子欠乏症 = "第VIII因子欠乏症"
-    # 血友病B
-    第IX因子欠乏症 = "第IX因子欠乏症"
-    # スチュアートプラウア欠乏症
-    第X因子欠乏症 = "第X因子欠乏症"
-    # PTA欠乏症
-    第XI因子欠乏症 = "第XI因子欠乏症"
-    # ヘイグマン因子欠乏症
-    第XII因子欠乏症 = "第XII因子欠乏症"
-    # フィブリン安定化因子欠乏症
-    第XIII因子欠乏症 = "第XIII因子欠乏症"
-    # フォン・ヴィルブランド病
-    フォンヴィルブランド病 = "フォンヴィルブランド病"
-    # 選択肢にない場合、または分からない場合に選ばれる
-    その他 = "その他"
+# NOTE: OpenFiscaでは現状世帯員がEnumの配列を持つことができないため、因子ごとにbool値で表現している
+# TODO: 世帯員がEnumを複数保持できるようになったらEnumに書き直す
 
 
-class 血液凝固因子異常症種別(Variable):
-    value_type = Enum
-    possible_values = 血液凝固因子異常症種別パターン
-    default_value = 血液凝固因子異常症種別パターン.無
+class 血液凝固因子異常症_第I因子欠乏症(Variable):
+    value_type = bool
+    default_value = False
     entity = 人物
     definition_period = DAY
-    label = "血液凝固因子異常症種別"
+    label = "血液凝固因子異常症（第I因子欠乏症）"
+    documentation = """
+    フィブリノゲン欠乏症
+    """
+
+
+class 血液凝固因子異常症_第II因子欠乏症(Variable):
+    value_type = bool
+    default_value = False
+    entity = 人物
+    definition_period = DAY
+    label = "血液凝固因子異常症（第II因子欠乏症）"
+    documentation = """
+    プロトロビン欠乏症
+    """
+
+
+class 血液凝固因子異常症_第V因子欠乏症(Variable):
+    value_type = bool
+    default_value = False
+    entity = 人物
+    definition_period = DAY
+    label = "血液凝固因子異常症（第V因子欠乏症）"
+    documentation = """
+    不安定因子欠乏症
+    """
+
+
+class 血液凝固因子異常症_第VII因子欠乏症(Variable):
+    value_type = bool
+    default_value = False
+    entity = 人物
+    definition_period = DAY
+    label = "血液凝固因子異常症（VII因子欠乏症）"
+    documentation = """
+    安定因子欠乏症
+    """
+
+
+class 血液凝固因子異常症_第VIII因子欠乏症(Variable):
+    value_type = bool
+    default_value = False
+    entity = 人物
+    definition_period = DAY
+    label = "血液凝固因子異常症（第VIII因子欠乏症）"
+    documentation = """
+    血友病A
+    """
+
+
+class 血液凝固因子異常症_第IX因子欠乏症(Variable):
+    value_type = bool
+    default_value = False
+    entity = 人物
+    definition_period = DAY
+    label = "血液凝固因子異常症（第IX因子欠乏症）"
+    documentation = """
+    血友病B
+    """
+
+
+class 血液凝固因子異常症_第X因子欠乏症(Variable):
+    value_type = bool
+    default_value = False
+    entity = 人物
+    definition_period = DAY
+    label = "血液凝固因子異常症（第X因子欠乏症）"
+    documentation = """
+    スチュアートプラウア欠乏症
+    """
+
+
+class 血液凝固因子異常症_第XI因子欠乏症(Variable):
+    value_type = bool
+    default_value = False
+    entity = 人物
+    definition_period = DAY
+    label = "血液凝固因子異常症（第XI因子欠乏症）"
+    documentation = """
+    PTA欠乏症
+    """
+
+
+class 血液凝固因子異常症_第XII因子欠乏症(Variable):
+    value_type = bool
+    default_value = False
+    entity = 人物
+    definition_period = DAY
+    label = "血液凝固因子異常症（第XII因子欠乏症）"
+    documentation = """
+    ヘイグマン因子欠乏症
+    """
+
+
+class 血液凝固因子異常症_第XIII因子欠乏症(Variable):
+    value_type = bool
+    default_value = False
+    entity = 人物
+    definition_period = DAY
+    label = "血液凝固因子異常症（第XIII因子欠乏症）"
+    documentation = """
+    フィブリン安定化因子欠乏症
+    """
+
+
+class 血液凝固因子異常症_フォンヴィルブランド病(Variable):
+    value_type = bool
+    default_value = False
+    entity = 人物
+    definition_period = DAY
+    label = "血液凝固因子異常症（フォン・ヴィルブランド病）"
+
+
+class 血液凝固因子異常症_その他(Variable):
+    value_type = bool
+    default_value = False
+    entity = 人物
+    definition_period = DAY
+    label = "血液凝固因子異常症（その他）"
+    documentation = """
+    上記いずれの因子にも該当しない、どれに該当するか分からない、または因子異常症であるかどうか分からない場合に選ばれる
+    """
 
 
 class 血友病の可能性がある(Variable):
@@ -82,10 +188,10 @@ class 血友病の可能性がある(Variable):
     """
 
     def formula(対象人物, 対象期間, _parameters):
-        血液凝固因子異常症種別 = 対象人物("血液凝固因子異常症種別", 対象期間)
-        return (血液凝固因子異常症種別 == 血液凝固因子異常症種別パターン.第VIII因子欠乏症) + \
-            (血液凝固因子異常症種別 == 血液凝固因子異常症種別パターン.第IX因子欠乏症) +\
-            (血液凝固因子異常症種別 == 血液凝固因子異常症種別パターン.その他)  # 分からない場合も選ばれる
+        第VIII因子欠乏症 = 対象人物("血液凝固因子異常症_第VIII因子欠乏症", 対象期間)
+        第IX因子欠乏症 = 対象人物("血液凝固因子異常症_第IX因子欠乏症", 対象期間)
+        その他 = 対象人物("血液凝固因子異常症_その他", 対象期間)
+        return 第VIII因子欠乏症 + 第IX因子欠乏症 + その他  # 分からない場合も選ばれる
 
 
 class 血友病である(Variable):
@@ -95,6 +201,6 @@ class 血友病である(Variable):
     label = "血友病である"
 
     def formula(対象人物, 対象期間, _parameters):
-        血液凝固因子異常症種別 = 対象人物("血液凝固因子異常症種別", 対象期間)
-        return (血液凝固因子異常症種別 == 血液凝固因子異常症種別パターン.第VIII因子欠乏症) + \
-            (血液凝固因子異常症種別 == 血液凝固因子異常症種別パターン.第IX因子欠乏症)
+        第VIII因子欠乏症 = 対象人物("血液凝固因子異常症_第VIII因子欠乏症", 対象期間)
+        第IX因子欠乏症 = 対象人物("血液凝固因子異常症_第IX因子欠乏症", 対象期間)
+        return 第VIII因子欠乏症 + 第IX因子欠乏症

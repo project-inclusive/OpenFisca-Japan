@@ -104,16 +104,33 @@
     "screenshotButtonText": "このページを画像で保存",
     "shareLinkButtonText": "このページを共有",
     "shareLinkButtonCopiedToClipboard": "クリップボードにコピーしました",
-    "consultationDescription1": "まずは近くの社会福祉協議会に相談してみませんか？",
-    "consultationDescription2": "きっとあなたの相談に寄り添ってくれるはずです",
-    "consultationDescription3": "社会福祉協議会はさまざまな福祉サービスや相談活動、市民と行政の橋渡しを行う民間組織です。他の制度や関係する窓口を紹介してもらえる可能性もあります。",
-    "consultationDescription4": "まずは窓口に相談してみませんか？ きっとあなたの相談に寄り添ってくれるはずです",
+    "consultationDescription": "まずは窓口に相談してみませんか？ きっとあなたの相談に寄り添ってくれるはずです",
+    "helpDeskDescription": {
+      "社会福祉協議会": {
+        "description1": "まずは近くの社会福祉協議会に相談してみませんか？",
+        "description2": "きっとあなたの相談に寄り添ってくれるはずです",
+        "description3": "社会福祉協議会はさまざまな福祉サービスや相談活動、市民と行政の橋渡しを行う民間組織です。他の制度や関係する窓口を紹介してもらえる可能性もあります。"
+      },
+      "拠点病院": {
+        "description1": "お近くの拠点病院に相談してみましょう。"
+      }
+    },
     "chatbotDescription": [
       "追加で知りたいことがあればヤドカリくんにも聞いてみましょう。"
     ],
     "questionnaireDescription": [
       "よろしければ改善のための簡単なアンケートにご協力ください。"
     ],
+    "emptyResultsDescription": {
+      "description1": "今回は支援が見つかりませんでした。次の可能性があります：",
+      "items": [
+        "入力をミスした（例：年収が高すぎた）",
+        "ヤドカリくんで今は探せない支援がある",
+        "将来環境が変わったら支援が見つかる（例：引っ越し、就職）",
+        "将来新しい制度ができたら支援が見つかる"
+      ],
+      "description2": "ヤドカリくんはいつでも応援していますよ"
+    },
     "benefitDescription": "給付される可能性のあるお金",
     "給付制度": {
       "caption": [
@@ -123,32 +140,37 @@
         "児童手当": {
           "unit": "円/月",
           "caption": ["中学校卒業までの児童を養育している方に給付される手当。"],
-          "reference": "https://www.cfa.go.jp/policies/kokoseido/jidouteate/annai/"
+          "reference": "https://www.cfa.go.jp/policies/kokoseido/jidouteate/annai/",
+          "helpDesk": null
         },
         "児童扶養手当": {
           "unit": "円/月",
           "caption": ["ひとり親家庭に給付される手当。"],
-          "reference": "https://www.cfa.go.jp/policies/hitori-oya/fuyou-teate/"
+          "reference": "https://www.cfa.go.jp/policies/hitori-oya/fuyou-teate/",
+          "helpDesk": null
         },
         "特別児童扶養手当": {
           "unit": "円/月",
           "caption": [
             "精神又は身体に障害をもつ20歳未満の児童を養育している方に給付される手当。"
           ],
-          "reference": "https://www.mhlw.go.jp/bunya/shougaihoken/jidou/huyou.html"
+          "reference": "https://www.mhlw.go.jp/bunya/shougaihoken/jidou/huyou.html",
+          "helpDesk": null
         },
         "障害児福祉手当": {
           "unit": "円/月",
           "caption": [
             "精神又は身体に重度の障害をもつ20歳未満の方に給付される手当。"
           ],
-          "reference": "https://www.mhlw.go.jp/bunya/shougaihoken/jidou/hukushi.html"
+          "reference": "https://www.mhlw.go.jp/bunya/shougaihoken/jidou/hukushi.html",
+          "helpDesk": null
         },
         "児童育成手当": {
           "unit": "円/月",
           "caption": ["ひとり親家庭に給付される手当。"],
           "reference": "https://www.fukushi.metro.tokyo.lg.jp/kodomo/kosodate/teate/zidouikuseiteate.html",
-          "local": "東京都"
+          "local": "東京都",
+          "helpDesk": null
         },
         "障害児童育成手当": {
           "unit": "円/月",
@@ -156,7 +178,8 @@
             "精神又は身体に障害をもつ20歳未満の児童を養育している方に給付される手当。"
           ],
           "reference": "https://www.fukushi.metro.tokyo.lg.jp/kodomo/kosodate/teate/zidouikuseiteate.html",
-          "local": "東京都"
+          "local": "東京都",
+          "helpDesk": null
         },
         "重度心身障害者手当": {
           "unit": "円/月",
@@ -164,7 +187,8 @@
             "精神又は身体に重度の障害を持ち、常時複雑な介護を必要とする方に給付される手当。"
           ],
           "reference": "https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/juudo.html",
-          "local": "東京都"
+          "local": "東京都",
+          "helpDesk": null
         },
         "生活保護": {
           "unit": "円/月",
@@ -173,40 +197,100 @@
             "働いて収入がある場合も、働いていない場合も対象になります。",
             "算出された額に加え、医療費・介護費等が実費で給付されます。"
           ],
-          "reference": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsuhogopage.html"
+          "reference": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsuhogopage.html",
+          "helpDesk": null
         },
         "高等学校奨学給付金": {
           "unit": "円/月",
           "caption": [
             "教材費、通学用品費等、高校で安心して教育を受けるために必要なお金の給付。"
           ],
-          "reference": "https://www.mext.go.jp/a_menu/shotou/mushouka/1344089.htm"
+          "reference": "https://www.mext.go.jp/a_menu/shotou/mushouka/1344089.htm",
+          "helpDesk": null
         },
         "災害弔慰金": {
           "unit": "円 　",
           "caption": ["災害により亡くなられた方のご遺族に支給されるお金。"],
-          "reference": "https://www.mhlw.go.jp/shinsai_jouhou/saigaishien.html"
+          "reference": "https://www.mhlw.go.jp/shinsai_jouhou/saigaishien.html",
+          "helpDesk": null
         },
         "災害障害見舞金": {
           "unit": "円 　",
           "caption": [
             "災害による負傷・疾病で精神又は身体に著しい障害が出た方に支給されるお金。"
           ],
-          "reference": "https://www.mhlw.go.jp/shinsai_jouhou/saigaishien.html"
+          "reference": "https://www.mhlw.go.jp/shinsai_jouhou/saigaishien.html",
+          "helpDesk": null
         },
         "被災者生活再建支援制度": {
           "unit": "円 　",
           "caption": [
             "災害により居住する住宅が全壊するなど、生活基盤に著しい被害を受けた世帯に対する支援金。"
           ],
-          "reference": "https://tkai.jp/reconstruction/tabid/82/Default.aspx"
+          "reference": "https://tkai.jp/reconstruction/tabid/82/Default.aspx",
+          "helpDesk": null
         },
         "高等学校等就学支援金": {
           "unit": "円/月",
           "caption": [
             "高校の授業料の支援金。本人が直接受け取る代わりに、授業料が減額されます。"
           ],
-          "reference": "https://www.mext.go.jp/a_menu/shotou/mushouka/1342674.htm"
+          "reference": "https://www.mext.go.jp/a_menu/shotou/mushouka/1342674.htm",
+          "helpDesk": null
+        },
+        "健康管理費用": {
+          "unit": "円/月",
+          "caption": [
+            "血液製剤によるHIV感染者の方へ、エイズ発症予防に役立てるために支給されるお金。",
+            "給付を受ける場合、健康状態の定期的な報告が必要です。"
+          ],
+          "reference": "https://www.pmda.go.jp/relief-services/hiv-positives/0002.html",
+          "helpDesk": "baseHospital"
+        },
+        "健康管理支援事業": {
+          "unit": "円/月",
+          "caption": [
+            "血液製剤によりエイズを発症した方へ、健康管理の費用負担を軽減するために給付される手当。",
+            "支給を受けるには裁判上の和解が成立している必要があります。"
+          ],
+          "reference": "https://www.pmda.go.jp/relief-services/hiv-positives/0002.html",
+          "helpDesk": "baseHospital"
+        },
+        "先天性の傷病治療によるC型肝炎患者に係るQOL向上等のための調査研究事業": {
+          "unit": "円/月",
+          "caption": [
+            "先天性の血液凝固因子異常症の治療のためC型肝炎を発症し健康被害を受けた方へ、生活の質（QOL）向上のため日常生活の状況を把握する事業。",
+            "健康状態や生活状況を報告することで、謝礼金を受け取れます。"
+          ],
+          "reference": "https://www.pmda.go.jp/relief-services/health-welfare/0006.html",
+          "helpDesk": "baseHospital"
+        },
+        "障害基礎年金": {
+          "unit": "円/月",
+          "caption": [
+            "病気やケガによって仕事などが制限された方が受け取ることができる年金。",
+            "20歳以上で国民年金に加入している場合、年金の支払い状況による条件があります。",
+            "また、障害についてはじめて診断を受けた日（初診日）が65歳未満である必要があります。"
+          ],
+          "reference": "https://www.nenkin.go.jp/service/jukyu/shougainenkin/jukyu-yoken/20150401-01.html",
+          "helpDesk": null
+        },
+        "特別障害者手当": {
+          "unit": "円/月",
+          "caption": [
+            "精神または身体に重度の障害をもち介護が必要な方に給付される手当。"
+          ],
+          "reference": "https://www.mhlw.go.jp/bunya/shougaihoken/jidou/tokubetsu.html",
+          "helpDesk": null
+        },
+        "傷病手当金": {
+          "unit": "円/日",
+          "caption": [
+            "病気やケガで会社を休み、その期間の給与が無い場合に代わりに支給されるお金。",
+            "健康保険（会社員）や共済組合（公務員）等に加入している必要があります。"
+          ],
+          "reference": "https://www.kyoukaikenpo.or.jp/g3/sb3040/r139/",
+          "helpDesk": null
         }
       }
     },
@@ -321,6 +405,32 @@
             ],
             "reference": "https://www.mhlw.go.jp/shinsai_jouhou/saigaishien.html"
           }
+        }
+      }
+    },
+    "該当制度": {
+      "制度一覧": {
+        "特定疾病療養": {
+          "variableName": "特定疾病療養の対象者である",
+          "caption": [
+            "長期間の治療と高額な医療費が必要な病気に対して医療費の負担を減らす制度。"
+          ],
+          "reference": "https://www.kyoukaikenpo.or.jp/shibu/shizuoka/cat080/20130225001/"
+        },
+        "先天性血液凝固因子障害等治療研究事業": {
+          "variableName": "先天性血液凝固因子障害等治療研究事業の対象者である",
+          "caption": [
+            "先天性血液凝固因子欠乏症（血友病等）や、血液製剤によるHIV感染などに関する医療費の負担を減らす制度。"
+          ],
+          "reference": "https://www.mhlw.go.jp/web/t_doc?dataId=00tb3840&dataType=1&pageNo=1"
+        },
+        "重度心身障害者医療費助成": {
+          "variableName": "重度心身障害者医療費助成制度の対象者である",
+          "caption": [
+            "重度の障害のある方が病気やケガで医療機関にかかったときの診察料を一部助成する制度。",
+            "自治体によって基準と助成の内容が異なるため、くわしくは市区町村の役所窓口にお問い合わせください。"
+          ],
+          "reference": "https://pap-net.jp/medical_bills/subsidy/"
         }
       }
     }

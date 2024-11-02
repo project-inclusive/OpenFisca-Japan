@@ -5,7 +5,7 @@ import { ExternalLinkIcon, InfoIcon } from '@chakra-ui/icons';
 import configData from '../../config/app_config.json';
 import { currentDateAtom } from '../../state';
 import { useRecoilValue } from 'recoil';
-import { HelpDesk } from './helpDesk';
+import { SocialWelfareCouncilHelpDesk } from './helpDesk';
 import { LoanAccordion } from './loanAccordion';
 
 export const Loan = ({ result }: { result: any }) => {
@@ -48,9 +48,18 @@ export const Loan = ({ result }: { result: any }) => {
     }
   }, [result]);
 
+  const existsResult = () => {
+    return (
+      displayedResult &&
+      Object.values(displayedResult).some(
+        (category: any) => Object.keys(category).length !== 0
+      )
+    );
+  };
+
   return (
     <>
-      {displayedResult && (
+      {existsResult() && (
         <Box bg="white" borderRadius="xl" p={4} mb={4} ml={4} mr={4}>
           <Center
             fontSize={configData.style.subTitleFontSize}
@@ -77,7 +86,10 @@ export const Loan = ({ result }: { result: any }) => {
                       )}
                       {category[0] === '生活福祉資金貸付制度' && (
                         <Tooltip
-                          label={configData.result.consultationDescription3}
+                          label={
+                            configData.result.helpDeskDescription.社会福祉協議会
+                              .description3
+                          }
                           isOpen={isLabelOpen}
                           bg="gray.600"
                         >
@@ -92,9 +104,6 @@ export const Loan = ({ result }: { result: any }) => {
                       )}
                     </Text>
 
-                    {category[0] === '生活福祉資金貸付制度' && (
-                      <HelpDesk></HelpDesk>
-                    )}
                     {category[1].reference && (
                       <Box color="blue" mb={2}>
                         <a
@@ -106,6 +115,9 @@ export const Loan = ({ result }: { result: any }) => {
                           <ExternalLinkIcon ml={1} />
                         </a>
                       </Box>
+                    )}
+                    {category[0] === '生活福祉資金貸付制度' && (
+                      <SocialWelfareCouncilHelpDesk></SocialWelfareCouncilHelpDesk>
                     )}
 
                     <LoanAccordion

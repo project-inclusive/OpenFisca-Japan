@@ -7,12 +7,41 @@ import {
   AccordionIcon,
   AccordionButton,
   AccordionPanel,
+  Text,
 } from '@chakra-ui/react';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 
 import configData from '../../config/app_config.json';
 import { useRecoilValue } from 'recoil';
 import { currentDateAtom } from '../../state';
+import { HelpDesk } from './helpDesk';
+
+// 窓口表示するか否かを判定
+const showsHelpDesk = (
+  allowanceName: string | null,
+  result: any,
+  currentDate: string
+) => {
+  // 設定されていない場合表示しない
+  if (allowanceName == null) {
+    return false;
+  }
+
+  if (
+    allowanceName ===
+    '先天性の傷病治療によるC型肝炎患者に係るQOL向上等のための調査研究事業'
+  ) {
+    // HIVに感染している世帯員がいる場合のみ窓口表示
+    const members = Object.values(result.世帯員);
+    return (
+      members.filter((member: any) => member.HIV感染者である[currentDate])
+        .length > 0
+    );
+  }
+
+  // それ以外の場合: 無条件で表示
+  return true;
+};
 
 export const Benefit = ({ result }: { result: any }) => {
   const [totalAllowance, setTotalAllowance] = useState<string>('0');
@@ -39,6 +68,9 @@ export const Benefit = ({ result }: { result: any }) => {
               unit: allowanceInfo.unit,
               caption: allowanceInfo.caption,
               reference: allowanceInfo.reference,
+              helpDesk:
+                showsHelpDesk(allowanceName, result, currentDate) &&
+                allowanceInfo.helpDesk,
             };
           }
         } else if (`${allowanceName}_最大` in result.世帯一覧.世帯1) {
@@ -50,6 +82,9 @@ export const Benefit = ({ result }: { result: any }) => {
               unit: allowanceInfo.unit,
               caption: allowanceInfo.caption,
               reference: allowanceInfo.reference,
+              helpDesk:
+                showsHelpDesk(allowanceName, result, currentDate) &&
+                allowanceInfo.helpDesk,
             };
           }
         }
@@ -93,21 +128,26 @@ export const Benefit = ({ result }: { result: any }) => {
     }
   }, [result]);
 
+  const existsResult = () => {
+    return displayedResult && Object.keys(displayedResult).length !== 0;
+  };
+
   return (
     <>
-      <Box bg="white" borderRadius="xl" p={4} mb={4} ml={4} mr={4}>
-        <Center
-          fontSize={configData.style.subTitleFontSize}
-          fontWeight="medium"
-          mb={2}
-        >
-          {configData.result.benefitDescription}
-        </Center>
+      {existsResult() && (
+        <Box bg="white" borderRadius="xl" p={4} mb={4} ml={4} mr={4}>
+          <Center
+            fontSize={configData.style.subTitleFontSize}
+            fontWeight="medium"
+            mb={2}
+          >
+            {configData.result.benefitDescription}
+          </Center>
 
-        {configData.result.給付制度.caption[0]}
+          {configData.result.給付制度.caption[0]}
 
-        <Accordion allowMultiple>
-          {/* // 一時金と継続支給が合算されていて紛らわしいため合計額は非表示。
+          <Accordion allowMultiple>
+            {/* // 一時金と継続支給が合算されていて紛らわしいため合計額は非表示。
           // ただし今後、一時金と継続支給それぞれの合計表示はする可能性あり
           <AccordionItem>
             <h2>
@@ -127,8 +167,7 @@ export const Benefit = ({ result }: { result: any }) => {
           </AccordionItem>
           */}
 
-          {displayedResult &&
-            displayedResult.map((val: any, index: any) => (
+            {displayedResult.map((val: any, index: any) => (
               <AccordionItem key={index}>
                 <h2>
                   <AccordionButton>
@@ -143,23 +182,27 @@ export const Benefit = ({ result }: { result: any }) => {
                   </AccordionButton>
                 </h2>
                 <AccordionPanel pb={4}>
-                  {val.caption.map((line: string, index: any) => (
-                    <span key={index}>
-                      {line}
-                      <br />
-                    </span>
-                  ))}
+                  <Text>
+                    {val.caption.map((line: string, index: any) => (
+                      <span key={index}>
+                        {line}
+                        <br />
+                      </span>
+                    ))}
+                  </Text>
                   <Box color="blue">
                     <a href={val.reference} target="_blank" rel="noreferrer">
                       詳細リンク
                       <ExternalLinkIcon ml={1} />
                     </a>
                   </Box>
+                  {val.helpDesk && <HelpDesk name={val.helpDesk} />}
                 </AccordionPanel>
               </AccordionItem>
             ))}
-        </Accordion>
-      </Box>
+          </Accordion>
+        </Box>
+      )}
     </>
   );
 };

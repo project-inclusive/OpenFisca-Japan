@@ -15,6 +15,7 @@ import { NursingHome } from './attributes/NursingHome';
 import { DisasterDisability } from './attributes/DisasterDisability';
 import { DisasterInjuryPeriod } from './attributes/DisasterInjuryPeriod';
 import { AgeInput } from './attributes/AgeInput';
+import { Injury } from './attributes/Injury';
 
 export const FormParents = () => {
   const location = useLocation();
@@ -57,6 +58,7 @@ export const FormParents = () => {
                 {isDetailedCalculation && (
                   <Disability personName={parentName} />
                 )}
+                {isDetailedCalculation && <Injury personName={parentName} />}
                 {isDetailedCalculation && (
                   <Recuperation personName={parentName} />
                 )}

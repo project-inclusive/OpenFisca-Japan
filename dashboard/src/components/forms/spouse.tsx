@@ -15,6 +15,7 @@ import { SpouseExistsButSingleParent } from './attributes/SpouseExistsButSingleP
 import { DisasterDisability } from './attributes/DisasterDisability';
 import { DisasterInjuryPeriod } from './attributes/DisasterInjuryPeriod';
 import { AgeInput } from './attributes/AgeInput';
+import { Injury } from './attributes/Injury';
 
 export const FormSpouse = () => {
   const location = useLocation();
@@ -54,6 +55,7 @@ export const FormSpouse = () => {
             {isDetailedCalculation && <Student personName={spouseName} />}
             {isDetailedCalculation && <Working personName={spouseName} />}
             {isDetailedCalculation && <Disability personName={spouseName} />}
+            {isDetailedCalculation && <Injury personName={spouseName} />}
             {isDetailedCalculation && <Recuperation personName={spouseName} />}
             {isDetailedCalculation && <NursingHome personName={spouseName} />}
             {isDetailedCalculation && (

@@ -25,6 +25,7 @@ import { DisasterInjuryPeriod } from './attributes/DisasterInjuryPeriod';
 import { useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { currentDateAtom, householdAtom } from '../../state';
+import { Injury } from './attributes/Injury';
 
 export const FormYou = () => {
   const navigationType = useNavigationType();
@@ -74,6 +75,7 @@ export const FormYou = () => {
         {isDetailedCalculation && <Student personName={yourName} />}
         {isDetailedCalculation && <Working personName={yourName} />}
         {isDetailedCalculation && <Disability personName={yourName} />}
+        {isDetailedCalculation && <Injury personName={yourName} />}
         {isDetailedCalculation && <Recuperation personName={yourName} />}
         {isDetailedCalculation && <NursingHome personName={yourName} />}
         <SpouseExists />
