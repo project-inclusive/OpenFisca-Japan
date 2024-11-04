@@ -104,7 +104,7 @@ export const Result = () => {
   const download = (
     image: string,
     {
-      name = 'お金サポート_結果',
+      name = '見積もり結果',
       extension = 'png',
     }: { name?: string; extension?: string } = {}
   ): void => {
