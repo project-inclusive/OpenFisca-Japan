@@ -104,13 +104,13 @@ export const Result = () => {
   const download = (
     image: string,
     {
-      name = 'お金サポート_結果',
+      name = '見積もり結果',
       extension = 'png',
     }: { name?: string; extension?: string } = {}
   ): void => {
     const a = document.createElement('a');
     a.href = image;
-    a.download = createFileName(extension, name);
+    a.download = createFileName(extension, `${name}_${getTime()}`);
     a.click();
     setLoadingScreenshotDownload(false);
   };
@@ -174,6 +174,23 @@ export const Result = () => {
 
     return true;
   };
+
+  function getTime() {
+    // Get the current date and time and adjust to Japan time
+    const japanTime = new Date().toLocaleString('ja-JP', {
+      timeZone: 'Asia/Tokyo',
+    });
+    const date = new Date(japanTime);
+
+    // Format the date and time
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+
+    return `${year}${month}${day}${hours}${minutes}`;
+  }
 
   return (
     <div ref={divRef}>
