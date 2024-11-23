@@ -42,11 +42,17 @@ export const AgeInput = ({
   }
 
   const handleAgeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    let value: number | string = toHalf(event.currentTarget.value) ?? 0;
+    let value: string = toHalf(event.currentTarget.value) ?? '';
     value = value.replace(/[^0-9]/g, '');
-    value = Number(value);
 
-    const inputAge = value <= 0 ? '' : value;
+    // If empty string, set as is
+    if (value === '') {
+      setAge('');
+      return;
+    }
+
+    const numValue = Number(value);
+    const inputAge = numValue < 0 ? '' : numValue;
     changeAge(Number(inputAge));
   };
 
@@ -69,11 +75,8 @@ export const AgeInput = ({
 
   return (
     <>
-      {/* Child Time Error */}
-      {mustInput && !you && <ErrorMessage condition={age === ''} />}
+      {mustInput && <ErrorMessage condition={age === ''} />}
 
-      {/* Error for the person's own time */}
-      {mustInput && you && <ErrorMessage condition={age === 0} />}
       <FormControl>
         <FormLabel
           fontSize={configData.style.itemFontSize}
