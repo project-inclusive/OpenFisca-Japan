@@ -75,11 +75,8 @@ export const AgeInput = ({
 
   return (
     <>
-      {/* Child Time Error */}
       {mustInput && <ErrorMessage condition={age === ''} />}
 
-      {/* Error for the person's own time */}
-      {mustInput && you && <ErrorMessage condition={age === 0} />}
       <FormControl>
         <FormLabel
           fontSize={configData.style.itemFontSize}
