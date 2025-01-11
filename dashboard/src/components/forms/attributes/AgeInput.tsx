@@ -52,7 +52,7 @@ export const AgeInput = ({
     }
 
     const numValue = Number(value);
-    const inputAge = numValue < 0 ? '' : numValue;
+    const inputAge = numValue < 0 || numValue > 200 ? '' : numValue; // 0~200歳に入力を制限(年齢が高すぎて誕生年が3桁になるとパース処理が煩雑なため)
     changeAge(Number(inputAge));
   };
 
