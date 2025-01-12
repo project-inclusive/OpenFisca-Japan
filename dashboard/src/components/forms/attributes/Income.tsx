@@ -31,6 +31,7 @@ export const Income = ({
     // 全角数字を半角数字に変換
     let value = toHalf(event.target.value);
     value = value.replace(/[^0-9]/g, '');
+    const maxIncome = 10000000000; // オーバーフローしないよう上限を100億に設定
 
     // 「万円」単位を「円」に換算
     let income = parseInt(value) * 10000;
@@ -38,6 +39,9 @@ export const Income = ({
     if (isNaN(income) || income < 0) {
       income = 0;
       setShownIncome('');
+    } else if (income > maxIncome) {
+      income = maxIncome;
+      setShownIncome(income / 10000);
     } else {
       setShownIncome(income / 10000);
     }

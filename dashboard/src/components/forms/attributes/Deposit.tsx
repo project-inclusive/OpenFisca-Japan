@@ -27,11 +27,15 @@ export const Deposit = ({ personName }: { personName: string }) => {
 
     // 「万円」単位を「円」に換算
     let deposit = parseInt(value) * 10000;
+    const maxDeposit = 10000000000; // オーバーフローしないよう上限を100億に設定
 
     // 正の整数以外は0に変換
     if (isNaN(deposit) || deposit < 0) {
       deposit = 0;
       setShownDeposit('');
+    } else if (deposit > maxDeposit) {
+      deposit = maxDeposit;
+      setShownDeposit(deposit / 10000);
     } else {
       setShownDeposit(deposit / 10000);
     }
