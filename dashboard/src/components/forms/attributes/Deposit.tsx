@@ -6,7 +6,13 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { currentDateAtom, householdAtom } from '../../../state';
 
 import { toHalf } from '../../../utils/toHalf';
-import { isMobile } from 'react-device-detect';
+import {
+  isChrome,
+  isChromium,
+  isEdge,
+  isMobile,
+  isWindows,
+} from 'react-device-detect';
 
 export const Deposit = ({ personName }: { personName: string }) => {
   const navigationType = useNavigationType();
@@ -17,6 +23,19 @@ export const Deposit = ({ personName }: { personName: string }) => {
   const [shownDeposit, setShownDeposit] = useState<string | number>('');
 
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    // NOTE: WindowsのChromium系ブラウザでは全角入力時に2回入力が発生してしまうため、片方を抑制
+    if (isWindows && (isChrome || isEdge || isChromium)) {
+      if (
+        event.nativeEvent instanceof InputEvent &&
+        event.nativeEvent.isComposing
+      ) {
+        // 前回と同じ値を設定して終了
+        // （設定しないままreturnすると未変換の全角入力が残ってしまいエンターキーを押すまで反映できなくなってしまう）
+        setHousehold(household);
+        return;
+      }
+    }
+
     const newHousehold = {
       ...household,
     };
