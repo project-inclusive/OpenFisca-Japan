@@ -16,7 +16,13 @@ import { householdAtom } from '../../../state';
 import { useRecoilState } from 'recoil';
 
 import { toHalf } from '../../../utils/toHalf';
-import { isMobile } from 'react-device-detect';
+import {
+  isChrome,
+  isChromium,
+  isEdge,
+  isMobile,
+  isWindows,
+} from 'react-device-detect';
 
 export const SchoolYear = ({
   personName,
@@ -84,6 +90,19 @@ export const SchoolYear = ({
   ];
 
   function handleSchoolYearChange(event: React.ChangeEvent<HTMLInputElement>) {
+    // NOTE: WindowsのChromium系ブラウザでは全角入力時に2回入力が発生してしまうため、片方を抑制
+    if (isWindows && (isChrome || isEdge || isChromium)) {
+      if (
+        event.nativeEvent instanceof InputEvent &&
+        event.nativeEvent.isComposing
+      ) {
+        // 前回と同じ値を設定して終了
+        // （設定しないままreturnすると未変換の全角入力が残ってしまいエンターキーを押すまで反映できなくなってしまう）
+        setHousehold({ ...household });
+        return;
+      }
+    }
+
     let value: number | string = toHalf(event.currentTarget.value);
     value = value.replace(/[^0-9]/g, '');
     value = parseInt(value);
