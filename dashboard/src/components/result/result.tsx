@@ -19,6 +19,7 @@ import shortLink, {
 } from './shareLink';
 import { QRCodeCanvas } from 'qrcode.react';
 import { EmptyResults } from './emptyResults';
+import { useDeviceData } from 'react-device-detect';
 
 const createFileName = (extension: string = '', ...names: string[]) => {
   if (!extension) {
@@ -52,6 +53,7 @@ export const Result = () => {
   const [result, calculate] = useCalculate();
   const [isDisplayChat, setIsDisplayChat] = useState('none');
   const [shareLink, setShareLink] = useState(false);
+  const [enviroment, setEnvironment] = useState(false);
   const [shareUrl, setShareUrl] = useState<string>('');
 
   useEffect(() => {
@@ -152,6 +154,24 @@ export const Result = () => {
         setShareLink(true);
         setTimeout(() => {
           setShareLink(false);
+        }, 3000);
+      })
+      .catch((e: any) => {
+        console.error('Failed to copy text:', e);
+      });
+  };
+
+  const deviceData = useDeviceData(window.navigator.userAgent);
+
+  const environmentButton = () => {
+    // 必要な情報のみ抽出し文字列化
+    const { browser, os } = deviceData;
+    const envInfoText = JSON.stringify({ browser, os });
+    clipBoard(envInfoText)
+      .then(() => {
+        setEnvironment(true);
+        setTimeout(() => {
+          setEnvironment(false);
         }, 3000);
       })
       .catch((e: any) => {
@@ -360,6 +380,28 @@ export const Result = () => {
               ></iframe>
             </Box>
           </Box>
+
+          <Center pr={4} pl={4} pb={4}>
+            {configData.result.environmentDescription[0]}
+          </Center>
+
+          <Center pr={4} pl={4} pb={4}>
+            <Button
+              onClick={() => environmentButton()}
+              as="button"
+              fontSize={configData.style.subTitleFontSize}
+              borderRadius="xl"
+              height="2em"
+              width="100%"
+              bg="gray.500"
+              color="white"
+              _hover={{ bg: 'gray.600' }}
+            >
+              {enviroment
+                ? configData.result.environmentButtonCopiedToClipboard
+                : configData.result.environmentButtonText}
+            </Button>
+          </Center>
 
           <Center pr={4} pl={4} pb={4}>
             {configData.result.questionnaireDescription[0]}

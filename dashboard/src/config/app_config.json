@@ -102,6 +102,8 @@
     "detailedCalculationDescription": "「くわしく計算」モードでは、より正確な結果が表示されます。金額が上がる場合もあります。",
     "questionExamplesButtonText": "窓口での質問例",
     "screenshotButtonText": "このページを画像で保存",
+    "environmentButtonText": "環境情報を取得",
+    "environmentButtonCopiedToClipboard": "クリップボードにコピーしました",
     "shareLinkButtonText": "このページを共有",
     "shareLinkButtonCopiedToClipboard": "クリップボードにコピーしました",
     "consultationDescription": "まずは窓口に相談してみませんか？ きっとあなたの相談に寄り添ってくれるはずです",
@@ -117,6 +119,9 @@
     },
     "chatbotDescription": [
       "追加で知りたいことがあればヤドカリくんにも聞いてみましょう。"
+    ],
+    "environmentDescription": [
+      "不具合発生時の原因特定に使用する環境情報(OS、ブラウザ)を取得します。不具合報告の際にご利用ください。"
     ],
     "questionnaireDescription": [
       "よろしければ改善のための簡単なアンケートにご協力ください。"
