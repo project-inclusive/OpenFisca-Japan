@@ -8,6 +8,8 @@ from functools import cache
 import numpy as np
 from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
+
+from openfisca_japan import COUNTRY_DIR
 from openfisca_japan.entities import 世帯
 from openfisca_japan.variables.災害.住宅 import 住宅再建方法パターン, 住宅被害パターン
 
@@ -19,7 +21,7 @@ def 基礎支援金額表():
 
     基礎支援金額表()[住宅被害] の形で参照可能
     """
-    return np.genfromtxt("openfisca_japan/assets/災害/支援/被災者生活再建支援制度_基礎支援金.csv",
+    return np.genfromtxt(COUNTRY_DIR + "/assets/災害/支援/被災者生活再建支援制度_基礎支援金.csv",
                   delimiter=",", skip_header=1, dtype="int64")[1:]
 
 
@@ -30,7 +32,7 @@ def 加算支援金額表():
 
     加算支援金額表()[住宅被害, 住宅再建方法] の形で参照可能
     """
-    return np.genfromtxt("openfisca_japan/assets/災害/支援/被災者生活再建支援制度_加算支援金.csv",
+    return np.genfromtxt(COUNTRY_DIR + "/assets/災害/支援/被災者生活再建支援制度_加算支援金.csv",
                   delimiter=",", skip_header=1, dtype="int64")[:, 1:]
 
 

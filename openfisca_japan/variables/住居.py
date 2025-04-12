@@ -16,6 +16,8 @@ from openfisca_core.variables import Variable
 # Import the Entities specifically defined for this tax and benefit system
 from openfisca_japan.entities import 世帯
 
+from openfisca_japan import COUNTRY_DIR
+
 
 @cache
 def 市区町村級地区分_キー一覧():
@@ -24,7 +26,7 @@ def 市区町村級地区分_キー一覧():
 
     各要素は [都道府県名, 市区町村名] の形式
     """
-    with open("openfisca_japan/assets/市区町村級地区分.json") as f:
+    with open(COUNTRY_DIR + "/assets/市区町村級地区分.json") as f:
         d = json.load(f)
         キー一覧 = []
         for 都道府県名, 都道府県データ in d.items():
@@ -40,7 +42,7 @@ def 市区町村級地区分_値一覧():
 
     市区町村級地区分_値一覧[市区町村級地区分キー, 区分]の形式で取得可能
     """
-    with open("openfisca_japan/assets/市区町村級地区分.json") as f:
+    with open(COUNTRY_DIR + "/assets/市区町村級地区分.json") as f:
         d = json.load(f)
         値一覧 = []
         for 都道府県データ in d.values():

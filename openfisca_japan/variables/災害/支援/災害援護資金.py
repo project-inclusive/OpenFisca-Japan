@@ -7,6 +7,8 @@ from functools import cache
 import numpy as np
 from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
+
+from openfisca_japan import COUNTRY_DIR
 from openfisca_japan.entities import 世帯
 from openfisca_japan.variables.災害.住宅 import 住宅被害パターン, 家財の損害パターン, 災害による負傷の療養期間パターン
 
@@ -18,7 +20,7 @@ def 災害援護資金貸付限度額():
 
     災害援護資金貸付限度額()[災害による負傷の療養期間, 住宅への損害] の形で参照可能
     """
-    return np.genfromtxt("openfisca_japan/assets/災害/支援/災害援護資金貸付限度額.csv",
+    return np.genfromtxt(COUNTRY_DIR + "/assets/災害/支援/災害援護資金貸付限度額.csv",
                   delimiter=",", skip_header=1, dtype="int64")[:, 1:]
 
 
