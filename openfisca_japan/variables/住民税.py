@@ -11,7 +11,6 @@ from functools import cache
 import numpy as np
 from openfisca_core.periods import DAY, period
 from openfisca_core.variables import Variable
-
 from openfisca_japan import COUNTRY_DIR
 # Import the Entities specifically defined for this tax and benefit system
 from openfisca_japan.entities import 世帯, 人物

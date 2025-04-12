@@ -8,7 +8,6 @@ import numpy as np
 from openfisca_core.indexed_enums import Enum
 from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
-
 from openfisca_japan import COUNTRY_DIR
 from openfisca_japan.entities import 世帯, 人物
 from openfisca_japan.variables.全般 import 高校生学年

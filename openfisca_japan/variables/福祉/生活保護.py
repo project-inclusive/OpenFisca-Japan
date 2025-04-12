@@ -10,7 +10,6 @@ import numpy as np
 from openfisca_core.indexed_enums import Enum
 from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
-
 from openfisca_japan import COUNTRY_DIR
 from openfisca_japan.entities import 世帯, 人物
 from openfisca_japan.variables.障害.身体障害者手帳 import 身体障害者手帳等級パターン

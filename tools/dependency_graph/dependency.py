@@ -11,7 +11,6 @@ import re
 
 import graphviz
 from openfisca_core.variables import Variable
-
 from openfisca_japan import COUNTRY_DIR
 
 

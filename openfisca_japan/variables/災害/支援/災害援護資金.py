@@ -7,7 +7,6 @@ from functools import cache
 import numpy as np
 from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
-
 from openfisca_japan import COUNTRY_DIR
 from openfisca_japan.entities import 世帯
 from openfisca_japan.variables.災害.住宅 import 住宅被害パターン, 家財の損害パターン, 災害による負傷の療養期間パターン
