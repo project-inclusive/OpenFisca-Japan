@@ -11,6 +11,7 @@ import re
 
 import graphviz
 from openfisca_core.variables import Variable
+from openfisca_japan import COUNTRY_DIR
 
 
 # Variable同士の依存関係を解析（継承はせず動的に読み込んでいるためソースコードから推定）
@@ -99,7 +100,7 @@ if __name__ == "__main__":
     dependencies = {}
 
     # openfisca_japanのルートディレクトリ
-    root_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "openfisca_japan")
+    root_dir = COUNTRY_DIR
 
     filenames = glob.glob(f"{root_dir}/**/*.py", recursive=True)
     module_paths = [filename.replace(".py", "").replace("/", ".") for filename in filenames]

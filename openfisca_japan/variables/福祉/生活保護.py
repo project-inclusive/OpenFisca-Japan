@@ -10,6 +10,7 @@ import numpy as np
 from openfisca_core.indexed_enums import Enum
 from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
+from openfisca_japan import COUNTRY_DIR
 from openfisca_japan.entities import 世帯, 人物
 from openfisca_japan.variables.障害.身体障害者手帳 import 身体障害者手帳等級パターン
 
@@ -25,7 +26,7 @@ def 生活扶助基準1_第1類_基準額1表():
 
     生活扶助基準1_第1類_基準額1表()[年齢, 居住級地区分] の形で参照可能
     """
-    return np.genfromtxt("openfisca_japan/assets/福祉/生活保護/生活扶助基準額/第1類1.csv",
+    return np.genfromtxt(COUNTRY_DIR + "/assets/福祉/生活保護/生活扶助基準額/第1類1.csv",
                          delimiter=",", skip_header=1, dtype="int64")[:, 1:]
 
 
@@ -36,7 +37,7 @@ def 生活扶助基準1_逓減率1表():
 
     生活扶助基準1_逓減率1表()[世帯人数, 居住級地区分] の形で参照可能
     """
-    return np.genfromtxt("openfisca_japan/assets/福祉/生活保護/生活扶助基準額/逓減率1.csv",
+    return np.genfromtxt(COUNTRY_DIR + "/assets/福祉/生活保護/生活扶助基準額/逓減率1.csv",
                          delimiter=",", skip_header=1, dtype="float64")[:, 1:]
 
 
@@ -47,7 +48,7 @@ def 生活扶助基準1_第2類_基準額1表():
 
     生活扶助基準1_第2類_基準額1表()[世帯人数, 居住級地区分] の形で参照可能
     """
-    return np.genfromtxt("openfisca_japan/assets/福祉/生活保護/生活扶助基準額/第2類1.csv",
+    return np.genfromtxt(COUNTRY_DIR + "/assets/福祉/生活保護/生活扶助基準額/第2類1.csv",
                         delimiter=",", skip_header=1, dtype="int64")[:, 1:]
 
 
@@ -58,7 +59,7 @@ def 生活扶助基準2_第1類_基準額2表():
 
     生活扶助基準2_第1類_基準額2表()[年齢, 居住級地区分] の形で参照可能
     """
-    return np.genfromtxt("openfisca_japan/assets/福祉/生活保護/生活扶助基準額/第1類2.csv",
+    return np.genfromtxt(COUNTRY_DIR + "/assets/福祉/生活保護/生活扶助基準額/第1類2.csv",
                          delimiter=",", skip_header=1, dtype="int64")[:, 1:]
 
 
@@ -69,7 +70,7 @@ def 生活扶助基準2_逓減率2表():
 
     生活扶助基準2_逓減率2表()[世帯人数, 居住級地区分] の形で参照可能
     """
-    return np.genfromtxt("openfisca_japan/assets/福祉/生活保護/生活扶助基準額/逓減率2.csv",
+    return np.genfromtxt(COUNTRY_DIR + "/assets/福祉/生活保護/生活扶助基準額/逓減率2.csv",
                          delimiter=",", skip_header=1, dtype="float64")[:, 1:]
 
 
@@ -80,7 +81,7 @@ def 生活扶助基準2_第2類_基準額2表():
 
     生活扶助基準2_第2類_基準額2表()[世帯人数, 居住級地区分] の形で参照可能
     """
-    return np.genfromtxt("openfisca_japan/assets/福祉/生活保護/生活扶助基準額/第2類2.csv",
+    return np.genfromtxt(COUNTRY_DIR + "/assets/福祉/生活保護/生活扶助基準額/第2類2.csv",
                          delimiter=",", skip_header=1, dtype="int64")[:, 1:]
 
 
@@ -92,7 +93,7 @@ def 地域区分表():
     地域区分表()[都道府県] の形で参照可能
     票に含まれていないものはすべて6区
     """
-    with open("openfisca_japan/assets/福祉/生活保護/冬季加算/地域区分.json") as f:
+    with open(COUNTRY_DIR + "/assets/福祉/生活保護/冬季加算/地域区分.json") as f:
         d = json.load(f)
         return np.array(list(d.values()))
 
@@ -104,7 +105,7 @@ def 地域区分表_キー一覧():
 
     selectする際のキー一覧として都道府県名を取得
     """
-    with open("openfisca_japan/assets/福祉/生活保護/冬季加算/地域区分.json") as f:
+    with open(COUNTRY_DIR + "/assets/福祉/生活保護/冬季加算/地域区分.json") as f:
         d = json.load(f)
         return d.keys()
 
@@ -118,7 +119,7 @@ def 冬季加算表():
     """
     冬季加算表 = []
     for i in range(1, 7):
-        地域区分の冬季加算表 = np.genfromtxt(f"openfisca_japan/assets/福祉/生活保護/冬季加算/{i}区.csv",
+        地域区分の冬季加算表 = np.genfromtxt(COUNTRY_DIR + f"/assets/福祉/生活保護/冬季加算/{i}区.csv",
                                    delimiter=",", skip_header=1, dtype="int64")[:, 1:]
         冬季加算表.append(地域区分の冬季加算表)
     return np.stack(冬季加算表)
@@ -131,7 +132,7 @@ def 市ごとの住宅扶助限度額():
 
     市ごとの住宅扶助限度額()[市, 世帯人員] の形で参照可能
     """
-    return np.genfromtxt("openfisca_japan/assets/福祉/生活保護/住宅扶助基準額/市.csv",
+    return np.genfromtxt(COUNTRY_DIR + "/assets/福祉/生活保護/住宅扶助基準額/市.csv",
                          delimiter=",", skip_header=1, dtype="int64")[:, 1:]
 
 
@@ -142,7 +143,7 @@ def 市ごとの住宅扶助限度額_キー一覧():
 
     selectする際のキー一覧として市名を取得
     """
-    with open("openfisca_japan/assets/福祉/生活保護/住宅扶助基準額/市.csv") as f:
+    with open(COUNTRY_DIR + "/assets/福祉/生活保護/住宅扶助基準額/市.csv") as f:
         reader = csv.DictReader(f)
         return [row["市"] for row in reader]
 
@@ -154,7 +155,7 @@ def 都道府県ごとの住宅扶助限度額():
 
     都道府県ごとの住宅扶助限度額()[都道府県区分, 世帯人員] の形で参照可能
     """
-    return np.genfromtxt("openfisca_japan/assets/福祉/生活保護/住宅扶助基準額/都道府県.csv",
+    return np.genfromtxt(COUNTRY_DIR + "/assets/福祉/生活保護/住宅扶助基準額/都道府県.csv",
                          delimiter=",", skip_header=1, dtype="int64")[:, 2:]
 
 
@@ -165,7 +166,7 @@ def 都道府県ごとの住宅扶助限度額_キー一覧():
 
     selectする際のキー一覧として都道府県名、級地区分を取得
     """
-    with open("openfisca_japan/assets/福祉/生活保護/住宅扶助基準額/都道府県.csv") as f:
+    with open(COUNTRY_DIR + "/assets/福祉/生活保護/住宅扶助基準額/都道府県.csv") as f:
         reader = csv.DictReader(f)
         return [{"都道府県": row["都道府県"], "級地": int(row["級地"])} for row in reader]
 
@@ -179,7 +180,7 @@ def 生活扶助本体に係る経過的加算表():
     """
     生活扶助本体に係る経過的加算表 = []
     for i in range(1, 6):
-        生活扶助本体に係る経過的加算表.append(np.genfromtxt(f"openfisca_japan/assets/福祉/生活保護/生活扶助本体に係る経過的加算/{i}人世帯.csv",
+        生活扶助本体に係る経過的加算表.append(np.genfromtxt(COUNTRY_DIR + f"/assets/福祉/生活保護/生活扶助本体に係る経過的加算/{i}人世帯.csv",
                                          delimiter=",", skip_header=1, dtype="int64")[:, 1:])
     return np.stack(生活扶助本体に係る経過的加算表)
 
@@ -193,11 +194,11 @@ def 母子世帯等に係る経過的加算表():
     """
     母子世帯等に係る経過的加算表 = []
 
-    母子世帯等に係る経過的加算表.append(np.genfromtxt("openfisca_japan/assets/福祉/生活保護/母子世帯等に係る経過的加算/3人世帯.csv",
+    母子世帯等に係る経過的加算表.append(np.genfromtxt(COUNTRY_DIR + "/assets/福祉/生活保護/母子世帯等に係る経過的加算/3人世帯.csv",
                                      delimiter=",", skip_header=1, dtype="int64")[:, 1:])
-    母子世帯等に係る経過的加算表.append(np.genfromtxt("openfisca_japan/assets/福祉/生活保護/母子世帯等に係る経過的加算/4人世帯.csv",
+    母子世帯等に係る経過的加算表.append(np.genfromtxt(COUNTRY_DIR + "/assets/福祉/生活保護/母子世帯等に係る経過的加算/4人世帯.csv",
                                      delimiter=",", skip_header=1, dtype="int64")[:, 1:])
-    母子世帯等に係る経過的加算表.append(np.genfromtxt("openfisca_japan/assets/福祉/生活保護/母子世帯等に係る経過的加算/5人世帯.csv",
+    母子世帯等に係る経過的加算表.append(np.genfromtxt(COUNTRY_DIR + "/assets/福祉/生活保護/母子世帯等に係る経過的加算/5人世帯.csv",
                                      delimiter=",", skip_header=1, dtype="int64")[:, 1:])
 
     return np.stack(母子世帯等に係る経過的加算表)
@@ -210,7 +211,7 @@ def 障害者加算表():
 
     障害者加算表()[等級, 居住級地区分1] の形で参照可能
     """
-    return np.genfromtxt("openfisca_japan/assets/福祉/生活保護/障害者加算.csv",
+    return np.genfromtxt(COUNTRY_DIR + "/assets/福祉/生活保護/障害者加算.csv",
                          delimiter=",", skip_header=1, dtype="int64")[:, 1:]
 
 
@@ -221,7 +222,7 @@ def 期末一時扶助表():
 
     期末一時扶助表()[世帯人数, 居住級地区分] の形で参照可能
     """
-    return np.genfromtxt("openfisca_japan/assets/福祉/生活保護/期末一時扶助.csv",
+    return np.genfromtxt(COUNTRY_DIR + "/assets/福祉/生活保護/期末一時扶助.csv",
                          delimiter=",", skip_header=1, dtype="int64")[:, 1:]
 
 

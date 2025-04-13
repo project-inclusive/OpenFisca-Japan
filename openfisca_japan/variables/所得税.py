@@ -13,6 +13,7 @@ import numpy as np
 from openfisca_core.holders import set_input_divide_by_period
 from openfisca_core.periods import DAY, period
 from openfisca_core.variables import Variable
+from openfisca_japan import COUNTRY_DIR
 # Import the Entities specifically defined for this tax and benefit system
 from openfisca_japan.entities import 世帯, 人物
 from openfisca_japan.variables.障害.愛の手帳 import 愛の手帳等級パターン
@@ -31,7 +32,7 @@ def 配偶者控除額表():
 
     配偶者控除額表()[配偶者の所得区分, 納税者本人の所得区分] の形で参照可能
     """
-    return np.genfromtxt("openfisca_japan/assets/所得/配偶者控除額.csv",
+    return np.genfromtxt(COUNTRY_DIR + "/assets/所得/配偶者控除額.csv",
                   delimiter=",", skip_header=1, dtype="int64")[np.newaxis, 1:]
 
 
@@ -42,7 +43,7 @@ def 配偶者特別控除額表():
 
     配偶者特別控除額表()[配偶者の所得区分, 納税者本人の所得区分] の形で参照可能
     """
-    return np.genfromtxt("openfisca_japan/assets/所得/配偶者特別控除額.csv",
+    return np.genfromtxt(COUNTRY_DIR + "/assets/所得/配偶者特別控除額.csv",
                   delimiter=",", skip_header=1, dtype="int64")[:, 1:]
 
 
@@ -53,7 +54,7 @@ def 老人控除対象配偶者_配偶者控除額表():
 
     老人控除対象配偶者_配偶者控除額表()[配偶者の所得区分, 納税者本人の所得区分] の形で参照可能
     """
-    return np.genfromtxt("openfisca_japan/assets/所得/配偶者控除額_老人控除対象配偶者.csv",
+    return np.genfromtxt(COUNTRY_DIR + "/assets/所得/配偶者控除額_老人控除対象配偶者.csv",
                          delimiter=",", skip_header=1, dtype="int64")[np.newaxis, 1:]
 
 
