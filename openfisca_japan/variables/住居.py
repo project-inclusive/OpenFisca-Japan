@@ -92,6 +92,7 @@ class 居住級地区分1(Variable):
                          [区分],
                          3)
 
+
 class 居住級地区分1_世帯員(Variable):
     # 世帯員ごとの所属世帯の居住級地区分 (障害者加算variableで世帯員ごとの身体障害者手帳等級との対応づけに必要)
     value_type = int
@@ -102,6 +103,7 @@ class 居住級地区分1_世帯員(Variable):
 
     def formula(対象人物, 対象期間, _parameters):
         return 対象人物.世帯("居住級地区分1", 対象期間)
+
 
 class 居住級地区分2(Variable):
     # m級地-n のとき n を返す
@@ -129,6 +131,7 @@ class 居住級地区分2(Variable):
             [級地区分インデックス != -1],
             [区分],
             2)
+
 
 class 居住級地区分2_世帯員(Variable):
     # 世帯員ごとの所属世帯の居住級地区分
