@@ -15,7 +15,7 @@ from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
 # Import the Entities specifically defined for this tax and benefit system
 from openfisca_japan import COUNTRY_DIR
-from openfisca_japan.entities import 世帯
+from openfisca_japan.entities import 世帯, 人物
 
 
 @cache
@@ -92,6 +92,16 @@ class 居住級地区分1(Variable):
                          [区分],
                          3)
 
+class 居住級地区分1_世帯員(Variable):
+    # 世帯員ごとの所属世帯の居住級地区分 (障害者加算variableで世帯員ごとの身体障害者手帳等級との対応づけに必要)
+    value_type = int
+    entity = 人物
+    label = "居住級地区分1_世帯員"
+    definition_period = DAY
+    reference = "https://best-selection.co.jp/media/wp-content/uploads/2021/03/seikatsuhogo-kyuchi2022.pdf"
+
+    def formula(対象人物, 対象期間, _parameters):
+        return 対象人物.世帯("居住級地区分1", 対象期間)
 
 class 居住級地区分2(Variable):
     # m級地-n のとき n を返す
@@ -119,3 +129,14 @@ class 居住級地区分2(Variable):
             [級地区分インデックス != -1],
             [区分],
             2)
+
+class 居住級地区分2_世帯員(Variable):
+    # 世帯員ごとの所属世帯の居住級地区分
+    value_type = int
+    entity = 人物
+    label = "居住級地区分2_世帯員"
+    definition_period = DAY
+    reference = "https://best-selection.co.jp/media/wp-content/uploads/2021/03/seikatsuhogo-kyuchi2022.pdf"
+
+    def formula(対象人物, 対象期間, _parameters):
+        return 対象人物.世帯("居住級地区分2", 対象期間)
