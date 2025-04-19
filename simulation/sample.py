@@ -6,10 +6,27 @@ https://openfisca.org/doc/simulate/run-simulation.html
 """
 
 import time
+import os
+import sys
+import locale
 
 import numpy as np
 from openfisca_core.simulation_builder import SimulationBuilder
 from openfisca_japan import CountryTaxBenefitSystem
+
+
+def check_cp932_env():
+    """
+    Windowsで [UnicodeDecodeError: 'cp932' codec can't decode byte...] が出た時の確認スクリプト
+
+    詳細対処法は以下リンクを参照
+    https://qiita.com/misohagi/items/e26c589506a69261fe04
+    """
+    print(os.environ.get("PYTHONIOENCODING"))
+    print(sys.getdefaultencoding())
+    print(sys.getfilesystemencoding())
+    print(sys.stdout.encoding)
+    print(locale.getpreferredencoding())
 
 
 def simulate_all():
@@ -46,14 +63,16 @@ def simulate_all():
     # 人物ID, 世帯IDとそれぞれ紐づくため
 
     # 人物データ. Numpyのndarray配列としてOpenFiscaに入力するためPandasを使った方が簡便
-    data_persons = np.loadtxt("data_persons.csv", delimiter=",", dtype=str)
+    data_persons = np.loadtxt("data_persons.csv", delimiter=",", dtype=str,
+                              encoding="utf-8")
     # data_persons_dict = {列名: 列の配列} のフォーマットにする
     data_persons_dict = {}
     for i in range(len(data_persons[0])):
         data_persons_dict[data_persons[0, i]] = data_persons[1:, i]
 
     # 世帯データ
-    data_households = np.loadtxt("data_households.csv", delimiter=",", dtype=str)
+    data_households = np.loadtxt("data_households.csv", delimiter=",", dtype=str,
+                                 encoding="utf-8")
     # data_households_dict = {列名: 列の配列} のフォーマットにする
     data_households_dict = {}
     for i in range(len(data_households[0])):
@@ -145,6 +164,7 @@ def simulate_生活保護():
 
 
 def main():
+    #check_cp932_env()
     simulate_all()
     #simulate_生活保護()  # 大量データの計算時間の計測
 
