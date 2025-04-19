@@ -35,7 +35,7 @@ format-style: encode-jananese-filename
 check-style: encode-jananese-filename
 	@# Do not analyse .gitignored files and simulation folder.
 	@# `make` needs `$$` to output `$`. Ref: http://stackoverflow.com/questions/2382764.
-	flake8 --exclude=./simulation `git ls-files | grep "\.py$$"`
+	flake8 --exclude=simulation `git ls-files | grep "\.py$$"`
 	@# check variables meet openfisca coding style
 	@# `grep` cannot be used here because it ignores Japanese file names.
 	ruff check
