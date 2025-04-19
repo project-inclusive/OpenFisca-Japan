@@ -5,10 +5,10 @@ OpenFiscaのシミュレーションサンプルコード
 https://openfisca.org/doc/simulate/run-simulation.html
 """
 
-import time
 import os
-import sys
+import time
 import locale
+import sys
 
 import numpy as np
 from openfisca_core.simulation_builder import SimulationBuilder
