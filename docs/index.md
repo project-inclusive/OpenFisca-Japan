@@ -25,4 +25,6 @@
 
 ### [チュートリアル](./tutorial.md)
 
+### [シミュレーション](./simulation.md)
+
 ### [変更履歴 (Change log)](./change_log.md)
