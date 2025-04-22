@@ -225,6 +225,11 @@ npm run cy:run
     - `setup.py`
   - (必要であれば) `README.md` の概要に対応制度追加
 - [開発版のページ](https://develop.openfisca-japan.pages.dev/)で見積もり結果が正常に表示されることを確認
+- ビルドしたwheelパッケージをPyPIにアップロード
+  - シミュレーションが簡便に実行できるよう、wheelパッケージをPyPIにアップロードしてpipでインストールできるようにする。
+  - `make build`でwheelパッケージをビルドする。(distフォルダにパッケージが作成される)
+  - [【PyPI 】Pythonの自作ライブラリをpipに公開する方法#PyPIへのユーザ登録](https://qiita.com/c60evaporator/items/e1ecccab07a607487dcf#pypi%E3%81%B8%E3%81%AE%E3%83%A6%E3%83%BC%E3%82%B6%E7%99%BB%E9%8C%B2)を参考に、テスト用PyPIと本番用PyPIにパッケージをアップロードする。  
+  テスト用PyPIからOpenFisca-Japanをインストールすると、必要な依存ライブラリはテスト用PyPIからインストールされるため、テスト用PyPIには存在しないものは手動で通常の本番用PyPIからインストールする。(OpenFisca-Core等)
 - developブランチからmainブランチへのPR作成、マージ
 - [本番のページ](https://shien-yadokari.proj-inclusive.org/)で見積もり結果が正常に表示されることを確認
   - mainブランチマージ後1分程度切り替わりのためバックエンドの404エラーが発生する可能性あり

@@ -13,7 +13,7 @@ deps:
 
 install: deps
 	@# Install OpenFisca-Extension-Template for development.
-	@# `make install` installs the editable version of OpenFisca-France.
+	@# `make install` installs the editable version of OpenFisca-Japan.
 	@# This allows contributors to test as they code.
 	pip install -e '.[dev]' --upgrade --use-deprecated=legacy-resolver
 
@@ -33,9 +33,9 @@ format-style: encode-jananese-filename
 	autopep8 `git ls-files | grep "\.py$$"`
 
 check-style: encode-jananese-filename
-	@# Do not analyse .gitignored files.
+	@# Do not analyse .gitignored files and simulation folder.
 	@# `make` needs `$$` to output `$`. Ref: http://stackoverflow.com/questions/2382764.
-	flake8 `git ls-files | grep "\.py$$"`
+	flake8 --exclude=simulation/sample.py `git ls-files | grep "\.py$$"`
 	@# check variables meet openfisca coding style
 	@# `grep` cannot be used here because it ignores Japanese file names.
 	ruff check
