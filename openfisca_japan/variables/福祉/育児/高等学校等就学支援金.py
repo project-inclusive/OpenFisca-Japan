@@ -7,6 +7,7 @@ from functools import cache
 import numpy as np
 from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
+from openfisca_japan import COUNTRY_DIR
 from openfisca_japan.entities import 世帯
 from openfisca_japan.variables.全般 import 高校生学年
 from openfisca_japan.variables.福祉.育児.高等学校奨学給付金 import 高校履修種別パターン, 高校運営種別パターン
@@ -25,7 +26,7 @@ def 支給限度額_学年制表():
     """
     # NOTE: 特別支援学校等、一部の高校履修種別は非対応（網羅すると判別のために利用者の入力負担が増えてしまうため）
     # https://www.mext.go.jp/a_menu/shotou/mushouka/__icsFiles/afieldfile/2020/04/30/100014428_4.pdf
-    return np.genfromtxt("openfisca_japan/assets/福祉/育児/高等学校等就学支援金/支給額/支給限度額_学年制.csv",
+    return np.genfromtxt(COUNTRY_DIR + "/assets/福祉/育児/高等学校等就学支援金/支給額/支給限度額_学年制.csv",
                          delimiter=",", skip_header=1, dtype="int64")[:, 1:]
 
 
@@ -38,7 +39,7 @@ def 支給限度額_単位制表():
     """
     # 月額の最大値として、年間取得可能最大単位数を取った場合の年額を12か月で按分した値を使用
     # https://www.mext.go.jp/a_menu/shotou/mushouka/__icsFiles/afieldfile/2020/04/30/100014428_4.pdf
-    return np.genfromtxt("openfisca_japan/assets/福祉/育児/高等学校等就学支援金/支給額/支給限度額_単位制.csv",
+    return np.genfromtxt(COUNTRY_DIR + "/assets/福祉/育児/高等学校等就学支援金/支給額/支給限度額_単位制.csv",
                          delimiter=",", skip_header=1, dtype="int64")[:, 1:]
 
 
@@ -49,7 +50,7 @@ def 加算額_学年制表():
 
     加算額_学年制表()[高校履修種別, 高校運営種別] の形で参照可能
     """
-    return np.genfromtxt("openfisca_japan/assets/福祉/育児/高等学校等就学支援金/支給額/加算額_学年制.csv",
+    return np.genfromtxt(COUNTRY_DIR + "/assets/福祉/育児/高等学校等就学支援金/支給額/加算額_学年制.csv",
                          delimiter=",", skip_header=1, dtype="int64")[:, 1:]
 
 
@@ -62,7 +63,7 @@ def 加算額_単位制表():
     """
     # 月額の最大値として、年間取得可能最大単位数を取った場合の年額を12か月で按分した値を使用
     # https://www.mext.go.jp/a_menu/shotou/mushouka/__icsFiles/afieldfile/2020/04/30/100014428_4.pdf
-    return np.genfromtxt("openfisca_japan/assets/福祉/育児/高等学校等就学支援金/支給額/加算額_単位制.csv",
+    return np.genfromtxt(COUNTRY_DIR + "/assets/福祉/育児/高等学校等就学支援金/支給額/加算額_単位制.csv",
                          delimiter=",", skip_header=1, dtype="int64")[:, 1:]
 
 
@@ -175,9 +176,9 @@ class 高等学校等就学支援金_所得判定基準(Variable):
         課税標準額 = 対象世帯("控除後住民税世帯高所得", 対象期間)
         調整控除 = 対象世帯("調整控除", 対象期間)
 
-        if 対象世帯.nb_persons(世帯.親) == 2:
-            課税標準額 += 対象世帯("世帯主の配偶者の控除後住民税所得", 対象期間)
-            調整控除 += 対象世帯("世帯主の配偶者の調整控除", 対象期間)
+        二人親である = 対象世帯.nb_persons(世帯.親) == 2
+        課税標準額 = 課税標準額 + 二人親である * 対象世帯("世帯主の配偶者の控除後住民税所得", 対象期間)
+        調整控除 = 調整控除 + 二人親である * 対象世帯("世帯主の配偶者の調整控除", 対象期間)
 
         return 課税標準額 * 0.06 - 調整控除
 
@@ -202,8 +203,8 @@ class 世帯主の配偶者の控除後住民税所得(Variable):
         # TODO: 世帯高所得ではなく自分、配偶者それぞれの所得から控除額を算出
         基礎控除 = np.select(
             [納税者の配偶者の所得 <= 24000000,
-             納税者の配偶者の所得 > 24000000 and 納税者の配偶者の所得 <= 24500000,
-             納税者の配偶者の所得 > 24500000 and 納税者の配偶者の所得 <= 25000000],
+             (納税者の配偶者の所得 > 24000000) * (納税者の配偶者の所得 <= 24500000),
+             (納税者の配偶者の所得 > 24500000) * (納税者の配偶者の所得 <= 25000000)],
             [430000,
              290000,
              150000],

@@ -195,14 +195,48 @@ npm run pretty
 npm run cy:run
 ```
 
+### 制度追加の流れ（バックエンド、フロントエンド開発の連携）
+
+- 1. 制度に必要な世帯、世帯員情報の洗い出し
+- 2. 制度情報の入力、出力の決定
+  - ※フロントエンドの仕様上、`見積もり結果`に表示する制度は世帯単位で算出する必要がある（個人に支給される支援であっても）
+  - 必要情報が多くフォームの入力負荷が高い場合、一部入力を省く代わりに幅のある結果（最大、最小）を返す選択肢もある
+- 3. バックエンド側で制度に対応するVariableを実装
+  - ※制度のVariableは`entity = 世帯`にする必要がある（フロントエンド側の制約）
+  - 結果に幅がある場合、Variable名を`{制度名}_最大`, `{制度名}_最小`とする
+  - 必要があれば依存する計算式を別Variableに実装（こちらは個人単位でもよい）
+    - 別のVariableから計算できない場合、ユーザーから受け取る必要があるためフロントエンド側にフォーム追加が必要
+- 4. フロントエンド側でフォームを実装
+  - ※バックエンド側で制度に対応するVariableが未定義の場合APIがエラーを返す
+    - フロントエンド側を先行開発したい場合はバックエンド側に空のVariableを実装しておく
+  - フォームの入力情報を `household` に設定することでバックエンドへのリクエストに含める
+    - リクエスト形式はバックエンド側のユニットテスト（yamlファイル）の`input.世帯`, `input.世帯員` の形式を参照
+      - `./openfisca_japan/tests/`
+    - 見積もり結果に制度を表示するには `dashboard/src/config/app_config.json` への追加が必要
+
 ## デプロイ方法
 
-### mainブランチマージ前の作業
-- docs/change_log.mdの更新
-- バックエンド OpenFisca-Japanパッケージのバージョン表記の更新
-  - requirements.txt
-  - setup.py
-- (必要であれば)README.mdの概要に対応制度追加
+### 新バージョンのリリース
+
+- 以下の内容を `develop` ブランチへマージ
+  - `docs/change_log.md` の更新
+  - バックエンド `OpenFisca-Japan` パッケージのバージョン表記の更新
+    - `requirements.txt`
+    - `setup.py`
+  - (必要であれば) `README.md` の概要に対応制度追加
+- [開発版のページ](https://develop.openfisca-japan.pages.dev/)で見積もり結果が正常に表示されることを確認
+- ビルドしたwheelパッケージをPyPIにアップロード
+  - シミュレーションが簡便に実行できるよう、wheelパッケージをPyPIにアップロードしてpipでインストールできるようにする。
+  - `make build`でwheelパッケージをビルドする。(distフォルダにパッケージが作成される)
+  - [【PyPI 】Pythonの自作ライブラリをpipに公開する方法#PyPIへのユーザ登録](https://qiita.com/c60evaporator/items/e1ecccab07a607487dcf#pypi%E3%81%B8%E3%81%AE%E3%83%A6%E3%83%BC%E3%82%B6%E7%99%BB%E9%8C%B2)を参考に、テスト用PyPIと本番用PyPIにパッケージをアップロードする。  
+  テスト用PyPIからOpenFisca-Japanをインストールすると、必要な依存ライブラリはテスト用PyPIからインストールされるため、テスト用PyPIには存在しないものは手動で通常の本番用PyPIからインストールする。(OpenFisca-Core等)
+- developブランチからmainブランチへのPR作成、マージ
+- [本番のページ](https://shien-yadokari.proj-inclusive.org/)で見積もり結果が正常に表示されることを確認
+  - mainブランチマージ後1分程度切り替わりのためバックエンドの404エラーが発生する可能性あり
+- TagとReleaseの作成
+  - `Releases` -> `Draft a new release` を選択
+  - `Choose a tag` へリリースしたいバージョンを入力し `Create a new tag`
+  - タイトルにバージョン、本文にリリースの概要を記載し `Publish release`
 
 ### バックエンド（OpenFisca Python APIサーバー）
 

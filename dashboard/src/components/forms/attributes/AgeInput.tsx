@@ -9,7 +9,13 @@ import { householdAtom } from '../../../state';
 import { useRecoilState } from 'recoil';
 
 import { toHalf } from '../../../utils/toHalf';
-import { isMobile } from 'react-device-detect';
+import {
+  isChrome,
+  isChromium,
+  isEdge,
+  isMobile,
+  isWindows,
+} from 'react-device-detect';
 
 export const AgeInput = ({
   personName,
@@ -42,11 +48,30 @@ export const AgeInput = ({
   }
 
   const handleAgeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    let value: number | string = toHalf(event.currentTarget.value) ?? 0;
+    let value: string = toHalf(event.currentTarget.value) ?? '';
     value = value.replace(/[^0-9]/g, '');
-    value = Number(value);
 
-    const inputAge = value <= 0 ? '' : value;
+    // NOTE: WindowsのChromium系ブラウザでは全角入力時に2回入力が発生してしまうため、片方を抑制
+    if (isWindows && (isChrome || isEdge || isChromium)) {
+      if (
+        event.nativeEvent instanceof InputEvent &&
+        event.nativeEvent.isComposing
+      ) {
+        // 前回と同じ値を設定して終了
+        // （設定しないままreturnすると未変換の全角入力が残ってしまいエンターキーを押すまで反映できなくなってしまう）
+        changeAge(Number(age));
+        return;
+      }
+    }
+
+    // If empty string, set as is
+    if (value === '') {
+      setAge('');
+      return;
+    }
+
+    const numValue = Number(value);
+    const inputAge = numValue < 0 || numValue > 200 ? '' : numValue; // 0~200歳に入力を制限(年齢が高すぎて誕生年が3桁になるとパース処理が煩雑なため)
     changeAge(Number(inputAge));
   };
 
@@ -69,11 +94,8 @@ export const AgeInput = ({
 
   return (
     <>
-      {/* Child Time Error */}
-      {mustInput && !you && <ErrorMessage condition={age === ''} />}
+      {mustInput && <ErrorMessage condition={age === ''} />}
 
-      {/* Error for the person's own time */}
-      {mustInput && you && <ErrorMessage condition={age === 0} />}
       <FormControl>
         <FormLabel
           fontSize={configData.style.itemFontSize}

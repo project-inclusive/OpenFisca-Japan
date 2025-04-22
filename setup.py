@@ -10,9 +10,9 @@ long_description = (this_directory / "README.md").read_text(encoding="utf-8")  #
 
 setup(
     name = "OpenFisca-Japan",
-    version = "1.2.3",
-    author = "OpenFisca Team",
-    author_email = "contact@openfisca.org",
+    version = "1.3.0",
+    author = "proj-inclusive",
+    author_email = "proj.inclusive@gmail.com",
     classifiers = [
         "Development Status :: 5 - Production/Stable",
         "License :: OSI Approved :: GNU Affero General Public License v3",
@@ -23,13 +23,13 @@ setup(
         "Programming Language :: Python :: 3.11",
         "Topic :: Scientific/Engineering :: Information Analysis",
         ],
-    description = "OpenFisca tax and benefit system for japan",
+    description = "OpenFisca tax and benefit system for Japan",
     long_description=long_description,
     long_description_content_type="text/markdown",
     keywords = "benefit microsimulation social tax",
     license = "http://www.fsf.org/licensing/licenses/agpl-3.0.html",
     license_files = ("LICENSE",),
-    url = "https://github.com/openfisca/country-template",
+    url = "https://github.com/project-inclusive/OpenFisca-Japan",
     include_package_data = True,  # Will read MANIFEST.in
     data_files = [
         (
