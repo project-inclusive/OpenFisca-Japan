@@ -102,6 +102,8 @@
     "detailedCalculationDescription": "「くわしく計算」モードでは、より正確な結果が表示されます。金額が上がる場合もあります。",
     "questionExamplesButtonText": "窓口での質問例",
     "screenshotButtonText": "このページを画像で保存",
+    "environmentButtonText": "環境情報を取得",
+    "environmentButtonCopiedToClipboard": "クリップボードにコピーしました",
     "shareLinkButtonText": "このページを共有",
     "shareLinkButtonCopiedToClipboard": "クリップボードにコピーしました",
     "consultationDescription": "まずは窓口に相談してみませんか？ きっとあなたの相談に寄り添ってくれるはずです",
@@ -118,9 +120,22 @@
     "chatbotDescription": [
       "追加で知りたいことがあればヤドカリくんにも聞いてみましょう。"
     ],
+    "environmentDescription": [
+      "不具合発生時の原因特定に使用する環境情報(OS、ブラウザ)を取得します。不具合報告の際にご利用ください。"
+    ],
     "questionnaireDescription": [
       "よろしければ改善のための簡単なアンケートにご協力ください。"
     ],
+    "emptyResultsDescription": {
+      "description1": "今回は支援が見つかりませんでした。次の可能性があります：",
+      "items": [
+        "入力をミスした（例：年収が高すぎた）",
+        "ヤドカリくんで今は探せない支援がある",
+        "将来環境が変わったら支援が見つかる（例：引っ越し、就職）",
+        "将来新しい制度ができたら支援が見つかる"
+      ],
+      "description2": "ヤドカリくんはいつでも応援していますよ"
+    },
     "benefitDescription": "給付される可能性のあるお金",
     "給付制度": {
       "caption": [
@@ -252,7 +267,7 @@
             "先天性の血液凝固因子異常症の治療のためC型肝炎を発症し健康被害を受けた方へ、生活の質（QOL）向上のため日常生活の状況を把握する事業。",
             "健康状態や生活状況を報告することで、謝礼金を受け取れます。"
           ],
-          "reference": "https://www.med.niigata-u.ac.jp/ifc/tebiki/blood/05.html",
+          "reference": "https://www.pmda.go.jp/relief-services/health-welfare/0006.html",
           "helpDesk": "baseHospital"
         },
         "障害基礎年金": {

@@ -6,7 +6,13 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { currentDateAtom, householdAtom } from '../../../state';
 
 import { toHalf } from '../../../utils/toHalf';
-import { isMobile } from 'react-device-detect';
+import {
+  isChrome,
+  isChromium,
+  isEdge,
+  isMobile,
+  isWindows,
+} from 'react-device-detect';
 
 export const Deposit = ({ personName }: { personName: string }) => {
   const navigationType = useNavigationType();
@@ -17,6 +23,19 @@ export const Deposit = ({ personName }: { personName: string }) => {
   const [shownDeposit, setShownDeposit] = useState<string | number>('');
 
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    // NOTE: WindowsのChromium系ブラウザでは全角入力時に2回入力が発生してしまうため、片方を抑制
+    if (isWindows && (isChrome || isEdge || isChromium)) {
+      if (
+        event.nativeEvent instanceof InputEvent &&
+        event.nativeEvent.isComposing
+      ) {
+        // 前回と同じ値を設定して終了
+        // （設定しないままreturnすると未変換の全角入力が残ってしまいエンターキーを押すまで反映できなくなってしまう）
+        setHousehold(household);
+        return;
+      }
+    }
+
     const newHousehold = {
       ...household,
     };
@@ -27,11 +46,15 @@ export const Deposit = ({ personName }: { personName: string }) => {
 
     // 「万円」単位を「円」に換算
     let deposit = parseInt(value) * 10000;
+    const maxDeposit = 10000000000; // オーバーフローしないよう上限を100億に設定
 
     // 正の整数以外は0に変換
     if (isNaN(deposit) || deposit < 0) {
       deposit = 0;
       setShownDeposit('');
+    } else if (deposit > maxDeposit) {
+      deposit = maxDeposit;
+      setShownDeposit(deposit / 10000);
     } else {
       setShownDeposit(deposit / 10000);
     }

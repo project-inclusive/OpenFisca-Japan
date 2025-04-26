@@ -278,7 +278,7 @@ return 居住地条件 * 金額
 # csvファイル読み込み
 @cache
 def 支給限度額_学年制表():
-    return np.genfromtxt("openfisca_japan/assets/福祉/育児/高等学校等就学支援金/支給額/支給限度額_学年制.csv",
+    return np.genfromtxt(COUNTRY_DIR + "/assets/福祉/育児/高等学校等就学支援金/支給額/支給限度額_学年制.csv",
                          delimiter=",", skip_header=1, dtype="int64")[:, 1:] # ヘッダーを読み込まないようインデックスは1始まり
 ```
 

@@ -15,14 +15,14 @@
 そのため、環境を変える場合は元の環境を停止してから新しく起動する。
 
     - フロントエンド・バックエンドを一括で環境構築・起動  
-      ```
+      ```bash
       # docker環境を構築・起動
       docker-compose up --build
       # 「Ctrlキー＋c」でdocker環境を停止
       ```
 
     - バックエンドのみ環境構築・起動  
-      ```
+      ```bash
       # docker環境を構築
       docker build ./ -t openfisca_japan
       # docker環境を起動
@@ -33,7 +33,7 @@
       ```
   
     - バックエンド(swagger-ui&openfisca)を環境構築・起動
-      ```
+      ```bash
       # docker環境を構築・起動
       docker compose up -d swagger-ui
       # ブラウザでSwagger-UIを表示する
@@ -48,7 +48,7 @@
       ![](./images/dev_note/swagger-ui-test-after-calculate.png)
 
     - フロントエンドのみ環境構築・起動  
-      ```
+      ```bash
       # dashboardのディレクトリに移動
       cd dashboard
       # docker環境を構築
@@ -86,13 +86,13 @@ Dockerを自分のPCにインストールする必要はありませんが、操
 
 ##### GitHub Codespaces で動作確認する
 
-```
+```bash
 make
 ```
 
 ##### GitHub Codespaces で API サーバーとして動かす
 
-```
+```bash
 make serve-local
 ```
 
@@ -100,9 +100,6 @@ make serve-local
 - GET http://localhost:50000/entities
 - GET http://localhost:50000/variables
 - GET http://localhost:50000/parameters
-
-
-
 
 ## 開発方法
 
@@ -136,26 +133,30 @@ make serve-local
   - `openfisca test --country-package openfisca_japan openfisca_japan/tests/<実行したいテストファイル或いはディレクトリパス>`
     - 上記コマンド実行時にテストファイル（~.yaml）を読み込みます
     - そのため、テストファイルのみ修正する場合はそれ自身を修正してコマンド実行すれば良いです
+
 #### 内部計算方法の修正
 - openfisca_japan/variables/~.py等の計算方法を規定するファイルを修正する
 - 以下のコマンドでビルドを行わないとテスト時に修正が反映されない
   - `make build`
 - その後、上述のテストを行う
 - 通常は標準出力は表示されませんが、例外を発生させると標準出力が表示されデバッグが容易になります
+- フロントエンドの制約上、見積もり結果に表示する制度のVariableは **`entity = 世帯` にする必要がある**
+  - 個人に依存する条件は世帯員単位で計算し、最終的な制度の金額のみ世帯単位で集計すると実装しやすいです
 
 #### テスト条件・結果を記載したCSVファイルから、yamlのテストファイルを自動生成する方法
 
-```
+```bash
 cd tools/make_tests
 bash generate.sh
 ```
-  
+
 - 上記コマンドで openfisca_japan/tests/generated 以下にyamlのテストファイルが作成される
   - そのテストファイルを上述の方法でテストする
+- 生成ファイルの形式を変えたい場合、新しい制度に対応する場合は `tools/make_tests/mylib/mymodule` 配下の生成スクリプトを修正する
 
 #### Variableの依存関係を確認する方法
 
-```
+```bash
 python tools/dependency_graph/dependency.py
 ```
 
@@ -164,13 +165,12 @@ python tools/dependency_graph/dependency.py
   - 他のVariableに依存していない場合青色で表示される
 - 実行には事前に [Graphviz](https://graphviz.org/) のインストールが必要
 
-```
+```bash
 # Ubuntuの場合
 sudo apt install graphviz
 python -m pip install graphviz
 sudo apt install xdg-utils
 ```
-
 
 ### フロントエンド
 - ルートディレクトリで以下コマンドを打ち、フロントエンドとバックエンドのDocker環境を一括で起動する
@@ -180,7 +180,7 @@ sudo apt install xdg-utils
 
 #### テスト、linter実行
 
-```
+```bash
 # dashboardディレクトリに移動
 cd dashboard
 
@@ -195,14 +195,48 @@ npm run pretty
 npm run cy:run
 ```
 
+### 制度追加の流れ（バックエンド、フロントエンド開発の連携）
+
+- 1. 制度に必要な世帯、世帯員情報の洗い出し
+- 2. 制度情報の入力、出力の決定
+  - ※フロントエンドの仕様上、`見積もり結果`に表示する制度は世帯単位で算出する必要がある（個人に支給される支援であっても）
+  - 必要情報が多くフォームの入力負荷が高い場合、一部入力を省く代わりに幅のある結果（最大、最小）を返す選択肢もある
+- 3. バックエンド側で制度に対応するVariableを実装
+  - ※制度のVariableは`entity = 世帯`にする必要がある（フロントエンド側の制約）
+  - 結果に幅がある場合、Variable名を`{制度名}_最大`, `{制度名}_最小`とする
+  - 必要があれば依存する計算式を別Variableに実装（こちらは個人単位でもよい）
+    - 別のVariableから計算できない場合、ユーザーから受け取る必要があるためフロントエンド側にフォーム追加が必要
+- 4. フロントエンド側でフォームを実装
+  - ※バックエンド側で制度に対応するVariableが未定義の場合APIがエラーを返す
+    - フロントエンド側を先行開発したい場合はバックエンド側に空のVariableを実装しておく
+  - フォームの入力情報を `household` に設定することでバックエンドへのリクエストに含める
+    - リクエスト形式はバックエンド側のユニットテスト（yamlファイル）の`input.世帯`, `input.世帯員` の形式を参照
+      - `./openfisca_japan/tests/`
+    - 見積もり結果に制度を表示するには `dashboard/src/config/app_config.json` への追加が必要
+
 ## デプロイ方法
 
-### mainブランチマージ前の作業
-- docs/change_log.mdの更新
-- バックエンド OpenFisca-Japanパッケージのバージョン表記の更新
-  - requirements.txt
-  - setup.py
-- (必要であれば)README.mdの概要に対応制度追加
+### 新バージョンのリリース
+
+- 以下の内容を `develop` ブランチへマージ
+  - `docs/change_log.md` の更新
+  - バックエンド `OpenFisca-Japan` パッケージのバージョン表記の更新
+    - `requirements.txt`
+    - `setup.py`
+  - (必要であれば) `README.md` の概要に対応制度追加
+- [開発版のページ](https://develop.openfisca-japan.pages.dev/)で見積もり結果が正常に表示されることを確認
+- ビルドしたwheelパッケージをPyPIにアップロード
+  - シミュレーションが簡便に実行できるよう、wheelパッケージをPyPIにアップロードしてpipでインストールできるようにする。
+  - `make build`でwheelパッケージをビルドする。(distフォルダにパッケージが作成される)
+  - [【PyPI 】Pythonの自作ライブラリをpipに公開する方法#PyPIへのユーザ登録](https://qiita.com/c60evaporator/items/e1ecccab07a607487dcf#pypi%E3%81%B8%E3%81%AE%E3%83%A6%E3%83%BC%E3%82%B6%E7%99%BB%E9%8C%B2)を参考に、テスト用PyPIと本番用PyPIにパッケージをアップロードする。  
+  テスト用PyPIからOpenFisca-Japanをインストールすると、必要な依存ライブラリはテスト用PyPIからインストールされるため、テスト用PyPIには存在しないものは手動で通常の本番用PyPIからインストールする。(OpenFisca-Core等)
+- developブランチからmainブランチへのPR作成、マージ
+- [本番のページ](https://shien-yadokari.proj-inclusive.org/)で見積もり結果が正常に表示されることを確認
+  - mainブランチマージ後1分程度切り替わりのためバックエンドの404エラーが発生する可能性あり
+- TagとReleaseの作成
+  - `Releases` -> `Draft a new release` を選択
+  - `Choose a tag` へリリースしたいバージョンを入力し `Create a new tag`
+  - タイトルにバージョン、本文にリリースの概要を記載し `Publish release`
 
 ### バックエンド（OpenFisca Python APIサーバー）
 
@@ -223,8 +257,6 @@ npm run cy:run
 - Cloudflare Pagesでmainブランチ、developブランチにpull (push)時にbuild, deployされる。
 
 - developブランチのデプロイURLは[https://develop.openfisca-japan.pages.dev/](https://develop.openfisca-japan.pages.dev/)
-
-
 
 ## TroubleShooting
 
@@ -271,14 +303,13 @@ npm run cy:run
   In Netlify depoloy environment, the error is probably not occured.  
   The error may have happened when the node:18-bullseye docker image went up from 18.16 to 18.17, but same error occured when reversion back to 16. 
 
-
 ### Backend
 
 - (for Windows) 環境変数を利用して Python に UTF-8 を強制させる  
 Unicode Decoding Error が起きるときもこちらの通りにしてください。
 Powershell を起動し以下のコマンドを入力して下さい。
 
-  ```
+  ```powershell
   $env:PYTHONUTF8=1
   ```
 

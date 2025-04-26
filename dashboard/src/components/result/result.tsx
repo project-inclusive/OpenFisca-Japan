@@ -18,6 +18,8 @@ import shortLink, {
   getShareKey,
 } from './shareLink';
 import { QRCodeCanvas } from 'qrcode.react';
+import { EmptyResults } from './emptyResults';
+import { useDeviceData } from 'react-device-detect';
 
 const createFileName = (extension: string = '', ...names: string[]) => {
   if (!extension) {
@@ -51,6 +53,7 @@ export const Result = () => {
   const [result, calculate] = useCalculate();
   const [isDisplayChat, setIsDisplayChat] = useState('none');
   const [shareLink, setShareLink] = useState(false);
+  const [enviroment, setEnvironment] = useState(false);
   const [shareUrl, setShareUrl] = useState<string>('');
 
   useEffect(() => {
@@ -103,13 +106,13 @@ export const Result = () => {
   const download = (
     image: string,
     {
-      name = 'お金サポート_結果',
+      name = '見積もり結果',
       extension = 'png',
     }: { name?: string; extension?: string } = {}
   ): void => {
     const a = document.createElement('a');
     a.href = image;
-    a.download = createFileName(extension, name);
+    a.download = createFileName(extension, `${name}_${getTime()}`);
     a.click();
     setLoadingScreenshotDownload(false);
   };
@@ -158,6 +161,24 @@ export const Result = () => {
       });
   };
 
+  const deviceData = useDeviceData(window.navigator.userAgent);
+
+  const environmentButton = () => {
+    // 必要な情報のみ抽出し文字列化
+    const { browser, os } = deviceData;
+    const envInfoText = JSON.stringify({ browser, os });
+    clipBoard(envInfoText)
+      .then(() => {
+        setEnvironment(true);
+        setTimeout(() => {
+          setEnvironment(false);
+        }, 3000);
+      })
+      .catch((e: any) => {
+        console.error('Failed to copy text:', e);
+      });
+  };
+
   const resuiredHousehold = (household: any) => {
     if (typeof household !== 'object') {
       return false;
@@ -173,6 +194,23 @@ export const Result = () => {
 
     return true;
   };
+
+  function getTime() {
+    // Get the current date and time and adjust to Japan time
+    const japanTime = new Date().toLocaleString('ja-JP', {
+      timeZone: 'Asia/Tokyo',
+    });
+    const date = new Date(japanTime);
+
+    // Format the date and time
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+
+    return `${year}${month}${day}${hours}${minutes}`;
+  }
 
   return (
     <div ref={divRef}>
@@ -215,6 +253,7 @@ export const Result = () => {
             {configData.result.topDescription}
           </Center>
 
+          <EmptyResults result={result} />
           <Benefit result={result} />
           <Loan result={result} />
 
@@ -341,6 +380,28 @@ export const Result = () => {
               ></iframe>
             </Box>
           </Box>
+
+          <Center pr={4} pl={4} pb={4}>
+            {configData.result.environmentDescription[0]}
+          </Center>
+
+          <Center pr={4} pl={4} pb={4}>
+            <Button
+              onClick={() => environmentButton()}
+              as="button"
+              fontSize={configData.style.subTitleFontSize}
+              borderRadius="xl"
+              height="2em"
+              width="100%"
+              bg="gray.500"
+              color="white"
+              _hover={{ bg: 'gray.600' }}
+            >
+              {enviroment
+                ? configData.result.environmentButtonCopiedToClipboard
+                : configData.result.environmentButtonText}
+            </Button>
+          </Center>
 
           <Center pr={4} pl={4} pb={4}>
             {configData.result.questionnaireDescription[0]}

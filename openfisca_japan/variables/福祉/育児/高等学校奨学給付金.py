@@ -8,6 +8,7 @@ import numpy as np
 from openfisca_core.indexed_enums import Enum
 from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
+from openfisca_japan import COUNTRY_DIR
 from openfisca_japan.entities import 世帯, 人物
 from openfisca_japan.variables.全般 import 高校生学年
 
@@ -19,7 +20,7 @@ def 国立高等学校奨学給付金表():
 
     国立高等学校奨学給付金表()[世帯区分, 履修形態] の形で参照可能
     """
-    return np.genfromtxt("openfisca_japan/assets/福祉/育児/高等学校奨学給付金/国立高等学校奨学給付金額.csv",
+    return np.genfromtxt(COUNTRY_DIR + "/assets/福祉/育児/高等学校奨学給付金/国立高等学校奨学給付金額.csv",
                          delimiter=",", skip_header=1, dtype="int64")[:, 1:]
 
 
@@ -30,7 +31,7 @@ def 公立高等学校奨学給付金表():
 
     公立高等学校奨学給付金表()[世帯区分, 履修形態] の形で参照可能
     """
-    return np.genfromtxt("openfisca_japan/assets/福祉/育児/高等学校奨学給付金/公立高等学校奨学給付金額.csv",
+    return np.genfromtxt(COUNTRY_DIR + "/assets/福祉/育児/高等学校奨学給付金/公立高等学校奨学給付金額.csv",
                          delimiter=",", skip_header=1, dtype="int64")[:, 1:]
 
 
@@ -41,7 +42,7 @@ def 私立高等学校奨学給付金表():
 
     私立高等学校奨学給付金表()[世帯区分, 履修形態] の形で参照可能
     """
-    return np.genfromtxt("openfisca_japan/assets/福祉/育児/高等学校奨学給付金/私立高等学校奨学給付金額.csv",
+    return np.genfromtxt(COUNTRY_DIR + "/assets/福祉/育児/高等学校奨学給付金/私立高等学校奨学給付金額.csv",
                          delimiter=",", skip_header=1, dtype="int64")[:, 1:]
 
 
