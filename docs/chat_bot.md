@@ -33,6 +33,8 @@ chat gptとは違い、テキストの検索・収集・整形を行うため、
 - [港区](https://www.city.minato.tokyo.jp/dejitarukaikakutan/line-shinsei.html)
 - [豊島区](https://www.city.toshima.lg.jp/419/2105251620.html)
 
+### ラインチャットボットの追加
+[こちら](https://line.me/R/ti/p/@573fqezc?oat_content=url)から追加できます
 
 ## ChatGPT_Retrieval_Pluginについて
 

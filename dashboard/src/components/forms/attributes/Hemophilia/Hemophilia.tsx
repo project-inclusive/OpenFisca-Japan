@@ -32,23 +32,23 @@ export const Hemophilia = ({ personName }: { personName: string }) => {
       if (!event.target.checked) {
         const newHousehold = { ...household };
         const factors = [
-          '第I因子欠乏症',
-          '第II因子欠乏症',
-          '第V因子欠乏症',
-          '第VII因子欠乏症',
-          '第VIII因子欠乏症',
-          '第IX因子欠乏症',
-          '第X因子欠乏症',
-          '第XI因子欠乏症',
-          '第XII因子欠乏症',
-          '第XIII因子欠乏症',
-          'フォンヴィルブランド病',
-          'その他',
+          '血液凝固因子異常症_第I因子欠乏症',
+          '血液凝固因子異常症_第II因子欠乏症',
+          '血液凝固因子異常症_第V因子欠乏症',
+          '血液凝固因子異常症_第VII因子欠乏症',
+          '血液凝固因子異常症_第VIII因子欠乏症',
+          '血液凝固因子異常症_第IX因子欠乏症',
+          '血液凝固因子異常症_第X因子欠乏症',
+          '血液凝固因子異常症_第XI因子欠乏症',
+          '血液凝固因子異常症_第XII因子欠乏症',
+          '血液凝固因子異常症_第XIII因子欠乏症',
+          '血液凝固因子異常症_フォンヴィルブランド病',
+          '血液凝固因子異常症_その他',
         ];
 
         factors.forEach((factor) => {
-          newHousehold.世帯員[personName].血液凝固因子異常症種別 = {
-            [currentDate]: factor,
+          newHousehold.世帯員[personName][factor] = {
+            [currentDate]: false,
           };
         });
 
@@ -63,24 +63,25 @@ export const Hemophilia = ({ personName }: { personName: string }) => {
   useEffect(() => {
     const personObj = household.世帯員[personName];
     const factors = [
-      '第I因子欠乏症',
-      '第II因子欠乏症',
-      '第V因子欠乏症',
-      '第VII因子欠乏症',
-      '第VIII因子欠乏症',
-      '第IX因子欠乏症',
-      '第X因子欠乏症',
-      '第XI因子欠乏症',
-      '第XII因子欠乏症',
-      '第XIII因子欠乏症',
-      'フォンヴィルブランド病',
-      'その他',
+      '血液凝固因子異常症_第I因子欠乏症',
+      '血液凝固因子異常症_第II因子欠乏症',
+      '血液凝固因子異常症_第V因子欠乏症',
+      '血液凝固因子異常症_第VII因子欠乏症',
+      '血液凝固因子異常症_第VIII因子欠乏症',
+      '血液凝固因子異常症_第IX因子欠乏症',
+      '血液凝固因子異常症_第X因子欠乏症',
+      '血液凝固因子異常症_第XI因子欠乏症',
+      '血液凝固因子異常症_第XII因子欠乏症',
+      '血液凝固因子異常症_第XIII因子欠乏症',
+      '血液凝固因子異常症_フォンヴィルブランド病',
+      '血液凝固因子異常症_その他',
     ];
 
     const hasAnyFactor = factors.some(
       (factor) =>
         personObj.血液凝固因子異常症種別 &&
-        personObj.血液凝固因子異常症種別[currentDate] !== factor
+        personObj.血液凝固因子異常症種別[factor] &&
+        personObj.血液凝固因子異常症種別[factor][currentDate] !== false
     );
 
     if (hasAnyFactor) {
