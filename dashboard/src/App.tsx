@@ -3,7 +3,6 @@ import { AbsoluteCenter } from '@chakra-ui/react';
 import CaluculationForm from './components/forms/caluculationForm';
 import Description from './components/Description';
 import QuestionExamples from './components/QuestionExamples';
-import Terms from './components/Terms';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import { Result } from './components/result/result';
 import { GenericError } from './components/errors/GenericError';
@@ -11,6 +10,7 @@ import { NotFoundError } from './components/errors/NotFoundError';
 import { FormResponseError } from './components/errors/FormResponseError';
 import { useRecoilState } from 'recoil';
 import { currentDateAtom } from './state';
+import { AgeQuestion } from './components/forms/templates/ageQuestion';
 
 function App() {
   const currentDate = useRecoilState(currentDateAtom);
@@ -64,6 +64,12 @@ function App() {
               path: '/response-error',
               element: <FormResponseError />,
             },
+            // TODO: 新UI確認用に追加したパス。移行が終わったら消す
+            {
+              path: '/dummy/age',
+              element: <AgeQuestion personName="あなた" mustInput={true} />,
+            },
+            // (ダミーここまで)
             {
               path: '/*',
               element: <NotFoundError />,
