@@ -11,6 +11,7 @@ import { FormResponseError } from './components/errors/FormResponseError';
 import { useRecoilState } from 'recoil';
 import { currentDateAtom } from './state';
 import { AgeQuestion } from './components/forms/templates/ageQuestion';
+import { AddressQuestion } from './components/forms/templates/addressQuestion';
 
 function App() {
   const currentDate = useRecoilState(currentDateAtom);
@@ -68,6 +69,10 @@ function App() {
             {
               path: '/dummy/age',
               element: <AgeQuestion personName="あなた" mustInput={true} />,
+            },
+            {
+              path: '/dummy/address',
+              element: <AddressQuestion mustInput={true} />,
             },
             // (ダミーここまで)
             {
