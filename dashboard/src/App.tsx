@@ -12,6 +12,7 @@ import { useRecoilState } from 'recoil';
 import { currentDateAtom } from './state';
 import { AgeQuestion } from './components/forms/templates/ageQuestion';
 import { AddressQuestion } from './components/forms/templates/addressQuestion';
+import { YesNoQuestion } from './components/forms/templates/yesNoQuestion';
 
 function App() {
   const currentDate = useRecoilState(currentDateAtom);
@@ -73,6 +74,10 @@ function App() {
             {
               path: '/dummy/address',
               element: <AddressQuestion mustInput={true} />,
+            },
+            {
+              path: '/dummy/yesno',
+              element: <YesNoQuestion mustInput={true} subtitle="○○ですか？" />,
             },
             // (ダミーここまで)
             {
