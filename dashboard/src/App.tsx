@@ -15,6 +15,8 @@ import { AddressQuestion } from './components/forms/templates/addressQuestion';
 import { YesNoQuestion } from './components/forms/templates/yesNoQuestion';
 import { SelectionQuestion } from './components/forms/templates/selectionQuestion';
 import { IncomeQuestion } from './components/forms/templates/incomeQuestion';
+import { ChildAgeQuestion } from './components/forms/templates/childAgeQuestion';
+import { PersonNumQuestion } from './components/forms/templates/personNumQuestion';
 
 function App() {
   const currentDate = useRecoilState(currentDateAtom);
@@ -98,6 +100,21 @@ function App() {
             {
               path: '/dummy/income',
               element: <IncomeQuestion personName="あなた" mustInput={true} />,
+            },
+            {
+              path: '/dummy/child-age',
+              element: (
+                <ChildAgeQuestion personName="あなた" mustInput={true} />
+              ),
+            },
+            {
+              path: '/dummy/person-num',
+              element: (
+                <PersonNumQuestion
+                  mustInput={true}
+                  subtitle="子どもはいますか？"
+                />
+              ),
             },
             // (ダミーここまで)
             {
