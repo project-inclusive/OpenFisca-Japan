@@ -7,6 +7,7 @@ import {
   FormLabel,
   Input,
   Select,
+  Center,
 } from '@chakra-ui/react';
 
 import configData from '../../../config/app_config.json';
@@ -299,14 +300,16 @@ export const ChildAgeQuestion = ({
             fontSize={configData.style.itemFontSize}
             fontWeight="Regular"
           >
-            <HStack>
-              <Box>年齢</Box>
-              {mustInput && (
-                <Box color="red" fontSize="0.7em">
-                  必須
-                </Box>
-              )}
-            </HStack>
+            <Center>
+              <HStack>
+                <Box>年齢</Box>
+                {mustInput && (
+                  <Box color="red" fontSize="0.7em">
+                    必須
+                  </Box>
+                )}
+              </HStack>
+            </Center>
           </FormLabel>
 
           <HStack mb={4}>

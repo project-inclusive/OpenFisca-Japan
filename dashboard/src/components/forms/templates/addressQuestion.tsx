@@ -1,6 +1,13 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useNavigationType } from 'react-router-dom';
-import { Box, Select, HStack, FormControl, FormLabel } from '@chakra-ui/react';
+import {
+  Box,
+  Select,
+  HStack,
+  FormControl,
+  FormLabel,
+  Center,
+} from '@chakra-ui/react';
 
 import configData from '../../../config/app_config.json';
 import pmJson from '../../../config/都道府県市区町村.json';
@@ -112,16 +119,18 @@ export const AddressQuestion = ({ mustInput }: { mustInput: boolean }) => {
           fontSize={configData.style.itemFontSize}
           fontWeight="Regular"
         >
-          <HStack>
-            <Box fontSize={configData.style.itemFontSize}>
-              寝泊まりしている地域
-            </Box>
-            {mustInput && (
-              <Box color="red" fontSize="0.7em">
-                必須
+          <Center>
+            <HStack>
+              <Box fontSize={configData.style.itemFontSize}>
+                寝泊まりしている地域
               </Box>
-            )}
-          </HStack>
+              {mustInput && (
+                <Box color="red" fontSize="0.7em">
+                  必須
+                </Box>
+              )}
+            </HStack>
+          </Center>
         </FormLabel>
 
         <HStack mb={4}>

@@ -8,6 +8,7 @@ import {
   FormLabel,
   Button,
   VStack,
+  Center,
 } from '@chakra-ui/react';
 
 import configData from '../../../config/app_config.json';
@@ -69,15 +70,17 @@ export const SelectionQuestion = ({
           fontSize={configData.style.itemFontSize}
           fontWeight="Regular"
         >
-          <HStack>
-            {/* TODO: 質問文を引数から受け取る */}
-            <Box fontSize={configData.style.itemFontSize}>{subtitle}</Box>
-            {mustInput && (
-              <Box color="red" fontSize="0.7em">
-                必須
-              </Box>
-            )}
-          </HStack>
+          <Center>
+            <HStack>
+              {/* TODO: 質問文を引数から受け取る */}
+              <Box fontSize={configData.style.itemFontSize}>{subtitle}</Box>
+              {mustInput && (
+                <Box color="red" fontSize="0.7em">
+                  必須
+                </Box>
+              )}
+            </HStack>
+          </Center>
         </FormLabel>
 
         <VStack mb={4}>

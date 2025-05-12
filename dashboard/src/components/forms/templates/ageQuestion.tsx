@@ -1,6 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigationType } from 'react-router-dom';
-import { Box, HStack, FormControl, FormLabel, Input } from '@chakra-ui/react';
+import {
+  Box,
+  HStack,
+  FormControl,
+  FormLabel,
+  Input,
+  Center,
+} from '@chakra-ui/react';
 
 import configData from '../../../config/app_config.json';
 
@@ -99,14 +106,16 @@ export const AgeQuestion = ({
 
         <FormControl>
           <FormLabel fontSize={configData.style.itemFontSize}>
-            <HStack>
-              <Box>年齢</Box>
-              {mustInput && (
-                <Box color="red" fontSize="0.7em">
-                  必須
-                </Box>
-              )}
-            </HStack>
+            <Center>
+              <HStack>
+                <Box>年齢</Box>
+                {mustInput && (
+                  <Box color="red" fontSize="0.7em">
+                    必須
+                  </Box>
+                )}
+              </HStack>
+            </Center>
           </FormLabel>
 
           <HStack mb={4}>
