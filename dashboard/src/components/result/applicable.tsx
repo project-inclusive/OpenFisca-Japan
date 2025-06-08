@@ -36,11 +36,22 @@ const showsHelpDesk = (
     );
   }
 
+  if (allowanceName === '埼玉県私立学校の父母負担軽減') {
+    // 埼玉県の場合のみ表示（埼玉県独自の精度のため https://www.pref.saitama.lg.jp/a0204/fubofutan2.html ）
+    return result.世帯一覧.世帯1.居住都道府県[currentDate] === '埼玉県';
+  }
+
   // それ以外の場合: 無条件で表示
   return true;
 };
 
-export const Applicable = ({ result }: { result: any }) => {
+export const Applicable = ({
+  result,
+  frontendHouseholdResult,
+}: {
+  result: any;
+  frontendHouseholdResult: any;
+}) => {
   const [displayedResult, setDisplayedResult] = useState<any>();
   const currentDate = useRecoilValue(currentDateAtom);
 
@@ -52,6 +63,7 @@ export const Applicable = ({ result }: { result: any }) => {
     const applicableResult: Obj = {};
 
     if (result) {
+      // バックエンドから返ってきた結果
       for (const [allowanceName, allowanceInfo] of Object.entries(
         configData.result.該当制度.制度一覧
       )) {
@@ -68,9 +80,29 @@ export const Applicable = ({ result }: { result: any }) => {
           }
         }
       }
-      console.log(applicableResult);
+
+      // フロントエンドで計算した結果
+      for (const [allowanceName, allowanceInfo] of Object.entries(
+        configData.result.該当制度.制度一覧
+      )) {
+        if (allowanceInfo.variableName in frontendHouseholdResult.support) {
+          if (frontendHouseholdResult.support[allowanceInfo.variableName]) {
+            applicableResult[allowanceName] = {
+              name: allowanceName,
+              caption: allowanceInfo.caption,
+              reference: allowanceInfo.reference,
+              helpDesk:
+                showsHelpDesk(allowanceName, result, currentDate) &&
+                allowanceInfo.helpDesk,
+            };
+          }
+        }
+      }
+
       setDisplayedResult(Object.values(applicableResult));
     }
+
+    // NOTE: frontendHouseholdResultを指定するとuseEffectが無限ループするためresultのみ指定
   }, [result]);
 
   const existsResult = () => {
@@ -109,12 +141,14 @@ export const Applicable = ({ result }: { result: any }) => {
                       </span>
                     ))}
                   </Text>
-                  <Box color="blue">
-                    <a href={val.reference} target="_blank" rel="noreferrer">
-                      詳細リンク
-                      <ExternalLinkIcon ml={1} />
-                    </a>
-                  </Box>
+                  {val.reference && (
+                    <Box color="blue">
+                      <a href={val.reference} target="_blank" rel="noreferrer">
+                        詳細リンク
+                        <ExternalLinkIcon ml={1} />
+                      </a>
+                    </Box>
+                  )}
                   {val.helpDesk && <HelpDesk name={val.helpDesk} />}
                 </AccordionPanel>
               </AccordionItem>
