@@ -20,6 +20,7 @@ import shortLink, {
 import { QRCodeCanvas } from 'qrcode.react';
 import { EmptyResults } from './emptyResults';
 import { useDeviceData } from 'react-device-detect';
+import { Applicable } from './applicable';
 
 const createFileName = (extension: string = '', ...names: string[]) => {
   if (!extension) {
@@ -256,6 +257,7 @@ export const Result = () => {
           <EmptyResults result={result} />
           <Benefit result={result} />
           <Loan result={result} />
+          <Applicable result={result} />
 
           {/* 被災者支援制度モードは他の支援制度も探せるリンクを載せる */}
           {isDisasterCalculation && (
