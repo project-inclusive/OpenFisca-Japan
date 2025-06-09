@@ -3,8 +3,8 @@ import { HelpDeskData } from './窓口情報形式';
 export const disabilityCertificateData: HelpDeskData = {
   埼玉県: {
     富士見市: {
-      施設名: '富士見市障がい福祉課給付係',
-      所在地: '埼玉県富士見市大字鶴馬1800-1 市庁舎1階',
+      施設名: '富士見市役所 障がい福祉課 給付係',
+      所在地: '埼玉県富士見市大字鶴馬1800-1',
       電話番号: '049-257-6114',
       WebサイトURL:
         'https://www.city.fujimi.saitama.jp/kenko_fukushi_iryo/05syougaisya/tecyou/2010-0520-1656-145.html',
@@ -15,8 +15,8 @@ export const disabilityCertificateData: HelpDeskData = {
 export const disabilityAllowanceData: HelpDeskData = {
   埼玉県: {
     富士見市: {
-      施設名: '富士見市障がい福祉課給付係',
-      所在地: '埼玉県富士見市大字鶴馬1800-1 市庁舎1階',
+      施設名: '富士見市役所 障がい福祉課 給付係',
+      所在地: '埼玉県富士見市大字鶴馬1800-1',
       電話番号: '049-257-6114',
       WebサイトURL:
         'https://www.city.fujimi.saitama.jp/kenko_fukushi_iryo/05syougaisya/teate/2010-0511-2132-136.html',
@@ -27,8 +27,8 @@ export const disabilityAllowanceData: HelpDeskData = {
 export const independenceSupportMedicalData: HelpDeskData = {
   埼玉県: {
     富士見市: {
-      施設名: '富士見市障がい福祉課給付係',
-      所在地: '埼玉県富士見市大字鶴馬1800-1 市庁舎1階',
+      施設名: '富士見市役所 障がい福祉課 給付係',
+      所在地: '埼玉県富士見市大字鶴馬1800-1',
       電話番号: '049-257-6114',
       WebサイトURL:
         'https://www.city.fujimi.saitama.jp/kenko_fukushi_iryo/05syougaisya/seishin/2010-0810-1644-29.html',
@@ -39,8 +39,8 @@ export const independenceSupportMedicalData: HelpDeskData = {
 export const severeDisabilityMedialExpensesData: HelpDeskData = {
   埼玉県: {
     富士見市: {
-      施設名: '富士見市障がい福祉課給付係',
-      所在地: '埼玉県富士見市大字鶴馬1800-1 市庁舎1階',
+      施設名: '富士見市役所 障がい福祉課 給付係',
+      所在地: '埼玉県富士見市大字鶴馬1800-1',
       電話番号: '049-257-6114',
       WebサイトURL:
         'https://www.city.fujimi.saitama.jp/kenko_fukushi_iryo/05syougaisya/2018-1025-1028-31.html',

@@ -208,7 +208,7 @@ export const frontendHouseholdAtom = atom<FrontendHousehold>({
     },
     support: {
       '雇用保険（失業手当）': false,
-      '再就職支援（職業訓練・ハロートレーニング）': false,
+      '求職者支援制度（職業訓練・ハロートレーニング）': false,
       '住宅支援（住居確保給付金）': false,
       '健康保険・年金の減免制度（国民健康保険に加入している場合）': false,
       '健康保険・年金の減免制度（国民年金に加入している場合）': false,
@@ -225,9 +225,11 @@ export const frontendHouseholdAtom = atom<FrontendHousehold>({
         false,
       '出産手当金（会社員・公務員向け）': false,
       育児休業給付金: false,
-      高額療養費制度: false,
+      '高額療養費制度（国民健康保険に加入している場合）': false,
+      '高額療養費制度（共済組合、協会けんぽまたは健康保険組合に加入している場合）':
+        false,
       富士見市産後ケア事業: false,
-      富士見市子ども医療費助成: false,
+      富士見市こども医療費助成: false,
       ひとり親家庭等医療費助成: false,
       未熟児養育医療費助成: false,
       小児慢性特定疾患医療費助成: false,

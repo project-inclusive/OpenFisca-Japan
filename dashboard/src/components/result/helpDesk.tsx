@@ -15,7 +15,10 @@ import {
 } from '../../config/仕事';
 import { publicAssistanceData } from '../../config/生活保護';
 import { nationalPensionSystemData } from '../../config/国民年金';
-import { nationalHealthInsuranceData } from '../../config/国民健康保険';
+import {
+  insuranceMedicalExpensesData,
+  nationalHealthInsuranceData,
+} from '../../config/国民健康保険';
 import {
   fujimiChildBirthData,
   midwiferyData,
@@ -528,6 +531,10 @@ export const InjuryAndIllnessAllowanceHelpDesk = () => {
   return <HelpDeskTemplate helpDeskData={injuryAndIllnessAllowanceData} />;
 };
 
+export const InsuranceMedicalExpensesHelpDesk = () => {
+  return <HelpDeskTemplate helpDeskData={insuranceMedicalExpensesData} />;
+};
+
 // 窓口名と窓口の対応
 export const HelpDesk = ({ name }: { name: string }) => {
   const helpDesks: { [name: string]: JSX.Element } = {
@@ -563,6 +570,7 @@ export const HelpDesk = ({ name }: { name: string }) => {
     saitamaPrivateSchool: <SaitamaPrivateSchoolHelpDesk />,
     childAllowance: <ChildAllowanceHelpDesk />,
     injuryAndIllnessAllowance: <InjuryAndIllnessAllowanceHelpDesk />,
+    insuranceMedicalExpenses: <InsuranceMedicalExpensesHelpDesk />,
   };
 
   return helpDesks[name];

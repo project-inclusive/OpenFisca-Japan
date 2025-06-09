@@ -19,8 +19,9 @@ export const calculateFrontendHouseHold = (
 
   if (calcuatedHouseHold.difficulty['仕事について']) {
     calcuatedHouseHold.support['雇用保険（失業手当）'] = true;
-    calcuatedHouseHold.support['再就職支援（職業訓練・ハロートレーニング）'] =
-      true;
+    calcuatedHouseHold.support[
+      '求職者支援制度（職業訓練・ハロートレーニング）'
+    ] = true;
     calcuatedHouseHold.support['住宅支援（住居確保給付金）'] = true;
     calcuatedHouseHold.support[
       '健康保険・年金の減免制度（国民健康保険に加入している場合）'
@@ -43,6 +44,9 @@ export const calculateFrontendHouseHold = (
       '健康保険・年金の減免制度（国民健康保険に加入している場合）'
     ] = true;
     calcuatedHouseHold.support[
+      '健康保険・年金の減免制度（国民年金に加入している場合）'
+    ] = true;
+    calcuatedHouseHold.support[
       '健康保険・年金の減免制度（共済組合、協会けんぽまたは健康保険組合に加入している場合）'
     ] = true;
   }
@@ -50,7 +54,7 @@ export const calculateFrontendHouseHold = (
   if (calcuatedHouseHold.difficulty['出産や子育てについて']) {
     if (prefecture === '埼玉県' && city === '富士見市') {
       calcuatedHouseHold.support['富士見市産後ケア事業'] = true;
-      calcuatedHouseHold.support['富士見市子ども医療費助成'] = true;
+      calcuatedHouseHold.support['富士見市こども医療費助成'] = true;
       calcuatedHouseHold.support['富士見市出産・子育て応援給付金'] = true;
     }
 
@@ -62,7 +66,12 @@ export const calculateFrontendHouseHold = (
     ] = true;
     calcuatedHouseHold.support['出産手当金（会社員・公務員向け）'] = true;
     calcuatedHouseHold.support['育児休業給付金'] = true;
-    calcuatedHouseHold.support['高額療養費制度'] = true;
+    calcuatedHouseHold.support[
+      '高額療養費制度（国民健康保険に加入している場合）'
+    ] = true;
+    calcuatedHouseHold.support[
+      '高額療養費制度（共済組合、協会けんぽまたは健康保険組合に加入している場合）'
+    ] = true;
     calcuatedHouseHold.support[
       '健康保険・年金の減免制度（国民健康保険に加入している場合）'
     ] = true;
@@ -95,7 +104,12 @@ export const calculateFrontendHouseHold = (
   }
 
   if (calcuatedHouseHold.difficulty['入院について']) {
-    calcuatedHouseHold.support['高額療養費制度'] = true;
+    calcuatedHouseHold.support[
+      '高額療養費制度（国民健康保険に加入している場合）'
+    ] = true;
+    calcuatedHouseHold.support[
+      '高額療養費制度（共済組合、協会けんぽまたは健康保険組合に加入している場合）'
+    ] = true;
     calcuatedHouseHold.support['医療費控除（確定申告）'] = true;
   }
 
