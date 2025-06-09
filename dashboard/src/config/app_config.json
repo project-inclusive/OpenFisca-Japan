@@ -146,13 +146,13 @@
           "unit": "円/月",
           "caption": ["中学校卒業までの児童を養育している方に給付される手当。"],
           "reference": "https://www.cfa.go.jp/policies/kokoseido/jidouteate/annai/",
-          "helpDesk": null
+          "helpDesk": "childAllowance"
         },
         "児童扶養手当": {
           "unit": "円/月",
           "caption": ["ひとり親家庭に給付される手当。"],
           "reference": "https://www.cfa.go.jp/policies/hitori-oya/fuyou-teate/",
-          "helpDesk": null
+          "helpDesk": "childAllowance"
         },
         "特別児童扶養手当": {
           "unit": "円/月",
@@ -160,7 +160,7 @@
             "精神又は身体に障害をもつ20歳未満の児童を養育している方に給付される手当。"
           ],
           "reference": "https://www.mhlw.go.jp/bunya/shougaihoken/jidou/huyou.html",
-          "helpDesk": null
+          "helpDesk": "disabilityAllowance"
         },
         "障害児福祉手当": {
           "unit": "円/月",
@@ -168,7 +168,7 @@
             "精神又は身体に重度の障害をもつ20歳未満の方に給付される手当。"
           ],
           "reference": "https://www.mhlw.go.jp/bunya/shougaihoken/jidou/hukushi.html",
-          "helpDesk": null
+          "helpDesk": "disabilityAllowance"
         },
         "児童育成手当": {
           "unit": "円/月",
@@ -203,7 +203,7 @@
             "算出された額に加え、医療費・介護費等が実費で給付されます。"
           ],
           "reference": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsuhogopage.html",
-          "helpDesk": null
+          "helpDesk": "publicAssistance"
         },
         "高等学校奨学給付金": {
           "unit": "円/月",
@@ -278,7 +278,7 @@
             "また、障害についてはじめて診断を受けた日（初診日）が65歳未満である必要があります。"
           ],
           "reference": "https://www.nenkin.go.jp/service/jukyu/shougainenkin/jukyu-yoken/20150401-01.html",
-          "helpDesk": null
+          "helpDesk": "disabilityPension"
         },
         "特別障害者手当": {
           "unit": "円/月",
@@ -286,7 +286,7 @@
             "精神または身体に重度の障害をもち介護が必要な方に給付される手当。"
           ],
           "reference": "https://www.mhlw.go.jp/bunya/shougaihoken/jidou/tokubetsu.html",
-          "helpDesk": null
+          "helpDesk": "disabilityAllowance"
         },
         "傷病手当金": {
           "unit": "円/日",
@@ -295,7 +295,7 @@
             "健康保険（会社員）や共済組合（公務員）等に加入している必要があります。"
           ],
           "reference": "https://www.kyoukaikenpo.or.jp/g3/sb3040/r139/",
-          "helpDesk": null
+          "helpDesk": "injuryAndIllnessAllowance"
         }
       }
     },
@@ -440,6 +440,318 @@
           ],
           "reference": "https://pap-net.jp/medical_bills/subsidy/",
           "helpDesk": null
+        },
+        "雇用保険（失業手当）": {
+          "variableName": "雇用保険（失業手当）",
+          "caption": [
+            "労働者の生活及び雇用の安定と就職の促進のために、失業された方や教育訓練を受けられる方等に対して、失業等給付を支給します。"
+          ],
+          "reference": "",
+          "helpDesk": "hellowork"
+        },
+        "求職者支援制度（職業訓練・ハロートレーニング）": {
+          "variableName": "求職者支援制度（職業訓練・ハロートレーニング）",
+          "caption": [
+            "再就職、転職、スキルアップを目指す方が月10万円の生活支援の給付金を受給しながら、無料の職業訓練を受講できる制度です。"
+          ],
+          "reference": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/kyushokusha_shien/index.html",
+          "helpDesk": "hellowork"
+        },
+        "住宅支援（住居確保給付金）": {
+          "variableName": "住宅支援（住居確保給付金）",
+          "caption": [
+            "主たる生計維持者が離職・廃業後2年以内である場合、もしくは個人の責任・都合によらず給与等を得る機会が、離職・廃業と同程度まで減少している場合において、一定の要件を満たした場合、市区町村ごとに定める額（※）を上限に実際の家賃額を原則3か月間（延長は2回まで最大9か月間）支給します。",
+            "（※）生活保護制度の住宅扶助額"
+          ],
+          "reference": "https://corona-support.mhlw.go.jp/jukyokakuhokyufukin/index.html",
+          "helpDesk": "socialWelfareCouncil"
+        },
+        "健康保険・年金の減免制度（国民健康保険に加入している場合）": {
+          "variableName": "健康保険・年金の減免制度（国民健康保険に加入している場合）",
+          "caption": [
+            "1. 世帯主の疾病または負傷による退職などにより、申請した年の世帯の収入が前年より40パーセント以上減少する見込みの場合、申請時点で納期限7日前を過ぎていない税額の一部が減免される場合があります。",
+            "所得が少なく保険料を納めることが困難なときは、申請し、承認されると一定期間保険料の納付が免除されます。",
+            "2. 出産予定または出産した場合、届出により国民健康保険税が軽減されます。"
+          ],
+          "reference": "",
+          "helpDesk": "nationalHealthInsurance"
+        },
+        "健康保険・年金の減免制度（国民年金に加入している場合）": {
+          "variableName": "健康保険・年金の減免制度（国民年金に加入している場合）",
+          "caption": [
+            "1. 所得が少なく保険料を納めることが困難なときは、申請し、承認されると一定期間保険料の納付が免除されます。",
+            "2. 出産前後の一定期間の国民年金保険料が免除されます。"
+          ],
+          "reference": "",
+          "helpDesk": "nationalPensionSystem"
+        },
+        "健康保険・年金の減免制度（共済組合、協会けんぽまたは健康保険組合に加入している場合）": {
+          "variableName": "健康保険・年金の減免制度（共済組合、協会けんぽまたは健康保険組合に加入している場合）",
+          "caption": [
+            "産前産後休業期間中の健康保険・厚生年金保険の保険料の負担が免除されます。",
+            "ご加入の健康保険組合または勤務先の事務担当の方にお問い合わせください。"
+          ],
+          "reference": "",
+          "helpDesk": null
+        },
+        "自立相談支援機関による相談支援": {
+          "variableName": "自立相談支援機関による相談支援",
+          "caption": [
+            "就職や住まい、家計管理などの困りごとや不安を抱えている方に対し、どのような支援が必要か、支援員が一緒に考えます。",
+            "具体的なプランを作成し、寄り添いながら、自立に向けて支援します。"
+          ],
+          "reference": "",
+          "helpDesk": "socialWelfareCouncil"
+        },
+        "妊婦健診の助成": {
+          "variableName": "妊婦健診の助成",
+          "caption": [
+            "妊婦健康診査（妊婦健診）にかかる費用の助成を14回受けることができます。"
+          ],
+          "reference": "https://www.mhlw.go.jp/bunya/kodomo/boshi-hoken13/",
+          "helpDesk": "prenatalCheckUp"
+        },
+        "富士見市出産・子育て応援給付金": {
+          "variableName": "富士見市出産・子育て応援給付金",
+          "caption": [
+            "全ての妊婦・子育て世帯が安心して出産・子育てができる環境づくりを目的に、富士見市出産・子育て応援給付金を支給します。"
+          ],
+          "reference": "https://www.city.fujimi.saitama.jp/kosodate_kyoiku/kosodate_oen/nenreibetsu/06ninsinsyussan/mirai020327.html",
+          "helpDesk": "fujimiChildBirth"
+        },
+        "産前産後休業（産休）": {
+          "variableName": "産前産後休業（産休）",
+          "caption": [
+            "母体保護のため労働基準法で定められた休業制度です。",
+            "産前は出産予定日の6週間前（多胎妊娠の場合は14週間前）から、産後は出産の翌日から8週間まで取得できます。"
+          ],
+          "reference": "https://www.bosei-navi.mhlw.go.jp/ninshin/sanzen_sango.html",
+          "helpDesk": null
+        },
+        "低所得世帯向けの入院助産制度": {
+          "variableName": "低所得世帯向けの入院助産制度",
+          "caption": [
+            "入院などによる分娩介助を受けることが経済的に困難な妊産婦に対し、指定医療機関に入院してもらい出産費用を支給します。"
+          ],
+          "reference": "",
+          "helpDesk": "midwifery"
+        },
+        "出産育児一時金（国民健康保険に加入している場合）": {
+          "variableName": "出産育児一時金（国民健康保険に加入している場合）",
+          "caption": [
+            "健康保険や国民健康保険の被保険者等が出産したときは、出産育児一時金が支給されます。"
+          ],
+          "reference": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/kenkou_iryou/iryouhoken/shussan/index.html",
+          "helpDesk": "childbirthLumpSumAllowance"
+        },
+        "出産育児一時金（共済組合、協会けんぽまたは健康保険組合に加入している場合）": {
+          "variableName": "出産育児一時金（共済組合、協会けんぽまたは健康保険組合に加入している場合）",
+          "caption": [
+            "健康保険や国民健康保険の被保険者等が出産したときは、出産育児一時金が支給されます。",
+            "詳細はご加入の健康保険組合または勤務先の事務担当の方にお問い合わせください。"
+          ],
+          "reference": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/kenkou_iryou/iryouhoken/shussan/index.html",
+          "helpDesk": null
+        },
+        "出産手当金（会社員・公務員向け）": {
+          "variableName": "出産手当金（会社員・公務員向け）",
+          "caption": [
+            "出産により会社を休み、その間にお給料が出ないか少なかったときに健康保険協会からもらえるお金です。",
+            "ご加入の健康保険組合または勤務先の事務担当の方にお問い合わせください。"
+          ],
+          "reference": "",
+          "helpDesk": null
+        },
+        "育児休業給付金": {
+          "variableName": "育児休業給付金",
+          "caption": [
+            "子どもの年齢や養育の状況に応じて、要件を満たす場合に出生時育児休業給付金、育児休業給付金、出生後休業支援給付金、育児時短就業給付金が支給されます。"
+          ],
+          "reference": "",
+          "helpDesk": "hellowork"
+        },
+        "高額療養費制度（国民健康保険に加入している場合）": {
+          "variableName": "高額療養費制度（国民健康保険に加入している場合）",
+          "caption": [
+            "同月内に自己負担限度額を超えて支払いした医療費を支給する制度です。"
+          ],
+          "reference": "",
+          "helpDesk": "insuranceMedicalExpenses"
+        },
+        "高額療養費制度（共済組合、協会けんぽまたは健康保険組合に加入している場合）": {
+          "variableName": "高額療養費制度（共済組合、協会けんぽまたは健康保険組合に加入している場合）",
+          "caption": [
+            "同月内に自己負担限度額を超えて支払いした医療費を支給する制度です。",
+            "詳しくはご加入の健康保険組合または勤務先の事務担当の方にお問い合わせください。"
+          ],
+          "reference": "",
+          "helpDesk": null
+        },
+        "富士見市産後ケア事業": {
+          "variableName": "富士見市産後ケア事業",
+          "caption": [
+            "「産後に家族などの手伝いがなくて不安」「体調がすぐれない」「授乳がうまくいかない」など、出産後のサポートが必要なお母さんが、自宅や医療機関でご利用いただけるサービスです。"
+          ],
+          "reference": "https://www.city.fujimi.saitama.jp/kosodate_kyoiku/kosodate_oen/nenreibetsu/baby/baby/sango-care.html",
+          "helpDesk": "fujimiPostNatalCare"
+        },
+        "富士見市こども医療費助成": {
+          "variableName": "富士見市こども医療費助成",
+          "caption": [
+            "未来を担う子どもの健康と、子育て中のお父さんお母さんの『スクスク子育て』を応援するため、子ども（18歳になって最初に迎える3月31日まで）の医療費の本人負担分を助成します。"
+          ],
+          "reference": "https://www.city.fujimi.saitama.jp/kosodate_kyoiku/kosodate_oen/2017-1208-1037-97/2010-0528-1226-131.html",
+          "helpDesk": "fujimiChildrenMedicalExpenses"
+        },
+        "ひとり親家庭等医療費助成": {
+          "variableName": "ひとり親家庭等医療費助成",
+          "caption": [
+            "母子家庭や父子家庭、または親のいない子を育てている養育者家庭などに対し、医療費の一部を助成することにより、生活の安定と自立を支援します。"
+          ],
+          "reference": "",
+          "helpDesk": "singleParentMedicalExpenses"
+        },
+        "未熟児養育医療費助成": {
+          "variableName": "未熟児養育医療費助成",
+          "caption": [
+            "身体の発育が未熟なまま生まれた赤ちゃんが指定された医療機関に入院し、医師が必要と認めた場合、その入院費の医療費を公費で負担します。"
+          ],
+          "reference": "",
+          "helpDesk": "prematureBabyMedicalExpenses"
+        },
+        "小児慢性特定疾患医療費助成": {
+          "variableName": "小児慢性特定疾患医療費助成",
+          "caption": [
+            "児童等の慢性疾病のうち国が指定した疾病（小児慢性特定疾病）の医療にかかる費用の一部を県が助成し、小児慢性児童等のご家庭の医療費の負担軽減を図る制度です。"
+          ],
+          "reference": "",
+          "helpDesk": "childrenDiseaseMedicalExpenses"
+        },
+        "医療費控除（確定申告）": {
+          "variableName": "医療費控除（確定申告）",
+          "caption": [
+            "その年の1月1日から12月31日までの間に自己または自己と生計を一にする配偶者やその他の親族のために医療費を支払った場合において、その支払った医療費が一定額を超えるときは、その医療費の額を基に計算される金額の所得控除を受けることができます。"
+          ],
+          "reference": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1120.htm",
+          "helpDesk": "taxOffice"
+        },
+        "養育費に関する公正証書等の作成費用補助": {
+          "variableName": "養育費に関する公正証書等の作成費用補助",
+          "caption": [
+            "養育費に関する公正証書の作成手数料、調停の申立てまたは裁判に必要な収入印紙や戸籍謄本などの書類取得に係る費用、郵送費などについて補助します。"
+          ],
+          "reference": "",
+          "helpDesk": "childSupport"
+        },
+        "子どものための養育費相談": {
+          "variableName": "子どものための養育費相談",
+          "caption": [
+            "子どもの養育費や面会交流など、ひとり親家庭が抱える諸問題について、専門の相談員が相談を受けます。"
+          ],
+          "reference": "",
+          "helpDesk": "childSupport"
+        },
+        "身体障害者手帳・療育手帳・精神障害者保健福祉手帳": {
+          "variableName": "身体障害者手帳・療育手帳・精神障害者保健福祉手帳",
+          "caption": [],
+          "reference": "",
+          "helpDesk": "disabilityCertificate"
+        },
+        "自立支援医療": {
+          "variableName": "自立支援医療",
+          "caption": [
+            "統合失調症やうつ病などの精神疾患により、通院による継続した治療を受ける場合に、医療費の一部公費負担が受けられます。"
+          ],
+          "reference": "",
+          "helpDesk": "independenceSupportMedical"
+        },
+        "重度障害者医療費助成": {
+          "variableName": "重度障害者医療費助成",
+          "caption": [
+            "障がいがある方とその家族の経済的負担を軽減するため、医療機関等を受診した場合の医療費（保険診療の一部負担金）を助成する制度です。"
+          ],
+          "reference": "",
+          "helpDesk": "severeDisabilityMedialExpenses"
+        },
+        "指定難病医療給付制度": {
+          "variableName": "指定難病医療給付制度",
+          "caption": [
+            "一定の認定基準を満たしている方に指定難病の治療に係る医療費の一部を助成します。"
+          ],
+          "reference": "",
+          "helpDesk": "intractableDisease"
+        },
+        "障がい者向けの就労支援": {
+          "variableName": "障がい者向けの就労支援",
+          "caption": [
+            "障がいをお持ちで就労を希望されている方、職場での悩みを抱えている方の相談・支援を行います。"
+          ],
+          "reference": "",
+          "helpDesk": "disabledPersonEmployment"
+        },
+        "介護保険制度": {
+          "variableName": "介護保険制度",
+          "caption": [
+            "本格的な高齢社会の到来に対応して、保健医療サービスおよび福祉サービスを総合的に提供し、介護を要する状態になっても、できる限り住み慣れた自宅で自立した生活が送れるよう、高齢者の介護を社会全体で支えるしくみです。"
+          ],
+          "reference": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/kaigo_koureisha/gaiyo/index.html",
+          "helpDesk": "longTermCare"
+        },
+        "介護休業制度": {
+          "variableName": "介護休業制度",
+          "caption": [
+            "労働者が要介護状態（負傷、疾病または身体上もしくは精神上の障害により、2週間以上の期間にわたり常時介護を必要とする状態）にある対象家族を介護するための休業です。"
+          ],
+          "reference": "https://www.mhlw.go.jp/seisakunitsuite/bunya/koyou_roudou/koyoukintou/ryouritsu/kaigo/closed/index.html",
+          "helpDesk": null
+        },
+        "介護保険料の減免": {
+          "variableName": "介護保険料の減免",
+          "caption": [
+            "保険料を納めることが困難である場合等には、保険料の減免が受けられる場合があります。"
+          ],
+          "reference": "",
+          "helpDesk": "longTermCarePremium"
+        },
+        "老人介護手当": {
+          "variableName": "老人介護手当",
+          "caption": [
+            "介護が必要な高齢者を在宅で介護している同一世帯の一定の要件を満たしている方に支給します。"
+          ],
+          "reference": "",
+          "helpDesk": "longTermCareAllowance"
+        },
+        "介護保険サービス利用者負担助成金": {
+          "variableName": "介護保険サービス利用者負担助成金",
+          "caption": [
+            "介護保険の在宅サービスを利用された方で、市県民税非課税世帯であることなど一定の要件を満たしている方に利用料の一部を助成します。"
+          ],
+          "reference": "",
+          "helpDesk": "longTermCareService"
+        },
+        "給付型奨学金": {
+          "variableName": "給付型奨学金",
+          "caption": [
+            "意欲と能力のある若者が経済的理由により進学及び修学の継続を断念することのないよう、原則として返還義務のない奨学金を支給するものです。"
+          ],
+          "reference": "https://www.jasso.go.jp/shogakukin/about/kyufu/index.html",
+          "helpDesk": null
+        },
+        "埼玉県母子寡婦福祉資金貸付金": {
+          "variableName": "埼玉県母子寡婦福祉資金貸付金",
+          "caption": [
+            "母子家庭の母および父子家庭の父、並びに寡婦などの方の経済的自立と扶養している児童の福祉増進のために必要な資金を貸し付けする制度です。"
+          ],
+          "reference": "",
+          "helpDesk": "saitamaSingleParentLoan"
+        },
+        "埼玉県私立学校の父母負担軽減": {
+          "variableName": "埼玉県私立学校の父母負担軽減",
+          "caption": [
+            "私立高等学校等に通われるご家庭の教育費負担の軽減を図るため、国の「高等学校等就学支援金」に独自で上乗せし、学校と連携して学費軽減の補助を行います。"
+          ],
+          "reference": "https://www.pref.saitama.lg.jp/a0204/fubofutan2.html",
+          "helpDesk": "saitamaPrivateSchool"
         }
       }
     }

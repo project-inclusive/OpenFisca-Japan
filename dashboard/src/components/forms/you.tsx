@@ -26,6 +26,7 @@ import { useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { currentDateAtom, householdAtom } from '../../state';
 import { Injury } from './attributes/Injury';
+import { Difficulty } from './attributes/Difficulty';
 
 export const FormYou = () => {
   const navigationType = useNavigationType();
@@ -83,6 +84,7 @@ export const FormYou = () => {
         {(isDetailedCalculation || isDisasterCalculation) && <ParentsNum />}
         {isDetailedCalculation && <Pregnant personName={yourName} />}
         {isDetailedCalculation && <RentingHouse />}
+        {isDetailedCalculation && <Difficulty />}
       </Box>
     </>
   );
