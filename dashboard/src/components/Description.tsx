@@ -211,6 +211,20 @@ function Description() {
                       </ul>
                     </UnorderedList>
                   </ListItem>
+
+                  {/* その他該当制度 */}
+                  {Object.entries(configData.result.該当制度.制度一覧).map(
+                    (entry: any, index: number) => (
+                      <ListItem key={index}>
+                        <Box color="blue">
+                          <a href={entry[1].reference}>
+                            {entry[0]}
+                            {entry[1].local && `(${entry[1].local})`}
+                          </a>
+                        </Box>
+                      </ListItem>
+                    )
+                  )}
                 </ul>
               </UnorderedList>
             </AccordionPanel>

@@ -27,10 +27,7 @@ const showsHelpDesk = (
     return false;
   }
 
-  if (
-    allowanceName ===
-    '先天性の傷病治療によるC型肝炎患者に係るQOL向上等のための調査研究事業'
-  ) {
+  if (allowanceName === '特定疾病療養') {
     // HIVに感染している世帯員がいる場合のみ窓口表示
     const members = Object.values(result.世帯員);
     return (
@@ -39,12 +36,22 @@ const showsHelpDesk = (
     );
   }
 
+  if (allowanceName === '埼玉県私立学校の父母負担軽減') {
+    // 埼玉県の場合のみ表示（埼玉県独自の精度のため https://www.pref.saitama.lg.jp/a0204/fubofutan2.html ）
+    return result.世帯一覧.世帯1.居住都道府県[currentDate] === '埼玉県';
+  }
+
   // それ以外の場合: 無条件で表示
   return true;
 };
 
-export const Benefit = ({ result }: { result: any }) => {
-  const [totalAllowance, setTotalAllowance] = useState<string>('0');
+export const Applicable = ({
+  result,
+  frontendHouseholdResult,
+}: {
+  result: any;
+  frontendHouseholdResult: any;
+}) => {
   const [displayedResult, setDisplayedResult] = useState<any>();
   const currentDate = useRecoilValue(currentDateAtom);
 
@@ -53,33 +60,17 @@ export const Benefit = ({ result }: { result: any }) => {
   }
 
   useEffect(() => {
-    const minMaxResult: Obj = {};
+    const applicableResult: Obj = {};
 
     if (result) {
+      // バックエンドから返ってきた結果
       for (const [allowanceName, allowanceInfo] of Object.entries(
-        configData.result.給付制度.制度一覧
+        configData.result.該当制度.制度一覧
       )) {
-        if (allowanceName in result.世帯一覧.世帯1) {
-          if (result.世帯一覧.世帯1[allowanceName][currentDate] > 0) {
-            minMaxResult[allowanceName] = {
+        if (allowanceInfo.variableName in result.世帯一覧.世帯1) {
+          if (result.世帯一覧.世帯1[allowanceInfo.variableName][currentDate]) {
+            applicableResult[allowanceName] = {
               name: allowanceName,
-              max: result.世帯一覧.世帯1[allowanceName][currentDate],
-              min: result.世帯一覧.世帯1[allowanceName][currentDate],
-              unit: allowanceInfo.unit,
-              caption: allowanceInfo.caption,
-              reference: allowanceInfo.reference,
-              helpDesk:
-                showsHelpDesk(allowanceName, result, currentDate) &&
-                allowanceInfo.helpDesk,
-            };
-          }
-        } else if (`${allowanceName}_最大` in result.世帯一覧.世帯1) {
-          if (result.世帯一覧.世帯1[`${allowanceName}_最大`][currentDate] > 0) {
-            minMaxResult[allowanceName] = {
-              name: allowanceName,
-              max: result.世帯一覧.世帯1[`${allowanceName}_最大`][currentDate],
-              min: result.世帯一覧.世帯1[`${allowanceName}_最小`][currentDate],
-              unit: allowanceInfo.unit,
               caption: allowanceInfo.caption,
               reference: allowanceInfo.reference,
               helpDesk:
@@ -90,42 +81,28 @@ export const Benefit = ({ result }: { result: any }) => {
         }
       }
 
-      let totalAllowanceMax = 0;
-      let totalAllowanceMin = 0;
-      for (const [key, value] of Object.entries(minMaxResult)) {
-        // 小数点1桁まで万円単位に変換 (1万円以下の給付もあり得るため)
-        const min = Math.floor(Number(value.min) / 1000) / 10;
-        const max = Math.floor(Number(value.max) / 1000) / 10;
-
-        totalAllowanceMax += max;
-        totalAllowanceMin += min;
-
-        // 後で金額順にソートするため、最大額を格納
-        minMaxResult[key].maxMoney = max;
-
-        if (value.max === value.min) {
-          minMaxResult[key].displayedMoney = max;
-        } else {
-          // 最小額と最大額が異なる場合は「（最小額）〜（最大額）」の文字列を格納
-          minMaxResult[key].displayedMoney = `${min}~${max}`;
+      // フロントエンドで計算した結果
+      for (const [allowanceName, allowanceInfo] of Object.entries(
+        configData.result.該当制度.制度一覧
+      )) {
+        if (allowanceInfo.variableName in frontendHouseholdResult.support) {
+          if (frontendHouseholdResult.support[allowanceInfo.variableName]) {
+            applicableResult[allowanceName] = {
+              name: allowanceName,
+              caption: allowanceInfo.caption,
+              reference: allowanceInfo.reference,
+              helpDesk:
+                showsHelpDesk(allowanceName, result, currentDate) &&
+                allowanceInfo.helpDesk,
+            };
+          }
         }
       }
 
-      // 合計額を格納
-      if (totalAllowanceMax === totalAllowanceMin) {
-        setTotalAllowance(totalAllowanceMax.toLocaleString());
-      } else {
-        setTotalAllowance(
-          `${totalAllowanceMin.toLocaleString()}~${totalAllowanceMax.toLocaleString()}`
-        );
-      }
-
-      // 表示のため最大額が小さい順にソート
-      const sortedMinMaxResult = Object.values(minMaxResult).sort(
-        (a: any, b: any) => a.maxMoney - b.maxMoney
-      );
-      setDisplayedResult(sortedMinMaxResult);
+      setDisplayedResult(Object.values(applicableResult));
     }
+
+    // NOTE: frontendHouseholdResultを指定するとuseEffectが無限ループするためresultのみ指定
   }, [result]);
 
   const existsResult = () => {
@@ -141,32 +118,10 @@ export const Benefit = ({ result }: { result: any }) => {
             fontWeight="medium"
             mb={2}
           >
-            {configData.result.benefitDescription}
+            {configData.result.applicableDescription}
           </Center>
 
-          {configData.result.給付制度.caption[0]}
-
           <Accordion allowMultiple>
-            {/* // 一時金と継続支給が合算されていて紛らわしいため合計額は非表示。
-          // ただし今後、一時金と継続支給それぞれの合計表示はする可能性あり
-          <AccordionItem>
-            <h2>
-              <AccordionButton
-                bg="yellow.100"
-                fontWeight="semibold"
-                _hover={{ bg: 'yellow.100' }}
-              >
-                <Box flex="1" textAlign="left">
-                  合計
-                </Box>
-                <Box flex="1" textAlign="right">
-                  {totalAllowance} 円/月
-                </Box>
-              </AccordionButton>
-            </h2>
-          </AccordionItem>
-          */}
-
             {displayedResult.map((val: any, index: any) => (
               <AccordionItem key={index}>
                 <h2>
@@ -174,10 +129,6 @@ export const Benefit = ({ result }: { result: any }) => {
                     <AccordionIcon />
                     <Box flex="1" textAlign="left">
                       {val.name}
-                    </Box>
-                    <Box flex="1" textAlign="right">
-                      {/* 小数点1桁まで万円単位で表示 */}
-                      {val.displayedMoney} 万{val.unit}
                     </Box>
                   </AccordionButton>
                 </h2>

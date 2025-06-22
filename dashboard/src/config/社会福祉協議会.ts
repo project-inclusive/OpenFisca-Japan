@@ -1,4 +1,16 @@
-export const data: { [key: string]: { [key: string]: TokyoCityTypes } } = {
+export const data: { [key: string]: { [key: string]: CityTypes } } = {
+  埼玉県: {
+    富士見市: {
+      施設名: '生活サポートセンター☆ふじみ',
+      郵便番号: '354-0026',
+      所在地: '富士見市鶴瀬西2-4-19',
+      経度: 139.5328224,
+      緯度: 35.8458368,
+      座標系: 'JGD2011',
+      電話番号: '049-265-6200',
+      WebサイトURL: 'https://www.fujimi-shakyo.or.jp/service/service_15/',
+    },
+  },
   東京都: {
     千代田区: {
       施設名: '千代田区社会福祉協議会',
@@ -623,7 +635,8 @@ export const data: { [key: string]: { [key: string]: TokyoCityTypes } } = {
   },
 };
 
-export type TokyoCityTypes = {
+// TODO: 不要なフィールドを消して、全体の窓口表示の型と統合する
+export type CityTypes = {
   施設名: string;
   郵便番号: string;
   所在地: string;
