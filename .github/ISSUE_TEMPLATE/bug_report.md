@@ -1,3 +1,12 @@
+---
+name: Bug report
+about: Create a report to help us improve
+title: ''
+labels: ''
+assignees: ''
+
+---
+
 ### As Is or how to reproduce if it's bug
 （今の状態を記載。不具合・バグの場合、可能であれば再現方法も記載してください。）
 
