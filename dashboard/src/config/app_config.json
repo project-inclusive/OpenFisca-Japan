@@ -32,6 +32,13 @@
       "lg": "1.5em",
       "xl": "1.5em"
     },
+    "questionFormFontSize": {
+      "base": "1.1em",
+      "sm": "1.3em",
+      "md": "1.3em",
+      "lg": "1.5em",
+      "xl": "1.5em"
+    },
     "itemFontSize": {
       "base": "1em",
       "sm": "1em",
