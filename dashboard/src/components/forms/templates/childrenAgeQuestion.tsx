@@ -13,7 +13,7 @@ import {
 import configData from '../../../config/app_config.json';
 
 import { ErrorMessage } from '../attributes/validation/ErrorMessage';
-import { householdAtom } from '../../../state';
+import { householdAtom, questionValidatedAtom } from '../../../state';
 import { useRecoilState } from 'recoil';
 
 import { toHalf } from '../../../utils/toHalf';
@@ -24,18 +24,13 @@ import {
   isMobile,
   isWindows,
 } from 'react-device-detect';
-import { Question } from '../question';
 
-// TODO: タイトルやonClickを引数で変更可能にする
-export const ChildAgeQuestion = ({
-  personName,
-  mustInput,
-}: {
-  personName: string;
-  mustInput: boolean;
-}) => {
+export const ChildrenAgeQuestion = ({ personName }: { personName: string }) => {
   const navigationType = useNavigationType();
   const [household, setHousehold] = useRecoilState(householdAtom);
+  const [questionValidated, setQuestionValidated] = useRecoilState(
+    questionValidatedAtom
+  );
 
   // 年齢に関する処理
   const [age, setAge] = useState<string | number>('');
@@ -60,6 +55,7 @@ export const ChildAgeQuestion = ({
   const handleAgeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     let value: string = toHalf(event.currentTarget.value) ?? '';
     value = value.replace(/[^0-9]/g, '');
+    setQuestionValidated(value !== '');
 
     // NOTE: WindowsのChromium系ブラウザでは全角入力時に2回入力が発生してしまうため、片方を抑制
     if (isWindows && (isChrome || isEdge || isChromium)) {
@@ -290,10 +286,8 @@ export const ChildAgeQuestion = ({
   }, [schoolYear, schoolEducationalAuthority]);
 
   return (
-    <Question>
-      {mustInput && schoolEducationalAuthority !== '小学校入学前' && (
-        <ErrorMessage condition={!schoolEducationalAuthority || !schoolYear} />
-      )}
+    <>
+      <ErrorMessage condition={!schoolEducationalAuthority || !schoolYear} />
       <HStack>
         <FormControl paddingRight={4}>
           <FormLabel
@@ -303,11 +297,6 @@ export const ChildAgeQuestion = ({
             <Center>
               <HStack>
                 <Box>年齢</Box>
-                {mustInput && (
-                  <Box color="red" fontSize="0.7em">
-                    必須
-                  </Box>
-                )}
               </HStack>
             </Center>
           </FormLabel>
@@ -346,11 +335,6 @@ export const ChildAgeQuestion = ({
           >
             <HStack>
               <Box>学年</Box>
-              {mustInput && (
-                <Box color="red" fontSize="0.7em">
-                  必須
-                </Box>
-              )}
             </HStack>
           </FormLabel>
 
@@ -370,6 +354,7 @@ export const ChildAgeQuestion = ({
                     e.target.value as typeof schoolEducationalAuthority
                   );
                 }
+                setQuestionValidated(age !== '');
               }}
             >
               {schoolInfo.map((item, index) => (
@@ -396,6 +381,6 @@ export const ChildAgeQuestion = ({
           </HStack>
         </FormControl>
       </HStack>
-    </Question>
+    </>
   );
 };

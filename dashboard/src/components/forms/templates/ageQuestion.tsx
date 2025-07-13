@@ -12,7 +12,7 @@ import {
 import configData from '../../../config/app_config.json';
 
 import { ErrorMessage } from '../attributes/validation/ErrorMessage';
-import { householdAtom } from '../../../state';
+import { householdAtom, questionValidatedAtom } from '../../../state';
 import { useRecoilState } from 'recoil';
 
 import { toHalf } from '../../../utils/toHalf';
@@ -23,19 +23,14 @@ import {
   isMobile,
   isWindows,
 } from 'react-device-detect';
-import { Question } from '../question';
 
-// TODO: タイトルやonClickを引数で変更可能にする
-export const AgeQuestion = ({
-  personName,
-  mustInput,
-}: {
-  personName: string;
-  mustInput: boolean;
-}) => {
+export const AgeQuestion = ({ personName }: { personName: string }) => {
   const navigationType = useNavigationType();
   const [household, setHousehold] = useRecoilState(householdAtom);
   const [age, setAge] = useState<string | number>('');
+  const [questionValidated, setQuestionValidated] = useRecoilState(
+    questionValidatedAtom
+  );
 
   function changeAge(age: number) {
     setAge(age);
@@ -67,6 +62,7 @@ export const AgeQuestion = ({
         // 前回と同じ値を設定して終了
         // （設定しないままreturnすると未変換の全角入力が残ってしまいエンターキーを押すまで反映できなくなってしまう）
         changeAge(Number(age));
+        setQuestionValidated(true);
         return;
       }
     }
@@ -74,12 +70,14 @@ export const AgeQuestion = ({
     // If empty string, set as is
     if (value === '') {
       setAge('');
+      setQuestionValidated(false);
       return;
     }
 
     const numValue = Number(value);
     const inputAge = numValue < 0 || numValue > 200 ? '' : numValue; // 0~200歳に入力を制限(年齢が高すぎて誕生年が3桁になるとパース処理が煩雑なため)
     changeAge(Number(inputAge));
+    setQuestionValidated(true);
   };
 
   // stored states set displayed age when page transition
@@ -96,56 +94,47 @@ export const AgeQuestion = ({
         100 * (today.getMonth() + 1) +
         today.getDate();
       setAge(Math.floor((todaySum - birthSum) / 10000));
+      setQuestionValidated(true);
     }
   }, [navigationType, household.世帯員[personName]?.誕生年月日]);
 
   return (
-    <Question>
-      <>
-        {mustInput && <ErrorMessage condition={age === ''} />}
+    <>
+      <ErrorMessage />
+      <FormControl>
+        <FormLabel fontSize={configData.style.itemFontSize}>
+          <Center>
+            <Box>年齢</Box>
+          </Center>
+        </FormLabel>
 
-        <FormControl>
-          <FormLabel fontSize={configData.style.itemFontSize}>
-            <Center>
-              <HStack>
-                <Box>年齢</Box>
-                {mustInput && (
-                  <Box color="red" fontSize="0.7em">
-                    必須
-                  </Box>
-                )}
-              </HStack>
-            </Center>
-          </FormLabel>
+        <HStack mb={4}>
+          <Input
+            width="6em"
+            fontSize={configData.style.itemFontSize}
+            type={isMobile ? 'number' : 'text'}
+            value={age}
+            onChange={handleAgeChange}
+            onKeyDown={(event) => {
+              if (event.key === 'ArrowUp') {
+                event.preventDefault();
+                changeAge(Number(age) + 1);
+              }
 
-          <HStack mb={4}>
-            <Input
-              width="6em"
-              fontSize={configData.style.itemFontSize}
-              type={isMobile ? 'number' : 'text'}
-              value={age}
-              onChange={handleAgeChange}
-              onKeyDown={(event) => {
-                if (event.key === 'ArrowUp') {
-                  event.preventDefault();
-                  changeAge(Number(age) + 1);
-                }
-
+              if (event.key === 'ArrowDown') {
+                event.preventDefault();
                 if (event.key === 'ArrowDown') {
                   event.preventDefault();
-                  if (event.key === 'ArrowDown') {
-                    event.preventDefault();
-                    const newAge = Math.max(Number(age) - 1, 0);
-                    changeAge(Number(newAge === 0 ? '' : newAge));
-                  }
+                  const newAge = Math.max(Number(age) - 1, 0);
+                  changeAge(Number(newAge === 0 ? '' : newAge));
                 }
-              }}
-              {...(isMobile && { pattern: '[0-9]*' })}
-            />
-            <Box>歳</Box>
-          </HStack>
-        </FormControl>
-      </>
-    </Question>
+              }
+            }}
+            {...(isMobile && { pattern: '[0-9]*' })}
+          />
+          <Box>歳</Box>
+        </HStack>
+      </FormControl>
+    </>
   );
 };

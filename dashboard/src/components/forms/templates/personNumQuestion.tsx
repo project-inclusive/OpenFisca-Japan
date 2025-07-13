@@ -14,9 +14,8 @@ import {
 
 import configData from '../../../config/app_config.json';
 
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { currentDateAtom, householdAtom } from '../../../state';
-import { Question } from '../question';
+import { useRecoilState } from 'recoil';
+import { householdAtom, questionValidatedAtom } from '../../../state';
 import { toHalf } from '../../../utils/toHalf';
 import {
   isChrome,
@@ -25,48 +24,39 @@ import {
   isMobile,
   isWindows,
 } from 'react-device-detect';
+import { ErrorMessage } from '../attributes/validation/ErrorMessage';
 
-// TODO: タイトルやonClickを引数で変更可能にする
 export const PersonNumQuestion = ({
-  mustInput,
-  subtitle,
+  updatePersonInfo,
+  filterPerson,
+  maxPerson,
+  title,
 }: {
-  mustInput: boolean;
-  subtitle: string;
+  updatePersonInfo: (personNum: number) => void;
+  filterPerson: (household: any) => any;
+  maxPerson: number;
+  title: string;
 }) => {
   const navigationType = useNavigationType();
   const [household, setHousehold] = useRecoilState(householdAtom);
 
-  const currentDate = useRecoilValue(currentDateAtom);
-
-  const [shownChildrenNum, setShownChildrenNum] = useState<string | number>('');
-  const inputEl = useRef<HTMLInputElement>(null);
-
-  const [isChecked, setIsChecked] = useState(false);
-  // チェックボックスの値が変更された時
-  // TODO: 子ども or 祖父母を指定可能にする
-  const onCheckChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      if (!event.target.checked && household.世帯一覧.世帯1.子一覧) {
-        const newHousehold = { ...household };
-        household.世帯一覧.世帯1.子一覧.map((childName: string) => {
-          delete newHousehold.世帯員[childName];
-        });
-        delete newHousehold.世帯一覧.世帯1.子一覧;
-        setShownChildrenNum('');
-        setHousehold({ ...newHousehold });
-      }
-      setIsChecked(event.target.checked);
-    },
-    []
+  const [questionValidated, setQuestionValidated] = useRecoilState(
+    questionValidatedAtom
   );
+  const [formValidated, setFormValidated] = useState<boolean>(false);
+  const [yesNoValidated, setYesNoValidated] = useState<boolean>(false);
+
+  const [shownPersonNum, setShownPersonNum] = useState<string | number>('');
+  const [actualPersonNum, setActualPersonNum] = useState<number>(0);
+  const inputEl = useRef<HTMLInputElement>(null);
+  const [boolState, setBoolState] = useState<boolean | null>(null);
 
   // チェックされたときに「子どもの数」フォームにフォーカス
   useEffect(() => {
     if (inputEl.current) {
       inputEl.current.focus();
     }
-  }, [isChecked]);
+  }, [boolState]);
 
   // 「子どもの数」フォームの変更時
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,50 +73,37 @@ export const PersonNumQuestion = ({
       }
     }
 
-    let childrenNum: number | string = toHalf(event.target.value);
-    childrenNum = childrenNum.replace(/[^0-9]/g, '');
-    childrenNum = parseInt(childrenNum);
+    let personNum: number | string = toHalf(event.target.value);
+    personNum = personNum.replace(/[^0-9]/g, '');
+    personNum = parseInt(personNum);
 
     // 正の整数以外は0に変換
-    if (isNaN(childrenNum) || childrenNum < 0) {
-      childrenNum = 0;
-      setShownChildrenNum('');
-    } else if (childrenNum > 5) {
-      childrenNum = 5;
-      setShownChildrenNum(childrenNum);
+    if (isNaN(personNum) || personNum < 0) {
+      personNum = 0;
+      setShownPersonNum('');
+      setFormValidated(false);
+      // 「はい」の場合はバリエーションエラー
+      setQuestionValidated(boolState ? false : yesNoValidated);
+    } else if (personNum > maxPerson) {
+      personNum = maxPerson;
+      setShownPersonNum(personNum);
+      setFormValidated(true);
+      setQuestionValidated(true);
     } else {
-      setShownChildrenNum(childrenNum);
+      setShownPersonNum(personNum);
+      setFormValidated(true);
+      setQuestionValidated(true);
     }
 
-    updateChildrenInfo(childrenNum);
+    setActualPersonNum(5);
+    updatePersonInfo(personNum);
   }, []);
-
-  function updateChildrenInfo(childrenNum: number) {
-    const newHousehold = { ...household };
-    if (household.世帯一覧.世帯1.子一覧) {
-      household.世帯一覧.世帯1.子一覧.map((childName: string) => {
-        delete newHousehold.世帯員[childName];
-      });
-    }
-
-    // 新しい子どもの情報を追加
-    newHousehold.世帯一覧.世帯1.子一覧 = [...Array(childrenNum)].map(
-      (val, i) => `子ども${i}`
-    );
-    if (newHousehold.世帯一覧.世帯1.子一覧) {
-      newHousehold.世帯一覧.世帯1.子一覧.map((childName: string) => {
-        newHousehold.世帯員[childName] = {};
-      });
-    }
-    setHousehold({ ...newHousehold });
-  }
 
   // stored states set displayed value when page transition
   useEffect(() => {
-    const storedChildrenObj = household.世帯一覧.世帯1.子一覧;
-    if (storedChildrenObj) {
-      setIsChecked(true);
-      setShownChildrenNum(storedChildrenObj.length);
+    const targetPeople = filterPerson(household);
+    if (targetPeople) {
+      setShownPersonNum(targetPeople.length);
     }
   }, [navigationType]);
 
@@ -134,10 +111,12 @@ export const PersonNumQuestion = ({
     cond,
     state,
     title,
+    onClick,
   }: {
     cond: () => boolean;
     state: boolean;
     title: string;
+    onClick: () => void;
   }) => (
     <Button
       variant="outline"
@@ -149,7 +128,9 @@ export const PersonNumQuestion = ({
       color={cond() ? 'white' : 'black'}
       _hover={{ bg: 'cyan.600', borderColor: 'cyan.900', color: 'white' }}
       onClick={() => {
-        setIsChecked(state);
+        setBoolState(state);
+        setYesNoValidated(true);
+        onClick();
       }}
     >
       {title}
@@ -157,49 +138,51 @@ export const PersonNumQuestion = ({
   );
 
   return (
-    <Question>
+    <>
+      <ErrorMessage />
       <FormControl>
         <FormLabel
           fontSize={configData.style.itemFontSize}
           fontWeight="Regular"
         >
           <Center>
-            <HStack>
-              {/* TODO: 質問文を引数から受け取る */}
-              <Box fontSize={configData.style.itemFontSize}>{subtitle}</Box>
-              {mustInput && (
-                <Box color="red" fontSize="0.7em">
-                  必須
-                </Box>
-              )}
-            </HStack>
+            <Box fontSize={configData.style.itemFontSize}>{title}</Box>
           </Center>
         </FormLabel>
 
         <SimpleGrid columns={2} rowGap={1} columnGap={6}>
-          {btn({ cond: () => isChecked, state: true, title: 'はい' })}
+          {btn({
+            cond: () => boolState === true,
+            state: true,
+            title: 'はい',
+            onClick: () => {
+              // 「はい」の場合は人数も入力されている必要がある
+              setQuestionValidated(formValidated);
+              updatePersonInfo(actualPersonNum);
+            },
+          })}
           <FormControl>
             <HStack>
               <Input
                 type={isMobile ? 'number' : 'text'}
-                value={shownChildrenNum}
+                value={shownPersonNum}
                 onChange={onChange}
                 onKeyDown={(e) => {
                   if (e.key === 'ArrowUp') {
                     e.preventDefault();
-                    const newChildrenNum = Number(shownChildrenNum) + 1;
-                    setShownChildrenNum(newChildrenNum);
-                    updateChildrenInfo(newChildrenNum);
+                    const newPersonNum = Number(shownPersonNum) + 1;
+                    setShownPersonNum(newPersonNum);
+                    updatePersonInfo(newPersonNum);
                   }
 
                   if (e.key === 'ArrowDown') {
                     e.preventDefault();
-                    let newChildrenNum = Number(shownChildrenNum) - 1;
-                    if (newChildrenNum < 0) {
-                      newChildrenNum = 0;
+                    let newPersonNum = Number(shownPersonNum) - 1;
+                    if (newPersonNum < 0) {
+                      newPersonNum = 0;
                     }
-                    setShownChildrenNum(newChildrenNum);
-                    updateChildrenInfo(newChildrenNum);
+                    setShownPersonNum(newPersonNum);
+                    updatePersonInfo(newPersonNum);
                   }
                 }}
                 width="6em"
@@ -210,13 +193,19 @@ export const PersonNumQuestion = ({
             </HStack>
           </FormControl>
           {btn({
-            cond: () => !isChecked,
+            cond: () => boolState === false,
             state: false,
             title: 'いいえ',
+            onClick: () => {
+              // 「いいえ」の場合は人数フォームの内容は不問
+              setQuestionValidated(true);
+              // 世帯員を削除
+              updatePersonInfo(0);
+            },
           })}
           <Spacer />
         </SimpleGrid>
       </FormControl>
-    </Question>
+    </>
   );
 };

@@ -14,6 +14,41 @@ export const agreedToTermsAtom = atom<boolean>({
   default: false,
 });
 
+export const questionValidatedAtom = atom<boolean>({
+  key: 'questionValidatedAtom',
+  default: false,
+});
+
+export const showsValidationErrorAtom = atom<boolean>({
+  key: 'showsValidationErrorAtom',
+  default: false,
+});
+
+export type QuestionKey = {
+  person: 'あなた' | '配偶者' | '子ども' | '親';
+  personNum: number;
+  title: string;
+};
+
+export const questionKeyAtom = atom<QuestionKey>({
+  key: 'questionKeyAtom',
+  default: {
+    person: 'あなた',
+    personNum: 0,
+    title: '住んでいる場所',
+  },
+});
+
+export const nextQuestionKeyAtom = atom<QuestionKey | null>({
+  key: 'nextQuestionKeyAtom',
+  default: null,
+});
+
+export const questionKeyHistoryAtom = atom<QuestionKey[]>({
+  key: 'questionKeyHistoryAtom',
+  default: [],
+});
+
 export const householdAtom = atom<any>({
   key: 'householdAtom',
   default: {

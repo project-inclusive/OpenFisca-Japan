@@ -14,13 +14,19 @@ import pmJson from '../../../config/都道府県市区町村.json';
 
 import { ErrorMessage } from '../attributes/validation/ErrorMessage';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { currentDateAtom, householdAtom } from '../../../state';
-import { Question } from '../question';
+import {
+  currentDateAtom,
+  householdAtom,
+  questionValidatedAtom,
+} from '../../../state';
 
 // TODO: タイトルやonClickを引数で変更可能にする
-export const AddressQuestion = ({ mustInput }: { mustInput: boolean }) => {
+export const AddressQuestion = () => {
   const navigationType = useNavigationType();
   const [household, setHousehold] = useRecoilState(householdAtom);
+  const [questionValidated, setQuestionValidated] = useRecoilState(
+    questionValidatedAtom
+  );
 
   interface pmType {
     [key: string]: string[];
@@ -38,6 +44,7 @@ export const AddressQuestion = ({ mustInput }: { mustInput: boolean }) => {
       const prefecture = String(event.currentTarget.value);
       setSelectedPrefecture(prefecture);
       setSelectedMunicipality('');
+      setQuestionValidated(prefecture !== '' && selectedMunicipality !== '');
       const newHousehold = { ...household };
       newHousehold.世帯一覧.世帯1.居住都道府県 = {
         [currentDate]: prefecture,
@@ -85,6 +92,7 @@ export const AddressQuestion = ({ mustInput }: { mustInput: boolean }) => {
     (event: React.ChangeEvent<HTMLSelectElement>) => {
       const municipality = String(event.currentTarget.value);
       setSelectedMunicipality(municipality);
+      setQuestionValidated(municipality !== '');
 
       const newHousehold = { ...household };
       newHousehold.世帯一覧.世帯1.居住市区町村 = {
@@ -107,12 +115,8 @@ export const AddressQuestion = ({ mustInput }: { mustInput: boolean }) => {
   }, [navigationType]);
 
   return (
-    <Question>
-      {mustInput && (
-        <ErrorMessage
-          condition={selectedPrefecture === '' || selectedMunicipality === ''}
-        />
-      )}
+    <>
+      <ErrorMessage />
 
       <FormControl>
         <FormLabel
@@ -124,11 +128,6 @@ export const AddressQuestion = ({ mustInput }: { mustInput: boolean }) => {
               <Box fontSize={configData.style.itemFontSize}>
                 寝泊まりしている地域
               </Box>
-              {mustInput && (
-                <Box color="red" fontSize="0.7em">
-                  必須
-                </Box>
-              )}
             </HStack>
           </Center>
         </FormLabel>
@@ -166,6 +165,6 @@ export const AddressQuestion = ({ mustInput }: { mustInput: boolean }) => {
           </Select>
         </HStack>
       </FormControl>
-    </Question>
+    </>
   );
 };
