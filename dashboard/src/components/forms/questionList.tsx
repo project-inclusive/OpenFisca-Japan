@@ -189,7 +189,6 @@ export const QuestionList = ({
   const navigate = useNavigate();
 
   const household = useRecoilValue(householdAtom);
-  console.log(household);
 
   const next = () => {
     if (!questionValidated) {
@@ -217,6 +216,7 @@ export const QuestionList = ({
     setNextQuestionKey(
       defaultNextQuestionKey(questions, nextQuestionKey, household)
     );
+    // TODO: デバッグ用、UI移行が終わったら消す
     console.log(nextQuestionKey);
   };
 

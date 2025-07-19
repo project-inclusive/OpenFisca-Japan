@@ -8,17 +8,11 @@ import {
 } from '../../../state';
 
 export const SelfWorkQuestion = () => {
-  const [questionValidated, setQuestionValidated] = useRecoilState(
-    questionValidatedAtom
-  );
   const [nextQuestionKey, setNextQuestionKey] =
     useRecoilState(nextQuestionKeyAtom);
 
-  const yesOnClick = () => {
-    setQuestionValidated(true);
-  };
+  const yesOnClick = () => {};
   const noOnClick = () => {
-    setQuestionValidated(true);
     // 仕事関連の質問をスキップ
     setNextQuestionKey({
       person: 'あなた',
