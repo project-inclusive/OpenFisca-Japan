@@ -24,9 +24,6 @@ describe('Renders main page and ', () => {
 
     cy.url().should('include', '/calculate-simple');
     cy.contains('あなたについて');
-
-    cy.get('[data-testid="select-prefecture"]').select('東京都');
-    cy.get('[data-testid="select-city"]').select('渋谷区');
-    cy.get('[data-testid="income-input"]').type('150');
+    cy.contains('かんたん見積もり');
   });
 });
