@@ -1,9 +1,6 @@
-import { useState, useCallback, useEffect } from 'react';
-import { useNavigationType } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import {
   Box,
-  Select,
-  HStack,
   FormControl,
   FormLabel,
   Button,
@@ -12,39 +9,40 @@ import {
 } from '@chakra-ui/react';
 
 import configData from '../../../config/app_config.json';
-
 import { ErrorMessage } from '../attributes/validation/ErrorMessage';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { currentDateAtom, householdAtom } from '../../../state';
-import { Question } from '../question';
+import { householdAtom, questionValidatedAtom } from '../../../state';
 
-// TODO: タイトルやonClickを引数で変更可能にする
 export const SelectionQuestion = ({
-  mustInput,
-  subtitle,
+  title,
   selections,
+  defaultSelection,
 }: {
-  mustInput: boolean;
-  subtitle: string;
-  selections: { selection: string; title: string }[];
+  title: string;
+  selections: { selection: string; onClick: () => void }[];
+  defaultSelection: (household: any) => string | null;
 }) => {
-  const navigationType = useNavigationType();
-  const [household, setHousehold] = useRecoilState(householdAtom);
-  const [selectionState, setSelectionState] = useState<string | null>(null);
-  // TODO: householdとboolStateを連携
-
-  const currentDate = useRecoilValue(currentDateAtom);
+  const household = useRecoilValue(householdAtom);
+  const [selectionState, setSelectionState] = useState<string | null>(
+    defaultSelection(household)
+  );
+  const [questionValidated, setQuestionValidated] = useRecoilState(
+    questionValidatedAtom
+  );
 
   const btn = ({
     cond,
-    state,
-    title,
+    selection,
+    onClick,
+    key,
   }: {
     cond: () => boolean;
-    state: string;
-    title: string;
+    selection: string;
+    onClick: () => void;
+    key: number;
   }) => (
     <Button
+      key={key}
       variant="outline"
       borderRadius="xl"
       height="2.5em"
@@ -54,45 +52,39 @@ export const SelectionQuestion = ({
       color={cond() ? 'white' : 'black'}
       _hover={{ bg: 'cyan.600', borderColor: 'cyan.900', color: 'white' }}
       onClick={() => {
-        setSelectionState(state);
+        setSelectionState(selection);
+        setQuestionValidated(true);
+        onClick();
       }}
     >
-      {title}
+      {selection}
     </Button>
   );
 
   return (
-    <Question>
-      {mustInput && <ErrorMessage condition={selectionState == null} />}
-
+    <>
+      <ErrorMessage condition={selectionState == null} />
       <FormControl>
         <FormLabel
           fontSize={configData.style.itemFontSize}
           fontWeight="Regular"
         >
           <Center>
-            <HStack>
-              {/* TODO: 質問文を引数から受け取る */}
-              <Box fontSize={configData.style.itemFontSize}>{subtitle}</Box>
-              {mustInput && (
-                <Box color="red" fontSize="0.7em">
-                  必須
-                </Box>
-              )}
-            </HStack>
+            <Box fontSize={configData.style.itemFontSize}>{title}</Box>
           </Center>
         </FormLabel>
 
         <VStack mb={4}>
-          {selections.map((e) =>
+          {selections.map((e, index) =>
             btn({
               cond: () => selectionState === e.selection,
-              state: e.selection,
-              title: e.title,
+              selection: e.selection,
+              onClick: e.onClick,
+              key: index,
             })
           )}
         </VStack>
       </FormControl>
-    </Question>
+    </>
   );
 };

@@ -2,26 +2,38 @@ import { useLocation } from 'react-router-dom';
 import {
   Center,
   Button,
-  propNames,
   Box,
   Icon,
-  HStack,
   Flex,
   Link,
+  Progress,
 } from '@chakra-ui/react';
 
-import configData from '../../config/app_config.json';
-import { CalculationLabel } from './calculationLabel';
+import configData from '../../../config/app_config.json';
+import { CalculationLabel } from '../calculationLabel';
 import { ReactNode } from 'react';
 import { FaHome } from 'react-icons/fa';
 
-export const Question = (props: { children: ReactNode }) => {
+export const Question = (props: {
+  children: ReactNode;
+  title: string;
+  progress: number;
+  maxProgress: number;
+  backOnClick: () => void;
+  nextOnClick: () => void;
+}) => {
   const location = useLocation();
   const isSimpleCalculation = location.pathname === '/calculate-simple';
   const isDisasterCalculation = location.pathname === '/calculate-disaster';
 
   return (
     <div>
+      <Progress
+        value={props.progress}
+        max={props.maxProgress}
+        marginTop="1em"
+        marginBottom="0.5em"
+      />
       <Flex w="100%" justifyContent="space-around" alignItems="center">
         <Link href="/" ml={0} paddingLeft="1.5em">
           <Icon as={FaHome} boxSize="2em" color="cyan.600" />
@@ -52,8 +64,7 @@ export const Question = (props: { children: ReactNode }) => {
         mt={2}
         mb={2}
       >
-        {/* TODO: 引数から受け取る */}
-        {configData.calculationForm.topDescription}
+        {props.title}
       </Center>
 
       <Box bg="white" borderRadius="xl" p={4} mb={4} ml={4} mr={4}>
@@ -72,8 +83,7 @@ export const Question = (props: { children: ReactNode }) => {
           bg="cyan.600"
           color="white"
           _hover={{ bg: 'cyan.700' }}
-          // TODO: 関数を設定
-          onClick={() => {}}
+          onClick={props.backOnClick}
         >
           前へ
         </Button>
@@ -85,8 +95,7 @@ export const Question = (props: { children: ReactNode }) => {
           bg="cyan.600"
           color="white"
           _hover={{ bg: 'cyan.700' }}
-          // TODO: 関数を設定
-          onClick={() => {}}
+          onClick={props.nextOnClick}
         >
           次へ
         </Button>

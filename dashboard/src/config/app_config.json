@@ -82,6 +82,12 @@
       "xl": "0em"
     }
   },
+  "validation": {
+    "household": {
+      "maxChildren": 5,
+      "maxParents": 10
+    }
+  },
   "description": {
     "title": "支援みつもりヤドカリくん",
     "feature": ["わかりやすい", "窓口へ", "安心", "制限"],
@@ -95,6 +101,7 @@
     ]
   },
   "calculationForm": {
+    "calculationSelectionDescription": "どのモードで見積もりますか？",
     "topDescription": "情報を入力してください",
     "youDescription": "あなたについて",
     "spouseDescription": "配偶者について",

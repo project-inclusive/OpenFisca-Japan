@@ -12,7 +12,11 @@ import {
 import configData from '../../../config/app_config.json';
 
 import { ErrorMessage } from '../attributes/validation/ErrorMessage';
-import { currentDateAtom, householdAtom } from '../../../state';
+import {
+  currentDateAtom,
+  householdAtom,
+  questionValidatedAtom,
+} from '../../../state';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { toHalf } from '../../../utils/toHalf';
@@ -23,22 +27,17 @@ import {
   isMobile,
   isWindows,
 } from 'react-device-detect';
-import { Question } from '../question';
 
-// TODO: タイトルやonClickを引数で変更可能にする
-export const IncomeQuestion = ({
-  personName,
-  mustInput,
-}: {
-  personName: string;
-  mustInput: boolean;
-}) => {
+export const IncomeQuestion = ({ personName }: { personName: string }) => {
   const isDisasterCalculation = location.pathname === '/calculate-disaster';
   const navigationType = useNavigationType();
   const currentDate = useRecoilValue(currentDateAtom);
 
   const [household, setHousehold] = useRecoilState(householdAtom);
   const [shownIncome, setShownIncome] = useState<string | number>('');
+  const [questionValidated, setQuestionValidated] = useRecoilState(
+    questionValidatedAtom
+  );
 
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     // NOTE: WindowsのChromium系ブラウザでは全角入力時に2回入力が発生してしまうため、片方を抑制
@@ -69,11 +68,14 @@ export const IncomeQuestion = ({
     if (isNaN(income) || income < 0) {
       income = 0;
       setShownIncome('');
+      setQuestionValidated(false);
     } else if (income > maxIncome) {
       income = maxIncome;
       setShownIncome(income / 10000);
+      setQuestionValidated(true);
     } else {
       setShownIncome(income / 10000);
+      setQuestionValidated(true);
     }
 
     newHousehold.世帯員[personName].収入 = { [currentDate]: income };
@@ -110,18 +112,13 @@ export const IncomeQuestion = ({
   }, [navigationType]);
 
   return (
-    <Question>
-      {mustInput && <ErrorMessage condition={shownIncome === ''} />}
+    <>
+      <ErrorMessage condition={shownIncome === ''} />
       <FormControl>
         <FormLabel fontSize={configData.style.itemFontSize}>
           <Center>
             <HStack>
               <Box>{isDisasterCalculation && '被災前の'}年収</Box>
-              {mustInput && (
-                <Box color="red" fontSize="0.7em">
-                  必須
-                </Box>
-              )}
             </HStack>
           </Center>
         </FormLabel>
@@ -140,6 +137,6 @@ export const IncomeQuestion = ({
           <Box>万円</Box>
         </HStack>
       </FormControl>
-    </Question>
+    </>
   );
 };
