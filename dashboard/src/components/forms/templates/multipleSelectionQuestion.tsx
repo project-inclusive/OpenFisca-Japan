@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Box,
   FormControl,
@@ -9,7 +9,6 @@ import {
 } from '@chakra-ui/react';
 
 import configData from '../../../config/app_config.json';
-import { ErrorMessage } from '../attributes/validation/ErrorMessage';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   frontendHouseholdAtom,
@@ -17,39 +16,46 @@ import {
   questionValidatedAtom,
 } from '../../../state';
 
-export const SelectionQuestion = ({
+export const MultipleSelectionQuestion = ({
   title,
   selections,
-  defaultSelection,
+  defaultSelections,
 }: {
   title: string;
-  selections: { selection: string; onClick: () => void }[];
-  defaultSelection: ({
+  selections: { selection: string; enable: () => void; disable: () => void }[];
+  defaultSelections: ({
     household,
     frontendHousehold,
   }: {
     household: any;
     frontendHousehold: any;
-  }) => string | null;
+  }) => { [key: string]: boolean };
 }) => {
   const household = useRecoilValue(householdAtom);
   const frontendHousehold = useRecoilValue(frontendHouseholdAtom);
-  const [selectionState, setSelectionState] = useState<string | null>(
-    defaultSelection({ household, frontendHousehold })
-  );
+  const [selectionsState, setSelectionsState] = useState<{
+    [key: string]: boolean;
+  }>(defaultSelections({ household, frontendHousehold }));
   const [questionValidated, setQuestionValidated] = useRecoilState(
     questionValidatedAtom
   );
 
+  useEffect(() => {
+    // 複数選択の場合、1つも選択しなくてもよいためバリデーションチェックは無条件で許可
+    setQuestionValidated(true);
+  }, []);
+
   const btn = ({
     cond,
     selection,
-    onClick,
+    enable,
+    disable,
     key,
   }: {
     cond: () => boolean;
     selection: string;
-    onClick: () => void;
+    enable: () => void;
+    disable: () => void;
     key: number;
   }) => (
     <Button
@@ -63,9 +69,17 @@ export const SelectionQuestion = ({
       color={cond() ? 'white' : 'black'}
       _hover={{ bg: 'cyan.600', borderColor: 'cyan.900', color: 'white' }}
       onClick={() => {
-        setSelectionState(selection);
-        setQuestionValidated(true);
-        onClick();
+        const copiedSelectionsState = { ...selectionsState };
+        // 有効、無効を反転
+        copiedSelectionsState[selection] = !copiedSelectionsState[selection];
+        setSelectionsState(copiedSelectionsState);
+
+        // 状態を反映
+        if (copiedSelectionsState[selection]) {
+          enable();
+        } else {
+          disable();
+        }
       }}
     >
       {selection}
@@ -74,23 +88,25 @@ export const SelectionQuestion = ({
 
   return (
     <>
-      <ErrorMessage condition={selectionState == null} />
       <FormControl>
         <FormLabel
           fontSize={configData.style.itemFontSize}
           fontWeight="Regular"
         >
           <Center>
-            <Box fontSize={configData.style.itemFontSize}>{title}</Box>
+            <Box fontSize={configData.style.itemFontSize}>
+              {title + '（複数選択）'}
+            </Box>
           </Center>
         </FormLabel>
 
         <VStack mb={4}>
           {selections.map((e, index) =>
             btn({
-              cond: () => selectionState === e.selection,
+              cond: () => selectionsState[e.selection],
               selection: e.selection,
-              onClick: e.onClick,
+              enable: e.enable,
+              disable: e.disable,
               key: index,
             })
           )}

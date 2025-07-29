@@ -220,3 +220,21 @@ export const householdAtom = atom<any>({
   },
   dangerouslyAllowMutability: true,
 });
+
+export type FrontendHousehold = {
+  世帯員: { [key: string]: { [key: string]: any } };
+  困りごと: { [key: string]: boolean };
+  制度: { [key: string]: boolean };
+};
+
+export const frontendHouseholdAtom = atom<FrontendHousehold>({
+  key: 'frontendHouseholdAtom',
+  default: {
+    世帯員: {
+      あなた: {},
+    },
+    困りごと: {},
+    制度: {},
+  },
+  dangerouslyAllowMutability: true,
+});
