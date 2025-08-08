@@ -11,7 +11,11 @@ import {
 import configData from '../../../config/app_config.json';
 import { ErrorMessage } from '../attributes/validation/ErrorMessage';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { householdAtom, questionValidatedAtom } from '../../../state';
+import {
+  frontendHouseholdAtom,
+  householdAtom,
+  questionValidatedAtom,
+} from '../../../state';
 
 // TODO: タイトルやonClickを引数で変更可能にする
 export const YesNoQuestion = ({
@@ -23,11 +27,18 @@ export const YesNoQuestion = ({
   title: string;
   yesOnClick: () => void;
   noOnClick: () => void;
-  defaultSelection: (household: any) => boolean | null;
+  defaultSelection: ({
+    household,
+    frontendHousehold,
+  }: {
+    household: any;
+    frontendHousehold: any;
+  }) => boolean | null;
 }) => {
   const household = useRecoilValue(householdAtom);
+  const frontendHousehold = useRecoilValue(frontendHouseholdAtom);
   const [boolState, setBoolState] = useState<boolean | null>(
-    defaultSelection(household)
+    defaultSelection({ household, frontendHousehold })
   );
   const [questionValidated, setQuestionValidated] = useRecoilState(
     questionValidatedAtom

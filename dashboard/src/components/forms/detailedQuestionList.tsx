@@ -10,6 +10,8 @@ import { SelfWorkQuestion } from './questions/SelfWorkQuestion';
 import { SelfOccupationQuestion } from './questions/selfOccupationQuestion';
 import { QuestionList } from './questionList';
 import { SelfAgeQuestion } from './questions/selfAgeQuestion';
+import { DummyQuestion } from './questions/dummyQuestion';
+import { SelfHealthConditionQuestion } from './questions/selfHealthConditionQuestion';
 
 // NOTE: プログレスバーの計算のために設問に順序関係を定義する必要があるため、objectではなくarrayを使用
 // HACK: componentをarray内に定義する際にkeyが必要なため定義している
@@ -28,24 +30,152 @@ const questions = {
       component: <SelfIncomeQuestion key={2} />,
     },
     {
+      title: '預金',
+      component: <DummyQuestion key={3} />,
+    },
+    {
       title: '仕事の有無',
-      component: <SelfWorkQuestion key={3} />,
+      component: <SelfWorkQuestion key={4} />,
     },
     {
       title: '仕事の種類',
-      component: <SelfOccupationQuestion key={4} />,
+      component: <SelfOccupationQuestion key={5} />,
+    },
+    {
+      title: '新しい仕事',
+      component: <DummyQuestion key={6} />,
+    },
+    {
+      title: '休業中',
+      component: <DummyQuestion key={7} />,
+    },
+    {
+      title: '病気、けが、障害',
+      component: <SelfHealthConditionQuestion key={8} />,
+    },
+    {
+      title: '業務による病気、けが',
+      component: <DummyQuestion key={9} />,
+    },
+    {
+      title: '3日以上休業',
+      component: <DummyQuestion key={10} />,
+    },
+    {
+      title: '入院中',
+      component: <DummyQuestion key={11} />,
+    },
+    {
+      title: '在宅療養中',
+      component: <DummyQuestion key={12} />,
+    },
+    {
+      title: '感染症',
+      component: <DummyQuestion key={13} />,
+    },
+    {
+      title: 'HIV',
+      component: <DummyQuestion key={14} />,
+    },
+    {
+      title: 'エイズ発症',
+      component: <DummyQuestion key={15} />,
+    },
+    {
+      title: '血液製剤による感染者',
+      component: <DummyQuestion key={16} />,
+    },
+    {
+      title: '血液製剤投与によるHIV感染',
+      component: <DummyQuestion key={17} />,
+    },
+    {
+      title: 'C型肝炎',
+      component: <DummyQuestion key={18} />,
+    },
+    {
+      title: '血液製剤投与によるC型肝炎感染',
+      component: <DummyQuestion key={19} />,
+    },
+    {
+      title: '肝硬変、肝がん、肝移植',
+      component: <DummyQuestion key={20} />,
+    },
+    {
+      title: '腎不全',
+      component: <DummyQuestion key={21} />,
+    },
+    {
+      title: '慢性腎不全',
+      component: <DummyQuestion key={22} />,
+    },
+    {
+      title: '人工透析',
+      component: <DummyQuestion key={23} />,
+    },
+    {
+      title: '血液凝固因子異常症の有無',
+      component: <DummyQuestion key={24} />,
+    },
+    {
+      title: '血液凝固因子異常症',
+      component: <DummyQuestion key={25} />,
+    },
+    {
+      title: '身体障害者手帳',
+      component: <DummyQuestion key={26} />,
+    },
+    {
+      title: '精神障害者手帳',
+      component: <DummyQuestion key={27} />,
+    },
+    {
+      title: '療育手帳',
+      component: <DummyQuestion key={28} />,
+    },
+    {
+      title: '愛の手帳',
+      component: <DummyQuestion key={29} />,
+    },
+    {
+      title: '放射線障害',
+      component: <DummyQuestion key={30} />,
+    },
+    {
+      title: '内部障害',
+      component: <DummyQuestion key={31} />,
+    },
+    {
+      title: '脳性まひ',
+      component: <DummyQuestion key={32} />,
+    },
+    {
+      title: '介護施設',
+      component: <DummyQuestion key={33} />,
+    },
+    {
+      title: '学生かどうか',
+      component: <DummyQuestion key={34} />,
+    },
+    {
+      title: '家を借りたい',
+      component: <DummyQuestion key={35} />,
+    },
+    {
+      title: '妊娠',
+      component: <DummyQuestion key={36} />,
     },
     {
       title: '配偶者の有無',
-      component: <SpouseExistsQuestion key={5} />,
+      component: <SpouseExistsQuestion key={37} />,
     },
     {
       title: '子どもの人数',
-      component: <ChildrenNumQuestion key={6} />,
+      component: <ChildrenNumQuestion key={38} />,
     },
     {
       title: '親の人数',
-      component: <ParentNumQuestion key={7} />,
+      component: <ParentNumQuestion key={39} />,
     },
   ],
   配偶者: [
@@ -53,17 +183,413 @@ const questions = {
       title: '年齢',
       component: <SpouseAgeQuestion key={0} />,
     },
+    {
+      title: '年収',
+      component: <DummyQuestion key={1} />,
+    },
+    {
+      title: '預金',
+      component: <DummyQuestion key={2} />,
+    },
+    {
+      title: '仕事の有無',
+      component: <DummyQuestion key={3} />,
+    },
+    {
+      title: '仕事の種類',
+      component: <DummyQuestion key={4} />,
+    },
+    {
+      title: '新しい仕事',
+      component: <DummyQuestion key={5} />,
+    },
+    {
+      title: '休業中',
+      component: <DummyQuestion key={6} />,
+    },
+    {
+      title: '病気、けが、障害',
+      component: <DummyQuestion key={7} />,
+    },
+    {
+      title: '業務による病気、けが',
+      component: <DummyQuestion key={8} />,
+    },
+    {
+      title: '3日以上休業',
+      component: <DummyQuestion key={9} />,
+    },
+    {
+      title: '入院中',
+      component: <DummyQuestion key={10} />,
+    },
+    {
+      title: '在宅療養中',
+      component: <DummyQuestion key={11} />,
+    },
+    {
+      title: '感染症',
+      component: <DummyQuestion key={12} />,
+    },
+    {
+      title: 'HIV',
+      component: <DummyQuestion key={13} />,
+    },
+    {
+      title: 'エイズ発症',
+      component: <DummyQuestion key={14} />,
+    },
+    {
+      title: '血液製剤による感染者',
+      component: <DummyQuestion key={15} />,
+    },
+    {
+      title: '血液製剤投与によるHIV感染',
+      component: <DummyQuestion key={16} />,
+    },
+    {
+      title: 'C型肝炎',
+      component: <DummyQuestion key={17} />,
+    },
+    {
+      title: '血液製剤投与によるC型肝炎感染',
+      component: <DummyQuestion key={18} />,
+    },
+    {
+      title: '肝硬変、肝がん、肝移植',
+      component: <DummyQuestion key={19} />,
+    },
+    {
+      title: '腎不全',
+      component: <DummyQuestion key={20} />,
+    },
+    {
+      title: '慢性腎不全',
+      component: <DummyQuestion key={21} />,
+    },
+    {
+      title: '人工透析',
+      component: <DummyQuestion key={22} />,
+    },
+    {
+      title: '血液凝固因子異常症の有無',
+      component: <DummyQuestion key={23} />,
+    },
+    {
+      title: '血液凝固因子異常症',
+      component: <DummyQuestion key={24} />,
+    },
+    {
+      title: '身体障害者手帳',
+      component: <DummyQuestion key={25} />,
+    },
+    {
+      title: '精神障害者手帳',
+      component: <DummyQuestion key={26} />,
+    },
+    {
+      title: '療育手帳',
+      component: <DummyQuestion key={27} />,
+    },
+    {
+      title: '愛の手帳',
+      component: <DummyQuestion key={28} />,
+    },
+    {
+      title: '放射線障害',
+      component: <DummyQuestion key={29} />,
+    },
+    {
+      title: '内部障害',
+      component: <DummyQuestion key={30} />,
+    },
+    {
+      title: '脳性まひ',
+      component: <DummyQuestion key={31} />,
+    },
+    {
+      title: '介護施設',
+      component: <DummyQuestion key={32} />,
+    },
+    {
+      title: '妊娠',
+      component: <DummyQuestion key={33} />,
+    },
+    {
+      title: '配偶者がいるがひとり親に該当',
+      component: <DummyQuestion key={34} />,
+    },
   ],
   子ども: [
     {
       title: '年齢',
       component: <ChildAgeQuestion key={0} />,
     },
+    {
+      title: '高校に通っているかどうか',
+      component: <DummyQuestion key={1} />,
+    },
+    {
+      title: '高校履修種別',
+      component: <DummyQuestion key={2} />,
+    },
+    {
+      title: '高校運営種別',
+      component: <DummyQuestion key={3} />,
+    },
+    {
+      title: '仕事の有無',
+      component: <DummyQuestion key={4} />,
+    },
+    {
+      title: '仕事の種類',
+      component: <DummyQuestion key={5} />,
+    },
+    {
+      title: '新しい仕事',
+      component: <DummyQuestion key={6} />,
+    },
+    {
+      title: '休業中',
+      component: <DummyQuestion key={7} />,
+    },
+    {
+      title: '病気、けが、障害',
+      component: <DummyQuestion key={8} />,
+    },
+    {
+      title: '業務による病気、けが',
+      component: <DummyQuestion key={9} />,
+    },
+    {
+      title: '3日以上休業',
+      component: <DummyQuestion key={10} />,
+    },
+    {
+      title: '入院中',
+      component: <DummyQuestion key={11} />,
+    },
+    {
+      title: '在宅療養中',
+      component: <DummyQuestion key={12} />,
+    },
+    {
+      title: '感染症',
+      component: <DummyQuestion key={13} />,
+    },
+    {
+      title: 'HIV',
+      component: <DummyQuestion key={14} />,
+    },
+    {
+      title: 'エイズ発症',
+      component: <DummyQuestion key={15} />,
+    },
+    {
+      title: '血液製剤による感染者',
+      component: <DummyQuestion key={16} />,
+    },
+    {
+      title: '血液製剤投与によるHIV感染',
+      component: <DummyQuestion key={17} />,
+    },
+    {
+      title: 'C型肝炎',
+      component: <DummyQuestion key={18} />,
+    },
+    {
+      title: '血液製剤投与によるC型肝炎感染',
+      component: <DummyQuestion key={19} />,
+    },
+    {
+      title: '肝硬変、肝がん、肝移植',
+      component: <DummyQuestion key={20} />,
+    },
+    {
+      title: '腎不全',
+      component: <DummyQuestion key={21} />,
+    },
+    {
+      title: '慢性腎不全',
+      component: <DummyQuestion key={22} />,
+    },
+    {
+      title: '人工透析',
+      component: <DummyQuestion key={23} />,
+    },
+    {
+      title: '血液凝固因子異常症の有無',
+      component: <DummyQuestion key={24} />,
+    },
+    {
+      title: '血液凝固因子異常症',
+      component: <DummyQuestion key={25} />,
+    },
+    {
+      title: '身体障害者手帳',
+      component: <DummyQuestion key={26} />,
+    },
+    {
+      title: '精神障害者手帳',
+      component: <DummyQuestion key={27} />,
+    },
+    {
+      title: '療育手帳',
+      component: <DummyQuestion key={28} />,
+    },
+    {
+      title: '愛の手帳',
+      component: <DummyQuestion key={29} />,
+    },
+    {
+      title: '放射線障害',
+      component: <DummyQuestion key={30} />,
+    },
+    {
+      title: '内部障害',
+      component: <DummyQuestion key={31} />,
+    },
+    {
+      title: '脳性まひ',
+      component: <DummyQuestion key={32} />,
+    },
+    {
+      title: '介護施設',
+      component: <DummyQuestion key={33} />,
+    },
   ],
   親: [
     {
       title: '年齢',
       component: <ParentAgeQuestion key={0} />,
+    },
+    {
+      title: '年収',
+      component: <DummyQuestion key={1} />,
+    },
+    {
+      title: '預金',
+      component: <DummyQuestion key={2} />,
+    },
+    {
+      title: '仕事の有無',
+      component: <DummyQuestion key={3} />,
+    },
+    {
+      title: '仕事の種類',
+      component: <DummyQuestion key={4} />,
+    },
+    {
+      title: '新しい仕事',
+      component: <DummyQuestion key={5} />,
+    },
+    {
+      title: '休業中',
+      component: <DummyQuestion key={6} />,
+    },
+    {
+      title: '病気、けが、障害',
+      component: <DummyQuestion key={7} />,
+    },
+    {
+      title: '業務による病気、けが',
+      component: <DummyQuestion key={8} />,
+    },
+    {
+      title: '3日以上休業',
+      component: <DummyQuestion key={9} />,
+    },
+    {
+      title: '入院中',
+      component: <DummyQuestion key={10} />,
+    },
+    {
+      title: '在宅療養中',
+      component: <DummyQuestion key={11} />,
+    },
+    {
+      title: '感染症',
+      component: <DummyQuestion key={12} />,
+    },
+    {
+      title: 'HIV',
+      component: <DummyQuestion key={13} />,
+    },
+    {
+      title: 'エイズ発症',
+      component: <DummyQuestion key={14} />,
+    },
+    {
+      title: '血液製剤による感染者',
+      component: <DummyQuestion key={15} />,
+    },
+    {
+      title: '血液製剤投与によるHIV感染',
+      component: <DummyQuestion key={16} />,
+    },
+    {
+      title: 'C型肝炎',
+      component: <DummyQuestion key={17} />,
+    },
+    {
+      title: '血液製剤投与によるC型肝炎感染',
+      component: <DummyQuestion key={18} />,
+    },
+    {
+      title: '肝硬変、肝がん、肝移植',
+      component: <DummyQuestion key={19} />,
+    },
+    {
+      title: '腎不全',
+      component: <DummyQuestion key={20} />,
+    },
+    {
+      title: '慢性腎不全',
+      component: <DummyQuestion key={21} />,
+    },
+    {
+      title: '人工透析',
+      component: <DummyQuestion key={22} />,
+    },
+    {
+      title: '血液凝固因子異常症の有無',
+      component: <DummyQuestion key={23} />,
+    },
+    {
+      title: '血液凝固因子異常症',
+      component: <DummyQuestion key={24} />,
+    },
+    {
+      title: '身体障害者手帳',
+      component: <DummyQuestion key={25} />,
+    },
+    {
+      title: '精神障害者手帳',
+      component: <DummyQuestion key={26} />,
+    },
+    {
+      title: '療育手帳',
+      component: <DummyQuestion key={27} />,
+    },
+    {
+      title: '愛の手帳',
+      component: <DummyQuestion key={28} />,
+    },
+    {
+      title: '放射線障害',
+      component: <DummyQuestion key={29} />,
+    },
+    {
+      title: '内部障害',
+      component: <DummyQuestion key={30} />,
+    },
+    {
+      title: '脳性まひ',
+      component: <DummyQuestion key={31} />,
+    },
+    {
+      title: '介護施設',
+      component: <DummyQuestion key={32} />,
     },
   ],
 };

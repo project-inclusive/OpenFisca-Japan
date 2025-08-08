@@ -51,7 +51,7 @@ export const PersonNumQuestion = ({
   const inputEl = useRef<HTMLInputElement>(null);
   const [boolState, setBoolState] = useState<boolean | null>(null);
 
-  // チェックされたときに「子どもの数」フォームにフォーカス
+  // チェックされたときに人数のフォームにフォーカス
   useEffect(() => {
     if (inputEl.current) {
       inputEl.current.focus();

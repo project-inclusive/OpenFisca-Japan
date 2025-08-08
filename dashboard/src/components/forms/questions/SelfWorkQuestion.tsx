@@ -1,11 +1,6 @@
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { YesNoQuestion } from '../templates/yesNoQuestion';
-import {
-  currentDateAtom,
-  householdAtom,
-  nextQuestionKeyAtom,
-  questionValidatedAtom,
-} from '../../../state';
+import { nextQuestionKeyAtom } from '../../../state';
 
 export const SelfWorkQuestion = () => {
   const [nextQuestionKey, setNextQuestionKey] =
@@ -17,7 +12,7 @@ export const SelfWorkQuestion = () => {
     setNextQuestionKey({
       person: 'あなた',
       personNum: 0,
-      title: '配偶者の有無',
+      title: '病気、けが、障害',
     });
   };
 
@@ -26,7 +21,7 @@ export const SelfWorkQuestion = () => {
       title="現在仕事をしていますか？"
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
-      defaultSelection={(household: any) => null}
+      defaultSelection={() => null}
     />
   );
 };

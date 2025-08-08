@@ -10,7 +10,7 @@ import {
   showsValidationErrorAtom,
 } from '../../state';
 import configData from '../../config/app_config.json';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export type Question = {
@@ -79,7 +79,7 @@ const defaultNextQuestionKey = (
       };
     }
     case '親': {
-      if (key.personNum < household.世帯一覧.世帯1.親一覧.length) {
+      if (key.personNum < household.世帯一覧.世帯1.祖父母一覧.length) {
         return {
           person: '親',
           personNum: key.personNum + 1,

@@ -52,7 +52,7 @@ export const SimpleSpouseExistsQuestion = () => {
       title="配偶者はいますか？"
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
-      defaultSelection={(household: any) =>
+      defaultSelection={({ household }: { household: any }) =>
         household.世帯員['配偶者'] ? true : null
       }
     />

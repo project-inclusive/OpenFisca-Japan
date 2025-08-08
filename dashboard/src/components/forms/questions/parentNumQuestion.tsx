@@ -1,5 +1,9 @@
 import { useRecoilState } from 'recoil';
-import { householdAtom, nextQuestionKeyAtom } from '../../../state';
+import {
+  frontendHouseholdAtom,
+  householdAtom,
+  nextQuestionKeyAtom,
+} from '../../../state';
 import { PersonNumQuestion } from '../templates/personNumQuestion';
 import configData from '../../../config/app_config.json';
 
@@ -7,8 +11,13 @@ export const ParentNumQuestion = () => {
   const [nextQuestionKey, setNextQuestionKey] =
     useRecoilState(nextQuestionKeyAtom);
   const [household, setHousehold] = useRecoilState(householdAtom);
+  const [frontendHousehold, setFrontendHousehold] = useRecoilState(
+    frontendHouseholdAtom
+  );
 
   const updatePersonInfo = (personNum: number) => {
+    const parentNames = [...Array(personNum)].map((val, i) => `親${i + 1}`);
+
     const newHousehold = { ...household };
     if (household.世帯一覧.世帯1.祖父母一覧) {
       household.世帯一覧.世帯1.祖父母一覧.map((parentName: string) => {
@@ -16,16 +25,25 @@ export const ParentNumQuestion = () => {
       });
     }
 
-    // 新しい子どもの情報を追加
-    newHousehold.世帯一覧.世帯1.祖父母一覧 = [...Array(personNum)].map(
-      (val, i) => `親${i + 1}`
-    );
+    // 新しい親の情報を追加
+    newHousehold.世帯一覧.世帯1.祖父母一覧 = parentNames;
     if (newHousehold.世帯一覧.世帯1.祖父母一覧) {
       newHousehold.世帯一覧.世帯1.祖父母一覧.map((parentName: string) => {
         newHousehold.世帯員[parentName] = {};
       });
     }
     setHousehold({ ...newHousehold });
+
+    const newFrontendHousehold = { ...frontendHousehold };
+    Object.keys(frontendHousehold.世帯員)
+      .filter((name) => name.match('親'))
+      .map((parentName) => {
+        delete newFrontendHousehold.世帯員[parentName];
+      });
+    parentNames.map((parentName) => {
+      newFrontendHousehold.世帯員[parentName] = {};
+    });
+    setFrontendHousehold(newFrontendHousehold);
 
     // 次の質問を設定
     if (personNum === 0) {
