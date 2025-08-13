@@ -8,6 +8,7 @@ import { ChildrenNumQuestion } from './questions/childrenNumQuestion';
 import { ParentNumQuestion } from './questions/parentNumQuestion';
 import { SelfWorkQuestion } from './questions/SelfWorkQuestion';
 import { SelfOccupationQuestion } from './questions/selfOccupationQuestion';
+import { SelfPhysicalDisability } from './questions/selfPhysicalDisability';
 import { QuestionList } from './questionList';
 import { SelfAgeQuestion } from './questions/selfAgeQuestion';
 import { DummyQuestion } from './questions/dummyQuestion';
@@ -123,7 +124,7 @@ const questions = {
     },
     {
       title: '身体障害者手帳',
-      component: <DummyQuestion key={26} />,
+      component: <SelfPhysicalDisability key={26} />,
     },
     {
       title: '精神障害者手帳',
