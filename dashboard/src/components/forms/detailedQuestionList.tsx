@@ -14,6 +14,7 @@ import { SelfAgeQuestion } from './questions/selfAgeQuestion';
 import { DummyQuestion } from './questions/dummyQuestion';
 import { SelfHealthConditionQuestion } from './questions/selfHealthConditionQuestion';
 import { SpousePhysicalDisability } from './questions/SpousePhysicalDisability';
+import { ChildPhysicalDisability } from './questions/childPhysicalDisability';
 
 // NOTE: プログレスバーの計算のために設問に順序関係を定義する必要があるため、objectではなくarrayを使用
 // HACK: componentをarray内に定義する際にkeyが必要なため定義している
@@ -429,7 +430,7 @@ const questions = {
     },
     {
       title: '身体障害者手帳',
-      component: <DummyQuestion key={26} />,
+      component: <ChildPhysicalDisability key={26} />,
     },
     {
       title: '精神障害者手帳',
