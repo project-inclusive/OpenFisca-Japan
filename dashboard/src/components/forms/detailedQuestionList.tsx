@@ -13,6 +13,7 @@ import { QuestionList } from './questionList';
 import { SelfAgeQuestion } from './questions/selfAgeQuestion';
 import { DummyQuestion } from './questions/dummyQuestion';
 import { SelfHealthConditionQuestion } from './questions/selfHealthConditionQuestion';
+import { SpousePhysicalDisability } from './questions/SpousePhysicalDisability';
 
 // NOTE: プログレスバーの計算のために設問に順序関係を定義する必要があるため、objectではなくarrayを使用
 // HACK: componentをarray内に定義する際にkeyが必要なため定義している
@@ -282,7 +283,7 @@ const questions = {
     },
     {
       title: '身体障害者手帳',
-      component: <DummyQuestion key={25} />,
+      component: <SpousePhysicalDisability key={25} />,
     },
     {
       title: '精神障害者手帳',
