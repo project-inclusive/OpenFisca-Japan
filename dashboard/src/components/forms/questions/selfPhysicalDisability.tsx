@@ -16,7 +16,7 @@ export const SelfPhysicalDisability = () => {
         newHousehold.世帯員['あなた'].身体障害者手帳等級 = {
           [currentDate]: grade,
         };
-        setHousehold({ ...newHousehold});
+        setHousehold({ ...newHousehold });
       }
     };
   });
