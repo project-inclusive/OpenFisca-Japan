@@ -1,0 +1,36 @@
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { currentDateAtom, householdAtom } from '../../../state';
+import { SelectionQuestion } from '../templates/selectionQuestion';
+
+export const ParentPhysicalDisability = () => {
+  const [household, setHousehold] = useRecoilState(householdAtom);
+  const currentDate = useRecoilValue(currentDateAtom);
+
+  const grades = ['1級', '2級', '3級', '上記以外／持っていない'];
+
+  const selections = grades.map((grade: string) => {
+    return {
+      selection: grade,
+      onClick: () => {
+        const newHousehold = { ...household };
+        // TODO: 親のサフィックスはpersonNumから取得するように修正
+        newHousehold.世帯員['親1'].身体障害者手帳等級 = {
+          [currentDate]: grade,
+        };
+        setHousehold({ ...newHousehold });
+      }
+    };
+  });
+
+  return (
+    <SelectionQuestion
+      title="身体障害者手帳を持っていますか？"
+      selections={selections}
+      defaultSelection={({ household }: { household: any }) =>
+        household.世帯員['親1'].身体障害者手帳等級 // TODO: 親のサフィックスはpersonNumから取得するように修正
+          ? household.世帯員['親1'].身体障害者手帳等級[currentDate]
+          : null
+      }
+    />
+  );
+};
