@@ -6,15 +6,22 @@ export const PhysicalDisability = ({ personName }: { personName: string }) => {
   const [household, setHousehold] = useRecoilState(householdAtom);
   const currentDate = useRecoilValue(currentDateAtom);
 
-  const grades = ['1級', '2級', '3級', '上記以外／持っていない'];
+  // display: 画面表示に使用
+  // value: OpenFisca APIに使用(pythonは数字を頭にした変数名をつけられない)
+  const grades = [
+    { display: '1級', value: '一級' },
+    { display: '2級', value: '二級' },
+    { display: '3級', value: '三級' },
+    { display: '上記以外／持っていない', value: '' }
+  ];
 
-  const selections = grades.map((grade: string) => {
+  const selections = grades.map((grade) => {
     return {
-      selection: grade,
+      selection: grade.display,
       onClick: () => {
         const newHousehold = { ...household };
         newHousehold.世帯員[personName].身体障害者手帳等級 = {
-          [currentDate]: grade,
+          [currentDate]: grade.value,
         };
         setHousehold({ ...newHousehold });
       }
