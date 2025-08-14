@@ -13,7 +13,7 @@ import { QuestionList } from './questionList';
 import { SelfAgeQuestion } from './questions/selfAgeQuestion';
 import { DummyQuestion } from './questions/dummyQuestion';
 import { SelfHealthConditionQuestion } from './questions/selfHealthConditionQuestion';
-import { SpousePhysicalDisability } from './questions/SpousePhysicalDisability';
+import { SpousePhysicalDisability } from './questions/spousePhysicalDisability';
 import { ChildPhysicalDisability } from './questions/childPhysicalDisability';
 import { ParentPhysicalDisability } from './questions/parentPhysicalDisability';
 
