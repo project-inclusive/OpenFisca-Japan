@@ -1,5 +1,5 @@
 import { useRecoilValue } from 'recoil';
-import { questionKeyAtom } from "../../../state";
+import { questionKeyAtom } from '../../../state';
 import { PhysicalDisability } from '../templates/physicalDisability';
 
 export const ParentPhysicalDisability = () => {

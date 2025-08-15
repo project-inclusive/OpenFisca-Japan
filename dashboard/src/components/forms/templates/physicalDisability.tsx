@@ -12,7 +12,7 @@ export const PhysicalDisability = ({ personName }: { personName: string }) => {
     { display: '1級', value: '一級' },
     { display: '2級', value: '二級' },
     { display: '3級', value: '三級' },
-    { display: '上記以外／持っていない', value: '' }
+    { display: '上記以外／持っていない', value: '' },
   ];
 
   const selections = grades.map((grade) => {
@@ -24,7 +24,7 @@ export const PhysicalDisability = ({ personName }: { personName: string }) => {
           [currentDate]: grade.value,
         };
         setHousehold({ ...newHousehold });
-      }
+      },
     };
   });
 
@@ -39,4 +39,4 @@ export const PhysicalDisability = ({ personName }: { personName: string }) => {
       }
     />
   );
-}
+};
