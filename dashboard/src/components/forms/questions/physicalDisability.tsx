@@ -32,11 +32,15 @@ export const PhysicalDisability = ({ personName }: { personName: string }) => {
     <SelectionQuestion
       title="身体障害者手帳を持っていますか？"
       selections={selections}
-      defaultSelection={({ household }: { household: any }) => {
-        return household.世帯員[personName].身体障害者手帳等級
-          ? grades.find(grade => grade.value === household.世帯員[personName].身体障害者手帳等級[currentDate])?.display ?? null
+      defaultSelection={({ household }: { household: any }) =>
+        household.世帯員[personName].身体障害者手帳等級
+          ? grades.find(
+              (grade) =>
+                grade.value ===
+                household.世帯員[personName].身体障害者手帳等級[currentDate]
+            )?.display ?? null
           : null
-      }}
+      }
     />
   );
 };
