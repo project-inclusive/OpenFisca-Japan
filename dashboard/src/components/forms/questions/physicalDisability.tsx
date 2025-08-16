@@ -1,6 +1,6 @@
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { currentDateAtom, householdAtom } from '../../../state';
-import { SelectionQuestion } from './selectionQuestion';
+import { SelectionQuestion } from '../templates/selectionQuestion';
 
 export const PhysicalDisability = ({ personName }: { personName: string }) => {
   const [household, setHousehold] = useRecoilState(householdAtom);
