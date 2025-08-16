@@ -3,10 +3,27 @@ import { SelfIncomeQuestion } from './questions/selfIncomeQuestion';
 import { QuestionList } from './questionList';
 import { SpouseIncomeQuestion } from './questions/spouseIncomeQuestion';
 import { ChildAgeQuestion } from './questions/childAgeQuestion';
-import { DummyQuestion } from './questions/dummyQuestion';
-import { SpouseExistsQuestion } from './questions/spouseExistsQuestion';
 import { ChildrenNumQuestion } from './questions/childrenNumQuestion';
-import { ParentNumQuestion } from './questions/parentNumQuestion';
+import { HousingDamageExistsQuestion } from './questions/housingDamageExistsQuestion';
+import { HousingDamageQuestion } from './questions/housingDamageQuestion';
+import { HousingReconstructionQuestion } from './questions/housingReconstructionQuestion';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { currentDateAtom, householdAtom } from '../../state';
+import { useEffect } from 'react';
+import { HouseholdGoodsDamageQuestion } from './questions/householdGoodsDamageQuestion';
+import { DeceasedNumberQuestion } from './questions/deceasedNumberQuestion';
+import { DeceasedBreadwinnerQuestion } from './questions/deceasedBreadwinnerQuestion';
+import { SelfDisasterInjuryQuestion } from './questions/selfDisasterInjuryQuestion';
+import { SelfDisasterDisabilityQuestion } from './questions/selfDisasterDisabilityQuestion';
+import { SpouseDisasterInjuryQuestion } from './questions/spouseDisasterInjuryQuestion';
+import { SpouseDisasterDisabilityQuestion } from './questions/spouseDisasterDisabilityQuestion';
+import { ChildDisasterInjuryQuestion } from './questions/childDisasterInjuryQuestion';
+import { ChildDisasterDisabilityQuestion } from './questions/childDisasterDisabilityQuestion';
+import { ParentDisasterDisabilityQuestion } from './questions/parentDisasterDisabilityQuestion';
+import { ParentDisasterInjuryQuestion } from './questions/parentDisasterInjuryQuestion';
+import { SimpleSpouseExistsQuestion } from './questions/simpleSpouseExistsQuestion';
+import { DisasterParentNumQuestion } from './questions/disasterParentNumQuestion';
+import { ParentIncomeQuestion } from './questions/parentIncomeQuestion';
 
 // TODO: 災害関連見積もりの内容に修正
 // NOTE: プログレスバーの計算のために設問に順序関係を定義する必要があるため、objectではなくarrayを使用
@@ -23,51 +40,47 @@ const questions = {
     },
     {
       title: '住宅被害の有無',
-      component: <DummyQuestion key={2} />,
+      component: <HousingDamageExistsQuestion key={2} />,
     },
     {
       title: '住宅被害状況',
-      component: <DummyQuestion key={3} />,
+      component: <HousingDamageQuestion key={3} />,
     },
     {
       title: '再建方法',
-      component: <DummyQuestion key={4} />,
+      component: <HousingReconstructionQuestion key={4} />,
     },
     {
       title: '家財の損害',
-      component: <DummyQuestion key={5} />,
+      component: <HouseholdGoodsDamageQuestion key={5} />,
     },
     {
       title: '災害による負傷',
-      component: <DummyQuestion key={6} />,
+      component: <SelfDisasterInjuryQuestion key={6} />,
     },
     {
       title: '災害による障害',
-      component: <DummyQuestion key={7} />,
-    },
-    {
-      title: '世帯員が亡くなったかどうか',
-      component: <DummyQuestion key={8} />,
+      component: <SelfDisasterDisabilityQuestion key={7} />,
     },
     {
       title: '亡くなった世帯員の人数',
-      component: <DummyQuestion key={9} />,
+      component: <DeceasedNumberQuestion key={8} />,
     },
     {
       title: '生計維持者が亡くなったかどうか',
-      component: <DummyQuestion key={10} />,
+      component: <DeceasedBreadwinnerQuestion key={9} />,
     },
     {
       title: '配偶者の有無',
-      component: <SpouseExistsQuestion key={11} />,
+      component: <SimpleSpouseExistsQuestion key={10} />,
     },
     {
       title: '子どもの人数',
-      component: <ChildrenNumQuestion key={12} />,
+      component: <ChildrenNumQuestion key={11} />,
     },
     {
       title: '親の人数',
-      component: <ParentNumQuestion key={13} />,
+      component: <DisasterParentNumQuestion key={12} />,
     },
   ],
   配偶者: [
@@ -77,11 +90,11 @@ const questions = {
     },
     {
       title: '災害による負傷',
-      component: <DummyQuestion key={1} />,
+      component: <SpouseDisasterInjuryQuestion key={1} />,
     },
     {
       title: '災害による障害',
-      component: <DummyQuestion key={2} />,
+      component: <SpouseDisasterDisabilityQuestion key={2} />,
     },
   ],
   子ども: [
@@ -91,26 +104,49 @@ const questions = {
     },
     {
       title: '災害による負傷',
-      component: <DummyQuestion key={1} />,
+      component: <ChildDisasterInjuryQuestion key={1} />,
     },
     {
       title: '災害による障害',
-      component: <DummyQuestion key={2} />,
+      component: <ChildDisasterDisabilityQuestion key={2} />,
     },
   ],
   親: [
     {
+      title: '年収',
+      component: <ParentIncomeQuestion key={0} />,
+    },
+    {
       title: '災害による負傷',
-      component: <DummyQuestion key={0} />,
+      component: <ParentDisasterInjuryQuestion key={1} />,
     },
     {
       title: '災害による障害',
-      component: <DummyQuestion key={1} />,
+      component: <ParentDisasterDisabilityQuestion key={2} />,
     },
   ],
 };
 
 export const DisasterQuestionList = () => {
+  const [household, setHousehold] = useRecoilState(householdAtom);
+  const currentDate = useRecoilValue(currentDateAtom);
+
+  // 災害関連の制度が該当するよう設定
+  useEffect(() => {
+    const newHousehold = { ...household };
+    newHousehold.世帯一覧.世帯1.被災している = {
+      [currentDate]: true,
+    };
+    newHousehold.世帯一覧.世帯1.災害救助法の適用地域である = {
+      [currentDate]: true,
+    };
+    newHousehold.世帯一覧.世帯1.被災者生活再建支援法の適用地域である = {
+      [currentDate]: true,
+    };
+
+    setHousehold({ ...newHousehold });
+  }, []);
+
   return (
     <QuestionList
       questions={questions}

@@ -64,12 +64,15 @@ export const ChildrenNumQuestion = () => {
     }
   };
 
-  const filterPerson = (household: any) => household.世帯一覧.世帯1.子一覧;
+  const defaultNum = (household: any) =>
+    household.世帯一覧.世帯1.子一覧
+      ? household.世帯一覧.世帯1.子一覧.length
+      : 0;
 
   return (
     <PersonNumQuestion
       updatePersonInfo={updatePersonInfo}
-      filterPerson={filterPerson}
+      defaultNum={defaultNum}
       maxPerson={configData.validation.household.maxChildren}
       title="子どもの人数"
     />

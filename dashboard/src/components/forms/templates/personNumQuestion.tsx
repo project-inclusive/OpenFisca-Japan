@@ -28,12 +28,12 @@ import { ErrorMessage } from '../attributes/validation/ErrorMessage';
 
 export const PersonNumQuestion = ({
   updatePersonInfo,
-  filterPerson,
+  defaultNum,
   maxPerson,
   title,
 }: {
   updatePersonInfo: (personNum: number) => void;
-  filterPerson: (household: any) => any;
+  defaultNum: (household: any) => number;
   maxPerson: number;
   title: string;
 }) => {
@@ -101,10 +101,7 @@ export const PersonNumQuestion = ({
 
   // stored states set displayed value when page transition
   useEffect(() => {
-    const targetPeople = filterPerson(household);
-    if (targetPeople) {
-      setShownPersonNum(targetPeople.length);
-    }
+    defaultNum(household);
   }, [navigationType]);
 
   const btn = ({
