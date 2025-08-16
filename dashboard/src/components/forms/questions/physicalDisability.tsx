@@ -1,6 +1,6 @@
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { currentDateAtom, householdAtom } from '../../../state';
-import { SelectionQuestion } from './selectionQuestion';
+import { SelectionQuestion } from '../templates/selectionQuestion';
 
 export const PhysicalDisability = ({ personName }: { personName: string }) => {
   const [household, setHousehold] = useRecoilState(householdAtom);
@@ -34,7 +34,11 @@ export const PhysicalDisability = ({ personName }: { personName: string }) => {
       selections={selections}
       defaultSelection={({ household }: { household: any }) =>
         household.世帯員[personName].身体障害者手帳等級
-          ? household.世帯員[personName].身体障害者手帳等級[currentDate]
+          ? grades.find(
+              (grade) =>
+                grade.value ===
+                household.世帯員[personName].身体障害者手帳等級[currentDate]
+            )?.display ?? null
           : null
       }
     />

@@ -95,7 +95,7 @@ export const PersonNumQuestion = ({
       setQuestionValidated(true);
     }
 
-    setActualPersonNum(5);
+    setActualPersonNum(personNum);
     updatePersonInfo(personNum);
   }, []);
 

@@ -1,4 +1,4 @@
-import { PhysicalDisability } from '../templates/physicalDisability';
+import { PhysicalDisability } from './physicalDisability';
 
 export const SelfPhysicalDisability = () => {
   return <PhysicalDisability personName="あなた" />;
