@@ -1,5 +1,5 @@
-import { IntellectualDisability } from "./intellectualDisability";
+import { IntellectualDisability } from './intellectualDisability';
 
 export const SelfIntellectualDisability = () => {
-  return <IntellectualDisability personName='あなた' />;
+  return <IntellectualDisability personName="あなた" />;
 };
