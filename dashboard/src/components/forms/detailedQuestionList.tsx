@@ -16,6 +16,10 @@ import { SelfPhysicalDisability } from './questions/selfPhysicalDisability';
 import { SpousePhysicalDisability } from './questions/spousePhysicalDisability';
 import { ChildPhysicalDisability } from './questions/childPhysicalDisability';
 import { ParentPhysicalDisability } from './questions/parentPhysicalDisability';
+import { SelfIntellectualDisability } from './questions/selfIntellectualDisability';
+import { SpouseIntellectualDisability } from './questions/spouseIntellectualDisability';
+import { ChildIntellectualDisability } from './questions/childIntellectualDisability';
+import { ParentIntellectualDisability } from './questions/parentIntellectualDisability';
 
 // NOTE: プログレスバーの計算のために設問に順序関係を定義する必要があるため、objectではなくarrayを使用
 // HACK: componentをarray内に定義する際にkeyが必要なため定義している
@@ -134,52 +138,48 @@ const questions = {
       component: <DummyQuestion key={27} />,
     },
     {
-      title: '療育手帳',
-      component: <DummyQuestion key={28} />,
-    },
-    {
-      title: '愛の手帳',
-      component: <DummyQuestion key={29} />,
+      title: '療育手帳、愛の手帳',
+      component: <SelfIntellectualDisability key={28} />,
     },
     {
       title: '放射線障害',
-      component: <DummyQuestion key={30} />,
+      component: <DummyQuestion key={29} />,
     },
     {
       title: '内部障害',
-      component: <DummyQuestion key={31} />,
+      component: <DummyQuestion key={30} />,
     },
     {
       title: '脳性まひ',
-      component: <DummyQuestion key={32} />,
+      component: <DummyQuestion key={31} />,
     },
     {
       title: '介護施設',
-      component: <DummyQuestion key={33} />,
+      component: <DummyQuestion key={32} />,
     },
     {
       title: '学生かどうか',
-      component: <DummyQuestion key={34} />,
+      component: <DummyQuestion key={33} />,
     },
     {
       title: '家を借りたい',
-      component: <DummyQuestion key={35} />,
+      component: <DummyQuestion key={34} />,
     },
     {
       title: '妊娠',
-      component: <DummyQuestion key={36} />,
+      component: <DummyQuestion key={35} />,
     },
     {
       title: '配偶者の有無',
-      component: <SpouseExistsQuestion key={37} />,
+      component: <SpouseExistsQuestion key={36} />,
     },
     {
       title: '子どもの人数',
-      component: <ChildrenNumQuestion key={38} />,
+      component: <ChildrenNumQuestion key={37} />,
     },
     {
       title: '親の人数',
-      component: <ParentNumQuestion key={39} />,
+      component: <ParentNumQuestion key={38} />,
     },
   ],
   配偶者: [
@@ -292,36 +292,32 @@ const questions = {
       component: <DummyQuestion key={26} />,
     },
     {
-      title: '療育手帳',
-      component: <DummyQuestion key={27} />,
-    },
-    {
-      title: '愛の手帳',
-      component: <DummyQuestion key={28} />,
+      title: '療育手帳、愛の手帳',
+      component: <SpouseIntellectualDisability key={27} />,
     },
     {
       title: '放射線障害',
-      component: <DummyQuestion key={29} />,
+      component: <DummyQuestion key={28} />,
     },
     {
       title: '内部障害',
-      component: <DummyQuestion key={30} />,
+      component: <DummyQuestion key={29} />,
     },
     {
       title: '脳性まひ',
-      component: <DummyQuestion key={31} />,
+      component: <DummyQuestion key={30} />,
     },
     {
       title: '介護施設',
-      component: <DummyQuestion key={32} />,
+      component: <DummyQuestion key={31} />,
     },
     {
       title: '妊娠',
-      component: <DummyQuestion key={33} />,
+      component: <DummyQuestion key={32} />,
     },
     {
       title: '配偶者がいるがひとり親に該当',
-      component: <DummyQuestion key={34} />,
+      component: <DummyQuestion key={33} />,
     },
   ],
   子ども: [
@@ -438,28 +434,24 @@ const questions = {
       component: <DummyQuestion key={27} />,
     },
     {
-      title: '療育手帳',
-      component: <DummyQuestion key={28} />,
-    },
-    {
-      title: '愛の手帳',
-      component: <DummyQuestion key={29} />,
+      title: '療育手帳、愛の手帳',
+      component: <ChildIntellectualDisability key={28} />,
     },
     {
       title: '放射線障害',
-      component: <DummyQuestion key={30} />,
+      component: <DummyQuestion key={29} />,
     },
     {
       title: '内部障害',
-      component: <DummyQuestion key={31} />,
+      component: <DummyQuestion key={30} />,
     },
     {
       title: '脳性まひ',
-      component: <DummyQuestion key={32} />,
+      component: <DummyQuestion key={31} />,
     },
     {
       title: '介護施設',
-      component: <DummyQuestion key={33} />,
+      component: <DummyQuestion key={32} />,
     },
   ],
   親: [
@@ -572,28 +564,24 @@ const questions = {
       component: <DummyQuestion key={26} />,
     },
     {
-      title: '療育手帳',
-      component: <DummyQuestion key={27} />,
-    },
-    {
-      title: '愛の手帳',
-      component: <DummyQuestion key={28} />,
+      title: '療育手帳、愛の手帳',
+      component: <ParentIntellectualDisability key={27} />,
     },
     {
       title: '放射線障害',
-      component: <DummyQuestion key={29} />,
+      component: <DummyQuestion key={28} />,
     },
     {
       title: '内部障害',
-      component: <DummyQuestion key={30} />,
+      component: <DummyQuestion key={29} />,
     },
     {
       title: '脳性まひ',
-      component: <DummyQuestion key={31} />,
+      component: <DummyQuestion key={30} />,
     },
     {
       title: '介護施設',
-      component: <DummyQuestion key={32} />,
+      component: <DummyQuestion key={31} />,
     },
   ],
 };
