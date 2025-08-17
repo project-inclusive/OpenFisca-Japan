@@ -37,7 +37,9 @@ export const MentalDisability = ({ personName }: { personName: string }) => {
           ? grades.find(
               (grade) =>
                 grade.value ===
-                household.世帯員[personName].精神障害者保健福祉手帳等級[currentDate]
+                household.世帯員[personName].精神障害者保健福祉手帳等級[
+                  currentDate
+                ]
             )?.display ?? null
           : null
       }
