@@ -1,5 +1,5 @@
-import { RadiationDamage } from "./radiationDamage";
+import { RadiationDamage } from './radiationDamage';
 
 export const SelfRadiationDamage = () => {
   return <RadiationDamage personName="あなた" />;
-}
+};
