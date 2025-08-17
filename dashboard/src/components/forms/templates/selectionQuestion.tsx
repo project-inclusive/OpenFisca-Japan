@@ -40,6 +40,9 @@ export const SelectionQuestion = ({
   const [questionValidated, setQuestionValidated] = useRecoilState(
     questionValidatedAtom
   );
+  if (selectionState !== null) {
+    setQuestionValidated(true);
+  }
 
   const btn = ({
     cond,
