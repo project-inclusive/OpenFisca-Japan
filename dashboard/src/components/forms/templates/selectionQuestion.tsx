@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Box,
   FormControl,
@@ -40,9 +40,12 @@ export const SelectionQuestion = ({
   const [questionValidated, setQuestionValidated] = useRecoilState(
     questionValidatedAtom
   );
-  if (selectionState !== null) {
-    setQuestionValidated(true);
-  }
+
+  useEffect(() => {
+    if (selectionState !== null) {
+      setQuestionValidated(true);
+    }
+  }, [selectionState]);
 
   const btn = ({
     cond,
@@ -67,7 +70,6 @@ export const SelectionQuestion = ({
       _hover={{ bg: 'cyan.600', borderColor: 'cyan.900', color: 'white' }}
       onClick={() => {
         setSelectionState(selection);
-        setQuestionValidated(true);
         onClick();
       }}
     >
