@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Box,
   FormControl,
@@ -41,6 +41,12 @@ export const SelectionQuestion = ({
     questionValidatedAtom
   );
 
+  useEffect(() => {
+    if (selectionState !== null) {
+      setQuestionValidated(true);
+    }
+  }, [selectionState]);
+
   const btn = ({
     cond,
     selection,
@@ -64,7 +70,6 @@ export const SelectionQuestion = ({
       _hover={{ bg: 'cyan.600', borderColor: 'cyan.900', color: 'white' }}
       onClick={() => {
         setSelectionState(selection);
-        setQuestionValidated(true);
         onClick();
       }}
     >
