@@ -23,6 +23,7 @@ import { ParentIntellectualDisability } from './questions/parentIntellectualDisa
 import { SelfMentalDisability } from './questions/selfMentalDisability';
 import { SpouseMentalDisability } from './questions/spouseMentalDisability';
 import { ChildMentalDisability } from './questions/childMentalDisability';
+import { ParentMentalDisability } from './questions/parentMentalDisability';
 
 // NOTE: プログレスバーの計算のために設問に順序関係を定義する必要があるため、objectではなくarrayを使用
 // HACK: componentをarray内に定義する際にkeyが必要なため定義している
@@ -564,7 +565,7 @@ const questions = {
     },
     {
       title: '精神障害者手帳',
-      component: <DummyQuestion key={26} />,
+      component: <ParentMentalDisability key={26} />,
     },
     {
       title: '療育手帳、愛の手帳',
