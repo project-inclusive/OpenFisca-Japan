@@ -28,7 +28,7 @@ export const InternalDisability = ({ personName }: { personName: string }) => {
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
       defaultSelection={({ household }: { household: any }) => {
-        if (household.世帯員[personName]?.内部障害 != null) {
+        if (household.世帯員[personName]?.内部障害?.[currentDate] != null) {
           return household.世帯員[personName].内部障害[currentDate] === '有';
         }
         return null;
