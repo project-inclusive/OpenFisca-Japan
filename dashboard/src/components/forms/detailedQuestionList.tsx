@@ -28,6 +28,10 @@ import { SelfInternalDisability } from './questions/selfInternalDisability';
 import { SpouseInternalDisability } from './questions/spouseInternalDisability';
 import { ChildInternalDisability } from './questions/childInternalDisability';
 import { ParentInternalDisability } from './questions/parentInternalDisability';
+import { SelfRadiationDamage } from './questions/selfRadiationDamage';
+import { SpouseRadiationDamage } from './questions/spouseRadiationDamage';
+import { ChildRadiationDamage } from './questions/childRadiationDamage';
+import { ParentRadiationDamage } from './questions/parentRadiationDamage';
 
 // NOTE: プログレスバーの計算のために設問に順序関係を定義する必要があるため、objectではなくarrayを使用
 // HACK: componentをarray内に定義する際にkeyが必要なため定義している
@@ -151,7 +155,7 @@ const questions = {
     },
     {
       title: '放射線障害',
-      component: <DummyQuestion key={29} />,
+      component: <SelfRadiationDamage key={29} />,
     },
     {
       title: '内部障害',
@@ -305,7 +309,7 @@ const questions = {
     },
     {
       title: '放射線障害',
-      component: <DummyQuestion key={28} />,
+      component: <SpouseRadiationDamage key={28} />,
     },
     {
       title: '内部障害',
@@ -447,7 +451,7 @@ const questions = {
     },
     {
       title: '放射線障害',
-      component: <DummyQuestion key={29} />,
+      component: <ChildRadiationDamage key={29} />,
     },
     {
       title: '内部障害',
@@ -577,7 +581,7 @@ const questions = {
     },
     {
       title: '放射線障害',
-      component: <DummyQuestion key={28} />,
+      component: <ParentRadiationDamage key={28} />,
     },
     {
       title: '内部障害',
