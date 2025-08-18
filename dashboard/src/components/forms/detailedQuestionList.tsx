@@ -25,6 +25,7 @@ import { SpouseMentalDisability } from './questions/spouseMentalDisability';
 import { ChildMentalDisability } from './questions/childMentalDisability';
 import { ParentMentalDisability } from './questions/parentMentalDisability';
 import { SelfInternalDisability } from './questions/selfInternalDisability';
+import { SpouseInternalDisability } from './questions/spouseInternalDisability';
 
 // NOTE: プログレスバーの計算のために設問に順序関係を定義する必要があるため、objectではなくarrayを使用
 // HACK: componentをarray内に定義する際にkeyが必要なため定義している
@@ -306,7 +307,7 @@ const questions = {
     },
     {
       title: '内部障害',
-      component: <DummyQuestion key={29} />,
+      component: <SpouseInternalDisability key={29} />,
     },
     {
       title: '脳性まひ',
