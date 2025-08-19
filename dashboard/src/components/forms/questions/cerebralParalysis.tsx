@@ -28,8 +28,16 @@ export const CerebralParalysis = ({ personName }: { personName: string }) => {
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
       defaultSelection={({ household }: { household: any }) => {
-        if (household.世帯員[personName]?.脳性まひ_進行性筋萎縮症?.[currentDate] != null) {
-          return household.世帯員[personName].脳性まひ_進行性筋萎縮症[currentDate] === '有';
+        if (
+          household.世帯員[personName]?.脳性まひ_進行性筋萎縮症?.[
+            currentDate
+          ] != null
+        ) {
+          return (
+            household.世帯員[personName].脳性まひ_進行性筋萎縮症[
+              currentDate
+            ] === '有'
+          );
         }
         return null;
       }}

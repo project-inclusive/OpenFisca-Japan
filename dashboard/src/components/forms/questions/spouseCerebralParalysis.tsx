@@ -1,4 +1,4 @@
-import { CerebralParalysis } from "./cerebralParalysis";
+import { CerebralParalysis } from './cerebralParalysis';
 
 export const SpouseCerebralParalysis = () => {
   return <CerebralParalysis personName="配偶者" />;

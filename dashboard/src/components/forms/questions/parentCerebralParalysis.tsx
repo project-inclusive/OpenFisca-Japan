@@ -1,6 +1,6 @@
 import { useRecoilValue } from 'recoil';
 import { questionKeyAtom } from '../../../state';
-import { CerebralParalysis } from "./cerebralParalysis";
+import { CerebralParalysis } from './cerebralParalysis';
 
 export const ParentCerebralParalysis = () => {
   const questionKey = useRecoilValue(questionKeyAtom);
