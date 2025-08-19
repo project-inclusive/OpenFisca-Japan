@@ -33,6 +33,7 @@ import { SpouseRadiationDamage } from './questions/spouseRadiationDamage';
 import { ChildRadiationDamage } from './questions/childRadiationDamage';
 import { ParentRadiationDamage } from './questions/parentRadiationDamage';
 import { SelfCerebralParalysis } from './questions/selfCerebralParalysis';
+import { SpouseCerebralParalysis } from './questions/spouseCerebralParalysis';
 
 // NOTE: プログレスバーの計算のために設問に順序関係を定義する必要があるため、objectではなくarrayを使用
 // HACK: componentをarray内に定義する際にkeyが必要なため定義している
@@ -318,7 +319,7 @@ const questions = {
     },
     {
       title: '脳性まひ',
-      component: <DummyQuestion key={30} />,
+      component: <SpouseCerebralParalysis key={30} />,
     },
     {
       title: '介護施設',
