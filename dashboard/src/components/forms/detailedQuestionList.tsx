@@ -24,6 +24,10 @@ import { SelfMentalDisability } from './questions/selfMentalDisability';
 import { SpouseMentalDisability } from './questions/spouseMentalDisability';
 import { ChildMentalDisability } from './questions/childMentalDisability';
 import { ParentMentalDisability } from './questions/parentMentalDisability';
+import { SelfInternalDisability } from './questions/selfInternalDisability';
+import { SpouseInternalDisability } from './questions/spouseInternalDisability';
+import { ChildInternalDisability } from './questions/childInternalDisability';
+import { ParentInternalDisability } from './questions/parentInternalDisability';
 import { SelfRadiationDamage } from './questions/selfRadiationDamage';
 import { SpouseRadiationDamage } from './questions/spouseRadiationDamage';
 import { ChildRadiationDamage } from './questions/childRadiationDamage';
@@ -155,7 +159,7 @@ const questions = {
     },
     {
       title: '内部障害',
-      component: <DummyQuestion key={30} />,
+      component: <SelfInternalDisability key={30} />,
     },
     {
       title: '脳性まひ',
@@ -309,7 +313,7 @@ const questions = {
     },
     {
       title: '内部障害',
-      component: <DummyQuestion key={29} />,
+      component: <SpouseInternalDisability key={29} />,
     },
     {
       title: '脳性まひ',
@@ -451,7 +455,7 @@ const questions = {
     },
     {
       title: '内部障害',
-      component: <DummyQuestion key={30} />,
+      component: <ChildInternalDisability key={30} />,
     },
     {
       title: '脳性まひ',
@@ -581,7 +585,7 @@ const questions = {
     },
     {
       title: '内部障害',
-      component: <DummyQuestion key={29} />,
+      component: <ParentInternalDisability key={29} />,
     },
     {
       title: '脳性まひ',
