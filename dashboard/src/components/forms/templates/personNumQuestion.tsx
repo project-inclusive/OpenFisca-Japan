@@ -14,8 +14,8 @@ import {
 
 import configData from '../../../config/app_config.json';
 
-import { useRecoilState } from 'recoil';
-import { householdAtom, questionValidatedAtom } from '../../../state';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { householdAtom, questionValidatedAtom, frontendHouseholdAtom } from '../../../state';
 import { toHalf } from '../../../utils/toHalf';
 import {
   isChrome,
@@ -31,14 +31,23 @@ export const PersonNumQuestion = ({
   filterPerson,
   maxPerson,
   title,
+  defaultSelection,
 }: {
   updatePersonInfo: (personNum: number) => void;
   filterPerson: (household: any) => any;
   maxPerson: number;
   title: string;
+  defaultSelection: ({
+    household,
+    frontendHousehold,
+  }: {
+    household: any;
+    frontendHousehold: any;
+  }) => boolean | null;
 }) => {
   const navigationType = useNavigationType();
   const [household, setHousehold] = useRecoilState(householdAtom);
+  const frontendHousehold = useRecoilValue(frontendHouseholdAtom);
 
   const [questionValidated, setQuestionValidated] = useRecoilState(
     questionValidatedAtom
@@ -49,7 +58,10 @@ export const PersonNumQuestion = ({
   const [shownPersonNum, setShownPersonNum] = useState<string | number>('');
   const [actualPersonNum, setActualPersonNum] = useState<number>(0);
   const inputEl = useRef<HTMLInputElement>(null);
-  const [boolState, setBoolState] = useState<boolean | null>(null);
+  
+  const [boolState, setBoolState] = useState<boolean | null>(
+    defaultSelection({ household, frontendHousehold })
+  );
 
   // チェックされたときに人数のフォームにフォーカス
   useEffect(() => {
