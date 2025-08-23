@@ -36,6 +36,7 @@ import { SelfCerebralParalysis } from './questions/selfCerebralParalysis';
 import { SpouseCerebralParalysis } from './questions/spouseCerebralParalysis';
 import { ChildCerebralParalysis } from './questions/childCerebralParalysis';
 import { ParentCerebralParalysis } from './questions/parentCerebralParalysis';
+import { SelfNursingHome } from './questions/selfNursingHome';
 
 // NOTE: プログレスバーの計算のために設問に順序関係を定義する必要があるため、objectではなくarrayを使用
 // HACK: componentをarray内に定義する際にkeyが必要なため定義している
@@ -171,7 +172,7 @@ const questions = {
     },
     {
       title: '介護施設',
-      component: <DummyQuestion key={32} />,
+      component: <SelfNursingHome key={32} />,
     },
     {
       title: '学生かどうか',
