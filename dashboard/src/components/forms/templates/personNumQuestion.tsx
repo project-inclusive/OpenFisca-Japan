@@ -32,6 +32,7 @@ export const PersonNumQuestion = ({
   maxPerson,
   title,
   defaultSelection,
+  defaultPersonNumber,
 }: {
   updatePersonInfo: (personNum: number) => void;
   filterPerson: (household: any) => any;
@@ -44,6 +45,11 @@ export const PersonNumQuestion = ({
     household: any;
     frontendHousehold: any;
   }) => boolean | null;
+  defaultPersonNumber: ({
+    frontendHousehold
+  }: {
+    frontendHousehold: any;
+  }) => number;
 }) => {
   const navigationType = useNavigationType();
   const [household, setHousehold] = useRecoilState(householdAtom);
@@ -55,13 +61,26 @@ export const PersonNumQuestion = ({
   const [formValidated, setFormValidated] = useState<boolean>(false);
   const [yesNoValidated, setYesNoValidated] = useState<boolean>(false);
 
-  const [shownPersonNum, setShownPersonNum] = useState<string | number>('');
+  const [shownPersonNum, setShownPersonNum] = useState<string | number>(
+    defaultPersonNumber({ frontendHousehold })
+  );
   const [actualPersonNum, setActualPersonNum] = useState<number>(0);
   const inputEl = useRef<HTMLInputElement>(null);
   
   const [boolState, setBoolState] = useState<boolean | null>(
     defaultSelection({ household, frontendHousehold })
   );
+
+  useEffect(() => {
+    if (boolState === null) {
+      return
+    }
+    if (boolState && shownPersonNum === 0) {
+      setQuestionValidated(false)
+    } else {
+      setQuestionValidated(true)
+    }
+  }, [])
 
   // チェックされたときに人数のフォームにフォーカス
   useEffect(() => {
