@@ -39,10 +39,8 @@ export const PersonNumQuestion = ({
   maxPerson: number;
   title: string;
   defaultSelection: ({
-    household,
     frontendHousehold,
   }: {
-    household: any;
     frontendHousehold: any;
   }) => boolean | null;
   defaultPersonNumber: ({
@@ -68,7 +66,7 @@ export const PersonNumQuestion = ({
   const inputEl = useRef<HTMLInputElement>(null);
   
   const [boolState, setBoolState] = useState<boolean | null>(
-    defaultSelection({ household, frontendHousehold })
+    defaultSelection({ frontendHousehold })
   );
 
   useEffect(() => {
