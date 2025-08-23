@@ -25,6 +25,7 @@ export const SpouseExistsQuestion = () => {
     setHousehold(newHousehold);
 
     const newFrontendHousehold = { ...frontendHousehold };
+    newFrontendHousehold.世帯員['配偶者'] = {};
     newFrontendHousehold.世帯['配偶者がいる'] = true;
     setFrontendHousehold(newFrontendHousehold);
 
@@ -48,6 +49,7 @@ export const SpouseExistsQuestion = () => {
     setHousehold(newHousehold);
 
     const newFrontendHousehold = { ...frontendHousehold };
+    delete newFrontendHousehold.世帯員['配偶者'];
     newFrontendHousehold.世帯['配偶者がいる'] = false;
     setFrontendHousehold(newFrontendHousehold);
 
