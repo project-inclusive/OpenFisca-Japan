@@ -33,7 +33,6 @@ export const SpouseExistsQuestion = () => {
       personNum: 0,
       title: '年齢',
     });
-    console.log('onYes');
   };
 
   const noOnClick = () => {
@@ -58,7 +57,6 @@ export const SpouseExistsQuestion = () => {
       personNum: 0,
       title: '子どもの人数',
     });
-    console.log('onYes');
   };
 
   const isAlreadySelected = (frontendHousehold: any): boolean | null => {
