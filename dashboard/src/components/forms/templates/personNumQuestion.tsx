@@ -14,8 +14,12 @@ import {
 
 import configData from '../../../config/app_config.json';
 
-import { useRecoilState } from 'recoil';
-import { householdAtom, questionValidatedAtom } from '../../../state';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import {
+  householdAtom,
+  questionValidatedAtom,
+  frontendHouseholdAtom,
+} from '../../../state';
 import { toHalf } from '../../../utils/toHalf';
 import {
   isChrome,
@@ -31,14 +35,27 @@ export const PersonNumQuestion = ({
   filterPerson,
   maxPerson,
   title,
+  defaultSelection,
+  defaultPersonNumber,
 }: {
   updatePersonInfo: (personNum: number) => void;
   filterPerson: (household: any) => any;
   maxPerson: number;
   title: string;
+  defaultSelection: ({
+    frontendHousehold,
+  }: {
+    frontendHousehold: any;
+  }) => boolean | null;
+  defaultPersonNumber: ({
+    frontendHousehold,
+  }: {
+    frontendHousehold: any;
+  }) => number;
 }) => {
   const navigationType = useNavigationType();
   const [household, setHousehold] = useRecoilState(householdAtom);
+  const frontendHousehold = useRecoilValue(frontendHouseholdAtom);
 
   const [questionValidated, setQuestionValidated] = useRecoilState(
     questionValidatedAtom
@@ -46,10 +63,26 @@ export const PersonNumQuestion = ({
   const [formValidated, setFormValidated] = useState<boolean>(false);
   const [yesNoValidated, setYesNoValidated] = useState<boolean>(false);
 
-  const [shownPersonNum, setShownPersonNum] = useState<string | number>('');
+  const [shownPersonNum, setShownPersonNum] = useState<string | number>(
+    defaultPersonNumber({ frontendHousehold })
+  );
   const [actualPersonNum, setActualPersonNum] = useState<number>(0);
   const inputEl = useRef<HTMLInputElement>(null);
-  const [boolState, setBoolState] = useState<boolean | null>(null);
+
+  const [boolState, setBoolState] = useState<boolean | null>(
+    defaultSelection({ frontendHousehold })
+  );
+
+  useEffect(() => {
+    if (boolState === null) {
+      return;
+    }
+    if (boolState && shownPersonNum === 0) {
+      setQuestionValidated(false);
+    } else {
+      setQuestionValidated(true);
+    }
+  }, []);
 
   // チェックされたときに人数のフォームにフォーカス
   useEffect(() => {

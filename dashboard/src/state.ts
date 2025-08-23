@@ -223,6 +223,7 @@ export const householdAtom = atom<any>({
 
 export type FrontendHousehold = {
   世帯員: { [key: string]: { [key: string]: any } };
+  世帯: { [key: string]: boolean | number };
   困りごと: { [key: string]: boolean };
   制度: { [key: string]: boolean };
 };
@@ -233,6 +234,7 @@ export const frontendHouseholdAtom = atom<FrontendHousehold>({
     世帯員: {
       あなた: {},
     },
+    世帯: {},
     困りごと: {},
     制度: {},
   },

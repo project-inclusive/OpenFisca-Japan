@@ -6,6 +6,7 @@ import {
   householdAtom,
   nextQuestionKeyAtom,
 } from '../../../state';
+import { useEffect } from 'react';
 
 export const SpouseExistsQuestion = () => {
   const [household, setHousehold] = useRecoilState(householdAtom);
@@ -15,7 +16,6 @@ export const SpouseExistsQuestion = () => {
   const [nextQuestionKey, setNextQuestionKey] =
     useRecoilState(nextQuestionKeyAtom);
   const currentDate = useRecoilValue(currentDateAtom);
-
   const yesOnClick = () => {
     const newHousehold = { ...household };
     if (newHousehold.世帯一覧.世帯1.親一覧.length == 1) {
@@ -26,6 +26,7 @@ export const SpouseExistsQuestion = () => {
 
     const newFrontendHousehold = { ...frontendHousehold };
     newFrontendHousehold.世帯員['配偶者'] = {};
+    newFrontendHousehold.世帯['配偶者がいる'] = true;
     setFrontendHousehold(newFrontendHousehold);
 
     setNextQuestionKey({
@@ -49,6 +50,7 @@ export const SpouseExistsQuestion = () => {
 
     const newFrontendHousehold = { ...frontendHousehold };
     delete newFrontendHousehold.世帯員['配偶者'];
+    newFrontendHousehold.世帯['配偶者がいる'] = false;
     setFrontendHousehold(newFrontendHousehold);
 
     // 配偶者がいないので、子どもの質問までスキップ
@@ -59,14 +61,44 @@ export const SpouseExistsQuestion = () => {
     });
   };
 
+  const isAlreadySelected = (frontendHousehold: any): boolean | null => {
+    if (frontendHousehold.世帯['配偶者がいる'] != null) {
+      return frontendHousehold.世帯['配偶者がいる'];
+    }
+    return null;
+  };
+
+  useEffect(() => {
+    if (isAlreadySelected(frontendHousehold) != null) {
+      if (isAlreadySelected(frontendHousehold)) {
+        setNextQuestionKey({
+          person: '配偶者',
+          personNum: 0,
+          title: '年齢',
+        });
+      } else {
+        setNextQuestionKey({
+          person: 'あなた',
+          personNum: 0,
+          title: '子どもの人数',
+        });
+      }
+    }
+  }, []);
+
   return (
     <YesNoQuestion
       title="配偶者はいますか？"
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
-      defaultSelection={({ household }: { household: any }) =>
-        household.世帯員['配偶者'] ? true : null
-      }
+      defaultSelection={({
+        frontendHousehold,
+      }: {
+        household: any;
+        frontendHousehold: any;
+      }) => {
+        return isAlreadySelected(frontendHousehold);
+      }}
     />
   );
 };

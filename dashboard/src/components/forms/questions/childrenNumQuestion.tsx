@@ -1,4 +1,5 @@
 import { useRecoilState } from 'recoil';
+import { useEffect } from 'react';
 import {
   frontendHouseholdAtom,
   householdAtom,
@@ -44,6 +45,10 @@ export const ChildrenNumQuestion = () => {
     childrenNames.map((childName) => {
       newFrontendHousehold.世帯員[childName] = {};
     });
+
+    // 質問の選択状態を設定
+    newFrontendHousehold.世帯['子どもの人数'] = personNum;
+
     setFrontendHousehold(newFrontendHousehold);
 
     // 次の質問を設定
@@ -66,12 +71,50 @@ export const ChildrenNumQuestion = () => {
 
   const filterPerson = (household: any) => household.世帯一覧.世帯1.子一覧;
 
+  const isAlreadySelected = (frontendHousehold: any): boolean | null => {
+    if (frontendHousehold.世帯['子どもの人数'] != null) {
+      return frontendHousehold.世帯['子どもの人数'] !== 0;
+    }
+    return null;
+  };
+
+  useEffect(() => {
+    if (isAlreadySelected(frontendHousehold) !== null) {
+      if (isAlreadySelected(frontendHousehold)) {
+        setNextQuestionKey({
+          person: '子ども',
+          personNum: 1,
+          title: '年齢',
+        });
+      } else {
+        setNextQuestionKey({
+          person: 'あなた',
+          personNum: 0,
+          title: '親の人数',
+        });
+      }
+    }
+  }, []);
+
   return (
     <PersonNumQuestion
       updatePersonInfo={updatePersonInfo}
       filterPerson={filterPerson}
       maxPerson={configData.validation.household.maxChildren}
       title="子どもの人数"
+      defaultSelection={({ frontendHousehold }: { frontendHousehold: any }) =>
+        isAlreadySelected(frontendHousehold)
+      }
+      defaultPersonNumber={({
+        frontendHousehold,
+      }: {
+        frontendHousehold: any;
+      }) => {
+        if (frontendHousehold.世帯['子どもの人数'] != null) {
+          return frontendHousehold.世帯['子どもの人数'];
+        }
+        return 0;
+      }}
     />
   );
 };
