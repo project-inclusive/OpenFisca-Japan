@@ -15,7 +15,11 @@ import {
 import configData from '../../../config/app_config.json';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { householdAtom, questionValidatedAtom, frontendHouseholdAtom } from '../../../state';
+import {
+  householdAtom,
+  questionValidatedAtom,
+  frontendHouseholdAtom,
+} from '../../../state';
 import { toHalf } from '../../../utils/toHalf';
 import {
   isChrome,
@@ -44,7 +48,7 @@ export const PersonNumQuestion = ({
     frontendHousehold: any;
   }) => boolean | null;
   defaultPersonNumber: ({
-    frontendHousehold
+    frontendHousehold,
   }: {
     frontendHousehold: any;
   }) => number;
@@ -64,21 +68,21 @@ export const PersonNumQuestion = ({
   );
   const [actualPersonNum, setActualPersonNum] = useState<number>(0);
   const inputEl = useRef<HTMLInputElement>(null);
-  
+
   const [boolState, setBoolState] = useState<boolean | null>(
     defaultSelection({ frontendHousehold })
   );
 
   useEffect(() => {
     if (boolState === null) {
-      return
+      return;
     }
     if (boolState && shownPersonNum === 0) {
-      setQuestionValidated(false)
+      setQuestionValidated(false);
     } else {
-      setQuestionValidated(true)
+      setQuestionValidated(true);
     }
-  }, [])
+  }, []);
 
   // チェックされたときに人数のフォームにフォーカス
   useEffect(() => {

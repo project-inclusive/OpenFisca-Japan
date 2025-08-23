@@ -85,7 +85,7 @@ export const ParentNumQuestion = () => {
         setNextQuestionKey(null);
       }
     }
-  }, [])
+  }, []);
 
   return (
     <PersonNumQuestion
@@ -96,7 +96,11 @@ export const ParentNumQuestion = () => {
       defaultSelection={({ frontendHousehold }: { frontendHousehold: any }) =>
         isAlreadySelected(frontendHousehold)
       }
-      defaultPersonNumber={({ frontendHousehold }: { frontendHousehold: any }) => {
+      defaultPersonNumber={({
+        frontendHousehold,
+      }: {
+        frontendHousehold: any;
+      }) => {
         if (frontendHousehold.世帯['親の人数'] != null) {
           return frontendHousehold.世帯['親の人数'];
         }

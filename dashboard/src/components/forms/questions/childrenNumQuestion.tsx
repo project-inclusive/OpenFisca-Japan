@@ -94,7 +94,7 @@ export const ChildrenNumQuestion = () => {
         });
       }
     }
-  }, [])
+  }, []);
 
   return (
     <PersonNumQuestion
@@ -105,7 +105,11 @@ export const ChildrenNumQuestion = () => {
       defaultSelection={({ frontendHousehold }: { frontendHousehold: any }) =>
         isAlreadySelected(frontendHousehold)
       }
-      defaultPersonNumber={({ frontendHousehold }: { frontendHousehold: any; }) => {
+      defaultPersonNumber={({
+        frontendHousehold,
+      }: {
+        frontendHousehold: any;
+      }) => {
         if (frontendHousehold.世帯['子どもの人数'] != null) {
           return frontendHousehold.世帯['子どもの人数'];
         }
