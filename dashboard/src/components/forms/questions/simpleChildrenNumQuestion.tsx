@@ -66,7 +66,7 @@ export const SimpleChildrenNumQuestion = () => {
     }
   };
 
-  const filterPerson = (household: any) => household.世帯一覧.世帯1.子一覧;
+  const defaultNum = (household: any) => household.世帯一覧.世帯1.子一覧.length;
 
   const isAlreadySelected = (frontendHousehold: any): boolean | null => {
     if (frontendHousehold.世帯['子どもの人数'] != null) {
@@ -92,7 +92,7 @@ export const SimpleChildrenNumQuestion = () => {
   return (
     <PersonNumQuestion
       updatePersonInfo={updatePersonInfo}
-      filterPerson={filterPerson}
+      defaultNum={defaultNum}
       maxPerson={configData.validation.household.maxChildren}
       title="子どもの人数"
       defaultSelection={({ frontendHousehold }: { frontendHousehold: any }) =>
