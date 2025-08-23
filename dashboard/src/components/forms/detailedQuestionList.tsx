@@ -37,6 +37,7 @@ import { SpouseCerebralParalysis } from './questions/spouseCerebralParalysis';
 import { ChildCerebralParalysis } from './questions/childCerebralParalysis';
 import { ParentCerebralParalysis } from './questions/parentCerebralParalysis';
 import { SelfNursingHome } from './questions/selfNursingHome';
+import { SpouseNursingHome } from './questions/spouseNursingHome';
 
 // NOTE: プログレスバーの計算のために設問に順序関係を定義する必要があるため、objectではなくarrayを使用
 // HACK: componentをarray内に定義する際にkeyが必要なため定義している
@@ -326,7 +327,7 @@ const questions = {
     },
     {
       title: '介護施設',
-      component: <DummyQuestion key={31} />,
+      component: <SpouseNursingHome key={31} />,
     },
     {
       title: '妊娠',
