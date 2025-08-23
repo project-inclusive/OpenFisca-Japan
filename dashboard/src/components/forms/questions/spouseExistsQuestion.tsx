@@ -92,7 +92,6 @@ export const SpouseExistsQuestion = () => {
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
       defaultSelection={({
-        household,
         frontendHousehold,
       }: {
         household: any;
