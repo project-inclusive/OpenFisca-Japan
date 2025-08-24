@@ -65,12 +65,24 @@ export const DisasterParentNumQuestion = () => {
       ? household.世帯一覧.世帯1.祖父母一覧.length
       : 0;
 
+  // TODO: defaultSectionに動的な値を設定するようにする
+  // TODO: defaultPersonNumberを廃止する（defaultNumを使用するため）
   return (
     <PersonNumQuestion
       updatePersonInfo={updatePersonInfo}
       defaultNum={defaultNum}
       maxPerson={configData.validation.household.maxParents}
       title="親の人数"
+      defaultSelection={({ frontendHousehold }: { frontendHousehold: any }) =>
+        null
+      }
+      defaultPersonNumber={({
+        frontendHousehold,
+      }: {
+        frontendHousehold: any;
+      }) => {
+        return 0;
+      }}
     />
   );
 };

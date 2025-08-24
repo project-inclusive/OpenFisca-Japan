@@ -89,6 +89,9 @@ export const SimpleChildrenNumQuestion = () => {
     }
   }, []);
 
+  // TODO:
+  // - defaultPersonNumberを廃止する（defaultNumを使用するため）
+  // - frontendHousehold.世帯['子どもの人数']を廃止し、人数はdefaultNumを使う
   return (
     <PersonNumQuestion
       updatePersonInfo={updatePersonInfo}

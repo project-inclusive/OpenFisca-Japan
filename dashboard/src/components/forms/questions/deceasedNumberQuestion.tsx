@@ -37,12 +37,24 @@ export const DeceasedNumberQuestion = () => {
       ? household.世帯一覧.世帯1.災害で死亡した世帯員の人数[currentDate]
       : 0;
 
+  // TODO: defaultSectionに動的な値を設定するようにする
+  // TODO: defaultPersonNumberを廃止する（defaultNumを使用するため）
   return (
     <PersonNumQuestion
       updatePersonInfo={updatePersonInfo}
       defaultNum={defaultNum}
       maxPerson={configData.validation.household.maxChildren}
       title="家族に災害で亡くなった方はいますか？"
+      defaultSelection={({ frontendHousehold }: { frontendHousehold: any }) =>
+        null
+      }
+      defaultPersonNumber={({
+        frontendHousehold,
+      }: {
+        frontendHousehold: any;
+      }) => {
+        return 0;
+      }}
     />
   );
 };

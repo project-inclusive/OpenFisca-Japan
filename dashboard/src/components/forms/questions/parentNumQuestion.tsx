@@ -90,6 +90,9 @@ export const ParentNumQuestion = () => {
     }
   }, []);
 
+  // TODO:
+  // - defaultPersonNumberを廃止する（defaultNumを使用するため）
+  // - frontendHousehold.世帯['親の人数']を廃止し、人数はdefaultNumを使う
   return (
     <PersonNumQuestion
       updatePersonInfo={updatePersonInfo}

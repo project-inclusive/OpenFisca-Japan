@@ -36,6 +36,7 @@ import { SelfCerebralParalysis } from './questions/selfCerebralParalysis';
 import { SpouseCerebralParalysis } from './questions/spouseCerebralParalysis';
 import { ChildCerebralParalysis } from './questions/childCerebralParalysis';
 import { ParentCerebralParalysis } from './questions/parentCerebralParalysis';
+import { SelfRentingHouse } from './questions/selfRentingHouse';
 import { SelfNursingHome } from './questions/selfNursingHome';
 import { SpouseNursingHome } from './questions/spouseNursingHome';
 import { ChildNursingHome } from './questions/childNursingHome';
@@ -183,7 +184,7 @@ const questions = {
     },
     {
       title: '家を借りたい',
-      component: <DummyQuestion key={34} />,
+      component: <SelfRentingHouse key={34} />,
     },
     {
       title: '妊娠',
