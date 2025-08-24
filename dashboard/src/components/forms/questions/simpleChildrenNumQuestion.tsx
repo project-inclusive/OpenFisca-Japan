@@ -46,10 +46,6 @@ export const SimpleChildrenNumQuestion = () => {
     childrenNames.map((childName) => {
       newFrontendHousehold.世帯員[childName] = {};
     });
-
-    // 質問の選択状態を設定
-    newFrontendHousehold.世帯['子どもの人数'] = personNum;
-
     setFrontendHousehold(newFrontendHousehold);
 
     // 次の質問を設定
@@ -68,16 +64,16 @@ export const SimpleChildrenNumQuestion = () => {
 
   const defaultNum = (household: any) => household.世帯一覧.世帯1.子一覧.length;
 
-  const isAlreadySelected = (frontendHousehold: any): boolean | null => {
-    if (frontendHousehold.世帯['子どもの人数'] != null) {
-      return frontendHousehold.世帯['子どもの人数'] !== 0;
+  const isAlreadySelected = (): boolean | null => {
+    if (household.世帯一覧.世帯1.子一覧 != null) {
+      return household.世帯一覧.世帯1.子一覧.length !== 0;
     }
     return null;
   };
 
   useEffect(() => {
-    if (isAlreadySelected(frontendHousehold) !== null) {
-      if (isAlreadySelected(frontendHousehold)) {
+    if (isAlreadySelected() !== null) {
+      if (isAlreadySelected()) {
         setNextQuestionKey({
           person: '子ども',
           personNum: 1,
@@ -97,9 +93,7 @@ export const SimpleChildrenNumQuestion = () => {
       defaultNum={defaultNum}
       maxPerson={configData.validation.household.maxChildren}
       title="子どもの人数"
-      defaultSelection={({ frontendHousehold }: { frontendHousehold: any }) =>
-        isAlreadySelected(frontendHousehold)
-      }
+      defaultSelection={() => isAlreadySelected()}
     />
   );
 };
