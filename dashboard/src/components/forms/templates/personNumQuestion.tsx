@@ -64,7 +64,7 @@ export const PersonNumQuestion = ({
   const [yesNoValidated, setYesNoValidated] = useState<boolean>(false);
 
   const [shownPersonNum, setShownPersonNum] = useState<string | number>(
-    defaultPersonNumber({ frontendHousehold })
+    defaultPersonNumber({ frontendHousehold }) // TODO: defaultPersonNumberを廃止した後、defaultNumに代替可能か検討する。76行目のuseEffectの実装含む。
   );
   const [actualPersonNum, setActualPersonNum] = useState<number>(0);
   const inputEl = useRef<HTMLInputElement>(null);
