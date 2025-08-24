@@ -42,7 +42,6 @@ export const SelfRentingHouse = () => {
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
       defaultSelection={({ frontendHousehold }: { frontendHousehold: any }) => {
-        console.log('household', household);
         if (frontendHousehold.世帯['家を借りたい'] != null) {
           return frontendHousehold.世帯['家を借りたい'];
         }
