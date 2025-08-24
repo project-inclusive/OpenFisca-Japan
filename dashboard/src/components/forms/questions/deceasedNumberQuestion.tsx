@@ -38,7 +38,6 @@ export const DeceasedNumberQuestion = () => {
       : 0;
 
   // TODO: defaultSectionに動的な値を設定するようにする
-  // TODO: defaultPersonNumberを廃止する（defaultNumを使用するため）
   return (
     <PersonNumQuestion
       updatePersonInfo={updatePersonInfo}
@@ -48,13 +47,6 @@ export const DeceasedNumberQuestion = () => {
       defaultSelection={({ frontendHousehold }: { frontendHousehold: any }) =>
         null
       }
-      defaultPersonNumber={({
-        frontendHousehold,
-      }: {
-        frontendHousehold: any;
-      }) => {
-        return 0;
-      }}
     />
   );
 };

@@ -90,7 +90,6 @@ export const SimpleChildrenNumQuestion = () => {
   }, []);
 
   // TODO:
-  // - defaultPersonNumberを廃止する（defaultNumを使用するため）
   // - frontendHousehold.世帯['子どもの人数']を廃止し、人数はdefaultNumを使う
   return (
     <PersonNumQuestion
@@ -101,16 +100,6 @@ export const SimpleChildrenNumQuestion = () => {
       defaultSelection={({ frontendHousehold }: { frontendHousehold: any }) =>
         isAlreadySelected(frontendHousehold)
       }
-      defaultPersonNumber={({
-        frontendHousehold,
-      }: {
-        frontendHousehold: any;
-      }) => {
-        if (frontendHousehold.世帯['子どもの人数'] != null) {
-          return frontendHousehold.世帯['子どもの人数'];
-        }
-        return 0;
-      }}
     />
   );
 };
