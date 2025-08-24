@@ -1,5 +1,4 @@
 import { useRecoilState } from 'recoil';
-import { useEffect } from 'react';
 import {
   frontendHouseholdAtom,
   householdAtom,
@@ -8,7 +7,8 @@ import {
 import { PersonNumQuestion } from '../templates/personNumQuestion';
 import configData from '../../../config/app_config.json';
 
-export const ParentNumQuestion = () => {
+// HACK: 質問遷移先が異なるので別Component化
+export const DisasterParentNumQuestion = () => {
   const [nextQuestionKey, setNextQuestionKey] =
     useRecoilState(nextQuestionKeyAtom);
   const [household, setHousehold] = useRecoilState(householdAtom);
@@ -44,10 +44,6 @@ export const ParentNumQuestion = () => {
     parentNames.map((parentName) => {
       newFrontendHousehold.世帯員[parentName] = {};
     });
-
-    // 質問の選択状態を設定
-    newFrontendHousehold.世帯['親の人数'] = personNum;
-
     setFrontendHousehold(newFrontendHousehold);
 
     // 次の質問を設定
@@ -59,7 +55,7 @@ export const ParentNumQuestion = () => {
       setNextQuestionKey({
         person: '親',
         personNum: 1,
-        title: '年齢',
+        title: '年収',
       });
     }
   };
@@ -69,46 +65,12 @@ export const ParentNumQuestion = () => {
       ? household.世帯一覧.世帯1.祖父母一覧.length
       : 0;
 
-  const isAlreadySelected = (frontendHousehold: any): boolean | null => {
-    if (frontendHousehold.世帯['親の人数'] != null) {
-      return frontendHousehold.世帯['親の人数'] !== 0;
-    }
-    return null;
-  };
-
-  useEffect(() => {
-    if (isAlreadySelected(frontendHousehold) !== null) {
-      if (isAlreadySelected(frontendHousehold)) {
-        setNextQuestionKey({
-          person: '親',
-          personNum: 1,
-          title: '年齢',
-        });
-      } else {
-        setNextQuestionKey(null);
-      }
-    }
-  }, []);
-
   return (
     <PersonNumQuestion
       updatePersonInfo={updatePersonInfo}
       defaultNum={defaultNum}
       maxPerson={configData.validation.household.maxParents}
       title="親の人数"
-      defaultSelection={({ frontendHousehold }: { frontendHousehold: any }) =>
-        isAlreadySelected(frontendHousehold)
-      }
-      defaultPersonNumber={({
-        frontendHousehold,
-      }: {
-        frontendHousehold: any;
-      }) => {
-        if (frontendHousehold.世帯['親の人数'] != null) {
-          return frontendHousehold.世帯['親の人数'];
-        }
-        return 0;
-      }}
     />
   );
 };

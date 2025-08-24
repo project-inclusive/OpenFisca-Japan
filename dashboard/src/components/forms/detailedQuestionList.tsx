@@ -37,6 +37,10 @@ import { SpouseCerebralParalysis } from './questions/spouseCerebralParalysis';
 import { ChildCerebralParalysis } from './questions/childCerebralParalysis';
 import { ParentCerebralParalysis } from './questions/parentCerebralParalysis';
 import { SelfRentingHouse } from './questions/selfRentingHouse';
+import { SelfNursingHome } from './questions/selfNursingHome';
+import { SpouseNursingHome } from './questions/spouseNursingHome';
+import { ChildNursingHome } from './questions/childNursingHome';
+import { ParentNursingHome } from './questions/parentNursingHome';
 
 // NOTE: プログレスバーの計算のために設問に順序関係を定義する必要があるため、objectではなくarrayを使用
 // HACK: componentをarray内に定義する際にkeyが必要なため定義している
@@ -172,7 +176,7 @@ const questions = {
     },
     {
       title: '介護施設',
-      component: <DummyQuestion key={32} />,
+      component: <SelfNursingHome key={32} />,
     },
     {
       title: '学生かどうか',
@@ -326,7 +330,7 @@ const questions = {
     },
     {
       title: '介護施設',
-      component: <DummyQuestion key={31} />,
+      component: <SpouseNursingHome key={31} />,
     },
     {
       title: '妊娠',
@@ -468,7 +472,7 @@ const questions = {
     },
     {
       title: '介護施設',
-      component: <DummyQuestion key={32} />,
+      component: <ChildNursingHome key={32} />,
     },
   ],
   親: [
@@ -598,7 +602,7 @@ const questions = {
     },
     {
       title: '介護施設',
-      component: <DummyQuestion key={31} />,
+      component: <ParentNursingHome key={31} />,
     },
   ],
 };
