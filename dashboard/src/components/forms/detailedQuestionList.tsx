@@ -41,6 +41,8 @@ import { SelfNursingHome } from './questions/selfNursingHome';
 import { SpouseNursingHome } from './questions/spouseNursingHome';
 import { ChildNursingHome } from './questions/childNursingHome';
 import { ParentNursingHome } from './questions/parentNursingHome';
+import { SelfPregnancy } from './questions/selfPregnancy';
+import { SpousePregnancy } from './questions/spousePregnancy';
 
 // NOTE: プログレスバーの計算のために設問に順序関係を定義する必要があるため、objectではなくarrayを使用
 // HACK: componentをarray内に定義する際にkeyが必要なため定義している
@@ -188,7 +190,7 @@ const questions = {
     },
     {
       title: '妊娠',
-      component: <DummyQuestion key={35} />,
+      component: <SelfPregnancy key={35} />,
     },
     {
       title: '配偶者の有無',
@@ -334,7 +336,7 @@ const questions = {
     },
     {
       title: '妊娠',
-      component: <DummyQuestion key={32} />,
+      component: <SpousePregnancy key={32} />,
     },
     {
       title: '配偶者がいるがひとり親に該当',
