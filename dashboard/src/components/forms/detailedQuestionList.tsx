@@ -190,7 +190,7 @@ const questions = {
     },
     {
       title: '妊娠',
-      component: <SelfPregnancy key={35} />,
+      component: <SelfPregnancy key={35} />, // TODO: 「あなた」「配偶者」いずれか一方のみ妊産婦を選択できるようにしたい
     },
     {
       title: '配偶者の有無',
@@ -336,7 +336,7 @@ const questions = {
     },
     {
       title: '妊娠',
-      component: <SpousePregnancy key={32} />,
+      component: <SpousePregnancy key={32} />, // TODO: 「あなた」「配偶者」いずれか一方のみ妊産婦を選択できるようにしたい
     },
     {
       title: '配偶者がいるがひとり親に該当',
