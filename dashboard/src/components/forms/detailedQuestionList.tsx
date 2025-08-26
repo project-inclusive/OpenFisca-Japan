@@ -46,6 +46,7 @@ import { SpousePregnancy } from './questions/spousePregnancy';
 import { SelfStudent } from './questions/selfStudent';
 import { SpouseStudent } from './questions/spouseStudent';
 import { ParentStudent } from './questions/parentStudent';
+import { SelfNewJob } from './questions/selfNewJob';
 
 // NOTE: プログレスバーの計算のために設問に順序関係を定義する必要があるため、objectではなくarrayを使用
 // HACK: componentをarray内に定義する際にkeyが必要なため定義している
@@ -77,7 +78,7 @@ const questions = {
     },
     {
       title: '新しい仕事',
-      component: <DummyQuestion key={6} />,
+      component: <SelfNewJob key={6} />,
     },
     {
       title: '休業中',
