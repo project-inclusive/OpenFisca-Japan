@@ -43,6 +43,9 @@ import { ChildNursingHome } from './questions/childNursingHome';
 import { ParentNursingHome } from './questions/parentNursingHome';
 import { SelfPregnancy } from './questions/selfPregnancy';
 import { SpousePregnancy } from './questions/spousePregnancy';
+import { SelfStudent } from './questions/selfStudent';
+import { SpouseStudent } from './questions/spouseStudent';
+import { ParentStudent } from './questions/parentStudent';
 
 // NOTE: プログレスバーの計算のために設問に順序関係を定義する必要があるため、objectではなくarrayを使用
 // HACK: componentをarray内に定義する際にkeyが必要なため定義している
@@ -182,7 +185,7 @@ const questions = {
     },
     {
       title: '学生かどうか',
-      component: <DummyQuestion key={33} />,
+      component: <SelfStudent key={33} />,
     },
     {
       title: '家を借りたい',
@@ -335,12 +338,16 @@ const questions = {
       component: <SpouseNursingHome key={31} />,
     },
     {
+      title: '学生かどうか',
+      component: <SpouseStudent key={32} />,
+    },
+    {
       title: '妊娠',
-      component: <SpousePregnancy key={32} />, // TODO: 「あなた」「配偶者」いずれか一方のみ妊産婦を選択できるようにしたい
+      component: <SpousePregnancy key={33} />, // TODO: 「あなた」「配偶者」いずれか一方のみ妊産婦を選択できるようにしたい
     },
     {
       title: '配偶者がいるがひとり親に該当',
-      component: <DummyQuestion key={33} />,
+      component: <DummyQuestion key={34} />,
     },
   ],
   子ども: [
@@ -605,6 +612,10 @@ const questions = {
     {
       title: '介護施設',
       component: <ParentNursingHome key={31} />,
+    },
+    {
+      title: '学生かどうか',
+      component: <ParentStudent key={32} />,
     },
   ],
 };
