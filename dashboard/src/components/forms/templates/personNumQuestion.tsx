@@ -35,17 +35,11 @@ export const PersonNumQuestion = ({
   defaultNum,
   maxPerson,
   title,
-  defaultSelection,
 }: {
   updatePersonInfo: (personNum: number) => void;
-  defaultNum: (household: any) => number;
+  defaultNum: (household: any) => number | null;
   maxPerson: number;
   title: string;
-  defaultSelection: ({
-    frontendHousehold,
-  }: {
-    frontendHousehold: any;
-  }) => boolean | null;
 }) => {
   const navigationType = useNavigationType();
   const [household, setHousehold] = useRecoilState(householdAtom);
@@ -58,13 +52,15 @@ export const PersonNumQuestion = ({
   const [yesNoValidated, setYesNoValidated] = useState<boolean>(false);
 
   const [shownPersonNum, setShownPersonNum] = useState<string | number>(
-    defaultNum(household)
+    defaultNum(household) ?? 0
   );
   const [actualPersonNum, setActualPersonNum] = useState<number>(0);
   const inputEl = useRef<HTMLInputElement>(null);
 
   const [boolState, setBoolState] = useState<boolean | null>(
-    defaultSelection({ frontendHousehold })
+    defaultNum(household) === null
+      ? null
+      : defaultNum(household) !== 0
   );
 
   useEffect(() => {

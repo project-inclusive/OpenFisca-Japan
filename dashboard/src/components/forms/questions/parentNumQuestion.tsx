@@ -60,21 +60,15 @@ export const ParentNumQuestion = () => {
     }
   };
 
-  const defaultNum = (household: any) =>
-    household.世帯一覧.世帯1.祖父母一覧
-      ? household.世帯一覧.世帯1.祖父母一覧
-      : 0;
-
-  const isAlreadySelected = (): boolean | null => {
-    if (household.世帯一覧.世帯1.祖父母一覧 != null) {
-      return household.世帯一覧.世帯1.祖父母一覧 !== 0;
-    }
-    return null;
-  };
+  const defaultNum = (household: any): number | null => {
+    const personNum = household.世帯一覧?.世帯1?.祖父母一覧?.length
+    if (personNum === undefined) return null;
+    return personNum;
+  }
 
   useEffect(() => {
-    if (isAlreadySelected() !== null) {
-      if (isAlreadySelected()) {
+    if (defaultNum(household) !== null) {
+      if (defaultNum(household !== 0)) {
         setNextQuestionKey({
           person: '親',
           personNum: 1,
@@ -92,7 +86,6 @@ export const ParentNumQuestion = () => {
       defaultNum={defaultNum}
       maxPerson={configData.validation.household.maxParents}
       title="親の人数"
-      defaultSelection={() => isAlreadySelected()}
     />
   );
 };

@@ -32,21 +32,18 @@ export const DeceasedNumberQuestion = () => {
     }
   };
 
-  const defaultNum = (household: any) =>
-    household.世帯一覧.世帯1.災害で死亡した世帯員の人数
-      ? household.世帯一覧.世帯1.災害で死亡した世帯員の人数[currentDate]
-      : 0;
+  const defaultNum = (household: any): number | null => {
+    const personNum = household.世帯一覧?.世帯1?.災害で死亡した世帯員の人数
+    if (personNum === undefined) return null;
+    return personNum;
+  }
 
-  // TODO: defaultSectionに動的な値を設定するようにする
   return (
     <PersonNumQuestion
       updatePersonInfo={updatePersonInfo}
       defaultNum={defaultNum}
       maxPerson={configData.validation.household.maxChildren}
       title="家族に災害で亡くなった方はいますか？"
-      defaultSelection={({ frontendHousehold }: { frontendHousehold: any }) =>
-        null
-      }
     />
   );
 };
