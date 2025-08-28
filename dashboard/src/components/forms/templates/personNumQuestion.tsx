@@ -52,7 +52,7 @@ export const PersonNumQuestion = ({
   const [yesNoValidated, setYesNoValidated] = useState<boolean>(false);
 
   const [shownPersonNum, setShownPersonNum] = useState<string | number>(
-    defaultNum(household) ?? 0
+    defaultNum(household) ?? ''
   );
   const [actualPersonNum, setActualPersonNum] = useState<number>(0);
   const inputEl = useRef<HTMLInputElement>(null);
