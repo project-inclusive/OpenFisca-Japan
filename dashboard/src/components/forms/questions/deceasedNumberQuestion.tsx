@@ -33,10 +33,11 @@ export const DeceasedNumberQuestion = () => {
   };
 
   const defaultNum = (household: any): number | null => {
-    const personNum = household.世帯一覧?.世帯1?.災害で死亡した世帯員の人数?.[currentDate]
+    const personNum =
+      household.世帯一覧?.世帯1?.災害で死亡した世帯員の人数?.[currentDate];
     if (personNum === undefined) return null;
     return personNum;
-  }
+  };
 
   return (
     <PersonNumQuestion

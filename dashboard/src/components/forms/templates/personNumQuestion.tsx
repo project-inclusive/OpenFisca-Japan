@@ -58,9 +58,7 @@ export const PersonNumQuestion = ({
   const inputEl = useRef<HTMLInputElement>(null);
 
   const [boolState, setBoolState] = useState<boolean | null>(
-    defaultNum(household) === null
-      ? null
-      : defaultNum(household) !== 0
+    defaultNum(household) === null ? null : defaultNum(household) !== 0
   );
 
   useEffect(() => {

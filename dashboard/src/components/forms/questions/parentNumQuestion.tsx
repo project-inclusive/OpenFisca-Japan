@@ -61,10 +61,10 @@ export const ParentNumQuestion = () => {
   };
 
   const defaultNum = (household: any): number | null => {
-    const personNum = household.世帯一覧?.世帯1?.祖父母一覧?.length
+    const personNum = household.世帯一覧?.世帯1?.祖父母一覧?.length;
     if (personNum === undefined) return null;
     return personNum;
-  }
+  };
 
   useEffect(() => {
     if (defaultNum(household) !== null) {

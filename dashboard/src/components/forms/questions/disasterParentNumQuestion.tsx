@@ -61,10 +61,10 @@ export const DisasterParentNumQuestion = () => {
   };
 
   const defaultNum = (household: any): number | null => {
-    const personNum = household.世帯一覧?.世帯1?.祖父母一覧?.length
+    const personNum = household.世帯一覧?.世帯1?.祖父母一覧?.length;
     if (personNum === undefined) return null;
     return personNum;
-  }
+  };
 
   return (
     <PersonNumQuestion
