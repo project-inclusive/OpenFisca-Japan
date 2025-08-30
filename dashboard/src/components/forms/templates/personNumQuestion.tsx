@@ -35,23 +35,11 @@ export const PersonNumQuestion = ({
   defaultNum,
   maxPerson,
   title,
-  defaultSelection,
-  defaultPersonNumber,
 }: {
   updatePersonInfo: (personNum: number) => void;
-  defaultNum: (household: any) => number;
+  defaultNum: (household: any) => number | null;
   maxPerson: number;
   title: string;
-  defaultSelection: ({
-    frontendHousehold,
-  }: {
-    frontendHousehold: any;
-  }) => boolean | null;
-  defaultPersonNumber: ({
-    frontendHousehold,
-  }: {
-    frontendHousehold: any;
-  }) => number;
 }) => {
   const navigationType = useNavigationType();
   const [household, setHousehold] = useRecoilState(householdAtom);
@@ -64,20 +52,20 @@ export const PersonNumQuestion = ({
   const [yesNoValidated, setYesNoValidated] = useState<boolean>(false);
 
   const [shownPersonNum, setShownPersonNum] = useState<string | number>(
-    defaultPersonNumber({ frontendHousehold }) // TODO: defaultPersonNumberを廃止した後、defaultNumに代替可能か検討する。76行目のuseEffectの実装含む。
+    defaultNum(household) ?? ''
   );
   const [actualPersonNum, setActualPersonNum] = useState<number>(0);
   const inputEl = useRef<HTMLInputElement>(null);
 
   const [boolState, setBoolState] = useState<boolean | null>(
-    defaultSelection({ frontendHousehold })
+    defaultNum(household) === null ? null : defaultNum(household) !== 0
   );
 
   useEffect(() => {
     if (boolState === null) {
       return;
     }
-    if (boolState && shownPersonNum === 0) {
+    if (boolState && defaultNum(household) === 0) {
       setQuestionValidated(false);
     } else {
       setQuestionValidated(true);
