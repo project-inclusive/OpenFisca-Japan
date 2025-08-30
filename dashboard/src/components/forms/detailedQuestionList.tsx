@@ -50,6 +50,7 @@ import { SelfNewJob } from './questions/selfNewJob';
 import { SpouseNewJob } from './questions/spouseNewJob';
 import { ChildNewJob } from './questions/childNewJob';
 import { ParentNewJob } from './questions/parentNewJob';
+import { Problems } from './questions/problems';
 
 // NOTE: プログレスバーの計算のために設問に順序関係を定義する必要があるため、objectではなくarrayを使用
 // HACK: componentをarray内に定義する際にkeyが必要なため定義している
@@ -200,16 +201,20 @@ const questions = {
       component: <SelfPregnancy key={35} />, // TODO: 「あなた」「配偶者」いずれか一方のみ妊産婦を選択できるようにしたい
     },
     {
+      title: '困りごと',
+      component: <Problems key={36} />,
+    },
+    {
       title: '配偶者の有無',
-      component: <SpouseExistsQuestion key={36} />,
+      component: <SpouseExistsQuestion key={37} />,
     },
     {
       title: '子どもの人数',
-      component: <ChildrenNumQuestion key={37} />,
+      component: <ChildrenNumQuestion key={38} />,
     },
     {
       title: '親の人数',
-      component: <ParentNumQuestion key={38} />,
+      component: <ParentNumQuestion key={39} />,
     },
   ],
   配偶者: [

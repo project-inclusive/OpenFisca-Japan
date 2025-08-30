@@ -1,5 +1,4 @@
 import { useRecoilState } from 'recoil';
-import { YesNoQuestion } from '../templates/yesNoQuestion';
 import { frontendHouseholdAtom, nextQuestionKeyAtom } from '../../../state';
 import { MultipleSelectionQuestion } from '../templates/multipleSelectionQuestion';
 import { useEffect } from 'react';

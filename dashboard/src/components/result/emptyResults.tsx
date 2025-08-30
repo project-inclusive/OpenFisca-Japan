@@ -5,7 +5,13 @@ import configData from '../../config/app_config.json';
 import { currentDateAtom } from '../../state';
 import { useRecoilValue } from 'recoil';
 
-export const EmptyResults = ({ result }: { result: any }) => {
+export const EmptyResults = ({
+  result,
+  frontendHouseholdResult,
+}: {
+  result: any;
+  frontendHouseholdResult: any;
+}) => {
   const [isEmpty, setIsEmpty] = useState(false);
   const currentDate = useRecoilValue(currentDateAtom);
 
@@ -29,6 +35,11 @@ export const EmptyResults = ({ result }: { result: any }) => {
             setIsEmpty(false);
             return;
           }
+        }
+        console.log(frontendHouseholdResult.制度);
+        if (Object.values(frontendHouseholdResult.制度).some((cond) => cond)) {
+          setIsEmpty(false);
+          return;
         }
       }
 
