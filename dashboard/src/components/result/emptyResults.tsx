@@ -36,7 +36,6 @@ export const EmptyResults = ({
             return;
           }
         }
-        console.log(frontendHouseholdResult.制度);
         if (Object.values(frontendHouseholdResult.制度).some((cond) => cond)) {
           setIsEmpty(false);
           return;
