@@ -29,6 +29,9 @@ export const DeceasedNumberQuestion = () => {
         personNum: 0,
         title: '配偶者の有無',
       });
+    } else {
+      // スキップしない
+      setNextQuestionKey(null);
     }
   };
 

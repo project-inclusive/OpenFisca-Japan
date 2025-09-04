@@ -6,7 +6,10 @@ export const HousingDamageExistsQuestion = () => {
   const [nextQuestionKey, setNextQuestionKey] =
     useRecoilState(nextQuestionKeyAtom);
 
-  const yesOnClick = () => {};
+  const yesOnClick = () => {
+    // スキップしない
+    setNextQuestionKey(null);
+  };
   const noOnClick = () => {
     // 住宅被害の質問をスキップ
     setNextQuestionKey({

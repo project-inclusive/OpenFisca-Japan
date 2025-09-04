@@ -44,6 +44,11 @@ export const nextQuestionKeyAtom = atom<QuestionKey | null>({
   default: null,
 });
 
+export const defaultNextQuestionKeyAtom = atom<QuestionKey | null>({
+  key: 'defaultNextQuestionKeyAtom',
+  default: null,
+});
+
 export const questionKeyHistoryAtom = atom<QuestionKey[]>({
   key: 'questionKeyHistoryAtom',
   default: [],

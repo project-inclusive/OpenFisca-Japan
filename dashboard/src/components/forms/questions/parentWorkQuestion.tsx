@@ -7,7 +7,10 @@ export const ParentWorkQuestion = () => {
   const [nextQuestionKey, setNextQuestionKey] =
     useRecoilState(nextQuestionKeyAtom);
 
-  const yesOnClick = () => {};
+  const yesOnClick = () => {
+    // スキップしない
+    setNextQuestionKey(null);
+  };
   const noOnClick = () => {
     // 仕事関連の質問をスキップ
     setNextQuestionKey({

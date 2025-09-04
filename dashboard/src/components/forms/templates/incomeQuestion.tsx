@@ -109,7 +109,7 @@ export const IncomeQuestion = ({ personName }: { personName: string }) => {
     if (storedIncomeObj) {
       setShownIncome(storedIncomeObj[currentDate] / 10000);
     }
-  }, [navigationType]);
+  }, [personName]);
 
   return (
     <>

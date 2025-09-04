@@ -1,6 +1,7 @@
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { Question } from './templates/question';
 import {
+  defaultNextQuestionKeyAtom,
   householdAtom,
   nextQuestionKeyAtom,
   QuestionKey,
@@ -24,7 +25,7 @@ const questionIndex = (questions: Questions, key: QuestionKey) => {
   return questions[key.person].findIndex((value) => value.title === key.title);
 };
 
-const defaultNextQuestionKey = (
+const defaultNextQuestionKeyOf = (
   questions: Questions,
   key: QuestionKey,
   household: any
@@ -166,6 +167,10 @@ export const QuestionList = ({
   // 次にどの質問に遷移すべきかを管理
   const [nextQuestionKey, setNextQuestionKey] =
     useRecoilState(nextQuestionKeyAtom);
+  // 次の質問のデフォルト値
+  const [defaultNextQuestionKey, setDefaultNextQuestionKey] = useRecoilState(
+    defaultNextQuestionKeyAtom
+  );
   // これまでに答えた質問の履歴（戻るボタンで使用）
   const [keyHistory, setKeyHistory] = useRecoilState(questionKeyHistoryAtom);
 
@@ -179,7 +184,7 @@ export const QuestionList = ({
 
   useEffect(() => {
     // 2番目の質問を設定（初回のみ設定するためuseEffectの内部に記述）
-    setNextQuestionKey({
+    setDefaultNextQuestionKey({
       person: 'あなた',
       personNum: 0,
       title: questions['あなた'][1].title,
@@ -199,7 +204,9 @@ export const QuestionList = ({
     setQuestionValidated(false);
     setShowsValidationError(false);
 
-    if (nextQuestionKey == null) {
+    // nextQuestionKey が設定されていなければデフォルトの質問へ進む
+    const mergedNextQuestionKey = nextQuestionKey ?? defaultNextQuestionKey;
+    if (mergedNextQuestionKey == null) {
       // すべての質問に回答したので見積もり結果に飛ぶ
       navigate('/result', {
         state: {
@@ -212,12 +219,22 @@ export const QuestionList = ({
     }
 
     setKeyHistory([...keyHistory, questionKey]);
-    setQuestionKey(nextQuestionKey);
-    setNextQuestionKey(
-      defaultNextQuestionKey(questions, nextQuestionKey, household)
+    setQuestionKey(mergedNextQuestionKey);
+    setNextQuestionKey(null);
+
+    const newNextQuestionKey = defaultNextQuestionKeyOf(
+      questions,
+      mergedNextQuestionKey,
+      household
     );
+    setDefaultNextQuestionKey(newNextQuestionKey);
     // TODO: デバッグ用、UI移行が終わったら消す
-    console.log(nextQuestionKey);
+    console.log(mergedNextQuestionKey);
+    console.log(
+      `next: ${JSON.stringify(nextQuestionKey)} default: ${JSON.stringify(
+        defaultNextQuestionKey
+      )}`
+    );
   };
 
   const back = () => {
@@ -231,9 +248,14 @@ export const QuestionList = ({
     const previousKey = keyHistory[keyHistory.length - 1];
     setKeyHistory(keyHistory.slice(0, keyHistory.length - 1));
     setQuestionKey(previousKey);
-    setNextQuestionKey(
-      defaultNextQuestionKey(questions, previousKey, household)
+
+    setNextQuestionKey(null);
+    const newNextQuestionKey = defaultNextQuestionKeyOf(
+      questions,
+      previousKey,
+      household
     );
+    setDefaultNextQuestionKey(newNextQuestionKey);
   };
 
   const personStr = questionKey.personNum

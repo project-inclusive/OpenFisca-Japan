@@ -16,6 +16,7 @@ export const SpouseHealthCondition = () => {
       frontendHousehold.世帯員['配偶者']['けがをしている']
     ) {
       // スキップしない
+      setNextQuestionKey(null);
       return;
     }
 

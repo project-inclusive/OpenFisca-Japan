@@ -16,6 +16,7 @@ export const SelfHealthCondition = () => {
       frontendHousehold.世帯員['あなた']['けがをしている']
     ) {
       // スキップしない
+      setNextQuestionKey(null);
       return;
     }
 

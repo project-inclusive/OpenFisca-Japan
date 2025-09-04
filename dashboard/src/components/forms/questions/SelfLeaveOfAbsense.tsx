@@ -6,7 +6,10 @@ export const SelfLeaveOfAbsense = () => {
   const [nextQuestionKey, setNextQuestionKey] =
     useRecoilState(nextQuestionKeyAtom);
 
-  const yesOnClick = () => {};
+  const yesOnClick = () => {
+    // スキップしない
+    setNextQuestionKey(null);
+  };
   const noOnClick = () => {
     // 休業関連の質問をスキップ
     setNextQuestionKey({

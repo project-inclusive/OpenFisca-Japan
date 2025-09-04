@@ -1,6 +1,7 @@
 import { useRecoilState } from 'recoil';
 import { useEffect } from 'react';
 import {
+  defaultNextQuestionKeyAtom,
   frontendHouseholdAtom,
   householdAtom,
   nextQuestionKeyAtom,
@@ -12,6 +13,9 @@ import configData from '../../../config/app_config.json';
 export const SimpleChildrenNumQuestion = () => {
   const [nextQuestionKey, setNextQuestionKey] =
     useRecoilState(nextQuestionKeyAtom);
+  const [defaultNextQuestionKey, setDefaultNextQuestionKey] = useRecoilState(
+    defaultNextQuestionKeyAtom
+  );
   const [household, setHousehold] = useRecoilState(householdAtom);
   const [frontendHousehold, setFrontendHousehold] = useRecoilState(
     frontendHouseholdAtom
@@ -51,6 +55,7 @@ export const SimpleChildrenNumQuestion = () => {
     // 次の質問を設定
     if (personNum === 0) {
       // 終了
+      setDefaultNextQuestionKey(null);
       setNextQuestionKey(null);
     } else {
       // 1人目の子どもの質問へ

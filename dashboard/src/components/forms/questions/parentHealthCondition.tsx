@@ -23,6 +23,7 @@ export const ParentHealthCondition = () => {
       frontendHousehold.世帯員[personName]['けがをしている']
     ) {
       // スキップしない
+      setNextQuestionKey(null);
       return;
     }
 
