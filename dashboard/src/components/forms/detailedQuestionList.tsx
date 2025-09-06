@@ -79,6 +79,66 @@ import { ChildWorkQuestion } from './questions/childWorkQuestion';
 import { ChildOccupationQuestion } from './questions/childOccupationQuestion';
 import { ParentWorkQuestion } from './questions/parentWorkQuestion';
 import { ParentOccupationQuestion } from './questions/parentOccupationQuestion';
+import { SpouseHospitalized } from './questions/spouseHospitalized';
+import { ChildHospitalized } from './questions/childHospitalized';
+import { ParentHospitalized } from './questions/parentHospitalized';
+import { SelfHomeRecuperation } from './questions/selfHomeRecuperation';
+import { SpouseHomeRecuperation } from './questions/spouseHomeRecuperation';
+import { ChildHomeRecuperation } from './questions/childHomeRecuperation';
+import { ParentHomeRecuperation } from './questions/parentHomeRecuperation';
+import { ParentContagion } from './questions/parentContagion';
+import { SelfContagion } from './questions/selfContagion';
+import { SpouseContagion } from './questions/spouseContagion';
+import { ChildContagion } from './questions/childContagion';
+import { SelfHIV } from './questions/selfHIV';
+import { ChildHIV } from './questions/childHIV';
+import { ParentHIV } from './questions/parentHIV';
+import { SpouseHIV } from './questions/spouseHIV';
+import { SelfAIDS } from './questions/selfAIDS';
+import { SpouseAIDS } from './questions/spouseAIDS';
+import { ChildAIDS } from './questions/childAIDS';
+import { ParentAIDS } from './questions/parentAIDS';
+import { ParentFamilyHIVByBloodProduct } from './questions/parentFamilyHIVByBloodProduct';
+import { ChildFamilyHIVByBloodProduct } from './questions/childFamilyHIVByBloodProduct';
+import { ChildHIVByBloodProduct } from './questions/childHIVByBloodProduct';
+import { SpouseFamilyHIVByBloodProduct } from './questions/spouseFamilyHIVByBloodProduct';
+import { SpouseHIVByBloodProduct } from './questions/spouseHIVByBloodProduct';
+import { SelfFamilyHIVByBloodProduct } from './questions/selfFamilyHIVByBloodProduct';
+import { SelfHIVByBloodProduct } from './questions/selfHIVByBloodProduct';
+import { SelfHepatitisC } from './questions/selfHepatitisC';
+import { SpouseHepatitisC } from './questions/spouseHepatitisC';
+import { ChildHepatitisC } from './questions/childHepatitisC';
+import { ParentHepatitisC } from './questions/parentHepatitisC';
+import { ParentHIVByBloodProduct } from './questions/parentHIVByBloodProduct';
+import { ParentHepatitisCByBloodProduct } from './questions/parentHepatiticsCByBloodProduct';
+import { SelfHepatitisCByBloodProduct } from './questions/selfHepatiticsCByBloodProduct';
+import { SpouseHepatitisCByBloodProduct } from './questions/spouseHepatiticsCByBloodProduct';
+import { ChildHepatitisCByBloodProduct } from './questions/childHepatiticsCByBloodProduct';
+import { SpouseCirrhosis } from './questions/spouseCirrhosis';
+import { ChildCirrhosis } from './questions/childCirrhosis';
+import { ParentCirrhosis } from './questions/parentCirrhosis';
+import { SelfCirrhosis } from './questions/selfCirrhosis';
+import { SelfRenalFailure } from './questions/selfRenalFailure';
+import { SpouseRenalFailure } from './questions/spouseRenalFailure';
+import { ChildRenalFailure } from './questions/childRenalFailure';
+import { ParentRenalFailure } from './questions/parentRenalFailure';
+import { SelfHemoPhilia } from './questions/selfHemophilia';
+import { SpouseHemoPhilia } from './questions/spouseHemophilia';
+import { ChildHemoPhilia } from './questions/childHemophilia';
+import { ParentHemoPhilia } from './questions/parentHemophilia';
+import { SelfHospitalized } from './questions/selfHospitalized';
+import { SelfChronicRenalFailure } from './questions/selfChronicRenalFailure';
+import { SelfDialysis } from './questions/selfDialysis';
+import { SelfHemophiliaKind } from './questions/selfHemophiliaKind';
+import { SpouseDialysis } from './questions/spouseDialysis';
+import { SpouseChronicRenalFailure } from './questions/spouseChronicRenalFailure';
+import { SpouseHemophiliaKind } from './questions/spouseHemophiliaKind';
+import { ChildChronicRenalFailure } from './questions/childChronicRenalFailure';
+import { ChildDialysis } from './questions/childDialysis';
+import { ChildHemophiliaKind } from './questions/childHemophiliaKind';
+import { ParentChronicRenalFailure } from './questions/parentChronicRenalFailure';
+import { ParentDialysis } from './questions/parentDialysis';
+import { ParentHemophiliaKind } from './questions/parentHemophiliaKind';
 
 // NOTE: プログレスバーの計算のために設問に順序関係を定義する必要があるため、objectではなくarrayを使用
 // HACK: componentをarray内に定義する際にkeyが必要なため定義している
@@ -134,63 +194,63 @@ const questions = {
     },
     {
       title: '入院中',
-      component: <DummyQuestion key={12} />,
+      component: <SelfHospitalized key={12} />,
     },
     {
       title: '在宅療養中',
-      component: <DummyQuestion key={13} />,
+      component: <SelfHomeRecuperation key={13} />,
     },
     {
       title: '感染症',
-      component: <DummyQuestion key={14} />,
+      component: <SelfContagion key={14} />,
     },
     {
       title: 'HIV',
-      component: <DummyQuestion key={15} />,
+      component: <SelfHIV key={15} />,
     },
     {
       title: 'エイズ発症',
-      component: <DummyQuestion key={16} />,
+      component: <SelfAIDS key={16} />,
     },
     {
-      title: '血液製剤による感染者',
-      component: <DummyQuestion key={17} />,
+      title: '家族に血液製剤によるHIV感染者',
+      component: <SelfFamilyHIVByBloodProduct key={17} />,
     },
     {
       title: '血液製剤投与によるHIV感染',
-      component: <DummyQuestion key={18} />,
+      component: <SelfHIVByBloodProduct key={18} />,
     },
     {
       title: 'C型肝炎',
-      component: <DummyQuestion key={19} />,
+      component: <SelfHepatitisC key={19} />,
     },
     {
       title: '血液製剤投与によるC型肝炎感染',
-      component: <DummyQuestion key={20} />,
+      component: <SelfHepatitisCByBloodProduct key={20} />,
     },
     {
       title: '肝硬変、肝がん、肝移植',
-      component: <DummyQuestion key={21} />,
+      component: <SelfCirrhosis key={21} />,
     },
     {
       title: '腎不全',
-      component: <DummyQuestion key={22} />,
+      component: <SelfRenalFailure key={22} />,
     },
     {
       title: '慢性腎不全',
-      component: <DummyQuestion key={23} />,
+      component: <SelfChronicRenalFailure key={23} />,
     },
     {
       title: '人工透析',
-      component: <DummyQuestion key={24} />,
+      component: <SelfDialysis key={24} />,
     },
     {
       title: '血液凝固因子異常症の有無',
-      component: <DummyQuestion key={25} />,
+      component: <SelfHemoPhilia key={25} />,
     },
     {
       title: '血液凝固因子異常症',
-      component: <DummyQuestion key={26} />,
+      component: <SelfHemophiliaKind key={26} />,
     },
     {
       title: '身体障害者手帳',
@@ -296,63 +356,63 @@ const questions = {
     },
     {
       title: '入院中',
-      component: <DummyQuestion key={11} />,
+      component: <SpouseHospitalized key={11} />,
     },
     {
       title: '在宅療養中',
-      component: <DummyQuestion key={12} />,
+      component: <SpouseHomeRecuperation key={12} />,
     },
     {
       title: '感染症',
-      component: <DummyQuestion key={13} />,
+      component: <SpouseContagion key={13} />,
     },
     {
       title: 'HIV',
-      component: <DummyQuestion key={14} />,
+      component: <SpouseHIV key={14} />,
     },
     {
       title: 'エイズ発症',
-      component: <DummyQuestion key={15} />,
+      component: <SpouseAIDS key={15} />,
     },
     {
-      title: '血液製剤による感染者',
-      component: <DummyQuestion key={16} />,
+      title: '家族に血液製剤によるHIV感染者',
+      component: <SpouseFamilyHIVByBloodProduct key={16} />,
     },
     {
       title: '血液製剤投与によるHIV感染',
-      component: <DummyQuestion key={17} />,
+      component: <SpouseHIVByBloodProduct key={17} />,
     },
     {
       title: 'C型肝炎',
-      component: <DummyQuestion key={18} />,
+      component: <SpouseHepatitisC key={18} />,
     },
     {
       title: '血液製剤投与によるC型肝炎感染',
-      component: <DummyQuestion key={19} />,
+      component: <SpouseHepatitisCByBloodProduct key={19} />,
     },
     {
       title: '肝硬変、肝がん、肝移植',
-      component: <DummyQuestion key={20} />,
+      component: <SpouseCirrhosis key={20} />,
     },
     {
       title: '腎不全',
-      component: <DummyQuestion key={21} />,
+      component: <SpouseRenalFailure key={21} />,
     },
     {
       title: '慢性腎不全',
-      component: <DummyQuestion key={22} />,
+      component: <SpouseChronicRenalFailure key={22} />,
     },
     {
       title: '人工透析',
-      component: <DummyQuestion key={23} />,
+      component: <SpouseDialysis key={23} />,
     },
     {
       title: '血液凝固因子異常症の有無',
-      component: <DummyQuestion key={24} />,
+      component: <SpouseHemoPhilia key={24} />,
     },
     {
       title: '血液凝固因子異常症',
-      component: <DummyQuestion key={25} />,
+      component: <SpouseHemophiliaKind key={25} />,
     },
     {
       title: '身体障害者手帳',
@@ -450,63 +510,63 @@ const questions = {
     },
     {
       title: '入院中',
-      component: <DummyQuestion key={13} />,
+      component: <ChildHospitalized key={13} />,
     },
     {
       title: '在宅療養中',
-      component: <DummyQuestion key={14} />,
+      component: <ChildHomeRecuperation key={14} />,
     },
     {
       title: '感染症',
-      component: <DummyQuestion key={15} />,
+      component: <ChildContagion key={15} />,
     },
     {
       title: 'HIV',
-      component: <DummyQuestion key={16} />,
+      component: <ChildHIV key={16} />,
     },
     {
       title: 'エイズ発症',
-      component: <DummyQuestion key={17} />,
+      component: <ChildAIDS key={17} />,
     },
     {
-      title: '血液製剤による感染者',
-      component: <DummyQuestion key={18} />,
+      title: '家族に血液製剤によるHIV感染者',
+      component: <ChildFamilyHIVByBloodProduct key={18} />,
     },
     {
       title: '血液製剤投与によるHIV感染',
-      component: <DummyQuestion key={19} />,
+      component: <ChildHIVByBloodProduct key={19} />,
     },
     {
       title: 'C型肝炎',
-      component: <DummyQuestion key={20} />,
+      component: <ChildHepatitisC key={20} />,
     },
     {
       title: '血液製剤投与によるC型肝炎感染',
-      component: <DummyQuestion key={21} />,
+      component: <ChildHepatitisCByBloodProduct key={21} />,
     },
     {
       title: '肝硬変、肝がん、肝移植',
-      component: <DummyQuestion key={22} />,
+      component: <ChildCirrhosis key={22} />,
     },
     {
       title: '腎不全',
-      component: <DummyQuestion key={23} />,
+      component: <ChildRenalFailure key={23} />,
     },
     {
       title: '慢性腎不全',
-      component: <DummyQuestion key={24} />,
+      component: <ChildChronicRenalFailure key={24} />,
     },
     {
       title: '人工透析',
-      component: <DummyQuestion key={25} />,
+      component: <ChildDialysis key={25} />,
     },
     {
       title: '血液凝固因子異常症の有無',
-      component: <DummyQuestion key={26} />,
+      component: <ChildHemoPhilia key={26} />,
     },
     {
       title: '血液凝固因子異常症',
-      component: <DummyQuestion key={27} />,
+      component: <ChildHemophiliaKind key={27} />,
     },
     {
       title: '身体障害者手帳',
@@ -584,63 +644,63 @@ const questions = {
     },
     {
       title: '入院中',
-      component: <DummyQuestion key={11} />,
+      component: <ParentHospitalized key={11} />,
     },
     {
       title: '在宅療養中',
-      component: <DummyQuestion key={12} />,
+      component: <ParentHomeRecuperation key={12} />,
     },
     {
       title: '感染症',
-      component: <DummyQuestion key={13} />,
+      component: <ParentContagion key={13} />,
     },
     {
       title: 'HIV',
-      component: <DummyQuestion key={14} />,
+      component: <ParentHIV key={14} />,
     },
     {
       title: 'エイズ発症',
-      component: <DummyQuestion key={15} />,
+      component: <ParentAIDS key={15} />,
     },
     {
-      title: '血液製剤による感染者',
-      component: <DummyQuestion key={16} />,
+      title: '家族に血液製剤によるHIV感染者',
+      component: <ParentFamilyHIVByBloodProduct key={16} />,
     },
     {
       title: '血液製剤投与によるHIV感染',
-      component: <DummyQuestion key={17} />,
+      component: <ParentHIVByBloodProduct key={17} />,
     },
     {
       title: 'C型肝炎',
-      component: <DummyQuestion key={18} />,
+      component: <ParentHepatitisC key={18} />,
     },
     {
       title: '血液製剤投与によるC型肝炎感染',
-      component: <DummyQuestion key={19} />,
+      component: <ParentHepatitisCByBloodProduct key={19} />,
     },
     {
       title: '肝硬変、肝がん、肝移植',
-      component: <DummyQuestion key={20} />,
+      component: <ParentCirrhosis key={20} />,
     },
     {
       title: '腎不全',
-      component: <DummyQuestion key={21} />,
+      component: <ParentRenalFailure key={21} />,
     },
     {
       title: '慢性腎不全',
-      component: <DummyQuestion key={22} />,
+      component: <ParentChronicRenalFailure key={22} />,
     },
     {
       title: '人工透析',
-      component: <DummyQuestion key={23} />,
+      component: <ParentDialysis key={23} />,
     },
     {
       title: '血液凝固因子異常症の有無',
-      component: <DummyQuestion key={24} />,
+      component: <ParentHemoPhilia key={24} />,
     },
     {
       title: '血液凝固因子異常症',
-      component: <DummyQuestion key={25} />,
+      component: <ParentHemophiliaKind key={25} />,
     },
     {
       title: '身体障害者手帳',
