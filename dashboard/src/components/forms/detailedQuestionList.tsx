@@ -3,7 +3,7 @@ import { SpouseAgeQuestion } from './questions/spouseAgeQuestion';
 import { ChildAgeQuestion } from './questions/childAgeQuestion';
 import { ParentAgeQuestion } from './questions/parentAgeQuestion';
 import { SpouseExistsQuestion } from './questions/spouseExistsQuestion';
-import { SelfIncomeQuestion } from './questions/selfIncomeQuestion';
+import { SelfIncome } from './questions/selfIncome';
 import { ChildrenNumQuestion } from './questions/childrenNumQuestion';
 import { ParentNumQuestion } from './questions/parentNumQuestion';
 import { SelfWorkQuestion } from './questions/selfWorkQuestion';
@@ -70,9 +70,9 @@ import { SpouseLeaveOfAbsense } from './questions/spouseLeaveOfAbsense';
 import { ChildLeaveOfAbsense } from './questions/childLeaveOfAbsense';
 import { ParentLeaveOfAbsense } from './questions/parentLeaveOfAbsense';
 import { ChildLeaveOfAbsenseByAccident } from './questions/childLeaveOfAbsenseByAccident';
-import { SpouseIncomeQuestion } from './questions/spouseIncomeQuestion';
-import { ChildIncomeQuestion } from './questions/childIncomeQuestion';
-import { ParentIncomeQuestion } from './questions/parentIncomeQuestion';
+import { SpouseIncome } from './questions/spouseIncome';
+import { ChildIncome } from './questions/childIncome';
+import { ParentIncome } from './questions/parentIncome';
 import { SpouseWorkQuestion } from './questions/spouseWorkQuestion';
 import { SpouseOccupationQuestion } from './questions/spouseOccupationQuestion';
 import { ChildWorkQuestion } from './questions/childWorkQuestion';
@@ -139,6 +139,9 @@ import { ChildHemophiliaKind } from './questions/childHemophiliaKind';
 import { ParentChronicRenalFailure } from './questions/parentChronicRenalFailure';
 import { ParentDialysis } from './questions/parentDialysis';
 import { ParentHemophiliaKind } from './questions/parentHemophiliaKind';
+import { SelfDeposit } from './questions/selfDeposit';
+import { SpouseDeposit } from './questions/spouseDeposit';
+import { ParentDeposit } from './questions/parentDeposit';
 
 // NOTE: プログレスバーの計算のために設問に順序関係を定義する必要があるため、objectではなくarrayを使用
 // HACK: componentをarray内に定義する際にkeyが必要なため定義している
@@ -154,11 +157,11 @@ const questions = {
     },
     {
       title: '年収',
-      component: <SelfIncomeQuestion key={2} />,
+      component: <SelfIncome key={2} />,
     },
     {
       title: '預金',
-      component: <DummyQuestion key={3} />,
+      component: <SelfDeposit key={3} />,
     },
     {
       title: '仕事の有無',
@@ -316,11 +319,11 @@ const questions = {
     },
     {
       title: '年収',
-      component: <SpouseIncomeQuestion key={1} />,
+      component: <SpouseIncome key={1} />,
     },
     {
       title: '預金',
-      component: <DummyQuestion key={2} />,
+      component: <SpouseDeposit key={2} />,
     },
     {
       title: '仕事の有無',
@@ -478,7 +481,7 @@ const questions = {
     },
     {
       title: '年収',
-      component: <ChildIncomeQuestion key={5} />,
+      component: <ChildIncome key={5} />,
     },
     {
       title: '仕事の種類',
@@ -604,11 +607,11 @@ const questions = {
     },
     {
       title: '年収',
-      component: <ParentIncomeQuestion key={1} />,
+      component: <ParentIncome key={1} />,
     },
     {
       title: '預金',
-      component: <DummyQuestion key={2} />,
+      component: <ParentDeposit key={2} />,
     },
     {
       title: '仕事の有無',

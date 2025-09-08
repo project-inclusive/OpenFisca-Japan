@@ -1,7 +1,7 @@
 import { AddressQuestion } from './questions/addressQuestion';
-import { SelfIncomeQuestion } from './questions/selfIncomeQuestion';
+import { SelfIncome } from './questions/selfIncome';
 import { QuestionList } from './questionList';
-import { SpouseIncomeQuestion } from './questions/spouseIncomeQuestion';
+import { SpouseIncome } from './questions/spouseIncome';
 import { SimpleChildrenNumQuestion } from './questions/simpleChildrenNumQuestion';
 import { ChildAgeQuestion } from './questions/childAgeQuestion';
 import { SimpleSpouseExistsQuestion } from './questions/simpleSpouseExistsQuestion';
@@ -16,7 +16,7 @@ const questions = {
     },
     {
       title: '年収',
-      component: <SelfIncomeQuestion key={1} />,
+      component: <SelfIncome key={1} />,
     },
     {
       title: '配偶者の有無',
@@ -30,7 +30,7 @@ const questions = {
   配偶者: [
     {
       title: '年収',
-      component: <SpouseIncomeQuestion key={0} />,
+      component: <SpouseIncome key={0} />,
     },
   ],
   子ども: [

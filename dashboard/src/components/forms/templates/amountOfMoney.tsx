@@ -1,5 +1,4 @@
 import { useState, useEffect, KeyboardEvent, useCallback } from 'react';
-import { useNavigationType } from 'react-router-dom';
 import {
   Box,
   HStack,
@@ -12,12 +11,8 @@ import {
 import configData from '../../../config/app_config.json';
 
 import { ErrorMessage } from '../attributes/validation/ErrorMessage';
-import {
-  currentDateAtom,
-  householdAtom,
-  questionValidatedAtom,
-} from '../../../state';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { householdAtom, questionValidatedAtom } from '../../../state';
+import { useRecoilState } from 'recoil';
 
 import { toHalf } from '../../../utils/toHalf';
 import {
@@ -28,13 +23,19 @@ import {
   isWindows,
 } from 'react-device-detect';
 
-export const IncomeQuestion = ({ personName }: { personName: string }) => {
-  const isDisasterCalculation = location.pathname === '/calculate-disaster';
-  const navigationType = useNavigationType();
-  const currentDate = useRecoilValue(currentDateAtom);
-
+export const AmountOfMoney = ({
+  title,
+  personName,
+  onChangeAmount,
+  defaultAmount,
+}: {
+  title: string;
+  personName: string;
+  onChangeAmount: (amount: number) => void;
+  defaultAmount: ({ household }: { household: any }) => number | null;
+}) => {
   const [household, setHousehold] = useRecoilState(householdAtom);
-  const [shownIncome, setShownIncome] = useState<string | number>('');
+  const [shownAmount, setShownAmount] = useState<string | number>('');
   const [questionValidated, setQuestionValidated] = useRecoilState(
     questionValidatedAtom
   );
@@ -53,33 +54,28 @@ export const IncomeQuestion = ({ personName }: { personName: string }) => {
       }
     }
 
-    const newHousehold = {
-      ...household,
-    };
-
     // 全角数字を半角数字に変換
     let value = toHalf(event.target.value);
     value = value.replace(/[^0-9]/g, '');
-    const maxIncome = 10000000000; // オーバーフローしないよう上限を100億に設定
+    const maxAmount = 10000000000; // オーバーフローしないよう上限を100億に設定
 
     // 「万円」単位を「円」に換算
-    let income = parseInt(value) * 10000;
+    let amount = parseInt(value) * 10000;
     // 正の整数以外は0に変換
-    if (isNaN(income) || income < 0) {
-      income = 0;
-      setShownIncome('');
+    if (isNaN(amount) || amount < 0) {
+      amount = 0;
+      setShownAmount('');
       setQuestionValidated(false);
-    } else if (income > maxIncome) {
-      income = maxIncome;
-      setShownIncome(income / 10000);
+    } else if (amount > maxAmount) {
+      amount = maxAmount;
+      setShownAmount(amount / 10000);
       setQuestionValidated(true);
     } else {
-      setShownIncome(income / 10000);
+      setShownAmount(amount / 10000);
       setQuestionValidated(true);
     }
 
-    newHousehold.世帯員[personName].収入 = { [currentDate]: income };
-    setHousehold(newHousehold);
+    onChangeAmount(amount);
   }, []);
 
   const onKeyDown = (e: KeyboardEvent<HTMLElement>) => {
@@ -89,45 +85,46 @@ export const IncomeQuestion = ({ personName }: { personName: string }) => {
     }
 
     if (e.key === 'ArrowUp') {
-      const value = Number(shownIncome) + 1;
-      setShownIncome(value);
+      const value = Number(shownAmount) + 1;
+      setShownAmount(value);
     }
 
     if (e.key === 'ArrowDown') {
       e.preventDefault();
-      let value = Number(shownIncome) - 1;
+      let value = Number(shownAmount) - 1;
       if (value < 0) {
         value = 0;
       }
-      setShownIncome(value);
+      setShownAmount(value);
     }
   };
 
   // stored states set displayed value when page transition
   useEffect(() => {
-    const storedIncomeObj = household.世帯員[personName].収入;
+    const storedIncomeObj = defaultAmount({ household });
     if (storedIncomeObj) {
-      setShownIncome(storedIncomeObj[currentDate] / 10000);
+      setShownAmount(storedIncomeObj / 10000);
+      setQuestionValidated(true);
     }
   }, [personName]);
 
   return (
     <>
-      <ErrorMessage condition={shownIncome === ''} />
+      <ErrorMessage condition={shownAmount === ''} />
       <FormControl>
         <FormLabel fontSize={configData.style.itemFontSize}>
           <Center>
             <HStack>
-              <Box>{isDisasterCalculation && '被災前の'}年収</Box>
+              <Box>{title}</Box>
             </HStack>
           </Center>
         </FormLabel>
 
         <HStack mb={4}>
           <Input
-            data-testid="income-input"
+            data-testid="amount-input"
             type={isMobile ? 'number' : 'text'}
-            value={shownIncome}
+            value={shownAmount}
             onChange={onChange}
             onKeyDown={onKeyDown}
             width="10em"
