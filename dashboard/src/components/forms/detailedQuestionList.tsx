@@ -10,7 +10,6 @@ import { SelfWorkQuestion } from './questions/selfWorkQuestion';
 import { SelfOccupationQuestion } from './questions/selfOccupationQuestion';
 import { QuestionList } from './questionList';
 import { SelfAgeQuestion } from './questions/selfAgeQuestion';
-import { DummyQuestion } from './questions/dummyQuestion';
 import { SelfHealthCondition } from './questions/selfHealthCondition';
 import { SelfPhysicalDisability } from './questions/selfPhysicalDisability';
 import { SpousePhysicalDisability } from './questions/spousePhysicalDisability';
@@ -145,6 +144,7 @@ import { ParentDeposit } from './questions/parentDeposit';
 import { ChildHighSchool } from './questions/childHighSchool';
 import { ChildHighSchoolCourse } from './questions/childHighSchoolCourse';
 import { ChildHighSchoolManagement } from './questions/childHighSchoolManagement';
+import { SpouseExistsButSingleParent } from './questions/spouseExistsButSingleParent';
 
 // NOTE: プログレスバーの計算のために設問に順序関係を定義する必要があるため、objectではなくarrayを使用
 // HACK: componentをarray内に定義する際にkeyが必要なため定義している
@@ -458,7 +458,7 @@ const questions = {
     },
     {
       title: '配偶者がいるがひとり親に該当',
-      component: <DummyQuestion key={35} />,
+      component: <SpouseExistsButSingleParent key={35} />,
     },
   ],
   子ども: [

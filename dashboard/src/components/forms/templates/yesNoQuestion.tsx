@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import {
   Box,
   FormControl,
@@ -23,6 +23,7 @@ export const YesNoQuestion = ({
   yesOnClick,
   noOnClick,
   defaultSelection,
+  children,
 }: {
   title: string;
   yesOnClick: () => void;
@@ -34,6 +35,7 @@ export const YesNoQuestion = ({
     household: any;
     frontendHousehold: any;
   }) => boolean | null;
+  children?: ReactNode;
 }) => {
   const household = useRecoilValue(householdAtom);
   const frontendHousehold = useRecoilValue(frontendHouseholdAtom);
@@ -92,6 +94,9 @@ export const YesNoQuestion = ({
             <Box fontSize={configData.style.itemFontSize}>{title}</Box>
           </Center>
         </FormLabel>
+        <Box mt={2} mb={4}>
+          {children}
+        </Box>
 
         <VStack mb={4}>
           {btn({
