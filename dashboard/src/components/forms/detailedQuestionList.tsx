@@ -142,6 +142,9 @@ import { ParentHemophiliaKind } from './questions/parentHemophiliaKind';
 import { SelfDeposit } from './questions/selfDeposit';
 import { SpouseDeposit } from './questions/spouseDeposit';
 import { ParentDeposit } from './questions/parentDeposit';
+import { ChildHighSchool } from './questions/childHighSchool';
+import { ChildHighSchoolCourse } from './questions/childHighSchoolCourse';
+import { ChildHighSchoolManagement } from './questions/childHighSchoolManagement';
 
 // NOTE: プログレスバーの計算のために設問に順序関係を定義する必要があるため、objectではなくarrayを使用
 // HACK: componentをarray内に定義する際にkeyが必要なため定義している
@@ -465,15 +468,15 @@ const questions = {
     },
     {
       title: '高校に通っているかどうか',
-      component: <DummyQuestion key={1} />,
+      component: <ChildHighSchool key={1} />,
     },
     {
       title: '高校履修種別',
-      component: <DummyQuestion key={2} />,
+      component: <ChildHighSchoolCourse key={2} />,
     },
     {
       title: '高校運営種別',
-      component: <DummyQuestion key={3} />,
+      component: <ChildHighSchoolManagement key={3} />,
     },
     {
       title: '仕事の有無',
