@@ -27,14 +27,6 @@ export const ChronicRenalFailure = ({ personName }: { personName: string }) => {
       title="慢性腎不全ですか？"
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
-      defaultSelection={({ household }: { household: any }) => {
-        if (
-          household.世帯員[personName]?.慢性腎不全である?.[currentDate] != null
-        ) {
-          return household.世帯員[personName].慢性腎不全である[currentDate];
-        }
-        return null;
-      }}
     />
   );
 };

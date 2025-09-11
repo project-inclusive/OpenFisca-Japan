@@ -34,13 +34,6 @@ export const HepatitisCByBloodProduct = ({
       title="血液製剤の投与によってC型肝炎ウイルスに感染しましたか？"
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
-      defaultSelection={({ household }: { household: any }) =>
-        household.世帯員[personName]
-          .血液製剤の投与によってC型肝炎ウイルスに感染した
-          ? household.世帯員[personName]
-              .血液製剤の投与によってC型肝炎ウイルスに感染した[currentDate]
-          : null
-      }
     />
   );
 };

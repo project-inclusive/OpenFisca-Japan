@@ -25,7 +25,6 @@ export const ParentHepatitisC = () => {
       title="C型肝炎に感染していますか？"
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
-      defaultSelection={() => null}
     />
   );
 };

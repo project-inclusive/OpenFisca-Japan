@@ -4,7 +4,6 @@ import {
   defaultNextQuestionKeyAtom,
   householdAtom,
   nextQuestionKeyAtom,
-  QuestionKey,
   questionKeyAtom,
   questionKeyHistoryAtom,
   questionValidatedAtom,
@@ -13,6 +12,7 @@ import {
 import configData from '../../config/app_config.json';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { QuestionKey } from '../../question';
 
 export type Question = {
   title: string;
@@ -230,11 +230,6 @@ export const QuestionList = ({
     setDefaultNextQuestionKey(newNextQuestionKey);
     // TODO: デバッグ用、UI移行が終わったら消す
     console.log(mergedNextQuestionKey);
-    console.log(
-      `next: ${JSON.stringify(nextQuestionKey)} default: ${JSON.stringify(
-        defaultNextQuestionKey
-      )}`
-    );
   };
 
   const back = () => {

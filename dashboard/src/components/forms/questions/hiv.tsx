@@ -36,11 +36,6 @@ export const HIV = ({
       title="HIVに感染していますか？"
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
-      defaultSelection={({ household }: { household: any }) =>
-        household.世帯員[personName].HIV感染者である
-          ? household.世帯員[personName].HIV感染者である[currentDate]
-          : null
-      }
     />
   );
 };

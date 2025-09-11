@@ -30,13 +30,6 @@ export const FamilyHIVByBloodProduct = ({
       title="家族に血液製剤によってHIVに感染した方はいますか？"
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
-      defaultSelection={({ household }: { household: any }) =>
-        household.世帯員[personName].家族に血液製剤によるHIV感染者がいる
-          ? household.世帯員[personName].家族に血液製剤によるHIV感染者がいる[
-              currentDate
-            ]
-          : null
-      }
     />
   );
 };

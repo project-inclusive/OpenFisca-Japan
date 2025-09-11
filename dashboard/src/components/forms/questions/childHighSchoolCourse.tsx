@@ -34,11 +34,6 @@ export const ChildHighSchoolCourse = () => {
     <SelectionQuestion
       title="通っている高校の種類を選んでください（1）"
       selections={selections}
-      defaultSelection={({ household }: { household: any }) =>
-        household.世帯員[personName].高校履修種別
-          ? household.世帯員[personName].高校履修種別[currentDate]
-          : null
-      }
     />
   );
 };

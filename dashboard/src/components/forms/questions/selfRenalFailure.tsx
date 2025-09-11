@@ -24,7 +24,6 @@ export const SelfRenalFailure = () => {
       title="腎不全ですか？"
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
-      defaultSelection={() => null}
     />
   );
 };

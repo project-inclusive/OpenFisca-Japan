@@ -25,7 +25,6 @@ export const ChildRenalFailure = () => {
       title="腎不全ですか？"
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
-      defaultSelection={() => null}
     />
   );
 };

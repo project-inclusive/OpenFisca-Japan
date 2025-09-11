@@ -13,42 +13,40 @@ import { ErrorMessage } from '../attributes/validation/ErrorMessage';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   frontendHouseholdAtom,
-  householdAtom,
+  questionKeyAtom,
   questionValidatedAtom,
 } from '../../../state';
+import { personNameFrom } from '../../../question';
 
-// TODO: タイトルやonClickを引数で変更可能にする
 export const YesNoQuestion = ({
   title,
   yesOnClick,
   noOnClick,
-  defaultSelection,
   children,
 }: {
   title: string;
   yesOnClick: () => void;
   noOnClick: () => void;
-  defaultSelection: ({
-    household,
-    frontendHousehold,
-  }: {
-    household: any;
-    frontendHousehold: any;
-  }) => boolean | null;
   children?: ReactNode;
 }) => {
-  const household = useRecoilValue(householdAtom);
-  const frontendHousehold = useRecoilValue(frontendHouseholdAtom);
+  const questionKey = useRecoilValue(questionKeyAtom);
+  const personName = personNameFrom(questionKey);
+
+  const [frontendHousehold, setFrontendHousehold] = useRecoilState(
+    frontendHouseholdAtom
+  );
   const [boolState, setBoolState] = useState<boolean | null>(
-    defaultSelection({ household, frontendHousehold })
+    frontendHousehold.世帯員[personName][questionKey.title]
   );
   const [questionValidated, setQuestionValidated] = useRecoilState(
     questionValidatedAtom
   );
 
+  // すでに選択されていた場合、その選択肢を選んだ処理を再実施
   useEffect(() => {
-    if (boolState !== null) {
+    if (boolState != null) {
       setQuestionValidated(true);
+      boolState ? yesOnClick() : noOnClick();
     }
   }, [boolState]);
 
@@ -56,12 +54,10 @@ export const YesNoQuestion = ({
     cond,
     state,
     title,
-    onClick,
   }: {
     cond: () => boolean;
     state: boolean;
     title: string;
-    onClick: () => void;
   }) => (
     <Button
       variant="outline"
@@ -73,8 +69,13 @@ export const YesNoQuestion = ({
       color={cond() ? 'white' : 'black'}
       _hover={{ bg: 'cyan.600', borderColor: 'cyan.900', color: 'white' }}
       onClick={() => {
+        // 選択肢の表示を更新
         setBoolState(state);
-        onClick();
+
+        // 別ページから戻ってきたときのために選択肢を記録
+        const newFrontendHousehold = { ...frontendHousehold };
+        newFrontendHousehold.世帯員[personName][questionKey.title] = state;
+        setFrontendHousehold(newFrontendHousehold);
       }}
     >
       {title}
@@ -103,13 +104,11 @@ export const YesNoQuestion = ({
             cond: () => boolState === true,
             state: true,
             title: 'はい',
-            onClick: yesOnClick,
           })}
           {btn({
             cond: () => boolState === false,
             state: false,
             title: 'いいえ',
-            onClick: noOnClick,
           })}
         </VStack>
       </FormControl>

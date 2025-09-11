@@ -38,10 +38,6 @@ export const SelfHealthCondition = () => {
     });
   };
 
-  useEffect(() => {
-    updateNextQuestionKey(frontendHousehold);
-  }, [frontendHousehold]);
-
   return (
     <HealthCondition
       personName="あなた"

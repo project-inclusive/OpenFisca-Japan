@@ -31,17 +31,6 @@ export const IndustrialAccidentDisease = ({
       title="業務によってけがをしましたか？"
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
-      defaultSelection={({ household }: { household: any }) => {
-        if (
-          household.世帯員[personName]?.業務によってけがをした?.[currentDate] !=
-          null
-        ) {
-          return household.世帯員[personName].業務によってけがをした[
-            currentDate
-          ];
-        }
-        return null;
-      }}
     />
   );
 };

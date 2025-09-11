@@ -32,14 +32,6 @@ export const Pregnancy = ({ personName }: { personName: string }) => {
     <SelectionQuestion
       title="妊娠中、または産後6ヵ月以内ですか？"
       selections={selections}
-      defaultSelection={({ household }: { household: any }) =>
-        household.世帯員[personName].妊産婦
-          ? items.find(
-              (item) =>
-                item.value === household.世帯員[personName].妊産婦[currentDate]
-            )?.display ?? null
-          : null
-      }
     />
   );
 };

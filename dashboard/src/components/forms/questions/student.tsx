@@ -27,12 +27,6 @@ export const Student = ({ personName }: { personName: string }) => {
       title="高校、大学、専門学校、職業訓練学校等の学生ですか？"
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
-      defaultSelection={({ household }: { household: any }) => {
-        if (household.世帯員[personName]?.学生?.[currentDate] != null) {
-          return household.世帯員[personName].学生[currentDate];
-        }
-        return null;
-      }}
     />
   );
 };

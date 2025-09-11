@@ -21,15 +21,5 @@ export const OccupationQuestion = ({ personName }: { personName: string }) => {
     };
   });
 
-  return (
-    <SelectionQuestion
-      title="仕事"
-      selections={selections}
-      defaultSelection={({ household }: { household: any }) =>
-        household.世帯員[personName].就労形態
-          ? household.世帯員[personName].就労形態[currentDate]
-          : null
-      }
-    />
-  );
+  return <SelectionQuestion title="仕事" selections={selections} />;
 };

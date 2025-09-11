@@ -4,15 +4,12 @@ import {
   nextQuestionKeyAtom,
   questionKeyAtom,
 } from '../../../state';
-import { useEffect } from 'react';
 import { HealthCondition } from './healthCondition';
 
 export const ParentHealthCondition = () => {
   const questionKey = useRecoilValue(questionKeyAtom);
   const [nextQuestionKey, setNextQuestionKey] =
     useRecoilState(nextQuestionKeyAtom);
-  const frontendHousehold = useRecoilValue(frontendHouseholdAtom);
-
   const personName = `親${questionKey.personNum}`;
 
   // 状態遷移先の質問を設定
@@ -44,10 +41,6 @@ export const ParentHealthCondition = () => {
       title: '介護施設',
     });
   };
-
-  useEffect(() => {
-    updateNextQuestionKey(frontendHousehold);
-  }, [frontendHousehold]);
 
   return (
     <HealthCondition

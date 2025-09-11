@@ -23,20 +23,10 @@ export const Problems = () => {
     },
   }));
 
-  const defaultSelections = ({
-    frontendHousehold,
-  }: {
-    frontendHousehold: any;
-  }) =>
-    Object.fromEntries(
-      selectionValues.map((value) => [value, frontendHousehold.困りごと[value]])
-    );
-
   return (
     <MultipleSelectionQuestion
       title="困りごとはありますか？"
       selections={selections}
-      defaultSelections={defaultSelections}
     />
   );
 };

@@ -1,10 +1,21 @@
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { currentDateAtom, householdAtom } from '../../../state';
+import {
+  currentDateAtom,
+  frontendHouseholdAtom,
+  householdAtom,
+} from '../../../state';
 import { MultipleSelectionQuestion } from '../templates/multipleSelectionQuestion';
 
-export const HemoPhiliaKind = ({ personName }: { personName: string }) => {
+export const HemoPhiliaKind = ({
+  personName,
+  updateNextQuestionKey,
+}: {
+  personName: string;
+  updateNextQuestionKey: (frontendHousehold: any) => void;
+}) => {
   const currentDate = useRecoilValue(currentDateAtom);
   const [household, setHousehold] = useRecoilState(householdAtom);
+  const frontendHousehold = useRecoilValue(frontendHouseholdAtom);
 
   // display: 画面表示に使用
   // value: OpenFisca APIに使用
@@ -64,6 +75,7 @@ export const HemoPhiliaKind = ({ personName }: { personName: string }) => {
         [currentDate]: true,
       };
       setHousehold(copiedHousehold);
+      updateNextQuestionKey(frontendHousehold);
     },
     disable: () => {
       const copiedHousehold = { ...household };
@@ -71,22 +83,14 @@ export const HemoPhiliaKind = ({ personName }: { personName: string }) => {
         [currentDate]: false,
       };
       setHousehold(copiedHousehold);
+      updateNextQuestionKey(frontendHousehold);
     },
   }));
-
-  const defaultSelections = ({ household }: { household: any }) =>
-    Object.fromEntries(
-      selectionValues.map((v) => {
-        const kind = household.世帯員[personName][v.value];
-        return [v.display, kind ? kind[currentDate] : null];
-      })
-    );
 
   return (
     <MultipleSelectionQuestion
       title="血液凝固因子異常症のうち、当てはまるものはどれですか？"
       selections={selections}
-      defaultSelections={defaultSelections}
     />
   );
 };

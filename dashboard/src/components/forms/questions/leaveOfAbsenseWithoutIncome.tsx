@@ -31,20 +31,6 @@ export const LeaveOfAbsenseWithoutIncome = ({
       title="休業中に給与の支払いがない状態ですか？"
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
-      defaultSelection={({ household }: { household: any }) => {
-        if (
-          household.世帯員[personName]?.休業中に給与の支払いがない?.[
-            currentDate
-          ] != null
-        ) {
-          return (
-            household.世帯員[personName].休業中に給与の支払いがない[
-              currentDate
-            ] === true
-          );
-        }
-        return null;
-      }}
     />
   );
 };

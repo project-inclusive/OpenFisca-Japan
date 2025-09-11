@@ -38,10 +38,6 @@ export const SpouseHealthCondition = () => {
     });
   };
 
-  useEffect(() => {
-    updateNextQuestionKey(frontendHousehold);
-  }, [frontendHousehold]);
-
   return (
     <HealthCondition
       personName="配偶者"

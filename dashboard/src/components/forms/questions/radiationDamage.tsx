@@ -31,15 +31,6 @@ export const RadiationDamage = ({ personName }: { personName: string }) => {
     <SelectionQuestion
       title="放射線障害がありますか？"
       selections={selections}
-      defaultSelection={({ household }: { household: any }) =>
-        household.世帯員[personName].放射線障害
-          ? items.find(
-              (item) =>
-                item.value ===
-                household.世帯員[personName].放射線障害[currentDate]
-            )?.display ?? null
-          : null
-      }
     />
   );
 };

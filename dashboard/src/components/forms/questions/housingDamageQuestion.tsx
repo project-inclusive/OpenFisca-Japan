@@ -35,11 +35,6 @@ export const HousingDamageQuestion = () => {
     <SelectionQuestion
       title="住宅被害の状況（当てはまるもののうち最も上のものを選んでください）"
       selections={selections}
-      defaultSelection={({ household }: { household: any }) =>
-        household.世帯一覧.世帯1.住宅被害
-          ? keyMap[household.世帯一覧.世帯1.住宅被害[currentDate]]
-          : null
-      }
     />
   );
 };
