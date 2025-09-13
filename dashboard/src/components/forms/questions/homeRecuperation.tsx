@@ -1,10 +1,21 @@
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { YesNoQuestion } from '../templates/yesNoQuestion';
-import { currentDateAtom, householdAtom } from '../../../state';
+import {
+  currentDateAtom,
+  frontendHouseholdAtom,
+  householdAtom,
+} from '../../../state';
 
-export const HomeRecuperation = ({ personName }: { personName: string }) => {
+export const HomeRecuperation = ({
+  personName,
+  updateNextQuestionKey,
+}: {
+  personName: string;
+  updateNextQuestionKey: (frontendHousehold: any) => void;
+}) => {
   const currentDate = useRecoilValue(currentDateAtom);
   const [household, setHousehold] = useRecoilState(householdAtom);
+  const frontendHousehold = useRecoilValue(frontendHouseholdAtom);
 
   const yesOnClick = () => {
     const newHousehold = { ...household };
@@ -12,6 +23,7 @@ export const HomeRecuperation = ({ personName }: { personName: string }) => {
       [currentDate]: true,
     };
     setHousehold({ ...newHousehold });
+    updateNextQuestionKey(frontendHousehold);
   };
   const noOnClick = () => {
     const newHousehold = { ...household };
@@ -19,6 +31,7 @@ export const HomeRecuperation = ({ personName }: { personName: string }) => {
       [currentDate]: false,
     };
     setHousehold({ ...newHousehold });
+    updateNextQuestionKey(frontendHousehold);
   };
 
   return (
