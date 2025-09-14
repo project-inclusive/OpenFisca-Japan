@@ -13,8 +13,13 @@ import {
 import configData from '../../../config/app_config.json';
 
 import { ErrorMessage } from '../attributes/validation/ErrorMessage';
-import { householdAtom, questionValidatedAtom } from '../../../state';
-import { useRecoilState } from 'recoil';
+import {
+  frontendHouseholdAtom,
+  householdAtom,
+  questionKeyAtom,
+  questionValidatedAtom,
+} from '../../../state';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { toHalf } from '../../../utils/toHalf';
 import {
@@ -27,13 +32,27 @@ import {
 
 export const ChildrenAgeQuestion = ({ personName }: { personName: string }) => {
   const navigationType = useNavigationType();
+  const questionKey = useRecoilValue(questionKeyAtom);
   const [household, setHousehold] = useRecoilState(householdAtom);
+  const [frontendHousehold, setFrontendHousehold] = useRecoilState(
+    frontendHouseholdAtom
+  );
   const [questionValidated, setQuestionValidated] = useRecoilState(
     questionValidatedAtom
   );
 
   // 年齢に関する処理
-  const [age, setAge] = useState<string | number>('');
+  const [age, setAge] = useState<string | number>(
+    frontendHousehold.世帯員[personName][questionKey.title] ?? ''
+  );
+
+  // stored states set displayed age when page transition
+  useEffect(() => {
+    if (age !== '') {
+      changeAge(Number(age));
+      setQuestionValidated(true);
+    }
+  }, [age]);
 
   function changeAge(age: number) {
     setAge(age);
@@ -49,6 +68,11 @@ export const ChildrenAgeQuestion = ({ personName }: { personName: string }) => {
         ETERNITY: `${birthYear.toString()}-01-01`,
       };
       setHousehold(newHousehold);
+
+      // 別ページから戻ってきたときのために選択肢を記録
+      const newFrontendHousehold = { ...frontendHousehold };
+      newFrontendHousehold.世帯員[personName][questionKey.title] = age;
+      setFrontendHousehold(newFrontendHousehold);
     }
   }
 
@@ -82,9 +106,14 @@ export const ChildrenAgeQuestion = ({ personName }: { personName: string }) => {
   };
 
   // 学年に関する処理
-  const [schoolYear, setSchoolYear] = useState<number | string>('');
+  const [schoolYear, setSchoolYear] = useState<number | string>(
+    frontendHousehold.世帯員[personName][`${questionKey.title}_学年`] ?? ''
+  );
   const [schoolEducationalAuthority, setschoolEducationalAuthority] =
-    useState<string>();
+    useState<string>(
+      frontendHousehold.世帯員[personName][`${questionKey.title}_教育機関`] ??
+        ''
+    );
   const [suffix, setSuffix] = useState<string>();
 
   const ignoreSchoolYear: Array<string> = ['高校卒業後相当', '小学校入学前'];
@@ -158,10 +187,21 @@ export const ChildrenAgeQuestion = ({ personName }: { personName: string }) => {
 
     if (value) {
       setSchoolYear(value);
+
+      const newFrontendHousehold = { ...frontendHousehold };
+      newFrontendHousehold.世帯員[personName][`${questionKey.title}_学年`] =
+        value;
+      setFrontendHousehold(newFrontendHousehold);
+
       //console.log('[DEBUG] schoolYear ->', schoolYear);
       setBirthday(Number(value), schoolEducationalAuthority);
     } else {
       setSchoolYear('');
+
+      const newFrontendHousehold = { ...frontendHousehold };
+      newFrontendHousehold.世帯員[personName][`${questionKey.title}_学年`] =
+        value;
+      setFrontendHousehold(newFrontendHousehold);
     }
   }
 
@@ -245,9 +285,20 @@ export const ChildrenAgeQuestion = ({ personName }: { personName: string }) => {
         totalSchoolYear >= info.minTotalSchoolYear &&
         totalSchoolYear <= info.maxTotalSchoolYear
       ) {
-        setschoolEducationalAuthority(info.building);
-        setSchoolYear(totalSchoolYear - info.diff + 6);
+        const schoolEducationalAuthority = info.building;
+        const schoolYear = totalSchoolYear - info.diff + 6;
+        setschoolEducationalAuthority(schoolEducationalAuthority);
+        setSchoolYear(schoolYear);
         setSuffix(info.suffix);
+
+        const newFrontendHousehold = { ...frontendHousehold };
+        newFrontendHousehold.世帯員[personName][
+          `${questionKey.title}_教育機関`
+        ] = schoolEducationalAuthority;
+        newFrontendHousehold.世帯員[personName][`${questionKey.title}_学年`] =
+          schoolYear;
+        setFrontendHousehold(newFrontendHousehold);
+
         break;
       }
     }
@@ -282,6 +333,11 @@ export const ChildrenAgeQuestion = ({ personName }: { personName: string }) => {
     // 学年が最大値を超えていた場合、最大値に設定
     if (Number(schoolYear) > maximum) {
       setSchoolYear(maximum);
+
+      const newFrontendHousehold = { ...frontendHousehold };
+      newFrontendHousehold.世帯員[personName][`${questionKey.title}_学年`] =
+        maximum;
+      setFrontendHousehold(newFrontendHousehold);
     }
   }, [schoolYear, schoolEducationalAuthority]);
 
@@ -348,6 +404,13 @@ export const ChildrenAgeQuestion = ({ personName }: { personName: string }) => {
                 setschoolEducationalAuthority(
                   e.target.value as typeof schoolEducationalAuthority
                 );
+
+                const newFrontendHousehold = { ...frontendHousehold };
+                newFrontendHousehold.世帯員[personName][
+                  `${questionKey.title}_教育機関`
+                ] = e.target.value;
+                setFrontendHousehold(frontendHousehold);
+
                 if (schoolYear) {
                   setBirthday(
                     Number(schoolYear),
@@ -364,7 +427,7 @@ export const ChildrenAgeQuestion = ({ personName }: { personName: string }) => {
               ))}
             </Select>
 
-            {!ignoreSchoolYear.includes(schoolEducationalAuthority as string) &&
+            {!ignoreSchoolYear.includes(schoolEducationalAuthority) &&
               typeof schoolEducationalAuthority !== 'undefined' &&
               schoolEducationalAuthority !== '' && (
                 <Input

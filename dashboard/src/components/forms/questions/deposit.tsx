@@ -14,17 +14,11 @@ export const Deposit = ({ personName }: { personName: string }) => {
     setHousehold(newHousehold);
   };
 
-  const defaultAmount = ({ household }: { household: any }) => {
-    const deposit = household.世帯員[personName].預貯金;
-    return deposit ? deposit[currentDate] : null;
-  };
-
   return (
     <AmountOfMoney
       title="預貯金"
       personName={personName}
       onChangeAmount={onChangeAmount}
-      defaultAmount={defaultAmount}
     />
   );
 };
