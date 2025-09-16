@@ -51,9 +51,13 @@ class 高等学校奨学給付金_最小(Variable):
     entity = 世帯
     definition_period = DAY
     label = "高等学校奨学給付金"
-    reference = "https://www.mext.go.jp/a_menu/shotou/mushouka/1344089.htm"
+    reference = "https://www.mext.go.jp/a_menu/shotou/mushouka/index.htm"
     documentation = """
     高等学校奨学給付金_最小
+    (文部科学省)https://www.mext.go.jp/a_menu/shotou/mushouka/1344089.htm
+    (文部科学省)https://www.mext.go.jp/content/20250411-mxt_shuukyo03-100002595-03.pdf
+    (文部科学省)https://www.mext.go.jp/a_menu/shotou/mushouka/1344146.htm
+    (文部科学省)https://www.mext.go.jp/content/20250711-mxt_kouhou02-1.pdf
     (東京都HP)https://www.kyoiku.metro.tokyo.lg.jp/admission/tuition/tuition/scholarship_public_school.html
     (兵庫HP)https://web.pref.hyogo.lg.jp/kk35/shougakukyuuhukinn.html
     """
@@ -88,9 +92,13 @@ class 高等学校奨学給付金_最大(Variable):
     entity = 世帯
     definition_period = DAY
     label = "高等学校奨学給付金"
-    reference = "https://www.mext.go.jp/a_menu/shotou/mushouka/1344089.htm"
+    reference = "https://www.mext.go.jp/a_menu/shotou/mushouka/index.htm"
     documentation = """
     高等学校奨学給付金_最大
+    (文部科学省)https://www.mext.go.jp/a_menu/shotou/mushouka/1344089.htm
+    (文部科学省)https://www.mext.go.jp/content/20250411-mxt_shuukyo03-100002595-03.pdf
+    (文部科学省)https://www.mext.go.jp/a_menu/shotou/mushouka/1344146.htm
+    (文部科学省)https://www.mext.go.jp/content/20250711-mxt_kouhou02-1.pdf
     (東京都HP)https://www.kyoiku.metro.tokyo.lg.jp/admission/tuition/tuition/scholarship_public_school.html
     (兵庫HP)https://web.pref.hyogo.lg.jp/kk35/shougakukyuuhukinn.html
     """
@@ -121,9 +129,13 @@ class 生活保護受給世帯の高等学校奨学給付金(Variable):
     entity = 人物
     definition_period = DAY
     label = "生活保護受給世帯の高等学校奨学給付金"
-    reference = "https://www.mext.go.jp/a_menu/shotou/mushouka/1344089.htm"
+    reference = "https://www.mext.go.jp/a_menu/shotou/mushouka/index.htm"
     documentation = """
     生活保護受給世帯の世帯員の高等学校奨学給付金
+    (文部科学省)https://www.mext.go.jp/a_menu/shotou/mushouka/1344089.htm
+    (文部科学省)https://www.mext.go.jp/content/20250411-mxt_shuukyo03-100002595-03.pdf
+    (文部科学省)https://www.mext.go.jp/a_menu/shotou/mushouka/1344146.htm
+    (文部科学省)https://www.mext.go.jp/content/20250711-mxt_kouhou02-1.pdf
     (東京都HP)https://www.kyoiku.metro.tokyo.lg.jp/admission/tuition/tuition/scholarship_public_school.html
     (兵庫HP)https://web.pref.hyogo.lg.jp/kk35/shougakukyuuhukinn.html
     """
@@ -162,9 +174,13 @@ class 住民税非課税世帯の高等学校奨学給付金(Variable):
     entity = 人物
     definition_period = DAY
     label = "住民税非課税世帯の高等学校奨学給付金"
-    reference = "https://www.mext.go.jp/a_menu/shotou/mushouka/1344089.htm"
+    reference = "https://www.mext.go.jp/a_menu/shotou/mushouka/index.htm"
     documentation = """
     住民税非課税世帯の世帯員の高等学校奨学給付金
+    (文部科学省)https://www.mext.go.jp/a_menu/shotou/mushouka/1344089.htm
+    (文部科学省)https://www.mext.go.jp/content/20250411-mxt_shuukyo03-100002595-03.pdf
+    (文部科学省)https://www.mext.go.jp/a_menu/shotou/mushouka/1344146.htm
+    (文部科学省)https://www.mext.go.jp/content/20250711-mxt_kouhou02-1.pdf
     (東京都HP)https://www.kyoiku.metro.tokyo.lg.jp/admission/tuition/tuition/scholarship_public_school.html
     (兵庫HP)https://web.pref.hyogo.lg.jp/kk35/shougakukyuuhukinn.html
     (東京都私立財団HP)https://www.shigaku-tokyo.or.jp/pa_shougaku.html
