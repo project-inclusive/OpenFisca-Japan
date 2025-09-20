@@ -1,5 +1,6 @@
 import { useRecoilState } from 'recoil';
 import {
+  defaultNextQuestionKeyAtom,
   frontendHouseholdAtom,
   householdAtom,
   nextQuestionKeyAtom,
@@ -11,6 +12,9 @@ import configData from '../../../config/app_config.json';
 export const DisasterParentNumQuestion = () => {
   const [nextQuestionKey, setNextQuestionKey] =
     useRecoilState(nextQuestionKeyAtom);
+  const [defaultNextQuestionKey, setDefaultNextQuestionKey] = useRecoilState(
+    defaultNextQuestionKeyAtom
+  );
   const [household, setHousehold] = useRecoilState(householdAtom);
   const [frontendHousehold, setFrontendHousehold] = useRecoilState(
     frontendHouseholdAtom
@@ -49,6 +53,7 @@ export const DisasterParentNumQuestion = () => {
     // 次の質問を設定
     if (personNum === 0) {
       // 終了
+      setDefaultNextQuestionKey(null);
       setNextQuestionKey(null);
     } else {
       // 1人目の親の質問へ

@@ -13,23 +13,30 @@ export const NursingHome = ({ personName }: { personName: string }) => {
   const [isChecked, setIsChecked] = useState(false);
 
   // チェックボックスの値が変更された時
-  const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const newHousehold = { ...household };
-    if (event.target.checked) {
-      newHousehold.世帯員[personName].介護施設入所中 = { [currentDate]: true };
-    } else {
-      newHousehold.世帯員[personName].介護施設入所中 = { [currentDate]: false };
-    }
+  const onChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const newHousehold = { ...household };
+      if (event.target.checked) {
+        newHousehold.世帯員[personName].介護施設入所中 = {
+          [currentDate]: true,
+        };
+      } else {
+        newHousehold.世帯員[personName].介護施設入所中 = {
+          [currentDate]: false,
+        };
+      }
 
-    setHousehold({ ...newHousehold });
-    setIsChecked(event.target.checked);
-  }, []);
+      setHousehold({ ...newHousehold });
+      setIsChecked(event.target.checked);
+    },
+    [personName]
+  );
 
   // stored states set checkbox when page transition
   useEffect(() => {
     const nursingHomeObj = household.世帯員[personName].介護施設入所中;
     setIsChecked(nursingHomeObj && nursingHomeObj[currentDate]);
-  }, [navigationType]);
+  }, [personName]);
 
   return (
     <>

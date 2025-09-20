@@ -2,7 +2,7 @@ import { useRecoilState } from 'recoil';
 import { YesNoQuestion } from '../templates/yesNoQuestion';
 import { nextQuestionKeyAtom } from '../../../state';
 
-export const HousingDamageExistsQuestion = () => {
+export const SpouseWorkQuestion = () => {
   const [nextQuestionKey, setNextQuestionKey] =
     useRecoilState(nextQuestionKeyAtom);
 
@@ -11,22 +11,20 @@ export const HousingDamageExistsQuestion = () => {
     setNextQuestionKey(null);
   };
   const noOnClick = () => {
-    // 住宅被害の質問をスキップ
+    // 仕事関連の質問をスキップ
     setNextQuestionKey({
-      person: 'あなた',
+      person: '配偶者',
       personNum: 0,
-      title: '家財の損害',
+      title: '病気、けが、障害',
     });
   };
 
   return (
     <YesNoQuestion
-      title="住宅が被害を受けていますか？"
+      title="現在仕事をしていますか？"
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
-      defaultSelection={({ household }: { household: any }) =>
-        household.世帯一覧.世帯1.住宅被害 ? true : null
-      }
+      defaultSelection={() => null}
     />
   );
 };

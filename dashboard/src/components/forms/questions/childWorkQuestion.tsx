@@ -1,17 +1,21 @@
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { YesNoQuestion } from '../templates/yesNoQuestion';
-import { nextQuestionKeyAtom } from '../../../state';
+import { nextQuestionKeyAtom, questionKeyAtom } from '../../../state';
 
-export const SelfWorkQuestion = () => {
+export const ChildWorkQuestion = () => {
+  const questionKey = useRecoilValue(questionKeyAtom);
   const [nextQuestionKey, setNextQuestionKey] =
     useRecoilState(nextQuestionKeyAtom);
 
-  const yesOnClick = () => {};
+  const yesOnClick = () => {
+    // スキップしない
+    setNextQuestionKey(null);
+  };
   const noOnClick = () => {
     // 仕事関連の質問をスキップ
     setNextQuestionKey({
-      person: 'あなた',
-      personNum: 0,
+      person: '子ども',
+      personNum: questionKey.personNum,
       title: '病気、けが、障害',
     });
   };
