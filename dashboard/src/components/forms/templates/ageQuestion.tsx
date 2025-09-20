@@ -12,8 +12,13 @@ import {
 import configData from '../../../config/app_config.json';
 
 import { ErrorMessage } from '../attributes/validation/ErrorMessage';
-import { householdAtom, questionValidatedAtom } from '../../../state';
-import { useRecoilState } from 'recoil';
+import {
+  frontendHouseholdAtom,
+  householdAtom,
+  questionKeyAtom,
+  questionValidatedAtom,
+} from '../../../state';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { toHalf } from '../../../utils/toHalf';
 import {
@@ -26,8 +31,14 @@ import {
 
 export const AgeQuestion = ({ personName }: { personName: string }) => {
   const navigationType = useNavigationType();
+  const questionKey = useRecoilValue(questionKeyAtom);
   const [household, setHousehold] = useRecoilState(householdAtom);
-  const [age, setAge] = useState<string | number>('');
+  const [frontendHousehold, setFrontendHousehold] = useRecoilState(
+    frontendHouseholdAtom
+  );
+  const [age, setAge] = useState<string | number>(
+    frontendHousehold.世帯員[personName][questionKey.title] ?? ''
+  );
   const [questionValidated, setQuestionValidated] = useRecoilState(
     questionValidatedAtom
   );
@@ -46,6 +57,11 @@ export const AgeQuestion = ({ personName }: { personName: string }) => {
         ETERNITY: `${birthYear.toString()}-01-01`,
       };
       setHousehold(newHousehold);
+
+      // 別ページから戻ってきたときのために選択肢を記録
+      const newFrontendHousehold = { ...frontendHousehold };
+      newFrontendHousehold.世帯員[personName][questionKey.title] = age;
+      setFrontendHousehold(newFrontendHousehold);
     }
   }
 
@@ -82,21 +98,11 @@ export const AgeQuestion = ({ personName }: { personName: string }) => {
 
   // stored states set displayed age when page transition
   useEffect(() => {
-    const birthdayObj = household.世帯員[personName].誕生年月日;
-    if (birthdayObj && birthdayObj.ETERNITY) {
-      const birthYear = Number(birthdayObj.ETERNITY.substring(0, 4));
-      const birthMonth = Number(birthdayObj.ETERNITY.substring(5, 7));
-      const birthDate = Number(birthdayObj.ETERNITY.substring(8));
-      const birthSum = 10000 * birthYear + 100 * birthMonth + birthDate;
-      const today = new Date();
-      const todaySum =
-        10000 * today.getFullYear() +
-        100 * (today.getMonth() + 1) +
-        today.getDate();
-      setAge(Math.floor((todaySum - birthSum) / 10000));
+    if (age !== '') {
+      changeAge(Number(age));
       setQuestionValidated(true);
     }
-  }, [navigationType, household.世帯員[personName]?.誕生年月日]);
+  }, [navigationType, age]);
 
   return (
     <>

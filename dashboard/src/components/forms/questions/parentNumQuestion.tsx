@@ -39,14 +39,12 @@ export const ParentNumQuestion = () => {
     }
     setHousehold({ ...newHousehold });
 
+    // frontendHouseholdは入力した選択肢を保持するため、親がいないと訂正した場合も 世帯員の削除は不要
     const newFrontendHousehold = { ...frontendHousehold };
-    Object.keys(frontendHousehold.世帯員)
-      .filter((name) => name.match('親'))
-      .map((parentName) => {
-        delete newFrontendHousehold.世帯員[parentName];
-      });
     parentNames.map((parentName) => {
-      newFrontendHousehold.世帯員[parentName] = {};
+      if (!newFrontendHousehold.世帯員[parentName]) {
+        newFrontendHousehold.世帯員[parentName] = {};
+      }
     });
     setFrontendHousehold(newFrontendHousehold);
 
@@ -70,20 +68,6 @@ export const ParentNumQuestion = () => {
     if (personNum === undefined) return null;
     return personNum;
   };
-
-  useEffect(() => {
-    if (defaultNum(household) !== null) {
-      if (defaultNum(household !== 0)) {
-        setNextQuestionKey({
-          person: '親',
-          personNum: 1,
-          title: '年齢',
-        });
-      } else {
-        setNextQuestionKey(null);
-      }
-    }
-  }, []);
 
   return (
     <PersonNumQuestion

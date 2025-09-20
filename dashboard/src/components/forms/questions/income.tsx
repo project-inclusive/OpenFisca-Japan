@@ -15,17 +15,11 @@ export const Income = ({ personName }: { personName: string }) => {
     setHousehold(newHousehold);
   };
 
-  const defaultAmount = ({ household }: { household: any }) => {
-    const income = household.世帯員[personName].収入;
-    return income ? income[currentDate] : null;
-  };
-
   return (
     <AmountOfMoney
       title={isDisasterCalculation ? '被災前の年収' : '年収'}
       personName={personName}
       onChangeAmount={onChangeAmount}
-      defaultAmount={defaultAmount}
     />
   );
 };

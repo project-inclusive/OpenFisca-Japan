@@ -1,5 +1,4 @@
 import { useRecoilState } from 'recoil';
-import { useEffect } from 'react';
 import {
   frontendHouseholdAtom,
   householdAtom,
@@ -36,14 +35,12 @@ export const ChildrenNumQuestion = () => {
     }
     setHousehold({ ...newHousehold });
 
+    // frontendHouseholdは入力した選択肢を保持するため、子どもがいないと訂正した場合も 世帯員の削除は不要
     const newFrontendHousehold = { ...frontendHousehold };
-    Object.keys(frontendHousehold.世帯員)
-      .filter((name) => name.match('子ども'))
-      .map((childName) => {
-        delete newFrontendHousehold.世帯員[childName];
-      });
     childrenNames.map((childName) => {
-      newFrontendHousehold.世帯員[childName] = {};
+      if (!newFrontendHousehold.世帯員[childName]) {
+        newFrontendHousehold.世帯員[childName] = {};
+      }
     });
     setFrontendHousehold(newFrontendHousehold);
 
@@ -70,24 +67,6 @@ export const ChildrenNumQuestion = () => {
     if (personNum === undefined) return null;
     return personNum;
   };
-
-  useEffect(() => {
-    if (defaultNum(household) !== null) {
-      if (defaultNum(household) !== 0) {
-        setNextQuestionKey({
-          person: '子ども',
-          personNum: 1,
-          title: '年齢',
-        });
-      } else {
-        setNextQuestionKey({
-          person: 'あなた',
-          personNum: 0,
-          title: '親の人数',
-        });
-      }
-    }
-  }, []);
 
   return (
     <PersonNumQuestion

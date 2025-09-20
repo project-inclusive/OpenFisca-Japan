@@ -11,8 +11,13 @@ import {
 import configData from '../../../config/app_config.json';
 
 import { ErrorMessage } from '../attributes/validation/ErrorMessage';
-import { householdAtom, questionValidatedAtom } from '../../../state';
-import { useRecoilState } from 'recoil';
+import {
+  frontendHouseholdAtom,
+  householdAtom,
+  questionKeyAtom,
+  questionValidatedAtom,
+} from '../../../state';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { toHalf } from '../../../utils/toHalf';
 import {
@@ -27,15 +32,19 @@ export const AmountOfMoney = ({
   title,
   personName,
   onChangeAmount,
-  defaultAmount,
 }: {
   title: string;
   personName: string;
   onChangeAmount: (amount: number) => void;
-  defaultAmount: ({ household }: { household: any }) => number | null;
 }) => {
+  const questionKey = useRecoilValue(questionKeyAtom);
   const [household, setHousehold] = useRecoilState(householdAtom);
-  const [shownAmount, setShownAmount] = useState<string | number>('');
+  const [frontendHousehold, setFrontendHousehold] = useRecoilState(
+    frontendHouseholdAtom
+  );
+  const [shownAmount, setShownAmount] = useState<string | number>(
+    frontendHousehold.世帯員[personName][questionKey.title] ?? ''
+  );
   const [questionValidated, setQuestionValidated] = useRecoilState(
     questionValidatedAtom
   );
@@ -76,6 +85,11 @@ export const AmountOfMoney = ({
     }
 
     onChangeAmount(amount);
+
+    // 別ページから戻ってきたときのために選択肢を記録
+    const newFrontendHousehold = { ...frontendHousehold };
+    newFrontendHousehold.世帯員[personName][questionKey.title] = amount / 10000;
+    setFrontendHousehold(newFrontendHousehold);
   }, []);
 
   const onKeyDown = (e: KeyboardEvent<HTMLElement>) => {
@@ -101,9 +115,11 @@ export const AmountOfMoney = ({
 
   // stored states set displayed value when page transition
   useEffect(() => {
-    const storedIncomeObj = defaultAmount({ household });
-    if (storedIncomeObj) {
-      setShownAmount(storedIncomeObj / 10000);
+    const storedShownIncomeObj =
+      frontendHousehold.世帯員[personName][questionKey.title];
+    if (storedShownIncomeObj) {
+      setShownAmount(storedShownIncomeObj);
+      onChangeAmount((shownAmount as number) * 10000);
       setQuestionValidated(true);
     }
   }, [personName]);

@@ -19,6 +19,7 @@ import {
   householdAtom,
   questionValidatedAtom,
   frontendHouseholdAtom,
+  questionKeyAtom,
 } from '../../../state';
 import { toHalf } from '../../../utils/toHalf';
 import {
@@ -41,9 +42,12 @@ export const PersonNumQuestion = ({
   maxPerson: number;
   title: string;
 }) => {
+  const questionKey = useRecoilValue(questionKeyAtom);
   const navigationType = useNavigationType();
   const [household, setHousehold] = useRecoilState(householdAtom);
-  const frontendHousehold = useRecoilValue(frontendHouseholdAtom);
+  const [frontendHousehold, setFrontendHousehold] = useRecoilState(
+    frontendHouseholdAtom
+  );
 
   const [questionValidated, setQuestionValidated] = useRecoilState(
     questionValidatedAtom
@@ -52,25 +56,33 @@ export const PersonNumQuestion = ({
   const [yesNoValidated, setYesNoValidated] = useState<boolean>(false);
 
   const [shownPersonNum, setShownPersonNum] = useState<string | number>(
-    defaultNum(household) ?? ''
+    frontendHousehold.世帯[questionKey.title]
+      ? (frontendHousehold.世帯[questionKey.title] as number)
+      : ''
   );
   const [actualPersonNum, setActualPersonNum] = useState<number>(0);
   const inputEl = useRef<HTMLInputElement>(null);
 
   const [boolState, setBoolState] = useState<boolean | null>(
-    defaultNum(household) === null ? null : defaultNum(household) !== 0
+    frontendHousehold.世帯[questionKey.title] === undefined
+      ? null
+      : frontendHousehold.世帯[questionKey.title] !== 0
   );
 
   useEffect(() => {
     if (boolState === null) {
       return;
     }
-    if (boolState && defaultNum(household) === 0) {
+    updatePersonInfo(shownPersonNum ? Number(shownPersonNum) : 0);
+    if (
+      (boolState && shownPersonNum === 0) ||
+      (boolState && shownPersonNum === '')
+    ) {
       setQuestionValidated(false);
     } else {
       setQuestionValidated(true);
     }
-  }, []);
+  }, [questionKey]);
 
   // チェックされたときに人数のフォームにフォーカス
   useEffect(() => {
@@ -98,8 +110,11 @@ export const PersonNumQuestion = ({
     personNum = personNum.replace(/[^0-9]/g, '');
     personNum = parseInt(personNum);
 
+    // 数値を更新したため「はい」を選択したとみなす
+    setBoolState(true);
+
     // 正の整数以外は0に変換
-    if (isNaN(personNum) || personNum < 0) {
+    if (isNaN(personNum) || personNum <= 0) {
       personNum = 0;
       setShownPersonNum('');
       setFormValidated(false);
@@ -118,6 +133,10 @@ export const PersonNumQuestion = ({
 
     setActualPersonNum(personNum);
     updatePersonInfo(personNum);
+
+    const newFrontendHousehold = { ...frontendHousehold };
+    newFrontendHousehold.世帯[questionKey.title] = personNum;
+    setFrontendHousehold(newFrontendHousehold);
   }, []);
 
   // stored states set displayed value when page transition
@@ -149,6 +168,13 @@ export const PersonNumQuestion = ({
         setBoolState(state);
         setYesNoValidated(true);
         onClick();
+
+        // 「はい」の場合はフォームの人数、「いいえ」の場合は0人に設定
+        const newPersonNum = state ? actualPersonNum : 0;
+        const newFrontendHousehold = { ...frontendHousehold };
+        newFrontendHousehold.世帯[questionKey.title] = newPersonNum;
+        setFrontendHousehold(newFrontendHousehold);
+        updatePersonInfo(newPersonNum);
       }}
     >
       {title}
