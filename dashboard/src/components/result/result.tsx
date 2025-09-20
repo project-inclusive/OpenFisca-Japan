@@ -9,7 +9,7 @@ import { useCalculate } from '../../hooks/calculate';
 import { Benefit } from './benefit';
 import { Loan } from './loan';
 import { CalculationLabel } from '../forms/calculationLabel';
-import { householdAtom } from '../../state';
+import { frontendHouseholdAtom, householdAtom } from '../../state';
 import { useRecoilState } from 'recoil';
 import shortLink, {
   inflate,
@@ -20,6 +20,8 @@ import shortLink, {
 import { QRCodeCanvas } from 'qrcode.react';
 import { EmptyResults } from './emptyResults';
 import { useDeviceData } from 'react-device-detect';
+import { Applicable } from './applicable';
+import { calculateFrontendHouseHold } from '../calculate/calculate';
 
 const createFileName = (extension: string = '', ...names: string[]) => {
   if (!extension) {
@@ -48,9 +50,16 @@ export const Result = () => {
   };
 
   const [household, setHousehold] = useRecoilState(householdAtom);
+  const [frontendHousehold, setFrontendHousehold] = useRecoilState(
+    frontendHouseholdAtom
+  );
   let householdByURL: any;
+  let frontendHouseholdByURL: any;
 
   const [result, calculate] = useCalculate();
+
+  const frontendHouseholdResult = calculateFrontendHouseHold(frontendHousehold);
+
   const [isDisplayChat, setIsDisplayChat] = useState('none');
   const [shareLink, setShareLink] = useState(false);
   const [enviroment, setEnvironment] = useState(false);
@@ -64,6 +73,15 @@ export const Result = () => {
         // URLパラメータから受け取った圧縮されたデータを展開
         setShareUrl(getShareLink(key));
         householdByURL = JSON.parse(inflate(key));
+        // NOTE: 共有リンクの後方互換性を保つため、（バックエンド用）householdにfrontend用householdを埋め込む形でエンコードしている
+        // (frontend用householdが存在しない場合無視されるため、従来のリンクも継続して使用可能)
+        // フロントエンド用household
+        if (householdByURL.hasOwnProperty('frontend')) {
+          setFrontendHousehold(householdByURL.frontend);
+          // 不要なためバックエンド用householdからは削除
+          delete householdByURL.frontend;
+        }
+        // バックエンド用household
         setHousehold(householdByURL);
       } catch (error) {
         console.error('Failed to inflate shared data:', error);
@@ -143,8 +161,13 @@ export const Result = () => {
   };
 
   const shareLinkButton = () => {
+    // NOTE: 共有リンクの後方互換性を保つため、（バックエンド用）householdにfrontend用householdを埋め込む形でエンコードしている
+    // (frontend用householdが存在しない場合無視されるため、従来のリンクも継続して使用可能)
+    const mergedHousehold = { ...household };
+    mergedHousehold.frontend = frontendHousehold;
+
     const url = shortLink(
-      household,
+      mergedHousehold,
       isSimpleCalculation,
       isDisasterCalculation
     );
@@ -253,9 +276,16 @@ export const Result = () => {
             {configData.result.topDescription}
           </Center>
 
-          <EmptyResults result={result} />
+          <EmptyResults
+            result={result}
+            frontendHouseholdResult={frontendHouseholdResult}
+          />
           <Benefit result={result} />
           <Loan result={result} />
+          <Applicable
+            result={result}
+            frontendHouseholdResult={frontendHouseholdResult}
+          />
 
           {/* 被災者支援制度モードは他の支援制度も探せるリンクを載せる */}
           {isDisasterCalculation && (
