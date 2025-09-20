@@ -15,7 +15,7 @@ export const SpouseHemophiliaKind = () => {
 
   useEffect(
     () => {
-      if (frontendHousehold.世帯員['あなた']['障害がある']) {
+      if (frontendHousehold.世帯員['配偶者']['障害がある']) {
         // スキップしない
         setNextQuestionKey(null);
         return;
@@ -23,7 +23,7 @@ export const SpouseHemophiliaKind = () => {
 
       // 障害の質問を飛ばす
       setNextQuestionKey({
-        person: 'あなた',
+        person: '配偶者',
         personNum: 0,
         title: '介護施設',
       });

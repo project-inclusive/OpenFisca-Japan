@@ -30,7 +30,7 @@ export const ChildHealthCondition = () => {
     if (frontendHousehold.世帯員[personName]['障害がある']) {
       // 病気、けがの質問を飛ばし障害の質問へ
       setNextQuestionKey({
-        person: '親',
+        person: '子ども',
         personNum: questionKey.personNum,
         title: '身体障害者手帳',
       });
@@ -39,7 +39,7 @@ export const ChildHealthCondition = () => {
 
     // 病気、けが、障害の質問を飛ばす
     setNextQuestionKey({
-      person: '親',
+      person: '子ども',
       personNum: questionKey.personNum,
       title: '介護施設',
     });

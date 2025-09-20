@@ -1,7 +1,7 @@
 import { AddressQuestion } from './questions/addressQuestion';
-import { SelfIncomeQuestion } from './questions/selfIncomeQuestion';
+import { SelfIncome } from './questions/selfIncome';
 import { QuestionList } from './questionList';
-import { SpouseIncomeQuestion } from './questions/spouseIncomeQuestion';
+import { SpouseIncome } from './questions/spouseIncome';
 import { ChildAgeQuestion } from './questions/childAgeQuestion';
 import { ChildrenNumQuestion } from './questions/childrenNumQuestion';
 import { HousingDamageExistsQuestion } from './questions/housingDamageExistsQuestion';
@@ -23,7 +23,7 @@ import { ParentDisasterDisabilityQuestion } from './questions/parentDisasterDisa
 import { ParentDisasterInjuryQuestion } from './questions/parentDisasterInjuryQuestion';
 import { SimpleSpouseExistsQuestion } from './questions/simpleSpouseExistsQuestion';
 import { DisasterParentNumQuestion } from './questions/disasterParentNumQuestion';
-import { ParentIncomeQuestion } from './questions/parentIncomeQuestion';
+import { ParentIncome } from './questions/parentIncome';
 
 // TODO: 災害関連見積もりの内容に修正
 // NOTE: プログレスバーの計算のために設問に順序関係を定義する必要があるため、objectではなくarrayを使用
@@ -36,7 +36,7 @@ const questions = {
     },
     {
       title: '年収',
-      component: <SelfIncomeQuestion key={1} />,
+      component: <SelfIncome key={1} />,
     },
     {
       title: '住宅被害の有無',
@@ -86,7 +86,7 @@ const questions = {
   配偶者: [
     {
       title: '年収',
-      component: <SpouseIncomeQuestion key={0} />,
+      component: <SpouseIncome key={0} />,
     },
     {
       title: '災害による負傷',
@@ -114,7 +114,7 @@ const questions = {
   親: [
     {
       title: '年収',
-      component: <ParentIncomeQuestion key={0} />,
+      component: <ParentIncome key={0} />,
     },
     {
       title: '災害による負傷',

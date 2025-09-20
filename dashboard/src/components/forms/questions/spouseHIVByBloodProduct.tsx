@@ -1,5 +1,5 @@
 import { HIVByBloodProduct } from './hivByBloodProduct';
 
 export const SpouseHIVByBloodProduct = () => {
-  return <HIVByBloodProduct personName={'あなた'} />;
+  return <HIVByBloodProduct personName={'配偶者'} />;
 };
