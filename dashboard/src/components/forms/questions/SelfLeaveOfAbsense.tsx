@@ -24,7 +24,6 @@ export const SelfLeaveOfAbsense = () => {
       title="休業中ですか？"
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
-      defaultSelection={() => null}
     />
   );
 };

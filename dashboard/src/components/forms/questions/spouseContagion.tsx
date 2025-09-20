@@ -24,7 +24,6 @@ export const SpouseContagion = () => {
       title="感染症にかかっていますか？"
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
-      defaultSelection={() => null}
     />
   );
 };

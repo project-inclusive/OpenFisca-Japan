@@ -30,13 +30,6 @@ export const DisasterDisabilityQuestion = ({
       title="災害によって、精神または身体に重い障害がありますか？"
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
-      defaultSelection={({ household }: { household: any }) =>
-        household.世帯員[personName].災害による重い後遺障害がある
-          ? household.世帯員[personName].災害による重い後遺障害がある[
-              currentDate
-            ]
-          : null
-      }
     />
   );
 };

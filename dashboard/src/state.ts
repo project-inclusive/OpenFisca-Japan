@@ -1,4 +1,5 @@
 import { atom } from 'recoil';
+import { QuestionKey } from './question';
 
 const currentDate = `${new Date().getFullYear()}-${(new Date().getMonth() + 1)
   .toString()
@@ -23,12 +24,6 @@ export const showsValidationErrorAtom = atom<boolean>({
   key: 'showsValidationErrorAtom',
   default: false,
 });
-
-export type QuestionKey = {
-  person: 'あなた' | '配偶者' | '子ども' | '親';
-  personNum: number;
-  title: string;
-};
 
 export const questionKeyAtom = atom<QuestionKey>({
   key: 'questionKeyAtom',
@@ -295,5 +290,11 @@ export const frontendHouseholdAtom = atom<FrontendHousehold>({
       埼玉県私立学校の父母負担軽減: false,
     },
   },
+  dangerouslyAllowMutability: true,
+});
+
+export const householdHistoryAtom = atom<any[]>({
+  key: 'householdHistoryAtom',
+  default: [],
   dangerouslyAllowMutability: true,
 });

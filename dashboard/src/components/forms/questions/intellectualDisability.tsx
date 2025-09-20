@@ -51,15 +51,6 @@ export const IntellectualDisability = ({
     <SelectionQuestion
       title="療育手帳、または愛の手帳を持っていますか？"
       selections={selections}
-      defaultSelection={({ household }: { household: any }) => {
-        const item = items.find((item) => {
-          const value = household.世帯員[personName][item.householdKey]
-            ? household.世帯員[personName][item.householdKey][currentDate]
-            : null;
-          return item.value === value;
-        });
-        return item?.display ?? null;
-      }}
     />
   );
 };

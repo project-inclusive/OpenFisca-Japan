@@ -45,10 +45,6 @@ export const ChildHealthCondition = () => {
     });
   };
 
-  useEffect(() => {
-    updateNextQuestionKey(frontendHousehold);
-  }, [frontendHousehold]);
-
   return (
     <HealthCondition
       personName={personName}

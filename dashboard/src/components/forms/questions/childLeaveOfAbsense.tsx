@@ -25,7 +25,6 @@ export const ChildLeaveOfAbsense = () => {
       title="休業中ですか？"
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
-      defaultSelection={() => null}
     />
   );
 };

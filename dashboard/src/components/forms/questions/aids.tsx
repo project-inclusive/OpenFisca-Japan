@@ -27,15 +27,6 @@ export const AIDS = ({ personName }: { personName: string }) => {
       title="エイズを発症していますか？"
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
-      defaultSelection={({ household }: { household: any }) => {
-        if (
-          household.世帯員[personName]?.エイズを発症している?.[currentDate] !=
-          null
-        ) {
-          return household.世帯員[personName].エイズを発症している[currentDate];
-        }
-        return null;
-      }}
     />
   );
 };

@@ -1,36 +1,32 @@
-import { useRecoilState, useRecoilValue } from 'recoil';
-import {
-  frontendHouseholdAtom,
-  nextQuestionKeyAtom,
-  questionKeyAtom,
-} from '../../../state';
+import { useRecoilState } from 'recoil';
+import { nextQuestionKeyAtom } from '../../../state';
 import { HemoPhiliaKind } from './hemoPhiliaKind';
-import { useEffect } from 'react';
 
 export const SpouseHemophiliaKind = () => {
-  const questionKey = useRecoilValue(questionKeyAtom);
-  const frontendHousehold = useRecoilValue(frontendHouseholdAtom);
   const [nextQuestionKey, setNextQuestionKey] =
     useRecoilState(nextQuestionKeyAtom);
 
-  useEffect(
-    () => {
-      if (frontendHousehold.世帯員['配偶者']['障害がある']) {
-        // スキップしない
-        setNextQuestionKey(null);
-        return;
-      }
+  // 状態遷移先の質問を設定
+  // HACK: 選択肢とは独立した条件式なので、enable, disableとは別の関数に切り出して処理
+  const updateNextQuestionKey = (frontendHousehold: any) => {
+    if (frontendHousehold.世帯員['配偶者']['障害がある']) {
+      // スキップしない
+      setNextQuestionKey(null);
+      return;
+    }
 
-      // 障害の質問を飛ばす
-      setNextQuestionKey({
-        person: '配偶者',
-        personNum: 0,
-        title: '介護施設',
-      });
-    },
-    // HACK: 前のページから戻ってきた際に再度スキップできるよう、questionKeyが変わるたびに再実施できるようにする
-    [questionKey]
+    // 障害の質問を飛ばす
+    setNextQuestionKey({
+      person: '配偶者',
+      personNum: 0,
+      title: '介護施設',
+    });
+  };
+
+  return (
+    <HemoPhiliaKind
+      personName={'配偶者'}
+      updateNextQuestionKey={updateNextQuestionKey}
+    />
   );
-
-  return <HemoPhiliaKind personName={'配偶者'} />;
 };

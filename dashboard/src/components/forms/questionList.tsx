@@ -1,10 +1,10 @@
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { Question } from './templates/question';
 import {
   defaultNextQuestionKeyAtom,
   householdAtom,
+  householdHistoryAtom,
   nextQuestionKeyAtom,
-  QuestionKey,
   questionKeyAtom,
   questionKeyHistoryAtom,
   questionValidatedAtom,
@@ -13,6 +13,7 @@ import {
 import configData from '../../config/app_config.json';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { QuestionKey } from '../../question';
 
 export type Question = {
   title: string;
@@ -182,6 +183,11 @@ export const QuestionList = ({
     showsValidationErrorAtom
   );
 
+  // 世帯情報
+  const [household, setHousehold] = useRecoilState(householdAtom);
+  const [householdHistory, setHouseholdHistory] =
+    useRecoilState(householdHistoryAtom);
+
   useEffect(() => {
     // 2番目の質問を設定（初回のみ設定するためuseEffectの内部に記述）
     setDefaultNextQuestionKey({
@@ -193,8 +199,6 @@ export const QuestionList = ({
 
   const navigate = useNavigate();
 
-  const household = useRecoilValue(householdAtom);
-
   const next = () => {
     if (!questionValidated) {
       // 入力不備のため次の質問には進まない
@@ -203,6 +207,9 @@ export const QuestionList = ({
     }
     setQuestionValidated(false);
     setShowsValidationError(false);
+    // その後の操作が影響しないようディープコピー
+    const copiedHousehold = JSON.parse(JSON.stringify(household));
+    setHouseholdHistory([...householdHistory, copiedHousehold]);
 
     // nextQuestionKey が設定されていなければデフォルトの質問へ進む
     const mergedNextQuestionKey = nextQuestionKey ?? defaultNextQuestionKey;
@@ -230,11 +237,6 @@ export const QuestionList = ({
     setDefaultNextQuestionKey(newNextQuestionKey);
     // TODO: デバッグ用、UI移行が終わったら消す
     console.log(mergedNextQuestionKey);
-    console.log(
-      `next: ${JSON.stringify(nextQuestionKey)} default: ${JSON.stringify(
-        defaultNextQuestionKey
-      )}`
-    );
   };
 
   const back = () => {
@@ -249,13 +251,23 @@ export const QuestionList = ({
     setKeyHistory(keyHistory.slice(0, keyHistory.length - 1));
     setQuestionKey(previousKey);
 
+    // NOTE: 「前へ」で分岐のある質問に戻り別の選択肢を選んだ際本来選ばれないパラメータが指定されないよう、「前へ」を押すたびに更新前のhouseholdへ戻す
+    // (将来的にメモリ使用量等のパフォーマンスが発生した場合は別の方法に修正)
+    let previousHousehold = household;
+    if (householdHistory.length > 0) {
+      const previousHouseHoldHistory = [...householdHistory];
+      previousHousehold = previousHouseHoldHistory.pop();
+      setHousehold(previousHousehold);
+      setHouseholdHistory(previousHouseHoldHistory);
+    }
+
     setNextQuestionKey(null);
-    const newNextQuestionKey = defaultNextQuestionKeyOf(
+    const previousNextQuestionKey = defaultNextQuestionKeyOf(
       questions,
       previousKey,
-      household
+      previousHousehold
     );
-    setDefaultNextQuestionKey(newNextQuestionKey);
+    setDefaultNextQuestionKey(previousNextQuestionKey);
   };
 
   const personStr = questionKey.personNum

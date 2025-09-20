@@ -24,7 +24,6 @@ export const SpouseWorkQuestion = () => {
       title="現在仕事をしていますか？"
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
-      defaultSelection={() => null}
     />
   );
 };

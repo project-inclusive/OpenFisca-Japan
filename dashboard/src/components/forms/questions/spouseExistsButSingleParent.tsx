@@ -28,14 +28,6 @@ export const SpouseExistsButSingleParent = () => {
       title="以下のいずれかに当てはまりますか？"
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
-      defaultSelection={({ household }: { household: any }) => {
-        if (household.世帯一覧.世帯1.配偶者がいるがひとり親に該当 != null) {
-          return household.世帯一覧.世帯1.配偶者がいるがひとり親に該当[
-            currentDate
-          ];
-        }
-        return null;
-      }}
     >
       <UnorderedList fontSize="md">
         <ListItem>重度の障害がある</ListItem>

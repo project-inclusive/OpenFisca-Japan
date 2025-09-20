@@ -27,15 +27,6 @@ export const Dialysis = ({ personName }: { personName: string }) => {
       title="人工透析を行っていますか？"
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
-      defaultSelection={({ household }: { household: any }) => {
-        if (
-          household.世帯員[personName]?.人工透析を行っている?.[currentDate] !=
-          null
-        ) {
-          return household.世帯員[personName].人工透析を行っている[currentDate];
-        }
-        return null;
-      }}
     />
   );
 };

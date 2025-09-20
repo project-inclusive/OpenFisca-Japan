@@ -26,11 +26,6 @@ export const Hospitalized = ({ personName }: { personName: string }) => {
       title="入院中ですか？"
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
-      defaultSelection={({ household }: { household: any }) =>
-        household.世帯員[personName].入院中
-          ? household.世帯員[personName].入院中[currentDate]
-          : null
-      }
     />
   );
 };

@@ -41,12 +41,6 @@ export const SelfRentingHouse = () => {
       title="家を借りたいですか？"
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
-      defaultSelection={({ frontendHousehold }: { frontendHousehold: any }) => {
-        if (frontendHousehold.世帯['家を借りたい'] != null) {
-          return frontendHousehold.世帯['家を借りたい'];
-        }
-        return null;
-      }}
     />
   );
 };

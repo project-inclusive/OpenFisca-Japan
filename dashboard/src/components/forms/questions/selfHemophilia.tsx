@@ -33,7 +33,6 @@ export const SelfHemoPhilia = () => {
       title="先天性の血液凝固因子異常症（血友病等）ですか？"
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
-      defaultSelection={() => null}
     />
   );
 };

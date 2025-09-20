@@ -32,27 +32,10 @@ export const HealthCondition = ({
     },
   }));
 
-  useEffect(() => {
-    updateNextQuestionKey(frontendHousehold);
-  }, [frontendHousehold]);
-
-  const defaultSelections = ({
-    frontendHousehold,
-  }: {
-    frontendHousehold: any;
-  }) =>
-    Object.fromEntries(
-      selectionValues.map((value) => [
-        value,
-        frontendHousehold.世帯員[personName][value],
-      ])
-    );
-
   return (
     <MultipleSelectionQuestion
       title="病気やけが、障害はありますか？"
       selections={selections}
-      defaultSelections={defaultSelections}
     />
   );
 };

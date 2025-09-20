@@ -13,36 +13,33 @@ import { ErrorMessage } from '../attributes/validation/ErrorMessage';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   frontendHouseholdAtom,
-  householdAtom,
+  questionKeyAtom,
   questionValidatedAtom,
 } from '../../../state';
+import { personNameFrom } from '../../../question';
 
 export const SelectionQuestion = ({
   title,
   selections,
-  defaultSelection,
 }: {
   title: string;
   selections: { selection: string; onClick: () => void }[];
-  defaultSelection: ({
-    household,
-    frontendHousehold,
-  }: {
-    household: any;
-    frontendHousehold: any;
-  }) => string | null;
 }) => {
-  const household = useRecoilValue(householdAtom);
-  const frontendHousehold = useRecoilValue(frontendHouseholdAtom);
+  const questionKey = useRecoilValue(questionKeyAtom);
+  const personName = personNameFrom(questionKey);
+
+  const [frontendHousehold, setFrontendHousehold] = useRecoilState(
+    frontendHouseholdAtom
+  );
   const [selectionState, setSelectionState] = useState<string | null>(
-    defaultSelection({ household, frontendHousehold })
+    frontendHousehold.世帯員[personName][questionKey.title]
   );
   const [questionValidated, setQuestionValidated] = useRecoilState(
     questionValidatedAtom
   );
 
   useEffect(() => {
-    if (selectionState !== null) {
+    if (selectionState != null) {
       setQuestionValidated(true);
     }
   }, [selectionState]);
@@ -69,7 +66,14 @@ export const SelectionQuestion = ({
       color={cond() ? 'white' : 'black'}
       _hover={{ bg: 'cyan.600', borderColor: 'cyan.900', color: 'white' }}
       onClick={() => {
+        // 選択肢の表示を更新
         setSelectionState(selection);
+
+        // 別ページから戻ってきたときのために選択肢を記録
+        const newFrontendHousehold = { ...frontendHousehold };
+        newFrontendHousehold.世帯員[personName][questionKey.title] = selection;
+        setFrontendHousehold(newFrontendHousehold);
+
         onClick();
       }}
     >

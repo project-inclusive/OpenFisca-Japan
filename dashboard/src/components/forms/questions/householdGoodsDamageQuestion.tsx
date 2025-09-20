@@ -27,11 +27,6 @@ export const HouseholdGoodsDamageQuestion = () => {
       title="家財の３分の１以上の損害が発生しましたか？"
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
-      defaultSelection={({ household }: { household: any }) =>
-        household.世帯一覧.世帯1.家財の損害
-          ? household.世帯一覧.世帯1.家財の損害[currentDate] === '三分の一以上'
-          : null
-      }
     />
   );
 };

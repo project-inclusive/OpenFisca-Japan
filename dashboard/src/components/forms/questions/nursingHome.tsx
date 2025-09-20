@@ -27,14 +27,6 @@ export const NursingHome = ({ personName }: { personName: string }) => {
       title="介護施設に入所していますか？"
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
-      defaultSelection={({ household }: { household: any }) => {
-        if (
-          household.世帯員[personName]?.介護施設入所中?.[currentDate] != null
-        ) {
-          return household.世帯員[personName].介護施設入所中[currentDate];
-        }
-        return null;
-      }}
     />
   );
 };

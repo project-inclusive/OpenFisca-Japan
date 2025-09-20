@@ -30,13 +30,6 @@ export const Cirrhosis = ({ personName }: { personName: string }) => {
       title="肝硬変や肝がんにかかっていますか？または肝移植をおこないましたか？"
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
-      defaultSelection={({ household }: { household: any }) =>
-        household.世帯員[personName]
-          .肝硬変や肝がんに罹患しているまたは肝移植をおこなった
-          ? household.世帯員[personName]
-              .肝硬変や肝がんに罹患しているまたは肝移植をおこなった[currentDate]
-          : null
-      }
     />
   );
 };

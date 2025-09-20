@@ -27,15 +27,6 @@ export const NewJob = ({ personName }: { personName: string }) => {
       title="6か月以内に新しい仕事を始めましたか？"
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
-      defaultSelection={({ household }: { household: any }) => {
-        if (
-          household.世帯員[personName]?.六か月以内に新規就労?.[currentDate] !=
-          null
-        ) {
-          return household.世帯員[personName].六か月以内に新規就労[currentDate];
-        }
-        return null;
-      }}
     />
   );
 };

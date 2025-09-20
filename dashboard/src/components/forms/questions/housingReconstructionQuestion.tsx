@@ -26,15 +26,5 @@ export const HousingReconstructionQuestion = () => {
     };
   });
 
-  return (
-    <SelectionQuestion
-      title="住宅再建方法"
-      selections={selections}
-      defaultSelection={({ household }: { household: any }) =>
-        household.世帯一覧.世帯1.住宅再建方法
-          ? household.世帯一覧.世帯1.住宅再建方法[currentDate]
-          : null
-      }
-    />
-  );
+  return <SelectionQuestion title="住宅再建方法" selections={selections} />;
 };

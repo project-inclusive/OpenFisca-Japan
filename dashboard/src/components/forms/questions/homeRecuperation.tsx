@@ -26,11 +26,6 @@ export const HomeRecuperation = ({ personName }: { personName: string }) => {
       title="在宅療養中（結核、または治療に3か月以上かかるもの）ですか？"
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
-      defaultSelection={({ household }: { household: any }) =>
-        household.世帯員[personName].在宅療養中
-          ? household.世帯員[personName].在宅療養中[currentDate]
-          : null
-      }
     />
   );
 };

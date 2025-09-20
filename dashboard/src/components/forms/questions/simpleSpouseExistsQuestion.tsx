@@ -91,14 +91,6 @@ export const SimpleSpouseExistsQuestion = () => {
       title="配偶者はいますか？"
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
-      defaultSelection={({
-        frontendHousehold,
-      }: {
-        household: any;
-        frontendHousehold: any;
-      }) => {
-        return isAlreadySelected(frontendHousehold);
-      }}
     />
   );
 };

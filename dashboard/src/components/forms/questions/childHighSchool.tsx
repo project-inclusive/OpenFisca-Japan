@@ -30,7 +30,6 @@ export const ChildHighSchool = () => {
       title="高校に通っていますか？"
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
-      defaultSelection={() => null}
     />
   );
 };

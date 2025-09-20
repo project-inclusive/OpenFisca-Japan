@@ -24,9 +24,6 @@ export const HousingDamageExistsQuestion = () => {
       title="住宅が被害を受けていますか？"
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
-      defaultSelection={({ household }: { household: any }) =>
-        household.世帯一覧.世帯1.住宅被害 ? true : null
-      }
     />
   );
 };

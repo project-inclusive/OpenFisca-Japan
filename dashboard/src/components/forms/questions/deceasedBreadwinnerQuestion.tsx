@@ -24,11 +24,6 @@ export const DeceasedBreadwinnerQuestion = () => {
       title="災害で生計維持者が亡くなりましたか？"
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
-      defaultSelection={() =>
-        household.世帯一覧.世帯1.災害で生計維持者が死亡した
-          ? household.世帯一覧.世帯1.災害で生計維持者が死亡した[currentDate]
-          : null
-      }
     />
   );
 };
