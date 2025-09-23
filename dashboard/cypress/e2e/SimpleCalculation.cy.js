@@ -11,19 +11,19 @@ describe('Renders main page and ', () => {
       .contains('かんたん見積もり')
       .click();
 
-    cy.contains('利用規約に同意します。');
-    cy.get('[data-testid="terms-checkbox"]')
-      .contains('利用規約に同意します。')
+    cy.contains('了解しました');
+    cy.get('[data-testid="restrictions-checkbox"]')
+      .contains('了解しました')
       .click();
+
+    cy.contains('了解しました');
+    cy.get('[data-testid="terms-checkbox"]').contains('了解しました').click();
 
     cy.contains('利用開始する');
     cy.get('[data-testid="start-button"]').contains('利用開始する').click();
 
     cy.url().should('include', '/calculate-simple');
     cy.contains('あなたについて');
-
-    cy.get('[data-testid="select-prefecture"]').select('東京都');
-    cy.get('[data-testid="select-city"]').select('渋谷区');
-    cy.get('[data-testid="income-input"]').type('150');
+    cy.contains('かんたん見積もり');
   });
 });

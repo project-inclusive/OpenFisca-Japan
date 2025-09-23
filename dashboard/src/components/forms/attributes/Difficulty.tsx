@@ -18,8 +18,8 @@ export const Difficulty = () => {
     // チェックを外したときは、子要素のチェックをすべて外す
     if (!event.target.checked) {
       const newFrontendHousehold = { ...frontendHousehold };
-      for (const key in frontendHousehold.difficulty) {
-        newFrontendHousehold.difficulty[key] = false;
+      for (const key in frontendHousehold.困りごと) {
+        newFrontendHousehold.困りごと[key] = false;
       }
 
       setfrontendHousehold({ ...newFrontendHousehold });
@@ -31,7 +31,7 @@ export const Difficulty = () => {
   // stored states set checkbox when page transition
   useEffect(() => {
     // 1つでもチェックされていたら全体にもチェックを入れ展開する
-    if (Object.values(frontendHousehold.difficulty).some((value) => value)) {
+    if (Object.values(frontendHousehold.困りごと).some((value) => value)) {
       setIsChecked(true);
     }
   }, [navigationType]);
@@ -49,7 +49,7 @@ export const Difficulty = () => {
       <Box ml={4} mr={4} mb={4}>
         <>
           {isChecked &&
-            Object.keys(frontendHousehold.difficulty).map(
+            Object.keys(frontendHousehold.困りごと).map(
               (key: string, index: number) => (
                 <DifficultyItem key={index} description={key} />
               )

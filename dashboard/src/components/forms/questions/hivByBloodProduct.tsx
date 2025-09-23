@@ -1,0 +1,31 @@
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { YesNoQuestion } from '../templates/yesNoQuestion';
+import { currentDateAtom, householdAtom } from '../../../state';
+
+export const HIVByBloodProduct = ({ personName }: { personName: string }) => {
+  const currentDate = useRecoilValue(currentDateAtom);
+  const [household, setHousehold] = useRecoilState(householdAtom);
+
+  const yesOnClick = () => {
+    const newHousehold = { ...household };
+    newHousehold.世帯員[personName].血液製剤の投与によってHIVに感染した = {
+      [currentDate]: true,
+    };
+    setHousehold({ ...newHousehold });
+  };
+  const noOnClick = () => {
+    const newHousehold = { ...household };
+    newHousehold.世帯員[personName].血液製剤の投与によってHIVに感染した = {
+      [currentDate]: false,
+    };
+    setHousehold({ ...newHousehold });
+  };
+
+  return (
+    <YesNoQuestion
+      title="血液製剤の投与によってHIVに感染しましたか？"
+      yesOnClick={yesOnClick}
+      noOnClick={noOnClick}
+    />
+  );
+};

@@ -10,7 +10,7 @@ import { Benefit } from './benefit';
 import { Loan } from './loan';
 import { CalculationLabel } from '../forms/calculationLabel';
 import { frontendHouseholdAtom, householdAtom } from '../../state';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import shortLink, {
   inflate,
   calculationType,

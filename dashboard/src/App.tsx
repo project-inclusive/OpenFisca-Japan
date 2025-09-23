@@ -3,7 +3,6 @@ import { AbsoluteCenter } from '@chakra-ui/react';
 import CaluculationForm from './components/forms/caluculationForm';
 import Description from './components/Description';
 import QuestionExamples from './components/QuestionExamples';
-import Terms from './components/Terms';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import { Result } from './components/result/result';
 import { GenericError } from './components/errors/GenericError';
@@ -11,6 +10,10 @@ import { NotFoundError } from './components/errors/NotFoundError';
 import { FormResponseError } from './components/errors/FormResponseError';
 import { useRecoilState } from 'recoil';
 import { currentDateAtom } from './state';
+import { QuestionForm } from './components/forms/questionForm';
+import { DetailedQuestionList } from './components/forms/detailedQuestionList';
+import { SimpleQuestionList } from './components/forms/simpleQuestionList';
+import { DisasterQuestionList } from './components/forms/disasterQuestionList';
 
 function App() {
   const currentDate = useRecoilState(currentDateAtom);
@@ -38,15 +41,15 @@ function App() {
             },
             {
               path: '/calculate',
-              element: <CaluculationForm />,
+              element: <DetailedQuestionList />,
             },
             {
               path: '/calculate-simple',
-              element: <CaluculationForm />,
+              element: <SimpleQuestionList />,
             },
             {
               path: '/calculate-disaster',
-              element: <CaluculationForm />,
+              element: <DisasterQuestionList />,
             },
             {
               path: '/result',
@@ -64,6 +67,12 @@ function App() {
               path: '/response-error',
               element: <FormResponseError />,
             },
+            // TODO: 新UI確認用に追加したパス。移行が終わったら消す
+            {
+              path: '/dummy/question-form',
+              element: <QuestionForm />,
+            },
+            // (ダミーここまで)
             {
               path: '/*',
               element: <NotFoundError />,

@@ -32,6 +32,13 @@
       "lg": "1.5em",
       "xl": "1.5em"
     },
+    "questionFormFontSize": {
+      "base": "1.1em",
+      "sm": "1.3em",
+      "md": "1.3em",
+      "lg": "1.5em",
+      "xl": "1.5em"
+    },
     "itemFontSize": {
       "base": "1em",
       "sm": "1em",
@@ -75,6 +82,12 @@
       "xl": "0em"
     }
   },
+  "validation": {
+    "household": {
+      "maxChildren": 5,
+      "maxParents": 10
+    }
+  },
   "description": {
     "title": "支援みつもりヤドカリくん",
     "feature": ["わかりやすい", "窓口へ", "安心", "制限"],
@@ -88,6 +101,7 @@
     ]
   },
   "calculationForm": {
+    "calculationSelectionDescription": "どのモードで見積もりますか？",
     "topDescription": "情報を入力してください",
     "youDescription": "あなたについて",
     "spouseDescription": "配偶者について",
