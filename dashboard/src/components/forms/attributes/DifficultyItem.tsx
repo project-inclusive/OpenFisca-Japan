@@ -15,7 +15,7 @@ export const DifficultyItem = ({ description }: { description: string }) => {
   // チェックボックスの値が変更された時
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const newFrontendHousehold = { ...frontendHousehold };
-    newFrontendHousehold.difficulty[description] = event.target.checked;
+    newFrontendHousehold.困りごと[description] = event.target.checked;
 
     setfrontendHousehold({ ...newFrontendHousehold });
     setIsChecked(event.target.checked);
@@ -23,7 +23,7 @@ export const DifficultyItem = ({ description }: { description: string }) => {
 
   // stored states set checkbox when page transition
   useEffect(() => {
-    setIsChecked(frontendHousehold.difficulty[description]);
+    setIsChecked(frontendHousehold.困りごと[description]);
   }, [navigationType]);
 
   return (
