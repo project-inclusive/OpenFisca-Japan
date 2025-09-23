@@ -29,7 +29,7 @@ import {
   isMobile,
   isWindows,
 } from 'react-device-detect';
-import { ErrorMessage } from '../attributes/validation/ErrorMessage';
+import { ErrorMessage } from '../validation/ErrorMessage';
 
 export const PersonNumQuestion = ({
   updatePersonInfo,

@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react';
 
 import configData from '../../../config/app_config.json';
-import { ErrorMessage } from '../attributes/validation/ErrorMessage';
+import { ErrorMessage } from '../validation/ErrorMessage';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   frontendHouseholdAtom,
@@ -83,7 +83,7 @@ export const SelectionQuestion = ({
 
   return (
     <>
-      <ErrorMessage condition={selectionState == null} />
+      <ErrorMessage />
       <FormControl>
         <FormLabel
           fontSize={configData.style.itemFontSize}

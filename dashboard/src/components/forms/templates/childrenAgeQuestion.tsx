@@ -12,7 +12,7 @@ import {
 
 import configData from '../../../config/app_config.json';
 
-import { ErrorMessage } from '../attributes/validation/ErrorMessage';
+import { ErrorMessage } from '../validation/ErrorMessage';
 import {
   frontendHouseholdAtom,
   householdAtom,
@@ -343,7 +343,7 @@ export const ChildrenAgeQuestion = ({ personName }: { personName: string }) => {
 
   return (
     <>
-      <ErrorMessage condition={!schoolEducationalAuthority || !schoolYear} />
+      <ErrorMessage />
       <HStack>
         <FormControl paddingRight={4}>
           <FormLabel

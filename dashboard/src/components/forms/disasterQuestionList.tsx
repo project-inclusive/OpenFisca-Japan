@@ -25,7 +25,6 @@ import { SimpleSpouseExistsQuestion } from './questions/simpleSpouseExistsQuesti
 import { DisasterParentNumQuestion } from './questions/disasterParentNumQuestion';
 import { ParentIncome } from './questions/parentIncome';
 
-// TODO: 災害関連見積もりの内容に修正
 // NOTE: プログレスバーの計算のために設問に順序関係を定義する必要があるため、objectではなくarrayを使用
 // HACK: componentをarray内に定義する際にkeyが必要なため定義している
 const questions = {

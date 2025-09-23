@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react';
 
 import configData from '../../../config/app_config.json';
-import { ErrorMessage } from '../attributes/validation/ErrorMessage';
+import { ErrorMessage } from '../validation/ErrorMessage';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   frontendHouseholdAtom,
@@ -84,7 +84,7 @@ export const YesNoQuestion = ({
 
   return (
     <>
-      <ErrorMessage condition={boolState == null} />
+      <ErrorMessage />
 
       <FormControl>
         <FormLabel

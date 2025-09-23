@@ -11,7 +11,7 @@ import {
 
 import configData from '../../../config/app_config.json';
 
-import { ErrorMessage } from '../attributes/validation/ErrorMessage';
+import { ErrorMessage } from '../validation/ErrorMessage';
 import {
   frontendHouseholdAtom,
   householdAtom,

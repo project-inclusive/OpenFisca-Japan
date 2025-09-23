@@ -2,11 +2,9 @@ import { Center } from '@chakra-ui/react';
 
 import { useRecoilValue } from 'recoil';
 
-import { showsValidationErrorAtom } from '../../../../state';
-import configData from '../../../../config/app_config.json';
+import { showsValidationErrorAtom } from '../../../state';
 
-// TODO: 引数は不要になったのでUI移行完了時に消す
-export const ErrorMessage = ({ condition }: { condition?: boolean }) => {
+export const ErrorMessage = () => {
   const showsValidationError = useRecoilValue(showsValidationErrorAtom);
 
   // HACK: spanタグのinvalidクラスをバリデーションエラーの存在チェックに使用
