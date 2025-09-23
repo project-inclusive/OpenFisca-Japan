@@ -228,6 +228,8 @@ export type FrontendHousehold = {
   制度: { [key: string]: boolean };
 };
 
+// フロントエンドのみで計算が完結する世帯情報
+// NOTE: OpenFiscaでは処理できないためhouseholdとはマージ不可
 export const frontendHouseholdAtom = atom<FrontendHousehold>({
   key: 'frontendHouseholdAtom',
   default: {
