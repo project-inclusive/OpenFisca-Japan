@@ -60,7 +60,6 @@ export const Result = () => {
 
   const frontendHouseholdResult = calculateFrontendHouseHold(frontendHousehold);
 
-  const [isDisplayChat, setIsDisplayChat] = useState('none');
   const [shareLink, setShareLink] = useState(false);
   const [enviroment, setEnvironment] = useState(false);
   const [shareUrl, setShareUrl] = useState<string>('');
@@ -140,17 +139,6 @@ export const Result = () => {
       takeScreenShot(divRef.current).then(download);
     }
   };
-
-  const displayChat = useCallback(async (sec: number = 5) => {
-    const sleep = (second: number) =>
-      new Promise((resolve) => setTimeout(resolve, second * 1000));
-
-    // wait some seconds because the page is auto scrolled to chatbot
-    // in first few seconds of chatbot preparation
-    await sleep(sec);
-    console.log('display chatbot');
-    setIsDisplayChat('');
-  }, []);
 
   const clipBoard = async (text: string): Promise<void> => {
     try {
@@ -397,17 +385,14 @@ export const Result = () => {
             </Box>
           )}
 
-          <Box display={isDisplayChat}>
+          <Box>
             <Center pr={4} pl={4} pt={4} pb={4}>
-              {configData.result.chatbotDescription[0]}
+              {/*configData.result.chatbotDescription[0] */}
             </Center>
             <Box bg="white" borderRadius="xl" p={4} mb={4} ml={4} mr={4}>
-              <iframe
-                src={configData.URL.chatbot}
-                width="100%"
-                height="400px"
-                onLoad={() => displayChat()}
-              ></iframe>
+              <Center>
+                （チャットボットはバージョンアップのためメンテナンス中です）
+              </Center>
             </Box>
           </Box>
 
