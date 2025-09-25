@@ -10,6 +10,7 @@ import {
   Spacer,
   SimpleGrid,
   Center,
+  VStack,
 } from '@chakra-ui/react';
 
 import configData from '../../../config/app_config.json';
@@ -156,10 +157,11 @@ export const PersonNumQuestion = ({
     onClick: () => void;
   }) => (
     <Button
+      mb={2}
       variant="outline"
       borderRadius="xl"
-      height="2.5em"
-      width="12em"
+      height="3.5em"
+      width="100%"
       bg={cond() ? 'cyan.600' : 'white'}
       borderColor={cond() ? 'cyan.900' : 'black'}
       color={cond() ? 'white' : 'black'}
@@ -182,19 +184,21 @@ export const PersonNumQuestion = ({
   );
 
   return (
-    <>
+    <VStack flex={1}>
       <ErrorMessage />
       <FormControl>
-        <FormLabel
-          fontSize={configData.style.itemFontSize}
-          fontWeight="Regular"
-        >
-          <Center>
-            <Box fontSize={configData.style.itemFontSize}>{title}</Box>
+        <FormLabel fontSize={configData.style.itemFontSize}>
+          <Center mb={4}>
+            <Box
+              fontSize={configData.style.subTitleFontSize}
+              textAlign="center"
+            >
+              {title}
+            </Box>
           </Center>
         </FormLabel>
 
-        <SimpleGrid columns={2} rowGap={1} columnGap={6}>
+        <SimpleGrid columns={2} rowGap={1} columnGap={6} mt={8} mb={8}>
           {btn({
             cond: () => boolState === true,
             state: true,
@@ -208,6 +212,7 @@ export const PersonNumQuestion = ({
           <FormControl>
             <HStack>
               <Input
+                height="3.5em"
                 type={isMobile ? 'number' : 'text'}
                 value={shownPersonNum}
                 onChange={onChange}
@@ -229,7 +234,7 @@ export const PersonNumQuestion = ({
                     updatePersonInfo(newPersonNum);
                   }
                 }}
-                width="6em"
+                width="100%"
                 ref={inputEl}
                 {...(isMobile && { pattern: '[0-9]*' })}
               />
@@ -250,6 +255,6 @@ export const PersonNumQuestion = ({
           <Spacer />
         </SimpleGrid>
       </FormControl>
-    </>
+    </VStack>
   );
 };

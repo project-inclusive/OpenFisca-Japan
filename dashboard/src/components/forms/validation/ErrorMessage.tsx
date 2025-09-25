@@ -16,10 +16,11 @@ export const ErrorMessage = () => {
           color="red.800"
           border="1px"
           borderColor="red.200"
-          borderRadius="lg"
+          borderRadius="xl"
           fontSize="md"
+          width="100%"
           p={1}
-          mt={5}
+          mt={1}
           mb={1}
         >
           入力必須項目です

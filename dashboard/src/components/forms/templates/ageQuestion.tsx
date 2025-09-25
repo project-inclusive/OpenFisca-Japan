@@ -7,6 +7,7 @@ import {
   FormLabel,
   Input,
   Center,
+  VStack,
 } from '@chakra-ui/react';
 
 import configData from '../../../config/app_config.json';
@@ -105,42 +106,46 @@ export const AgeQuestion = ({ personName }: { personName: string }) => {
   }, [navigationType, age]);
 
   return (
-    <>
+    <VStack flex={1}>
       <ErrorMessage />
       <FormControl>
-        <FormLabel fontSize={configData.style.itemFontSize}>
+        <FormLabel fontSize={configData.style.subTitleFontSize}>
           <Center>
-            <Box>年齢</Box>
+            <Box textAlign="center">年齢</Box>
           </Center>
         </FormLabel>
 
-        <HStack mb={4}>
-          <Input
-            width="6em"
-            fontSize={configData.style.itemFontSize}
-            type={isMobile ? 'number' : 'text'}
-            value={age}
-            onChange={handleAgeChange}
-            onKeyDown={(event) => {
-              if (event.key === 'ArrowUp') {
-                event.preventDefault();
-                changeAge(Number(age) + 1);
-              }
+        <Center>
+          <HStack mt={8} mb={8}>
+            <Input
+              width="100%"
+              height="3.5em"
+              textAlign="right"
+              fontSize={configData.style.itemFontSize}
+              type={isMobile ? 'number' : 'text'}
+              value={age}
+              onChange={handleAgeChange}
+              onKeyDown={(event) => {
+                if (event.key === 'ArrowUp') {
+                  event.preventDefault();
+                  changeAge(Number(age) + 1);
+                }
 
-              if (event.key === 'ArrowDown') {
-                event.preventDefault();
                 if (event.key === 'ArrowDown') {
                   event.preventDefault();
-                  const newAge = Math.max(Number(age) - 1, 0);
-                  changeAge(Number(newAge === 0 ? '' : newAge));
+                  if (event.key === 'ArrowDown') {
+                    event.preventDefault();
+                    const newAge = Math.max(Number(age) - 1, 0);
+                    changeAge(Number(newAge === 0 ? '' : newAge));
+                  }
                 }
-              }
-            }}
-            {...(isMobile && { pattern: '[0-9]*' })}
-          />
-          <Box>歳</Box>
-        </HStack>
+              }}
+              {...(isMobile && { pattern: '[0-9]*' })}
+            />
+            <Box>歳</Box>
+          </HStack>
+        </Center>
       </FormControl>
-    </>
+    </VStack>
   );
 };

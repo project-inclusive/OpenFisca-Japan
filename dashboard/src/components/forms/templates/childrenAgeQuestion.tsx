@@ -8,6 +8,7 @@ import {
   Input,
   Select,
   Center,
+  VStack,
 } from '@chakra-ui/react';
 
 import configData from '../../../config/app_config.json';
@@ -342,14 +343,11 @@ export const ChildrenAgeQuestion = ({ personName }: { personName: string }) => {
   }, [schoolYear, schoolEducationalAuthority]);
 
   return (
-    <>
+    <VStack flex={1}>
       <ErrorMessage />
       <HStack>
         <FormControl paddingRight={4}>
-          <FormLabel
-            fontSize={configData.style.itemFontSize}
-            fontWeight="Regular"
-          >
+          <FormLabel fontSize={configData.style.subTitleFontSize}>
             <Center>
               <HStack>
                 <Box>年齢</Box>
@@ -357,9 +355,10 @@ export const ChildrenAgeQuestion = ({ personName }: { personName: string }) => {
             </Center>
           </FormLabel>
 
-          <HStack mb={4}>
+          <HStack mt={8} mb={8}>
             <Input
-              width="4em"
+              width="3em"
+              height="3.5em"
               fontSize={configData.style.itemFontSize}
               type={isMobile ? 'number' : 'text'}
               value={age}
@@ -385,18 +384,22 @@ export const ChildrenAgeQuestion = ({ personName }: { personName: string }) => {
           </HStack>
         </FormControl>
         <FormControl>
-          <FormLabel
-            fontSize={configData.style.itemFontSize}
-            fontWeight="Regular"
-          >
-            <HStack>
-              <Box>学年</Box>
-            </HStack>
+          <FormLabel fontSize={configData.style.subTitleFontSize}>
+            <Center>
+              <HStack>
+                <Box>学年</Box>
+              </HStack>
+            </Center>
           </FormLabel>
 
-          <HStack mb={4}>
+          <HStack mt={8} mb={8}>
             <Select
-              width="9em"
+              width={
+                ignoreSchoolYear.includes(schoolEducationalAuthority)
+                  ? '11em'
+                  : '7em'
+              }
+              height="3.5em"
               value={schoolEducationalAuthority}
               placeholder="学校教育機関"
               fontSize={configData.style.itemFontSize}
@@ -431,7 +434,8 @@ export const ChildrenAgeQuestion = ({ personName }: { personName: string }) => {
               typeof schoolEducationalAuthority !== 'undefined' &&
               schoolEducationalAuthority !== '' && (
                 <Input
-                  width="6em"
+                  width="3em"
+                  height="3.5em"
                   fontSize={configData.style.itemFontSize}
                   type={isMobile ? 'number' : 'text'}
                   value={schoolYear}
@@ -439,11 +443,10 @@ export const ChildrenAgeQuestion = ({ personName }: { personName: string }) => {
                   {...(isMobile && { pattern: '[0-9]*' })}
                 />
               )}
-            {/* NOTE:  */}
             {suffix && <Box whiteSpace="nowrap">{suffix}</Box>}
           </HStack>
         </FormControl>
       </HStack>
-    </>
+    </VStack>
   );
 };

@@ -162,7 +162,7 @@ function TermsModal({
                 fontSize={configData.style.subTitleFontSize}
                 bg="cyan.600"
                 color="white"
-                p="1em"
+                p="1.5em"
                 borderRadius="xl"
                 width="100%"
                 isDisabled={!agreedToTerms}
