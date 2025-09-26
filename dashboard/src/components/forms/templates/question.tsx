@@ -80,9 +80,9 @@ export const Question = (props: {
           borderRadius="xl"
           height="2em"
           width="100%"
-          bg="cyan.600"
-          color="white"
-          _hover={{ bg: 'cyan.700' }}
+          bg="white"
+          color="cyan.600"
+          _hover={{ bg: 'cyan.700', color: 'white' }}
           onClick={props.backOnClick}
         >
           前へ
