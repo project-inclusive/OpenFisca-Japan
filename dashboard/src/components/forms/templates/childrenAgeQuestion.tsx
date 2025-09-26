@@ -46,14 +46,6 @@ export const ChildrenAgeQuestion = ({ personName }: { personName: string }) => {
     frontendHousehold.世帯員[personName][questionKey.title] ?? ''
   );
 
-  // stored states set displayed age when page transition
-  useEffect(() => {
-    if (age !== '') {
-      changeAge(Number(age));
-      setQuestionValidated(true);
-    }
-  }, [age]);
-
   function changeAge(age: number) {
     setAge(age);
 
@@ -193,7 +185,6 @@ export const ChildrenAgeQuestion = ({ personName }: { personName: string }) => {
         value;
       setFrontendHousehold(newFrontendHousehold);
 
-      //console.log('[DEBUG] schoolYear ->', schoolYear);
       setBirthday(Number(value), schoolEducationalAuthority);
     } else {
       setSchoolYear('');
