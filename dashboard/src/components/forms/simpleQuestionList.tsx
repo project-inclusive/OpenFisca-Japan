@@ -5,6 +5,7 @@ import { SpouseIncome } from './questions/spouseIncome';
 import { SimpleChildrenNumQuestion } from './questions/simpleChildrenNumQuestion';
 import { ChildAgeQuestion } from './questions/childAgeQuestion';
 import { SimpleSpouseExistsQuestion } from './questions/simpleSpouseExistsQuestion';
+import { SimpleChildAgeQuestion } from './questions/simpleChildAgeQuestion';
 
 // NOTE: プログレスバーの計算のために設問に順序関係を定義する必要があるため、objectではなくarrayを使用
 // HACK: componentをarray内に定義する際にkeyが必要なため定義している
@@ -36,7 +37,7 @@ const questions = {
   子ども: [
     {
       title: '年齢',
-      component: <ChildAgeQuestion key={0} />,
+      component: <SimpleChildAgeQuestion key={0} />,
     },
   ],
   親: [],
