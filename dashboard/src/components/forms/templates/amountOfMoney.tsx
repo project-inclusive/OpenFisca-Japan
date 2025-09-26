@@ -10,7 +10,7 @@ import {
 
 import configData from '../../../config/app_config.json';
 
-import { ErrorMessage } from '../attributes/validation/ErrorMessage';
+import { ErrorMessage } from '../validation/ErrorMessage';
 import {
   frontendHouseholdAtom,
   householdAtom,
@@ -126,7 +126,7 @@ export const AmountOfMoney = ({
 
   return (
     <>
-      <ErrorMessage condition={shownAmount === ''} />
+      <ErrorMessage />
       <FormControl>
         <FormLabel fontSize={configData.style.itemFontSize}>
           <Center>

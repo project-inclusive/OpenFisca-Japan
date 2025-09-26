@@ -12,7 +12,7 @@ import {
 import configData from '../../../config/app_config.json';
 import pmJson from '../../../config/都道府県市区町村.json';
 
-import { ErrorMessage } from '../attributes/validation/ErrorMessage';
+import { ErrorMessage } from '../validation/ErrorMessage';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   currentDateAtom,
@@ -20,7 +20,6 @@ import {
   questionValidatedAtom,
 } from '../../../state';
 
-// TODO: タイトルやonClickを引数で変更可能にする
 export const AddressQuestion = () => {
   const navigationType = useNavigationType();
   const [household, setHousehold] = useRecoilState(householdAtom);

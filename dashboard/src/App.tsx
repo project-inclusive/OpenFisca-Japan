@@ -1,6 +1,5 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { AbsoluteCenter } from '@chakra-ui/react';
-import CaluculationForm from './components/forms/caluculationForm';
 import Description from './components/Description';
 import QuestionExamples from './components/QuestionExamples';
 import PrivacyPolicy from './components/PrivacyPolicy';
@@ -10,7 +9,6 @@ import { NotFoundError } from './components/errors/NotFoundError';
 import { FormResponseError } from './components/errors/FormResponseError';
 import { useRecoilState } from 'recoil';
 import { currentDateAtom } from './state';
-import { QuestionForm } from './components/forms/questionForm';
 import { DetailedQuestionList } from './components/forms/detailedQuestionList';
 import { SimpleQuestionList } from './components/forms/simpleQuestionList';
 import { DisasterQuestionList } from './components/forms/disasterQuestionList';
@@ -67,12 +65,6 @@ function App() {
               path: '/response-error',
               element: <FormResponseError />,
             },
-            // TODO: 新UI確認用に追加したパス。移行が終わったら消す
-            {
-              path: '/dummy/question-form',
-              element: <QuestionForm />,
-            },
-            // (ダミーここまで)
             {
               path: '/*',
               element: <NotFoundError />,
