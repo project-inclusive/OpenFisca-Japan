@@ -7,6 +7,8 @@ import {
   FormControl,
   FormLabel,
   Center,
+  Text,
+  VStack,
 } from '@chakra-ui/react';
 
 import configData from '../../../config/app_config.json';
@@ -114,56 +116,59 @@ export const AddressQuestion = () => {
   }, [navigationType]);
 
   return (
-    <>
+    <VStack>
       <ErrorMessage />
-
       <FormControl>
-        <FormLabel
-          fontSize={configData.style.itemFontSize}
-          fontWeight="Regular"
-        >
+        <FormLabel fontSize={configData.style.itemFontSize}>
           <Center>
             <HStack>
-              <Box fontSize={configData.style.itemFontSize}>
+              <Box
+                fontSize={configData.style.subTitleFontSize}
+                textAlign="center"
+              >
                 寝泊まりしている地域
               </Box>
             </HStack>
           </Center>
         </FormLabel>
 
-        <HStack mb={4}>
-          <Select
-            data-testid="select-prefecture"
-            value={selectedPrefecture}
-            onChange={onPrefectureChange}
-            fontSize={configData.style.itemFontSize}
-            width={configData.style.selectPrefectureSize}
-            placeholder="都道府県"
-          >
-            {prefectureArray.map((item) => (
-              <option value={item} key={item}>
-                {item}
-              </option>
-            ))}
-          </Select>
-
-          <Select
-            data-testid="select-city"
-            value={selectedMunicipality}
-            onChange={onMunicipalityChange}
-            fontSize={configData.style.itemFontSize}
-            width={configData.style.selectPrefectureSize}
-            placeholder="市区町村"
-          >
-            {selectedPrefecture &&
-              pmObj[selectedPrefecture].map((item) => (
+        <Center>
+          <HStack mt={8} mb={8}>
+            <Select
+              height="3.5em"
+              data-testid="select-prefecture"
+              value={selectedPrefecture}
+              onChange={onPrefectureChange}
+              fontSize={configData.style.itemFontSize}
+              width={configData.style.selectPrefectureSize}
+              placeholder="都道府県"
+            >
+              {prefectureArray.map((item) => (
                 <option value={item} key={item}>
                   {item}
                 </option>
               ))}
-          </Select>
-        </HStack>
+            </Select>
+
+            <Select
+              height="3.5em"
+              data-testid="select-city"
+              value={selectedMunicipality}
+              onChange={onMunicipalityChange}
+              fontSize={configData.style.itemFontSize}
+              width={configData.style.selectPrefectureSize}
+              placeholder="市区町村"
+            >
+              {selectedPrefecture &&
+                pmObj[selectedPrefecture].map((item) => (
+                  <option value={item} key={item}>
+                    {item}
+                  </option>
+                ))}
+            </Select>
+          </HStack>
+        </Center>
       </FormControl>
-    </>
+    </VStack>
   );
 };

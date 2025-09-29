@@ -36,7 +36,7 @@ export const Question = (props: {
       />
       <Flex w="100%" justifyContent="space-around" alignItems="center">
         <Link href="/" ml={0} paddingLeft="1.5em">
-          <Icon as={FaHome} boxSize="2em" color="cyan.600" />
+          <Icon as={FaHome} boxSize="3em" color="cyan.600" />
         </Link>
         <Box ml="auto">
           <CalculationLabel
@@ -62,14 +62,14 @@ export const Question = (props: {
         fontSize={configData.style.subTitleFontSize}
         fontWeight="medium"
         mt={2}
-        mb={2}
+        mb={4}
       >
         {props.title}
       </Center>
 
-      <Box bg="white" borderRadius="xl" p={4} mb={4} ml={4} mr={4}>
+      <Box bg="white" borderRadius="xl" p={4} m={4}>
         <Center fontSize={configData.style.questionFormFontSize} mb={2}>
-          <form>{props.children}</form>
+          {props.children}
         </Center>
       </Box>
 
@@ -78,7 +78,7 @@ export const Question = (props: {
           fontSize={configData.style.subTitleFontSize}
           style={{ marginRight: '10%' }}
           borderRadius="xl"
-          height="2em"
+          height="3.5em"
           width="100%"
           bg="white"
           color="cyan.600"
@@ -90,7 +90,7 @@ export const Question = (props: {
         <Button
           fontSize={configData.style.subTitleFontSize}
           borderRadius="xl"
-          height="2em"
+          height="3.5em"
           width="100%"
           bg="cyan.600"
           color="white"

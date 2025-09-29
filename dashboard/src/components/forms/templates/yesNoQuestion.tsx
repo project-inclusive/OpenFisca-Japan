@@ -60,9 +60,10 @@ export const YesNoQuestion = ({
     title: string;
   }) => (
     <Button
+      mb={2}
       variant="outline"
       borderRadius="xl"
-      height="2.5em"
+      height="3.5em"
       width="100%"
       bg={cond() ? 'cyan.600' : 'white'}
       borderColor={cond() ? 'cyan.900' : 'black'}
@@ -83,23 +84,22 @@ export const YesNoQuestion = ({
   );
 
   return (
-    <>
+    <VStack flex={1}>
       <ErrorMessage />
-
       <FormControl>
-        <FormLabel
-          fontSize={configData.style.itemFontSize}
-          fontWeight="Regular"
-        >
-          <Center>
-            <Box fontSize={configData.style.itemFontSize}>{title}</Box>
+        <FormLabel fontSize={configData.style.itemFontSize}>
+          <Center mb={4}>
+            <Box
+              fontSize={configData.style.subTitleFontSize}
+              textAlign="center"
+            >
+              {title}
+            </Box>
           </Center>
         </FormLabel>
-        <Box mt={2} mb={4}>
-          {children}
-        </Box>
+        <Box mb={2}>{children}</Box>
 
-        <VStack mb={4}>
+        <VStack mt={8} mb={8}>
           {btn({
             cond: () => boolState === true,
             state: true,
@@ -112,6 +112,6 @@ export const YesNoQuestion = ({
           })}
         </VStack>
       </FormControl>
-    </>
+    </VStack>
   );
 };

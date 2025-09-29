@@ -56,10 +56,11 @@ export const SelectionQuestion = ({
     key: number;
   }) => (
     <Button
+      mb={2}
       key={key}
       variant="outline"
       borderRadius="xl"
-      height="2.5em"
+      height="3.5em"
       width="100%"
       bg={cond() ? 'cyan.600' : 'white'}
       borderColor={cond() ? 'cyan.900' : 'black'}
@@ -82,19 +83,21 @@ export const SelectionQuestion = ({
   );
 
   return (
-    <>
+    <VStack flex={1}>
       <ErrorMessage />
       <FormControl>
-        <FormLabel
-          fontSize={configData.style.itemFontSize}
-          fontWeight="Regular"
-        >
-          <Center>
-            <Box fontSize={configData.style.itemFontSize}>{title}</Box>
+        <FormLabel fontSize={configData.style.itemFontSize}>
+          <Center mb={4}>
+            <Box
+              fontSize={configData.style.subTitleFontSize}
+              textAlign="center"
+            >
+              {title}
+            </Box>
           </Center>
         </FormLabel>
 
-        <VStack mb={4}>
+        <VStack mt={8} mb={8}>
           {selections.map((e, index) =>
             btn({
               cond: () => selectionState === e.selection,
@@ -105,6 +108,6 @@ export const SelectionQuestion = ({
           )}
         </VStack>
       </FormControl>
-    </>
+    </VStack>
   );
 };

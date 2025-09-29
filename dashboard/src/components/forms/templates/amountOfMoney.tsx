@@ -6,6 +6,7 @@ import {
   FormLabel,
   Input,
   Center,
+  VStack,
 } from '@chakra-ui/react';
 
 import configData from '../../../config/app_config.json';
@@ -125,31 +126,35 @@ export const AmountOfMoney = ({
   }, [personName]);
 
   return (
-    <>
+    <VStack flex={1}>
       <ErrorMessage />
       <FormControl>
-        <FormLabel fontSize={configData.style.itemFontSize}>
+        <FormLabel fontSize={configData.style.subTitleFontSize}>
           <Center>
             <HStack>
-              <Box>{title}</Box>
+              <Box textAlign="center">{title}</Box>
             </HStack>
           </Center>
         </FormLabel>
 
-        <HStack mb={4}>
-          <Input
-            data-testid="amount-input"
-            type={isMobile ? 'number' : 'text'}
-            value={shownAmount}
-            onChange={onChange}
-            onKeyDown={onKeyDown}
-            width="10em"
-            fontSize={configData.style.itemFontSize}
-            {...(isMobile && { pattern: '[0-9]*' })}
-          />
-          <Box>万円</Box>
-        </HStack>
+        <Center>
+          <HStack mt={8} mb={8}>
+            <Input
+              height="3.5em"
+              textAlign="right"
+              data-testid="amount-input"
+              type={isMobile ? 'number' : 'text'}
+              value={shownAmount}
+              onChange={onChange}
+              onKeyDown={onKeyDown}
+              width="80%"
+              fontSize={configData.style.itemFontSize}
+              {...(isMobile && { pattern: '[0-9]*' })}
+            />
+            <Box>万円</Box>
+          </HStack>
+        </Center>
       </FormControl>
-    </>
+    </VStack>
   );
 };

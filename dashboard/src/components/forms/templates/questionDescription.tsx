@@ -2,6 +2,7 @@ import { Text } from '@chakra-ui/react';
 import { questionValidatedAtom } from '../../../state';
 import { useRecoilState } from 'recoil';
 import { useEffect } from 'react';
+import configData from '../../../config/app_config.json';
 
 export const QuestionDescription = ({
   description,
@@ -17,5 +18,9 @@ export const QuestionDescription = ({
     setQuestionValidated(true);
   }, []);
 
-  return <Text>{description}</Text>;
+  return (
+    <Text fontSize={configData.style.subTitleFontSize} textAlign="center">
+      {description}
+    </Text>
+  );
 };
