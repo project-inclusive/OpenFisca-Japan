@@ -1,6 +1,5 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { AbsoluteCenter } from '@chakra-ui/react';
-import Description from './components/Description';
 import QuestionExamples from './components/QuestionExamples';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import { Result } from './components/result/result';
@@ -12,6 +11,7 @@ import { currentDateAtom } from './state';
 import { DetailedQuestionList } from './components/forms/detailedQuestionList';
 import { SimpleQuestionList } from './components/forms/simpleQuestionList';
 import { DisasterQuestionList } from './components/forms/disasterQuestionList';
+import { TopPage } from './components/top/topPage';
 
 function App() {
   const currentDate = useRecoilState(currentDateAtom);
@@ -19,23 +19,14 @@ function App() {
   console.log(`deploy ${import.meta.env.VITE_BRANCH}`);
 
   return (
-    <AbsoluteCenter
-      width={{
-        base: '100%', // 0-48em
-        sm: '100%', // 480px
-        md: '80%', // 768px
-        lg: '60%', // 992px
-        xl: '50%', // 1280px
-      }}
-      axis="horizontal"
-    >
+    <>
       <RouterProvider
         fallbackElement={<GenericError />}
         router={createBrowserRouter(
           [
             {
               path: '/',
-              element: <Description />,
+              element: <TopPage />,
             },
             {
               path: '/calculate',
@@ -75,7 +66,7 @@ function App() {
           }
         )}
       />
-    </AbsoluteCenter>
+    </>
   );
 }
 
