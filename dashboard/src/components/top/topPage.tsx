@@ -119,32 +119,6 @@ export function TopPage() {
             <Button
               as={RouterLink}
               // 規約に同意していない場合のみモーダルが開く
-              to={agreedToTerms ? '/calculate' : '/'}
-              onClick={
-                agreedToTerms
-                  ? noop
-                  : () => {
-                      setModalLink('/calculate');
-                      onModalOpen();
-                    }
-              }
-              style={{ marginRight: '1%' }}
-              fontSize={configData.style.subTitleFontSize}
-              borderRadius="xl"
-              height="3.5em"
-              pr="1.2em"
-              pl="1.2em"
-              width="45%"
-              bg="blue.500"
-              color="white"
-              _hover={{ bg: 'blue.600' }}
-              data-testid="calculate-detail-button"
-            >
-              くわしく見積もり
-            </Button>
-            <Button
-              as={RouterLink}
-              // 規約に同意していない場合のみモーダルが開く
               to={agreedToTerms ? '/calculate-simple' : '/'}
               onClick={
                 agreedToTerms
@@ -154,6 +128,7 @@ export function TopPage() {
                       onModalOpen();
                     }
               }
+              style={{ marginRight: '1%' }}
               fontSize={configData.style.subTitleFontSize}
               borderRadius="xl"
               height="3.5em"
@@ -166,6 +141,31 @@ export function TopPage() {
               data-testid="calculate-simple-button"
             >
               かんたん見積もり
+            </Button>
+            <Button
+              as={RouterLink}
+              // 規約に同意していない場合のみモーダルが開く
+              to={agreedToTerms ? '/calculate' : '/'}
+              onClick={
+                agreedToTerms
+                  ? noop
+                  : () => {
+                      setModalLink('/calculate');
+                      onModalOpen();
+                    }
+              }
+              fontSize={configData.style.subTitleFontSize}
+              borderRadius="xl"
+              height="3.5em"
+              pr="1.2em"
+              pl="1.2em"
+              width="45%"
+              bg="blue.500"
+              color="white"
+              _hover={{ bg: 'blue.600' }}
+              data-testid="calculate-detail-button"
+            >
+              くわしく見積もり
             </Button>
             <br />
           </Center>
