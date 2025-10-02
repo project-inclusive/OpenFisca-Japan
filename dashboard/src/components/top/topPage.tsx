@@ -12,8 +12,6 @@ import {
 } from '@chakra-ui/react';
 import { useRecoilValue } from 'recoil';
 import { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import { FaHome } from 'react-icons/fa';
 import configData from '../../config/app_config.json';
 import personIcon1 from '../../assets/top/person_icon1.png';
 import personIcon2 from '../../assets/top/person_icon2.png';
@@ -23,6 +21,7 @@ import { FormLinkButton } from './formLinkButton';
 import { Links } from './links';
 import { agreedToTermsAtom } from '../../state';
 import TermsModal from '../TermsModal';
+import { HomeButton } from '../homeButton';
 
 // 何もしない関数（onClickで発火する関数のデフォルト値として使用）
 const noop = () => {};
@@ -51,17 +50,7 @@ export function TopPage() {
   return (
     <AbsoluteCenter width="100%" axis="horizontal">
       <VStack>
-        <Flex w="90%" justifyContent="left" marginTop="0.5em">
-          <RouterLink to="/">
-            <Icon
-              as={FaHome}
-              paddingLeft="1.5em"
-              justifyContent="left"
-              boxSize="4em"
-              color="cyan.900"
-            />
-          </RouterLink>
-        </Flex>
+        <HomeButton />
         <VStack width="100%">
           <Center>
             <Text
