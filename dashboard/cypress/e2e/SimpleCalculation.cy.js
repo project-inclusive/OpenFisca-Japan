@@ -5,7 +5,7 @@ describe('Renders main page and ', () => {
   });
 
   it('navigates to simple calculate page, fill in mandatory fields', () => {
-    cy.contains('支援みつもりヤドカリくん');
+    cy.contains('もらえるお金をかんたん見積もり');
     cy.contains('かんたん見積もり');
     cy.get('[data-testid="calculate-simple-button"]')
       .contains('かんたん見積もり')

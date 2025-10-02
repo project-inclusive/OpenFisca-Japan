@@ -5,7 +5,7 @@ describe('Renders main page and ', () => {
   });
 
   it('navigates to detailed calculate page', () => {
-    cy.contains('支援みつもりヤドカリくん');
+    cy.contains('もらえるお金をかんたん見積もり');
     cy.contains('くわしく見積もり');
 
     cy.get('[data-testid="calculate-detail-button"]')
