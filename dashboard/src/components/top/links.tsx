@@ -11,7 +11,7 @@ export const Links = () => {
       align="center"
       bg="gray.300"
       width="100%"
-      marginTop="2em"
+      marginTop="1em"
     >
       <LinkButton title="Contact" to={configData.URL.contact} />
       <LinkButton title="GitHub" to={configData.URL.Github} />

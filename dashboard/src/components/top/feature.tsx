@@ -13,8 +13,8 @@ export const Feature = ({
   descriptions: string[];
 }) => {
   return (
-    <VStack marginTop="2em" marginLeft="4em" marginRight="4em" width="100%">
-      <Image src={image} background="white" rounded="100%" width="80%" />
+    <VStack marginTop={4} width="auto">
+      <Image src={image} background="white" rounded="100%" width="70%" />
       <Text
         fontSize={configData.style.titleFontSize}
         textAlign="center"

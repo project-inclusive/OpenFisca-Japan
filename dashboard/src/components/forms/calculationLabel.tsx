@@ -13,6 +13,7 @@ export const CalculationLabel = ({
       size="lg"
       colorScheme={colour}
       sx={{ height: '48px' }}
+      whiteSpace="nowrap"
     >
       {text}
     </Tag>

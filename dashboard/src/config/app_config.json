@@ -16,7 +16,7 @@
       "sm": "2.2em",
       "md": "2.2em",
       "lg": "2.5em",
-      "xl": "3em"
+      "xl": "2.5em"
     },
     "featureFontSize": {
       "base": "1.4em",
@@ -115,7 +115,7 @@
     ]
   },
   "topPage": {
-    "title": "もらえるお金をかんたん見積もり",
+    "title": ["もらえるお金を", "かんたん見積もり"],
     "features": [
       {
         "feature": "わかりやすい",
