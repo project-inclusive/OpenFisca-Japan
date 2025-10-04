@@ -124,10 +124,13 @@ function TermsModal({
             <Checkbox
               isChecked={isRestrictionsChecked}
               onChange={onChangeRestrictions}
-              colorScheme="cyan"
+              colorScheme="blue"
               mt="1em"
               mb="1em"
               data-testid="restrictions-checkbox"
+              bg="teal.300"
+              padding="0.5em"
+              borderRadius="10%"
             >
               了解しました
             </Checkbox>
@@ -145,10 +148,13 @@ function TermsModal({
             <Checkbox
               isChecked={isChecked}
               onChange={onChange}
-              colorScheme="cyan"
+              colorScheme="blue"
               mt="1em"
               mb="1em"
               data-testid="terms-checkbox"
+              bg="teal.300"
+              padding="0.5em"
+              borderRadius="10%"
             >
               了解しました
             </Checkbox>
