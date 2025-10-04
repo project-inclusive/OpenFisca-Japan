@@ -5,7 +5,7 @@ describe('Loads homepage', () => {
   });
 
   it('Renders main title', () => {
-    cy.contains('もらえるお金をかんたん見積もり');
+    cy.contains('受けられそうな支援をかんたん見積もり');
   });
 
   it('Renders かんたん見積もり button', () => {
