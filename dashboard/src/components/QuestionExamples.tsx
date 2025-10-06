@@ -14,6 +14,7 @@ import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 import { CloseIcon } from '@chakra-ui/icons';
 import configData from '../config/app_config.json';
 import questionExamples from '../config/question_examples.json';
+import { NarrowWidth } from './layout/narrowWidth';
 
 type Question = {
   title: string;
@@ -34,47 +35,51 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <Box bg="white" borderRadius="xl" p={4} m={4}>
-      <Center
-        fontSize={configData.style.titleFontSize}
-        fontWeight="semibold"
-        color="blue.800"
-        mb="0.5em"
-      >
-        {configData.question_examples.title}
-      </Center>
-      {sections.map((section, i) => (
-        <Card mt={2} key={i}>
-          <CardHeader>
-            <Heading size="md" color="blue.800">
-              {section.heading}
-            </Heading>
-          </CardHeader>
-          {section.questions.map((question, j) => (
-            <CardBody ml={2} key={j}>
-              <Heading size="sm" color="blue.800">
-                {question.title}
-              </Heading>
-              <Flex mt={3}>
-                <Center>
-                  <Text>（例）</Text>
-                </Center>
-                <Text fontSize="sm">{question.example}</Text>
-              </Flex>
-            </CardBody>
-          ))}
-        </Card>
-      ))}
-      <Center mt={2}>
-        <Button
-          onClick={() => {
-            navigate(-1);
-          }}
+    <NarrowWidth>
+      <Box bg="white" borderRadius="xl" p={4} m={4}>
+        <Center
+          fontSize={configData.style.titleFontSize}
+          fontWeight="semibold"
+          color="blue.800"
+          mb="0.5em"
         >
-          <Text>{configData.question_examples.backButtonText}</Text>
-        </Button>
-      </Center>
-    </Box>
+          {configData.question_examples.title}
+        </Center>
+        {sections.map((section, i) => (
+          <Card mt={2} key={i}>
+            <CardHeader>
+              <Heading size="md" color="blue.800">
+                {section.heading}
+              </Heading>
+            </CardHeader>
+            {section.questions.map((question, j) => (
+              <CardBody ml={2} key={j}>
+                <Heading size="sm" color="blue.800">
+                  {question.title}
+                </Heading>
+                <Flex mt={3}>
+                  <Center>
+                    <Text>（例）</Text>
+                  </Center>
+                  <Text fontSize="sm">{question.example}</Text>
+                </Flex>
+              </CardBody>
+            ))}
+          </Card>
+        ))}
+        <Center mt={2}>
+          <Button
+            height="3.5em"
+            width="50%"
+            onClick={() => {
+              navigate(-1);
+            }}
+          >
+            <Text>{configData.question_examples.backButtonText}</Text>
+          </Button>
+        </Center>
+      </Box>
+    </NarrowWidth>
   );
 };
 

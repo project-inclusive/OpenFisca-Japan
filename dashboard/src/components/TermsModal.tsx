@@ -34,8 +34,9 @@ function TermsModal({
   to: string;
 }) {
   const [agreedToTerms, setAgreedToTerms] = useRecoilState(agreedToTermsAtom);
-  const [isChecked, setIsChecked] = useState(false);
-  const [isRestrictionsChecked, setIsRestrictionsChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState(agreedToTerms);
+  const [isRestrictionsChecked, setIsRestrictionsChecked] =
+    useState(agreedToTerms);
 
   // 見積もり対象制度一覧モーダルの開閉
   const [isprogramListModalOpen, setProgramListModalOpen] = useState(false);
@@ -123,10 +124,13 @@ function TermsModal({
             <Checkbox
               isChecked={isRestrictionsChecked}
               onChange={onChangeRestrictions}
-              colorScheme="cyan"
+              colorScheme="blue"
               mt="1em"
               mb="1em"
               data-testid="restrictions-checkbox"
+              bg="teal.300"
+              padding="0.5em"
+              borderRadius="10%"
             >
               了解しました
             </Checkbox>
@@ -144,10 +148,13 @@ function TermsModal({
             <Checkbox
               isChecked={isChecked}
               onChange={onChange}
-              colorScheme="cyan"
+              colorScheme="blue"
               mt="1em"
               mb="1em"
               data-testid="terms-checkbox"
+              bg="teal.300"
+              padding="0.5em"
+              borderRadius="10%"
             >
               了解しました
             </Checkbox>

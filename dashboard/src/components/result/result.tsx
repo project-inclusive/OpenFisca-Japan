@@ -22,6 +22,7 @@ import { EmptyResults } from './emptyResults';
 import { useDeviceData } from 'react-device-detect';
 import { Applicable } from './applicable';
 import { calculateFrontendHouseHold } from '../calculate/calculate';
+import { NarrowWidth } from '../layout/narrowWidth';
 
 const createFileName = (extension: string = '', ...names: string[]) => {
   if (!extension) {
@@ -224,224 +225,226 @@ export const Result = () => {
   }
 
   return (
-    <div ref={divRef}>
-      {!result && (
-        <Center>
-          <Spinner
-            mt={20}
-            thickness="4px"
-            size="xl"
-            color="cyan.600"
-            speed="0.7s"
-          />
-        </Center>
-      )}
-      {result && (
-        <>
-          <CalculationLabel
-            text={
-              isSimpleCalculation
-                ? configData.calculationForm.simpleCalculation
-                : isDisasterCalculation
-                ? configData.calculationForm.disasterCalculation
-                : configData.calculationForm.detailedCalculation
-            }
-            colour={
-              isSimpleCalculation
-                ? 'teal'
-                : isDisasterCalculation
-                ? 'orange'
-                : 'blue'
-            }
-          />
-
-          <Center
-            fontSize={configData.style.subTitleFontSize}
-            fontWeight="medium"
-            mt={2}
-            mb={2}
-          >
-            {configData.result.topDescription}
+    <NarrowWidth>
+      <div ref={divRef}>
+        {!result && (
+          <Center>
+            <Spinner
+              mt={20}
+              thickness="4px"
+              size="xl"
+              color="cyan.600"
+              speed="0.7s"
+            />
           </Center>
+        )}
+        {result && (
+          <>
+            <CalculationLabel
+              text={
+                isSimpleCalculation
+                  ? configData.calculationForm.simpleCalculation
+                  : isDisasterCalculation
+                  ? configData.calculationForm.disasterCalculation
+                  : configData.calculationForm.detailedCalculation
+              }
+              colour={
+                isSimpleCalculation
+                  ? 'teal'
+                  : isDisasterCalculation
+                  ? 'orange'
+                  : 'blue'
+              }
+            />
 
-          <EmptyResults
-            result={result}
-            frontendHouseholdResult={frontendHouseholdResult}
-          />
-          <Benefit result={result} />
-          <Loan result={result} />
-          <Applicable
-            result={result}
-            frontendHouseholdResult={frontendHouseholdResult}
-          />
+            <Center
+              fontSize={configData.style.subTitleFontSize}
+              fontWeight="medium"
+              mt={2}
+              mb={2}
+            >
+              {configData.result.topDescription}
+            </Center>
 
-          {/* 被災者支援制度モードは他の支援制度も探せるリンクを載せる */}
-          {isDisasterCalculation && (
+            <EmptyResults
+              result={result}
+              frontendHouseholdResult={frontendHouseholdResult}
+            />
+            <Benefit result={result} />
+            <Loan result={result} />
+            <Applicable
+              result={result}
+              frontendHouseholdResult={frontendHouseholdResult}
+            />
+
+            {/* 被災者支援制度モードは他の支援制度も探せるリンクを載せる */}
+            {isDisasterCalculation && (
+              <Center pr={4} pl={4} pb={2}>
+                <Text color="blue.900">
+                  他にも被災者支援制度はあります。詳しくは協力プロジェクトの
+                  <Text as="span" color="blue">
+                    <a
+                      href={configData.URL.disaster_navi_sodegawara}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      災害支援ナビゲーター
+                      <ExternalLinkIcon ml={1} mr={1} />
+                    </a>
+                  </Text>
+                  (by Civic Tech Sodegaura)をご覧ください。
+                </Text>
+              </Center>
+            )}
+
             <Center pr={4} pl={4} pb={2}>
               <Text color="blue.900">
-                他にも被災者支援制度はあります。詳しくは協力プロジェクトの
-                <Text as="span" color="blue">
-                  <a
-                    href={configData.URL.disaster_navi_sodegawara}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    災害支援ナビゲーター
-                    <ExternalLinkIcon ml={1} mr={1} />
-                  </a>
-                </Text>
-                (by Civic Tech Sodegaura)をご覧ください。
+                {configData.result.consultationDescription}
               </Text>
             </Center>
-          )}
-
-          <Center pr={4} pl={4} pb={2}>
-            <Text color="blue.900">
-              {configData.result.consultationDescription}
-            </Text>
-          </Center>
-          <Center pr={4} pl={4} pb={4}>
-            <Button
-              as={RouterLink}
-              to="/question-examples"
-              fontSize={configData.style.subTitleFontSize}
-              borderRadius="xl"
-              height="2em"
-              width="100%"
-              bg="gray.500"
-              color="white"
-              _hover={{ bg: 'gray.600' }}
-            >
-              {configData.result.questionExamplesButtonText}
-            </Button>
-          </Center>
-
-          {isSimpleCalculation && (
-            <>
-              <Center pr={4} pl={4} pb={4}>
-                {configData.result.detailedCalculationDescription}
-              </Center>
-
-              <Center pr={4} pl={4} pb={4}>
-                <Button
-                  as={RouterLink}
-                  to="/calculate"
-                  fontSize={configData.style.subTitleFontSize}
-                  borderRadius="xl"
-                  height="2em"
-                  width="100%"
-                  bg="blue.500"
-                  color="white"
-                  _hover={{ bg: 'blue.600' }}
-                >
-                  {configData.calculationForm.detailedCalculation}
-                </Button>
-              </Center>
-            </>
-          )}
-
-          <Center pr={4} pl={4} pb={4}>
-            <Button
-              onClick={downloadScreenshot}
-              loadingText={'読み込み中...'}
-              isLoading={loadingScreenshotDownload}
-              as="button"
-              fontSize={configData.style.subTitleFontSize}
-              borderRadius="xl"
-              height="2em"
-              width="100%"
-              bg="gray.500"
-              color="white"
-              _hover={{ bg: 'gray.600' }}
-            >
-              {configData.result.screenshotButtonText}
-            </Button>
-          </Center>
-
-          <Center pr={4} pl={4} pb={4}>
-            <Button
-              onClick={() => shareLinkButton()}
-              as="button"
-              fontSize={configData.style.subTitleFontSize}
-              borderRadius="xl"
-              height="2em"
-              width="100%"
-              bg="gray.500"
-              color="white"
-              _hover={{ bg: 'gray.600' }}
-            >
-              {shareLink
-                ? configData.result.shareLinkButtonCopiedToClipboard
-                : configData.result.shareLinkButtonText}
-            </Button>
-          </Center>
-
-          {shareUrl && (
-            <Box bg="white" borderRadius="xl" p={4} mb={4} ml={4} mr={4}>
-              <Center>
-                {/* QRコード表示部分 */}
-                <QRCodeCanvas value={shareUrl} size={200} />
-              </Center>
-            </Box>
-          )}
-
-          <Box>
-            <Center pr={4} pl={4} pt={4} pb={4}>
-              {/*configData.result.chatbotDescription[0] */}
+            <Center pr={4} pl={4} pb={4}>
+              <Button
+                as={RouterLink}
+                to="/question-examples"
+                fontSize={configData.style.subTitleFontSize}
+                borderRadius="xl"
+                height="2em"
+                width="100%"
+                bg="gray.500"
+                color="white"
+                _hover={{ bg: 'gray.600' }}
+              >
+                {configData.result.questionExamplesButtonText}
+              </Button>
             </Center>
-            <Box bg="white" borderRadius="xl" p={4} mb={4} ml={4} mr={4}>
-              <Center>
-                （チャットボットはバージョンアップのためメンテナンス中です）
+
+            {isSimpleCalculation && (
+              <>
+                <Center pr={4} pl={4} pb={4}>
+                  {configData.result.detailedCalculationDescription}
+                </Center>
+
+                <Center pr={4} pl={4} pb={4}>
+                  <Button
+                    as={RouterLink}
+                    to="/calculate"
+                    fontSize={configData.style.subTitleFontSize}
+                    borderRadius="xl"
+                    height="2em"
+                    width="100%"
+                    bg="blue.500"
+                    color="white"
+                    _hover={{ bg: 'blue.600' }}
+                  >
+                    {configData.calculationForm.detailedCalculation}
+                  </Button>
+                </Center>
+              </>
+            )}
+
+            <Center pr={4} pl={4} pb={4}>
+              <Button
+                onClick={downloadScreenshot}
+                loadingText={'読み込み中...'}
+                isLoading={loadingScreenshotDownload}
+                as="button"
+                fontSize={configData.style.subTitleFontSize}
+                borderRadius="xl"
+                height="2em"
+                width="100%"
+                bg="gray.500"
+                color="white"
+                _hover={{ bg: 'gray.600' }}
+              >
+                {configData.result.screenshotButtonText}
+              </Button>
+            </Center>
+
+            <Center pr={4} pl={4} pb={4}>
+              <Button
+                onClick={() => shareLinkButton()}
+                as="button"
+                fontSize={configData.style.subTitleFontSize}
+                borderRadius="xl"
+                height="2em"
+                width="100%"
+                bg="gray.500"
+                color="white"
+                _hover={{ bg: 'gray.600' }}
+              >
+                {shareLink
+                  ? configData.result.shareLinkButtonCopiedToClipboard
+                  : configData.result.shareLinkButtonText}
+              </Button>
+            </Center>
+
+            {shareUrl && (
+              <Box bg="white" borderRadius="xl" p={4} mb={4} ml={4} mr={4}>
+                <Center>
+                  {/* QRコード表示部分 */}
+                  <QRCodeCanvas value={shareUrl} size={200} />
+                </Center>
+              </Box>
+            )}
+
+            <Box>
+              <Center pr={4} pl={4} pt={4} pb={4}>
+                {/*configData.result.chatbotDescription[0] */}
               </Center>
+              <Box bg="white" borderRadius="xl" p={4} mb={4} ml={4} mr={4}>
+                <Center>
+                  （チャットボットはバージョンアップのためメンテナンス中です）
+                </Center>
+              </Box>
             </Box>
-          </Box>
 
-          <Center pr={4} pl={4} pb={4}>
-            {configData.result.environmentDescription[0]}
-          </Center>
+            <Center pr={4} pl={4} pb={4}>
+              {configData.result.environmentDescription[0]}
+            </Center>
 
-          <Center pr={4} pl={4} pb={4}>
-            <Button
-              onClick={() => environmentButton()}
-              as="button"
-              fontSize={configData.style.subTitleFontSize}
-              borderRadius="xl"
-              height="2em"
-              width="100%"
-              bg="gray.500"
-              color="white"
-              _hover={{ bg: 'gray.600' }}
-            >
-              {enviroment
-                ? configData.result.environmentButtonCopiedToClipboard
-                : configData.result.environmentButtonText}
-            </Button>
-          </Center>
+            <Center pr={4} pl={4} pb={4}>
+              <Button
+                onClick={() => environmentButton()}
+                as="button"
+                fontSize={configData.style.subTitleFontSize}
+                borderRadius="xl"
+                height="2em"
+                width="100%"
+                bg="gray.500"
+                color="white"
+                _hover={{ bg: 'gray.600' }}
+              >
+                {enviroment
+                  ? configData.result.environmentButtonCopiedToClipboard
+                  : configData.result.environmentButtonText}
+              </Button>
+            </Center>
 
-          <Center pr={4} pl={4} pb={4}>
-            {configData.result.questionnaireDescription[0]}
-          </Center>
+            <Center pr={4} pl={4} pb={4}>
+              {configData.result.questionnaireDescription[0]}
+            </Center>
 
-          <Center pr={4} pl={4} pb={4}>
-            {/* When returning to this calculation result page from the questionnaire form on a PC browser (Chrome, Edge) deployed by Cloudflare Pages, it will be 404, so open it in a new tab */}
-            <Button
-              as="a"
-              href={configData.URL.questionnaire_form}
-              fontSize={configData.style.subTitleFontSize}
-              borderRadius="xl"
-              height="2em"
-              width="100%"
-              bg="cyan.600"
-              color="white"
-              _hover={{ bg: 'cyan.700' }}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              アンケートに答える
-            </Button>
-          </Center>
-        </>
-      )}
-    </div>
+            <Center pr={4} pl={4} pb={4}>
+              {/* When returning to this calculation result page from the questionnaire form on a PC browser (Chrome, Edge) deployed by Cloudflare Pages, it will be 404, so open it in a new tab */}
+              <Button
+                as="a"
+                href={configData.URL.questionnaire_form}
+                fontSize={configData.style.subTitleFontSize}
+                borderRadius="xl"
+                height="2em"
+                width="100%"
+                bg="cyan.600"
+                color="white"
+                _hover={{ bg: 'cyan.700' }}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                アンケートに答える
+              </Button>
+            </Center>
+          </>
+        )}
+      </div>
+    </NarrowWidth>
   );
 };
