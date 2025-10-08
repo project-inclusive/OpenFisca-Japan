@@ -14,7 +14,7 @@ export const ParentHepatitisC = () => {
   const noOnClick = () => {
     // 仕事関連の質問をスキップ
     setNextQuestionKey({
-      person: '子ども',
+      person: '親',
       personNum: questionKey.personNum,
       title: '腎不全',
     });
