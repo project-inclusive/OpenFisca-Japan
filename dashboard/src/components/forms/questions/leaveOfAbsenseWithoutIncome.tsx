@@ -28,7 +28,8 @@ export const LeaveOfAbsenseWithoutIncome = ({
 
   return (
     <YesNoQuestion
-      title="休業中に給与の支払いがない状態ですか？"
+      // 人に対する「休業中」という表現がなじみが薄いので、UI上の文章は「休職中」にする
+      title="休職中に給与の支払いがない状態ですか？"
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
     />
