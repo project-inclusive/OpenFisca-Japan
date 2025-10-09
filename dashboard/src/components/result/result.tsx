@@ -23,6 +23,7 @@ import { useDeviceData } from 'react-device-detect';
 import { Applicable } from './applicable';
 import { calculateFrontendHouseHold } from '../calculate/calculate';
 import { NarrowWidth } from '../layout/narrowWidth';
+import { HomeButton } from '../homeButton';
 
 const createFileName = (extension: string = '', ...names: string[]) => {
   if (!extension) {
@@ -226,6 +227,7 @@ export const Result = () => {
 
   return (
     <NarrowWidth>
+      <HomeButton />
       <div ref={divRef}>
         {!result && (
           <Center>
