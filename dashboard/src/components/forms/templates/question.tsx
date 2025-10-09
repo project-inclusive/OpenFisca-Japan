@@ -8,6 +8,8 @@ import { ReactNode } from 'react';
 import { FaHome } from 'react-icons/fa';
 import { NarrowWidth } from '../../layout/narrowWidth';
 import { HomeButton } from '../../homeButton';
+import { useRecoilValue } from 'recoil';
+import { questionKeyHistoryAtom } from '../../../state';
 
 export const Question = (props: {
   children: ReactNode;
@@ -20,6 +22,9 @@ export const Question = (props: {
   const location = useLocation();
   const isSimpleCalculation = location.pathname === '/calculate-simple';
   const isDisasterCalculation = location.pathname === '/calculate-disaster';
+
+  const questionKeyHistory = useRecoilValue(questionKeyHistoryAtom);
+  const noHistory = questionKeyHistory.length === 0;
 
   return (
     <NarrowWidth>
@@ -76,8 +81,9 @@ export const Question = (props: {
             width="100%"
             bg="white"
             color="cyan.600"
-            _hover={{ bg: 'cyan.700', color: 'white' }}
+            _hover={noHistory ? undefined : { bg: 'cyan.700', color: 'white' }}
             onClick={props.backOnClick}
+            isDisabled={noHistory}
           >
             前へ
           </Button>
