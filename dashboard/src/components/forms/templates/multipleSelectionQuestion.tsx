@@ -42,6 +42,11 @@ export const MultipleSelectionQuestion = ({
       ])
     )
   );
+  // 1つも選択されていないかどうか
+  const [neitherSelected, setNeitherSelected] = useState(
+    Object.values(selectionsState).every((s) => !s)
+  );
+
   const [questionValidated, setQuestionValidated] = useRecoilState(
     questionValidatedAtom
   );
@@ -81,7 +86,11 @@ export const MultipleSelectionQuestion = ({
       bg={cond() ? 'cyan.600' : 'white'}
       borderColor={cond() ? 'cyan.900' : 'black'}
       color={cond() ? 'white' : 'black'}
-      _hover={{ bg: 'cyan.600', borderColor: 'cyan.900', color: 'white' }}
+      _hover={
+        cond()
+          ? { bg: 'cyan.600', borderColor: 'cyan.900', color: 'white' }
+          : undefined
+      }
       onClick={() => {
         // 選択肢の表示を更新
         const copiedSelectionsState = { ...selectionsState };
@@ -98,6 +107,7 @@ export const MultipleSelectionQuestion = ({
         // 状態を反映
         if (copiedSelectionsState[selection]) {
           enable();
+          setNeitherSelected(false);
         } else {
           disable();
         }
@@ -106,6 +116,48 @@ export const MultipleSelectionQuestion = ({
       {selection}
     </Button>
   );
+
+  const NeitherBtn = () => {
+    return (
+      <Button
+        mb={2}
+        key={-1}
+        variant="outline"
+        borderRadius="xl"
+        height="3.5em"
+        width="100%"
+        bg={neitherSelected ? 'cyan.600' : 'white'}
+        borderColor={neitherSelected ? 'cyan.900' : 'black'}
+        color={neitherSelected ? 'white' : 'black'}
+        _hover={{ bg: 'cyan.600', borderColor: 'cyan.900', color: 'white' }}
+        onClick={() => {
+          setNeitherSelected(true);
+
+          // 選択肢の表示を更新
+          const copiedSelectionsState = { ...selectionsState };
+          // すべて無効
+          Object.keys(copiedSelectionsState).forEach((selection) => {
+            copiedSelectionsState[selection] = false;
+          });
+          setSelectionsState(copiedSelectionsState);
+
+          // 別ページから戻ってきたときのために選択肢を記録
+          const newFrontendHousehold = { ...frontendHousehold };
+          Object.keys(copiedSelectionsState).forEach((selection) => {
+            newFrontendHousehold.世帯員[personName][selection] = false;
+          });
+          setFrontendHousehold(newFrontendHousehold);
+
+          // 状態を反映
+          selections.forEach((s) => {
+            s.disable();
+          });
+        }}
+      >
+        いずれでもない
+      </Button>
+    );
+  };
 
   return (
     <>
@@ -116,7 +168,7 @@ export const MultipleSelectionQuestion = ({
               fontSize={configData.style.subTitleFontSize}
               textAlign="center"
             >
-              {title + '（複数選択）'}
+              {title + '（複数選択可）'}
             </Box>
           </Center>
         </FormLabel>
@@ -131,6 +183,7 @@ export const MultipleSelectionQuestion = ({
               key: index,
             })
           )}
+          <NeitherBtn />
         </VStack>
       </FormControl>
     </>
