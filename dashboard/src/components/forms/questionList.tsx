@@ -245,7 +245,7 @@ export const QuestionList = ({
       return;
     }
     setQuestionValidated(true); // 過去の設問はすでにバリデーションチェックを満たしている
-    setShowsValidationError(false); // バリエーションエラーはない
+    setShowsValidationError(false); // バリデーションエラーはない
 
     const previousKey = keyHistory[keyHistory.length - 1];
     setKeyHistory(keyHistory.slice(0, keyHistory.length - 1));
