@@ -1,4 +1,4 @@
-import { atom } from 'recoil';
+import { atom, SetterOrUpdater } from 'recoil';
 import { QuestionKey } from './question';
 
 const currentDate = `${new Date().getFullYear()}-${(new Date().getMonth() + 1)
@@ -48,6 +48,27 @@ export const questionKeyHistoryAtom = atom<QuestionKey[]>({
   key: 'questionKeyHistoryAtom',
   default: [],
 });
+
+export const resetQuestionKeys = ({
+  setQuestionKey,
+  setNextQuestionKey,
+  setDefaultNextQuestionKey,
+  setQuestionKeyHistory,
+}: {
+  setQuestionKey: SetterOrUpdater<QuestionKey>;
+  setNextQuestionKey: SetterOrUpdater<QuestionKey | null>;
+  setDefaultNextQuestionKey: SetterOrUpdater<QuestionKey | null>;
+  setQuestionKeyHistory: SetterOrUpdater<QuestionKey[]>;
+}) => {
+  setQuestionKey({
+    person: 'あなた',
+    personNum: 0,
+    title: '住んでいる場所',
+  });
+  setNextQuestionKey(null);
+  setDefaultNextQuestionKey(null);
+  setQuestionKeyHistory([]);
+};
 
 export const householdAtom = atom<any>({
   key: 'householdAtom',
@@ -223,7 +244,7 @@ export const householdAtom = atom<any>({
 
 export type FrontendHousehold = {
   世帯員: { [key: string]: { [key: string]: any } };
-  世帯: { [key: string]: boolean | number };
+  世帯: { [key: string]: boolean | number | string };
   困りごと: { [key: string]: boolean };
   制度: { [key: string]: boolean };
 };

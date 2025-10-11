@@ -9,7 +9,15 @@ import { useCalculate } from '../../hooks/calculate';
 import { Benefit } from './benefit';
 import { Loan } from './loan';
 import { CalculationLabel } from '../forms/calculationLabel';
-import { frontendHouseholdAtom, householdAtom } from '../../state';
+import {
+  defaultNextQuestionKeyAtom,
+  frontendHouseholdAtom,
+  householdAtom,
+  nextQuestionKeyAtom,
+  questionKeyAtom,
+  questionKeyHistoryAtom,
+  resetQuestionKeys,
+} from '../../state';
 import { useRecoilState } from 'recoil';
 import shortLink, {
   inflate,
@@ -47,6 +55,27 @@ export const Result = () => {
         isDisasterCalculation: isDisasterCalculation,
         redirect: '/',
       },
+    });
+  };
+
+  const [questionKey, setQuestionKey] = useRecoilState(questionKeyAtom);
+  const [nextQuestionKey, setNextQuestionKey] =
+    useRecoilState(nextQuestionKeyAtom);
+  const [defaultNextQuestionKey, setDefaultNextQuestionKey] = useRecoilState(
+    defaultNextQuestionKeyAtom
+  );
+  const [questionKeyHistory, setQuestionKeyHistory] = useRecoilState(
+    questionKeyHistoryAtom
+  );
+
+  const detailedCalculationonClick = () => {
+    // 質問の1問目に戻る
+    // (戻さないと別の見積もりモードへ移った際に想定外の設問から始まってしまうため)
+    resetQuestionKeys({
+      setQuestionKey,
+      setNextQuestionKey,
+      setDefaultNextQuestionKey,
+      setQuestionKeyHistory,
     });
   };
 
@@ -335,6 +364,7 @@ export const Result = () => {
                     bg="blue.500"
                     color="white"
                     _hover={{ bg: 'blue.600' }}
+                    onClick={detailedCalculationonClick}
                   >
                     {configData.calculationForm.detailedCalculation}
                   </Button>

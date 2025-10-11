@@ -18,12 +18,16 @@ import { ErrorMessage } from '../validation/ErrorMessage';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   currentDateAtom,
+  frontendHouseholdAtom,
   householdAtom,
   questionValidatedAtom,
 } from '../../../state';
 
 export const AddressQuestion = () => {
   const navigationType = useNavigationType();
+  const [frontendHousehold, setFrontendHousehold] = useRecoilState(
+    frontendHouseholdAtom
+  );
   const [household, setHousehold] = useRecoilState(householdAtom);
   const [questionValidated, setQuestionValidated] = useRecoilState(
     questionValidatedAtom
@@ -35,9 +39,19 @@ export const AddressQuestion = () => {
   const pmObj = { ...pmJson } as pmType;
 
   const currentDate = useRecoilValue(currentDateAtom);
-  const [selectedPrefecture, setSelectedPrefecture] = useState('');
-  const [selectedMunicipality, setSelectedMunicipality] = useState('');
+  const [selectedPrefecture, setSelectedPrefecture] = useState(
+    (frontendHousehold.世帯.居住都道府県 ?? '') as string
+  );
+  const [selectedMunicipality, setSelectedMunicipality] = useState(
+    (frontendHousehold.世帯.居住市区町村 ?? '') as string
+  );
   const prefectureArray = Object.keys(pmObj);
+
+  useEffect(() => {
+    setQuestionValidated(
+      selectedPrefecture !== '' && selectedMunicipality !== ''
+    );
+  }, [selectedPrefecture, selectedMunicipality]);
 
   // prefectureの値が変更された時
   const onPrefectureChange = useCallback(
@@ -45,11 +59,12 @@ export const AddressQuestion = () => {
       const prefecture = String(event.currentTarget.value);
       setSelectedPrefecture(prefecture);
       setSelectedMunicipality('');
-      setQuestionValidated(prefecture !== '' && selectedMunicipality !== '');
       const newHousehold = { ...household };
       newHousehold.世帯一覧.世帯1.居住都道府県 = {
         [currentDate]: prefecture,
       };
+      const newFrontendHousehold = { ...frontendHousehold };
+      newFrontendHousehold.世帯.居住都道府県 = prefecture;
       if (prefecture === '東京都') {
         newHousehold.世帯一覧.世帯1.児童育成手当 = {
           [currentDate]: null,
@@ -83,7 +98,8 @@ export const AddressQuestion = () => {
           delete newHousehold.世帯一覧.世帯1.受験生チャレンジ支援貸付;
         }
       }
-      setHousehold({ ...newHousehold });
+      setHousehold(newHousehold);
+      setFrontendHousehold(newFrontendHousehold);
     },
     []
   );
@@ -93,25 +109,26 @@ export const AddressQuestion = () => {
     (event: React.ChangeEvent<HTMLSelectElement>) => {
       const municipality = String(event.currentTarget.value);
       setSelectedMunicipality(municipality);
-      setQuestionValidated(municipality !== '');
 
       const newHousehold = { ...household };
       newHousehold.世帯一覧.世帯1.居住市区町村 = {
         [currentDate]: municipality,
       };
-      setHousehold({ ...newHousehold });
+      const newFrontendHousehold = { ...frontendHousehold };
+      newFrontendHousehold.世帯.居住市区町村 = municipality;
+      setHousehold(newHousehold);
+      setFrontendHousehold(newFrontendHousehold);
     },
     []
   );
 
-  // stored states set displayed value when page transition
+  // すでに選択されていた場合、その選択肢を選んだ処理を再実施
   useEffect(() => {
-    const householdObj = household.世帯一覧.世帯1;
-    if (householdObj.居住都道府県) {
-      setSelectedPrefecture(householdObj.居住都道府県[currentDate]);
+    if (frontendHousehold.世帯.居住都道府県) {
+      setSelectedPrefecture(frontendHousehold.世帯.居住都道府県 as string);
     }
-    if (householdObj.居住市区町村) {
-      setSelectedMunicipality(householdObj.居住市区町村[currentDate]);
+    if (frontendHousehold.世帯.居住市区町村) {
+      setSelectedMunicipality(frontendHousehold.世帯.居住市区町村 as string);
     }
   }, [navigationType]);
 

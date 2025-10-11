@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import configData from '../../config/app_config.json';
 import personIcon1 from '../../assets/top/person_icon1.png';
 import personIcon2 from '../../assets/top/person_icon2.png';
@@ -55,10 +55,10 @@ export function TopPage() {
               textAlign="center"
             >
               {configData.topPage.title.map((line, i) => (
-                <>
-                  <span key={i}>{line}</span>
+                <Fragment key={i}>
+                  <span>{line}</span>
                   <NarrowBr />
-                </>
+                </Fragment>
               ))}
             </Text>
           </Center>

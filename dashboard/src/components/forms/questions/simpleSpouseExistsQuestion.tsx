@@ -1,5 +1,4 @@
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { useEffect } from 'react';
 import { YesNoQuestion } from '../templates/yesNoQuestion';
 import {
   currentDateAtom,
@@ -27,6 +26,9 @@ export const SimpleSpouseExistsQuestion = () => {
     setHousehold(newHousehold);
 
     const newFrontendHousehold = { ...frontendHousehold };
+    if (!newFrontendHousehold.世帯員['配偶者']) {
+      newFrontendHousehold.世帯員['配偶者'] = {};
+    }
     newFrontendHousehold.世帯['配偶者がいる'] = true;
     setFrontendHousehold(newFrontendHousehold);
 
@@ -47,8 +49,9 @@ export const SimpleSpouseExistsQuestion = () => {
         [currentDate]: false,
       };
     }
-    setHousehold(household);
+    setHousehold(newHousehold);
 
+    // frontendHouseholdは入力した選択肢を保持するため、配偶者がいないと訂正した場合も 世帯員['配偶者'] の削除は不要
     const newFrontendHousehold = { ...frontendHousehold };
     newFrontendHousehold.世帯['配偶者がいる'] = false;
     setFrontendHousehold(newFrontendHousehold);
@@ -60,31 +63,6 @@ export const SimpleSpouseExistsQuestion = () => {
       title: '子どもの人数',
     });
   };
-
-  const isAlreadySelected = (frontendHousehold: any): boolean | null => {
-    if (frontendHousehold.世帯['配偶者がいる'] != null) {
-      return frontendHousehold.世帯['配偶者がいる'];
-    }
-    return null;
-  };
-
-  useEffect(() => {
-    if (isAlreadySelected(frontendHousehold) != null) {
-      if (isAlreadySelected(frontendHousehold)) {
-        setNextQuestionKey({
-          person: '配偶者',
-          personNum: 0,
-          title: '年収',
-        });
-      } else {
-        setNextQuestionKey({
-          person: 'あなた',
-          personNum: 0,
-          title: '子どもの人数',
-        });
-      }
-    }
-  }, []);
 
   return (
     <YesNoQuestion
