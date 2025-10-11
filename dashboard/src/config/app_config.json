@@ -123,7 +123,7 @@
           "あなたが受けられそうな",
           "支援制度の給付額などを",
           "簡単な世帯情報から",
-          "見積もります"
+          "見積もります。"
         ]
       },
       {
@@ -140,8 +140,8 @@
         "feature": "窓口へ",
         "descriptions": [
           "申請のときはお住まいの",
-          "自治体の窓口へ！",
-          "他の制度があるかも？"
+          "自治体の窓口へ！他にも",
+          "申請できる制度があるかも？"
         ]
       }
     ]
@@ -164,7 +164,7 @@
     "screenshotButtonText": "このページを画像で保存",
     "environmentButtonText": "環境情報を取得",
     "environmentButtonCopiedToClipboard": "クリップボードにコピーしました",
-    "shareLinkButtonText": "このページを共有",
+    "shareLinkButtonText": "結果のリンクをコピー",
     "shareLinkButtonCopiedToClipboard": "クリップボードにコピーしました",
     "consultationDescription": "まずは窓口に相談してみませんか？ きっとあなたの相談に寄り添ってくれるはずです",
     "helpDeskDescription": {

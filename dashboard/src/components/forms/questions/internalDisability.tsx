@@ -24,7 +24,7 @@ export const InternalDisability = ({ personName }: { personName: string }) => {
 
   return (
     <YesNoQuestion
-      title="内部障害がありますか？"
+      title="内部障害（内臓などのからだの内部の障害）がありますか？"
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
     />

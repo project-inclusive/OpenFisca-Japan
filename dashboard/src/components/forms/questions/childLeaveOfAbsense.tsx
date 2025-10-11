@@ -22,7 +22,8 @@ export const ChildLeaveOfAbsense = () => {
 
   return (
     <YesNoQuestion
-      title="休業中ですか？"
+      // 人に対する「休業中」という表現がなじみが薄いので、UI上の文章は「休職中」にする
+      title="休職中ですか？"
       yesOnClick={yesOnClick}
       noOnClick={noOnClick}
     />
