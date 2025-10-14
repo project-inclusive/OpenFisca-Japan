@@ -24,6 +24,7 @@ import { ParentDisasterInjuryQuestion } from './questions/parentDisasterInjuryQu
 import { SimpleSpouseExistsQuestion } from './questions/simpleSpouseExistsQuestion';
 import { DisasterParentNumQuestion } from './questions/disasterParentNumQuestion';
 import { ParentIncome } from './questions/parentIncome';
+import { DisasterChildAgeQuestion } from './questions/disasterChildAgeQuestion';
 
 // NOTE: プログレスバーの計算のために設問に順序関係を定義する必要があるため、objectではなくarrayを使用
 // HACK: componentをarray内に定義する際にkeyが必要なため定義している
@@ -99,7 +100,7 @@ const questions = {
   子ども: [
     {
       title: '年齢',
-      component: <ChildAgeQuestion key={0} />,
+      component: <DisasterChildAgeQuestion key={0} />,
     },
     {
       title: '災害による負傷',
