@@ -85,8 +85,8 @@ export const Applicable = ({
       for (const [allowanceName, allowanceInfo] of Object.entries(
         configData.result.該当制度.制度一覧
       )) {
-        if (allowanceInfo.variableName in frontendHouseholdResult.support) {
-          if (frontendHouseholdResult.support[allowanceInfo.variableName]) {
+        if (allowanceInfo.variableName in frontendHouseholdResult.制度) {
+          if (frontendHouseholdResult.制度[allowanceInfo.variableName]) {
             applicableResult[allowanceName] = {
               name: allowanceName,
               caption: allowanceInfo.caption,

@@ -12,7 +12,8 @@ export const CalculationLabel = ({
       variant="outline"
       size="lg"
       colorScheme={colour}
-      sx={{ height: '32px' }}
+      sx={{ height: '48px' }}
+      whiteSpace="nowrap"
     >
       {text}
     </Tag>

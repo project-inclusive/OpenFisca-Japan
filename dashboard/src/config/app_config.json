@@ -5,12 +5,26 @@
       "dev": "https://openfisca-japan-dev-ijgkugdoka-uc.a.run.app"
     },
     "Github": "https://github.com/project-inclusive/OpenFisca-Japan",
-    "contact": "https://www.poverty-prevention.net/",
+    "contact": "https://poverty-prevention.or.jp/",
     "chatbot": "https://miibo.jp/chat/b86882cc-35e6-4796-a880-b2148056299418ce92567e3f9?name=%E3%83%A4%E3%83%89%E3%82%AB%E3%83%AA%E3%81%8F%E3%82%93",
     "questionnaire_form": "https://forms.gle/fxztn7JGTuZ3v1mS9",
     "disaster_navi_sodegawara": "https://civictechsodegaura.org/noto/"
   },
   "style": {
+    "titleLogoFontSize": {
+      "base": "2em",
+      "sm": "2.2em",
+      "md": "2.2em",
+      "lg": "2.5em",
+      "xl": "2.5em"
+    },
+    "featureFontSize": {
+      "base": "1.4em",
+      "sm": "1.4em",
+      "md": "1.4em",
+      "lg": "1.4em",
+      "xl": "1.4em"
+    },
     "titleFontSize": {
       "base": "1.5em",
       "sm": "2em",
@@ -27,6 +41,13 @@
     },
     "descriptionFontSize": {
       "base": "1em",
+      "sm": "1.3em",
+      "md": "1.3em",
+      "lg": "1.5em",
+      "xl": "1.5em"
+    },
+    "questionFormFontSize": {
+      "base": "1.1em",
       "sm": "1.3em",
       "md": "1.3em",
       "lg": "1.5em",
@@ -75,6 +96,12 @@
       "xl": "0em"
     }
   },
+  "validation": {
+    "household": {
+      "maxChildren": 5,
+      "maxParents": 10
+    }
+  },
   "description": {
     "title": "支援みつもりヤドカリくん",
     "feature": ["わかりやすい", "窓口へ", "安心", "制限"],
@@ -87,7 +114,40 @@
       "最新かつ正確な情報が本サイトに反映されていない場合があり、必ずしも見積もり結果の通り支援が受けられることを保証するものではありません。"
     ]
   },
+  "topPage": {
+    "title": ["受けられそうな支援を", "かんたん見積もり"],
+    "features": [
+      {
+        "feature": "わかりやすい",
+        "descriptions": [
+          "あなたが受けられそうな",
+          "支援制度の給付額などを",
+          "簡単な世帯情報から",
+          "見積もります。"
+        ]
+      },
+      {
+        "feature": "安心",
+        "descriptions": [
+          "入力された情報はサーバーに",
+          "保存されません。また、入力",
+          "された情報が本アプリの目的",
+          "以外で使用されたり、第三者に",
+          "提供されることもありません。"
+        ]
+      },
+      {
+        "feature": "窓口へ",
+        "descriptions": [
+          "申請のときはお住まいの",
+          "自治体の窓口へ！他にも",
+          "申請できる制度があるかも？"
+        ]
+      }
+    ]
+  },
   "calculationForm": {
+    "calculationSelectionDescription": "どのモードで見積もりますか？",
     "topDescription": "情報を入力してください",
     "youDescription": "あなたについて",
     "spouseDescription": "配偶者について",
@@ -104,7 +164,7 @@
     "screenshotButtonText": "このページを画像で保存",
     "environmentButtonText": "環境情報を取得",
     "environmentButtonCopiedToClipboard": "クリップボードにコピーしました",
-    "shareLinkButtonText": "このページを共有",
+    "shareLinkButtonText": "結果のリンクをコピー",
     "shareLinkButtonCopiedToClipboard": "クリップボードにコピーしました",
     "consultationDescription": "まずは窓口に相談してみませんか？ きっとあなたの相談に寄り添ってくれるはずです",
     "helpDeskDescription": {

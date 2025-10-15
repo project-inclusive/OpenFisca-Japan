@@ -1,0 +1,98 @@
+import { useRecoilState } from 'recoil';
+import { useEffect } from 'react';
+import {
+  defaultNextQuestionKeyAtom,
+  frontendHouseholdAtom,
+  householdAtom,
+  nextQuestionKeyAtom,
+} from '../../../state';
+import { PersonNumQuestion } from '../templates/personNumQuestion';
+import configData from '../../../config/app_config.json';
+
+// HACK: 質問遷移先が異なるので別Component化
+export const SimpleChildrenNumQuestion = () => {
+  const [nextQuestionKey, setNextQuestionKey] =
+    useRecoilState(nextQuestionKeyAtom);
+  const [defaultNextQuestionKey, setDefaultNextQuestionKey] = useRecoilState(
+    defaultNextQuestionKeyAtom
+  );
+  const [household, setHousehold] = useRecoilState(householdAtom);
+  const [frontendHousehold, setFrontendHousehold] = useRecoilState(
+    frontendHouseholdAtom
+  );
+
+  const updatePersonInfo = (personNum: number) => {
+    const childrenNames = [...Array(personNum)].map(
+      (val, i) => `子ども${i + 1}`
+    );
+
+    const newHousehold = { ...household };
+    if (household.世帯一覧.世帯1.子一覧) {
+      household.世帯一覧.世帯1.子一覧.map((childName: string) => {
+        delete newHousehold.世帯員[childName];
+      });
+    }
+    // 新しい子どもの情報を追加
+    newHousehold.世帯一覧.世帯1.子一覧 = childrenNames;
+    if (newHousehold.世帯一覧.世帯1.子一覧) {
+      newHousehold.世帯一覧.世帯1.子一覧.map((childName: string) => {
+        newHousehold.世帯員[childName] = {};
+      });
+    }
+    setHousehold({ ...newHousehold });
+
+    const newFrontendHousehold = { ...frontendHousehold };
+    Object.keys(frontendHousehold.世帯員)
+      .filter((name) => name.match('子ども'))
+      .map((childName) => {
+        delete newFrontendHousehold.世帯員[childName];
+      });
+    childrenNames.map((childName) => {
+      newFrontendHousehold.世帯員[childName] = {};
+    });
+    setFrontendHousehold(newFrontendHousehold);
+
+    // 次の質問を設定
+    if (personNum === 0) {
+      // 終了
+      setDefaultNextQuestionKey(null);
+      setNextQuestionKey(null);
+    } else {
+      // 1人目の子どもの質問へ
+      setNextQuestionKey({
+        person: '子ども',
+        personNum: 1,
+        title: '年齢',
+      });
+    }
+  };
+
+  const defaultNum = (household: any): number | null => {
+    const personNum = household.世帯一覧?.世帯1?.子一覧?.length;
+    if (personNum === undefined) return null;
+    return personNum;
+  };
+
+  useEffect(() => {
+    if (defaultNum(household) !== null) {
+      if (defaultNum(household) !== 0) {
+        setNextQuestionKey({
+          person: '子ども',
+          personNum: 1,
+          title: '年齢',
+        });
+      } else {
+        setNextQuestionKey(null);
+      }
+    }
+  }, []);
+
+  return (
+    <PersonNumQuestion
+      updatePersonInfo={updatePersonInfo}
+      defaultNum={defaultNum}
+      maxPerson={configData.validation.household.maxChildren}
+      title="子どもの人数"
+    />
+  );
+};

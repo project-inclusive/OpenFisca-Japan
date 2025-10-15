@@ -1,4 +1,5 @@
-import { atom } from 'recoil';
+import { atom, SetterOrUpdater } from 'recoil';
+import { QuestionKey } from './question';
 
 const currentDate = `${new Date().getFullYear()}-${(new Date().getMonth() + 1)
   .toString()
@@ -13,6 +14,61 @@ export const agreedToTermsAtom = atom<boolean>({
   key: 'agreedToTermsAtom',
   default: false,
 });
+
+export const questionValidatedAtom = atom<boolean>({
+  key: 'questionValidatedAtom',
+  default: false,
+});
+
+export const showsValidationErrorAtom = atom<boolean>({
+  key: 'showsValidationErrorAtom',
+  default: false,
+});
+
+export const questionKeyAtom = atom<QuestionKey>({
+  key: 'questionKeyAtom',
+  default: {
+    person: 'あなた',
+    personNum: 0,
+    title: '住んでいる場所',
+  },
+});
+
+export const nextQuestionKeyAtom = atom<QuestionKey | null>({
+  key: 'nextQuestionKeyAtom',
+  default: null,
+});
+
+export const defaultNextQuestionKeyAtom = atom<QuestionKey | null>({
+  key: 'defaultNextQuestionKeyAtom',
+  default: null,
+});
+
+export const questionKeyHistoryAtom = atom<QuestionKey[]>({
+  key: 'questionKeyHistoryAtom',
+  default: [],
+});
+
+export const resetQuestionKeys = ({
+  setQuestionKey,
+  setNextQuestionKey,
+  setDefaultNextQuestionKey,
+  setQuestionKeyHistory,
+}: {
+  setQuestionKey: SetterOrUpdater<QuestionKey>;
+  setNextQuestionKey: SetterOrUpdater<QuestionKey | null>;
+  setDefaultNextQuestionKey: SetterOrUpdater<QuestionKey | null>;
+  setQuestionKeyHistory: SetterOrUpdater<QuestionKey[]>;
+}) => {
+  setQuestionKey({
+    person: 'あなた',
+    personNum: 0,
+    title: '住んでいる場所',
+  });
+  setNextQuestionKey(null);
+  setDefaultNextQuestionKey(null);
+  setQuestionKeyHistory([]);
+};
 
 export const householdAtom = atom<any>({
   key: 'householdAtom',
@@ -187,8 +243,10 @@ export const householdAtom = atom<any>({
 });
 
 export type FrontendHousehold = {
-  difficulty: { [key: string]: boolean };
-  support: { [key: string]: boolean };
+  世帯員: { [key: string]: { [key: string]: any } };
+  世帯: { [key: string]: boolean | number | string };
+  困りごと: { [key: string]: boolean };
+  制度: { [key: string]: boolean };
 };
 
 // フロントエンドのみで計算が完結する世帯情報
@@ -196,7 +254,11 @@ export type FrontendHousehold = {
 export const frontendHouseholdAtom = atom<FrontendHousehold>({
   key: 'frontendHouseholdAtom',
   default: {
-    difficulty: {
+    世帯員: {
+      あなた: {},
+    },
+    世帯: {},
+    困りごと: {
       仕事について: false,
       妊娠について: false,
       出産や子育てについて: false,
@@ -206,7 +268,7 @@ export const frontendHouseholdAtom = atom<FrontendHousehold>({
       病気や障害について: false,
       離婚について: false,
     },
-    support: {
+    制度: {
       '雇用保険（失業手当）': false,
       '求職者支援制度（職業訓練・ハロートレーニング）': false,
       '住宅支援（住居確保給付金）': false,
@@ -251,5 +313,11 @@ export const frontendHouseholdAtom = atom<FrontendHousehold>({
       埼玉県私立学校の父母負担軽減: false,
     },
   },
+  dangerouslyAllowMutability: true,
+});
+
+export const householdHistoryAtom = atom<any[]>({
+  key: 'householdHistoryAtom',
+  default: [],
   dangerouslyAllowMutability: true,
 });

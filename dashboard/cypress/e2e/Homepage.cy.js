@@ -5,7 +5,7 @@ describe('Loads homepage', () => {
   });
 
   it('Renders main title', () => {
-    cy.contains('支援みつもりヤドカリくん');
+    cy.contains('受けられそうな支援をかんたん見積もり');
   });
 
   it('Renders かんたん見積もり button', () => {

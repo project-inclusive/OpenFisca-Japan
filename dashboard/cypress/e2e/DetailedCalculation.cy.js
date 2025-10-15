@@ -5,17 +5,20 @@ describe('Renders main page and ', () => {
   });
 
   it('navigates to detailed calculate page', () => {
-    cy.contains('支援みつもりヤドカリくん');
+    cy.contains('受けられそうな支援をかんたん見積もり');
     cy.contains('くわしく見積もり');
 
     cy.get('[data-testid="calculate-detail-button"]')
       .contains('くわしく見積もり')
       .click();
 
-    cy.contains('利用規約に同意します。');
-    cy.get('[data-testid="terms-checkbox"]')
-      .contains('利用規約に同意します。')
+    cy.contains('了解しました');
+    cy.get('[data-testid="restrictions-checkbox"]')
+      .contains('了解しました')
       .click();
+
+    cy.contains('了解しました');
+    cy.get('[data-testid="terms-checkbox"]').contains('了解しました').click();
 
     cy.contains('利用開始する');
     cy.get('[data-testid="start-button"]').contains('利用開始する').click();

@@ -1,9 +1,6 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { AbsoluteCenter } from '@chakra-ui/react';
-import CaluculationForm from './components/forms/caluculationForm';
-import Description from './components/Description';
 import QuestionExamples from './components/QuestionExamples';
-import Terms from './components/Terms';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import { Result } from './components/result/result';
 import { GenericError } from './components/errors/GenericError';
@@ -11,6 +8,10 @@ import { NotFoundError } from './components/errors/NotFoundError';
 import { FormResponseError } from './components/errors/FormResponseError';
 import { useRecoilState } from 'recoil';
 import { currentDateAtom } from './state';
+import { DetailedQuestionList } from './components/forms/detailedQuestionList';
+import { SimpleQuestionList } from './components/forms/simpleQuestionList';
+import { DisasterQuestionList } from './components/forms/disasterQuestionList';
+import { TopPage } from './components/top/topPage';
 
 function App() {
   const currentDate = useRecoilState(currentDateAtom);
@@ -18,35 +19,26 @@ function App() {
   console.log(`deploy ${import.meta.env.VITE_BRANCH}`);
 
   return (
-    <AbsoluteCenter
-      width={{
-        base: '100%', // 0-48em
-        sm: '100%', // 480px
-        md: '80%', // 768px
-        lg: '60%', // 992px
-        xl: '50%', // 1280px
-      }}
-      axis="horizontal"
-    >
+    <>
       <RouterProvider
         fallbackElement={<GenericError />}
         router={createBrowserRouter(
           [
             {
               path: '/',
-              element: <Description />,
+              element: <TopPage />,
             },
             {
               path: '/calculate',
-              element: <CaluculationForm />,
+              element: <DetailedQuestionList />,
             },
             {
               path: '/calculate-simple',
-              element: <CaluculationForm />,
+              element: <SimpleQuestionList />,
             },
             {
               path: '/calculate-disaster',
-              element: <CaluculationForm />,
+              element: <DisasterQuestionList />,
             },
             {
               path: '/result',
@@ -74,7 +66,7 @@ function App() {
           }
         )}
       />
-    </AbsoluteCenter>
+    </>
   );
 }
 

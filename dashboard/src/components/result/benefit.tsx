@@ -34,8 +34,9 @@ const showsHelpDesk = (
     // HIVに感染している世帯員がいる場合のみ窓口表示
     const members = Object.values(result.世帯員);
     return (
-      members.filter((member: any) => member.HIV感染者である[currentDate])
-        .length > 0
+      members.filter((member: any) =>
+        member.HIV感染者である ? member.HIV感染者である[currentDate] : false
+      ).length > 0
     );
   }
 
