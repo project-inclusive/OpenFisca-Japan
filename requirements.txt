@@ -48,7 +48,7 @@ nptyping==1.4.4
 numexpr==2.8.4
 numpy==1.24.4
 OpenFisca-Core==41.3.0
-OpenFisca-Japan @ file:///app/dist/OpenFisca_Japan-1.4.0-py3-none-any.whl
+OpenFisca-Japan @ file:///app/dist/OpenFisca_Japan-2.0.0-py3-none-any.whl
 packaging==23.1
 pendulum==2.1.2
 pkginfo==1.9.6
