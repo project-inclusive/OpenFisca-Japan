@@ -275,10 +275,51 @@ export const QuestionList = ({
     : questionKey.person;
   const [progress, maxProgress] = questionProgress(questions, questionKey);
 
+  type Checkpoint = { logicalEnd: number; visualEnd: number };
+
+  /**
+   * 進捗を視覚的調整するための関数
+   * @param currentProgress 現在の進捗
+   * @param currentMax 最大進捗
+   * @param cps チェックポイント（どこまで進んだら、どの割合で表示するか）
+   * @returns 視覚的調整後の進捗
+   */
+  const mapProgress = (
+    currentProgress: number,
+    currentMax: number,
+    cps: Checkpoint[]
+  ): number => {
+    if (currentMax <= 0) return 0;
+    if (currentProgress <= 0) return 0;
+    if (currentProgress >= currentMax) return currentMax;
+
+    const idx = cps.findIndex((cp) => currentProgress <= cp.logicalEnd);
+    if (idx === -1) return currentMax;
+
+    const prevLogical = idx === 0 ? 0 : cps[idx - 1].logicalEnd;
+    const prevVisual = idx === 0 ? 0 : cps[idx - 1].visualEnd;
+    const cp = cps[idx];
+
+    const sectionWidth = cp.logicalEnd - prevLogical || 1;
+    const t = (currentProgress - prevLogical) / sectionWidth; // 0〜1 に正規化
+    const visualRatio = prevVisual + t * (cp.visualEnd - prevVisual);
+    return visualRatio * currentMax;
+  };
+
+  // - 「あなた」の設問をすべて終えた時点で 60%
+  // - 「配偶者」の設問をすべて終えた時点で 80%
+  const selfEnd = questions["あなた"].length;
+  const spouseEnd = questions['あなた'].length + questions['配偶者'].length;
+  const displayProgress = mapProgress(progress, maxProgress, [
+    { logicalEnd: selfEnd, visualEnd: 0.6 },
+    { logicalEnd: spouseEnd, visualEnd: 0.8 },
+    { logicalEnd: maxProgress, visualEnd: 1 },
+  ]);
+
   return (
     <Question
       title={`${personStr}について`}
-      progress={progress}
+      progress={displayProgress}
       maxProgress={maxProgress}
       backOnClick={back}
       nextOnClick={next}
