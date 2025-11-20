@@ -308,7 +308,7 @@ export const QuestionList = ({
 
   // - 「あなた」の設問をすべて終えた時点で 60%
   // - 「配偶者」の設問をすべて終えた時点で 80%
-  const selfEnd = questions["あなた"].length;
+  const selfEnd = questions['あなた'].length;
   const spouseEnd = questions['あなた'].length + questions['配偶者'].length;
   const displayProgress = mapProgress(progress, maxProgress, [
     { logicalEnd: selfEnd, visualEnd: 0.6 },
