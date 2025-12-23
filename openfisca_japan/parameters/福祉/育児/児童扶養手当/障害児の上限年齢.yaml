@@ -5,3 +5,7 @@ metadata:
 values:
   2010-05-01:
     value: 20
+  2024-11-01:
+    value: 20
+    metadata:
+      reference: https://www.fukushi.metro.tokyo.lg.jp/shisetsu/jigyosyo/shinsho/teate/toku_ji
