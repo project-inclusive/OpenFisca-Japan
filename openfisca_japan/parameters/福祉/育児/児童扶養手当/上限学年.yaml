@@ -5,3 +5,7 @@ metadata:
 values:
   2010-05-01:
     value: 12
+  2024-11-01:
+    value: 12
+    metadata:
+      reference: https://www.fukushi.metro.tokyo.lg.jp/kodomo/kosodate/teate/zidoufuyouteate
