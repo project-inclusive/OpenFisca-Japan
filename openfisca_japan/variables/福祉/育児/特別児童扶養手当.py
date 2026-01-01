@@ -18,7 +18,7 @@ class 特別児童扶養手当_最大(Variable):
     entity = 世帯
     definition_period = DAY
     label = "保護者への特別児童扶養手当の最大額"
-    reference = "https://web.archive.org/web/20220308004641/https://www.city.shibuya.tokyo.jp/kodomo/ninshin/teate/jido_i.html"
+    reference = "https://www.mhlw.go.jp/bunya/shougaihoken/jidou/huyou.html"
     documentation = """
     特別児童扶養手当制度
     """
