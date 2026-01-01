@@ -16,7 +16,7 @@ class 障害児童育成手当(Variable):
     entity = 世帯
     definition_period = DAY
     label = "保護者への障害児童育成手当"
-    reference = "https://www.city.shibuya.tokyo.jp/kodomo/ninshin/teate/jido_i.html"
+    reference = "https://web.archive.org/web/20220308004641/https://www.city.shibuya.tokyo.jp/kodomo/ninshin/teate/jido_i.html"
     documentation = """
     渋谷区の児童育成（障害）手当
 
