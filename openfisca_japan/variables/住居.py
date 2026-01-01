@@ -10,9 +10,11 @@ from functools import cache
 import json
 
 import numpy as np
+
 # Import from openfisca-core the Python objects used to code the legislation in OpenFisca
 from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
+
 # Import the Entities specifically defined for this tax and benefit system
 from openfisca_japan import COUNTRY_DIR
 from openfisca_japan.entities import 世帯, 人物
@@ -72,7 +74,7 @@ class 居住級地区分1(Variable):
     entity = 世帯
     label = "居住級地区分1"
     definition_period = DAY
-    reference = "https://best-selection.co.jp/media/wp-content/uploads/2021/03/seikatsuhogo-kyuchi2022.pdf"
+    reference = "https://web.archive.org/web/20240421022937/https://best-selection.co.jp/media/wp-content/uploads/2021/03/seikatsuhogo-kyuchi2022.pdf"
 
     def formula(対象世帯, 対象期間, _parameters):
         居住都道府県 = 対象世帯("居住都道府県", 対象期間)
@@ -80,17 +82,19 @@ class 居住級地区分1(Variable):
 
         級地区分キー一覧 = 市区町村級地区分_キー一覧()
         級地区分インデックス = np.select(
-            [(居住都道府県 == キー[0]) * (居住市区町村 == キー[1]) for キー in 級地区分キー一覧],
+            [
+                (居住都道府県 == キー[0]) * (居住市区町村 == キー[1])
+                for キー in 級地区分キー一覧
+            ],
             list(range(len(級地区分キー一覧))),
-            -1).astype(int)
+            -1,
+        ).astype(int)
 
         # NOTE: 市区町村級地区分()[級地区分インデックス, 0] が級地区分1を表す
         区分 = 市区町村級地区分_値一覧()[級地区分インデックス, 0]
 
         # 当てはまらない場合は3
-        return np.select([級地区分インデックス != -1],
-                         [区分],
-                         3)
+        return np.select([級地区分インデックス != -1], [区分], 3)
 
 
 class 居住級地区分1_世帯員(Variable):
@@ -99,7 +103,7 @@ class 居住級地区分1_世帯員(Variable):
     entity = 人物
     label = "居住級地区分1_世帯員"
     definition_period = DAY
-    reference = "https://best-selection.co.jp/media/wp-content/uploads/2021/03/seikatsuhogo-kyuchi2022.pdf"
+    reference = "https://web.archive.org/web/20240421022937/https://best-selection.co.jp/media/wp-content/uploads/2021/03/seikatsuhogo-kyuchi2022.pdf"
 
     def formula(対象人物, 対象期間, _parameters):
         return 対象人物.世帯("居住級地区分1", 対象期間)
@@ -111,7 +115,7 @@ class 居住級地区分2(Variable):
     entity = 世帯
     label = "居住級地区分2"
     definition_period = DAY
-    reference = "https://best-selection.co.jp/media/wp-content/uploads/2021/03/seikatsuhogo-kyuchi2022.pdf"
+    reference = "https://web.archive.org/web/20240421022937/https://best-selection.co.jp/media/wp-content/uploads/2021/03/seikatsuhogo-kyuchi2022.pdf"
 
     def formula(対象世帯, 対象期間, parameters):
         居住都道府県 = 対象世帯("居住都道府県", 対象期間)
@@ -119,18 +123,19 @@ class 居住級地区分2(Variable):
 
         級地区分キー一覧 = 市区町村級地区分_キー一覧()
         級地区分インデックス = np.select(
-            [(居住都道府県 == キー[0]) * (居住市区町村 == キー[1]) for キー in 級地区分キー一覧],
+            [
+                (居住都道府県 == キー[0]) * (居住市区町村 == キー[1])
+                for キー in 級地区分キー一覧
+            ],
             list(range(len(級地区分キー一覧))),
-            -1).astype(int)
+            -1,
+        ).astype(int)
 
         # NOTE: 市区町村級地区分()[級地区分インデックス, 1] が級地区分2を表す
         区分 = 市区町村級地区分_値一覧()[級地区分インデックス, 1]
 
         # 当てはまらない場合は2
-        return np.select(
-            [級地区分インデックス != -1],
-            [区分],
-            2)
+        return np.select([級地区分インデックス != -1], [区分], 2)
 
 
 class 居住級地区分2_世帯員(Variable):
@@ -139,7 +144,7 @@ class 居住級地区分2_世帯員(Variable):
     entity = 人物
     label = "居住級地区分2_世帯員"
     definition_period = DAY
-    reference = "https://best-selection.co.jp/media/wp-content/uploads/2021/03/seikatsuhogo-kyuchi2022.pdf"
+    reference = "https://web.archive.org/web/20240421022937/https://best-selection.co.jp/media/wp-content/uploads/2021/03/seikatsuhogo-kyuchi2022.pdf"
 
     def formula(対象人物, 対象期間, _parameters):
         return 対象人物.世帯("居住級地区分2", 対象期間)

@@ -1,12 +1,12 @@
 description: 児童扶養手当の金額（3人目以降1人ごとの一部支給最大額）
 metadata:
-  reference: https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/hitorioya_teate.html
+  reference: https://web.archive.org/web/20220302155714/https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/hitorioya_teate.html
   unit: currency-JPY
 values:
   2010-05-01:
     value: 6240
     metadata:
-      reference: https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/hitorioya_teate.html
+      reference: https://web.archive.org/web/20220302155714/https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/hitorioya_teate.html
   2024-11-01:
     value: 11020
     metadata:

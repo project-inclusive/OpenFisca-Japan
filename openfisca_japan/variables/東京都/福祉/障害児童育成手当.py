@@ -7,7 +7,9 @@ from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
 from openfisca_japan.entities import 世帯
 from openfisca_japan.variables.障害.愛の手帳 import 愛の手帳等級パターン
-from openfisca_japan.variables.障害.脳性まひ_進行性筋萎縮症 import 脳性まひ_進行性筋萎縮症パターン
+from openfisca_japan.variables.障害.脳性まひ_進行性筋萎縮症 import (
+    脳性まひ_進行性筋萎縮症パターン,
+)
 from openfisca_japan.variables.障害.身体障害者手帳 import 身体障害者手帳等級パターン
 
 
@@ -16,7 +18,7 @@ class 障害児童育成手当(Variable):
     entity = 世帯
     definition_period = DAY
     label = "保護者への障害児童育成手当"
-    reference = "https://www.city.shibuya.tokyo.jp/kodomo/ninshin/teate/jido_i.html"
+    reference = "https://web.archive.org/web/20230501084238/https://www.city.shibuya.tokyo.jp/kodomo/kodomo-teate-josei/kodomo-teate/jido_i.html"
     documentation = """
     渋谷区の児童育成（障害）手当
 
@@ -40,26 +42,32 @@ class 障害児童育成手当(Variable):
         所得制限限度額 = np.select(
             [扶養人数 == i for i in range(6)],
             [障害児童育成手当.所得制限限度額[i] for i in range(6)],
-            -1).astype(int)
+            -1,
+        ).astype(int)
 
         所得条件 = 世帯高所得 < 所得制限限度額
 
         身体障害者手帳等級一覧 = 対象世帯.members("身体障害者手帳等級", 対象期間)
         愛の手帳等級一覧 = 対象世帯.members("愛の手帳等級", 対象期間)
-        脳性まひ_進行性筋萎縮症一覧 = 対象世帯.members("脳性まひ_進行性筋萎縮症", 対象期間)
+        脳性まひ_進行性筋萎縮症一覧 = 対象世帯.members(
+            "脳性まひ_進行性筋萎縮症", 対象期間
+        )
         年齢 = 対象世帯.members("年齢", 対象期間)
         児童である = 対象世帯.has_role(世帯.子)
         上限年齢未満の児童 = 児童である * (年齢 < 障害児童育成手当.上限年齢)
 
-        対象障害者手帳等級 = \
-            (身体障害者手帳等級一覧 == 身体障害者手帳等級パターン.一級) + \
-            (身体障害者手帳等級一覧 == 身体障害者手帳等級パターン.二級) + \
-            (愛の手帳等級一覧 == 愛の手帳等級パターン.一度) + \
-            (愛の手帳等級一覧 == 愛の手帳等級パターン.二度) + \
-            (愛の手帳等級一覧 == 愛の手帳等級パターン.三度) + \
-            (脳性まひ_進行性筋萎縮症一覧 == 脳性まひ_進行性筋萎縮症パターン.有)
+        対象障害者手帳等級 = (
+            (身体障害者手帳等級一覧 == 身体障害者手帳等級パターン.一級)
+            + (身体障害者手帳等級一覧 == 身体障害者手帳等級パターン.二級)
+            + (愛の手帳等級一覧 == 愛の手帳等級パターン.一度)
+            + (愛の手帳等級一覧 == 愛の手帳等級パターン.二度)
+            + (愛の手帳等級一覧 == 愛の手帳等級パターン.三度)
+            + (脳性まひ_進行性筋萎縮症一覧 == 脳性まひ_進行性筋萎縮症パターン.有)
+        )
 
-        上限年齢未満の身体障害を持つ児童人数 = 対象世帯.sum(上限年齢未満の児童 & 対象障害者手帳等級)
+        上限年齢未満の身体障害を持つ児童人数 = 対象世帯.sum(
+            上限年齢未満の児童 & 対象障害者手帳等級
+        )
         手当金額 = 障害児童育成手当.金額 * 上限年齢未満の身体障害を持つ児童人数
 
         return 居住地条件 * 所得条件 * 手当金額

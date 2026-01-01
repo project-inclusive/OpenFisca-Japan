@@ -13,7 +13,7 @@ class 児童育成手当(Variable):
     entity = 世帯
     definition_period = DAY
     label = "保護者への児童手当"
-    reference = "https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/hitorioya_teate.html"
+    reference = "https://web.archive.org/web/20220302155714/https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/hitorioya_teate.html"
     documentation = """
     渋谷区の児童育成手当制度
 
@@ -37,7 +37,8 @@ class 児童育成手当(Variable):
         所得制限限度額 = np.select(
             [扶養人数 == i for i in range(6)],
             [児童育成手当.所得制限限度額[i] for i in range(6)],
-            -1).astype(int)
+            -1,
+        ).astype(int)
 
         所得条件 = 世帯高所得 < 所得制限限度額
 
