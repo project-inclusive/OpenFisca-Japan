@@ -579,7 +579,7 @@ class 控除後世帯高所得(Variable):
     entity = 世帯
     definition_period = DAY
     label = "各種控除が適用された後の世帯高所得額"
-    reference = "https://web.archive.org/web/20220930063105/https://www.city.himeji.lg.jp/waku2child/0000013409.html"
+    reference = "https://web.archive.org/web/20220930063105/https://web.archive.org/web/20220930063105/https://www.city.himeji.lg.jp/waku2child/0000013409.html"
 
     def formula(対象世帯, 対象期間, _parameters):
         所得 = 対象世帯.members("所得", 対象期間)
@@ -596,7 +596,7 @@ class 控除後所得(Variable):
     entity = 人物
     definition_period = DAY
     label = "各種控除が適用された後の所得額"
-    reference = "https://web.archive.org/web/20220930063105/https://www.city.himeji.lg.jp/waku2child/0000013409.html"
+    reference = "https://web.archive.org/web/20220930063105/https://web.archive.org/web/20220930063105/https://www.city.himeji.lg.jp/waku2child/0000013409.html"
 
     def formula(対象人物, 対象期間, parameters):
         所得 = 対象人物("所得", 対象期間)
@@ -628,7 +628,7 @@ class 児童手当の控除後世帯高所得(Variable):
     entity = 世帯
     definition_period = DAY
     label = "各種控除が適用された後の児童手当における世帯高所得額"
-    reference = "https://web.archive.org/web/20220930063105/https://www.city.himeji.lg.jp/waku2child/0000013409.html"
+    reference = "https://web.archive.org/web/20220930063105/https://web.archive.org/web/20220930063105/https://www.city.himeji.lg.jp/waku2child/0000013409.html"
     documentation = """
     所得税等の控除額とは異なる。
     https://www.nta.go.jp/publication/pamph/koho/kurashi/html/01_1.htm
@@ -649,7 +649,7 @@ class 児童手当の控除後所得(Variable):
     entity = 人物
     definition_period = DAY
     label = "各種控除が適用された後の児童手当における所得額"
-    reference = "https://web.archive.org/web/20220930063105/https://www.city.himeji.lg.jp/waku2child/0000013409.html"
+    reference = "https://web.archive.org/web/20220930063105/https://web.archive.org/web/20220930063105/https://www.city.himeji.lg.jp/waku2child/0000013409.html"
     documentation = """
     所得税等の控除額とは異なる。
     https://www.nta.go.jp/publication/pamph/koho/kurashi/html/01_1.htm
