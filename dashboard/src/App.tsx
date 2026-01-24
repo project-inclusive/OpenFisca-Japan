@@ -12,11 +12,22 @@ import { DetailedQuestionList } from './components/forms/detailedQuestionList';
 import { SimpleQuestionList } from './components/forms/simpleQuestionList';
 import { DisasterQuestionList } from './components/forms/disasterQuestionList';
 import { TopPage } from './components/top/topPage';
+import { Question } from './components/questions/question';
+import { questionStateMachine } from './state/questionState';
+import { useMachine } from '@xstate/react';
+import { useEffect } from 'react';
 
 function App() {
   const currentDate = useRecoilState(currentDateAtom);
 
-  console.log(`deploy ${import.meta.env.VITE_BRANCH}`);
+  useEffect(() => {
+    // デバッグとして初回レンダリング時にのみ表示
+    console.log(`deploy ${import.meta.env.VITE_BRANCH}`);
+  }, []);
+
+  // HACK: ページ遷移や戻るボタンによって質問の回答が消えないよう、xstateをここで初期化
+  // TODO: ホームボタンを押したらリセットする
+  const [questionState, send] = useMachine(questionStateMachine);
 
   return (
     <>
@@ -55,6 +66,11 @@ function App() {
             {
               path: '/response-error',
               element: <FormResponseError />,
+            },
+            {
+              // TODO: 動作確認用なので移行が終わったら削除
+              path: '/question-new',
+              element: <Question state={questionState} send={send} />,
             },
             {
               path: '/*',
