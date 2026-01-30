@@ -301,7 +301,11 @@ export const ChildrenAgeQuestion = ({ personName }: { personName: string }) => {
         break;
       }
     }
-  }, [personName, navigationType, household.世帯員[personName].誕生年月日?.ETERNITY]);
+  }, [
+    personName,
+    navigationType,
+    household.世帯員[personName].誕生年月日?.ETERNITY,
+  ]);
 
   // 学校教育機関と学年が変更された時に実行される処理
   useEffect(() => {
