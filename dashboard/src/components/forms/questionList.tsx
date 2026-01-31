@@ -318,6 +318,10 @@ export const QuestionList = ({
 
   return (
     <Question
+      key={`${questionKey.person}-${questionKey.personNum}-${questionIndex(
+        questions,
+        questionKey
+      )}`}
       title={`${personStr}について`}
       progress={displayProgress}
       maxProgress={maxProgress}
