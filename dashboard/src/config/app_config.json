@@ -167,6 +167,14 @@
     "shareLinkButtonText": "結果のリンクをコピー",
     "shareLinkButtonCopiedToClipboard": "クリップボードにコピーしました",
     "consultationDescription": "まずは窓口に相談してみませんか？ きっとあなたの相談に寄り添ってくれるはずです",
+    "externalLinks": {
+      "カタリバ": {
+        "description": "窓口に相談する前に話を整理したい方へ",
+        "buttonText": "NPOカタリバの相談チャットに相談する",
+        "url": "https://www.katariba.or.jp/support/",
+        "color": "#00AB8D"
+      }
+    },
     "helpDeskDescription": {
       "社会福祉協議会": {
         "description1": "まずは近くの社会福祉協議会に相談してみませんか？",
