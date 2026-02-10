@@ -60,6 +60,13 @@
       "lg": "1em",
       "xl": "1em"
     },
+    "externalLinkFontSize": {
+      "base": "1.05em",
+      "sm": "1.3em",
+      "md": "1.5em",
+      "lg": "1.7em",
+      "xl": "1.7em"
+    },
     "selectPrefectureSize": {
       "base": "10em",
       "sm": "10em",
