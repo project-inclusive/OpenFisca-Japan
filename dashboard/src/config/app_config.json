@@ -60,6 +60,13 @@
       "lg": "1em",
       "xl": "1em"
     },
+    "externalLinkFontSize": {
+      "base": "1.05em",
+      "sm": "1.3em",
+      "md": "1.5em",
+      "lg": "1.7em",
+      "xl": "1.7em"
+    },
     "selectPrefectureSize": {
       "base": "10em",
       "sm": "10em",
@@ -170,7 +177,7 @@
     "externalLinks": {
       "カタリバ": {
         "description": "窓口に相談する前に話を整理したい方へ",
-        "buttonText": "NPOカタリバの相談チャットに相談する",
+        "buttonText": "NPOカタリバの相談チャットを利用",
         "url": "https://www.katariba.or.jp/support/",
         "color": "#00AB8D"
       }

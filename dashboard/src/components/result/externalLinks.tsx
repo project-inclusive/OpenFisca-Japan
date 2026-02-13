@@ -20,7 +20,7 @@ export const ExternalLinks = ({
             <Button
               as={RouterLink}
               to={configData.result.externalLinks.カタリバ.url}
-              fontSize={configData.style.subTitleFontSize}
+              fontSize={configData.style.externalLinkFontSize}
               borderRadius="xl"
               height="2em"
               width="100%"
