@@ -1,7 +1,11 @@
 description: 児童扶養手当の障害児の上限年齢
 metadata:
-  reference: https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/hitorioya_teate.html
+  reference: https://web.archive.org/web/20220302155714/https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/hitorioya_teate.html
   unit: year
 values:
   2010-05-01:
     value: 20
+  2024-11-01:
+    value: 20
+    metadata:
+      reference: https://www.fukushi.metro.tokyo.lg.jp/shisetsu/jigyosyo/shinsho/teate/toku_ji

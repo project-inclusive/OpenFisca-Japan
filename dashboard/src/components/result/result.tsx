@@ -32,6 +32,7 @@ import { Applicable } from './applicable';
 import { calculateFrontendHouseHold } from '../calculate/calculate';
 import { NarrowWidth } from '../layout/narrowWidth';
 import { HomeButton } from '../homeButton';
+import { ExternalLinks } from './externalLinks';
 
 const createFileName = (extension: string = '', ...names: string[]) => {
   if (!extension) {
@@ -85,7 +86,6 @@ export const Result = () => {
     frontendHouseholdAtom
   );
   let householdByURL: any;
-  let frontendHouseholdByURL: any;
 
   const [result, calculate] = useCalculate();
 
@@ -327,6 +327,12 @@ export const Result = () => {
                 </Text>
               </Center>
             )}
+
+            <ExternalLinks
+              conditions={{
+                カタリバ: household.世帯一覧.世帯1.子一覧?.length > 0,
+              }}
+            />
 
             <Center pr={4} pl={4} pb={2}>
               <Text color="blue.900">

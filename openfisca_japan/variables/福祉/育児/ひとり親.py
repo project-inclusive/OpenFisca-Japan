@@ -20,7 +20,7 @@ class ひとり親(Variable):
     entity = 世帯
     definition_period = DAY
     label = "ひとり親に該当するか否か"
-    reference = "https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/hitorioya_teate.html"
+    reference = "https://web.archive.org/web/20220302155714/https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/hitorioya_teate.html"
     documentation = """
     渋谷区の児童扶養手当制度
 

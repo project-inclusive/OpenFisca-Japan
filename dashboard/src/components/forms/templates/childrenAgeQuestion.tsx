@@ -245,6 +245,13 @@ export const ChildrenAgeQuestion = ({ personName }: { personName: string }) => {
   useEffect(() => {
     // 年齢フォームの更新
     const birthdayObj = household.世帯員[personName].誕生年月日;
+    if (!birthdayObj?.ETERNITY) {
+      setAge('');
+      setSchoolYear('');
+      setschoolEducationalAuthority('');
+      setSuffix(undefined);
+      return;
+    }
     if (birthdayObj && birthdayObj.ETERNITY) {
       const birthYear = Number(birthdayObj.ETERNITY.substring(0, 4));
       const birthMonth = Number(birthdayObj.ETERNITY.substring(5, 7));
@@ -294,7 +301,11 @@ export const ChildrenAgeQuestion = ({ personName }: { personName: string }) => {
         break;
       }
     }
-  }, [navigationType, household.世帯員[personName].誕生年月日?.ETERNITY]);
+  }, [
+    personName,
+    navigationType,
+    household.世帯員[personName].誕生年月日?.ETERNITY,
+  ]);
 
   // 学校教育機関と学年が変更された時に実行される処理
   useEffect(() => {

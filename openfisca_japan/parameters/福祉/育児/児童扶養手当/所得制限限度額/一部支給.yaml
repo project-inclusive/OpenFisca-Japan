@@ -16,3 +16,17 @@ values:
       - 4580000
       - 4960000
       - 5340000
+  2024-11-01:
+    value:
+      - 2080000
+      - 2460000
+      - 2840000
+      - 3220000
+      - 3600000 
+      - 3980000
+      - 4360000
+      - 4740000
+      - 5120000
+      - 5500000
+    metadata:
+      reference: https://www.fukushi.metro.tokyo.lg.jp/kodomo/kosodate/teate/zidoufuyouteate
