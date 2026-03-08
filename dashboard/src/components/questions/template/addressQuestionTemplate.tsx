@@ -1,5 +1,4 @@
 import { useState, useCallback, useEffect } from 'react';
-import { useNavigationType } from 'react-router-dom';
 import {
   Box,
   Select,

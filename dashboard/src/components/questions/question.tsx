@@ -9,8 +9,10 @@ import { StateFrom } from 'xstate';
 import { HouseholdMember } from '../../state/household';
 import {
   AddressQuestion,
+  AgeQuestion,
   BooleanQuestion,
   isAddressQuestion,
+  isAgeQuestion,
   isBooleanQuestion,
   isSelectionQuestion,
   QuestionKey,
@@ -29,6 +31,7 @@ import { YesNoQuestionTemplate } from './template/yesNoQuestionTemplate';
 import { useNavigate } from 'react-router-dom';
 import { toOpenFiscaHousehold } from '../../state/convert';
 import { useEffect } from 'react';
+import { AgeQuestionTemplate } from './template/ageQuestionTemplate';
 
 const personStr = (member: HouseholdMember): string => {
   switch (member.relationship) {
@@ -72,6 +75,27 @@ const QuestionContent = ({
 
     return (
       <AddressQuestionTemplate
+        assignFunc={assignFunc}
+        initialValue={initialValue}
+      />
+    );
+  }
+
+  if (isAgeQuestion(questionKey)) {
+    const assignFunc = (question: AgeQuestion) => {
+      send({
+        type: questionKey,
+        value: question,
+      });
+    };
+    // NOTE: 関数化すると型推論が効かないので直接代入
+    const initialValue =
+      context[questionKey][context.currentMember.relationship][
+        context.currentMember.index
+      ];
+
+    return (
+      <AgeQuestionTemplate
         assignFunc={assignFunc}
         initialValue={initialValue}
       />

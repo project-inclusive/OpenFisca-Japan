@@ -10,9 +10,27 @@ export const addressQuestionDefinitions = {
   },
 } as const;
 
+export const ageQuestionDefinitions = {
+  年齢: {
+    type: 'Age',
+  },
+} as const;
+
+export const amountOfMoneyQuestionDefinitions = {
+  年収: {
+    type: 'AmountOfMoney',
+  },
+} as const;
+
 export const booleanQuestionDefinitions = {
   家を借りたい: {
     type: 'Boolean',
+  },
+} as const;
+
+export const personNumQuestionDefinitions = {
+  子どもの人数: {
+    type: 'PersonNum',
   },
 } as const;
 
@@ -25,24 +43,43 @@ export const selectionQuestionDefinitions = {
 
 export const questionDefinitions = {
   ...addressQuestionDefinitions,
+  ...ageQuestionDefinitions,
+  //  ...amountOfMoneyQuestionDefinitions,
   ...booleanQuestionDefinitions,
+  //  ...personNumQuestionDefinitions,
   ...selectionQuestionDefinitions,
 } as const;
 
 export type AddressQuestionKey = keyof typeof addressQuestionDefinitions;
+export type AgeQuestionKey = keyof typeof ageQuestionDefinitions;
+export type AmountOfMoneyQuestionKey =
+  keyof typeof amountOfMoneyQuestionDefinitions;
 export type BooleanQuestionKey = keyof typeof booleanQuestionDefinitions;
+export type PersonNumQuestionKey = keyof typeof personNumQuestionDefinitions;
 export type SelectionQuestionKey = keyof typeof selectionQuestionDefinitions;
 export type QuestionKey =
   | AddressQuestionKey
+  | AgeQuestionKey
+  //  | AmountOfMoneyQuestionKey
   | BooleanQuestionKey
+  //  | PersonNumQuestionKey
   | SelectionQuestionKey;
 
 export const addressQuestionKeys = Object.keys(
   addressQuestionDefinitions
 ) as AddressQuestionKey[];
+export const ageQuestionKeys = Object.keys(
+  ageQuestionDefinitions
+) as AgeQuestionKey[];
+export const amountOfMoneyQuestionKeys = Object.keys(
+  amountOfMoneyQuestionDefinitions
+) as AmountOfMoneyQuestionKey[];
 export const booleanQuestionKeys = Object.keys(
   booleanQuestionDefinitions
 ) as BooleanQuestionKey[];
+export const personNumQuestionKeys = Object.keys(
+  personNumQuestionDefinitions
+) as PersonNumQuestionKey[];
 export const selectionQuestionKeys = Object.keys(
   selectionQuestionDefinitions
 ) as SelectionQuestionKey[];
@@ -54,11 +91,31 @@ export const isAddressQuestion = (
   return addressQuestionKeys.includes(key as any);
 };
 
+export const isAgeQuestion = (key: QuestionKey): key is AgeQuestionKey => {
+  return ageQuestionKeys.includes(key as any);
+};
+
+/*
+export const isAmountOfMoneyQuestion = (
+  key: QuestionKey
+): key is AmountOfMoneyQuestionKey => {
+  return amountOfMoneyQuestionKeys.includes(key as any);
+};
+*/
+
 export const isBooleanQuestion = (
   key: QuestionKey
 ): key is BooleanQuestionKey => {
   return booleanQuestionKeys.includes(key as any);
 };
+
+/*
+export const isPersonNumQuestion = (
+  key: QuestionKey
+): key is PersonNumQuestionKey => {
+  return personNumQuestionKeys.includes(key as any);
+};
+*/
 
 export const isSelectionQuestion = (
   key: QuestionKey
@@ -73,9 +130,24 @@ export type AddressQuestion = {
   municipality: string;
 };
 
+export type AgeQuestion = {
+  type: 'Age';
+  selection: number | undefined;
+};
+
+export type AmountOfMoneyQuestion = {
+  type: 'AmountOfMoney';
+  selection: number | undefined;
+};
+
 export type BooleanQuestion = {
   type: 'Boolean';
   selection: boolean | undefined;
+};
+
+export type PersonNumQuestion = {
+  type: 'PersonNum';
+  selection: number | undefined;
 };
 
 export type SelectionQuestion<T extends SelectionQuestionKey> = {
@@ -91,8 +163,20 @@ type addressQuestionAnswer = {
   [_ in keyof typeof addressQuestionDefinitions]: AddressQuestion;
 };
 
+type ageQuestionAnswer = {
+  [_ in keyof typeof ageQuestionDefinitions]: AgeQuestion;
+};
+
+type amountOfMoneyQuestionAnswer = {
+  [_ in keyof typeof amountOfMoneyQuestionDefinitions]: AmountOfMoneyQuestion;
+};
+
 type booleanQuestionAnswer = {
   [_ in keyof typeof booleanQuestionDefinitions]: BooleanQuestion;
+};
+
+type personNumQuestionAnswer = {
+  [_ in keyof typeof personNumQuestionDefinitions]: PersonNumQuestion;
 };
 
 type selectionQuestionAnswer = {
@@ -100,7 +184,10 @@ type selectionQuestionAnswer = {
 };
 
 export type QuestionAnswer = addressQuestionAnswer &
+  ageQuestionAnswer &
+  //  amountOfMoneyQuestionAnswer &
   booleanQuestionAnswer &
+  //  personNumQuestionAnswer &
   selectionQuestionAnswer;
 
 // 各世帯員に対する回答をまとめた型
@@ -110,8 +197,20 @@ type addressQuestionAnswers = {
   [_ in keyof typeof addressQuestionDefinitions]: HouseholdMemberAttrs<AddressQuestion>;
 };
 
+type ageQuestionAnswers = {
+  [_ in keyof typeof ageQuestionDefinitions]: HouseholdMemberAttrs<AgeQuestion>;
+};
+
+type amountOfMoneyQuestionAnswers = {
+  [_ in keyof typeof amountOfMoneyQuestionDefinitions]: HouseholdMemberAttrs<AmountOfMoneyQuestion>;
+};
+
 type booleanQuestionAnswers = {
   [_ in keyof typeof booleanQuestionDefinitions]: HouseholdMemberAttrs<BooleanQuestion>;
+};
+
+type personNumQuestionAnswers = {
+  [_ in keyof typeof personNumQuestionDefinitions]: HouseholdMemberAttrs<PersonNumQuestion>;
 };
 
 type selectionQuestionAnswers = {
@@ -121,5 +220,8 @@ type selectionQuestionAnswers = {
 };
 
 export type QuestionAnswers = addressQuestionAnswers &
+  ageQuestionAnswers &
+  //  amountOfMoneyQuestionAnswers &
   booleanQuestionAnswers &
+  //  personNumQuestionAnswers &
   selectionQuestionAnswers;

@@ -160,6 +160,17 @@ export const questionStateMachine = setup({
       子ども: [],
       親: [],
     },
+    年齢: {
+      あなた: [
+        {
+          type: 'Age',
+          selection: undefined,
+        },
+      ],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
     仕事: {
       あなた: [
         {
@@ -192,9 +203,17 @@ export const questionStateMachine = setup({
     住んでいる場所: {
       on: actionObj<'住んでいる場所'>({
         questionKey: '住んでいる場所',
-        nextQuestionKey: '仕事',
+        nextQuestionKey: '年齢',
         nextConditions: [],
         hasBack: false,
+      }),
+    },
+    年齢: {
+      on: actionObj<'年齢'>({
+        questionKey: '年齢',
+        nextQuestionKey: '仕事',
+        nextConditions: [],
+        hasBack: true,
       }),
     },
     仕事: {

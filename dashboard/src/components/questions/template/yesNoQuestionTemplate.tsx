@@ -10,13 +10,8 @@ import {
 
 import configData from '../../../config/app_config.json';
 import { ErrorMessage } from '../../forms/validation/ErrorMessage';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import {
-  frontendHouseholdAtom,
-  questionKeyAtom,
-  questionValidatedAtom,
-} from '../../../state';
-import { personNameFrom } from '../../../question';
+import { useRecoilState } from 'recoil';
+import { questionValidatedAtom } from '../../../state';
 import {
   BooleanQuestion,
   BooleanQuestionKey,
