@@ -3,7 +3,6 @@
 """
 
 import numpy as np
-from openfisca_core.holders import set_input_divide_by_period
 from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
 from openfisca_japan.entities import 人物
@@ -28,8 +27,8 @@ class 雇用保険料(Variable):
     def formula(対象人物, 対象期間, parameters):
         収入 = 対象人物("収入", 対象期間)
         雇用保険料率 = parameters(対象期間).社会保険料.雇用保険料率
-        雇用保険料 = 収入 / 12 * 雇用保険料率 # 標準報酬月額ではない
-        
+        雇用保険料 = 収入 / 12 * 雇用保険料率  # 標準報酬月額ではない
+
         # NOTE: 個人事業主は加入しない
         個人事業主でない = np.logical_not(対象人物("個人事業主である", 対象期間))
         return 個人事業主でない * 雇用保険料

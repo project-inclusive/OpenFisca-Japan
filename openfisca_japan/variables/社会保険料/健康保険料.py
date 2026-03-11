@@ -3,7 +3,6 @@
 """
 
 import numpy as np
-from openfisca_core.holders import set_input_divide_by_period
 from openfisca_core.periods import DAY
 from openfisca_core.variables import Variable
 from openfisca_japan.entities import 人物
@@ -34,7 +33,7 @@ class 健康保険料(Variable):
         健康保険料率 = parameters(対象期間).社会保険料.健康保険料率
         # 労使折半のため2で割る
         健康保険料 = (標準報酬月額_健康保険料 + 標準賞与額_月平均_健康保険料) * 健康保険料率 / 2
-        
+
         # NOTE: 個人事業主が加入する国民健康保険の保険料は市区町村によって異なるため計算しない
         個人事業主でない = np.logical_not(対象人物("個人事業主である", 対象期間))
         return 個人事業主でない * 健康保険料
