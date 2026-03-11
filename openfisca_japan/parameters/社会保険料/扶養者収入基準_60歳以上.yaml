@@ -1,0 +1,7 @@
+description: 扶養者収入基準_60歳以上
+metadata:
+  reference: https://nenkinkikou-kenpo.or.jp/health-insurance-top/fuyousha_hani/
+  unit: currency-JPY
+values:
+  2017-09-01:
+    value: 1800000

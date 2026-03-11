@@ -1,0 +1,7 @@
+description: 雇用保険料率
+metadata:
+  reference: https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000108634.html
+  unit: currency-JPY
+values:
+  2020-01-01:
+    value: 0.0055 # 「一般の事業」の労働者負担分
