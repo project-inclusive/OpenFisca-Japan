@@ -99,3 +99,78 @@ class 世帯高所得(Variable):
     def formula(対象世帯, 対象期間, _parameters):
         所得一覧 = 対象世帯.members("所得", 対象期間)
         return 対象世帯.max(所得一覧)
+
+
+class 合計所得金額(Variable):
+    value_type = float
+    entity = 人物
+    definition_period = DAY
+    label = "合計所得金額"
+    reference = "https://www.nta.go.jp/taxes/shiraberu/taxanswer/yogo/senmon.htm#word2"
+
+    def formula(対象人物, 対象期間, _parameters):
+        # 合計所得金額は大多数が当てはまる給与所得あるいは事業所得とする
+        収入 = 対象人物("収入", 対象期間)
+        個人事業主である = 対象人物("個人事業主である", 対象期間)
+        個人事業主の必要経費 = 対象人物("個人事業主の必要経費", 対象期間)
+        給与所得控除額 = 対象人物("給与所得控除額", 対象期間)
+        給与所得 = 収入 - 給与所得控除額
+        事業所得 = 収入 - 個人事業主の必要経費
+
+        合計所得金額 = np.where(個人事業主である, 事業所得, 給与所得)
+        return np.clip(合計所得金額, 0.0, None)
+
+
+class 基礎控除(Variable):
+
+    value_type = float
+    entity = 人物
+    definition_period = DAY
+    label = "基礎控除"
+    reference = "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1199.htm"
+    # 住民税の基礎控除とは異なる
+
+    def formula(対象人物, 対象期間, _parameters):
+        合計所得金額 = 対象人物("合計所得金額", 対象期間)
+
+        基礎控除 = np.select(
+            [
+                (合計所得金額 <= 1320000),
+                (合計所得金額 > 1320000) * (合計所得金額 <= 23500000),
+                (合計所得金額 > 23500000) * (合計所得金額 <= 24000000),
+                (合計所得金額 > 24000000) * (合計所得金額 < 24500000),
+                (合計所得金額 > 24500000) * (合計所得金額 < 25000000)
+            ],  # 条件一覧
+            [
+                950000,
+                580000,
+                480000,
+                320000,
+                160000
+            ],  # 条件を満たした場合の出力一覧
+            0)
+
+        return 基礎控除
+
+
+class 所得控除(Variable):
+    value_type = float
+    entity = 人物
+    definition_period = DAY
+    label = "所得控除"
+    reference = "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1100.htm"
+
+    def formula(対象人物, 対象期間, _parameters):
+        # 以下の対象者・金額が大きい控除を計算対象として加算する
+        社会保険料控除 = 対象人物("社会保険料控除", 対象期間)
+        障害者控除 = 対象人物("障害者控除", 対象期間)
+        寡婦控除 = 対象人物("寡婦控除", 対象期間)
+        ひとり親控除 = 対象人物("ひとり親控除", 対象期間)
+        勤労学生控除 = 対象人物("勤労学生控除", 対象期間)
+        扶養控除 = 対象人物("扶養控除", 対象期間)
+        配偶者控除 = 対象人物("配偶者控除", 対象期間)
+        配偶者特別控除 = 対象人物("配偶者特別控除", 対象期間)
+        基礎控除 = 対象人物("基礎控除", 対象期間)
+        所得控除 = 社会保険料控除 + 障害者控除 + 寡婦控除 + ひとり親控除 + 勤労学生控除 + 扶養控除 + 配偶者控除 + 配偶者特別控除 + 基礎控除
+
+        return 所得控除
