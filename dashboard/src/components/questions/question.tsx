@@ -16,7 +16,13 @@ import {
   isAgeQuestion,
   isAmountOfMoneyQuestion,
   isBooleanQuestion,
+  isMultipleSelectionQuestion,
+  isPersonNumQuestion,
   isSelectionQuestion,
+  MultipleSelectionQuestion,
+  MultipleSelectionQuestionKey,
+  multipleSelectionQuestionDefinitions,
+  PersonNumQuestion,
   QuestionKey,
   SelectionQuestion,
   selectionQuestionDefinitions,
@@ -35,6 +41,8 @@ import { toOpenFiscaHousehold } from '../../state/convert';
 import { useEffect } from 'react';
 import { AgeQuestionTemplate } from './template/ageQuestionTemplate';
 import { AmountOfMoneyQuestionTemplate } from './template/amountOfMoneyQuestionTemplate';
+import { MultipleSelectionQuestionTemplate } from './template/multipleSelectionQuestionTemplate';
+import { PersonNumQuestionTemplate } from './template/personNumQuestionTemplate';
 
 const personStr = (member: HouseholdMember): string => {
   switch (member.relationship) {
@@ -111,10 +119,11 @@ const QuestionContent = ({
 
   if (isSelectionQuestion(questionKey)) {
     const assignFunc = (question: SelectionQuestion<typeof questionKey>) => {
+      // NOTE: 関数化すると型推論が効かないためanyキャストで回避
       send({
         type: questionKey,
         value: question,
-      });
+      } as any);
     };
     // NOTE: 関数化すると型推論が効かないので直接代入
     const initialValue =
@@ -173,6 +182,59 @@ const QuestionContent = ({
 
     return (
       <AmountOfMoneyQuestionTemplate
+        // 質問を切り替えるたびにフォーム表示をリセットするため、stateごとに一意なkeyを設定
+        key={`${questionKey}-${context.currentMember.relationship}-${context.currentMember.index}`}
+        title={questionKey}
+        initialValue={initialValue}
+        assignFunc={assignFunc}
+      />
+    );
+  }
+
+  if (isMultipleSelectionQuestion(questionKey)) {
+    const assignFunc = (
+      question: MultipleSelectionQuestion<typeof questionKey>
+    ) => {
+      // NOTE: 関数化すると型推論が効かないためanyキャストで回避
+      send({
+        type: questionKey,
+        value: question,
+      } as any);
+    };
+    const initialValue = context[questionKey][
+      context.currentMember.relationship
+    ][context.currentMember.index] as MultipleSelectionQuestion<
+      typeof questionKey
+    >;
+
+    return (
+      <MultipleSelectionQuestionTemplate
+        // 質問を切り替えるたびにフォーム表示をリセットするため、stateごとに一意なkeyを設定
+        key={`${questionKey}-${context.currentMember.relationship}-${context.currentMember.index}`}
+        title={questionKey}
+        selections={
+          multipleSelectionQuestionDefinitions[questionKey].selections
+        }
+        initialValue={initialValue}
+        assignFunc={assignFunc}
+      />
+    );
+  }
+
+  if (isPersonNumQuestion(questionKey)) {
+    const assignFunc = (question: PersonNumQuestion) => {
+      send({
+        type: questionKey,
+        value: question,
+      });
+    };
+    const initialValue =
+      context[questionKey][context.currentMember.relationship][
+        context.currentMember.index
+      ];
+
+    return (
+      <PersonNumQuestionTemplate
         // 質問を切り替えるたびにフォーム表示をリセットするため、stateごとに一意なkeyを設定
         key={`${questionKey}-${context.currentMember.relationship}-${context.currentMember.index}`}
         title={questionKey}

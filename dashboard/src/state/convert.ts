@@ -5,12 +5,13 @@ type OpenFiscaField<T> = {
   [K in string]: T;
 };
 
+type OpenFiscaMember = {
+  [key: string]: OpenFiscaField<any>;
+};
+
 export type OpenFiscaHousehold = {
   世帯員: {
-    あなた: {
-      誕生年月日: OpenFiscaField<string>;
-      収入: OpenFiscaField<number>;
-    };
+    [name: string]: OpenFiscaMember;
   };
   世帯一覧: {
     世帯1: {
@@ -74,31 +75,275 @@ export const toOpenFiscaHousehold = ({
   context: QuestionStateContext;
   currentDate: string;
 }): OpenFiscaHousehold => {
+  // あなた の世帯員情報を構築
+  const selfMember: OpenFiscaMember = {};
+
+  // 年齢 → 誕生年月日（生まれ年は currentDate の年から年齢を引いた値で近似）
+  const selfAge = context.年齢.あなた[0].selection;
+  if (selfAge != null) {
+    const birthYear = parseInt(currentDate.substring(0, 4)) - selfAge;
+    selfMember.誕生年月日 = { ETERNITY: `${birthYear}-01-01` };
+  }
+
+  // 年収・預貯金（万円 → 円）
+  const unit = 10000;
+  // HACK: 将来unitの種類が増えた際コンパイルエラーで気づけるようチェック
+  const _: '万円' = context.年収.あなた[0].unit;
+
+  const selfIncome = context.年収.あなた[0].selection;
+  if (selfIncome != null) {
+    selfMember.収入 = { [currentDate]: selfIncome * unit };
+  }
+  const selfDeposit = context['預貯金'].あなた[0].selection;
+  if (selfDeposit != null) {
+    selfMember.預貯金 = { [currentDate]: selfDeposit * unit };
+  }
+
+  // 仕事の種類
+  const selfOccupation = context['仕事'].あなた[0].selection;
+  if (selfOccupation != null) {
+    selfMember.就労形態 = { [currentDate]: selfOccupation };
+  }
+
+  // 新しい仕事
+  const selfNewJob =
+    context['6か月以内に新しい仕事を始めましたか？'].あなた[0].selection;
+  if (selfNewJob != null) {
+    selfMember.六か月以内に新規就労 = { [currentDate]: selfNewJob };
+  }
+
+  // 休業中の給与の支払い
+  const selfLeaveWithoutPay =
+    context['休職中に給与の支払いがない状態ですか？'].あなた[0].selection;
+  if (selfLeaveWithoutPay != null) {
+    selfMember.休業中に給与の支払いがない = {
+      [currentDate]: selfLeaveWithoutPay,
+    };
+  }
+
+  // 業務による病気・けが（MultipleSelection → 各フィールドを true/false で設定）
+  const selfIndustrialAccident =
+    context['業務によって病気やけがをしましたか？'].あなた[0].selection;
+  selfMember.業務によって病気になった = {
+    [currentDate]: selfIndustrialAccident.includes('業務によって病気になった'),
+  };
+  selfMember.業務によってけがをした = {
+    [currentDate]: selfIndustrialAccident.includes('業務によってけがをした'),
+  };
+
+  // 病気・けがによる3日以上休業
+  const selfLeaveByAccident =
+    context['病気やけがによって連続3日以上休業していますか？'].あなた[0]
+      .selection;
+  selfMember.病気によって連続三日以上休業している = {
+    [currentDate]:
+      selfLeaveByAccident.includes('病気によって連続三日以上休業している'),
+  };
+  selfMember.けがによって連続三日以上休業している = {
+    [currentDate]:
+      selfLeaveByAccident.includes('けがによって連続三日以上休業している'),
+  };
+
+  // 入院中・在宅療養中
+  const selfHospitalized = context['入院中ですか？'].あなた[0].selection;
+  if (selfHospitalized != null) {
+    selfMember.入院中 = { [currentDate]: selfHospitalized };
+  }
+  const selfHomeRecuperation =
+    context['在宅療養中（結核、または治療に3か月以上かかるもの）ですか？']
+      .あなた[0].selection;
+  if (selfHomeRecuperation != null) {
+    selfMember.在宅療養中 = { [currentDate]: selfHomeRecuperation };
+  }
+
+  // HIV・エイズ関連（スキップされた場合もデフォルトfalseで設定）
+  const selfHIV = context['HIVに感染していますか？'].あなた[0].selection;
+  selfMember.HIV感染者である = { [currentDate]: selfHIV ?? false };
+  const selfAIDS = context['エイズを発症していますか？'].あなた[0].selection;
+  if (selfAIDS != null) {
+    selfMember.エイズを発症している = { [currentDate]: selfAIDS };
+  }
+  const selfFamilyHIV =
+    context['家族に血液製剤によってHIVに感染した方はいますか？'].あなた[0]
+      .selection;
+  if (selfFamilyHIV != null) {
+    selfMember.家族に血液製剤によるHIV感染者がいる = {
+      [currentDate]: selfFamilyHIV,
+    };
+  }
+  const selfHIVByBlood =
+    context['血液製剤の投与によってHIVに感染しましたか？'].あなた[0].selection;
+  if (selfHIVByBlood != null) {
+    selfMember.血液製剤の投与によってHIVに感染した = {
+      [currentDate]: selfHIVByBlood,
+    };
+  }
+
+  // C型肝炎関連
+  const selfHepCByBlood =
+    context['血液製剤の投与によってC型肝炎ウイルスに感染しましたか？'].あなた[0]
+      .selection;
+  if (selfHepCByBlood != null) {
+    selfMember.血液製剤の投与によってC型肝炎ウイルスに感染した = {
+      [currentDate]: selfHepCByBlood,
+    };
+  }
+  const selfCirrhosis =
+    context[
+      '肝硬変や肝がんにかかっていますか？または肝移植をおこないましたか？'
+    ].あなた[0].selection;
+  if (selfCirrhosis != null) {
+    selfMember.肝硬変や肝がんに罹患しているまたは肝移植をおこなった = {
+      [currentDate]: selfCirrhosis,
+    };
+  }
+
+  // 腎不全関連
+  const selfChronicRenalFailure =
+    context['慢性腎不全ですか？'].あなた[0].selection;
+  if (selfChronicRenalFailure != null) {
+    selfMember.慢性腎不全である = { [currentDate]: selfChronicRenalFailure };
+  }
+  const selfDialysis =
+    context['人工透析を行っていますか？'].あなた[0].selection;
+  if (selfDialysis != null) {
+    selfMember.人工透析を行っている = { [currentDate]: selfDialysis };
+  }
+
+  // 血液凝固因子異常症（MultipleSelection → 各因子フィールド）
+  const hemophiliaFieldMap: Record<string, string> = {
+    '第I因子（フィブリノゲン）欠乏症': '血液凝固因子異常症_第I因子欠乏症',
+    '第II因子（プロトロンビン）欠乏症': '血液凝固因子異常症_第II因子欠乏症',
+    '第V因子（不安定因子）欠乏症': '血液凝固因子異常症_第V因子欠乏症',
+    '第VII因子（安定因子）欠乏症': '血液凝固因子異常症_第VII因子欠乏症',
+    '第VIII因子欠乏症（血友病A）': '血液凝固因子異常症_第VIII因子欠乏症',
+    '第IX因子欠乏症（血友病B）': '血液凝固因子異常症_第IX因子欠乏症',
+    '第X因子（スチュアートプラウア）欠乏症': '血液凝固因子異常症_第X因子欠乏症',
+    '第XI因子（PTA）欠乏症': '血液凝固因子異常症_第XI因子欠乏症',
+    '第XII因子（ヘイグマン因子）欠乏症': '血液凝固因子異常症_第XII因子欠乏症',
+    '第XIII因子（フィブリン安定化因子）欠乏症':
+      '血液凝固因子異常症_第XIII因子欠乏症',
+    'Von Willebrand（フォン・ヴィルブランド）病':
+      '血液凝固因子異常症_フォンヴィルブランド病',
+    'わからない・その他': '血液凝固因子異常症_その他',
+  };
+  const selfHemophilia = context[
+    '血液凝固因子異常症のうち、当てはまるものはどれですか？'
+  ].あなた[0].selection as string[];
+  Object.entries(hemophiliaFieldMap).forEach(([display, field]) => {
+    selfMember[field] = { [currentDate]: selfHemophilia.includes(display) };
+  });
+
+  // 身体障害者手帳等級（display → API値）
+  const physicalDisabilityGradeMap: Record<string, string> = {
+    '1級': '一級',
+    '2級': '二級',
+    '3級': '三級',
+    '上記以外／持っていない': '無',
+  };
+  const selfPhysicalDisability =
+    context['身体障害者手帳を持っていますか？'].あなた[0].selection;
+  if (selfPhysicalDisability != null) {
+    selfMember.身体障害者手帳等級 = {
+      [currentDate]: physicalDisabilityGradeMap[selfPhysicalDisability] ?? '無',
+    };
+  }
+
+  // 精神障害者手帳等級
+  const selfMentalDisability =
+    context['精神障害者保健福祉手帳を持っていますか？'].あなた[0].selection;
+  if (selfMentalDisability != null) {
+    selfMember.精神障害者保健福祉手帳等級 = {
+      [currentDate]: physicalDisabilityGradeMap[selfMentalDisability] ?? '無',
+    };
+  }
+
+  // 療育手帳・愛の手帳
+  const selfIntellectualDisability =
+    context['療育手帳、または愛の手帳を持っていますか？'].あなた[0].selection;
+  if (selfIntellectualDisability != null) {
+    const intellectualMap: Record<string, { field: string; value: string }> = {
+      '療育手帳 A': { field: '療育手帳等級', value: 'A' },
+      '療育手帳 B': { field: '療育手帳等級', value: 'B' },
+      '愛の手帳 1度': { field: '愛の手帳等級', value: '一度' },
+      '愛の手帳 2度': { field: '愛の手帳等級', value: '二度' },
+      '愛の手帳 3度': { field: '愛の手帳等級', value: '三度' },
+      '愛の手帳 4度': { field: '愛の手帳等級', value: '四度' },
+    };
+    const mapped = intellectualMap[selfIntellectualDisability];
+    if (mapped) {
+      selfMember[mapped.field] = { [currentDate]: mapped.value };
+    }
+  }
+
+  // 放射線障害（'いいえ' → '無'）
+  const selfRadiation = context['放射線障害がありますか？'].あなた[0].selection;
+  if (selfRadiation != null) {
+    selfMember.放射線障害 = {
+      [currentDate]: selfRadiation === 'いいえ' ? '無' : selfRadiation,
+    };
+  }
+
+  // 内部障害・脳性まひ（bool → '有'/'無'）
+  const selfInternalDisability =
+    context['内部障害（内臓などのからだの内部の障害）がありますか？'].あなた[0]
+      .selection;
+  if (selfInternalDisability != null) {
+    selfMember.内部障害 = {
+      [currentDate]: selfInternalDisability ? '有' : '無',
+    };
+  }
+  const selfCerebralParalysis =
+    context['脳性まひ、または進行性筋萎縮症ですか？'].あなた[0].selection;
+  if (selfCerebralParalysis != null) {
+    selfMember.脳性まひ_進行性筋萎縮症 = {
+      [currentDate]: selfCerebralParalysis ? '有' : '無',
+    };
+  }
+
+  // 介護施設・学生
+  const selfNursingHome =
+    context['介護施設に入所していますか？'].あなた[0].selection;
+  if (selfNursingHome != null) {
+    selfMember.介護施設入所中 = { [currentDate]: selfNursingHome };
+  }
+  const selfStudent =
+    context['高校、大学、専門学校、職業訓練学校等の学生ですか？'].あなた[0]
+      .selection;
+  if (selfStudent != null) {
+    selfMember.学生 = { [currentDate]: selfStudent };
+  }
+
+  // 妊娠（'いいえ' → '無'）
+  const selfPregnancy =
+    context['妊娠中、または産後6ヵ月以内ですか？'].あなた[0].selection;
+  if (selfPregnancy != null) {
+    selfMember.妊産婦 = {
+      [currentDate]: selfPregnancy === 'いいえ' ? '無' : selfPregnancy,
+    };
+  }
+
+  // 親一覧の構築（配偶者の有無に応じて追加）
+  const 親一覧: HouseholdRelationship[] = ['あなた'];
+  if (context['配偶者はいますか？'].あなた[0].selection === true) {
+    親一覧.push('配偶者');
+  }
+
   const household: OpenFiscaHousehold = {
     // Household members
     世帯員: {
-      // You
-      あなた: {
-        // TODO: contextから取得
-        誕生年月日: {
-          ETERNITY: `2000-01-01`,
-        },
-        収入: {
-          [currentDate]: 1000000,
-        },
-      },
+      あなた: selfMember,
     },
     // Household
     世帯一覧: {
       // Household 1
       世帯1: {
-        // Self List: ['You']
-        親一覧: ['あなた'],
+        親一覧: 親一覧,
         居住都道府県: {
-          [currentDate]: context.住んでいる場所.あなた[0].prefecure,
+          [currentDate]: context['寝泊まりしている地域'].あなた[0].prefecure,
         },
         居住市区町村: {
-          [currentDate]: context.住んでいる場所.あなた[0].municipality,
+          [currentDate]: context['寝泊まりしている地域'].あなた[0].municipality,
         },
 
         // 以下はOpenFisca側から受け取りたいVariableを指定
@@ -245,7 +490,7 @@ export const toOpenFiscaHousehold = ({
   };
 
   // 東京都独自の支援制度
-  if (context.住んでいる場所.あなた[0].prefecure === '東京都') {
+  if (context['寝泊まりしている地域'].あなた[0].prefecure === '東京都') {
     household.世帯一覧.世帯1.児童育成手当 = {
       [currentDate]: null,
     };
@@ -263,18 +508,12 @@ export const toOpenFiscaHousehold = ({
     };
   }
 
-  // 「家を借りたい」の回答
-  if (context.家を借りたい.あなた[0].selection != null) {
+  // 「家を借りたいですか？」の回答
+  if (context['家を借りたいですか？'].あなた[0].selection != null) {
     household.世帯一覧.世帯1.住宅入居費 = {
-      [currentDate]: context.家を借りたい.あなた[0].selection,
+      [currentDate]: context['家を借りたいですか？'].あなた[0].selection,
     };
   }
-
-  // TODO: 仕事に関する設定
-  // TODO: 年収等の金額はunitに応じて数値に変換
-
-  // TODO: contextに対応する値を設定する
-  // TODO: contextの世帯員に応じて世帯員を生成する
 
   return household;
 };

@@ -96,7 +96,6 @@ const actionObj = <Key extends QuestionKey>({
           const member = context.currentMember;
           answers[member.relationship][member.index] = event.value;
 
-          //return event.value;
           return answers;
         },
       }),
@@ -136,6 +135,22 @@ const actionObj = <Key extends QuestionKey>({
   };
 };
 
+// 病気がある・けがをしているが選択されているかを判定するガード
+const hasIllnessOrInjury = ({ context }: { context: QuestionStateContext }) => {
+  const selection =
+    context['病気やけが、障害はありますか？'].あなた[0].selection;
+  return (
+    selection.includes('病気がある') || selection.includes('けがをしている')
+  );
+};
+
+// 障害があるが選択されているかを判定するガード
+const hasDisability = ({ context }: { context: QuestionStateContext }) => {
+  return context['病気やけが、障害はありますか？'].あなた[0].selection.includes(
+    '障害がある'
+  );
+};
+
 // 質問の状態を管理するステートマシン
 export const questionStateMachine = setup({
   types: {} as {
@@ -145,74 +160,251 @@ export const questionStateMachine = setup({
 }).createMachine({
   id: 'question',
   // 最初の状態（質問）
-  initial: '住んでいる場所',
-  // 各質問で選んだ選択肢の初期値（選択前のため、デフォルトで0または最初の選択肢を設定している）
+  initial: '寝泊まりしている地域',
+  // 各質問で選んだ選択肢の初期値
   context: {
-    住んでいる場所: {
-      あなた: [
-        {
-          type: 'Address',
-          prefecure: '',
-          municipality: '',
-        },
-      ],
+    寝泊まりしている地域: {
+      あなた: [{ type: 'Address', prefecure: '', municipality: '' }],
       配偶者: [],
       子ども: [],
       親: [],
     },
     年齢: {
-      あなた: [
-        {
-          type: 'Age',
-          selection: undefined,
-        },
-      ],
+      あなた: [{ type: 'Age', selection: undefined }],
       配偶者: [],
       子ども: [],
       親: [],
     },
     年収: {
-      あなた: [
-        {
-          type: 'AmountOfMoney',
-          selection: undefined,
-          unit: '万円',
-        },
-      ],
+      あなた: [{ type: 'AmountOfMoney', selection: undefined, unit: '万円' }],
       配偶者: [],
       子ども: [],
       親: [],
     },
     預貯金: {
-      あなた: [
-        {
-          type: 'AmountOfMoney',
-          selection: undefined,
-          unit: '万円',
-        },
-      ],
+      あなた: [{ type: 'AmountOfMoney', selection: undefined, unit: '万円' }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '現在仕事をしていますか？': {
+      あなた: [{ type: 'Boolean', selection: undefined }],
       配偶者: [],
       子ども: [],
       親: [],
     },
     仕事: {
-      あなた: [
-        {
-          type: 'Selection',
-          selection: undefined,
-        },
-      ],
+      あなた: [{ type: 'Selection', selection: undefined }],
       配偶者: [],
       子ども: [],
       親: [],
     },
-    家を借りたい: {
-      あなた: [
-        {
-          type: 'Boolean',
-          selection: undefined,
-        },
-      ],
+    '6か月以内に新しい仕事を始めましたか？': {
+      あなた: [{ type: 'Boolean', selection: undefined }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '休職中ですか？': {
+      あなた: [{ type: 'Boolean', selection: undefined }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '休職中に給与の支払いがない状態ですか？': {
+      あなた: [{ type: 'Boolean', selection: undefined }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '病気やけが、障害はありますか？': {
+      あなた: [{ type: 'MultipleSelection', selection: [] }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '業務によって病気やけがをしましたか？': {
+      あなた: [{ type: 'MultipleSelection', selection: [] }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '病気やけがによって連続3日以上休業していますか？': {
+      あなた: [{ type: 'MultipleSelection', selection: [] }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '入院中ですか？': {
+      あなた: [{ type: 'Boolean', selection: undefined }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '在宅療養中（結核、または治療に3か月以上かかるもの）ですか？': {
+      あなた: [{ type: 'Boolean', selection: undefined }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '感染症にかかっていますか？': {
+      あなた: [{ type: 'Boolean', selection: undefined }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    'HIVに感染していますか？': {
+      あなた: [{ type: 'Boolean', selection: undefined }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    'エイズを発症していますか？': {
+      あなた: [{ type: 'Boolean', selection: undefined }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '家族に血液製剤によってHIVに感染した方はいますか？': {
+      あなた: [{ type: 'Boolean', selection: undefined }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '血液製剤の投与によってHIVに感染しましたか？': {
+      あなた: [{ type: 'Boolean', selection: undefined }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    'C型肝炎に感染していますか？': {
+      あなた: [{ type: 'Boolean', selection: undefined }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '血液製剤の投与によってC型肝炎ウイルスに感染しましたか？': {
+      あなた: [{ type: 'Boolean', selection: undefined }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '肝硬変や肝がんにかかっていますか？または肝移植をおこないましたか？': {
+      あなた: [{ type: 'Boolean', selection: undefined }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '腎不全ですか？': {
+      あなた: [{ type: 'Boolean', selection: undefined }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '慢性腎不全ですか？': {
+      あなた: [{ type: 'Boolean', selection: undefined }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '人工透析を行っていますか？': {
+      あなた: [{ type: 'Boolean', selection: undefined }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '先天性の血液凝固因子異常症（血友病等）ですか？': {
+      あなた: [{ type: 'Boolean', selection: undefined }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '血液凝固因子異常症のうち、当てはまるものはどれですか？': {
+      あなた: [{ type: 'MultipleSelection', selection: [] }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '身体障害者手帳を持っていますか？': {
+      あなた: [{ type: 'Selection', selection: undefined }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '精神障害者保健福祉手帳を持っていますか？': {
+      あなた: [{ type: 'Selection', selection: undefined }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '療育手帳、または愛の手帳を持っていますか？': {
+      あなた: [{ type: 'Selection', selection: undefined }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '放射線障害がありますか？': {
+      あなた: [{ type: 'Selection', selection: undefined }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '内部障害（内臓などのからだの内部の障害）がありますか？': {
+      あなた: [{ type: 'Boolean', selection: undefined }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '脳性まひ、または進行性筋萎縮症ですか？': {
+      あなた: [{ type: 'Boolean', selection: undefined }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '介護施設に入所していますか？': {
+      あなた: [{ type: 'Boolean', selection: undefined }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '高校、大学、専門学校、職業訓練学校等の学生ですか？': {
+      あなた: [{ type: 'Boolean', selection: undefined }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '家を借りたいですか？': {
+      あなた: [{ type: 'Boolean', selection: undefined }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '妊娠中、または産後6ヵ月以内ですか？': {
+      あなた: [{ type: 'Selection', selection: undefined }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '困りごとはありますか？': {
+      あなた: [{ type: 'MultipleSelection', selection: [] }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '配偶者はいますか？': {
+      あなた: [{ type: 'Boolean', selection: undefined }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    子どもの人数: {
+      あなた: [{ type: 'PersonNum', selection: undefined }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    親の人数: {
+      あなた: [{ type: 'PersonNum', selection: undefined }],
       配偶者: [],
       子ども: [],
       親: [],
@@ -222,11 +414,10 @@ export const questionStateMachine = setup({
     histories: [],
   },
   // 各質問を状態として定義
-  // 現在どの質問が聞かれているかを表す
   states: {
-    住んでいる場所: {
-      on: actionObj<'住んでいる場所'>({
-        questionKey: '住んでいる場所',
+    寝泊まりしている地域: {
+      on: actionObj<'寝泊まりしている地域'>({
+        questionKey: '寝泊まりしている地域',
         nextQuestionKey: '年齢',
         nextConditions: [],
         hasBack: false,
@@ -251,29 +442,408 @@ export const questionStateMachine = setup({
     預貯金: {
       on: actionObj<'預貯金'>({
         questionKey: '預貯金',
-        nextQuestionKey: '仕事',
+        nextQuestionKey: '現在仕事をしていますか？',
         nextConditions: [],
+        hasBack: true,
+      }),
+    },
+    '現在仕事をしていますか？': {
+      on: actionObj<'現在仕事をしていますか？'>({
+        questionKey: '現在仕事をしていますか？',
+        nextQuestionKey: '仕事',
+        nextConditions: [
+          {
+            // 仕事していない場合、仕事関連の質問をスキップ
+            target: '病気やけが、障害はありますか？',
+            guard: ({ context }) =>
+              context['現在仕事をしていますか？'].あなた[0].selection === false,
+          },
+        ],
         hasBack: true,
       }),
     },
     仕事: {
       on: actionObj<'仕事'>({
         questionKey: '仕事',
-        nextQuestionKey: '家を借りたい',
+        nextQuestionKey: '6か月以内に新しい仕事を始めましたか？',
         nextConditions: [],
         hasBack: true,
       }),
     },
-    家を借りたい: {
-      on: actionObj<'家を借りたい'>({
-        questionKey: '家を借りたい',
+    '6か月以内に新しい仕事を始めましたか？': {
+      on: actionObj<'6か月以内に新しい仕事を始めましたか？'>({
+        questionKey: '6か月以内に新しい仕事を始めましたか？',
+        nextQuestionKey: '休職中ですか？',
+        nextConditions: [],
+        hasBack: true,
+      }),
+    },
+    '休職中ですか？': {
+      on: actionObj<'休職中ですか？'>({
+        questionKey: '休職中ですか？',
+        nextQuestionKey: '休職中に給与の支払いがない状態ですか？',
+        nextConditions: [
+          {
+            // 休業していない場合、休業関連の質問をスキップ
+            target: '病気やけが、障害はありますか？',
+            guard: ({ context }) =>
+              context['休職中ですか？'].あなた[0].selection === false,
+          },
+        ],
+        hasBack: true,
+      }),
+    },
+    '休職中に給与の支払いがない状態ですか？': {
+      on: actionObj<'休職中に給与の支払いがない状態ですか？'>({
+        questionKey: '休職中に給与の支払いがない状態ですか？',
+        nextQuestionKey: '病気やけが、障害はありますか？',
+        nextConditions: [],
+        hasBack: true,
+      }),
+    },
+    '病気やけが、障害はありますか？': {
+      on: actionObj<'病気やけが、障害はありますか？'>({
+        questionKey: '病気やけが、障害はありますか？',
+        nextQuestionKey: '業務によって病気やけがをしましたか？',
+        nextConditions: [
+          {
+            // 障害のみ選択の場合、身体障害者手帳へスキップ
+            target: '身体障害者手帳を持っていますか？',
+            guard: ({ context }) =>
+              !hasIllnessOrInjury({ context }) && hasDisability({ context }),
+          },
+          {
+            // 何も選択しない場合、介護施設へスキップ
+            target: '介護施設に入所していますか？',
+            guard: ({ context }) =>
+              !hasIllnessOrInjury({ context }) && !hasDisability({ context }),
+          },
+        ],
+        hasBack: true,
+      }),
+    },
+    '業務によって病気やけがをしましたか？': {
+      on: actionObj<'業務によって病気やけがをしましたか？'>({
+        questionKey: '業務によって病気やけがをしましたか？',
+        nextQuestionKey: '病気やけがによって連続3日以上休業していますか？',
+        nextConditions: [],
+        hasBack: true,
+      }),
+    },
+    '病気やけがによって連続3日以上休業していますか？': {
+      on: actionObj<'病気やけがによって連続3日以上休業していますか？'>({
+        questionKey: '病気やけがによって連続3日以上休業していますか？',
+        nextQuestionKey: '入院中ですか？',
+        nextConditions: [],
+        hasBack: true,
+      }),
+    },
+    '入院中ですか？': {
+      on: actionObj<'入院中ですか？'>({
+        questionKey: '入院中ですか？',
+        nextQuestionKey:
+          '在宅療養中（結核、または治療に3か月以上かかるもの）ですか？',
+        nextConditions: [],
+        hasBack: true,
+      }),
+    },
+    '在宅療養中（結核、または治療に3か月以上かかるもの）ですか？': {
+      on: actionObj<'在宅療養中（結核、または治療に3か月以上かかるもの）ですか？'>(
+        {
+          questionKey:
+            '在宅療養中（結核、または治療に3か月以上かかるもの）ですか？',
+          nextQuestionKey: '感染症にかかっていますか？',
+          nextConditions: [
+            {
+              // 在宅療養中でなく病気もない場合、障害があれば身体障害者手帳へスキップ
+              target: '身体障害者手帳を持っていますか？',
+              guard: ({ context }) =>
+                !context[
+                  '病気やけが、障害はありますか？'
+                ].あなた[0].selection.includes('病気がある') &&
+                hasDisability({ context }),
+            },
+            {
+              // 在宅療養中でなく病気も障害もない場合、介護施設へスキップ
+              target: '介護施設に入所していますか？',
+              guard: ({ context }) =>
+                !context[
+                  '病気やけが、障害はありますか？'
+                ].あなた[0].selection.includes('病気がある') &&
+                !hasDisability({ context }),
+            },
+          ],
+          hasBack: true,
+        }
+      ),
+    },
+    '感染症にかかっていますか？': {
+      on: actionObj<'感染症にかかっていますか？'>({
+        questionKey: '感染症にかかっていますか？',
+        nextQuestionKey: 'HIVに感染していますか？',
+        nextConditions: [
+          {
+            target: '腎不全ですか？',
+            guard: ({ context }) =>
+              context['感染症にかかっていますか？'].あなた[0].selection ===
+              false,
+          },
+        ],
+        hasBack: true,
+      }),
+    },
+    'HIVに感染していますか？': {
+      on: actionObj<'HIVに感染していますか？'>({
+        questionKey: 'HIVに感染していますか？',
+        nextQuestionKey: 'エイズを発症していますか？',
+        nextConditions: [
+          {
+            target: 'C型肝炎に感染していますか？',
+            guard: ({ context }) =>
+              context['HIVに感染していますか？'].あなた[0].selection === false,
+          },
+        ],
+        hasBack: true,
+      }),
+    },
+    'エイズを発症していますか？': {
+      on: actionObj<'エイズを発症していますか？'>({
+        questionKey: 'エイズを発症していますか？',
+        nextQuestionKey: '家族に血液製剤によってHIVに感染した方はいますか？',
+        nextConditions: [],
+        hasBack: true,
+      }),
+    },
+    '家族に血液製剤によってHIVに感染した方はいますか？': {
+      on: actionObj<'家族に血液製剤によってHIVに感染した方はいますか？'>({
+        questionKey: '家族に血液製剤によってHIVに感染した方はいますか？',
+        nextQuestionKey: '血液製剤の投与によってHIVに感染しましたか？',
+        nextConditions: [],
+        hasBack: true,
+      }),
+    },
+    '血液製剤の投与によってHIVに感染しましたか？': {
+      on: actionObj<'血液製剤の投与によってHIVに感染しましたか？'>({
+        questionKey: '血液製剤の投与によってHIVに感染しましたか？',
+        nextQuestionKey: 'C型肝炎に感染していますか？',
+        nextConditions: [],
+        hasBack: true,
+      }),
+    },
+    'C型肝炎に感染していますか？': {
+      on: actionObj<'C型肝炎に感染していますか？'>({
+        questionKey: 'C型肝炎に感染していますか？',
+        nextQuestionKey:
+          '血液製剤の投与によってC型肝炎ウイルスに感染しましたか？',
+        nextConditions: [
+          {
+            target: '腎不全ですか？',
+            guard: ({ context }) =>
+              context['C型肝炎に感染していますか？'].あなた[0].selection ===
+              false,
+          },
+        ],
+        hasBack: true,
+      }),
+    },
+    '血液製剤の投与によってC型肝炎ウイルスに感染しましたか？': {
+      on: actionObj<'血液製剤の投与によってC型肝炎ウイルスに感染しましたか？'>({
+        questionKey: '血液製剤の投与によってC型肝炎ウイルスに感染しましたか？',
+        nextQuestionKey:
+          '肝硬変や肝がんにかかっていますか？または肝移植をおこないましたか？',
+        nextConditions: [],
+        hasBack: true,
+      }),
+    },
+    '肝硬変や肝がんにかかっていますか？または肝移植をおこないましたか？': {
+      on: actionObj<'肝硬変や肝がんにかかっていますか？または肝移植をおこないましたか？'>(
+        {
+          questionKey:
+            '肝硬変や肝がんにかかっていますか？または肝移植をおこないましたか？',
+          nextQuestionKey: '腎不全ですか？',
+          nextConditions: [],
+          hasBack: true,
+        }
+      ),
+    },
+    '腎不全ですか？': {
+      on: actionObj<'腎不全ですか？'>({
+        questionKey: '腎不全ですか？',
+        nextQuestionKey: '慢性腎不全ですか？',
+        nextConditions: [
+          {
+            target: '先天性の血液凝固因子異常症（血友病等）ですか？',
+            guard: ({ context }) =>
+              context['腎不全ですか？'].あなた[0].selection === false,
+          },
+        ],
+        hasBack: true,
+      }),
+    },
+    '慢性腎不全ですか？': {
+      on: actionObj<'慢性腎不全ですか？'>({
+        questionKey: '慢性腎不全ですか？',
+        nextQuestionKey: '人工透析を行っていますか？',
+        nextConditions: [],
+        hasBack: true,
+      }),
+    },
+    '人工透析を行っていますか？': {
+      on: actionObj<'人工透析を行っていますか？'>({
+        questionKey: '人工透析を行っていますか？',
+        nextQuestionKey: '先天性の血液凝固因子異常症（血友病等）ですか？',
+        nextConditions: [],
+        hasBack: true,
+      }),
+    },
+    '先天性の血液凝固因子異常症（血友病等）ですか？': {
+      on: actionObj<'先天性の血液凝固因子異常症（血友病等）ですか？'>({
+        questionKey: '先天性の血液凝固因子異常症（血友病等）ですか？',
+        nextQuestionKey:
+          '血液凝固因子異常症のうち、当てはまるものはどれですか？',
+        nextConditions: [
+          {
+            target: '身体障害者手帳を持っていますか？',
+            guard: ({ context }) =>
+              context['先天性の血液凝固因子異常症（血友病等）ですか？']
+                .あなた[0].selection === false && hasDisability({ context }),
+          },
+          {
+            target: '介護施設に入所していますか？',
+            guard: ({ context }) =>
+              context['先天性の血液凝固因子異常症（血友病等）ですか？']
+                .あなた[0].selection === false && !hasDisability({ context }),
+          },
+        ],
+        hasBack: true,
+      }),
+    },
+    '血液凝固因子異常症のうち、当てはまるものはどれですか？': {
+      on: actionObj<'血液凝固因子異常症のうち、当てはまるものはどれですか？'>({
+        questionKey: '血液凝固因子異常症のうち、当てはまるものはどれですか？',
+        nextQuestionKey: '身体障害者手帳を持っていますか？',
+        nextConditions: [
+          {
+            target: '介護施設に入所していますか？',
+            guard: ({ context }) => !hasDisability({ context }),
+          },
+        ],
+        hasBack: true,
+      }),
+    },
+    '身体障害者手帳を持っていますか？': {
+      on: actionObj<'身体障害者手帳を持っていますか？'>({
+        questionKey: '身体障害者手帳を持っていますか？',
+        nextQuestionKey: '精神障害者保健福祉手帳を持っていますか？',
+        nextConditions: [],
+        hasBack: true,
+      }),
+    },
+    '精神障害者保健福祉手帳を持っていますか？': {
+      on: actionObj<'精神障害者保健福祉手帳を持っていますか？'>({
+        questionKey: '精神障害者保健福祉手帳を持っていますか？',
+        nextQuestionKey: '療育手帳、または愛の手帳を持っていますか？',
+        nextConditions: [],
+        hasBack: true,
+      }),
+    },
+    '療育手帳、または愛の手帳を持っていますか？': {
+      on: actionObj<'療育手帳、または愛の手帳を持っていますか？'>({
+        questionKey: '療育手帳、または愛の手帳を持っていますか？',
+        nextQuestionKey: '放射線障害がありますか？',
+        nextConditions: [],
+        hasBack: true,
+      }),
+    },
+    '放射線障害がありますか？': {
+      on: actionObj<'放射線障害がありますか？'>({
+        questionKey: '放射線障害がありますか？',
+        nextQuestionKey:
+          '内部障害（内臓などのからだの内部の障害）がありますか？',
+        nextConditions: [],
+        hasBack: true,
+      }),
+    },
+    '内部障害（内臓などのからだの内部の障害）がありますか？': {
+      on: actionObj<'内部障害（内臓などのからだの内部の障害）がありますか？'>({
+        questionKey: '内部障害（内臓などのからだの内部の障害）がありますか？',
+        nextQuestionKey: '脳性まひ、または進行性筋萎縮症ですか？',
+        nextConditions: [],
+        hasBack: true,
+      }),
+    },
+    '脳性まひ、または進行性筋萎縮症ですか？': {
+      on: actionObj<'脳性まひ、または進行性筋萎縮症ですか？'>({
+        questionKey: '脳性まひ、または進行性筋萎縮症ですか？',
+        nextQuestionKey: '介護施設に入所していますか？',
+        nextConditions: [],
+        hasBack: true,
+      }),
+    },
+    '介護施設に入所していますか？': {
+      on: actionObj<'介護施設に入所していますか？'>({
+        questionKey: '介護施設に入所していますか？',
+        nextQuestionKey: '高校、大学、専門学校、職業訓練学校等の学生ですか？',
+        nextConditions: [],
+        hasBack: true,
+      }),
+    },
+    '高校、大学、専門学校、職業訓練学校等の学生ですか？': {
+      on: actionObj<'高校、大学、専門学校、職業訓練学校等の学生ですか？'>({
+        questionKey: '高校、大学、専門学校、職業訓練学校等の学生ですか？',
+        nextQuestionKey: '家を借りたいですか？',
+        nextConditions: [],
+        hasBack: true,
+      }),
+    },
+    '家を借りたいですか？': {
+      on: actionObj<'家を借りたいですか？'>({
+        questionKey: '家を借りたいですか？',
+        nextQuestionKey: '妊娠中、または産後6ヵ月以内ですか？',
+        nextConditions: [],
+        hasBack: true,
+      }),
+    },
+    '妊娠中、または産後6ヵ月以内ですか？': {
+      on: actionObj<'妊娠中、または産後6ヵ月以内ですか？'>({
+        questionKey: '妊娠中、または産後6ヵ月以内ですか？',
+        nextQuestionKey: '困りごとはありますか？',
+        nextConditions: [],
+        hasBack: true,
+      }),
+    },
+    '困りごとはありますか？': {
+      on: actionObj<'困りごとはありますか？'>({
+        questionKey: '困りごとはありますか？',
+        nextQuestionKey: '配偶者はいますか？',
+        nextConditions: [],
+        hasBack: true,
+      }),
+    },
+    '配偶者はいますか？': {
+      on: actionObj<'配偶者はいますか？'>({
+        questionKey: '配偶者はいますか？',
+        nextQuestionKey: '子どもの人数',
+        nextConditions: [],
+        hasBack: true,
+      }),
+    },
+    子どもの人数: {
+      on: actionObj<'子どもの人数'>({
+        questionKey: '子どもの人数',
+        nextQuestionKey: '親の人数',
+        nextConditions: [],
+        hasBack: true,
+      }),
+    },
+    親の人数: {
+      on: actionObj<'親の人数'>({
+        questionKey: '親の人数',
         nextQuestionKey: 'result',
         nextConditions: [],
         hasBack: true,
       }),
     },
-    // TODO: 各世帯員に対する質問終了のダミー状態を作成
-    // 即時次の世帯員へ遷移（誰に遷移するか、人数の範囲外チェック等の責務を持たせる）
     // 最後の状態（結果表示）
     // NOTE: type "final" は使わない（状態遷移が完了しbackで戻れなくなるため）
     result: {
