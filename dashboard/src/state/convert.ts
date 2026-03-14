@@ -271,6 +271,7 @@ export const toOpenFiscaHousehold = ({
   }
 
   // TODO: 仕事に関する設定
+  // TODO: 年収等の金額はunitに応じて数値に変換
 
   // TODO: contextに対応する値を設定する
   // TODO: contextの世帯員に応じて世帯員を生成する

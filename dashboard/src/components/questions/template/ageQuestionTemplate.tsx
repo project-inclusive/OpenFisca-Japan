@@ -41,7 +41,7 @@ export const AgeQuestionTemplate = ({
 
   useEffect(() => {
     setQuestionValidated(ageState != null);
-  }, [ageState]);
+  }, [ageState, initialValue]);
 
   const changeAge = (age: number | undefined) => {
     if (typeof age === 'number' && age < 0) {

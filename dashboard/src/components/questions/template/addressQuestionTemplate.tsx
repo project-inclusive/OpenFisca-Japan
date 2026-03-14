@@ -47,7 +47,7 @@ export const AddressQuestionTemplate = ({
     setQuestionValidated(
       selectedPrefecture !== '' && selectedMunicipality !== ''
     );
-  }, [selectedPrefecture, selectedMunicipality]);
+  }, [selectedPrefecture, selectedMunicipality, initialValue]);
 
   // prefectureの値が変更された時
   const onPrefectureChange = useCallback(

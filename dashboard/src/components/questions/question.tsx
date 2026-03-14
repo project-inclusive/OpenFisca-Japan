@@ -10,9 +10,11 @@ import { HouseholdMember } from '../../state/household';
 import {
   AddressQuestion,
   AgeQuestion,
+  AmountOfMoneyQuestion,
   BooleanQuestion,
   isAddressQuestion,
   isAgeQuestion,
+  isAmountOfMoneyQuestion,
   isBooleanQuestion,
   isSelectionQuestion,
   QuestionKey,
@@ -32,6 +34,7 @@ import { useNavigate } from 'react-router-dom';
 import { toOpenFiscaHousehold } from '../../state/convert';
 import { useEffect } from 'react';
 import { AgeQuestionTemplate } from './template/ageQuestionTemplate';
+import { AmountOfMoneyQuestionTemplate } from './template/amountOfMoneyQuestionTemplate';
 
 const personStr = (member: HouseholdMember): string => {
   switch (member.relationship) {
@@ -75,6 +78,8 @@ const QuestionContent = ({
 
     return (
       <AddressQuestionTemplate
+        // 質問を切り替えるたびにフォーム表示をリセットするため、stateごとに一意なkeyを設定
+        key={`${questionKey}-${context.currentMember.relationship}-${context.currentMember.index}`}
         assignFunc={assignFunc}
         initialValue={initialValue}
       />
@@ -96,6 +101,8 @@ const QuestionContent = ({
 
     return (
       <AgeQuestionTemplate
+        // 質問を切り替えるたびにフォーム表示をリセットするため、stateごとに一意なkeyを設定
+        key={`${questionKey}-${context.currentMember.relationship}-${context.currentMember.index}`}
         assignFunc={assignFunc}
         initialValue={initialValue}
       />
@@ -117,6 +124,8 @@ const QuestionContent = ({
 
     return (
       <SelectionQuestionTemplate
+        // 質問を切り替えるたびにフォーム表示をリセットするため、stateごとに一意なkeyを設定
+        key={`${questionKey}-${context.currentMember.relationship}-${context.currentMember.index}`}
         title={questionKey}
         selections={selectionQuestionDefinitions[questionKey].selections}
         initialValue={initialValue}
@@ -138,9 +147,34 @@ const QuestionContent = ({
         context.currentMember.index
       ];
 
-    // TODO: childrenを渡す
     return (
       <YesNoQuestionTemplate
+        // 質問を切り替えるたびにフォーム表示をリセットするため、stateごとに一意なkeyを設定
+        key={`${questionKey}-${context.currentMember.relationship}-${context.currentMember.index}`}
+        title={questionKey}
+        initialValue={initialValue}
+        assignFunc={assignFunc}
+      />
+    );
+  }
+
+  if (isAmountOfMoneyQuestion(questionKey)) {
+    const assignFunc = (question: AmountOfMoneyQuestion) => {
+      send({
+        type: questionKey,
+        value: question,
+      });
+    };
+    // NOTE: 関数化すると型推論が効かないので直接代入
+    const initialValue =
+      context[questionKey][context.currentMember.relationship][
+        context.currentMember.index
+      ];
+
+    return (
+      <AmountOfMoneyQuestionTemplate
+        // 質問を切り替えるたびにフォーム表示をリセットするため、stateごとに一意なkeyを設定
+        key={`${questionKey}-${context.currentMember.relationship}-${context.currentMember.index}`}
         title={questionKey}
         initialValue={initialValue}
         assignFunc={assignFunc}
@@ -170,6 +204,11 @@ export const Question = ({
   const [showsValidationError, setShowsValidationError] = useRecoilState(
     showsValidationErrorAtom
   );
+
+  useEffect(() => {
+    // 質問が切り替わるたびにバリデーションエラー表示をリセット
+    setShowsValidationError(false);
+  }, [state.value]);
 
   useEffect(() => {
     // すべての質問に回答し "result" に到達したら見積もり結果へ遷移

@@ -171,6 +171,30 @@ export const questionStateMachine = setup({
       子ども: [],
       親: [],
     },
+    年収: {
+      あなた: [
+        {
+          type: 'AmountOfMoney',
+          selection: undefined,
+          unit: '万円',
+        },
+      ],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    預貯金: {
+      あなた: [
+        {
+          type: 'AmountOfMoney',
+          selection: undefined,
+          unit: '万円',
+        },
+      ],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
     仕事: {
       あなた: [
         {
@@ -211,6 +235,22 @@ export const questionStateMachine = setup({
     年齢: {
       on: actionObj<'年齢'>({
         questionKey: '年齢',
+        nextQuestionKey: '年収',
+        nextConditions: [],
+        hasBack: true,
+      }),
+    },
+    年収: {
+      on: actionObj<'年収'>({
+        questionKey: '年収',
+        nextQuestionKey: '預貯金',
+        nextConditions: [],
+        hasBack: true,
+      }),
+    },
+    預貯金: {
+      on: actionObj<'預貯金'>({
+        questionKey: '預貯金',
         nextQuestionKey: '仕事',
         nextConditions: [],
         hasBack: true,

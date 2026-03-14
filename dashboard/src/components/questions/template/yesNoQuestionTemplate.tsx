@@ -37,7 +37,7 @@ export const YesNoQuestionTemplate = ({
 
   useEffect(() => {
     setQuestionValidated(boolState != null);
-  }, [boolState]);
+  }, [boolState, title, initialValue]);
 
   const btn = ({
     cond,

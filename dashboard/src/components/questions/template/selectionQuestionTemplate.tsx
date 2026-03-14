@@ -41,7 +41,7 @@ export const SelectionQuestionTemplate = <T extends SelectionQuestionKey>({
 
   useEffect(() => {
     setQuestionValidated(selectionState != null);
-  }, [selectionState]);
+  }, [selectionState, title, initialValue]);
 
   const btn = ({
     cond,

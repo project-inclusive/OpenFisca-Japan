@@ -20,6 +20,9 @@ export const amountOfMoneyQuestionDefinitions = {
   年収: {
     type: 'AmountOfMoney',
   },
+  預貯金: {
+    type: 'AmountOfMoney',
+  },
 } as const;
 
 export const booleanQuestionDefinitions = {
@@ -44,7 +47,7 @@ export const selectionQuestionDefinitions = {
 export const questionDefinitions = {
   ...addressQuestionDefinitions,
   ...ageQuestionDefinitions,
-  //  ...amountOfMoneyQuestionDefinitions,
+  ...amountOfMoneyQuestionDefinitions,
   ...booleanQuestionDefinitions,
   //  ...personNumQuestionDefinitions,
   ...selectionQuestionDefinitions,
@@ -60,7 +63,7 @@ export type SelectionQuestionKey = keyof typeof selectionQuestionDefinitions;
 export type QuestionKey =
   | AddressQuestionKey
   | AgeQuestionKey
-  //  | AmountOfMoneyQuestionKey
+  | AmountOfMoneyQuestionKey
   | BooleanQuestionKey
   //  | PersonNumQuestionKey
   | SelectionQuestionKey;
@@ -95,13 +98,11 @@ export const isAgeQuestion = (key: QuestionKey): key is AgeQuestionKey => {
   return ageQuestionKeys.includes(key as any);
 };
 
-/*
 export const isAmountOfMoneyQuestion = (
   key: QuestionKey
 ): key is AmountOfMoneyQuestionKey => {
   return amountOfMoneyQuestionKeys.includes(key as any);
 };
-*/
 
 export const isBooleanQuestion = (
   key: QuestionKey
@@ -138,6 +139,8 @@ export type AgeQuestion = {
 export type AmountOfMoneyQuestion = {
   type: 'AmountOfMoney';
   selection: number | undefined;
+  // 金額の単位（数値変換する際に使用）
+  unit: '万円';
 };
 
 export type BooleanQuestion = {
@@ -185,7 +188,7 @@ type selectionQuestionAnswer = {
 
 export type QuestionAnswer = addressQuestionAnswer &
   ageQuestionAnswer &
-  //  amountOfMoneyQuestionAnswer &
+  amountOfMoneyQuestionAnswer &
   booleanQuestionAnswer &
   //  personNumQuestionAnswer &
   selectionQuestionAnswer;
@@ -221,7 +224,7 @@ type selectionQuestionAnswers = {
 
 export type QuestionAnswers = addressQuestionAnswers &
   ageQuestionAnswers &
-  //  amountOfMoneyQuestionAnswers &
+  amountOfMoneyQuestionAnswers &
   booleanQuestionAnswers &
   //  personNumQuestionAnswers &
   selectionQuestionAnswers;

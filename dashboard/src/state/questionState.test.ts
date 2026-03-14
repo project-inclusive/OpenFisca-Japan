@@ -35,6 +35,15 @@ const skipUntil = (
         });
       },
     },
+    {
+      key: '年収',
+      f: () => {
+        actor.send({
+          type: '年収',
+          value: { type: 'AmountOfMoney', selection: 0, unit: '万円' },
+        });
+      },
+    },
   ];
 
   for (const sendFunc of sendFuncs) {
@@ -108,7 +117,7 @@ test('あなた: 年齢: 値が設定されている', () => {
   });
 });
 
-test('あなた: 年齢: 次の質問が「仕事」', () => {
+test('あなた: 年齢: 次の質問が「年収」', () => {
   const actor = createActor(questionStateMachine);
   actor.start();
   skipUntil(actor, '年齢');
@@ -118,7 +127,7 @@ test('あなた: 年齢: 次の質問が「仕事」', () => {
     value: { type: 'Age', selection: 20 },
   });
   actor.send({ type: 'next' });
-  expect(actor.getSnapshot().value).toBe('仕事');
+  expect(actor.getSnapshot().value).toBe('年収');
 });
 
 test('あなた: 年齢: next->backで元の質問に戻る', () => {
@@ -136,6 +145,104 @@ test('あなた: 年齢: next->backで元の質問に戻る', () => {
   expect(actor.getSnapshot().context['年齢']['あなた'][0]).toEqual({
     type: 'Age',
     selection: 20,
+  });
+});
+
+test('あなた: 年収: 値が設定されている', () => {
+  const actor = createActor(questionStateMachine);
+  actor.start();
+  skipUntil(actor, '年収');
+
+  actor.send({
+    type: '年収',
+    value: { type: 'AmountOfMoney', selection: 300, unit: '万円' },
+  });
+  actor.send({ type: 'next' });
+  expect(actor.getSnapshot().context['年収']['あなた'][0]).toEqual({
+    type: 'AmountOfMoney',
+    selection: 300,
+    unit: '万円',
+  });
+});
+
+test('あなた: 年収: 次の質問が「仕事」', () => {
+  const actor = createActor(questionStateMachine);
+  actor.start();
+  skipUntil(actor, '年収');
+
+  actor.send({
+    type: '年収',
+    value: { type: 'AmountOfMoney', selection: 300, unit: '万円' },
+  });
+  actor.send({ type: 'next' });
+  expect(actor.getSnapshot().value).toBe('預貯金');
+});
+
+test('あなた: 年齢: next->backで元の質問に戻る', () => {
+  const actor = createActor(questionStateMachine);
+  actor.start();
+  skipUntil(actor, '年収');
+
+  actor.send({
+    type: '年収',
+    value: { type: 'AmountOfMoney', selection: 300, unit: '万円' },
+  });
+  actor.send({ type: 'next' });
+  actor.send({ type: 'back' });
+  expect(actor.getSnapshot().value).toBe('年収');
+  expect(actor.getSnapshot().context['年収']['あなた'][0]).toEqual({
+    type: 'AmountOfMoney',
+    selection: 300,
+    unit: '万円',
+  });
+});
+
+test('あなた: 預貯金: 値が設定されている', () => {
+  const actor = createActor(questionStateMachine);
+  actor.start();
+  skipUntil(actor, '預貯金');
+
+  actor.send({
+    type: '預貯金',
+    value: { type: 'AmountOfMoney', selection: 300, unit: '万円' },
+  });
+  actor.send({ type: 'next' });
+  expect(actor.getSnapshot().context['預貯金']['あなた'][0]).toEqual({
+    type: 'AmountOfMoney',
+    selection: 300,
+    unit: '万円',
+  });
+});
+
+test('あなた: 預貯金: 次の質問が「仕事」', () => {
+  const actor = createActor(questionStateMachine);
+  actor.start();
+  skipUntil(actor, '預貯金');
+
+  actor.send({
+    type: '預貯金',
+    value: { type: 'AmountOfMoney', selection: 300, unit: '万円' },
+  });
+  actor.send({ type: 'next' });
+  expect(actor.getSnapshot().value).toBe('仕事');
+});
+
+test('あなた: 預貯金: next->backで元の質問に戻る', () => {
+  const actor = createActor(questionStateMachine);
+  actor.start();
+  skipUntil(actor, '預貯金');
+
+  actor.send({
+    type: '預貯金',
+    value: { type: 'AmountOfMoney', selection: 300, unit: '万円' },
+  });
+  actor.send({ type: 'next' });
+  actor.send({ type: 'back' });
+  expect(actor.getSnapshot().value).toBe('預貯金');
+  expect(actor.getSnapshot().context['預貯金']['あなた'][0]).toEqual({
+    type: 'AmountOfMoney',
+    selection: 300,
+    unit: '万円',
   });
 });
 
