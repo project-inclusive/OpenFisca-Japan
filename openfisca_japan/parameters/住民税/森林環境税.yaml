@@ -1,0 +1,7 @@
+description: 住民税における森林環境税
+metadata:
+  reference: https://www.soumu.go.jp/main_sosiki/jichi_zeisei/czaisei/czaisei_seido/150790_06.html
+  unit: currency-JPY
+values:
+  2024-01-01:
+    value: 1000

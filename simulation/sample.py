@@ -78,7 +78,6 @@ def simulate_all():
     for i in range(len(data_households[0])):
         data_households_dict[data_households[0, i]] = data_households[1:, i]
 
-
     ### OpenFiscaの準備 ###
     tax_benefit_system = CountryTaxBenefitSystem()
     sb = SimulationBuilder()
@@ -97,7 +96,6 @@ def simulate_all():
     # 制度計算の対象とする日時. YYYY-MM-DD 形式で記述する. 過去の日時も指定可能
     period = "2025-04-05"
 
-
     ### 必須の入力属性 ###
     # (その他の必須ではない属性は未入力の場合デフォルト値が適用されるため、基本的な制度の計算には影響なし.
     # ex. 身体障害者手帳: 無)
@@ -111,7 +109,6 @@ def simulate_all():
     simulation.set_input("収入", period, data_persons_dict["収入"].astype(int))
     simulation.set_input("居住都道府県", period, data_households_dict["居住都道府県"])
     simulation.set_input("居住市区町村", period, data_households_dict["居住市区町村"])
-
 
     ### シミュレーション実行 ###
     # (中間変数を出力することも可能. ex. 世帯高所得)
@@ -164,9 +161,9 @@ def simulate_生活保護():
 
 
 def main():
-    #check_cp932_env()
+    # check_cp932_env()
     simulate_all()
-    #simulate_生活保護()  # 大量データの計算時間の計測
+    # simulate_生活保護()  # 大量データの計算時間の計測
 
 
 if __name__ == "__main__":
