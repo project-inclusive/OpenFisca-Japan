@@ -14,8 +14,8 @@ from openfisca_core.holders import set_input_divide_by_period
 from openfisca_core.periods import DAY, period
 from openfisca_core.variables import Variable
 # Import the Entities specifically defined for this tax and benefit system
-from openfisca_japan.entities import 世帯, 人物
 from openfisca_japan import COUNTRY_DIR
+from openfisca_japan.entities import 世帯, 人物
 from openfisca_japan.variables.障害.愛の手帳 import 愛の手帳等級パターン
 from openfisca_japan.variables.障害.療育手帳 import 療育手帳等級パターン
 from openfisca_japan.variables.障害.精神障害者保健福祉手帳 import 精神障害者保健福祉手帳等級パターン
@@ -823,14 +823,14 @@ class 基準所得税額(Variable):
         所得税率 = np.select(
             課税所得範囲,
             [0.05, 0.10, 0.20, 0.23, 0.33, 0.40, 0.45],
-            default=0.0
+            default=0.0,
         )
 
         # 所得税率の変わり目で税額が滑らかに変化するように、税率ごとに差し引く金額を設定
         基準所得税額から差し引かれる金額 = np.select(
             課税所得範囲,
             [0, 97_500, 427_500, 636_000, 1_536_000, 2_796_000, 4_796_000],
-            default=0.0
+            default=0.0,
         )
 
         基準所得税額 = 課税所得 * 所得税率 - 基準所得税額から差し引かれる金額
