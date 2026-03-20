@@ -15,11 +15,12 @@ class 社会保険料(Variable):
     label = "社会保険料"
     reference = "https://www.freee.co.jp/kb/kb-payroll/how-to-calculate-employment-insurance/"
     documentation = """
-    被保険者の社会保険料(月額)
+    被保険者の社会保険料(年額)
     個人事業主の計算は行わない。
     """
 
     def formula(対象人物, 対象期間, parameters):
+        # 以下の保険料は年間額で計算されている
         健康保険料 = 対象人物("健康保険料", 対象期間)
         厚生年金保険料 = 対象人物("厚生年金保険料", 対象期間)
         雇用保険料 = 対象人物("雇用保険料", 対象期間)

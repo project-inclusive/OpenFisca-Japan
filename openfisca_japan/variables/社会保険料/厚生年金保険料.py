@@ -16,7 +16,7 @@ class 厚生年金保険料(Variable):
     # 厚生年金保険料率
     reference = "https://www.nenkin.go.jp/service/kounen/hokenryo/ryogaku/ryogakuhyo/index.html"
     documentation = """
-    被保険者の厚生年金保険料(月額)
+    被保険者の厚生年金保険料(年額)
     厚生年金保険用の標準報酬月額と標準賞与額(月平均)に厚生年金保険料率を掛けた金額
     以下リンクの説明も参考になる。
     https://www.freee.co.jp/kb/kb-payroll/how-to-calculate-social-insurance-premium-deduction-from-salary/
@@ -26,8 +26,8 @@ class 厚生年金保険料(Variable):
         標準報酬月額_厚生年金保険料 = 対象人物("標準報酬月額_厚生年金保険料", 対象期間)
         標準賞与額_月平均_厚生年金保険料 = 対象人物("標準賞与額_月平均_厚生年金保険料", 対象期間)
         厚生年金保険料率 = parameters(対象期間).社会保険料.厚生年金保険料率
-        # 労使折半のため2で割る
-        厚生年金保険料 = (標準報酬月額_厚生年金保険料 + 標準賞与額_月平均_厚生年金保険料) * 厚生年金保険料率 / 2
+        # 年間合計. 労使折半のため2で割る
+        厚生年金保険料 = 12 * (標準報酬月額_厚生年金保険料 + 標準賞与額_月平均_厚生年金保険料) * 厚生年金保険料率 / 2
 
         # 扶養者
         年齢 = 対象人物("年齢", 対象期間)

@@ -23,10 +23,11 @@ class 国民年金保険料(Variable):
     label = "国民年金保険料"
     reference = "https://www.nenkin.go.jp/service/kokunen/hokenryo/hokenryo.html"
     documentation = """
-    国民年金保険加入者の毎月の保険料
+    国民年金保険加入者の年間の保険料
     """
 
     def formula(対象人物, 対象期間, parameters):
         国民年金保険に加入している = 対象人物("国民年金保険に加入している", 対象期間)
-        保険料 = parameters(対象期間).社会保険料.国民年金保険料
+        # 年間合計
+        保険料 = 12 * parameters(対象期間).社会保険料.国民年金保険料
         return 国民年金保険に加入している * 保険料
