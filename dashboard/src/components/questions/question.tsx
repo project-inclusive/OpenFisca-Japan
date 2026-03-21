@@ -43,6 +43,7 @@ import { AgeQuestionTemplate } from './template/ageQuestionTemplate';
 import { AmountOfMoneyQuestionTemplate } from './template/amountOfMoneyQuestionTemplate';
 import { MultipleSelectionQuestionTemplate } from './template/multipleSelectionQuestionTemplate';
 import { PersonNumQuestionTemplate } from './template/personNumQuestionTemplate';
+import { QuestionDescription } from './description';
 
 const personStr = (member: HouseholdMember): string => {
   switch (member.relationship) {
@@ -163,7 +164,10 @@ const QuestionContent = ({
         title={questionKey}
         initialValue={initialValue}
         assignFunc={assignFunc}
-      />
+      >
+        {/* 質問特有の補足があれば追加 */}
+        <QuestionDescription questionKey={questionKey} />
+      </YesNoQuestionTemplate>
     );
   }
 
@@ -300,8 +304,8 @@ export const Question = ({
     return <></>;
   }
 
-  // HACK: "history" はダミーの状態なので可能性から除外
-  if (state.value === 'history') {
+  // HACK: ダミーの状態なので可能性から除外
+  if (state.value === 'history' || state.value === 'changeToSpouse') {
     throw new Error(
       `xstateが予期せぬ状態遷移をしています: state: ${state.value}`
     );

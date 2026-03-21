@@ -32,13 +32,13 @@ export const AmountOfMoneyQuestionTemplate = ({
 }: {
   title: string;
   assignFunc: (question: AmountOfMoneyQuestion) => void;
-  initialValue: AmountOfMoneyQuestion;
+  initialValue?: AmountOfMoneyQuestion;
 }) => {
   const [questionValidated, setQuestionValidated] = useRecoilState(
     questionValidatedAtom
   );
   const [amountState, setAmountState] = useState<number | undefined>(
-    initialValue.selection
+    initialValue?.selection
   );
 
   useEffect(() => {

@@ -24,12 +24,12 @@ export const YesNoQuestionTemplate = ({
   children,
 }: {
   title: BooleanQuestionKey;
-  initialValue: BooleanQuestion;
+  initialValue?: BooleanQuestion;
   assignFunc: (question: BooleanQuestion) => void;
   children?: ReactNode;
 }) => {
   const [boolState, setBoolState] = useState<boolean | undefined>(
-    initialValue.selection
+    initialValue?.selection
   );
   const [questionValidated, setQuestionValidated] = useRecoilState(
     questionValidatedAtom

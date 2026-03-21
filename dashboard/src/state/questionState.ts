@@ -36,6 +36,8 @@ export type QuestionEvent =
 
 export type QustionState = StateValueFrom<typeof questionStateMachine>;
 
+export type ChangeMemberKey = 'changeToSpouse';
+
 // 各状態に対する遷移先を定義
 const actionObj = <Key extends QuestionKey>({
   questionKey,
@@ -46,7 +48,7 @@ const actionObj = <Key extends QuestionKey>({
   questionKey: Key;
   nextQuestionKey: QuestionKey | 'result';
   nextConditions: {
-    target: QuestionKey;
+    target: QuestionKey | ChangeMemberKey;
     guard: ({ context }: { context: QuestionStateContext }) => boolean;
   }[];
   hasBack: boolean;
@@ -137,8 +139,10 @@ const actionObj = <Key extends QuestionKey>({
 
 // 病気がある・けがをしているが選択されているかを判定するガード
 const hasIllnessOrInjury = ({ context }: { context: QuestionStateContext }) => {
+  const member = context.currentMember;
   const selection =
-    context['病気やけが、障害はありますか？'].あなた[0].selection;
+    context['病気やけが、障害はありますか？'][member.relationship][member.index]
+      .selection;
   return (
     selection.includes('病気がある') || selection.includes('けがをしている')
   );
@@ -146,9 +150,10 @@ const hasIllnessOrInjury = ({ context }: { context: QuestionStateContext }) => {
 
 // 障害があるが選択されているかを判定するガード
 const hasDisability = ({ context }: { context: QuestionStateContext }) => {
-  return context['病気やけが、障害はありますか？'].あなた[0].selection.includes(
-    '障害がある'
-  );
+  const member = context.currentMember;
+  return context['病気やけが、障害はありますか？'][member.relationship][
+    member.index
+  ].selection.includes('障害がある');
 };
 
 // 質問の状態を管理するステートマシン
@@ -409,6 +414,12 @@ export const questionStateMachine = setup({
       子ども: [],
       親: [],
     },
+    '以下のいずれかに当てはまりますか？': {
+      あなた: [],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
     // 質問は「あなた」についてのものから始める
     currentMember: { relationship: 'あなた', index: 0 },
     histories: [],
@@ -455,8 +466,14 @@ export const questionStateMachine = setup({
           {
             // 仕事していない場合、仕事関連の質問をスキップ
             target: '病気やけが、障害はありますか？',
-            guard: ({ context }) =>
-              context['現在仕事をしていますか？'].あなた[0].selection === false,
+            guard: ({ context }) => {
+              const member = context.currentMember;
+              return (
+                context['現在仕事をしていますか？'][member.relationship][
+                  member.index
+                ].selection === false
+              );
+            },
           },
         ],
         hasBack: true,
@@ -486,8 +503,13 @@ export const questionStateMachine = setup({
           {
             // 休業していない場合、休業関連の質問をスキップ
             target: '病気やけが、障害はありますか？',
-            guard: ({ context }) =>
-              context['休職中ですか？'].あなた[0].selection === false,
+            guard: ({ context }) => {
+              const member = context.currentMember;
+              return (
+                context['休職中ですか？'][member.relationship][member.index]
+                  .selection === false
+              );
+            },
           },
         ],
         hasBack: true,
@@ -557,20 +579,28 @@ export const questionStateMachine = setup({
             {
               // 在宅療養中でなく病気もない場合、障害があれば身体障害者手帳へスキップ
               target: '身体障害者手帳を持っていますか？',
-              guard: ({ context }) =>
-                !context[
-                  '病気やけが、障害はありますか？'
-                ].あなた[0].selection.includes('病気がある') &&
-                hasDisability({ context }),
+              guard: ({ context }) => {
+                const member = context.currentMember;
+                return (
+                  !context['病気やけが、障害はありますか？'][
+                    member.relationship
+                  ][member.index].selection.includes('病気がある') &&
+                  hasDisability({ context })
+                );
+              },
             },
             {
               // 在宅療養中でなく病気も障害もない場合、介護施設へスキップ
               target: '介護施設に入所していますか？',
-              guard: ({ context }) =>
-                !context[
-                  '病気やけが、障害はありますか？'
-                ].あなた[0].selection.includes('病気がある') &&
-                !hasDisability({ context }),
+              guard: ({ context }) => {
+                const member = context.currentMember;
+                return (
+                  !context['病気やけが、障害はありますか？'][
+                    member.relationship
+                  ][member.index].selection.includes('病気がある') &&
+                  !hasDisability({ context })
+                );
+              },
             },
           ],
           hasBack: true,
@@ -584,9 +614,14 @@ export const questionStateMachine = setup({
         nextConditions: [
           {
             target: '腎不全ですか？',
-            guard: ({ context }) =>
-              context['感染症にかかっていますか？'].あなた[0].selection ===
-              false,
+            guard: ({ context }) => {
+              const member = context.currentMember;
+              return (
+                context['感染症にかかっていますか？'][member.relationship][
+                  member.index
+                ].selection === false
+              );
+            },
           },
         ],
         hasBack: true,
@@ -599,8 +634,14 @@ export const questionStateMachine = setup({
         nextConditions: [
           {
             target: 'C型肝炎に感染していますか？',
-            guard: ({ context }) =>
-              context['HIVに感染していますか？'].あなた[0].selection === false,
+            guard: ({ context }) => {
+              const member = context.currentMember;
+              return (
+                context['HIVに感染していますか？'][member.relationship][
+                  member.index
+                ].selection === false
+              );
+            },
           },
         ],
         hasBack: true,
@@ -638,9 +679,14 @@ export const questionStateMachine = setup({
         nextConditions: [
           {
             target: '腎不全ですか？',
-            guard: ({ context }) =>
-              context['C型肝炎に感染していますか？'].あなた[0].selection ===
-              false,
+            guard: ({ context }) => {
+              const member = context.currentMember;
+              return (
+                context['C型肝炎に感染していますか？'][member.relationship][
+                  member.index
+                ].selection === false
+              );
+            },
           },
         ],
         hasBack: true,
@@ -673,8 +719,13 @@ export const questionStateMachine = setup({
         nextConditions: [
           {
             target: '先天性の血液凝固因子異常症（血友病等）ですか？',
-            guard: ({ context }) =>
-              context['腎不全ですか？'].あなた[0].selection === false,
+            guard: ({ context }) => {
+              const member = context.currentMember;
+              return (
+                context['腎不全ですか？'][member.relationship][member.index]
+                  .selection === false
+              );
+            },
           },
         ],
         hasBack: true,
@@ -704,15 +755,27 @@ export const questionStateMachine = setup({
         nextConditions: [
           {
             target: '身体障害者手帳を持っていますか？',
-            guard: ({ context }) =>
-              context['先天性の血液凝固因子異常症（血友病等）ですか？']
-                .あなた[0].selection === false && hasDisability({ context }),
+            guard: ({ context }) => {
+              const member = context.currentMember;
+              return (
+                context['先天性の血液凝固因子異常症（血友病等）ですか？'][
+                  member.relationship
+                ][member.index].selection === false &&
+                hasDisability({ context })
+              );
+            },
           },
           {
             target: '介護施設に入所していますか？',
-            guard: ({ context }) =>
-              context['先天性の血液凝固因子異常症（血友病等）ですか？']
-                .あなた[0].selection === false && !hasDisability({ context }),
+            guard: ({ context }) => {
+              const member = context.currentMember;
+              return (
+                context['先天性の血液凝固因子異常症（血友病等）ですか？'][
+                  member.relationship
+                ][member.index].selection === false &&
+                !hasDisability({ context })
+              );
+            },
           },
         ],
         hasBack: true,
@@ -792,7 +855,14 @@ export const questionStateMachine = setup({
       on: actionObj<'高校、大学、専門学校、職業訓練学校等の学生ですか？'>({
         questionKey: '高校、大学、専門学校、職業訓練学校等の学生ですか？',
         nextQuestionKey: '家を借りたいですか？',
-        nextConditions: [],
+        nextConditions: [
+          {
+            target: '妊娠中、または産後6ヵ月以内ですか？',
+            guard: ({ context }) => {
+              return context.currentMember.relationship === '配偶者';
+            },
+          },
+        ],
         hasBack: true,
       }),
     },
@@ -808,7 +878,14 @@ export const questionStateMachine = setup({
       on: actionObj<'妊娠中、または産後6ヵ月以内ですか？'>({
         questionKey: '妊娠中、または産後6ヵ月以内ですか？',
         nextQuestionKey: '困りごとはありますか？',
-        nextConditions: [],
+        nextConditions: [
+          {
+            target: '以下のいずれかに当てはまりますか？',
+            guard: ({ context }) => {
+              return context.currentMember.relationship === '配偶者';
+            },
+          },
+        ],
         hasBack: true,
       }),
     },
@@ -824,7 +901,15 @@ export const questionStateMachine = setup({
       on: actionObj<'配偶者はいますか？'>({
         questionKey: '配偶者はいますか？',
         nextQuestionKey: '子どもの人数',
-        nextConditions: [],
+        nextConditions: [
+          {
+            // 配偶者がいる場合、配偶者の質問へ
+            target: 'changeToSpouse',
+            guard: ({ context }) => {
+              return context['配偶者はいますか？'].あなた[0].selection === true;
+            },
+          },
+        ],
         hasBack: true,
       }),
     },
@@ -844,6 +929,14 @@ export const questionStateMachine = setup({
         hasBack: true,
       }),
     },
+    '以下のいずれかに当てはまりますか？': {
+      on: actionObj<'以下のいずれかに当てはまりますか？'>({
+        questionKey: '以下のいずれかに当てはまりますか？',
+        nextQuestionKey: '子どもの人数',
+        nextConditions: [],
+        hasBack: true,
+      }),
+    },
     // 最後の状態（結果表示）
     // NOTE: type "final" は使わない（状態遷移が完了しbackで戻れなくなるため）
     result: {
@@ -853,7 +946,24 @@ export const questionStateMachine = setup({
         },
       },
     },
-    // 履歴を使って前の状態に戻るための仮状態
+    // 質問対象の世帯員を切り替えるためのダミーの状態
+    // NOTE: 世帯員切り替え処理を通常の質問と分離するため、こちらのダミー状態を経由している
+    changeToSpouse: {
+      // alwaysを使用しそのまま次の状態へ遷移
+      always: {
+        target: '年齢',
+      },
+      // 状態を抜ける際に必ず実行
+      exit: assign({
+        currentMember: () => {
+          return {
+            relationship: '配偶者',
+            index: 0,
+          };
+        },
+      }),
+    },
+    // 履歴を使って前の状態に戻るためのダミーの状態
     // NOTE: xstateでは状態遷移時に動的にtargetを決定できないため、このような形で実装している
     // histories配列を使用して直前の状態（質問）を特定しそこへ遷移する
     history: {

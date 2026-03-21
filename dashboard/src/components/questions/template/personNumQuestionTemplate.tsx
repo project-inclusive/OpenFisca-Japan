@@ -30,11 +30,11 @@ export const PersonNumQuestionTemplate = ({
 }: {
   title: string;
   assignFunc: (question: PersonNumQuestion) => void;
-  initialValue: PersonNumQuestion;
+  initialValue?: PersonNumQuestion;
 }) => {
   const [, setQuestionValidated] = useRecoilState(questionValidatedAtom);
   const [numState, setNumState] = useState<number | undefined>(
-    initialValue.selection
+    initialValue?.selection
   );
 
   useEffect(() => {

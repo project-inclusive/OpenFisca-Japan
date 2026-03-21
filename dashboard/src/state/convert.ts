@@ -1,4 +1,5 @@
 import { HouseholdRelationship } from './household';
+import { questionKeys } from './questionDefinition';
 import { QuestionStateContext } from './questionState';
 
 type OpenFiscaField<T> = {
@@ -64,6 +65,7 @@ export type OpenFiscaHousehold = {
       重度心身障害者手当_最大?: OpenFiscaField<any>;
       受験生チャレンジ支援貸付?: OpenFiscaField<any>;
       住宅入居費?: OpenFiscaField<any>;
+      配偶者がいるがひとり親に該当?: OpenFiscaField<any>;
     };
   };
 };
@@ -323,17 +325,262 @@ export const toOpenFiscaHousehold = ({
     };
   }
 
+  // 配偶者の世帯員情報を構築
+  const hasSpouse = context['配偶者はいますか？'].あなた[0].selection === true;
+  const spouseMember: OpenFiscaMember = {};
+
+  if (hasSpouse) {
+    // 年齢（配偶者は誕生年月日ではなく年齢をそのまま設定）
+    const spouseAge = context['年齢'].配偶者[0]?.selection;
+    if (spouseAge != null) {
+      spouseMember.年齢 = { [currentDate]: spouseAge };
+    }
+
+    // 年収・預貯金
+    const spouseIncome = context['年収'].配偶者[0]?.selection;
+    if (spouseIncome != null) {
+      spouseMember.収入 = { [currentDate]: spouseIncome * unit };
+    }
+    const spouseDeposit = context['預貯金'].配偶者[0]?.selection;
+    if (spouseDeposit != null) {
+      spouseMember.預貯金 = { [currentDate]: spouseDeposit * unit };
+    }
+
+    // 仕事の種類
+    const spouseOccupation = context['仕事'].配偶者[0]?.selection;
+    if (spouseOccupation != null) {
+      spouseMember.就労形態 = { [currentDate]: spouseOccupation };
+    }
+
+    // 新しい仕事
+    const spouseNewJob =
+      context['6か月以内に新しい仕事を始めましたか？'].配偶者[0]?.selection;
+    if (spouseNewJob != null) {
+      spouseMember.六か月以内に新規就労 = { [currentDate]: spouseNewJob };
+    }
+
+    // 休業中の給与の支払い
+    const spouseLeaveWithoutPay =
+      context['休職中に給与の支払いがない状態ですか？'].配偶者[0]?.selection;
+    if (spouseLeaveWithoutPay != null) {
+      spouseMember.休業中に給与の支払いがない = {
+        [currentDate]: spouseLeaveWithoutPay,
+      };
+    }
+
+    // 業務による病気・けが
+    const spouseIndustrialAccident = (context[
+      '業務によって病気やけがをしましたか？'
+    ].配偶者[0]?.selection ?? []) as string[];
+    spouseMember.業務によって病気になった = {
+      [currentDate]:
+        spouseIndustrialAccident.includes('業務によって病気になった'),
+    };
+    spouseMember.業務によってけがをした = {
+      [currentDate]:
+        spouseIndustrialAccident.includes('業務によってけがをした'),
+    };
+
+    // 病気・けがによる3日以上休業
+    const spouseLeaveByAccident = (context[
+      '病気やけがによって連続3日以上休業していますか？'
+    ].配偶者[0]?.selection ?? []) as string[];
+    spouseMember.病気によって連続三日以上休業している = {
+      [currentDate]:
+        spouseLeaveByAccident.includes('病気によって連続三日以上休業している'),
+    };
+    spouseMember.けがによって連続三日以上休業している = {
+      [currentDate]:
+        spouseLeaveByAccident.includes('けがによって連続三日以上休業している'),
+    };
+
+    // 入院中・在宅療養中
+    const spouseHospitalized = context['入院中ですか？'].配偶者[0]?.selection;
+    if (spouseHospitalized != null) {
+      spouseMember.入院中 = { [currentDate]: spouseHospitalized };
+    }
+    const spouseHomeRecuperation =
+      context['在宅療養中（結核、または治療に3か月以上かかるもの）ですか？']
+        .配偶者[0]?.selection;
+    if (spouseHomeRecuperation != null) {
+      spouseMember.在宅療養中 = { [currentDate]: spouseHomeRecuperation };
+    }
+
+    // HIV・エイズ関連
+    const spouseHIV = context['HIVに感染していますか？'].配偶者[0]?.selection;
+    spouseMember.HIV感染者である = { [currentDate]: spouseHIV ?? false };
+    const spouseAIDS =
+      context['エイズを発症していますか？'].配偶者[0]?.selection;
+    if (spouseAIDS != null) {
+      spouseMember.エイズを発症している = { [currentDate]: spouseAIDS };
+    }
+    const spouseFamilyHIV =
+      context['家族に血液製剤によってHIVに感染した方はいますか？'].配偶者[0]
+        ?.selection;
+    if (spouseFamilyHIV != null) {
+      spouseMember.家族に血液製剤によるHIV感染者がいる = {
+        [currentDate]: spouseFamilyHIV,
+      };
+    }
+    const spouseHIVByBlood =
+      context['血液製剤の投与によってHIVに感染しましたか？'].配偶者[0]
+        ?.selection;
+    if (spouseHIVByBlood != null) {
+      spouseMember.血液製剤の投与によってHIVに感染した = {
+        [currentDate]: spouseHIVByBlood,
+      };
+    }
+
+    // C型肝炎関連
+    const spouseHepCByBlood =
+      context['血液製剤の投与によってC型肝炎ウイルスに感染しましたか？']
+        .配偶者[0]?.selection;
+    if (spouseHepCByBlood != null) {
+      spouseMember.血液製剤の投与によってC型肝炎ウイルスに感染した = {
+        [currentDate]: spouseHepCByBlood,
+      };
+    }
+    const spouseCirrhosis =
+      context[
+        '肝硬変や肝がんにかかっていますか？または肝移植をおこないましたか？'
+      ].配偶者[0]?.selection;
+    if (spouseCirrhosis != null) {
+      spouseMember.肝硬変や肝がんに罹患しているまたは肝移植をおこなった = {
+        [currentDate]: spouseCirrhosis,
+      };
+    }
+
+    // 腎不全関連
+    const spouseChronicRenalFailure =
+      context['慢性腎不全ですか？'].配偶者[0]?.selection;
+    if (spouseChronicRenalFailure != null) {
+      spouseMember.慢性腎不全である = {
+        [currentDate]: spouseChronicRenalFailure,
+      };
+    }
+    const spouseDialysis =
+      context['人工透析を行っていますか？'].配偶者[0]?.selection;
+    if (spouseDialysis != null) {
+      spouseMember.人工透析を行っている = { [currentDate]: spouseDialysis };
+    }
+
+    // 血液凝固因子異常症
+    const spouseHemophilia = (context[
+      '血液凝固因子異常症のうち、当てはまるものはどれですか？'
+    ].配偶者[0]?.selection ?? []) as string[];
+    Object.entries(hemophiliaFieldMap).forEach(([display, field]) => {
+      spouseMember[field] = {
+        [currentDate]: spouseHemophilia.includes(display),
+      };
+    });
+
+    // 身体障害者手帳等級
+    const spousePhysicalDisability =
+      context['身体障害者手帳を持っていますか？'].配偶者[0]?.selection;
+    if (spousePhysicalDisability != null) {
+      spouseMember.身体障害者手帳等級 = {
+        [currentDate]:
+          physicalDisabilityGradeMap[spousePhysicalDisability] ?? '無',
+      };
+    }
+
+    // 精神障害者手帳等級
+    const spouseMentalDisability =
+      context['精神障害者保健福祉手帳を持っていますか？'].配偶者[0]?.selection;
+    if (spouseMentalDisability != null) {
+      spouseMember.精神障害者保健福祉手帳等級 = {
+        [currentDate]:
+          physicalDisabilityGradeMap[spouseMentalDisability] ?? '無',
+      };
+    }
+
+    // 療育手帳・愛の手帳
+    const spouseIntellectualDisability =
+      context['療育手帳、または愛の手帳を持っていますか？'].配偶者[0]
+        ?.selection;
+    if (spouseIntellectualDisability != null) {
+      const spouseIntellectualMap: Record<
+        string,
+        { field: string; value: string }
+      > = {
+        '療育手帳 A': { field: '療育手帳等級', value: 'A' },
+        '療育手帳 B': { field: '療育手帳等級', value: 'B' },
+        '愛の手帳 1度': { field: '愛の手帳等級', value: '一度' },
+        '愛の手帳 2度': { field: '愛の手帳等級', value: '二度' },
+        '愛の手帳 3度': { field: '愛の手帳等級', value: '三度' },
+        '愛の手帳 4度': { field: '愛の手帳等級', value: '四度' },
+      };
+      const mapped = spouseIntellectualMap[spouseIntellectualDisability];
+      if (mapped) {
+        spouseMember[mapped.field] = { [currentDate]: mapped.value };
+      }
+    }
+
+    // 放射線障害
+    const spouseRadiation =
+      context['放射線障害がありますか？'].配偶者[0]?.selection;
+    if (spouseRadiation != null) {
+      spouseMember.放射線障害 = {
+        [currentDate]: spouseRadiation === 'いいえ' ? '無' : spouseRadiation,
+      };
+    }
+
+    // 内部障害・脳性まひ
+    const spouseInternalDisability =
+      context['内部障害（内臓などのからだの内部の障害）がありますか？']
+        .配偶者[0]?.selection;
+    if (spouseInternalDisability != null) {
+      spouseMember.内部障害 = {
+        [currentDate]: spouseInternalDisability ? '有' : '無',
+      };
+    }
+    const spouseCerebralParalysis =
+      context['脳性まひ、または進行性筋萎縮症ですか？'].配偶者[0]?.selection;
+    if (spouseCerebralParalysis != null) {
+      spouseMember.脳性まひ_進行性筋萎縮症 = {
+        [currentDate]: spouseCerebralParalysis ? '有' : '無',
+      };
+    }
+
+    // 介護施設・学生
+    const spouseNursingHome =
+      context['介護施設に入所していますか？'].配偶者[0]?.selection;
+    if (spouseNursingHome != null) {
+      spouseMember.介護施設入所中 = { [currentDate]: spouseNursingHome };
+    }
+    const spouseStudent =
+      context['高校、大学、専門学校、職業訓練学校等の学生ですか？'].配偶者[0]
+        ?.selection;
+    if (spouseStudent != null) {
+      spouseMember.学生 = { [currentDate]: spouseStudent };
+    }
+
+    // 妊娠
+    const spousePregnancy =
+      context['妊娠中、または産後6ヵ月以内ですか？'].配偶者[0]?.selection;
+    if (spousePregnancy != null) {
+      spouseMember.妊産婦 = {
+        [currentDate]: spousePregnancy === 'いいえ' ? '無' : spousePregnancy,
+      };
+    }
+  }
+
   // 親一覧の構築（配偶者の有無に応じて追加）
   const 親一覧: HouseholdRelationship[] = ['あなた'];
-  if (context['配偶者はいますか？'].あなた[0].selection === true) {
+  if (hasSpouse) {
     親一覧.push('配偶者');
+  }
+
+  const 世帯員: OpenFiscaHousehold['世帯員'] = {
+    あなた: selfMember,
+  };
+  if (hasSpouse) {
+    世帯員.配偶者 = spouseMember;
   }
 
   const household: OpenFiscaHousehold = {
     // Household members
-    世帯員: {
-      あなた: selfMember,
-    },
+    世帯員: 世帯員,
     // Household
     世帯一覧: {
       // Household 1
@@ -344,6 +591,10 @@ export const toOpenFiscaHousehold = ({
         },
         居住市区町村: {
           [currentDate]: context['寝泊まりしている地域'].あなた[0].municipality,
+        },
+        配偶者がいるがひとり親に該当: {
+          [currentDate]:
+            context['以下のいずれかに当てはまりますか？'].配偶者[0]?.selection,
         },
 
         // 以下はOpenFisca側から受け取りたいVariableを指定

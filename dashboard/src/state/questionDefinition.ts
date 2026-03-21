@@ -56,6 +56,7 @@ export const booleanQuestionDefinitions = {
   '介護施設に入所していますか？': { type: 'Boolean' },
   '高校、大学、専門学校、職業訓練学校等の学生ですか？': { type: 'Boolean' },
   '配偶者はいますか？': { type: 'Boolean' },
+  '以下のいずれかに当てはまりますか？': { type: 'Boolean' },
 } as const;
 
 export const personNumQuestionDefinitions = {

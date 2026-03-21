@@ -23,7 +23,7 @@ export const AddressQuestionTemplate = ({
   initialValue,
 }: {
   assignFunc: (question: AddressQuestion) => void;
-  initialValue: AddressQuestion;
+  initialValue?: AddressQuestion;
 }) => {
   const [questionValidated, setQuestionValidated] = useRecoilState(
     questionValidatedAtom
@@ -36,10 +36,10 @@ export const AddressQuestionTemplate = ({
 
   // TODO: 初期値設定
   const [selectedPrefecture, setSelectedPrefecture] = useState(
-    initialValue.prefecure ?? ('' as string)
+    initialValue?.prefecure ?? ('' as string)
   );
   const [selectedMunicipality, setSelectedMunicipality] = useState(
-    initialValue.municipality ?? ('' as string)
+    initialValue?.municipality ?? ('' as string)
   );
   const prefectureArray = Object.keys(pmObj);
 

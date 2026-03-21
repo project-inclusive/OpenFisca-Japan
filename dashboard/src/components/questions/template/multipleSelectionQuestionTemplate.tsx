@@ -27,11 +27,11 @@ export const MultipleSelectionQuestionTemplate = <
   title: string;
   selections: readonly string[];
   assignFunc: (question: MultipleSelectionQuestion<T>) => void;
-  initialValue: MultipleSelectionQuestion<T>;
+  initialValue?: MultipleSelectionQuestion<T>;
 }) => {
   const [, setQuestionValidated] = useRecoilState(questionValidatedAtom);
-  const [selectedItems, setSelectedItems] = useState<string[]>(
-    initialValue.selection as string[]
+  const [selectedItems, setSelectedItems] = useState<string[] | undefined>(
+    initialValue?.selection
   );
 
   useEffect(() => {
@@ -40,9 +40,9 @@ export const MultipleSelectionQuestionTemplate = <
   }, []);
 
   const toggle = (item: string) => {
-    const next = selectedItems.includes(item)
+    const next = selectedItems?.includes(item)
       ? selectedItems.filter((s) => s !== item)
-      : [...selectedItems, item];
+      : [...(selectedItems || []), item];
     setSelectedItems(next);
     assignFunc({ type: 'MultipleSelection', selection: next as any });
   };
@@ -52,7 +52,7 @@ export const MultipleSelectionQuestionTemplate = <
     assignFunc({ type: 'MultipleSelection', selection: [] as any });
   };
 
-  const neitherSelected = selectedItems.length === 0;
+  const neitherSelected = selectedItems?.length === 0;
 
   return (
     <VStack flex={1}>
@@ -77,11 +77,11 @@ export const MultipleSelectionQuestionTemplate = <
               borderRadius="xl"
               height="3.5em"
               width="100%"
-              bg={selectedItems.includes(item) ? 'cyan.600' : 'white'}
-              borderColor={selectedItems.includes(item) ? 'cyan.900' : 'black'}
-              color={selectedItems.includes(item) ? 'white' : 'black'}
+              bg={selectedItems?.includes(item) ? 'cyan.600' : 'white'}
+              borderColor={selectedItems?.includes(item) ? 'cyan.900' : 'black'}
+              color={selectedItems?.includes(item) ? 'white' : 'black'}
               _hover={
-                selectedItems.includes(item)
+                selectedItems?.includes(item)
                   ? { bg: 'cyan.600', borderColor: 'cyan.900', color: 'white' }
                   : undefined
               }
