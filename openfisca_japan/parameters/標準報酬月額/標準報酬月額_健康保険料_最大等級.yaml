@@ -1,6 +1,6 @@
 description: 標準報酬月額_健康保険料_最大等級
 metadata:
-  reference: https://www.kyoukaikenpo.or.jp/~/media/Files/shared/hokenryouritu/r5/ippan/r50213tokyo.pdf
+  reference: https://www.kyoukaikenpo.or.jp/assets/r60213tokyo.pdf
   unit: currency-JPY
 values:
   2000-01-01:
