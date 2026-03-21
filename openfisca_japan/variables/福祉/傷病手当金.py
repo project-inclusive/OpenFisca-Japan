@@ -14,7 +14,7 @@ class 傷病手当金_最大(Variable):
     entity = 世帯
     definition_period = DAY
     label = "傷病手当金"
-    reference = "https://www.kyoukaikenpo.or.jp/g7/cat710/sb3160/sb3170/sbb31710/1950-271/"
+    reference = "https://www.kyoukaikenpo.or.jp/benefit/injury_and_sickness_allowance/index.html"
     documentation = """
     休んだ日単位で支給されるため、算出額も一日当たりの金額とする。地方公務員の場合は一月当たりの日数が異なる。
     https://www.chikyosai.or.jp/division/short/scene/works/01.html
@@ -70,7 +70,7 @@ class 傷病手当金_最小(Variable):
     entity = 世帯
     definition_period = DAY
     label = "傷病手当金"
-    reference = "https://www.kyoukaikenpo.or.jp/g7/cat710/sb3160/sb3170/sbb31710/1950-271/"
+    reference = "https://www.kyoukaikenpo.or.jp/benefit/injury_and_sickness_allowance/index.html"
     documentation = """
     休んだ日単位で支給されるため、算出額も一日当たりの金額とする。
 

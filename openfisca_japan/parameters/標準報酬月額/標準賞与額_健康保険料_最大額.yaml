@@ -1,6 +1,6 @@
 description: 標準賞与額_健康保険料_最大額
 metadata:
-  reference: https://www.kyoukaikenpo.or.jp/g3/cat320/sb3160/sbb3165/1962-231/
+  reference: https://www.kyoukaikenpo.or.jp/about/business/insurance_rate/
   unit: currency-JPY
 values:
   2000-01-01:

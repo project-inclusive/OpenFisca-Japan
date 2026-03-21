@@ -14,7 +14,7 @@ class 介護保険料(Variable):
     definition_period = DAY
     label = "介護保険料"
     # 協会けんぽの介護保険料率(各事業所の健康保険組合の介護保険料率とは異なる)
-    reference = "https://www.kyoukaikenpo.or.jp/g7/cat330/1995-298/"
+    reference = "https://www.kyoukaikenpo.or.jp/g7/cat330/"
     documentation = """
     40歳から64歳までの介護保険第2号被保険者の介護保険料
     介護保険用の標準報酬月額と標準賞与額(月平均)に介護保険料率を掛けた金額の年間合計

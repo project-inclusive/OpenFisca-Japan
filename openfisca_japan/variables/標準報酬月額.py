@@ -14,7 +14,7 @@ class 標準報酬月額_健康保険料(Variable):
     entity = 人物
     definition_period = DAY
     label = "標準報酬月額_健康保険料"
-    reference = "https://www.kyoukaikenpo.or.jp/g3/cat320/sb3160/sbb3165/1962-231/"
+    reference = "https://www.kyoukaikenpo.or.jp/about/business/insurance_rate/"
     documentation = """
     被保険者が事業主から受ける毎月の報酬
 
@@ -64,7 +64,7 @@ class 標準賞与額_月平均_健康保険料(Variable):
     entity = 人物
     definition_period = DAY
     label = "標準賞与額_月平均_健康保険料"
-    reference = "https://www.kyoukaikenpo.or.jp/g3/cat320/sb3160/sbb3165/1962-231/"
+    reference = "https://www.kyoukaikenpo.or.jp/about/business/insurance_rate/"
     documentation = """
     被保険者が事業主から受ける賞与の月平均額(健康保険料計算用)
     """
@@ -120,6 +120,7 @@ class 賞与以外の年収(Variable):
     # OpenFisca will spread the yearly 金額 over the days contained in the year.
     set_input = set_input_divide_by_period
     label = "人物の賞与以外の年収"
+    reference = "https://www.freee.co.jp/kb/kb-payroll/what-standard-monthly-income-is/"
 
     def formula(対象人物, 対象期間, parameters):
         収入 = 対象人物("収入", 対象期間)
@@ -127,12 +128,12 @@ class 賞与以外の年収(Variable):
         年2回目の賞与 = 対象人物("年2回目の賞与", 対象期間)
         年3回目の賞与 = 対象人物("年3回目の賞与", 対象期間)
         年4回目以降の賞与合計 = 対象人物("年4回目以降の賞与合計", 対象期間)
-        賞与が年4回以上 = 年4回目以降の賞与合計 > 0
+        賞与が年3回以下 = 年4回目以降の賞与合計 == 0
         賞与の合計 = 年1回目の賞与 + 年2回目の賞与 + 年3回目の賞与 + 年4回目以降の賞与合計
 
-        # 1年の間に賞与が4回以上ある場合、収入に賞与の合計を加算し
-        # 3回以内である場合、賞与の合計を収入から差し引く
-        賞与以外の年収 = 収入 + 賞与が年4回以上 * 賞与の合計 - np.logical_not(賞与が年4回以上) * 賞与の合計
+        # 1年の間に3回以内である場合、賞与の合計を収入から差し引く
+        # 賞与が4回以上ある場合、収入に賞与を含む(元々収入は賞与を含む想定)
+        賞与以外の年収 = 収入 - 賞与が年3回以下 * 賞与の合計
 
         return 賞与以外の年収
 

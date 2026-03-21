@@ -14,6 +14,9 @@ class 国民年金保険に加入している(Variable):
     # NOTE: 厚生年金保険加入者とその扶養者は国民年金保険に加入しない
     definition_period = DAY
     label = "国民年金保険に加入している"
+    # NOTE: 国民年金加入は義務のためdefault値はTrueとしているが実際の納付率は2021年度は74%
+    # https://www.smbc.co.jp/kojin/money-viva/nenkin/0006/
+    default_value = True
 
 
 class 国民年金保険料(Variable):
