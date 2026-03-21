@@ -13,7 +13,7 @@ class 社会保険料(Variable):
     entity = 人物
     definition_period = DAY
     label = "社会保険料"
-    reference = "https://www.freee.co.jp/kb/kb-payroll/how-to-calculate-employment-insurance/"
+    reference = "https://www.freee.co.jp/kb/kb-payroll/how-to-calculate-social-insurance-premium-deduction-from-salary/"
     documentation = """
     被保険者の社会保険料(年額)
     個人事業主の計算は行わない。
