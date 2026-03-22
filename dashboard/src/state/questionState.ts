@@ -959,8 +959,7 @@ export const questionStateMachine = setup({
           {
             // 他に親がいなければ終了
             target: 'result',
-            guard: ({ context }) =>
-              context.currentMember.relationship === '親',
+            guard: ({ context }) => context.currentMember.relationship === '親',
           },
         ],
         hasBack: true,
