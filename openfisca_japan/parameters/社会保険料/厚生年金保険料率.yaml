@@ -1,0 +1,7 @@
+description: 厚生年金保険料率
+metadata:
+  reference: https://www.nenkin.go.jp/service/kounen/hokenryo/ryogaku/ryogakuhyo/index.html
+  unit: currency-JPY
+values:
+  2017-09-01:
+    value: 0.183

@@ -14,7 +14,7 @@ class 傷病手当金_最大(Variable):
     entity = 世帯
     definition_period = DAY
     label = "傷病手当金"
-    reference = "https://www.kyoukaikenpo.or.jp/g7/cat710/sb3160/sb3170/sbb31710/1950-271/"
+    reference = "https://www.kyoukaikenpo.or.jp/benefit/injury_and_sickness_allowance/index.html"
     documentation = """
     休んだ日単位で支給されるため、算出額も一日当たりの金額とする。地方公務員の場合は一月当たりの日数が異なる。
     https://www.chikyosai.or.jp/division/short/scene/works/01.html
@@ -59,7 +59,7 @@ class 傷病手当金_最大(Variable):
              1 / 一月当たりの日数_会社員 * (2 / 3)],
             0)
 
-        標準報酬月額 = 対象世帯.members("標準報酬月額", 対象期間)
+        標準報酬月額 = 対象世帯.members("標準報酬月額_健康保険料", 対象期間)
         傷病手当金日額 = 標準報酬月額 * 就労形態ごとの倍率
 
         return 対象世帯.sum(休業条件 * 給与条件 * 年齢条件 * 傷病手当金日額)
@@ -70,7 +70,7 @@ class 傷病手当金_最小(Variable):
     entity = 世帯
     definition_period = DAY
     label = "傷病手当金"
-    reference = "https://www.kyoukaikenpo.or.jp/g7/cat710/sb3160/sb3170/sbb31710/1950-271/"
+    reference = "https://www.kyoukaikenpo.or.jp/benefit/injury_and_sickness_allowance/index.html"
     documentation = """
     休んだ日単位で支給されるため、算出額も一日当たりの金額とする。
 
@@ -83,7 +83,6 @@ class 傷病手当金_最小(Variable):
         # 任意継続被保険者である場合、傷病手当金の対象外
         # 労災保険から休業補償給付を受けている場合、傷病手当金の対象外
         # 会社の出産手当金、退職年金等を受け取っている場合、傷病手当金の対象外
-        # 賞与は実際の標準報酬月額には含まれない（年2回以下の場合）ため、傷病手当金の最大額が実際よりも高く産出されてしまう
         return 0
 
 

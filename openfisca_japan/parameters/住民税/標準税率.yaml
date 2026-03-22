@@ -1,0 +1,7 @@
+description: 住民税における標準税率
+metadata:
+  reference: https://www.soumu.go.jp/main_sosiki/jichi_zeisei/czaisei/czaisei_seido/150790_06.html
+  unit: currency-JPY
+values:
+  2000-01-01:
+    value: 0.1

@@ -63,7 +63,7 @@ class 住民税障害者控除(Variable):
     OpenFiscaではクラス名をアプリ全体で一意にする必要があるため、先頭に「住民税」を追加。
     """
 
-    def formula(対象人物, 対象期間, _parameters):
+    def formula(対象人物, 対象期間, parameters):
         # 自身が扶養に入っている、または同一生計配偶者である場合、納税者（世帯主）が控除を受ける
         扶養親族である = 対象人物("扶養親族である", 対象期間)
         同一生計配偶者である = 対象人物("同一生計配偶者である", 対象期間)
@@ -189,7 +189,7 @@ class 住民税配偶者控除(Variable):
     https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1182.htm
     """
 
-    def formula(対象人物, 対象期間, _parameters):
+    def formula(対象人物, 対象期間, parameters):
         # 所得が高いほうが控除を受ける対象となる
         所得一覧 = 対象人物("所得", 対象期間)
         所得降順 = 対象人物.get_rank(対象人物.世帯, - 所得一覧, condition=対象人物.has_role(世帯.親))
@@ -242,7 +242,7 @@ class 住民税配偶者特別控除(Variable):
     OpenFiscaではクラス名をアプリ全体で一意にする必要があるため、先頭に「住民税」を追加。
     """
 
-    def formula(対象人物, 対象期間, _parameters):
+    def formula(対象人物, 対象期間, parameters):
         # 所得が高いほうが控除を受ける対象となる
         所得一覧 = 対象人物("所得", 対象期間)
         所得降順 = 対象人物.get_rank(対象人物.世帯, - 所得一覧, condition=対象人物.has_role(世帯.親))
@@ -330,18 +330,18 @@ class 住民税扶養控除(Variable):
 
 class 住民税基礎控除(Variable):
     value_type = float
-    entity = 世帯
+    entity = 人物
     definition_period = DAY
     label = "住民税における基礎控除"
     reference = "https://www.city.yokohama.lg.jp/kurashi/koseki-zei-hoken/zeikin/y-shizei/kojin-shiminzei-kenminzei/kaisei/R3zeiseikaisei.html"
 
-    def formula(対象世帯, 対象期間, _parameters):
-        世帯高所得 = 対象世帯("世帯高所得", 対象期間)
+    def formula(対象人物, 対象期間, parameters):
+        合計所得金額 = 対象人物("合計所得金額", 対象期間)
 
         return np.select(
-            [世帯高所得 <= 24000000,
-             (世帯高所得 > 24000000) * (世帯高所得 <= 24500000),
-             (世帯高所得 > 24500000) * (世帯高所得 <= 25000000)],
+            [合計所得金額 <= 24000000,
+             (合計所得金額 > 24000000) * (合計所得金額 <= 24500000),
+             (合計所得金額 > 24500000) * (合計所得金額 <= 25000000)],
             [430000,
              290000,
              150000],
@@ -355,32 +355,11 @@ class 控除後住民税世帯高所得(Variable):
     label = "住民税計算において、各種控除が適用された後の世帯高所得額"
     reference = "https://www.town.hinode.tokyo.jp/0000000516.html"
 
-    def formula(対象世帯, 対象期間, _parameters):
-        # TODO: 社会保険料を追加
+    def formula(対象世帯, 対象期間, parameters):
         世帯高所得 = 対象世帯("世帯高所得", 対象期間)
-        配偶者控除一覧 = 対象世帯.members("住民税配偶者控除", 対象期間)
-        配偶者控除 = 対象世帯.sum(配偶者控除一覧)
-        配偶者特別控除一覧 = 対象世帯.members("住民税配偶者特別控除", 対象期間)
-        配偶者特別控除 = 対象世帯.sum(配偶者特別控除一覧)
-        扶養控除一覧 = 対象世帯.members("住民税扶養控除", 対象期間)
-        扶養控除 = 対象世帯.sum(扶養控除一覧)
-        障害者控除一覧 = 対象世帯.members("住民税障害者控除", 対象期間)
-        障害者控除 = 対象世帯.sum(障害者控除一覧)
-        ひとり親控除一覧 = 対象世帯.members("住民税ひとり親控除", 対象期間)
-        ひとり親控除 = 対象世帯.sum(ひとり親控除一覧)
-        寡婦控除一覧 = 対象世帯.members("住民税寡婦控除", 対象期間)
-        寡婦控除 = 対象世帯.sum(寡婦控除一覧)
-        勤労学生控除一覧 = 対象世帯.members("住民税勤労学生控除", 対象期間)
-        勤労学生控除 = 対象世帯.sum(勤労学生控除一覧)
-        基礎控除 = 対象世帯("住民税基礎控除", 対象期間)
-
-        # 他の控除（雑損控除・医療費控除等）は定額でなく実費を元に算出するため除外する
-
-        総控除額 = 配偶者控除 + 配偶者特別控除 + 扶養控除 + 障害者控除 + \
-            ひとり親控除 + 寡婦控除 + 勤労学生控除 + 基礎控除
-
-        # 負の数にならないよう、0円未満になった場合は0円に補正
-        return np.clip(世帯高所得 - 総控除額, 0.0, None)
+        住民税所得控除一覧 = 対象世帯.members("住民税所得控除", 対象期間)
+        総住民税所得控除 = 対象世帯.sum(住民税所得控除一覧)
+        return np.clip(世帯高所得 - 総住民税所得控除, 0.0, None)
 
 
 class 住民税非課税世帯(Variable):
@@ -394,7 +373,7 @@ class 住民税非課税世帯(Variable):
     # 市町村の級地により住民税均等割における非課税限度額が異なる
     # https://www.soumu.go.jp/main_content/000758656.pdf
 
-    def formula(対象世帯, 対象期間, _parameters):
+    def formula(対象世帯, 対象期間, parameters):
         世帯高所得 = 対象世帯("世帯高所得", 対象期間)
         世帯人数 = 対象世帯("世帯人数", 対象期間)
         居住級地区分1 = 対象世帯("居住級地区分1", 対象期間)
@@ -421,7 +400,7 @@ class 人的控除額の差(Variable):
     例外についての詳細は https://www.town.hinode.tokyo.jp/0000000519.html も参考になる
     """
 
-    def formula(対象世帯, 対象期間, _parameters):
+    def formula(対象世帯, 対象期間, parameters):
         障害者控除差額 = 対象世帯.sum(対象世帯.members("障害者控除", 対象期間) - 対象世帯.members("住民税障害者控除", 対象期間))
         寡婦控除一覧 = 対象世帯.members("寡婦控除", 対象期間)
         住民税寡婦控除一覧 = 対象世帯.members("住民税寡婦控除", 対象期間)
@@ -482,3 +461,77 @@ class 調整控除(Variable):
 
         # 負の数にならないよう、0円未満になった場合は0円に補正
         return np.clip(控除額, 0.0, None)
+
+
+class 住民税所得控除(Variable):
+    value_type = float
+    entity = 人物
+    definition_period = DAY
+    label = "住民税所得控除"
+    reference = "https://biz.moneyforward.com/tax_return/basic/18507/"
+    # NOTE: 所得税算出用のvariable"所得控除"とは異なる
+
+    def formula(対象人物, 対象期間, parameters):
+        # 対象者・金額が大きい以下の控除を計算対象として加算する
+        社会保険料控除 = 対象人物("社会保険料控除", 対象期間)
+        障害者控除 = 対象人物("住民税障害者控除", 対象期間)
+        寡婦控除 = 対象人物("住民税寡婦控除", 対象期間)
+        ひとり親控除 = 対象人物("住民税ひとり親控除", 対象期間)
+        勤労学生控除 = 対象人物("住民税勤労学生控除", 対象期間)
+        扶養控除 = 対象人物("住民税扶養控除", 対象期間)
+        配偶者控除 = 対象人物("住民税配偶者控除", 対象期間)
+        配偶者特別控除 = 対象人物("住民税配偶者特別控除", 対象期間)
+        基礎控除 = 対象人物("住民税基礎控除", 対象期間)
+        所得控除 = 社会保険料控除 + 障害者控除 + 寡婦控除 + ひとり親控除 + 勤労学生控除 + 扶養控除 + 配偶者控除 + 配偶者特別控除 + 基礎控除
+
+        return 所得控除
+
+
+class 住民税所得割(Variable):
+    value_type = float
+    entity = 人物
+    definition_period = DAY
+    label = "住民税所得割"
+    reference = "https://www.soumu.go.jp/main_sosiki/jichi_zeisei/czaisei/czaisei_seido/150790_06.html"
+
+    def formula(対象人物, 対象期間, parameters):
+        # 所得控除が差し引かれる前の所得は厳密には合計所得金額ではないが
+        # 給与所得者あるいは個人事業主はほぼ合計所得金額と等しいので、ここでは合計所得金額を用いる
+        合計所得金額 = 対象人物("合計所得金額", 対象期間)
+        所得控除 = 対象人物("住民税所得控除", 対象期間)
+        課税所得 = 合計所得金額 - 所得控除
+        標準税率 = parameters(対象期間).住民税.標準税率
+
+        調整控除 = 対象人物.世帯("調整控除", 対象期間)  # 調整控除は世帯で計算している
+        所得 = 対象人物("所得", 対象期間)
+        所得降順 = 対象人物.get_rank(対象人物.世帯, -所得)
+        所得が最も高い世帯員である = 所得降順 == 0
+        所得割 = 課税所得 * 標準税率 - 所得が最も高い世帯員である * 調整控除
+        # 税額控除は定常的でない、あるいは少額なため省略する
+        return np.clip(所得割, 0.0, None)
+
+
+class 住民税均等割(Variable):
+    value_type = float
+    entity = 人物
+    definition_period = DAY
+    label = "住民税均等割"
+    reference = "https://www.soumu.go.jp/main_sosiki/jichi_zeisei/czaisei/czaisei_seido/150790_06.html"
+
+    def formula(対象人物, 対象期間, parameters):
+        均等割 = parameters(対象期間).住民税.均等割
+        森林環境税 = parameters(対象期間).住民税.森林環境税
+        return 均等割 + 森林環境税
+
+
+class 住民税(Variable):
+    value_type = float
+    entity = 人物
+    definition_period = DAY
+    label = "住民税"
+    reference = "https://www.soumu.go.jp/main_sosiki/jichi_zeisei/czaisei/czaisei_seido/150790_06.html"
+
+    def formula(対象人物, 対象期間, parameters):
+        所得割 = 対象人物("住民税所得割", 対象期間)
+        均等割 = 対象人物("住民税均等割", 対象期間)
+        return 所得割 + 均等割

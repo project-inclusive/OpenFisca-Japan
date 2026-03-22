@@ -1,0 +1,7 @@
+description: 介護保険料率
+metadata:
+  reference: https://www.kyoukaikenpo.or.jp/about/business/insurance_rate/ # 協会けんぽの介護保険料率(各事業所の健康保険組合の介護保険料率とは異なる)
+  unit: currency-JPY
+values:
+  2015-01-01:
+    value: 0.016

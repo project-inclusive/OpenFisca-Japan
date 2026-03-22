@@ -1,0 +1,7 @@
+description: 復興特別所得税率
+metadata:
+  reference: https://www.nta.go.jp/publication/pamph/koho/kurashi/html/01_1.htm
+  unit: currency-JPY
+values:
+  2013-01-01:
+    value: 0.021

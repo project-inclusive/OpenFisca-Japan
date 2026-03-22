@@ -1,0 +1,7 @@
+description: 超過所得割合
+metadata:
+  reference: https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2260.htm
+  unit: currency-JPY
+values:
+  2025-01-01:
+    value: 0.225

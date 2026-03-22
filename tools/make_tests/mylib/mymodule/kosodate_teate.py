@@ -51,7 +51,7 @@ class Process(ProcessBase):
         if self.titles.get("控除後世帯高所得") and row[self.titles["控除後世帯高所得"]]:
             income = int(row[self.titles["控除後世帯高所得"]].replace(",", ""))
             if allowance == "障害児福祉手当":
-                d_input["世帯"]["控除後世帯高所得"] = {self.period: income}
+                d_input["世帯"]["障害児福祉手当の控除後世帯高所得"] = {self.period: income}
             elif allowance == "児童手当":
                 d_input["世帯"]["児童手当の控除後世帯高所得"] = {self.period: income}
             elif allowance == "児童扶養手当":
