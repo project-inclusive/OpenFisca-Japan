@@ -57,6 +57,7 @@ export const booleanQuestionDefinitions = {
   '高校、大学、専門学校、職業訓練学校等の学生ですか？': { type: 'Boolean' },
   '配偶者はいますか？': { type: 'Boolean' },
   '以下のいずれかに当てはまりますか？': { type: 'Boolean' },
+  '高校に通っていますか？': { type: 'Boolean' },
 } as const;
 
 export const personNumQuestionDefinitions = {
@@ -68,6 +69,14 @@ export const selectionQuestionDefinitions = {
   仕事: {
     type: 'Selection',
     selections: ['会社員', '公務員', '自営業', 'その他'],
+  },
+  '通っている高校の種類を選んでください（1）': {
+    type: 'Selection',
+    selections: ['全日制課程', '定時制課程', '通信制課程', '専攻科'],
+  },
+  '通っている高校の種類を選んでください（2）': {
+    type: 'Selection',
+    selections: ['国立', '公立', '私立'],
   },
   '身体障害者手帳を持っていますか？': {
     type: 'Selection',

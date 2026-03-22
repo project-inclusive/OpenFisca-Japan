@@ -565,6 +565,257 @@ export const toOpenFiscaHousehold = ({
     }
   }
 
+  // 子どもの世帯員情報を構築
+  const childrenNum = context['子どもの人数'].あなた[0].selection;
+  const childMembers: OpenFiscaMember[] = [];
+
+  if (childrenNum != null) {
+    for (let i = 0; i < childrenNum; i++) {
+      const childMember: OpenFiscaMember = {};
+
+      // 年齢 → 誕生年月日
+      const childAge = context['年齢'].子ども[i]?.selection;
+      if (childAge != null) {
+        const birthYear = parseInt(currentDate.substring(0, 4)) - childAge;
+        childMember.誕生年月日 = { ETERNITY: `${birthYear}-01-01` };
+      }
+
+      // 年収・預貯金（万円 → 円）
+      const childIncome = context['年収'].子ども[i]?.selection;
+      if (childIncome != null) {
+        childMember.収入 = { [currentDate]: childIncome * unit };
+      } else {
+        childMember.収入 = { [currentDate]: 0 };
+      }
+      const childDeposit = context['預貯金'].子ども[i]?.selection;
+      if (childDeposit != null) {
+        childMember.預貯金 = { [currentDate]: childDeposit * unit };
+      }
+
+      // 高校履修種別
+      const childHighSchoolCourse =
+        context['通っている高校の種類を選んでください（1）'].子ども[i]
+          ?.selection;
+      if (childHighSchoolCourse != null) {
+        childMember.高校履修種別 = { [currentDate]: childHighSchoolCourse };
+      }
+
+      // 高校運営種別
+      const childHighSchoolManagement =
+        context['通っている高校の種類を選んでください（2）'].子ども[i]
+          ?.selection;
+      if (childHighSchoolManagement != null) {
+        childMember.高校運営種別 = { [currentDate]: childHighSchoolManagement };
+      }
+
+      // 仕事の種類
+      const childOccupation = context['仕事'].子ども[i]?.selection;
+      if (childOccupation != null) {
+        childMember.就労形態 = { [currentDate]: childOccupation };
+      }
+
+      // 新しい仕事
+      const childNewJob =
+        context['6か月以内に新しい仕事を始めましたか？'].子ども[i]?.selection;
+      if (childNewJob != null) {
+        childMember.六か月以内に新規就労 = { [currentDate]: childNewJob };
+      }
+
+      // 休業中の給与の支払い
+      const childLeaveWithoutPay =
+        context['休職中に給与の支払いがない状態ですか？'].子ども[i]?.selection;
+      if (childLeaveWithoutPay != null) {
+        childMember.休業中に給与の支払いがない = {
+          [currentDate]: childLeaveWithoutPay,
+        };
+      }
+
+      // 業務による病気・けが（MultipleSelection → 各フィールドを true/false で設定）
+      const childIndustrialAccident = (context[
+        '業務によって病気やけがをしましたか？'
+      ].子ども[i]?.selection ?? []) as string[];
+      childMember.業務によって病気になった = {
+        [currentDate]:
+          childIndustrialAccident.includes('業務によって病気になった'),
+      };
+      childMember.業務によってけがをした = {
+        [currentDate]:
+          childIndustrialAccident.includes('業務によってけがをした'),
+      };
+
+      // 病気・けがによる3日以上休業
+      const childLeaveByAccident = (context[
+        '病気やけがによって連続3日以上休業していますか？'
+      ].子ども[i]?.selection ?? []) as string[];
+      childMember.病気によって連続三日以上休業している = {
+        [currentDate]:
+          childLeaveByAccident.includes('病気によって連続三日以上休業している'),
+      };
+      childMember.けがによって連続三日以上休業している = {
+        [currentDate]:
+          childLeaveByAccident.includes('けがによって連続三日以上休業している'),
+      };
+
+      // 入院中・在宅療養中
+      const childHospitalized = context['入院中ですか？'].子ども[i]?.selection;
+      if (childHospitalized != null) {
+        childMember.入院中 = { [currentDate]: childHospitalized };
+      }
+      const childHomeRecuperation =
+        context['在宅療養中（結核、または治療に3か月以上かかるもの）ですか？']
+          .子ども[i]?.selection;
+      if (childHomeRecuperation != null) {
+        childMember.在宅療養中 = { [currentDate]: childHomeRecuperation };
+      }
+
+      // HIV・エイズ関連（スキップされた場合もデフォルトfalseで設定）
+      const childHIV = context['HIVに感染していますか？'].子ども[i]?.selection;
+      childMember.HIV感染者である = { [currentDate]: childHIV ?? false };
+      const childAIDS =
+        context['エイズを発症していますか？'].子ども[i]?.selection;
+      if (childAIDS != null) {
+        childMember.エイズを発症している = { [currentDate]: childAIDS };
+      }
+      const childFamilyHIV =
+        context['家族に血液製剤によってHIVに感染した方はいますか？'].子ども[i]
+          ?.selection;
+      if (childFamilyHIV != null) {
+        childMember.家族に血液製剤によるHIV感染者がいる = {
+          [currentDate]: childFamilyHIV,
+        };
+      }
+      const childHIVByBlood =
+        context['血液製剤の投与によってHIVに感染しましたか？'].子ども[i]
+          ?.selection;
+      if (childHIVByBlood != null) {
+        childMember.血液製剤の投与によってHIVに感染した = {
+          [currentDate]: childHIVByBlood,
+        };
+      }
+
+      // C型肝炎関連
+      const childHepCByBlood =
+        context['血液製剤の投与によってC型肝炎ウイルスに感染しましたか？']
+          .子ども[i]?.selection;
+      if (childHepCByBlood != null) {
+        childMember.血液製剤の投与によってC型肝炎ウイルスに感染した = {
+          [currentDate]: childHepCByBlood,
+        };
+      }
+      const childCirrhosis =
+        context[
+          '肝硬変や肝がんにかかっていますか？または肝移植をおこないましたか？'
+        ].子ども[i]?.selection;
+      if (childCirrhosis != null) {
+        childMember.肝硬変や肝がんに罹患しているまたは肝移植をおこなった = {
+          [currentDate]: childCirrhosis,
+        };
+      }
+
+      // 腎不全関連
+      const childChronicRenalFailure =
+        context['慢性腎不全ですか？'].子ども[i]?.selection;
+      if (childChronicRenalFailure != null) {
+        childMember.慢性腎不全である = {
+          [currentDate]: childChronicRenalFailure,
+        };
+      }
+      const childDialysis =
+        context['人工透析を行っていますか？'].子ども[i]?.selection;
+      if (childDialysis != null) {
+        childMember.人工透析を行っている = { [currentDate]: childDialysis };
+      }
+
+      // 血液凝固因子異常症（MultipleSelection → 各因子フィールド）
+      const childHemophilia = (context[
+        '血液凝固因子異常症のうち、当てはまるものはどれですか？'
+      ].子ども[i]?.selection ?? []) as string[];
+      Object.entries(hemophiliaFieldMap).forEach(([display, field]) => {
+        childMember[field] = {
+          [currentDate]: childHemophilia.includes(display),
+        };
+      });
+
+      // 身体障害者手帳等級
+      const childPhysicalDisability =
+        context['身体障害者手帳を持っていますか？'].子ども[i]?.selection;
+      if (childPhysicalDisability != null) {
+        childMember.身体障害者手帳等級 = {
+          [currentDate]:
+            physicalDisabilityGradeMap[childPhysicalDisability] ?? '無',
+        };
+      }
+
+      // 精神障害者手帳等級
+      const childMentalDisability =
+        context['精神障害者保健福祉手帳を持っていますか？'].子ども[i]
+          ?.selection;
+      if (childMentalDisability != null) {
+        childMember.精神障害者保健福祉手帳等級 = {
+          [currentDate]:
+            physicalDisabilityGradeMap[childMentalDisability] ?? '無',
+        };
+      }
+
+      // 療育手帳・愛の手帳
+      const childIntellectualDisability =
+        context['療育手帳、または愛の手帳を持っていますか？'].子ども[i]
+          ?.selection;
+      if (childIntellectualDisability != null) {
+        const childIntellectualMap: Record<
+          string,
+          { field: string; value: string }
+        > = {
+          '療育手帳 A': { field: '療育手帳等級', value: 'A' },
+          '療育手帳 B': { field: '療育手帳等級', value: 'B' },
+          '愛の手帳 1度': { field: '愛の手帳等級', value: '一度' },
+          '愛の手帳 2度': { field: '愛の手帳等級', value: '二度' },
+          '愛の手帳 3度': { field: '愛の手帳等級', value: '三度' },
+          '愛の手帳 4度': { field: '愛の手帳等級', value: '四度' },
+        };
+        const mapped = childIntellectualMap[childIntellectualDisability];
+        if (mapped) {
+          childMember[mapped.field] = { [currentDate]: mapped.value };
+        }
+      }
+
+      // 放射線障害（'いいえ' → '無'）
+      const childRadiation =
+        context['放射線障害がありますか？'].子ども[i]?.selection;
+      if (childRadiation != null) {
+        childMember.放射線障害 = {
+          [currentDate]: childRadiation === 'いいえ' ? '無' : childRadiation,
+        };
+      }
+
+      // 内部障害・脳性まひ（bool → '有'/'無'）
+      const childInternalDisability =
+        context['内部障害（内臓などのからだの内部の障害）がありますか？']
+          .子ども[i]?.selection;
+      if (childInternalDisability != null) {
+        childMember.内部障害 = {
+          [currentDate]: childInternalDisability ? '有' : '無',
+        };
+      }
+      const childCerebralParalysis =
+        context['脳性まひ、または進行性筋萎縮症ですか？'].子ども[i]?.selection;
+      if (childCerebralParalysis != null) {
+        childMember.脳性まひ_進行性筋萎縮症 = {
+          [currentDate]: childCerebralParalysis ? '有' : '無',
+        };
+      }
+
+      // 介護施設
+      const childNursingHome =
+        context['介護施設に入所していますか？'].子ども[i]?.selection;
+      if (childNursingHome != null) {
+        childMember.介護施設入所中 = { [currentDate]: childNursingHome };
+      }
+
+      childMembers.push(childMember);
+    }
+  }
+
   // 親一覧の構築（配偶者の有無に応じて追加）
   const 親一覧: HouseholdRelationship[] = ['あなた'];
   if (hasSpouse) {
@@ -577,6 +828,9 @@ export const toOpenFiscaHousehold = ({
   if (hasSpouse) {
     世帯員.配偶者 = spouseMember;
   }
+  childMembers.forEach((childMember, i) => {
+    世帯員[`子ども${i + 1}`] = childMember;
+  });
 
   const household: OpenFiscaHousehold = {
     // Household members

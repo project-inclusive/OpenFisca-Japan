@@ -44,6 +44,8 @@ import { AmountOfMoneyQuestionTemplate } from './template/amountOfMoneyQuestionT
 import { MultipleSelectionQuestionTemplate } from './template/multipleSelectionQuestionTemplate';
 import { PersonNumQuestionTemplate } from './template/personNumQuestionTemplate';
 import { QuestionDescription } from './description';
+import configData from '../../config/app_config.json';
+import { ChildrenAgeQuestionTemplate } from './template/childrenAgeQuestionTemplate';
 
 const personStr = (member: HouseholdMember): string => {
   switch (member.relationship) {
@@ -107,6 +109,18 @@ const QuestionContent = ({
       context[questionKey][context.currentMember.relationship][
         context.currentMember.index
       ];
+
+    // 子どもには専用フォーム（学年を設定できる）を使用
+    if (context.currentMember.relationship === '子ども') {
+      return (
+        <ChildrenAgeQuestionTemplate
+          // 質問を切り替えるたびにフォーム表示をリセットするため、stateごとに一意なkeyを設定
+          key={`${questionKey}-${context.currentMember.relationship}-${context.currentMember.index}`}
+          assignFunc={assignFunc}
+          initialValue={initialValue}
+        />
+      );
+    }
 
     return (
       <AgeQuestionTemplate
@@ -237,6 +251,11 @@ const QuestionContent = ({
         context.currentMember.index
       ];
 
+    const maxPersonNum = {
+      子どもの人数: configData.validation.household.maxChildren,
+      親の人数: configData.validation.household.maxParents,
+    }[questionKey];
+
     return (
       <PersonNumQuestionTemplate
         // 質問を切り替えるたびにフォーム表示をリセットするため、stateごとに一意なkeyを設定
@@ -244,6 +263,7 @@ const QuestionContent = ({
         title={questionKey}
         initialValue={initialValue}
         assignFunc={assignFunc}
+        maxPersonNum={maxPersonNum}
       />
     );
   }
@@ -274,7 +294,7 @@ export const Question = ({
   useEffect(() => {
     // 質問が切り替わるたびにバリデーションエラー表示をリセット
     setShowsValidationError(false);
-  }, [state.value]);
+  }, [state.value, state.context.currentMember]);
 
   useEffect(() => {
     // すべての質問に回答し "result" に到達したら見積もり結果へ遷移
@@ -305,7 +325,16 @@ export const Question = ({
   }
 
   // HACK: ダミーの状態なので可能性から除外
-  if (state.value === 'history' || state.value === 'changeToSpouse') {
+  if (
+    state.value === 'history' ||
+    state.value === 'changeToSpouse' ||
+    state.value === 'changeToSelfChildrenNum' ||
+    state.value === 'changeToSelfParentNum' ||
+    state.value === 'changeToChild' ||
+    state.value === 'changeToNextChild' ||
+    state.value === 'changeToParent' ||
+    state.value === 'changeToNextParent'
+  ) {
     throw new Error(
       `xstateが予期せぬ状態遷移をしています: state: ${state.value}`
     );

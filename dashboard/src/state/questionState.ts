@@ -1,5 +1,7 @@
 import { assign, setup, type StateValueFrom } from 'xstate';
 import {
+  BooleanQuestion,
+  BooleanQuestionKey,
   QuestionAnswer,
   QuestionAnswers,
   QuestionKey,
@@ -30,13 +32,22 @@ type QuestionAssignEventMap = {
 type QuestionAssignEvent = QuestionAssignEventMap[QuestionKey];
 
 export type QuestionEvent =
-  | QuestionAssignEvent
+  // HACK: QuestionAssignEventを直接指定するとUnion型推論上限の26プロパティを超えてしまうため、BooleanQuestionのみ分離している
+  | Exclude<QuestionAssignEvent, { type: BooleanQuestionKey }>
+  | { type: BooleanQuestionKey; value: BooleanQuestion }
   | { type: 'next' }
   | { type: 'back' };
 
 export type QustionState = StateValueFrom<typeof questionStateMachine>;
 
-export type ChangeMemberKey = 'changeToSpouse';
+export type ChangeMemberKey =
+  | 'changeToSpouse'
+  | 'changeToChild'
+  | 'changeToSelfChildrenNum'
+  | 'changeToSelfParentNum'
+  | 'changeToNextChild'
+  | 'changeToParent'
+  | 'changeToNextParent';
 
 // 各状態に対する遷移先を定義
 const actionObj = <Key extends QuestionKey>({
@@ -46,9 +57,9 @@ const actionObj = <Key extends QuestionKey>({
   hasBack,
 }: {
   questionKey: Key;
-  nextQuestionKey: QuestionKey | 'result';
+  nextQuestionKey: QuestionKey | ChangeMemberKey | 'result';
   nextConditions: {
-    target: QuestionKey | ChangeMemberKey;
+    target: QuestionKey | ChangeMemberKey | 'result';
     guard: ({ context }: { context: QuestionStateContext }) => boolean;
   }[];
   hasBack: boolean;
@@ -420,6 +431,24 @@ export const questionStateMachine = setup({
       子ども: [],
       親: [],
     },
+    '高校に通っていますか？': {
+      あなた: [],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '通っている高校の種類を選んでください（1）': {
+      あなた: [],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '通っている高校の種類を選んでください（2）': {
+      あなた: [],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
     // 質問は「あなた」についてのものから始める
     currentMember: { relationship: 'あなた', index: 0 },
     histories: [],
@@ -438,7 +467,15 @@ export const questionStateMachine = setup({
       on: actionObj<'年齢'>({
         questionKey: '年齢',
         nextQuestionKey: '年収',
-        nextConditions: [],
+        nextConditions: [
+          {
+            // 子どもは仕事をしている場合のみ年収を聞けばよいため、先に高校の質問へ進む
+            target: '高校に通っていますか？',
+            guard: ({ context }) => {
+              return context.currentMember.relationship === '子ども';
+            },
+          },
+        ],
         hasBack: true,
       }),
     },
@@ -446,7 +483,15 @@ export const questionStateMachine = setup({
       on: actionObj<'年収'>({
         questionKey: '年収',
         nextQuestionKey: '預貯金',
-        nextConditions: [],
+        nextConditions: [
+          // 子どもについては仕事関連の質問の途中で年収を聞くため、仕事についての次の質問へ進む
+          {
+            target: '仕事',
+            guard: ({ context }) => {
+              return context.currentMember.relationship === '子ども';
+            },
+          },
+        ],
         hasBack: true,
       }),
     },
@@ -473,6 +518,18 @@ export const questionStateMachine = setup({
                   member.index
                 ].selection === false
               );
+            },
+          },
+          {
+            // 子どもは仕事をしている場合のみ年収を聞く
+            target: '年収',
+            guard: ({ context }) => {
+              const member = context.currentMember;
+              const working =
+                context['現在仕事をしていますか？'][member.relationship][
+                  member.index
+                ].selection === true;
+              return member.relationship === '子ども' && working;
             },
           },
         ],
@@ -847,7 +904,29 @@ export const questionStateMachine = setup({
       on: actionObj<'介護施設に入所していますか？'>({
         questionKey: '介護施設に入所していますか？',
         nextQuestionKey: '高校、大学、専門学校、職業訓練学校等の学生ですか？',
-        nextConditions: [],
+        nextConditions: [
+          // 子どもは「高校、大学...学生ですか？」以降の質問をスキップ
+          {
+            // 次の子どもへ
+            target: 'changeToNextChild',
+            guard: ({ context }) => {
+              const childrenNum = context.子どもの人数.あなた[0]?.selection;
+              if (childrenNum == null) {
+                return false;
+              }
+              return (
+                context.currentMember.relationship === '子ども' &&
+                context.currentMember.index + 1 < childrenNum
+              );
+            },
+          },
+          {
+            // 他に子どもがいなければ親の人数へ
+            target: 'changeToSelfParentNum',
+            guard: ({ context }) =>
+              context.currentMember.relationship === '子ども',
+          },
+        ],
         hasBack: true,
       }),
     },
@@ -861,6 +940,27 @@ export const questionStateMachine = setup({
             guard: ({ context }) => {
               return context.currentMember.relationship === '配偶者';
             },
+          },
+          // 親の質問はここで終了
+          {
+            // 次の親へ
+            target: 'changeToNextParent',
+            guard: ({ context }) => {
+              const parentNum = context.親の人数.あなた[0]?.selection;
+              if (parentNum == null) {
+                return false;
+              }
+              return (
+                context.currentMember.relationship === '親' &&
+                context.currentMember.index + 1 < parentNum
+              );
+            },
+          },
+          {
+            // 他に親がいなければ終了
+            target: 'result',
+            guard: ({ context }) =>
+              context.currentMember.relationship === '親',
           },
         ],
         hasBack: true,
@@ -917,7 +1017,17 @@ export const questionStateMachine = setup({
       on: actionObj<'子どもの人数'>({
         questionKey: '子どもの人数',
         nextQuestionKey: '親の人数',
-        nextConditions: [],
+        nextConditions: [
+          {
+            // 子どもがいる場合、子どもの質問へ
+            target: 'changeToChild',
+            guard: ({ context }) => {
+              return context['子どもの人数'].あなた[0].selection
+                ? context['子どもの人数'].あなた[0].selection > 0
+                : false;
+            },
+          },
+        ],
         hasBack: true,
       }),
     },
@@ -925,14 +1035,61 @@ export const questionStateMachine = setup({
       on: actionObj<'親の人数'>({
         questionKey: '親の人数',
         nextQuestionKey: 'result',
-        nextConditions: [],
+        nextConditions: [
+          {
+            // 親がいる場合、親の質問へ
+            target: 'changeToParent',
+            guard: ({ context }) => {
+              return context['親の人数'].あなた[0].selection
+                ? context['親の人数'].あなた[0].selection > 0
+                : false;
+            },
+          },
+        ],
         hasBack: true,
       }),
     },
     '以下のいずれかに当てはまりますか？': {
       on: actionObj<'以下のいずれかに当てはまりますか？'>({
         questionKey: '以下のいずれかに当てはまりますか？',
-        nextQuestionKey: '子どもの人数',
+        nextQuestionKey: 'changeToSelfChildrenNum',
+        nextConditions: [],
+        hasBack: true,
+      }),
+    },
+    '高校に通っていますか？': {
+      on: actionObj<'高校に通っていますか？'>({
+        questionKey: '高校に通っていますか？',
+        nextQuestionKey: '現在仕事をしていますか？',
+        nextConditions: [
+          {
+            // 高校に通っている場合は履修種別の質問へ
+            target: '通っている高校の種類を選んでください（1）',
+            guard: ({ context }) => {
+              const member = context.currentMember;
+              return (
+                context['高校に通っていますか？'][member.relationship][
+                  member.index
+                ]?.selection === true
+              );
+            },
+          },
+        ],
+        hasBack: true,
+      }),
+    },
+    '通っている高校の種類を選んでください（1）': {
+      on: actionObj<'通っている高校の種類を選んでください（1）'>({
+        questionKey: '通っている高校の種類を選んでください（1）',
+        nextQuestionKey: '通っている高校の種類を選んでください（2）',
+        nextConditions: [],
+        hasBack: true,
+      }),
+    },
+    '通っている高校の種類を選んでください（2）': {
+      on: actionObj<'通っている高校の種類を選んでください（2）'>({
+        questionKey: '通っている高校の種類を選んでください（2）',
+        nextQuestionKey: '現在仕事をしていますか？',
         nextConditions: [],
         hasBack: true,
       }),
@@ -958,6 +1115,94 @@ export const questionStateMachine = setup({
         currentMember: () => {
           return {
             relationship: '配偶者',
+            index: 0,
+          };
+        },
+      }),
+    },
+    changeToChild: {
+      // alwaysを使用しそのまま次の状態へ遷移
+      always: {
+        target: '年齢',
+      },
+      // 状態を抜ける際に必ず実行
+      exit: assign({
+        currentMember: () => {
+          return {
+            relationship: '子ども',
+            index: 0,
+          };
+        },
+      }),
+    },
+    changeToNextChild: {
+      always: {
+        target: '年齢',
+      },
+      // 状態を抜ける際に必ず実行
+      exit: assign({
+        currentMember: ({ context }: { context: QuestionStateContext }) => {
+          return {
+            relationship: '子ども',
+            index: context.currentMember.index + 1,
+          };
+        },
+      }),
+    },
+    changeToParent: {
+      // alwaysを使用しそのまま次の状態へ遷移
+      always: {
+        target: '年齢',
+      },
+      // 状態を抜ける際に必ず実行
+      exit: assign({
+        currentMember: () => {
+          return {
+            relationship: '親',
+            index: 0,
+          };
+        },
+      }),
+    },
+    changeToNextParent: {
+      always: {
+        target: '年齢',
+      },
+      // 状態を抜ける際に必ず実行
+      exit: assign({
+        currentMember: ({ context }: { context: QuestionStateContext }) => {
+          return {
+            relationship: '親',
+            index: context.currentMember.index + 1,
+          };
+        },
+      }),
+    },
+    changeToSelfChildrenNum: {
+      // alwaysを使用しそのまま次の状態へ遷移
+      always: {
+        target: '子どもの人数',
+      },
+      // 状態を抜ける際に必ず実行
+      exit: assign({
+        currentMember: () => {
+          return {
+            relationship: 'あなた',
+            index: 0,
+          };
+        },
+      }),
+    },
+    changeToSelfParentNum: {
+      // alwaysを使用しそのまま次の状態へ遷移
+      always: {
+        target: '親の人数',
+      },
+      // 状態を抜ける際に必ず実行
+      exit: assign({
+        currentMember: () => {
+          return {
+            relationship: 'あなた',
             index: 0,
           };
         },
