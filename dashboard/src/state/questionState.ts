@@ -155,6 +155,14 @@ const actionObj = <Key extends QuestionKey>({
   };
 };
 
+// 能登半島地震被災者支援制度見積もりモードかどうかを判定するガード
+const isDisasterMode = ({ context }: { context: QuestionStateContext }) => {
+  return (
+    context['見積もりモード'].あなた[0].selection ===
+    '能登半島地震被災者支援制度見積もり'
+  );
+};
+
 // 病気がある・けがをしているが選択されているかを判定するガード
 const hasIllnessOrInjury = ({ context }: { context: QuestionStateContext }) => {
   const member = context.currentMember;
@@ -463,6 +471,61 @@ export const questionStateMachine = setup({
       子ども: [],
       親: [],
     },
+    // 能登半島地震被災者支援制度見積もり用
+    被災前の年収: {
+      あなた: [{ type: 'AmountOfMoney', selection: undefined, unit: '万円' }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '住宅が被害を受けていますか？': {
+      あなた: [{ type: 'Boolean', selection: undefined }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '住宅被害の状況（当てはまるもののうち最も上のものを選んでください）': {
+      あなた: [{ type: 'Selection', selection: undefined }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    住宅再建方法: {
+      あなた: [{ type: 'Selection', selection: undefined }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '家財の３分の１以上の損害が発生しましたか？': {
+      あなた: [{ type: 'Boolean', selection: undefined }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '災害により負傷し、1ヶ月以上療養を続けていますか？': {
+      あなた: [{ type: 'Boolean', selection: undefined }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '災害によって、精神または身体に重い障害がありますか？': {
+      あなた: [{ type: 'Boolean', selection: undefined }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '家族に災害で亡くなった方はいますか？': {
+      あなた: [{ type: 'PersonNum', selection: undefined }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
+    '災害で生計維持者が亡くなりましたか？': {
+      あなた: [{ type: 'Boolean', selection: undefined }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
     // 質問は「あなた」についてのものから始める
     currentMember: { relationship: 'あなた', index: 0 },
     histories: [],
@@ -490,6 +553,23 @@ export const questionStateMachine = setup({
         questionKey: '年齢',
         nextQuestionKey: '年収',
         nextConditions: [
+          {
+            // 災害モードの子どもは年収、仕事の質問をスキップし、災害による負傷へ進む
+            target: '災害により負傷し、1ヶ月以上療養を続けていますか？',
+            guard: ({ context }) => {
+              return (
+                isDisasterMode({ context }) &&
+                context.currentMember.relationship === '子ども'
+              );
+            },
+          },
+          {
+            // 災害モードでは年収の代わりに「被災前の年収」を聞く
+            target: '被災前の年収',
+            guard: ({ context }) => {
+              return isDisasterMode({ context });
+            },
+          },
           {
             // 子どもは仕事をしている場合のみ年収を聞けばよいため、先に高校の質問へ進む
             target: '高校に通っていますか？',
@@ -1115,6 +1195,160 @@ export const questionStateMachine = setup({
         hasBack: true,
       }),
     },
+    // 能登半島地震被災者支援制度見積もり用の質問
+    被災前の年収: {
+      on: actionObj<'被災前の年収'>({
+        questionKey: '被災前の年収',
+        nextQuestionKey: '災害により負傷し、1ヶ月以上療養を続けていますか？',
+        nextConditions: [
+          // 災害モードのあなたは住宅被害の質問へ進む
+          {
+            target: '住宅が被害を受けていますか？',
+            guard: ({ context }) => {
+              return (
+                isDisasterMode({ context }) &&
+                context.currentMember.relationship === 'あなた'
+              );
+            },
+          },
+        ],
+        hasBack: true,
+      }),
+    },
+    '住宅が被害を受けていますか？': {
+      on: actionObj<'住宅が被害を受けていますか？'>({
+        questionKey: '住宅が被害を受けていますか？',
+        nextQuestionKey: '家財の３分の１以上の損害が発生しましたか？',
+        nextConditions: [
+          {
+            // 住宅被害がある場合、被害状況の質問へ進む
+            target:
+              '住宅被害の状況（当てはまるもののうち最も上のものを選んでください）',
+            guard: ({ context }) => {
+              const member = context.currentMember;
+              return (
+                context['住宅が被害を受けていますか？'][member.relationship][
+                  member.index
+                ].selection === true
+              );
+            },
+          },
+        ],
+        hasBack: true,
+      }),
+    },
+    '住宅被害の状況（当てはまるもののうち最も上のものを選んでください）': {
+      on: actionObj<'住宅被害の状況（当てはまるもののうち最も上のものを選んでください）'>(
+        {
+          questionKey:
+            '住宅被害の状況（当てはまるもののうち最も上のものを選んでください）',
+          nextQuestionKey: '住宅再建方法',
+          nextConditions: [],
+          hasBack: true,
+        }
+      ),
+    },
+    住宅再建方法: {
+      on: actionObj<'住宅再建方法'>({
+        questionKey: '住宅再建方法',
+        nextQuestionKey: '家財の３分の１以上の損害が発生しましたか？',
+        nextConditions: [],
+        hasBack: true,
+      }),
+    },
+    '家財の３分の１以上の損害が発生しましたか？': {
+      on: actionObj<'家財の３分の１以上の損害が発生しましたか？'>({
+        questionKey: '家財の３分の１以上の損害が発生しましたか？',
+        nextQuestionKey: '災害により負傷し、1ヶ月以上療養を続けていますか？',
+        nextConditions: [],
+        hasBack: true,
+      }),
+    },
+    '災害により負傷し、1ヶ月以上療養を続けていますか？': {
+      on: actionObj<'災害により負傷し、1ヶ月以上療養を続けていますか？'>({
+        questionKey: '災害により負傷し、1ヶ月以上療養を続けていますか？',
+        nextQuestionKey: '災害によって、精神または身体に重い障害がありますか？',
+        nextConditions: [],
+        hasBack: true,
+      }),
+    },
+    '災害によって、精神または身体に重い障害がありますか？': {
+      on: actionObj<'災害によって、精神または身体に重い障害がありますか？'>({
+        questionKey: '災害によって、精神または身体に重い障害がありますか？',
+        nextQuestionKey: '家族に災害で亡くなった方はいますか？',
+        nextConditions: [
+          {
+            // 配偶者は子どもの人数へ戻る
+            target: 'changeToSelfChildrenNum',
+            guard: ({ context }) =>
+              context.currentMember.relationship === '配偶者',
+          },
+          {
+            // 次の子どもへ
+            target: 'changeToNextChild',
+            guard: ({ context }) => {
+              const childrenNum = context.子どもの人数.あなた[0]?.selection;
+              if (childrenNum == null) return false;
+              return (
+                context.currentMember.relationship === '子ども' &&
+                context.currentMember.index + 1 < childrenNum
+              );
+            },
+          },
+          {
+            // 他に子どもがいなければ親の人数へ
+            target: 'changeToSelfParentNum',
+            guard: ({ context }) =>
+              context.currentMember.relationship === '子ども',
+          },
+          {
+            // 次の親へ
+            target: 'changeToNextParent',
+            guard: ({ context }) => {
+              const parentNum = context.親の人数.あなた[0]?.selection;
+              if (parentNum == null) return false;
+              return (
+                context.currentMember.relationship === '親' &&
+                context.currentMember.index + 1 < parentNum
+              );
+            },
+          },
+          {
+            // 他に親がいなければ終了
+            target: 'result',
+            guard: ({ context }) => context.currentMember.relationship === '親',
+          },
+        ],
+        hasBack: true,
+      }),
+    },
+    '家族に災害で亡くなった方はいますか？': {
+      on: actionObj<'家族に災害で亡くなった方はいますか？'>({
+        questionKey: '家族に災害で亡くなった方はいますか？',
+        nextQuestionKey: '災害で生計維持者が亡くなりましたか？',
+        nextConditions: [
+          {
+            // 死亡した世帯員がいない場合、生計維持者の質問をスキップ
+            target: '配偶者はいますか？',
+            guard: ({ context }) => {
+              return (
+                context['家族に災害で亡くなった方はいますか？'].あなた[0]
+                  .selection === 0
+              );
+            },
+          },
+        ],
+        hasBack: true,
+      }),
+    },
+    '災害で生計維持者が亡くなりましたか？': {
+      on: actionObj<'災害で生計維持者が亡くなりましたか？'>({
+        questionKey: '災害で生計維持者が亡くなりましたか？',
+        nextQuestionKey: '配偶者はいますか？',
+        nextConditions: [],
+        hasBack: true,
+      }),
+    },
     // 最後の状態（結果表示）
     // NOTE: type "final" は使わない（状態遷移が完了しbackで戻れなくなるため）
     result: {
@@ -1128,9 +1362,11 @@ export const questionStateMachine = setup({
     // NOTE: 世帯員切り替え処理を通常の質問と分離するため、こちらのダミー状態を経由している
     changeToSpouse: {
       // alwaysを使用しそのまま次の状態へ遷移
-      always: {
-        target: '年齢',
-      },
+      always: [
+        // 災害モードでは配偶者の年齢を聞かず被災前の年収へ直接進む
+        { target: '被災前の年収', guard: isDisasterMode },
+        { target: '年齢' },
+      ],
       // 状態を抜ける際に必ず実行
       exit: assign({
         currentMember: () => {
@@ -1172,9 +1408,11 @@ export const questionStateMachine = setup({
     },
     changeToParent: {
       // alwaysを使用しそのまま次の状態へ遷移
-      always: {
-        target: '年齢',
-      },
+      always: [
+        // 災害モードでは親の年齢を聞かず被災前の年収へ直接進む
+        { target: '被災前の年収', guard: isDisasterMode },
+        { target: '年齢' },
+      ],
       // 状態を抜ける際に必ず実行
       exit: assign({
         currentMember: () => {
@@ -1186,9 +1424,11 @@ export const questionStateMachine = setup({
       }),
     },
     changeToNextParent: {
-      always: {
-        target: '年齢',
-      },
+      always: [
+        // 災害モードでは親の年齢を聞かず被災前の年収へ直接進む
+        { target: '被災前の年収', guard: isDisasterMode },
+        { target: '年齢' },
+      ],
       // 状態を抜ける際に必ず実行
       exit: assign({
         currentMember: ({ context }: { context: QuestionStateContext }) => {

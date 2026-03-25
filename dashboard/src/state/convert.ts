@@ -1,5 +1,3 @@
-import { HouseholdRelationship } from './household';
-import { questionKeys } from './questionDefinition';
 import { QuestionStateContext } from './questionState';
 
 type OpenFiscaField<T> = {
@@ -16,7 +14,9 @@ export type OpenFiscaHousehold = {
   };
   世帯一覧: {
     世帯1: {
-      親一覧: HouseholdRelationship[];
+      親一覧: string[];
+      子一覧: string[];
+      祖父母一覧: string[];
       居住都道府県: OpenFiscaField<string>;
       居住市区町村: OpenFiscaField<string>;
 
@@ -66,6 +66,15 @@ export type OpenFiscaHousehold = {
       受験生チャレンジ支援貸付?: OpenFiscaField<any>;
       住宅入居費?: OpenFiscaField<any>;
       配偶者がいるがひとり親に該当?: OpenFiscaField<any>;
+      // 能登半島地震被災者支援制度見積もり用
+      被災している?: OpenFiscaField<any>;
+      災害救助法の適用地域である?: OpenFiscaField<any>;
+      被災者生活再建支援法の適用地域である?: OpenFiscaField<any>;
+      住宅被害?: OpenFiscaField<any>;
+      住宅再建方法?: OpenFiscaField<any>;
+      家財の損害?: OpenFiscaField<any>;
+      災害で死亡した世帯員の人数?: OpenFiscaField<any>;
+      災害で生計維持者が死亡した?: OpenFiscaField<any>;
     };
   };
 };
@@ -77,6 +86,10 @@ export const toOpenFiscaHousehold = ({
   context: QuestionStateContext;
   currentDate: string;
 }): OpenFiscaHousehold => {
+  const isDisasterMode =
+    context['見積もりモード'].あなた[0].selection ===
+    '能登半島地震被災者支援制度見積もり';
+
   // あなた の世帯員情報を構築
   const selfMember: OpenFiscaMember = {};
 
@@ -325,6 +338,31 @@ export const toOpenFiscaHousehold = ({
     };
   }
 
+  // 災害による負傷・障害（あなた）
+  if (isDisasterMode) {
+    const selfPastIncome = context.被災前の年収.あなた[0]?.selection;
+    if (selfPastIncome != null) {
+      selfMember.収入 = { [currentDate]: selfPastIncome * unit };
+    }
+
+    const selfDisasterInjury =
+      context['災害により負傷し、1ヶ月以上療養を続けていますか？'].あなた[0]
+        .selection;
+    if (selfDisasterInjury != null) {
+      selfMember.災害による負傷の療養期間 = {
+        [currentDate]: selfDisasterInjury ? '一か月以上' : '無',
+      };
+    }
+    const selfDisasterDisability =
+      context['災害によって、精神または身体に重い障害がありますか？'].あなた[0]
+        .selection;
+    if (selfDisasterDisability != null) {
+      selfMember.災害による重い後遺障害がある = {
+        [currentDate]: selfDisasterDisability,
+      };
+    }
+  }
+
   // 配偶者の世帯員情報を構築
   const hasSpouse = context['配偶者はいますか？'].あなた[0].selection === true;
   const spouseMember: OpenFiscaMember = {};
@@ -562,6 +600,31 @@ export const toOpenFiscaHousehold = ({
       spouseMember.妊産婦 = {
         [currentDate]: spousePregnancy === 'いいえ' ? '無' : spousePregnancy,
       };
+    }
+
+    // 災害による負傷・障害（配偶者）
+    if (isDisasterMode) {
+      const spousePastIncome = context.被災前の年収.配偶者[0]?.selection;
+      if (spousePastIncome != null) {
+        spouseMember.収入 = { [currentDate]: spousePastIncome * unit };
+      }
+
+      const spouseDisasterInjury =
+        context['災害により負傷し、1ヶ月以上療養を続けていますか？'].配偶者[0]
+          ?.selection;
+      if (spouseDisasterInjury != null) {
+        spouseMember.災害による負傷の療養期間 = {
+          [currentDate]: spouseDisasterInjury ? '一か月以上' : '無',
+        };
+      }
+      const spouseDisasterDisability =
+        context['災害によって、精神または身体に重い障害がありますか？']
+          .配偶者[0]?.selection;
+      if (spouseDisasterDisability != null) {
+        spouseMember.災害による重い後遺障害がある = {
+          [currentDate]: spouseDisasterDisability,
+        };
+      }
     }
   }
 
@@ -812,6 +875,31 @@ export const toOpenFiscaHousehold = ({
         childMember.介護施設入所中 = { [currentDate]: childNursingHome };
       }
 
+      // 災害による負傷・障害（子ども）
+      if (isDisasterMode) {
+        const childPastIncome = context.被災前の年収.子ども[i]?.selection;
+        if (childPastIncome != null) {
+          childMember.収入 = { [currentDate]: childPastIncome * unit };
+        }
+
+        const childDisasterInjury =
+          context['災害により負傷し、1ヶ月以上療養を続けていますか？'].子ども[i]
+            ?.selection;
+        if (childDisasterInjury != null) {
+          childMember.災害による負傷の療養期間 = {
+            [currentDate]: childDisasterInjury ? '一か月以上' : '無',
+          };
+        }
+        const childDisasterDisability =
+          context['災害によって、精神または身体に重い障害がありますか？']
+            .子ども[i]?.selection;
+        if (childDisasterDisability != null) {
+          childMember.災害による重い後遺障害がある = {
+            [currentDate]: childDisasterDisability,
+          };
+        }
+      }
+
       childMembers.push(childMember);
     }
   }
@@ -1055,15 +1143,44 @@ export const toOpenFiscaHousehold = ({
         parentMember.学生 = { [currentDate]: parentStudent };
       }
 
+      // 災害による負傷・障害（親）
+      if (isDisasterMode) {
+        const parentPastIncome = context.被災前の年収.親[i]?.selection;
+        if (parentPastIncome != null) {
+          parentMember.収入 = { [currentDate]: parentPastIncome * unit };
+        }
+
+        const parentDisasterInjury =
+          context['災害により負傷し、1ヶ月以上療養を続けていますか？'].親[i]
+            ?.selection;
+        if (parentDisasterInjury != null) {
+          parentMember.災害による負傷の療養期間 = {
+            [currentDate]: parentDisasterInjury ? '一か月以上' : '無',
+          };
+        }
+        const parentDisasterDisability =
+          context['災害によって、精神または身体に重い障害がありますか？'].親[i]
+            ?.selection;
+        if (parentDisasterDisability != null) {
+          parentMember.災害による重い後遺障害がある = {
+            [currentDate]: parentDisasterDisability,
+          };
+        }
+      }
+
       parentMembers.push(parentMember);
     }
   }
 
   // 親一覧の構築（配偶者の有無に応じて追加）
-  const 親一覧: HouseholdRelationship[] = ['あなた'];
+  const 親一覧 = ['あなた'];
   if (hasSpouse) {
     親一覧.push('配偶者');
   }
+  // 子一覧の構築
+  const 子一覧 = childMembers.map((_, i) => `子ども${i + 1}`);
+  // 祖父母一覧の構築
+  const 祖父母一覧 = parentMembers.map((_, i) => `親${i + 1}`);
 
   const 世帯員: OpenFiscaHousehold['世帯員'] = {
     あなた: selfMember,
@@ -1079,13 +1196,12 @@ export const toOpenFiscaHousehold = ({
   });
 
   const household: OpenFiscaHousehold = {
-    // Household members
     世帯員: 世帯員,
-    // Household
     世帯一覧: {
-      // Household 1
       世帯1: {
         親一覧: 親一覧,
+        子一覧: 子一覧,
+        祖父母一覧: 祖父母一覧,
         居住都道府県: {
           [currentDate]: context['寝泊まりしている地域'].あなた[0].prefecure,
         },
@@ -1099,87 +1215,66 @@ export const toOpenFiscaHousehold = ({
 
         // 以下はOpenFisca側から受け取りたいVariableを指定
         // 値は計算前のためすべてnullで指定
-        // Child Allowance
         児童手当: {
           [currentDate]: null,
         },
-        // Maximum Child Support Allowance
         児童扶養手当_最大: {
           [currentDate]: null,
         },
-        // Minimum Child Support Allowance
         児童扶養手当_最小: {
           [currentDate]: null,
         },
-        // Minimum Special Child Support Allowance
         特別児童扶養手当_最小: {
           [currentDate]: null,
         },
-        // Maximum Special Child Support Allowance
         特別児童扶養手当_最大: {
           [currentDate]: null,
         },
-        // Livelihood Protection
         生活保護: {
           [currentDate]: null,
         },
-        // Handicapped Children Welfare Allowance
         障害児福祉手当: {
           [currentDate]: null,
         },
-        // Minimum High School Scholarship
         高等学校奨学給付金_最小: {
           [currentDate]: null,
         },
-        // Maximum High School Scholarship
         高等学校奨学給付金_最大: {
           [currentDate]: null,
         },
-        // Livelihood Support Payment
         生活支援費: {
           [currentDate]: null,
         },
-        // Temporary Life Reconstruction Payment
         一時生活再建費: {
           [currentDate]: null,
         },
-        // Welfare Expenses
         福祉費: {
           [currentDate]: null,
         },
-        // Emergency Small Amount Fund
         緊急小口資金: {
           [currentDate]: null,
         },
-        // Education Support Payment
         教育支援費: {
           [currentDate]: null,
         },
-        // School Enrollment Expenses
         就学支度費: {
           [currentDate]: null,
         },
-        // Real Estate Secured Living Expenses
         不動産担保型生活資金: {
           [currentDate]: null,
         },
-        // Disaster condolence money
         災害弔慰金: {
           [currentDate]: null,
         },
-        // Disaster disability compensation money MAX
         災害障害見舞金_最大: {
           [currentDate]: null,
         },
-        // Disaster disability compensation money MIN
         災害障害見舞金_最小: {
           [currentDate]: null,
         },
-        // Disaster victim life reconstruction support system
         被災者生活再建支援制度: {
           [currentDate]: null,
         },
-        // Disaster relief funds
         災害援護資金: {
           [currentDate]: null,
         },
@@ -1264,6 +1359,70 @@ export const toOpenFiscaHousehold = ({
     household.世帯一覧.世帯1.住宅入居費 = {
       [currentDate]: context['家を借りたいですか？'].あなた[0].selection,
     };
+  }
+
+  // 能登半島地震被災者支援制度見積もり用の世帯フィールド
+  if (isDisasterMode) {
+    household.世帯一覧.世帯1.被災している = { [currentDate]: true };
+    household.世帯一覧.世帯1.災害救助法の適用地域である = {
+      [currentDate]: true,
+    };
+    household.世帯一覧.世帯1.被災者生活再建支援法の適用地域である = {
+      [currentDate]: true,
+    };
+
+    // 住宅被害（表示している値とOpenFiscaの値の形式が異なるものを変換）
+    const housingDamageDisplayToApi: Record<string, string> = {
+      '全壊（損害割合50%以上）': '全壊',
+      '大規模半壊（損害割合40%台）': '大規模半壊',
+      '中規模半壊（損害割合30%台）': '中規模半壊',
+    };
+    const housingDamage =
+      context[
+        '住宅被害の状況（当てはまるもののうち最も上のものを選んでください）'
+      ].あなた[0]?.selection;
+    if (housingDamage != null) {
+      household.世帯一覧.世帯1.住宅被害 = {
+        [currentDate]:
+          housingDamageDisplayToApi[housingDamage] ?? housingDamage,
+      };
+    }
+
+    // 住宅再建方法
+    const housingReconstruction = context['住宅再建方法'].あなた[0]?.selection;
+    if (housingReconstruction != null) {
+      household.世帯一覧.世帯1.住宅再建方法 = {
+        [currentDate]: housingReconstruction,
+      };
+    }
+
+    // 家財の損害（bool → '三分の一以上' / '無'）
+    const householdGoodsDamage =
+      context['家財の３分の１以上の損害が発生しましたか？'].あなた[0]
+        ?.selection;
+    if (householdGoodsDamage != null) {
+      household.世帯一覧.世帯1.家財の損害 = {
+        [currentDate]: householdGoodsDamage ? '三分の一以上' : '無',
+      };
+    }
+
+    // 災害で亡くなった世帯員の人数
+    const deadMemberNum =
+      context['家族に災害で亡くなった方はいますか？'].あなた[0]?.selection;
+    if (deadMemberNum != null) {
+      household.世帯一覧.世帯1.災害で死亡した世帯員の人数 = {
+        [currentDate]: deadMemberNum,
+      };
+    }
+
+    // 生計維持者が亡くなったかどうか
+    const breadwinnerDied =
+      context['災害で生計維持者が亡くなりましたか？'].あなた[0]?.selection;
+    if (breadwinnerDied != null) {
+      household.世帯一覧.世帯1.災害で生計維持者が死亡した = {
+        [currentDate]: breadwinnerDied,
+      };
+    }
   }
 
   return household;

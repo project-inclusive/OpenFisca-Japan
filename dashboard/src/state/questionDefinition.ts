@@ -20,6 +20,9 @@ export const amountOfMoneyQuestionDefinitions = {
   年収: {
     type: 'AmountOfMoney',
   },
+  被災前の年収: {
+    type: 'AmountOfMoney',
+  },
   預貯金: {
     type: 'AmountOfMoney',
   },
@@ -58,11 +61,19 @@ export const booleanQuestionDefinitions = {
   '配偶者はいますか？': { type: 'Boolean' },
   '以下のいずれかに当てはまりますか？': { type: 'Boolean' },
   '高校に通っていますか？': { type: 'Boolean' },
+  // 能登半島地震被災者支援制度見積もり用
+  '住宅が被害を受けていますか？': { type: 'Boolean' },
+  '家財の３分の１以上の損害が発生しましたか？': { type: 'Boolean' },
+  '災害により負傷し、1ヶ月以上療養を続けていますか？': { type: 'Boolean' },
+  '災害によって、精神または身体に重い障害がありますか？': { type: 'Boolean' },
+  '災害で生計維持者が亡くなりましたか？': { type: 'Boolean' },
 } as const;
 
 export const personNumQuestionDefinitions = {
   子どもの人数: { type: 'PersonNum' },
   親の人数: { type: 'PersonNum' },
+  // 能登半島地震被災者支援制度見積もり用
+  '家族に災害で亡くなった方はいますか？': { type: 'PersonNum' },
 } as const;
 
 export const selectionQuestionDefinitions = {
@@ -114,6 +125,22 @@ export const selectionQuestionDefinitions = {
       'くわしく見積もり',
       '能登半島地震被災者支援制度見積もり',
     ],
+  },
+  // 能登半島地震被災者支援制度見積もり用
+  '住宅被害の状況（当てはまるもののうち最も上のものを選んでください）': {
+    type: 'Selection',
+    selections: [
+      '滅失または流失',
+      '長期避難',
+      '解体',
+      '全壊（損害割合50%以上）',
+      '大規模半壊（損害割合40%台）',
+      '中規模半壊（損害割合30%台）',
+    ],
+  },
+  住宅再建方法: {
+    type: 'Selection',
+    selections: ['建設または購入', '補修', '賃借'],
   },
 } as const;
 

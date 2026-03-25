@@ -253,6 +253,8 @@ const QuestionContent = ({
     const maxPersonNum = {
       子どもの人数: configData.validation.household.maxChildren,
       親の人数: configData.validation.household.maxParents,
+      '家族に災害で亡くなった方はいますか？':
+        configData.validation.household.maxChildren,
     }[questionKey];
 
     return (
