@@ -106,6 +106,15 @@ export const selectionQuestionDefinitions = {
     type: 'Selection',
     selections: ['妊娠6ヵ月未満', '妊娠6ヵ月以上', '産後6ヵ月以内', 'いいえ'],
   },
+  // 見積もりモードを管理する選択肢。フォームには対応せず、モードに応じ自動で設定される
+  見積もりモード: {
+    type: 'Selection',
+    selections: [
+      'かんたん見積もり',
+      'くわしく見積もり',
+      '能登半島地震被災者支援制度見積もり',
+    ],
+  },
 } as const;
 
 export const multipleSelectionQuestionDefinitions = {

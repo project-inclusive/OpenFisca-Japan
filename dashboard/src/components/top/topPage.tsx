@@ -20,6 +20,8 @@ import { Links } from './links';
 import { agreedToTermsAtom } from '../../state';
 import TermsModal from '../TermsModal';
 import { HomeButton } from '../homeButton';
+import { StateFrom } from 'xstate';
+import { QuestionEvent, questionStateMachine } from '../../state/questionState';
 
 // 何もしない関数（onClickで発火する関数のデフォルト値として使用）
 const noop = () => {};
@@ -32,7 +34,13 @@ const NarrowBr = () => {
   return <span />;
 };
 
-export function TopPage() {
+export function TopPage({
+  state,
+  send,
+}: {
+  state: StateFrom<typeof questionStateMachine>;
+  send: (e: QuestionEvent) => void;
+}) {
   const agreedToTerms = useRecoilValue(agreedToTermsAtom);
   const {
     isOpen: isModalOpen,
@@ -40,6 +48,20 @@ export function TopPage() {
     onClose: onModalClose,
   } = useDisclosure();
   const [modalLink, setModalLink] = useState('/');
+
+  // ボタンクリック時にstateの見積もりモードを設定
+  const setMode = (
+    modeName:
+      | 'かんたん見積もり'
+      | 'くわしく見積もり'
+      | '能登半島地震被災者支援制度見積もり'
+  ) => {
+    send({
+      type: '見積もりモード',
+      value: { type: 'Selection', selection: modeName },
+    });
+    send({ type: 'next' });
+  };
 
   return (
     <>
@@ -97,6 +119,7 @@ export function TopPage() {
                 agreedToTerms
                   ? noop
                   : () => {
+                      setMode('能登半島地震被災者支援制度見積もり');
                       setModalLink('/calculate-disaster');
                       onModalOpen();
                     }
@@ -124,6 +147,7 @@ export function TopPage() {
                 agreedToTerms
                   ? noop
                   : () => {
+                      setMode('かんたん見積もり');
                       setModalLink('/calculate-simple');
                       onModalOpen();
                     }
@@ -150,6 +174,7 @@ export function TopPage() {
                 agreedToTerms
                   ? noop
                   : () => {
+                      setMode('くわしく見積もり');
                       setModalLink('/calculate');
                       onModalOpen();
                     }

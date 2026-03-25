@@ -14,6 +14,18 @@ const skipUntil = (
     f: () => void;
   }[] = [
     {
+      key: '見積もりモード',
+      f: () => {
+        actor.send({
+          type: '見積もりモード',
+          value: {
+            type: 'Selection',
+            selection: 'くわしく見積もり',
+          },
+        });
+      },
+    },
+    {
       key: '寝泊まりしている地域',
       f: () => {
         actor.send({
@@ -408,6 +420,18 @@ const skipSpouseUntil = (
     key: QuestionKey;
     f: () => void;
   }[] = [
+    {
+      key: '見積もりモード',
+      f: () => {
+        actor.send({
+          type: '見積もりモード',
+          value: {
+            type: 'Selection',
+            selection: 'くわしく見積もり',
+          },
+        });
+      },
+    },
     {
       // あなたについて
       key: '寝泊まりしている地域',
@@ -890,6 +914,18 @@ const skipChildUntil = (
     f: () => void;
   }[] = [
     {
+      key: '見積もりモード',
+      f: () => {
+        actor.send({
+          type: '見積もりモード',
+          value: {
+            type: 'Selection',
+            selection: 'くわしく見積もり',
+          },
+        });
+      },
+    },
+    {
       // あなたについて
       key: '寝泊まりしている地域',
       f: () => {
@@ -1366,6 +1402,18 @@ const skipParentUntil = (
     key: QuestionKey;
     f: () => void;
   }[] = [
+    {
+      key: '見積もりモード',
+      f: () => {
+        actor.send({
+          type: '見積もりモード',
+          value: {
+            type: 'Selection',
+            selection: 'くわしく見積もり',
+          },
+        });
+      },
+    },
     {
       // あなたについて
       key: '寝泊まりしている地域',
@@ -1867,6 +1915,7 @@ const skipParentUntil = (
 test('あなた: 寝泊まりしている地域: 値が設定されている', () => {
   const actor = createActor(questionStateMachine);
   actor.start();
+  skipUntil(actor, '寝泊まりしている地域');
 
   actor.send({
     type: '寝泊まりしている地域',
@@ -1884,6 +1933,7 @@ test('あなた: 寝泊まりしている地域: 値が設定されている', (
 test('あなた: 寝泊まりしている地域: 次の質問が「年齢」', () => {
   const actor = createActor(questionStateMachine);
   actor.start();
+  skipUntil(actor, '寝泊まりしている地域');
 
   actor.send({
     type: '寝泊まりしている地域',
@@ -1896,6 +1946,7 @@ test('あなた: 寝泊まりしている地域: 次の質問が「年齢」', (
 test('あなた: 寝泊まりしている地域: next->backで元の質問に戻る', () => {
   const actor = createActor(questionStateMachine);
   actor.start();
+  skipUntil(actor, '寝泊まりしている地域');
 
   actor.send({
     type: '寝泊まりしている地域',

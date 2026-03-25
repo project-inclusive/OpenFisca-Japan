@@ -128,13 +128,20 @@ const actionObj = <Key extends QuestionKey>({
           never
         >({
           // backでこの質問に戻ってこれるよう、この質問を履歴に追加
-          histories: ({ context }: { context: QuestionStateContext }) => [
-            ...context.histories,
-            {
-              key: questionKey,
-              member: context.currentMember,
-            },
-          ],
+          histories: ({ context }: { context: QuestionStateContext }) => {
+            // 見積もりモードはダミーの状態なので、フォームに表示されないよう履歴には保存しない
+            if (questionKey === '見積もりモード') {
+              return context.histories;
+            }
+
+            return [
+              ...context.histories,
+              {
+                key: questionKey,
+                member: context.currentMember,
+              },
+            ];
+          },
         }),
       },
     ],
@@ -176,9 +183,16 @@ export const questionStateMachine = setup({
 }).createMachine({
   id: 'question',
   // 最初の状態（質問）
-  initial: '寝泊まりしている地域',
+  initial: '見積もりモード',
   // 各質問で選んだ選択肢の初期値
   context: {
+    見積もりモード: {
+      // デフォルトでは「くわしく見積もり」
+      あなた: [{ type: 'Selection', selection: 'くわしく見積もり' }],
+      配偶者: [],
+      子ども: [],
+      親: [],
+    },
     寝泊まりしている地域: {
       あなた: [{ type: 'Address', prefecure: '', municipality: '' }],
       配偶者: [],
@@ -455,12 +469,20 @@ export const questionStateMachine = setup({
   },
   // 各質問を状態として定義
   states: {
+    見積もりモード: {
+      on: actionObj<'見積もりモード'>({
+        questionKey: '見積もりモード',
+        nextQuestionKey: '寝泊まりしている地域',
+        nextConditions: [],
+        hasBack: false,
+      }),
+    },
     寝泊まりしている地域: {
       on: actionObj<'寝泊まりしている地域'>({
         questionKey: '寝泊まりしている地域',
         nextQuestionKey: '年齢',
         nextConditions: [],
-        hasBack: false,
+        hasBack: true,
       }),
     },
     年齢: {

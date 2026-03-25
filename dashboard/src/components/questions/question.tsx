@@ -20,7 +20,6 @@ import {
   isPersonNumQuestion,
   isSelectionQuestion,
   MultipleSelectionQuestion,
-  MultipleSelectionQuestionKey,
   multipleSelectionQuestionDefinitions,
   PersonNumQuestion,
   QuestionKey,
