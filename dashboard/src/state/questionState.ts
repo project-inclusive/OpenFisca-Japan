@@ -163,6 +163,11 @@ const isDisasterMode = ({ context }: { context: QuestionStateContext }) => {
   );
 };
 
+// かんたん見積もりモードかどうかを判定するガード
+const isSimpleMode = ({ context }: { context: QuestionStateContext }) => {
+  return context['見積もりモード'].あなた[0].selection === 'かんたん見積もり';
+};
+
 // 病気がある・けがをしているが選択されているかを判定するガード
 const hasIllnessOrInjury = ({ context }: { context: QuestionStateContext }) => {
   const member = context.currentMember;
@@ -544,7 +549,14 @@ export const questionStateMachine = setup({
       on: actionObj<'寝泊まりしている地域'>({
         questionKey: '寝泊まりしている地域',
         nextQuestionKey: '年齢',
-        nextConditions: [],
+        nextConditions: [
+          {
+            target: '年収',
+            guard: ({ context }) => {
+              return isSimpleMode({ context });
+            },
+          },
+        ],
         hasBack: true,
       }),
     },
@@ -553,6 +565,30 @@ export const questionStateMachine = setup({
         questionKey: '年齢',
         nextQuestionKey: '年収',
         nextConditions: [
+          // かんたん見積もりは親についての質問がないためここで終了
+          {
+            target: 'changeToNextChild',
+            guard: ({ context }) => {
+              const childrenNum = context.子どもの人数.あなた[0]?.selection;
+              if (childrenNum == null) {
+                return false;
+              }
+              return (
+                isSimpleMode({ context }) &&
+                context.currentMember.relationship === '子ども' &&
+                context.currentMember.index + 1 < childrenNum
+              );
+            },
+          },
+          {
+            target: 'result',
+            guard: ({ context }) => {
+              return (
+                isSimpleMode({ context }) &&
+                context.currentMember.relationship === '子ども'
+              );
+            },
+          },
           {
             // 災害モードの子どもは年収、仕事の質問をスキップし、災害による負傷へ進む
             target: '災害により負傷し、1ヶ月以上療養を続けていますか？',
@@ -586,6 +622,24 @@ export const questionStateMachine = setup({
         questionKey: '年収',
         nextQuestionKey: '預貯金',
         nextConditions: [
+          {
+            target: '配偶者はいますか？',
+            guard: ({ context }) => {
+              return (
+                isSimpleMode({ context }) &&
+                context.currentMember.relationship === 'あなた'
+              );
+            },
+          },
+          {
+            target: 'changeToSelfChildrenNum',
+            guard: ({ context }) => {
+              return (
+                isSimpleMode({ context }) &&
+                context.currentMember.relationship === '配偶者'
+              );
+            },
+          },
           // 子どもについては仕事関連の質問の途中で年収を聞くため、仕事についての次の質問へ進む
           {
             target: '仕事',
@@ -1365,6 +1419,7 @@ export const questionStateMachine = setup({
       always: [
         // 災害モードでは配偶者の年齢を聞かず被災前の年収へ直接進む
         { target: '被災前の年収', guard: isDisasterMode },
+        { target: '年収', guard: isSimpleMode },
         { target: '年齢' },
       ],
       // 状態を抜ける際に必ず実行

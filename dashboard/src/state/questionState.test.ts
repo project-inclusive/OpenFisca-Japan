@@ -12325,3 +12325,88 @@ test('親: 高校、大学、専門学校、職業訓練学校等の学生です
     ]['親'][0]
   ).toEqual({ type: 'Boolean', selection: true });
 });
+
+// ============================================================
+// かんたん見積もりモードのテスト
+// ============================================================
+
+// かんたん見積もり特有のstateは存在せず他のテストでnextや値設定の動作確認ができているため、ここでは
+
+test('かんたん見積もりの質問遷移', () => {
+  const actor = createActor(questionStateMachine);
+  actor.start();
+  actor.send({
+    type: '見積もりモード',
+    value: {
+      type: 'Selection',
+      selection: 'かんたん見積もり',
+    },
+  });
+  actor.send({ type: 'next' });
+
+  actor.send({
+    type: '寝泊まりしている地域',
+    value: {
+      type: 'Address',
+      prefecure: '東京都',
+      municipality: '渋谷区',
+    },
+  });
+  actor.send({ type: 'next' });
+  actor.send({
+    type: '年収',
+    value: { type: 'AmountOfMoney', selection: 0, unit: '万円' },
+  });
+  actor.send({ type: 'next' });
+  actor.send({
+    type: '配偶者はいますか？',
+    value: { type: 'Boolean', selection: true },
+  });
+  actor.send({ type: 'next' });
+
+  expect(actor.getSnapshot().context.currentMember).toEqual({
+    relationship: '配偶者',
+    index: 0,
+  });
+
+  actor.send({
+    type: '年収',
+    value: { type: 'AmountOfMoney', selection: 0, unit: '万円' },
+  });
+  actor.send({ type: 'next' });
+
+  expect(actor.getSnapshot().context.currentMember).toEqual({
+    relationship: 'あなた',
+    index: 0,
+  });
+
+  actor.send({
+    type: '子どもの人数',
+    value: { type: 'PersonNum', selection: 2 },
+  });
+  actor.send({ type: 'next' });
+
+  expect(actor.getSnapshot().context.currentMember).toEqual({
+    relationship: '子ども',
+    index: 0,
+  });
+
+  actor.send({
+    type: '年齢',
+    value: { type: 'Age', selection: 10 },
+  });
+  actor.send({ type: 'next' });
+
+  expect(actor.getSnapshot().context.currentMember).toEqual({
+    relationship: '子ども',
+    index: 1,
+  });
+
+  actor.send({
+    type: '年齢',
+    value: { type: 'Age', selection: 10 },
+  });
+  actor.send({ type: 'next' });
+
+  expect(actor.getSnapshot().value).toBe('result');
+});
