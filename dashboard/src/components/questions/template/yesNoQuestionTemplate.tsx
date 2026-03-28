@@ -10,13 +10,8 @@ import {
 
 import configData from '../../../config/app_config.json';
 import { ErrorMessage } from '../../forms/validation/ErrorMessage';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import {
-  frontendHouseholdAtom,
-  questionKeyAtom,
-  questionValidatedAtom,
-} from '../../../state';
-import { personNameFrom } from '../../../question';
+import { useRecoilState } from 'recoil';
+import { questionValidatedAtom } from '../../../state';
 import {
   BooleanQuestion,
   BooleanQuestionKey,
@@ -29,12 +24,12 @@ export const YesNoQuestionTemplate = ({
   children,
 }: {
   title: BooleanQuestionKey;
-  initialValue: BooleanQuestion;
+  initialValue?: BooleanQuestion;
   assignFunc: (question: BooleanQuestion) => void;
   children?: ReactNode;
 }) => {
   const [boolState, setBoolState] = useState<boolean | undefined>(
-    initialValue.selection
+    initialValue?.selection
   );
   const [questionValidated, setQuestionValidated] = useRecoilState(
     questionValidatedAtom
@@ -42,7 +37,7 @@ export const YesNoQuestionTemplate = ({
 
   useEffect(() => {
     setQuestionValidated(boolState != null);
-  }, [boolState]);
+  }, [boolState, title, initialValue]);
 
   const btn = ({
     cond,

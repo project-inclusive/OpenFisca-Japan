@@ -13,7 +13,6 @@ export const QuestionFrame = (props: {
   children: ReactNode;
   title: string;
   progress: number;
-  maxProgress: number;
   backOnClick: () => void;
   nextOnClick: () => void;
   hasHistory: boolean;
@@ -29,7 +28,7 @@ export const QuestionFrame = (props: {
       <div>
         <Progress
           value={props.progress}
-          max={props.maxProgress}
+          max={1}
           marginTop="1em"
           marginBottom="0.5em"
         />

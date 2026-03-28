@@ -1,5 +1,4 @@
 import { useState, useCallback, useEffect } from 'react';
-import { useNavigationType } from 'react-router-dom';
 import {
   Box,
   Select,
@@ -24,7 +23,7 @@ export const AddressQuestionTemplate = ({
   initialValue,
 }: {
   assignFunc: (question: AddressQuestion) => void;
-  initialValue: AddressQuestion;
+  initialValue?: AddressQuestion;
 }) => {
   const [questionValidated, setQuestionValidated] = useRecoilState(
     questionValidatedAtom
@@ -37,10 +36,10 @@ export const AddressQuestionTemplate = ({
 
   // TODO: 初期値設定
   const [selectedPrefecture, setSelectedPrefecture] = useState(
-    initialValue.prefecure ?? ('' as string)
+    initialValue?.prefecure ?? ('' as string)
   );
   const [selectedMunicipality, setSelectedMunicipality] = useState(
-    initialValue.municipality ?? ('' as string)
+    initialValue?.municipality ?? ('' as string)
   );
   const prefectureArray = Object.keys(pmObj);
 
@@ -48,7 +47,7 @@ export const AddressQuestionTemplate = ({
     setQuestionValidated(
       selectedPrefecture !== '' && selectedMunicipality !== ''
     );
-  }, [selectedPrefecture, selectedMunicipality]);
+  }, [selectedPrefecture, selectedMunicipality, initialValue]);
 
   // prefectureの値が変更された時
   const onPrefectureChange = useCallback(

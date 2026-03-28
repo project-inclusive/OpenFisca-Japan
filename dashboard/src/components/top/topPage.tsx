@@ -20,9 +20,8 @@ import { Links } from './links';
 import { agreedToTermsAtom } from '../../state';
 import TermsModal from '../TermsModal';
 import { HomeButton } from '../homeButton';
-
-// 何もしない関数（onClickで発火する関数のデフォルト値として使用）
-const noop = () => {};
+import { StateFrom } from 'xstate';
+import { QuestionEvent, questionStateMachine } from '../../state/questionState';
 
 // 幅に応じて改行を入れる
 const NarrowBr = () => {
@@ -32,7 +31,13 @@ const NarrowBr = () => {
   return <span />;
 };
 
-export function TopPage() {
+export function TopPage({
+  state,
+  send,
+}: {
+  state: StateFrom<typeof questionStateMachine>;
+  send: (e: QuestionEvent) => void;
+}) {
   const agreedToTerms = useRecoilValue(agreedToTermsAtom);
   const {
     isOpen: isModalOpen,
@@ -40,6 +45,24 @@ export function TopPage() {
     onClose: onModalClose,
   } = useDisclosure();
   const [modalLink, setModalLink] = useState('/');
+
+  // ボタンクリック時にstateの見積もりモードを設定
+  const setMode = (
+    modeName:
+      | 'かんたん見積もり'
+      | 'くわしく見積もり'
+      | '能登半島地震被災者支援制度見積もり'
+  ) => {
+    // ホームボタンで戻ってきた場合はすでに状態が進んでいるため、初期状態に戻す
+    send({ type: 'reset' });
+
+    // 見積もりモードの設定
+    send({
+      type: '見積もりモード',
+      value: { type: 'Selection', selection: modeName },
+    });
+    send({ type: 'next' });
+  };
 
   return (
     <>
@@ -93,14 +116,13 @@ export function TopPage() {
               as={RouterLink}
               // 規約に同意していない場合のみモーダルが開く
               to={agreedToTerms ? '/calculate-disaster' : '/'}
-              onClick={
-                agreedToTerms
-                  ? noop
-                  : () => {
-                      setModalLink('/calculate-disaster');
-                      onModalOpen();
-                    }
-              }
+              onClick={() => {
+                setMode('能登半島地震被災者支援制度見積もり');
+                if (!agreedToTerms) {
+                  setModalLink('/calculate-disaster');
+                  onModalOpen();
+                }
+              }}
               fontSize={configData.style.subTitleFontSize}
               borderRadius="xl"
               pr="1em"
@@ -120,14 +142,13 @@ export function TopPage() {
               as={RouterLink}
               // 規約に同意していない場合のみモーダルが開く
               to={agreedToTerms ? '/calculate-simple' : '/'}
-              onClick={
-                agreedToTerms
-                  ? noop
-                  : () => {
-                      setModalLink('/calculate-simple');
-                      onModalOpen();
-                    }
-              }
+              onClick={() => {
+                setMode('かんたん見積もり');
+                if (!agreedToTerms) {
+                  setModalLink('/calculate-simple');
+                  onModalOpen();
+                }
+              }}
               style={{ marginRight: '1%' }}
               fontSize={configData.style.subTitleFontSize}
               borderRadius="xl"
@@ -146,14 +167,13 @@ export function TopPage() {
               as={RouterLink}
               // 規約に同意していない場合のみモーダルが開く
               to={agreedToTerms ? '/calculate' : '/'}
-              onClick={
-                agreedToTerms
-                  ? noop
-                  : () => {
-                      setModalLink('/calculate');
-                      onModalOpen();
-                    }
-              }
+              onClick={() => {
+                setMode('くわしく見積もり');
+                if (!agreedToTerms) {
+                  setModalLink('/calculate');
+                  onModalOpen();
+                }
+              }}
               fontSize={configData.style.subTitleFontSize}
               borderRadius="xl"
               height="3.5em"

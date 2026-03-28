@@ -1,6 +1,4 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { AbsoluteCenter } from '@chakra-ui/react';
-import QuestionExamples from './components/QuestionExamples';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import { Result } from './components/result/result';
 import { GenericError } from './components/errors/GenericError';
@@ -8,9 +6,6 @@ import { NotFoundError } from './components/errors/NotFoundError';
 import { FormResponseError } from './components/errors/FormResponseError';
 import { useRecoilState } from 'recoil';
 import { currentDateAtom } from './state';
-import { DetailedQuestionList } from './components/forms/detailedQuestionList';
-import { SimpleQuestionList } from './components/forms/simpleQuestionList';
-import { DisasterQuestionList } from './components/forms/disasterQuestionList';
 import { TopPage } from './components/top/topPage';
 import { Question } from './components/questions/question';
 import { questionStateMachine } from './state/questionState';
@@ -37,27 +32,23 @@ function App() {
           [
             {
               path: '/',
-              element: <TopPage />,
+              element: <TopPage state={questionState} send={send} />,
             },
             {
               path: '/calculate',
-              element: <DetailedQuestionList />,
+              element: <Question state={questionState} send={send} />,
             },
             {
               path: '/calculate-simple',
-              element: <SimpleQuestionList />,
+              element: <Question state={questionState} send={send} />,
             },
             {
               path: '/calculate-disaster',
-              element: <DisasterQuestionList />,
+              element: <Question state={questionState} send={send} />,
             },
             {
               path: '/result',
               element: <Result />,
-            },
-            {
-              path: '/question-examples',
-              element: <QuestionExamples />,
             },
             {
               path: '/privacypolicy',
@@ -66,11 +57,6 @@ function App() {
             {
               path: '/response-error',
               element: <FormResponseError />,
-            },
-            {
-              // TODO: 動作確認用なので移行が終わったら削除
-              path: '/question-new',
-              element: <Question state={questionState} send={send} />,
             },
             {
               path: '/*',

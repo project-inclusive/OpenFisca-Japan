@@ -29,19 +29,19 @@ export const SelectionQuestionTemplate = <T extends SelectionQuestionKey>({
 }: {
   title: T;
   selections: readonly Selection<T>[];
-  initialValue: SelectionQuestion<T>;
+  initialValue?: SelectionQuestion<T>;
   assignFunc: (question: SelectionQuestion<T>) => void;
 }) => {
   const [selectionState, setSelectionState] = useState<
     Selection<T> | undefined
-  >(initialValue.selection);
+  >(initialValue?.selection);
   const [questionValidated, setQuestionValidated] = useRecoilState(
     questionValidatedAtom
   );
 
   useEffect(() => {
     setQuestionValidated(selectionState != null);
-  }, [selectionState]);
+  }, [selectionState, title, initialValue]);
 
   const btn = ({
     cond,
