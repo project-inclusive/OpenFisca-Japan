@@ -1055,7 +1055,7 @@ test('配偶者が設定されている', () => {
 
   const actual = toOpenFiscaHousehold({ context, currentDate });
 
-  expect(actual.世帯員.配偶者.年齢[currentDate]).toEqual(30);
+  expect(actual.世帯員.配偶者.誕生年月日.ETERNITY).toEqual('1996-01-01');
   // 世帯の親一覧にも追加される
   expect(actual.世帯一覧.世帯1.親一覧).toEqual(['あなた', '配偶者']);
 });

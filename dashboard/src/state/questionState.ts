@@ -1186,6 +1186,16 @@ export const questionStateMachine = setup({
                 : false;
             },
           },
+          {
+            // かんたん見積もりで子どもがいない場合終了
+            target: 'result',
+            guard: ({ context }) => {
+              return (
+                isSimpleMode({ context }) &&
+                !context['子どもの人数'].あなた[0].selection
+              );
+            },
+          },
         ],
         hasBack: true,
       }),

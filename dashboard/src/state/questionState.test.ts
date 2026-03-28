@@ -12410,3 +12410,60 @@ test('かんたん見積もりの質問遷移', () => {
 
   expect(actor.getSnapshot().value).toBe('result');
 });
+
+test('かんたん見積もり: 子どもがいない場合すぐに終了', () => {
+  const actor = createActor(questionStateMachine);
+  actor.start();
+  actor.send({
+    type: '見積もりモード',
+    value: {
+      type: 'Selection',
+      selection: 'かんたん見積もり',
+    },
+  });
+  actor.send({ type: 'next' });
+
+  actor.send({
+    type: '寝泊まりしている地域',
+    value: {
+      type: 'Address',
+      prefecure: '東京都',
+      municipality: '渋谷区',
+    },
+  });
+  actor.send({ type: 'next' });
+  actor.send({
+    type: '年収',
+    value: { type: 'AmountOfMoney', selection: 0, unit: '万円' },
+  });
+  actor.send({ type: 'next' });
+  actor.send({
+    type: '配偶者はいますか？',
+    value: { type: 'Boolean', selection: true },
+  });
+  actor.send({ type: 'next' });
+
+  expect(actor.getSnapshot().context.currentMember).toEqual({
+    relationship: '配偶者',
+    index: 0,
+  });
+
+  actor.send({
+    type: '年収',
+    value: { type: 'AmountOfMoney', selection: 0, unit: '万円' },
+  });
+  actor.send({ type: 'next' });
+
+  expect(actor.getSnapshot().context.currentMember).toEqual({
+    relationship: 'あなた',
+    index: 0,
+  });
+
+  actor.send({
+    type: '子どもの人数',
+    value: { type: 'PersonNum', selection: 0 },
+  });
+  actor.send({ type: 'next' });
+
+  expect(actor.getSnapshot().value).toBe('result');
+});

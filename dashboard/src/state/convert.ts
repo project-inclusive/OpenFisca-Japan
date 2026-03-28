@@ -368,10 +368,10 @@ export const toOpenFiscaHousehold = ({
   const spouseMember: OpenFiscaMember = {};
 
   if (hasSpouse) {
-    // 年齢（配偶者は誕生年月日ではなく年齢をそのまま設定）
     const spouseAge = context['年齢'].配偶者[0]?.selection;
     if (spouseAge != null) {
-      spouseMember.年齢 = { [currentDate]: spouseAge };
+      const birthYear = parseInt(currentDate.substring(0, 4)) - spouseAge;
+      spouseMember.誕生年月日 = { ETERNITY: `${birthYear}-01-01` };
     }
 
     // 年収・預貯金
