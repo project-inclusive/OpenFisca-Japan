@@ -2,6 +2,8 @@ import { assign, setup, type StateValueFrom } from 'xstate';
 import {
   BooleanQuestion,
   BooleanQuestionKey,
+  PersonNumQuestion,
+  PersonNumQuestionKey,
   QuestionAnswer,
   QuestionAnswers,
   QuestionKey,
@@ -32,11 +34,16 @@ type QuestionAssignEventMap = {
 type QuestionAssignEvent = QuestionAssignEventMap[QuestionKey];
 
 export type QuestionEvent =
-  // HACK: QuestionAssignEventを直接指定するとUnion型推論上限の26プロパティを超えてしまうため、BooleanQuestionのみ分離している
-  | Exclude<QuestionAssignEvent, { type: BooleanQuestionKey }>
+  // HACK: QuestionAssignEventを直接指定するとUnion型推論上限の26プロパティを超えてしまうため、一部の質問を分離している
+  | Exclude<
+      QuestionAssignEvent,
+      { type: BooleanQuestionKey } | { type: PersonNumQuestionKey }
+    >
   | { type: BooleanQuestionKey; value: BooleanQuestion }
+  | { type: PersonNumQuestionKey; value: PersonNumQuestion }
   | { type: 'next' }
-  | { type: 'back' };
+  | { type: 'back' }
+  | { type: 'reset' };
 
 export type QustionState = StateValueFrom<typeof questionStateMachine>;
 
@@ -152,6 +159,11 @@ const actionObj = <Key extends QuestionKey>({
           target: 'history',
         }
       : undefined,
+    // reset: リセットし最初の状態（質問）へ戻る
+    // 見積もりモード切りかえ時に使用される
+    reset: {
+      target: 'reset',
+    },
   };
 };
 
@@ -1557,6 +1569,22 @@ export const questionStateMachine = setup({
         currentMember: ({ context }: { context: QuestionStateContext }) => {
           const lastHistory = context.histories[context.histories.length - 1];
           return lastHistory.member;
+        },
+      }),
+    },
+    // 最初の状態に戻るためのダミーの状態
+    reset: {
+      // alwaysを使用しそのまま最初の状態へ遷移
+      always: {
+        target: '見積もりモード',
+      },
+      // 状態を抜ける際に必ず実行
+      exit: assign({
+        currentMember: () => {
+          return {
+            relationship: 'あなた',
+            index: 0,
+          };
         },
       }),
     },

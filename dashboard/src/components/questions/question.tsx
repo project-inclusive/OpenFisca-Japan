@@ -336,6 +336,7 @@ export const Question = ({
   // HACK: ダミーの状態なので可能性から除外
   if (
     state.value === 'history' ||
+    state.value === 'reset' ||
     state.value === 'changeToSpouse' ||
     state.value === 'changeToSelfChildrenNum' ||
     state.value === 'changeToSelfParentNum' ||

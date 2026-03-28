@@ -5,7 +5,6 @@ import {
   QuestionStateContext,
   questionStateMachine,
 } from './questionState';
-import { QuestionKey } from '../question';
 
 // 世帯員ごとに進捗をどれくらいの割合で表示するかを定義
 const progressRatio: Record<HouseholdRelationship, number> = {

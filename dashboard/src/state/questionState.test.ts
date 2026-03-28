@@ -12467,3 +12467,31 @@ test('かんたん見積もり: 子どもがいない場合すぐに終了', () 
 
   expect(actor.getSnapshot().value).toBe('result');
 });
+
+// ============================================================
+// 見積もりモードリセットのテスト
+// ============================================================
+
+test('最初の質問に戻り別の見積もりモードを設定できる', () => {
+  const actor = createActor(questionStateMachine);
+  actor.start();
+  // くわしく見積もり
+  skipSpouseUntil(actor, '年齢');
+
+  actor.send({ type: 'reset' });
+
+  expect(actor.getSnapshot().value).toBe('見積もりモード');
+  expect(actor.getSnapshot().context.currentMember.relationship).toBe('あなた');
+  expect(actor.getSnapshot().context.currentMember.index).toBe(0);
+
+  actor.send({
+    type: '見積もりモード',
+    value: {
+      type: 'Selection',
+      selection: '能登半島地震被災者支援制度見積もり',
+    },
+  });
+  expect(actor.getSnapshot().context.見積もりモード.あなた[0].selection).toBe(
+    '能登半島地震被災者支援制度見積もり'
+  );
+});
