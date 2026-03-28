@@ -173,7 +173,7 @@ const hasIllnessOrInjury = ({ context }: { context: QuestionStateContext }) => {
   const member = context.currentMember;
   const selection =
     context['病気やけが、障害はありますか？'][member.relationship][member.index]
-      .selection;
+      ?.selection ?? [];
   return (
     selection.includes('病気がある') || selection.includes('けがをしている')
   );
@@ -182,9 +182,11 @@ const hasIllnessOrInjury = ({ context }: { context: QuestionStateContext }) => {
 // 障害があるが選択されているかを判定するガード
 const hasDisability = ({ context }: { context: QuestionStateContext }) => {
   const member = context.currentMember;
-  return context['病気やけが、障害はありますか？'][member.relationship][
-    member.index
-  ].selection.includes('障害がある');
+  return (
+    context['病気やけが、障害はありますか？'][member.relationship][
+      member.index
+    ]?.selection?.includes('障害がある') ?? false
+  );
 };
 
 // 質問の状態を管理するステートマシン
@@ -672,7 +674,7 @@ export const questionStateMachine = setup({
               return (
                 context['現在仕事をしていますか？'][member.relationship][
                   member.index
-                ].selection === false
+                ]?.selection === false
               );
             },
           },
@@ -684,7 +686,7 @@ export const questionStateMachine = setup({
               const working =
                 context['現在仕事をしていますか？'][member.relationship][
                   member.index
-                ].selection === true;
+                ]?.selection === true;
               return member.relationship === '子ども' && working;
             },
           },
@@ -720,7 +722,7 @@ export const questionStateMachine = setup({
               const member = context.currentMember;
               return (
                 context['休職中ですか？'][member.relationship][member.index]
-                  .selection === false
+                  ?.selection === false
               );
             },
           },
@@ -795,10 +797,11 @@ export const questionStateMachine = setup({
               guard: ({ context }) => {
                 const member = context.currentMember;
                 return (
-                  !context['病気やけが、障害はありますか？'][
-                    member.relationship
-                  ][member.index].selection.includes('病気がある') &&
-                  hasDisability({ context })
+                  !(
+                    context['病気やけが、障害はありますか？'][
+                      member.relationship
+                    ][member.index]?.selection?.includes('病気がある') ?? false
+                  ) && hasDisability({ context })
                 );
               },
             },
@@ -808,10 +811,11 @@ export const questionStateMachine = setup({
               guard: ({ context }) => {
                 const member = context.currentMember;
                 return (
-                  !context['病気やけが、障害はありますか？'][
-                    member.relationship
-                  ][member.index].selection.includes('病気がある') &&
-                  !hasDisability({ context })
+                  !(
+                    context['病気やけが、障害はありますか？'][
+                      member.relationship
+                    ][member.index]?.selection?.includes('病気がある') ?? false
+                  ) && !hasDisability({ context })
                 );
               },
             },
@@ -832,7 +836,7 @@ export const questionStateMachine = setup({
               return (
                 context['感染症にかかっていますか？'][member.relationship][
                   member.index
-                ].selection === false
+                ]?.selection === false
               );
             },
           },
@@ -852,7 +856,7 @@ export const questionStateMachine = setup({
               return (
                 context['HIVに感染していますか？'][member.relationship][
                   member.index
-                ].selection === false
+                ]?.selection === false
               );
             },
           },
@@ -897,7 +901,7 @@ export const questionStateMachine = setup({
               return (
                 context['C型肝炎に感染していますか？'][member.relationship][
                   member.index
-                ].selection === false
+                ]?.selection === false
               );
             },
           },
@@ -936,7 +940,7 @@ export const questionStateMachine = setup({
               const member = context.currentMember;
               return (
                 context['腎不全ですか？'][member.relationship][member.index]
-                  .selection === false
+                  ?.selection === false
               );
             },
           },
@@ -973,7 +977,7 @@ export const questionStateMachine = setup({
               return (
                 context['先天性の血液凝固因子異常症（血友病等）ですか？'][
                   member.relationship
-                ][member.index].selection === false &&
+                ][member.index]?.selection === false &&
                 hasDisability({ context })
               );
             },
@@ -985,7 +989,7 @@ export const questionStateMachine = setup({
               return (
                 context['先天性の血液凝固因子異常症（血友病等）ですか？'][
                   member.relationship
-                ][member.index].selection === false &&
+                ][member.index]?.selection === false &&
                 !hasDisability({ context })
               );
             },
@@ -1283,7 +1287,7 @@ export const questionStateMachine = setup({
               return (
                 context['住宅が被害を受けていますか？'][member.relationship][
                   member.index
-                ].selection === true
+                ]?.selection === true
               );
             },
           },

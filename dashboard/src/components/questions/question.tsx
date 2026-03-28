@@ -37,7 +37,7 @@ import { SelectionQuestionTemplate } from './template/selectionQuestionTemplate'
 import { YesNoQuestionTemplate } from './template/yesNoQuestionTemplate';
 import { useNavigate } from 'react-router-dom';
 import { toOpenFiscaHousehold } from '../../state/convert';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { AgeQuestionTemplate } from './template/ageQuestionTemplate';
 import { AmountOfMoneyQuestionTemplate } from './template/amountOfMoneyQuestionTemplate';
 import { MultipleSelectionQuestionTemplate } from './template/multipleSelectionQuestionTemplate';
@@ -45,6 +45,7 @@ import { PersonNumQuestionTemplate } from './template/personNumQuestionTemplate'
 import { QuestionDescription } from './description';
 import configData from '../../config/app_config.json';
 import { ChildrenAgeQuestionTemplate } from './template/childrenAgeQuestionTemplate';
+import { calculateProgress, maxProgressOf } from '../../state/progress';
 
 const personStr = (member: HouseholdMember): string => {
   switch (member.relationship) {
@@ -284,6 +285,13 @@ export const Question = ({
   const currentDate = useRecoilValue(currentDateAtom);
   const [household, setHousehold] = useRecoilState(householdAtom);
 
+  // 進捗の分母計算（重いのでメモ化）
+  const maxProgressMap = useMemo(() => {
+    return maxProgressOf(
+      state.context.見積もりモード.あなた[0].selection ?? 'くわしく見積もり'
+    );
+  }, [state.context.見積もりモード.あなた[0].selection]);
+
   // バリデーションチェックの状態
   const [questionValidated, setQuestionValidated] = useRecoilState(
     questionValidatedAtom
@@ -350,8 +358,6 @@ export const Question = ({
   f();
 
   // 現在の状態とボタンの定義
-  const displayProgress = 1;
-  const maxProgress = 10;
   const back = () => {
     send({ type: 'back' });
   };
@@ -365,11 +371,17 @@ export const Question = ({
     send({ type: 'next' });
   };
 
+  // 進捗の計算
+  const progress = calculateProgress(
+    state.context,
+    state.value,
+    maxProgressMap
+  );
+
   return (
     <QuestionFrame
       title={`${personStr(state.context.currentMember)}について`}
-      progress={displayProgress}
-      maxProgress={maxProgress}
+      progress={progress}
       backOnClick={back}
       nextOnClick={next}
       hasHistory={state.context.histories.length > 0}
