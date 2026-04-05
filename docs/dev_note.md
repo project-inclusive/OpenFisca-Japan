@@ -34,7 +34,8 @@
   
     - バックエンド(swagger-ui&openfisca)を環境構築・起動
       ```bash
-      # docker環境を構築・起動
+      # docker環境を構築・起動 (`docker build`で作成されたイメージは使われない)
+      docker compose up -d --build openfisca
       docker compose up -d swagger-ui
       # ブラウザでSwagger-UIを表示する
       http://localhost:8080
