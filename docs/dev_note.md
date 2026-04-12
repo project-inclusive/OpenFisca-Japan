@@ -226,8 +226,7 @@ npm run cy:run
     - `setup.py`
   - (必要であれば) `README.md` の概要に対応制度追加
 - [開発版のページ](https://develop.openfisca-japan.pages.dev/)で見積もり結果が正常に表示されることを確認
-- developブランチにマージされると自動でTest PyPIにパッケージがアップロードされ、mainブランチにマージされると自動でPyPIにパッケージがアップロードされる。(Github Actions)
-- developブランチからmainブランチへのPR作成、マージ
+- developブランチからmainブランチへのPR作成、マージ。マージされるとGithub Actionsにより自動でPyPIにパッケージがアップロードされる。
 - [本番のページ](https://shien-yadokari.proj-inclusive.org/)で見積もり結果が正常に表示されることを確認
   - mainブランチマージ後1分程度切り替わりのためバックエンドの404エラーが発生する可能性あり
 - TagとReleaseの作成
