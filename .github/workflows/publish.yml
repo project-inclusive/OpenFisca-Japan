@@ -1,0 +1,47 @@
+name: Publish Python Package
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+
+jobs:
+  publish:
+    name: Build and Publish
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write      # Required for OIDC authentication
+      contents: read       # Required to checkout the code
+
+    # Environment is optional but recommended for differentiating PyPI and TestPyPI settings
+    environment:
+      name: ${{ github.ref == 'refs/heads/main' && 'pypi' || 'testpypi' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11.6 # Matches test_backend.yml
+
+      - name: Install specific pip version
+        run: pip install --upgrade pip==25.0.1 # Matches test_backend.yml
+
+      - name: Build package
+        run: make build # Matches test_backend.yml
+
+      - name: Publish to TestPyPI
+        if: github.ref == 'refs/heads/develop'
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          packages-dir: dist/
+
+      - name: Publish to PyPI
+        if: github.ref == 'refs/heads/main'
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist/

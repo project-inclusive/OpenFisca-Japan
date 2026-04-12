@@ -1,0 +1,9 @@
+description: 雇用保険料率
+metadata:
+  reference: https://www.mhlw.go.jp/content/001672589.pdf
+  unit: currency-JPY
+values:
+  2020-01-01:
+    value: 0.0055 # 「一般の事業」の労働者負担分
+  2026-04-01:
+    value: 0.005
