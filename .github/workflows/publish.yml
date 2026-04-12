@@ -3,7 +3,6 @@ name: Publish Python Package
 on:
   push:
     branches:
-      - develop
       - main
 
 jobs:
@@ -16,7 +15,7 @@ jobs:
 
     # Environment is optional but recommended for differentiating PyPI and TestPyPI settings
     environment:
-      name: ${{ github.ref == 'refs/heads/main' && 'pypi' || 'testpypi' }}
+      name: pypi
 
     steps:
       - name: Checkout
@@ -33,15 +32,7 @@ jobs:
       - name: Build package
         run: make build # Matches test_backend.yml
 
-      - name: Publish to TestPyPI
-        if: github.ref == 'refs/heads/develop'
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          repository-url: https://test.pypi.org/legacy/
-          packages-dir: dist/
-
       - name: Publish to PyPI
-        if: github.ref == 'refs/heads/main'
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           packages-dir: dist/
