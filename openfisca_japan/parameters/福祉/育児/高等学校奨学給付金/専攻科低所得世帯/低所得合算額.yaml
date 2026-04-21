@@ -1,0 +1,9 @@
+description: 専攻科の低所得世帯を判定するための道府県民税所得割額と市町村民税所得割額の合算額上限
+metadata:
+  reference:
+    - https://www.mext.go.jp/a_menu/shotou/mushouka/1344146.htm
+    - https://www.mext.go.jp/content/20250711-mxt_kouhou02-1.pdf
+  unit: currency-JPY
+values:
+  2025-04-01:
+    value: 105500
