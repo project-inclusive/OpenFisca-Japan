@@ -1,1 +1,1 @@
-../../.agents/skills/add-question.md
+../../.agents/skills/add-question/SKILL.md
