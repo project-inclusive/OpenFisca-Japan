@@ -224,6 +224,7 @@ class flat_tax_on_salary(Variable):
 from openfisca_core.model_api import Enum, Variable, MONTH
 
 class HousingOccupancyStatus(Enum):
+    __order__ = "tenant owner free_lodger homeless"  # 定義順を明示・検証
     tenant = "テナント（賃借人）"
     owner = "所有者"
     free_lodger = "無償居住者"
@@ -260,6 +261,37 @@ class another_variable(Variable):
         is_owner = (status == HousingOccupancyStatus.owner)
         return is_owner
 ```
+
+### `__order__` — メンバーの定義順を明示する
+
+`__order__` はスペース区切りで全メンバー名を列挙した文字列で、**openfisca_japan では全 Enum 定義に書くのが慣例**。
+
+```python
+class 身体障害者手帳等級パターン(Enum):
+    __order__ = "無 一級 二級 三級 四級 五級 六級 七級"
+    無   = "無"
+    一級 = "一級"
+    二級 = "二級"
+    三級 = "三級"
+    四級 = "四級"
+    五級 = "五級"
+    六級 = "六級"
+    七級 = "七級"
+```
+
+**動作:**
+- 各メンバーは定義順（= `__order__` の順）に **0 始まりの `.index`** が割り当てられる
+- openfisca-core 内部では NumPy 配列のインデックスとしてこの値を使用する
+- Python の `enum` メタクラスが `__order__` の列挙と実際の定義順が一致するか検証し、**不一致なら `TypeError`** を投げる
+
+```python
+# 各メンバーの .index 値（定義順の 0 始まり整数）
+身体障害者手帳等級パターン.無.index    # => 0
+身体障害者手帳等級パターン.一級.index  # => 1
+身体障害者手帳等級パターン.七級.index  # => 7
+```
+
+> **由来:** `enum34`（Python 2 互換ライブラリ）では dict の順序が保証されないため `__order__` でメンバー順を明示する必要があった。Python 3 では定義順が自動保持されるが、openfisca_japan では定義順の文書化・バリデーション慣例として引き続き記述する。
 
 ---
 
@@ -502,12 +534,13 @@ from openfisca_core.model_api import (
 1. **`if/else` を formula 内で使ってはいけない** → `where` / `select` / 条件 × 値を使う
 2. **`Enum` 型は `default_value` が必須**
 3. **別ファイルの Enum を Python import してはいけない** → `status.possible_values` で取得
-4. **`min/max` ではなく `min_/max_`** を使う
-5. **`formula` の命名**: 必ず `formula` で始めること（`formula_YYYY` 形式）
-6. **`end` は最終有効日（inclusive）**: `end = '2025-12-31'` は2025年12月31日まで有効
-7. **`set_input` は除算 or 転送の2択**: `divide_by_period`（等分）か `dispatch_by_period`（複製）
-8. **複合演算子（`+=`, `-=`）は使わない**: `a = a + b` と書く（Variable の参照を書き換えてしまう）
-9. **`np.sum` / `np.max` は世帯集計に使わない**: `household.sum` / `household.max` を使う（複数世帯入力時に全世帯を混同する）
+4. **Enum には `__order__` を必ず書く** → メンバーの `.index`（0始まり整数）が定義順に割り当てられる。`__order__` の列挙順と定義順が異なると `TypeError`
+5. **`min/max` ではなく `min_/max_`** を使う
+6. **`formula` の命名**: 必ず `formula` で始めること（`formula_YYYY` 形式）
+7. **`end` は最終有効日（inclusive）**: `end = '2025-12-31'` は2025年12月31日まで有効
+8. **`set_input` は除算 or 転送の2択**: `divide_by_period`（等分）か `dispatch_by_period`（複製）
+9. **複合演算子（`+=`, `-=`）は使わない**: `a = a + b` と書く（Variable の参照を書き換えてしまう）
+10. **`np.sum` / `np.max` は世帯集計に使わない**: `household.sum` / `household.max` を使う（複数世帯入力時に全世帯を混同する）
 
 ---
 
@@ -575,10 +608,11 @@ class household_benefit_per_member(Variable):
 
 ```python
 class OccupationType(Enum):
-    employee = "雇用者"
+    __order__ = "employee freelancer student retired"
+    employee  = "雇用者"
     freelancer = "フリーランス"
-    student = "学生"
-    retired = "退職者"
+    student   = "学生"
+    retired   = "退職者"
 
 class occupation(Variable):
     value_type = Enum
