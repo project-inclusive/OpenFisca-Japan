@@ -310,6 +310,38 @@ def formula(person, period):
 | `a or b` | `a + b` |
 | `a + b` (文字列) | `concat(a, b)` |
 
+### 複数世帯対応の注意点
+
+OpenFisca では複数世帯を同時に計算するため、以下の制約に注意する。
+
+**複合演算子（`+=`, `-=`）は使わない**
+
+Variable の参照そのものを書き換えてしまい、計算に不整合が生じる。
+
+```python
+# ❌ NG: a で参照しているVariableの計算結果自体を書き換えてしまう
+a += b
+
+# ✅ OK: Pythonのローカル変数のみを上書きする
+a = a + b
+```
+
+**`np.sum` / `np.max` ではなく `household.sum` / `household.max` を使う**
+
+`np.sum` 等の numpy 集計関数は全世帯の値を混同してしまう。
+
+| 使ってはいけない | 使うべきメソッド |
+|---|---|
+| `np.sum(household.members(...))` | `household.sum(household.members(...))` |
+| `np.max(household.members(...))` | `household.max(household.members(...))` |
+
+**Enum の OR 比較には `|` 演算子が使える**
+
+```python
+# Enum同士のOR比較（+ でも動作するが | がより意図明確）
+is_first_or_second = (grade == Grade.first) | (grade == Grade.second)
+```
+
 ---
 
 ## エンティティ間の集約・参照
@@ -346,6 +378,37 @@ class college_scholarship(Variable):
         is_adult = person.has_role(Household.ADULT)
 
         return person('is_student', period) * (household_income > 0) * 100
+```
+
+### `get_rank` — 世帯員の順序付け
+
+世帯内で「第一子」「最も所得が高い世帯員」等を求める場合は `get_rank` を使う。条件を満たす範囲で順序（0始まり）を付け、条件を満たさない場合は `-1` を返す。
+
+```python
+def formula(person, period):
+    # 所得降順で順位付け（降順なので -income）
+    income = person('income', period)
+    income_rank = person.get_rank(person.household, -income)
+    is_highest_earner = income_rank == 0
+
+    # 子供の中で年齢が高い順（第一子判定）
+    is_child = person('is_child', period)
+    age = person('age', period)
+    child_age_rank = person.get_rank(person.household, -age, condition=is_child)
+    is_first_child = child_age_rank == 0
+```
+
+### 異なる Entity を組み合わせる際の注意
+
+`entity=Household` の Variable と `entity=Person` の Variable を直接乗算すると型が合わない場合がある。Person レベルの結果を先に集計してから、Household 条件を乗算する。
+
+```python
+# ❌ NG: 型が合わず計算できない
+result = person_condition * household_condition
+
+# ✅ OK: 人物ごとに集計してから世帯条件を乗算
+per_person = household.sum(household.members('person_variable', period))
+result = per_person * household_condition
 ```
 
 ---
@@ -443,6 +506,8 @@ from openfisca_core.model_api import (
 5. **`formula` の命名**: 必ず `formula` で始めること（`formula_YYYY` 形式）
 6. **`end` は最終有効日（inclusive）**: `end = '2025-12-31'` は2025年12月31日まで有効
 7. **`set_input` は除算 or 転送の2択**: `divide_by_period`（等分）か `dispatch_by_period`（複製）
+8. **複合演算子（`+=`, `-=`）は使わない**: `a = a + b` と書く（Variable の参照を書き換えてしまう）
+9. **`np.sum` / `np.max` は世帯集計に使わない**: `household.sum` / `household.max` を使う（複数世帯入力時に全世帯を混同する）
 
 ---
 
