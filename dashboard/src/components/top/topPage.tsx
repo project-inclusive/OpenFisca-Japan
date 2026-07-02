@@ -5,7 +5,6 @@ import {
   VStack,
   useDisclosure,
   Stack,
-  AbsoluteCenter,
   Spacer,
 } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
@@ -68,18 +67,19 @@ export function TopPage({
     <>
       <VStack width="100%" overflowX="hidden">
         <HomeButton />
-      <VStack
-        w={{ base: '100%', md: 'auto' }}
-        maxW="100%"
-        boxSizing="border-box"
-        px={{ base: 4, md: 0 }}
-      >
+
+        <VStack
+          w={{ base: '100%', md: 'auto' }}
+          maxW="100%"
+          boxSizing="border-box"
+          px={{ base: 4, md: 0 }}
+        >
           <Center>
             <Text
               color="cyan.900"
               fontSize={{
+                ...configData.style.subTitleFontSize,
                 base: 'sm',
-                md: configData.style.subTitleFontSize,
               }}
               fontWeight="bold"
               display="inline-block"
@@ -93,6 +93,7 @@ export function TopPage({
               ))}
             </Text>
           </Center>
+
           <Stack
             direction={{ base: 'column', xl: 'row' }}
             justifyContent="space-between"
@@ -103,14 +104,18 @@ export function TopPage({
               descriptions={configData.topPage.features[0].descriptions}
               titleColor="red.500"
             />
+
             <Spacer />
+
             <Feature
               image={personIcon2}
               title={configData.topPage.features[1].feature}
               descriptions={configData.topPage.features[1].descriptions}
               titleColor="blue.500"
             />
+
             <Spacer />
+
             <Feature
               image={personIcon3}
               title={configData.topPage.features[2].feature}
@@ -131,29 +136,19 @@ export function TopPage({
               as={RouterLink}
               // 規約に同意していない場合のみモーダルが開く
               to={agreedToTerms ? '/calculate-disaster' : '/'}
-<<<<<<< HEAD
-              onClick={
-                agreedToTerms
-                  ? noop
-                  : () => {
-                      setModalLink('/calculate-disaster');
-                      onModalOpen();
-                    }
-              }
-              fontSize={{
-                base: 'sm',
-                md: configData.style.subTitleFontSize,
-              }}
-=======
               onClick={() => {
                 setMode('能登半島地震被災者支援制度見積もり');
+
+                // 規約に同意していない場合のみモーダルが開く
                 if (!agreedToTerms) {
                   setModalLink('/calculate-disaster');
                   onModalOpen();
                 }
               }}
-              fontSize={configData.style.subTitleFontSize}
->>>>>>> upstream/develop
+              fontSize={{
+                ...configData.style.subTitleFontSize,
+                base: 'sm',
+              }}
               borderRadius="xl"
               px="1em"
               height="3.5em"
@@ -180,30 +175,19 @@ export function TopPage({
               as={RouterLink}
               // 規約に同意していない場合のみモーダルが開く
               to={agreedToTerms ? '/calculate-simple' : '/'}
-<<<<<<< HEAD
-              onClick={
-                agreedToTerms
-                  ? noop
-                  : () => {
-                      setModalLink('/calculate-simple');
-                      onModalOpen();
-                    }
-              }
-              fontSize={{
-                base: 'sm',
-                md: configData.style.subTitleFontSize,
-              }}
-=======
               onClick={() => {
                 setMode('かんたん見積もり');
+
+                // 規約に同意していない場合のみモーダルが開く
                 if (!agreedToTerms) {
                   setModalLink('/calculate-simple');
                   onModalOpen();
                 }
               }}
-              style={{ marginRight: '1%' }}
-              fontSize={configData.style.subTitleFontSize}
->>>>>>> upstream/develop
+              fontSize={{
+                ...configData.style.subTitleFontSize,
+                base: 'sm',
+              }}
               borderRadius="xl"
               height="3.5em"
               px={2}
@@ -221,29 +205,19 @@ export function TopPage({
               as={RouterLink}
               // 規約に同意していない場合のみモーダルが開く
               to={agreedToTerms ? '/calculate' : '/'}
-<<<<<<< HEAD
-              onClick={
-                agreedToTerms
-                  ? noop
-                  : () => {
-                      setModalLink('/calculate');
-                      onModalOpen();
-                    }
-              }
-              fontSize={{
-                base: 'sm',
-                md: configData.style.subTitleFontSize,
-              }}
-=======
               onClick={() => {
                 setMode('くわしく見積もり');
+
+                // 規約に同意していない場合のみモーダルが開く
                 if (!agreedToTerms) {
                   setModalLink('/calculate');
                   onModalOpen();
                 }
               }}
-              fontSize={configData.style.subTitleFontSize}
->>>>>>> upstream/develop
+              fontSize={{
+                ...configData.style.subTitleFontSize,
+                base: 'sm',
+              }}
               borderRadius="xl"
               height="3.5em"
               px={2}
@@ -258,8 +232,10 @@ export function TopPage({
             </Button>
           </Center>
         </VStack>
+
         <Links />
       </VStack>
+
       <TermsModal
         isOpen={isModalOpen}
         onOpen={onModalOpen}
