@@ -1,5 +1,5 @@
-# fix version (only 18 -> 18.xx(latest ver))
-FROM node:18.16-bullseye
+# fix version (only 26 -> 26.xx(latest ver))
+FROM node:26.4-bullseye
 
 # comment out useradd for "npm cache clean"
 #RUN useradd -m user
