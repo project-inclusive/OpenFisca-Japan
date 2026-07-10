@@ -1,0 +1,1 @@
+../../.agents/skills/openfisca-japan/SKILL.md
