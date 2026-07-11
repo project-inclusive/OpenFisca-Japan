@@ -179,6 +179,20 @@ sudo apt install xdg-utils
 - `cd dashboard` でdashboardディレクトリにて開発する。
 - http://localhost:30000/ をブラウザに打ち込み、ページを確認する。
 
+#### 初回セットアップ（pre-commitフック）
+
+コミット時に [Husky](https://typicode.github.io/husky/) により自動フォーマット（`npm run pretty`）が実行されるようになっています。
+新たにクローンした場合、以下のコマンドを一度実行してください。
+
+```bash
+# dashboardディレクトリに移動
+cd dashboard
+npm install
+```
+
+- `npm install` 時に `prepare` スクリプトが実行され、Huskyのpre-commitフックが自動でセットアップされます
+- このリポジトリは `.git` がルートディレクトリにあるモノレポ構成のため、`dashboard` ディレクトリ単体では `.git` を検出できません。そのため `prepare` スクリプト内で一度ルートディレクトリに移動してからフックを設定しています（詳細は `dashboard/package.json` の `prepare` スクリプト参照）
+
 #### テスト、linter実行
 
 ```bash
