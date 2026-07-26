@@ -127,11 +127,13 @@ export function TopPage({
               borderRadius="xl"
               pr="1em"
               pl="1em"
-              height="3.5em"
-              width="100%"
+              height="auto"
+              width={{ base: '80vw', md: '100%' }}
+              minHeight="3.5em"
               bg="orange.400"
               color="white"
               _hover={{ bg: 'orange.500' }}
+              whiteSpace={{ base: 'normal', md: 'nowrap' }}
             >
               能登半島地震被災者支援制度見積もり
             </Button>
@@ -152,14 +154,16 @@ export function TopPage({
               style={{ marginRight: '1%' }}
               fontSize={configData.style.subTitleFontSize}
               borderRadius="xl"
-              height="3.5em"
+              height="auto"
+              width={{ base: '40vw', md: '45%' }}
+              minHeight="3.5em"
               pr="1.2em"
               pl="1.2em"
-              width="45%"
               bg="teal.500"
               color="white"
               _hover={{ bg: 'teal.600' }}
               data-testid="calculate-simple-button"
+              whiteSpace={{ base: 'normal', md: 'nowrap' }}
             >
               かんたん見積もり
             </Button>
@@ -176,14 +180,16 @@ export function TopPage({
               }}
               fontSize={configData.style.subTitleFontSize}
               borderRadius="xl"
-              height="3.5em"
+              height="auto"
+              width={{ base: '40vw', md: '45%' }}
+              minHeight="3.5em"
               pr="1.2em"
               pl="1.2em"
-              width="45%"
               bg="blue.500"
               color="white"
               _hover={{ bg: 'blue.600' }}
               data-testid="calculate-detail-button"
+              whiteSpace={{ base: 'normal', md: 'nowrap' }}
             >
               くわしく見積もり
             </Button>
