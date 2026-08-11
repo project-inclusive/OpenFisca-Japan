@@ -1,0 +1,7 @@
+description: 高等教育の修学支援新制度_多子世帯に該当する子の人数
+metadata:
+  reference: https://www.mext.go.jp/a_menu/koutou/hutankeigen/index.htm
+  unit: 人
+values:
+  2024-04-01:
+    value: 3
