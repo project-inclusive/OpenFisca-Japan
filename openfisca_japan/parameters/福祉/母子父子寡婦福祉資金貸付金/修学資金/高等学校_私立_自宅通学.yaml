@@ -1,0 +1,7 @@
+description: 母子父子寡婦福祉資金貸付金_修学資金_高等学校_私立_自宅通学_月額
+metadata:
+  reference: https://www.mhlw.go.jp/web/t_doc?dataId=00tc4886&dataType=1&pageNo=1
+  unit: currency-JPY
+values:
+  2020-04-01:
+    value: 45000
