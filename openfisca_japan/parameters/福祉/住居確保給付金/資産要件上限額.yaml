@@ -1,0 +1,9 @@
+description: 住居確保給付金の資産要件の上限額（基準額の6月分。ただしこの額を超えない）
+metadata:
+  reference: https://corona-support.mhlw.go.jp/jukyokakuhokyufukin/index.html
+  unit: currency-JPY
+values:
+  2020-04-20:
+    value: 1000000
+    metadata:
+      reference: https://corona-support.mhlw.go.jp/jukyokakuhokyufukin/index.html
