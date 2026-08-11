@@ -15,4 +15,11 @@ describe('Loads homepage', () => {
   it('Renders くわしく見積もり button', () => {
     cy.contains('くわしく見積もり');
   });
+
+  it('navigates directly to the referral letter flow', () => {
+    cy.get('[data-testid="referral-letter-button"]').contains('紹介状').click();
+
+    cy.url().should('include', '/referral-letter');
+    cy.get('[data-testid="restrictions-checkbox"]').should('not.exist');
+  });
 });

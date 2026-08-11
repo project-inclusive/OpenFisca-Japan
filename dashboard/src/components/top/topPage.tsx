@@ -118,6 +118,25 @@ export function TopPage() {
           <Center pr={4} pl={4} pb={1} style={{ textAlign: 'center' }}>
             <Button
               as={RouterLink}
+              to="/referral-letter"
+              fontSize={configData.style.subTitleFontSize}
+              borderRadius="xl"
+              height="3.5em"
+              pr="1.2em"
+              pl="1.2em"
+              width="100%"
+              bg="cyan.800"
+              color="white"
+              _hover={{ bg: 'cyan.900' }}
+              data-testid="referral-letter-button"
+            >
+              紹介状
+            </Button>
+          </Center>
+
+          <Center pr={4} pl={4} pb={1} style={{ textAlign: 'center' }}>
+            <Button
+              as={RouterLink}
               // 規約に同意していない場合のみモーダルが開く
               to={agreedToTerms ? '/calculate-simple' : '/'}
               onClick={

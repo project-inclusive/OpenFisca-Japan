@@ -1,0 +1,46 @@
+.referral-print-document {
+  background: #c4f1f9;
+  padding: 1rem;
+}
+
+.referral-print-card {
+  break-inside: avoid-page;
+  page-break-inside: avoid;
+}
+
+@media print {
+  body.referral-print-page {
+    background: #fff !important;
+  }
+
+  body.referral-print-page * {
+    visibility: hidden !important;
+  }
+
+  body.referral-print-page .referral-print-document,
+  body.referral-print-page .referral-print-document * {
+    visibility: visible !important;
+  }
+
+  body.referral-print-page .referral-print-document {
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background: #fff !important;
+    color: #000;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body.referral-print-page .referral-print-card {
+    box-shadow: none !important;
+    border: 1px solid #cbd5e0;
+    margin-bottom: 8mm !important;
+  }
+
+  body.referral-print-page .referral-no-print {
+    display: none !important;
+  }
+}
