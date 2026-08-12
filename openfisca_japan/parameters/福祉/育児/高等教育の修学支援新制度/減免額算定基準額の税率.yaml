@@ -1,0 +1,7 @@
+description: 高等教育の修学支援新制度_減免額算定基準額の算定に用いる市町村民税所得割の税率
+metadata:
+  reference: https://laws.e-gov.go.jp/law/501CO0000000049
+  unit: /1
+values:
+  2020-04-01:
+    value: 0.06

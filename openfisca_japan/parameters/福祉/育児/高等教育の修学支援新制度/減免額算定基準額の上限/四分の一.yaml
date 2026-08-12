@@ -1,0 +1,7 @@
+description: 高等教育の修学支援新制度_授業料等の四分の一が減免される減免額算定基準額の上限
+metadata:
+  reference: https://laws.e-gov.go.jp/law/501CO0000000049
+  unit: currency-JPY
+values:
+  2024-04-01:
+    value: 154500
