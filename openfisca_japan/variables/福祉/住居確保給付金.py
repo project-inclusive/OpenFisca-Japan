@@ -8,28 +8,6 @@ from openfisca_core.variables import Variable
 from openfisca_japan.entities import 世帯
 
 
-class 住居確保給付金の離職等要件を満たす(Variable):
-    value_type = bool
-    default_value = False
-    entity = 世帯
-    definition_period = DAY
-    label = "主たる生計維持者が離職・廃業後2年以内、または給与等を得る機会が離職・廃業と同程度まで減少しているか否か"
-    reference = "https://corona-support.mhlw.go.jp/jukyokakuhokyufukin/index.html"
-    documentation = """
-    「個人の責任・都合によらず」給与等を得る機会が減少した場合が対象となるため、
-    自己都合による減少は対象外。
-    """
-
-
-class 住居確保給付金の求職活動要件を満たす(Variable):
-    value_type = bool
-    default_value = False
-    entity = 世帯
-    definition_period = DAY
-    label = "ハローワークへの求職申込等、誠実かつ熱心な求職活動を行っているか否か"
-    reference = "https://corona-support.mhlw.go.jp/jukyokakuhokyufukin/index.html"
-
-
 class 住居確保給付金の資産要件を満たす(Variable):
     value_type = bool
     entity = 世帯
@@ -54,7 +32,7 @@ class 住居確保給付金の資産要件を満たす(Variable):
         return 世帯預貯金 <= 資産要件上限額
 
 
-class 住居確保給付金(Variable):
+class 住居確保給付金_最大(Variable):
     value_type = int
     entity = 世帯
     definition_period = DAY
@@ -66,14 +44,13 @@ class 住居確保給付金(Variable):
 
     支給期間は原則3か月（延長は2回まで最大9か月間）だが、本 Variable では月額を算出する。
 
-    NOTE: 収入要件（直近の月の世帯収入合計額が基準額と家賃の合計額以下であること）は、
-    基準額が市区町村ごとに異なり本リポジトリで算出できないため判定していない。
+    NOTE: 離職等要件・求職活動要件・収入要件は入力項目としていないため、
+    それらをすべて満たす場合の額を最大額として算出している。
+    満たさない要件がある場合は支給されないため、最小額は0円（住居確保給付金_最小）となる。
     """
 
     def formula(対象世帯, 対象期間, _parameters):
-        離職等要件を満たす = 対象世帯("住居確保給付金の離職等要件を満たす", 対象期間)
         資産要件を満たす = 対象世帯("住居確保給付金の資産要件を満たす", 対象期間)
-        求職活動要件を満たす = 対象世帯("住居確保給付金の求職活動要件を満たす", 対象期間)
 
         家賃 = 対象世帯("家賃", 対象期間)
         住宅扶助基準 = 対象世帯("住宅扶助基準", 対象期間)
@@ -82,4 +59,24 @@ class 住居確保給付金(Variable):
         # NOTE: 家賃に負の値が入力された場合に負の支給額とならないよう、下限を0円とする
         支給額 = np.clip(np.min([家賃, 住宅扶助基準], axis=0), 0, None)  # noqa: TID251
 
-        return 離職等要件を満たす * 資産要件を満たす * 求職活動要件を満たす * 支給額
+        return 資産要件を満たす * 支給額
+
+
+class 住居確保給付金_最小(Variable):
+    value_type = int
+    entity = 世帯
+    definition_period = DAY
+    label = "住居確保給付金"
+    reference = "https://corona-support.mhlw.go.jp/jukyokakuhokyufukin/index.html"
+    documentation = """
+    NOTE: 以下の要件は回答の負荷が高いため入力項目とせず、満たさない場合を想定して最小額は0円とする。
+
+    - 離職等要件: 主たる生計維持者が離職・廃業後2年以内、または「個人の責任・都合によらず」
+      給与等を得る機会が離職・廃業と同程度まで減少していること
+    - 求職活動要件: ハローワークへの求職申込等、誠実かつ熱心な求職活動を行っていること
+    - 収入要件: 直近の月の世帯収入合計額が基準額と家賃の合計額以下であること
+      （基準額は市区町村ごとに異なり本リポジトリで算出できない）
+    """
+
+    def formula(対象世帯, 対象期間, _parameters):
+        return 0
