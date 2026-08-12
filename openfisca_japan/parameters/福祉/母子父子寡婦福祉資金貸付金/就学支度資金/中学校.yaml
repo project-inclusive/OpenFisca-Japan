@@ -1,0 +1,7 @@
+description: 母子父子寡婦福祉資金貸付金_就学支度資金_中学校
+metadata:
+  reference: https://www.mhlw.go.jp/web/t_doc?dataId=00tc4886&dataType=1&pageNo=1
+  unit: currency-JPY
+values:
+  2020-04-01:
+    value: 81000
