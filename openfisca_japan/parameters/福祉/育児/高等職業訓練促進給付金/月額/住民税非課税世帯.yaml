@@ -1,0 +1,9 @@
+description: 高等職業訓練促進給付金の月額（住民税非課税世帯）
+metadata:
+  reference: https://www.cfa.go.jp/policies/hitori-oya/syokugyou-kunren
+  unit: currency-JPY
+values:
+  2026-04-01:
+    value: 100000
+    metadata:
+      reference: https://www.cfa.go.jp/policies/hitori-oya/syokugyou-kunren
