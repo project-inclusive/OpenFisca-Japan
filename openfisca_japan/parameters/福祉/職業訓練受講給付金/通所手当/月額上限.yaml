@@ -1,0 +1,9 @@
+description: 通所手当の月額の上限（通所経路により決まる額の上限）
+metadata:
+  reference: https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/kyushokusha_shien/index.html
+  unit: currency-JPY
+values:
+  2017-04-01:
+    value: 42500
+    metadata:
+      reference: https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/kyushokusha_shien/index.html

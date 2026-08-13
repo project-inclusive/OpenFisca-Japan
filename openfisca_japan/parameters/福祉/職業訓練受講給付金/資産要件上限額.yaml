@@ -1,0 +1,9 @@
+description: 職業訓練受講給付金の資産要件の上限額（本人および配偶者等が所有する金融資産の合計額）
+metadata:
+  reference: https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/kyushokusha_shien/index.html
+  unit: currency-JPY
+values:
+  2017-04-01:
+    value: 3000000
+    metadata:
+      reference: https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/kyushokusha_shien/index.html
