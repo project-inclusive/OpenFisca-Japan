@@ -1912,7 +1912,7 @@ const skipParentUntil = (
   }
 };
 
-// 能登半島地震被災者支援制度見積もりモード用のskipヘルパー（あなた）
+// 地震被災者支援制度見積もりモード用のskipヘルパー（あなた）
 const skipDisasterUntil = (
   actor: Actor<typeof questionStateMachine>,
   until: QuestionKey
@@ -1928,7 +1928,7 @@ const skipDisasterUntil = (
           type: '見積もりモード',
           value: {
             type: 'Selection',
-            selection: '能登半島地震被災者支援制度見積もり',
+            selection: '地震被災者支援制度見積もり',
           },
         });
       },
@@ -2074,7 +2074,7 @@ const skipDisasterUntil = (
   }
 };
 
-// 能登半島地震被災者支援制度見積もりモード用のskipヘルパー（配偶者）
+// 地震被災者支援制度見積もりモード用のskipヘルパー（配偶者）
 const skipDisasterSpouseUntil = (
   actor: Actor<typeof questionStateMachine>,
   until: QuestionKey
@@ -2090,7 +2090,7 @@ const skipDisasterSpouseUntil = (
           type: '見積もりモード',
           value: {
             type: 'Selection',
-            selection: '能登半島地震被災者支援制度見積もり',
+            selection: '地震被災者支援制度見積もり',
           },
         });
       },
@@ -2251,7 +2251,7 @@ const skipDisasterSpouseUntil = (
   }
 };
 
-// 能登半島地震被災者支援制度見積もりモード用のskipヘルパー（子ども）
+// 地震被災者支援制度見積もりモード用のskipヘルパー（子ども）
 const skipDisasterChildUntil = (
   actor: Actor<typeof questionStateMachine>,
   until: QuestionKey,
@@ -2268,7 +2268,7 @@ const skipDisasterChildUntil = (
           type: '見積もりモード',
           value: {
             type: 'Selection',
-            selection: '能登半島地震被災者支援制度見積もり',
+            selection: '地震被災者支援制度見積もり',
           },
         });
       },
@@ -2417,7 +2417,7 @@ const skipDisasterChildUntil = (
   }
 };
 
-// 能登半島地震被災者支援制度見積もりモード用のskipヘルパー（親）
+// 地震被災者支援制度見積もりモード用のskipヘルパー（親）
 const skipDisasterParentUntil = (
   actor: Actor<typeof questionStateMachine>,
   until: QuestionKey,
@@ -2434,7 +2434,7 @@ const skipDisasterParentUntil = (
           type: '見積もりモード',
           value: {
             type: 'Selection',
-            selection: '能登半島地震被災者支援制度見積もり',
+            selection: '地震被災者支援制度見積もり',
           },
         });
       },
@@ -2596,7 +2596,7 @@ const skipDisasterParentUntil = (
 };
 
 // ============================================================
-// 能登半島地震被災者支援制度見積もりモードのテスト
+// 地震被災者支援制度見積もりモードのテスト
 // ============================================================
 
 // ---- あなた: 被災前の年収（災害モード） ----
@@ -12488,10 +12488,10 @@ test('最初の質問に戻り別の見積もりモードを設定できる', ()
     type: '見積もりモード',
     value: {
       type: 'Selection',
-      selection: '能登半島地震被災者支援制度見積もり',
+      selection: '地震被災者支援制度見積もり',
     },
   });
   expect(actor.getSnapshot().context.見積もりモード.あなた[0].selection).toBe(
-    '能登半島地震被災者支援制度見積もり'
+    '地震被災者支援制度見積もり'
   );
 });

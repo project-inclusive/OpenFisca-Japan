@@ -167,11 +167,11 @@ const actionObj = <Key extends QuestionKey>({
   };
 };
 
-// 能登半島地震被災者支援制度見積もりモードかどうかを判定するガード
+// 地震被災者支援制度見積もりモードかどうかを判定するガード
 const isDisasterMode = ({ context }: { context: QuestionStateContext }) => {
   return (
     context['見積もりモード'].あなた[0].selection ===
-    '能登半島地震被災者支援制度見積もり'
+    '地震被災者支援制度見積もり'
   );
 };
 
@@ -490,7 +490,7 @@ export const questionStateMachine = setup({
       子ども: [],
       親: [],
     },
-    // 能登半島地震被災者支援制度見積もり用
+    // 地震被災者支援制度見積もり用
     被災前の年収: {
       あなた: [{ type: 'AmountOfMoney', selection: undefined, unit: '万円' }],
       配偶者: [],
@@ -1275,7 +1275,7 @@ export const questionStateMachine = setup({
         hasBack: true,
       }),
     },
-    // 能登半島地震被災者支援制度見積もり用の質問
+    // 地震被災者支援制度見積もり用の質問
     被災前の年収: {
       on: actionObj<'被災前の年収'>({
         questionKey: '被災前の年収',

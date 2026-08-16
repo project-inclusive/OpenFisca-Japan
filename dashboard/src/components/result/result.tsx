@@ -286,6 +286,14 @@ export const Result = () => {
               }
             />
 
+            {isDisasterCalculation && (
+              <Center pr={4} pl={4} pb={2}>
+                <Text color="blue.900">
+                  {configData.result.disasterNoteText}
+                </Text>
+              </Center>
+            )}
+
             <Center
               fontSize={configData.style.subTitleFontSize}
               fontWeight="medium"

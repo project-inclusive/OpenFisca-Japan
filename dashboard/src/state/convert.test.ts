@@ -128,7 +128,7 @@ const defaultContext = (): QuestionStateContext => {
       子ども: [],
       親: [],
     },
-    // 能登半島地震被災者支援制度見積もり用
+    // 地震被災者支援制度見積もり用
     '住宅が被害を受けていますか？': boolField(),
     '住宅被害の状況（当てはまるもののうち最も上のものを選んでください）': {
       あなた: [{ type: 'Selection' as const, selection: undefined }],
@@ -3598,12 +3598,11 @@ test('2人目の親の年齢が設定されている', () => {
   expect(actual.世帯員.親2.誕生年月日.ETERNITY).toEqual('1971-01-01');
 });
 
-// 能登半島地震被災者支援制度見積もり用
+// 地震被災者支援制度見積もり用
 
 const disasterContext = (): QuestionStateContext => {
   const context = defaultContext();
-  context['見積もりモード'].あなた[0].selection =
-    '能登半島地震被災者支援制度見積もり';
+  context['見積もりモード'].あなた[0].selection = '地震被災者支援制度見積もり';
   return context;
 };
 

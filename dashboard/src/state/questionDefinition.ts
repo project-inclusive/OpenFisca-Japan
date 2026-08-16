@@ -61,7 +61,7 @@ const booleanQuestionDefinitions = {
   '配偶者はいますか？': { type: 'Boolean' },
   '以下のいずれかに当てはまりますか？': { type: 'Boolean' },
   '高校に通っていますか？': { type: 'Boolean' },
-  // 能登半島地震被災者支援制度見積もり用
+  // 地震被災者支援制度見積もり用
   '住宅が被害を受けていますか？': { type: 'Boolean' },
   '家財の３分の１以上の損害が発生しましたか？': { type: 'Boolean' },
   '災害により負傷し、1ヶ月以上療養を続けていますか？': { type: 'Boolean' },
@@ -72,7 +72,7 @@ const booleanQuestionDefinitions = {
 const personNumQuestionDefinitions = {
   子どもの人数: { type: 'PersonNum' },
   親の人数: { type: 'PersonNum' },
-  // 能登半島地震被災者支援制度見積もり用
+  // 地震被災者支援制度見積もり用
   '家族に災害で亡くなった方はいますか？': { type: 'PersonNum' },
 } as const;
 
@@ -123,10 +123,10 @@ export const selectionQuestionDefinitions = {
     selections: [
       'かんたん見積もり',
       'くわしく見積もり',
-      '能登半島地震被災者支援制度見積もり',
+      '地震被災者支援制度見積もり',
     ],
   },
-  // 能登半島地震被災者支援制度見積もり用
+  // 地震被災者支援制度見積もり用
   '住宅被害の状況（当てはまるもののうち最も上のものを選んでください）': {
     type: 'Selection',
     selections: [

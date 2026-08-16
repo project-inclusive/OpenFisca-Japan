@@ -162,11 +162,12 @@
     "parentDescription": "同居している親または祖父母",
     "simpleCalculation": "かんたん見積もり",
     "detailedCalculation": "くわしく見積もり",
-    "disasterCalculation": "能登半島地震 被災者支援見積もり"
+    "disasterCalculation": "地震被災者支援見積もり"
   },
   "result": {
     "topDescription": "見積もり結果",
     "detailedCalculationDescription": "「くわしく計算」モードでは、より正確な結果が表示されます。金額が上がる場合もあります。",
+    "disasterNoteText": "災害関連支援制度の適用範囲は随時更新されていくため、お住まいの地域が対象に含まれるかどうか市区町村の最新の情報をご確認ください。",
     "questionExamplesButtonText": "窓口での質問例",
     "screenshotButtonText": "このページを画像で保存",
     "environmentButtonText": "環境情報を取得",

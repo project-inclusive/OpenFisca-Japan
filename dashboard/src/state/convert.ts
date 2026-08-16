@@ -67,7 +67,7 @@ export type OpenFiscaHousehold = {
       受験生チャレンジ支援貸付?: OpenFiscaField<any>;
       住宅入居費?: OpenFiscaField<any>;
       配偶者がいるがひとり親に該当?: OpenFiscaField<any>;
-      // 能登半島地震被災者支援制度見積もり用
+      // 地震被災者支援制度見積もり用
       被災している?: OpenFiscaField<any>;
       災害救助法の適用地域である?: OpenFiscaField<any>;
       被災者生活再建支援法の適用地域である?: OpenFiscaField<any>;
@@ -89,7 +89,7 @@ export const toOpenFiscaHousehold = ({
 }): OpenFiscaHousehold => {
   const isDisasterMode =
     context['見積もりモード'].あなた[0].selection ===
-    '能登半島地震被災者支援制度見積もり';
+    '地震被災者支援制度見積もり';
 
   // あなた の世帯員情報を構築
   const selfMember: OpenFiscaMember = {};
@@ -1362,7 +1362,8 @@ export const toOpenFiscaHousehold = ({
     };
   }
 
-  // 能登半島地震被災者支援制度見積もり用の世帯フィールド
+  // 地震被災者支援制度見積もり用の世帯フィールド
+  // HACK: 震災発生時の適用地域情報の変化に追随することが難しいため、災害支援見積もりを使用した場合居住地によらず適用地域であるとする
   if (isDisasterMode) {
     household.世帯一覧.世帯1.被災している = { [currentDate]: true };
     household.世帯一覧.世帯1.災害救助法の適用地域である = {
