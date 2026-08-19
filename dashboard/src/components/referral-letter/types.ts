@@ -114,6 +114,7 @@ export interface ReferralGuide {
   readonly urgencyLabel: UrgencyLabel;
   readonly recommendation: string;
   readonly destination: string;
+  readonly concerns: readonly ReferralDocumentConcern[];
   readonly searchMethods: readonly [string, string];
   readonly contactInstruction: string;
   readonly letterInstruction: string;

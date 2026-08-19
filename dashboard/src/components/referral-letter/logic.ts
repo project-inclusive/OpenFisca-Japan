@@ -170,6 +170,8 @@ export const createReferralDocument = (
   const otherCandidates = candidates.filter((candidate) =>
     selection.otherConcernIds.includes(candidate.id)
   );
+  const mainConcern = toDocumentConcern(mainCandidate);
+  const otherConcerns = otherCandidates.map(toDocumentConcern);
   const name = state.inputs.name.trim();
   const email = state.inputs.email.trim();
   const message = state.inputs.message.trim();
@@ -183,6 +185,7 @@ export const createReferralDocument = (
       urgencyLabel: CONCERN_URGENCY_LABELS[mainCandidate.urgency],
       recommendation: URGENCY_RECOMMENDATIONS[mainCandidate.urgency],
       destination: mainCandidate.destination,
+      concerns: [mainConcern, ...otherConcerns],
       searchMethods: [
         `市町村の代表番号に電話し「${mainCandidate.questionLabel}ので相談窓口を知りたい」と伝える`,
         `ネットで「${mainCandidate.destination} お住まいの市町村名 電話番号」で検索し連絡する`,
@@ -196,8 +199,8 @@ export const createReferralDocument = (
         '※この紹介状は、アプリ「支援みつもりヤドカリくん」を使用し、\nユーザーの方が支援につながりやすいように作られました。',
       ...(name.length > 0 ? { name } : {}),
       ...(email.length > 0 ? { email } : {}),
-      mainConcern: toDocumentConcern(mainCandidate),
-      otherConcerns: otherCandidates.map(toDocumentConcern),
+      mainConcern,
+      otherConcerns,
       ...(message.length > 0 ? { message } : {}),
       creator: '防窮研究会',
     },

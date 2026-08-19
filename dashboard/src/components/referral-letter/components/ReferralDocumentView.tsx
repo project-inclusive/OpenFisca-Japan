@@ -26,6 +26,12 @@ const ConcernDetails = ({
       <UrgencyBadge urgency={concern.urgency} />
       <Text>（{concern.answer}）</Text>
     </Stack>
+    <Text mt={1} overflowWrap="anywhere">
+      <Text as="span" fontWeight="bold">
+        相談先：
+      </Text>
+      {concern.destination}
+    </Text>
   </Box>
 );
 
@@ -70,13 +76,30 @@ export const ReferralDocumentView = forwardRef<
               </UnorderedList>
             </Box>
 
-            <Text fontWeight="bold">
-              相談窓口：【{document.guide.destination}】の窓口
-            </Text>
+            <Box>
+              <Text fontWeight="bold" mb={2}>
+                選択した困りごとの相談先
+              </Text>
+              <Stack spacing={2}>
+                {document.guide.concerns.map((concern, index) => (
+                  <Box key={concern.id}>
+                    <Text fontWeight="semibold">
+                      {index === 0
+                        ? '主な困りごと'
+                        : `他の困りごと${['①', '②', '③'][index - 1]}`}
+                      ：{concern.label}
+                    </Text>
+                    <Text overflowWrap="anywhere">
+                      相談先：{concern.destination}
+                    </Text>
+                  </Box>
+                ))}
+              </Stack>
+            </Box>
 
             <Box>
               <Text fontWeight="bold" mb={1}>
-                窓口の検索方法
+                主な困りごとの窓口の検索方法
               </Text>
               <Stack as="ol" pl={5} spacing={1}>
                 {document.guide.searchMethods.map((method) => (

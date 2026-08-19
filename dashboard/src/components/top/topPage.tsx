@@ -1,4 +1,5 @@
 import {
+  Badge,
   Button,
   Text,
   Center,
@@ -118,25 +119,6 @@ export function TopPage() {
           <Center pr={4} pl={4} pb={1} style={{ textAlign: 'center' }}>
             <Button
               as={RouterLink}
-              to="/referral-letter"
-              fontSize={configData.style.subTitleFontSize}
-              borderRadius="xl"
-              height="3.5em"
-              pr="1.2em"
-              pl="1.2em"
-              width="100%"
-              bg="cyan.800"
-              color="white"
-              _hover={{ bg: 'cyan.900' }}
-              data-testid="referral-letter-button"
-            >
-              紹介状
-            </Button>
-          </Center>
-
-          <Center pr={4} pl={4} pb={1} style={{ textAlign: 'center' }}>
-            <Button
-              as={RouterLink}
               // 規約に同意していない場合のみモーダルが開く
               to={agreedToTerms ? '/calculate-simple' : '/'}
               onClick={
@@ -197,6 +179,34 @@ export function TopPage() {
         onClose={onModalClose}
         to={modalLink}
       />
+      <Button
+        as={RouterLink}
+        to="/referral-letter"
+        position="fixed"
+        right={{ base: 4, md: 6 }}
+        bottom={{
+          base: 'calc(env(safe-area-inset-bottom) + 1rem)',
+          md: 6,
+        }}
+        zIndex="overlay"
+        minH="3rem"
+        px={4}
+        borderRadius="full"
+        borderWidth="2px"
+        borderColor="cyan.800"
+        bg="white"
+        color="cyan.900"
+        boxShadow="lg"
+        _hover={{ bg: 'cyan.50' }}
+        _focusVisible={{ boxShadow: 'outline' }}
+        data-testid="referral-letter-button"
+        aria-label="紹介状（ベータ版）を開く"
+      >
+        紹介状
+        <Badge ml={2} bg="cyan.800" color="white" borderRadius="full" px={2}>
+          β版
+        </Badge>
+      </Button>
     </>
   );
 }

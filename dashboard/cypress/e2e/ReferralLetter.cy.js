@@ -195,6 +195,44 @@ describe('Referral letter domain rules', () => {
     ).to.equal('none');
   });
 
+  it('keeps each selected answer destination in the final document', () => {
+    REFERRAL_AREA_CONFIGS.forEach((area) => {
+      const answers = answersFor(
+        area.id,
+        (answer) => answer.urgency !== 'none'
+      );
+      const candidates = deriveConcernCandidates(area.id, answers);
+      const selectedCandidates = candidates.slice(0, MAX_OTHER_CONCERNS + 1);
+      const document = createReferralDocument({
+        ...createInitialReferralState(),
+        areaId: area.id,
+        answers,
+        mainConcernId: selectedCandidates[0].id,
+        otherConcernIds: selectedCandidates
+          .slice(1)
+          .map((candidate) => candidate.id),
+      });
+
+      expect(document, area.id).not.to.equal(null);
+      expect(
+        document.guide.concerns.map(({ id, destination }) => ({
+          id,
+          destination,
+        }))
+      ).to.deep.equal(
+        selectedCandidates.map(({ id, destination }) => ({ id, destination }))
+      );
+      expect(document.letter.mainConcern.destination).to.equal(
+        selectedCandidates[0].destination
+      );
+      expect(
+        document.letter.otherConcerns.map((concern) => concern.destination)
+      ).to.deep.equal(
+        selectedCandidates.slice(1).map((candidate) => candidate.destination)
+      );
+    });
+  });
+
   it('derives candidates in question order and caps other concerns at three', () => {
     const answers = answersFor(
       'elderly',
@@ -450,6 +488,23 @@ describe('Referral letter flow', () => {
       .should('contain', TEST_NAME)
       .and('contain', TEST_EMAIL)
       .and('contain', TEST_MESSAGE);
+    const selectedCandidates = candidates.slice(0, MAX_OTHER_CONCERNS + 1);
+    cy.get('[data-testid="referral-guide"]')
+      .invoke('text')
+      .then((guideText) => {
+        selectedCandidates.forEach((candidate) => {
+          expect(guideText).to.include(candidate.questionLabel);
+          expect(guideText).to.include(`相談先：${candidate.destination}`);
+        });
+      });
+    cy.get('[data-testid="referral-letter"]')
+      .invoke('text')
+      .then((letterText) => {
+        selectedCandidates.forEach((candidate) => {
+          expect(letterText).to.include(candidate.questionLabel);
+          expect(letterText).to.include(`相談先：${candidate.destination}`);
+        });
+      });
     cy.contains(
       '氏名・メールアドレス等を含む場合があります。保存先や共有相手をご確認ください。'
     );
