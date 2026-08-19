@@ -4,8 +4,6 @@ export type Urgency = 'none' | 'low' | 'medium' | 'high';
 
 export type ConcernUrgency = Exclude<Urgency, 'none'>;
 
-export type UrgencyLabel = '低' | '中' | '高';
-
 export interface ReferralAnswerOption {
   readonly id: string;
   readonly label: string;
@@ -64,6 +62,7 @@ export type ReferralStep =
   | { kind: 'questions'; questionIndex: number }
   | { kind: 'no-concerns' }
   | { kind: 'concerns' }
+  | { kind: 'other-concerns' }
   | { kind: 'details' }
   | { kind: 'result' };
 
@@ -101,19 +100,12 @@ export type ReferralAction =
 export interface ReferralDocumentConcern {
   readonly id: string;
   readonly label: string;
-  readonly urgency: ConcernUrgency;
-  readonly urgencyLabel: UrgencyLabel;
   readonly answer: string;
   readonly destination: string;
 }
 
 export interface ReferralGuide {
   readonly introduction: string;
-  readonly concernLabel: string;
-  readonly urgency: ConcernUrgency;
-  readonly urgencyLabel: UrgencyLabel;
-  readonly recommendation: string;
-  readonly destination: string;
   readonly concerns: readonly ReferralDocumentConcern[];
   readonly searchMethods: readonly [string, string];
   readonly contactInstruction: string;

@@ -192,6 +192,7 @@ const isReferralStep = (value: unknown): value is ReferralStep => {
     'area',
     'no-concerns',
     'concerns',
+    'other-concerns',
     'details',
     'result',
   ].includes(value.kind);
@@ -233,9 +234,14 @@ export const sanitizeReferralState = (value: unknown): ReferralState | null => {
 
   if (
     value.areaId === null &&
-    ['questions', 'no-concerns', 'concerns', 'details', 'result'].includes(
-      value.step.kind
-    )
+    [
+      'questions',
+      'no-concerns',
+      'concerns',
+      'other-concerns',
+      'details',
+      'result',
+    ].includes(value.step.kind)
   ) {
     return null;
   }
@@ -247,6 +253,7 @@ export const sanitizeReferralState = (value: unknown): ReferralState | null => {
       'questions',
       'no-concerns',
       'concerns',
+      'other-concerns',
       'details',
       'result',
     ].includes(value.step.kind)
@@ -305,6 +312,7 @@ export const sanitizeReferralState = (value: unknown): ReferralState | null => {
       }
       break;
 
+    case 'other-concerns':
     case 'details':
       if (
         !allQuestionsAnswered ||

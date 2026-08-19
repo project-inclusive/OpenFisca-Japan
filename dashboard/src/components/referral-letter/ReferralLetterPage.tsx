@@ -21,6 +21,7 @@ import { DescriptionScreen } from './screens/DescriptionScreen';
 import { DetailsScreen } from './screens/DetailsScreen';
 import { NoConcernsScreen } from './screens/NoConcernsScreen';
 import { NoticeScreen } from './screens/NoticeScreen';
+import { OtherConcernScreen } from './screens/OtherConcernScreen';
 import { QuestionScreen } from './screens/QuestionScreen';
 import { ResultScreen } from './screens/ResultScreen';
 
@@ -204,12 +205,8 @@ export const ReferralLetterPage = () => {
           <ConcernScreen
             candidates={candidates}
             mainConcernId={state.mainConcernId}
-            otherConcernIds={state.otherConcernIds}
             onSelectMain={(concernId) =>
               dispatch({ type: 'SELECT_MAIN_CONCERN', concernId })
-            }
-            onToggleOther={(concernId) =>
-              dispatch({ type: 'TOGGLE_OTHER_CONCERN', concernId })
             }
             onBack={() =>
               dispatch({
@@ -219,9 +216,36 @@ export const ReferralLetterPage = () => {
             }
             onNext={() => {
               if (state.mainConcernId !== null) {
-                dispatch({ type: 'SET_STEP', step: { kind: 'details' } });
+                dispatch({
+                  type: 'SET_STEP',
+                  step: { kind: 'other-concerns' },
+                });
               }
             }}
+          />
+        </Box>
+      );
+
+    case 'other-concerns':
+      if (state.mainConcernId === null) {
+        return null;
+      }
+      return (
+        <Box as="main">
+          {renderStorageWarning()}
+          <OtherConcernScreen
+            candidates={candidates}
+            mainConcernId={state.mainConcernId}
+            otherConcernIds={state.otherConcernIds}
+            onToggleOther={(concernId) =>
+              dispatch({ type: 'TOGGLE_OTHER_CONCERN', concernId })
+            }
+            onBack={() =>
+              dispatch({ type: 'SET_STEP', step: { kind: 'concerns' } })
+            }
+            onNext={() =>
+              dispatch({ type: 'SET_STEP', step: { kind: 'details' } })
+            }
           />
         </Box>
       );
@@ -236,7 +260,7 @@ export const ReferralLetterPage = () => {
               dispatch({ type: 'SET_INPUT', field, value })
             }
             onBack={() =>
-              dispatch({ type: 'SET_STEP', step: { kind: 'concerns' } })
+              dispatch({ type: 'SET_STEP', step: { kind: 'other-concerns' } })
             }
             onNext={() => {
               if (isValidReferralEmail(state.inputs.email)) {

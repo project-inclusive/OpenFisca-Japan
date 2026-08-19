@@ -452,6 +452,24 @@ describe('Referral letter flow', () => {
       answersFor('elderly', (answer) => answer.urgency !== 'none')
     );
     cy.get(`[data-testid="referral-main-${candidates[0].id}"]`).click();
+    cy.contains('その他の困りごとを選ぶ').should('not.exist');
+    cy.contains('緊急度').should('not.exist');
+    assertReferralA11y();
+    cy.contains('button', /^次へ$/).click();
+
+    cy.contains('その他の困りごとを選ぶ');
+    cy.contains('選択した主な困りごと')
+      .parent()
+      .should('contain', candidates[0].questionLabel);
+    cy.window().then((window) => {
+      const savedState = JSON.parse(
+        window.sessionStorage.getItem(REFERRAL_STORAGE_KEY)
+      );
+      expect(savedState.step).to.deep.equal({ kind: 'other-concerns' });
+    });
+    cy.reload();
+    cy.contains('その他の困りごとを選ぶ');
+    cy.injectAxe();
     candidates.slice(1, 4).forEach((candidate) => {
       cy.get(`[data-testid="referral-other-${candidate.id}"]`)
         .click()
@@ -459,6 +477,7 @@ describe('Referral letter flow', () => {
         .and('not.be.disabled');
     });
     cy.contains(`${MAX_OTHER_CONCERNS} / ${MAX_OTHER_CONCERNS}件を選択中`);
+    cy.contains('緊急度').should('not.exist');
     cy.get(`[data-testid="referral-other-${candidates[4].id}"]`).should(
       'be.disabled'
     );
@@ -483,6 +502,7 @@ describe('Referral letter flow', () => {
     cy.contains('button', '完了').should('not.be.disabled').click();
 
     cy.contains('紹介状ができました');
+    cy.contains('緊急度').should('not.exist');
     cy.get('[data-testid="referral-guide"]').should('be.visible');
     cy.get('[data-testid="referral-letter"]')
       .should('contain', TEST_NAME)
@@ -537,11 +557,7 @@ describe('Referral letter flow', () => {
     cy.get('input[name="email"]').should('have.value', TEST_EMAIL);
     cy.get('textarea[name="message"]').should('have.value', TEST_MESSAGE);
     cy.contains('button', /^前へ$/).click();
-    cy.get(`[data-testid="referral-main-${candidates[0].id}"]`).should(
-      'have.attr',
-      'aria-pressed',
-      'true'
-    );
+    cy.contains('その他の困りごとを選ぶ');
     candidates.slice(1, 4).forEach((candidate) => {
       cy.get(`[data-testid="referral-other-${candidate.id}"]`).should(
         'have.attr',
@@ -549,6 +565,14 @@ describe('Referral letter flow', () => {
         'true'
       );
     });
+    cy.contains('button', /^前へ$/).click();
+    cy.get(`[data-testid="referral-main-${candidates[0].id}"]`).should(
+      'have.attr',
+      'aria-pressed',
+      'true'
+    );
+    cy.contains('button', /^次へ$/).click();
+    cy.contains('その他の困りごとを選ぶ');
     cy.contains('button', /^次へ$/).click();
     cy.contains('button', '完了').click();
 

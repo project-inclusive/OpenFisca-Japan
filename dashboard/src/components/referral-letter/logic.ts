@@ -2,7 +2,6 @@ import { getReferralAreaConfig } from './config';
 import type {
   ConcernCandidate,
   ConcernSelection,
-  ConcernUrgency,
   ReferralAnswerOption,
   ReferralAnswers,
   ReferralAreaId,
@@ -10,37 +9,11 @@ import type {
   ReferralDocumentConcern,
   ReferralQuestion,
   ReferralState,
-  Urgency,
-  UrgencyLabel,
 } from './types';
 
 export const DEFAULT_REFERRAL_DESTINATION = 'お住まいの市町村の相談窓口';
 
 export const MAX_OTHER_CONCERNS = 3;
-
-export const URGENCY_LABELS: Readonly<
-  Record<Urgency, UrgencyLabel | '問題なし'>
-> = {
-  none: '問題なし',
-  low: '低',
-  medium: '中',
-  high: '高',
-};
-
-const CONCERN_URGENCY_LABELS: Readonly<Record<ConcernUrgency, UrgencyLabel>> = {
-  low: '低',
-  medium: '中',
-  high: '高',
-};
-
-const URGENCY_RECOMMENDATIONS: Readonly<Record<ConcernUrgency, string>> = {
-  high: 'ぜひ窓口に相談することを薦めます。',
-  medium: '窓口に相談してみてはどうですか',
-  low: '自分の身を守るため知ってください',
-};
-
-export const urgencyToLabel = (urgency: Urgency): UrgencyLabel | '問題なし' =>
-  URGENCY_LABELS[urgency];
 
 export const getSelectedAnswer = (
   question: ReferralQuestion,
@@ -133,8 +106,6 @@ const toDocumentConcern = (
 ): ReferralDocumentConcern => ({
   id: candidate.id,
   label: candidate.questionLabel,
-  urgency: candidate.urgency,
-  urgencyLabel: CONCERN_URGENCY_LABELS[candidate.urgency],
   answer: candidate.answerLabel,
   destination: candidate.destination,
 });
@@ -180,11 +151,6 @@ export const createReferralDocument = (
     guide: {
       introduction:
         '回答いただいた内容に基づいて紹介状を作成しました。説明書の内容をよく確認の上、窓口へ相談に行ってみましょう。',
-      concernLabel: mainCandidate.questionLabel,
-      urgency: mainCandidate.urgency,
-      urgencyLabel: CONCERN_URGENCY_LABELS[mainCandidate.urgency],
-      recommendation: URGENCY_RECOMMENDATIONS[mainCandidate.urgency],
-      destination: mainCandidate.destination,
       concerns: [mainConcern, ...otherConcerns],
       searchMethods: [
         `市町村の代表番号に電話し「${mainCandidate.questionLabel}ので相談窓口を知りたい」と伝える`,

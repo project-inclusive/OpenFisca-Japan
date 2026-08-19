@@ -1,15 +1,7 @@
-import {
-  Box,
-  Heading,
-  ListItem,
-  Stack,
-  Text,
-  UnorderedList,
-} from '@chakra-ui/react';
+import { Box, Heading, Stack, Text } from '@chakra-ui/react';
 import { forwardRef } from 'react';
 
 import { ReferralDocument, ReferralDocumentConcern } from '../types';
-import { UrgencyBadge } from './UrgencyBadge';
 
 const ConcernDetails = ({
   concern,
@@ -22,10 +14,7 @@ const ConcernDetails = ({
     <Text fontWeight="bold">
       {title}：{concern.label}
     </Text>
-    <Stack direction={{ base: 'column', sm: 'row' }} mt={1} spacing={2}>
-      <UrgencyBadge urgency={concern.urgency} />
-      <Text>（{concern.answer}）</Text>
-    </Stack>
+    <Text mt={1}>（{concern.answer}）</Text>
     <Text mt={1} overflowWrap="anywhere">
       <Text as="span" fontWeight="bold">
         相談先：
@@ -61,20 +50,6 @@ export const ReferralDocumentView = forwardRef<
 
           <Stack spacing={4}>
             <Text>{document.guide.introduction}</Text>
-            <Box>
-              <Text fontWeight="bold">
-                「{document.guide.concernLabel}」のあなたの緊急度は（
-                {document.guide.urgencyLabel}）です。
-              </Text>
-              <Box mt={2}>
-                <UrgencyBadge urgency={document.guide.urgency} />
-              </Box>
-              <UnorderedList mt={2} ml={6} spacing={1}>
-                <ListItem>高：ぜひ窓口に相談することを薦めます。</ListItem>
-                <ListItem>中：窓口に相談してみてはどうですか</ListItem>
-                <ListItem>低：自分の身を守るため知ってください</ListItem>
-              </UnorderedList>
-            </Box>
 
             <Box>
               <Text fontWeight="bold" mb={2}>
