@@ -8,6 +8,7 @@ import {
   MAX_OTHER_CONCERNS,
   createReferralDocument,
   deriveConcernCandidates,
+  isReferralCandidateAnswer,
   isValidReferralEmail,
   reconcileConcernSelection,
   resolveReferralDestination,
@@ -163,12 +164,19 @@ describe('Referral letter domain rules', () => {
         `${question.id} has a none answer`
       ).to.equal(true);
 
-      question.answers
-        .filter((answer) => answer.urgency !== 'none')
-        .forEach((answer) => {
-          expect(resolveReferralDestination(answer)).to.match(/\S/);
-        });
+      question.answers.filter(isReferralCandidateAnswer).forEach((answer) => {
+        expect(resolveReferralDestination(answer)).to.match(/\S/);
+      });
     });
+
+    const answers = questions.flatMap((question) => question.answers);
+    expect(answers.filter(isReferralCandidateAnswer)).to.have.length(107);
+    expect(
+      answers.filter(
+        (answer) =>
+          answer.urgency === 'none' && isReferralCandidateAnswer(answer)
+      )
+    ).to.have.length(5);
   });
 
   it('uses the configured cell-colour urgency instead of score thresholds', () => {
@@ -195,42 +203,42 @@ describe('Referral letter domain rules', () => {
     ).to.equal('none');
   });
 
-  it('keeps each selected answer destination in the final document', () => {
-    REFERRAL_AREA_CONFIGS.forEach((area) => {
-      const answers = answersFor(
-        area.id,
-        (answer) => answer.urgency !== 'none'
-      );
-      const candidates = deriveConcernCandidates(area.id, answers);
-      const selectedCandidates = candidates.slice(0, MAX_OTHER_CONCERNS + 1);
-      const document = createReferralDocument({
-        ...createInitialReferralState(),
-        areaId: area.id,
-        answers,
-        mainConcernId: selectedCandidates[0].id,
-        otherConcernIds: selectedCandidates
-          .slice(1)
-          .map((candidate) => candidate.id),
-      });
+  it('keeps every candidate answer destination in the final document', () => {
+    let checkedCandidates = 0;
 
-      expect(document, area.id).not.to.equal(null);
-      expect(
-        document.guide.concerns.map(({ id, destination }) => ({
-          id,
-          destination,
-        }))
-      ).to.deep.equal(
-        selectedCandidates.map(({ id, destination }) => ({ id, destination }))
-      );
-      expect(document.letter.mainConcern.destination).to.equal(
-        selectedCandidates[0].destination
-      );
-      expect(
-        document.letter.otherConcerns.map((concern) => concern.destination)
-      ).to.deep.equal(
-        selectedCandidates.slice(1).map((candidate) => candidate.destination)
-      );
+    REFERRAL_AREA_CONFIGS.forEach((area) => {
+      area.questions.forEach((question) => {
+        question.answers.filter(isReferralCandidateAnswer).forEach((answer) => {
+          const answers = answersFor(area.id, () => true);
+          answers[question.id] = answer.id;
+          const candidate = deriveConcernCandidates(area.id, answers).find(
+            ({ questionId }) => questionId === question.id
+          );
+          const document = createReferralDocument({
+            ...createInitialReferralState(),
+            areaId: area.id,
+            answers,
+            mainConcernId: candidate.id,
+          });
+
+          expect(document, `${area.id}/${answer.id}`).not.to.equal(null);
+          expect(candidate.answerId).to.equal(answer.id);
+          expect(candidate.destination).to.equal(
+            resolveReferralDestination(answer)
+          );
+          expect(document.guide.concerns).to.deep.equal([
+            document.letter.mainConcern,
+          ]);
+          expect(document.letter.mainConcern.destination).to.equal(
+            resolveReferralDestination(answer)
+          );
+          expect(document.letter.otherConcerns).to.deep.equal([]);
+          checkedCandidates += 1;
+        });
+      });
     });
+
+    expect(checkedCandidates).to.equal(107);
   });
 
   it('derives candidates in question order and caps other concerns at three', () => {
@@ -261,7 +269,7 @@ describe('Referral letter domain rules', () => {
     expect(selection.otherConcernIds).to.have.length(MAX_OTHER_CONCERNS);
   });
 
-  it('handles one non-none answer as a single concern without other rows', () => {
+  it('handles one candidate answer as a single concern without other rows', () => {
     const area = getReferralAreaConfig('elderly');
     const answers = answersFor(
       'elderly',
@@ -305,24 +313,32 @@ describe('Referral letter domain rules', () => {
     state = answerAll(state, (answer) => answer.urgency !== 'none');
     const candidates = deriveConcernCandidates(state.areaId, state.answers);
 
+    const mainCandidate = candidates[1];
     state = referralReducer(state, {
       type: 'SELECT_MAIN_CONCERN',
-      concernId: candidates[0].id,
+      concernId: mainCandidate.id,
     });
-    candidates.slice(1, 5).forEach((candidate) => {
-      state = referralReducer(state, {
-        type: 'TOGGLE_OTHER_CONCERN',
-        concernId: candidate.id,
+    candidates
+      .filter(({ id }) => id !== mainCandidate.id)
+      .slice(0, 4)
+      .forEach((candidate) => {
+        state = referralReducer(state, {
+          type: 'TOGGLE_OTHER_CONCERN',
+          concernId: candidate.id,
+        });
       });
-    });
     expect(state.otherConcernIds).to.have.length(MAX_OTHER_CONCERNS);
 
-    const firstQuestion = getReferralAreaConfig('elderly').questions[0];
+    const mainQuestion = getReferralAreaConfig('elderly').questions.find(
+      ({ id }) => id === mainCandidate.questionId
+    );
     state = referralReducer(state, {
       type: 'ANSWER_QUESTION',
-      questionId: firstQuestion.id,
-      answerId: getAnswer(firstQuestion, (answer) => answer.urgency === 'none')
-        .id,
+      questionId: mainQuestion.id,
+      answerId: getAnswer(
+        mainQuestion,
+        (answer) => !isReferralCandidateAnswer(answer)
+      ).id,
     });
     expect(state.mainConcernId).to.equal(null);
 
@@ -412,25 +428,32 @@ describe('Referral letter domain rules', () => {
 });
 
 describe('Referral letter flow', () => {
-  it('completes seven none answers without generating a letter', () => {
+  it('shows a configured destination even when all answers have none urgency', () => {
     beginReferral('elderly');
     answerReferralQuestions('elderly', (answer) => answer.urgency === 'none');
 
-    cy.contains('回答内容からは、現在、大きな困り事はなさそうです。');
-    cy.get('[data-testid="referral-letter"]').should('not.exist');
-    cy.window().then((window) => {
-      const savedState = JSON.parse(
-        window.sessionStorage.getItem(REFERRAL_STORAGE_KEY)
-      );
-      expect(savedState.step).to.deep.equal({ kind: 'no-concerns' });
-    });
+    const candidates = deriveConcernCandidates(
+      'elderly',
+      answersFor('elderly', (answer) => answer.urgency === 'none')
+    );
+    expect(candidates).to.have.length(1);
+    cy.contains('困りごとを選ぶ');
+    cy.get(`[data-testid="referral-main-${candidates[0].id}"]`).click();
+    cy.contains('button', /^次へ$/).click();
+    cy.contains('その他の困りごとを選ぶ');
+    cy.contains('button', /^次へ$/).click();
+    cy.contains('伝えたいこと');
+    cy.contains('button', '完了').click();
 
-    cy.contains('button', 'トップページへ戻る').click();
-    cy.location('pathname').should('equal', '/');
-    cy.window()
-      .its('sessionStorage')
-      .invoke('getItem', REFERRAL_STORAGE_KEY)
-      .should('equal', null);
+    cy.contains('紹介状ができました');
+    cy.get('[data-testid="referral-guide"]').should(
+      'contain',
+      `相談先：${candidates[0].destination}`
+    );
+    cy.get('[data-testid="referral-letter"]').should(
+      'contain',
+      `相談先：${candidates[0].destination}`
+    );
   });
 
   it('creates, restores, edits, and prints a referral letter without sending PII', () => {
@@ -535,6 +558,19 @@ describe('Referral letter flow', () => {
       'target',
       '_blank'
     );
+    cy.contains('button', 'スクリーンショットで保存').should(($button) => {
+      expect($button.css('background-color')).not.to.equal('rgba(0, 0, 0, 0)');
+    });
+    [
+      ['button', '印刷（PC向け）'],
+      ['button', '回答を編集'],
+      ['a', 'くわしく計算'],
+      ['a', 'アンケートに答える'],
+    ].forEach(([element, label]) => {
+      cy.contains(element, label).should(($action) => {
+        expect($action.css('background-color')).to.equal('rgba(0, 0, 0, 0)');
+      });
+    });
     assertReferralA11y();
 
     cy.window().then((window) => {

@@ -2,8 +2,6 @@ export type ReferralAreaId = 'elderly' | 'childcare' | 'young-adult';
 
 export type Urgency = 'none' | 'low' | 'medium' | 'high';
 
-export type ConcernUrgency = Exclude<Urgency, 'none'>;
-
 export interface ReferralAnswerOption {
   readonly id: string;
   readonly label: string;
@@ -36,7 +34,7 @@ export interface ConcernCandidate {
   readonly answerId: string;
   readonly answerLabel: string;
   readonly score: number | null;
-  readonly urgency: ConcernUrgency;
+  readonly urgency: Urgency;
   /** A non-empty destination, with the documented fallback applied. */
   readonly destination: string;
   /** The unmodified answer-specific destination from the source Sheet. */

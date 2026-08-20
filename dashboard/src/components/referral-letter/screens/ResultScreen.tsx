@@ -118,10 +118,10 @@ export const ResultScreen = ({
           </Button>
           <Button
             type="button"
-            colorScheme="blue"
-            bg="blue.700"
-            color="white"
-            _hover={{ bg: 'blue.800' }}
+            variant="outline"
+            borderColor="gray.400"
+            color="gray.800"
+            _hover={{ bg: 'gray.100' }}
             minH="3.25em"
             onClick={printDocument}
           >
@@ -129,15 +129,23 @@ export const ResultScreen = ({
           </Button>
 
           <SimpleGrid columns={{ base: 1, sm: 2 }} spacing={3}>
-            <Button type="button" variant="outline" onClick={onEdit}>
+            <Button
+              type="button"
+              variant="outline"
+              borderColor="gray.400"
+              color="gray.800"
+              _hover={{ bg: 'gray.100' }}
+              onClick={onEdit}
+            >
               回答を編集
             </Button>
             <Button
               as={RouterLink}
               to="/calculate"
-              bg="cyan.800"
-              color="white"
-              _hover={{ bg: 'cyan.900' }}
+              variant="outline"
+              borderColor="gray.400"
+              color="gray.800"
+              _hover={{ bg: 'gray.100' }}
             >
               くわしく計算
             </Button>
@@ -146,9 +154,10 @@ export const ResultScreen = ({
               href={configData.URL.questionnaire_form}
               target="_blank"
               rel="noopener noreferrer"
-              bg="teal.700"
-              color="white"
-              _hover={{ bg: 'teal.800' }}
+              variant="outline"
+              borderColor="gray.400"
+              color="gray.800"
+              _hover={{ bg: 'gray.100' }}
             >
               アンケートに答える
             </Button>

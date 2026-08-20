@@ -35,6 +35,11 @@ export const resolveReferralDestination = (
   answer: ReferralAnswerOption
 ): string => answer.destination?.trim() || DEFAULT_REFERRAL_DESTINATION;
 
+export const isReferralCandidateAnswer = (
+  answer: ReferralAnswerOption
+): boolean =>
+  answer.urgency !== 'none' || (answer.destination?.trim().length ?? 0) > 0;
+
 export const deriveConcernCandidates = (
   areaId: ReferralAreaId | null,
   answers: ReferralAnswers
@@ -45,7 +50,7 @@ export const deriveConcernCandidates = (
 
   return getReferralAreaConfig(areaId).questions.flatMap((question, order) => {
     const answer = getSelectedAnswer(question, answers);
-    if (answer === undefined || answer.urgency === 'none') {
+    if (answer === undefined || !isReferralCandidateAnswer(answer)) {
       return [];
     }
 
