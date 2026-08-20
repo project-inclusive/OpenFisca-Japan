@@ -161,7 +161,14 @@ export const ResultScreen = ({
             >
               アンケートに答える
             </Button>
-            <Button type="button" variant="ghost" onClick={onReset}>
+            <Button
+              type="button"
+              variant="outline"
+              borderColor="gray.400"
+              color="gray.800"
+              _hover={{ bg: 'gray.100' }}
+              onClick={onReset}
+            >
               最初からやり直す
             </Button>
           </SimpleGrid>

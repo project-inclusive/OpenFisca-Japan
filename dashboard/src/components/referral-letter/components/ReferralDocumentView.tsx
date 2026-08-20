@@ -11,10 +11,12 @@ const ConcernDetails = ({
   title: string;
 }) => (
   <Box>
-    <Text fontWeight="bold">
-      {title}：{concern.label}
+    <Text overflowWrap="anywhere">
+      <Text as="span" fontWeight="bold">
+        {title}：{concern.label}
+      </Text>
+      <Text as="span">（{concern.answer}）</Text>
     </Text>
-    <Text mt={1}>（{concern.answer}）</Text>
     <Text mt={1} overflowWrap="anywhere">
       <Text as="span" fontWeight="bold">
         相談先：
@@ -44,7 +46,13 @@ export const ReferralDocumentView = forwardRef<
           p={{ base: 4, md: 6 }}
           aria-labelledby="referral-guide-heading"
         >
-          <Heading id="referral-guide-heading" as="h2" size="md" mb={4}>
+          <Heading
+            id="referral-guide-heading"
+            as="h2"
+            size="md"
+            mb={4}
+            textAlign="center"
+          >
             説明書
           </Heading>
 
@@ -99,7 +107,13 @@ export const ReferralDocumentView = forwardRef<
           p={{ base: 4, md: 6 }}
           aria-labelledby="referral-letter-heading"
         >
-          <Heading id="referral-letter-heading" as="h2" size="md" mb={4}>
+          <Heading
+            id="referral-letter-heading"
+            as="h2"
+            size="md"
+            mb={4}
+            textAlign="center"
+          >
             紹介状
           </Heading>
 

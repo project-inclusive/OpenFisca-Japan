@@ -533,6 +533,16 @@ describe('Referral letter flow', () => {
     cy.contains('紹介状ができました');
     cy.contains('緊急度').should('not.exist');
     cy.get('[data-testid="referral-guide"]').should('be.visible');
+    cy.get('#referral-guide-heading').should(
+      'have.css',
+      'text-align',
+      'center'
+    );
+    cy.get('#referral-letter-heading').should(
+      'have.css',
+      'text-align',
+      'center'
+    );
     cy.get('[data-testid="referral-letter"]')
       .should('contain', TEST_NAME)
       .and('contain', TEST_EMAIL)
@@ -546,6 +556,18 @@ describe('Referral letter flow', () => {
           expect(guideText).to.include(`相談先：${candidate.destination}`);
         });
       });
+    cy.get('[data-testid="referral-letter"]').within(() => {
+      selectedCandidates.forEach((candidate, index) => {
+        const title =
+          index === 0
+            ? '主な困りごと'
+            : `他の困りごと${['①', '②', '③'][index - 1]}`;
+        cy.contains(
+          'p',
+          `${title}：${candidate.questionLabel}（${candidate.answerLabel}）`
+        );
+      });
+    });
     cy.get('[data-testid="referral-letter"]')
       .invoke('text')
       .then((letterText) => {
@@ -572,11 +594,15 @@ describe('Referral letter flow', () => {
       ['button', '回答を編集'],
       ['a', 'くわしく計算'],
       ['a', 'アンケートに答える'],
+      ['button', '最初からやり直す'],
     ].forEach(([element, label]) => {
       cy.contains(element, label).should(($action) => {
         expect($action.css('background-color')).to.equal('rgba(0, 0, 0, 0)');
       });
     });
+    cy.contains('button', '最初からやり直す')
+      .should('have.css', 'border-top-style', 'solid')
+      .and('have.css', 'border-top-width', '1px');
     assertReferralA11y();
 
     cy.window().then((window) => {
