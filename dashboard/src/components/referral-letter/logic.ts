@@ -158,10 +158,11 @@ export const createReferralDocument = (
         '回答いただいた内容に基づいて紹介状を作成しました。説明書の内容をよく確認の上、窓口へ相談に行ってみましょう。',
       concerns: [mainConcern, ...otherConcerns],
       searchMethods: [
-        `市町村の代表番号に電話し「${mainCandidate.questionLabel}ので相談窓口を知りたい」と伝える`,
+        '市町村の代表番号に電話し「困りごとについて相談できる窓口を知りたい」と伝える',
         `ネットで「${mainCandidate.destination} お住まいの市町村名 電話番号」で検索し連絡する`,
       ],
-      contactInstruction: `窓口に連絡し「${mainCandidate.questionLabel}ので相談に乗ってほしい」と伝える`,
+      contactInstruction:
+        '窓口に連絡し「紹介状に記載された困りごとについて相談したい」と伝える',
       letterInstruction:
         'そのときに、画面に表示された「紹介状」もご利用ください',
     },
