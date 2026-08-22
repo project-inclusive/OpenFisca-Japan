@@ -20,6 +20,7 @@ class 災害救助法の適用地域である(Variable):
     適用状況 https://www.bousai.go.jp/taisaku/kyuujo/kyuujo_tekiyou.html
     """
     # TODO: 居住市区町村から災害救助法が適用されているかどうかを計算できるようにする
+    # （現状は災害時の情報更新に追随するのが難しいため、災害支援モード指定時に居住地によらずtrueを指定している）
 
 
 class 災害障害見舞金_最大(Variable):

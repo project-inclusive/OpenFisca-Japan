@@ -23,10 +23,7 @@ export interface MaxProgress {
 
 // モードごとの総質問数を事前に計算
 export const maxProgressOf = (
-  mode:
-    | 'かんたん見積もり'
-    | 'くわしく見積もり'
-    | '能登半島地震被災者支援制度見積もり'
+  mode: 'かんたん見積もり' | 'くわしく見積もり' | '地震被災者支援制度見積もり'
 ): MaxProgress => {
   const actor = createActor(questionStateMachine);
   actor.start();

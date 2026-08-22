@@ -576,7 +576,7 @@ test('災害支援見積もり: あなたの最初の質問の時点で進捗は
     type: '見積もりモード',
     value: {
       type: 'Selection',
-      selection: '能登半島地震被災者支援制度見積もり',
+      selection: '地震被災者支援制度見積もり',
     },
   });
   actor.send({ type: 'next' });
@@ -596,7 +596,7 @@ test('災害支援見積もり: 配偶者の最初の質問の時点で進捗は
     type: '見積もりモード',
     value: {
       type: 'Selection',
-      selection: '能登半島地震被災者支援制度見積もり',
+      selection: '地震被災者支援制度見積もり',
     },
   });
   actor.send({ type: 'next' });
@@ -661,7 +661,7 @@ test('災害支援見積もり: 1人目の子どもの最初の質問の時点�
     type: '見積もりモード',
     value: {
       type: 'Selection',
-      selection: '能登半島地震被災者支援制度見積もり',
+      selection: '地震被災者支援制度見積もり',
     },
   });
   actor.send({ type: 'next' });
@@ -731,7 +731,7 @@ test('災害支援見積もり: 1人目の親の最初の質問の時点で進�
     type: '見積もりモード',
     value: {
       type: 'Selection',
-      selection: '能登半島地震被災者支援制度見積もり',
+      selection: '地震被災者支援制度見積もり',
     },
   });
   actor.send({ type: 'next' });

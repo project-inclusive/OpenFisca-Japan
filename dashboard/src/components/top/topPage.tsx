@@ -51,7 +51,7 @@ export function TopPage({
     modeName:
       | 'かんたん見積もり'
       | 'くわしく見積もり'
-      | '能登半島地震被災者支援制度見積もり'
+      | '地震被災者支援制度見積もり'
   ) => {
     // ホームボタンで戻ってきた場合はすでに状態が進んでいるため、初期状態に戻す
     send({ type: 'reset' });
@@ -111,34 +111,6 @@ export function TopPage({
             />
           </Stack>
 
-          <Center pt={2} pb={1} pr={4} pl={4} style={{ textAlign: 'center' }}>
-            <Button
-              as={RouterLink}
-              // 規約に同意していない場合のみモーダルが開く
-              to={agreedToTerms ? '/calculate-disaster' : '/'}
-              onClick={() => {
-                setMode('能登半島地震被災者支援制度見積もり');
-                if (!agreedToTerms) {
-                  setModalLink('/calculate-disaster');
-                  onModalOpen();
-                }
-              }}
-              fontSize={configData.style.subTitleFontSize}
-              borderRadius="xl"
-              pr="1em"
-              pl="1em"
-              height="auto"
-              width={{ base: '80vw', md: '100%' }}
-              minHeight="3.5em"
-              bg="orange.400"
-              color="white"
-              _hover={{ bg: 'orange.500' }}
-              whiteSpace={{ base: 'normal', md: 'nowrap' }}
-            >
-              能登半島地震被災者支援制度見積もり
-            </Button>
-          </Center>
-
           <Center pr={4} pl={4} pb={1} style={{ textAlign: 'center' }}>
             <Button
               as={RouterLink}
@@ -194,6 +166,34 @@ export function TopPage({
               くわしく見積もり
             </Button>
             <br />
+          </Center>
+
+          <Center pt={2} pb={1} pr={4} pl={4} style={{ textAlign: 'center' }}>
+            <Button
+              as={RouterLink}
+              // 規約に同意していない場合のみモーダルが開く
+              to={agreedToTerms ? '/calculate-disaster' : '/'}
+              onClick={() => {
+                setMode('地震被災者支援制度見積もり');
+                if (!agreedToTerms) {
+                  setModalLink('/calculate-disaster');
+                  onModalOpen();
+                }
+              }}
+              fontSize={configData.style.subTitleFontSize}
+              borderRadius="xl"
+              pr="1em"
+              pl="1em"
+              height="auto"
+              width={{ base: '80vw', md: '100%' }}
+              minHeight="3.5em"
+              bg="orange.400"
+              color="white"
+              _hover={{ bg: 'orange.500' }}
+              whiteSpace={{ base: 'normal', md: 'nowrap' }}
+            >
+              地震被災者支援制度見積もり
+            </Button>
           </Center>
         </VStack>
         <Links />
