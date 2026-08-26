@@ -2,6 +2,8 @@ export type ReferralAreaId = 'elderly' | 'childcare' | 'young-adult';
 
 export type Urgency = 'none' | 'low' | 'medium' | 'high';
 
+export type ReferralUrgencyLevel = 'low' | 'medium' | 'high';
+
 export interface ReferralAnswerOption {
   readonly id: string;
   readonly label: string;
@@ -35,6 +37,7 @@ export interface ConcernCandidate {
   readonly answerLabel: string;
   readonly score: number | null;
   readonly urgency: Urgency;
+  readonly urgencyLevel: ReferralUrgencyLevel;
   /** A non-empty destination, with the documented fallback applied. */
   readonly destination: string;
   /** The unmodified answer-specific destination from the source Sheet. */
@@ -100,6 +103,7 @@ export interface ReferralDocumentConcern {
   readonly label: string;
   readonly answer: string;
   readonly destination: string;
+  readonly urgencyLevel: ReferralUrgencyLevel;
 }
 
 export interface ReferralGuide {

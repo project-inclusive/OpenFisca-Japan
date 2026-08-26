@@ -1,22 +1,30 @@
-import { Box, Heading, Stack, Text } from '@chakra-ui/react';
+import { Box, Flex, Heading, Stack, Text } from '@chakra-ui/react';
 import { forwardRef } from 'react';
 
 import { ReferralDocument, ReferralDocumentConcern } from '../types';
+import { ReferralUrgencyBadge } from './ReferralUrgencyBadge';
 
 const ConcernDetails = ({
   concern,
   title,
+  showUrgency = false,
 }: {
   concern: ReferralDocumentConcern;
   title: string;
+  showUrgency?: boolean;
 }) => (
   <Box>
-    <Text overflowWrap="anywhere">
-      <Text as="span" fontWeight="bold">
-        {title}：{concern.label}
+    <Flex align="center" justify="space-between" gap={2} flexWrap="wrap">
+      <Text overflowWrap="anywhere">
+        <Text as="span" fontWeight="bold">
+          {title}：{concern.label}
+        </Text>
+        <Text as="span">（{concern.answer}）</Text>
       </Text>
-      <Text as="span">（{concern.answer}）</Text>
-    </Text>
+      {showUrgency ? (
+        <ReferralUrgencyBadge level={concern.urgencyLevel} />
+      ) : null}
+    </Flex>
     <Text mt={1} overflowWrap="anywhere">
       <Text as="span" fontWeight="bold">
         相談先：
@@ -66,12 +74,22 @@ export const ReferralDocumentView = forwardRef<
               <Stack spacing={2}>
                 {document.guide.concerns.map((concern, index) => (
                   <Box key={concern.id}>
-                    <Text fontWeight="semibold">
-                      {index === 0
-                        ? '主な困りごと'
-                        : `他の困りごと${['①', '②', '③'][index - 1]}`}
-                      ：{concern.label}
-                    </Text>
+                    <Flex
+                      align="center"
+                      justify="space-between"
+                      gap={2}
+                      flexWrap="wrap"
+                    >
+                      <Text fontWeight="semibold">
+                        {index === 0
+                          ? '主な困りごと'
+                          : `他の困りごと${['①', '②', '③'][index - 1]}`}
+                        ：{concern.label}
+                      </Text>
+                      {index === 0 ? (
+                        <ReferralUrgencyBadge level={concern.urgencyLevel} />
+                      ) : null}
+                    </Flex>
                     <Text overflowWrap="anywhere">
                       相談先：{concern.destination}
                     </Text>
@@ -140,6 +158,7 @@ export const ReferralDocumentView = forwardRef<
             <ConcernDetails
               concern={document.letter.mainConcern}
               title="主な困りごと"
+              showUrgency
             />
 
             {document.letter.otherConcerns.map((concern, index) => (

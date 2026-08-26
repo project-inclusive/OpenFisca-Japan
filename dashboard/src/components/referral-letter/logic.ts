@@ -9,11 +9,35 @@ import type {
   ReferralDocumentConcern,
   ReferralQuestion,
   ReferralState,
+  ReferralUrgencyLevel,
 } from './types';
 
 export const DEFAULT_REFERRAL_DESTINATION = 'お住まいの市町村の相談窓口';
 
 export const MAX_OTHER_CONCERNS = 3;
+
+export const REFERRAL_URGENCY_LABELS: Readonly<
+  Record<ReferralUrgencyLevel, '低' | '中' | '高'>
+> = {
+  low: '低',
+  medium: '中',
+  high: '高',
+};
+
+export const getReferralUrgencyLevel = (
+  score: number | null
+): ReferralUrgencyLevel | null => {
+  if (score === 0 || score === 1) {
+    return 'low';
+  }
+  if (score === 2 || score === 3) {
+    return 'medium';
+  }
+  if (score === 4 || score === 5) {
+    return 'high';
+  }
+  return null;
+};
 
 export const getSelectedAnswer = (
   question: ReferralQuestion,
@@ -54,6 +78,11 @@ export const deriveConcernCandidates = (
       return [];
     }
 
+    const urgencyLevel = getReferralUrgencyLevel(answer.score);
+    if (urgencyLevel === null) {
+      throw new Error(`紹介状候補 ${answer.id} の緊急度合が不正です。`);
+    }
+
     return [
       {
         id: question.id,
@@ -63,6 +92,7 @@ export const deriveConcernCandidates = (
         answerLabel: answer.label,
         score: answer.score,
         urgency: answer.urgency,
+        urgencyLevel,
         destination: resolveReferralDestination(answer),
         sourceDestination: answer.destination,
         order,
@@ -113,6 +143,7 @@ const toDocumentConcern = (
   label: candidate.questionLabel,
   answer: candidate.answerLabel,
   destination: candidate.destination,
+  urgencyLevel: candidate.urgencyLevel,
 });
 
 export const createReferralDocument = (

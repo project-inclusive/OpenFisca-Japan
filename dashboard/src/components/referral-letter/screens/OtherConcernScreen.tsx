@@ -1,8 +1,10 @@
-import { Box, Stack, Text } from '@chakra-ui/react';
+import { Box, Flex, Stack, Text } from '@chakra-ui/react';
 
 import { PressedChoiceButton } from '../../forms/PressedChoiceButton';
 import { FlowNavigation, FlowShell } from '../../layout/flowShell';
+import { ConcernCandidateContent } from '../components/ConcernCandidateContent';
 import { ReferralHeader } from '../components/ReferralHeader';
+import { ReferralUrgencyBadge } from '../components/ReferralUrgencyBadge';
 import { MAX_OTHER_CONCERNS } from '../logic';
 import type { ConcernCandidate } from '../types';
 
@@ -14,13 +16,6 @@ type OtherConcernScreenProps = {
   onBack: () => void;
   onNext: () => void;
 };
-
-const CandidateContent = ({ candidate }: { candidate: ConcernCandidate }) => (
-  <Stack spacing={1} alignItems="flex-start" textAlign="left" w="100%">
-    <Text fontWeight="bold">{candidate.questionLabel}</Text>
-    <Text fontSize="sm">回答：{candidate.answerLabel}</Text>
-  </Stack>
-);
 
 export const OtherConcernScreen = ({
   candidates,
@@ -56,7 +51,15 @@ export const OtherConcernScreen = ({
             <Text fontSize="sm" fontWeight="bold">
               選択した主な困りごと
             </Text>
-            <Text>{mainConcern.questionLabel}</Text>
+            <Flex
+              align="center"
+              justify="space-between"
+              gap={2}
+              flexWrap="wrap"
+            >
+              <Text>{mainConcern.questionLabel}</Text>
+              <ReferralUrgencyBadge level={mainConcern.urgencyLevel} />
+            </Flex>
           </Box>
         ) : null}
 
@@ -88,7 +91,7 @@ export const OtherConcernScreen = ({
                     py={3}
                     whiteSpace="normal"
                   >
-                    <CandidateContent candidate={candidate} />
+                    <ConcernCandidateContent candidate={candidate} />
                   </PressedChoiceButton>
                 );
               })}

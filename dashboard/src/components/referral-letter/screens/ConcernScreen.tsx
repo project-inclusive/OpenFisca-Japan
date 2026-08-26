@@ -2,6 +2,7 @@ import { Box, Stack, Text } from '@chakra-ui/react';
 
 import { PressedChoiceButton } from '../../forms/PressedChoiceButton';
 import { FlowNavigation, FlowShell } from '../../layout/flowShell';
+import { ConcernCandidateContent } from '../components/ConcernCandidateContent';
 import { ReferralHeader } from '../components/ReferralHeader';
 import type { ConcernCandidate } from '../types';
 
@@ -12,13 +13,6 @@ type ConcernScreenProps = {
   onBack: () => void;
   onNext: () => void;
 };
-
-const CandidateContent = ({ candidate }: { candidate: ConcernCandidate }) => (
-  <Stack spacing={1} alignItems="flex-start" textAlign="left" w="100%">
-    <Text fontWeight="bold">{candidate.questionLabel}</Text>
-    <Text fontSize="sm">回答：{candidate.answerLabel}</Text>
-  </Stack>
-);
 
 export const ConcernScreen = ({
   candidates,
@@ -60,7 +54,7 @@ export const ConcernScreen = ({
             py={3}
             whiteSpace="normal"
           >
-            <CandidateContent candidate={candidate} />
+            <ConcernCandidateContent candidate={candidate} />
           </PressedChoiceButton>
         ))}
       </Stack>

@@ -6,8 +6,10 @@ import {
 } from '../../src/components/referral-letter/config';
 import {
   MAX_OTHER_CONCERNS,
+  REFERRAL_URGENCY_LABELS,
   createReferralDocument,
   deriveConcernCandidates,
+  getReferralUrgencyLevel,
   isReferralCandidateAnswer,
   isValidReferralEmail,
   reconcileConcernSelection,
@@ -179,7 +181,15 @@ describe('Referral letter domain rules', () => {
     ).to.have.length(5);
   });
 
-  it('uses the configured cell-colour urgency instead of score thresholds', () => {
+  it('maps the Sheet urgency score to the displayed low, medium, and high levels', () => {
+    expect([0, 1].map(getReferralUrgencyLevel)).to.deep.equal(['low', 'low']);
+    expect([2, 3].map(getReferralUrgencyLevel)).to.deep.equal([
+      'medium',
+      'medium',
+    ]);
+    expect([4, 5].map(getReferralUrgencyLevel)).to.deep.equal(['high', 'high']);
+    expect(getReferralUrgencyLevel(null)).to.equal(null);
+
     const childFuture = getReferralAreaConfig('childcare').questions.find(
       (question) => question.id === 'childcare-child-future'
     );
@@ -193,14 +203,18 @@ describe('Referral letter domain rules', () => {
       getAnswer(childFuture, (answer) => answer.score === 5).urgency
     ).to.equal('medium');
     expect(
-      getAnswer(childFuture, (answer) => answer.score === 1).urgency
-    ).to.equal('none');
+      getReferralUrgencyLevel(
+        getAnswer(childFuture, (answer) => answer.score === 5).score
+      )
+    ).to.equal('high');
     expect(
       getAnswer(careerPlan, (answer) => answer.score === 5).urgency
     ).to.equal('medium');
     expect(
-      getAnswer(careerPlan, (answer) => answer.score === null).urgency
-    ).to.equal('none');
+      getReferralUrgencyLevel(
+        getAnswer(careerPlan, (answer) => answer.score === 5).score
+      )
+    ).to.equal('high');
   });
 
   it('keeps every candidate answer destination in the final document', () => {
@@ -226,11 +240,17 @@ describe('Referral letter domain rules', () => {
           expect(candidate.destination).to.equal(
             resolveReferralDestination(answer)
           );
+          expect(candidate.urgencyLevel).to.equal(
+            getReferralUrgencyLevel(answer.score)
+          );
           expect(document.guide.concerns).to.deep.equal([
             document.letter.mainConcern,
           ]);
           expect(document.letter.mainConcern.destination).to.equal(
             resolveReferralDestination(answer)
+          );
+          expect(document.letter.mainConcern.urgencyLevel).to.equal(
+            getReferralUrgencyLevel(answer.score)
           );
           expect(document.guide.searchMethods[0]).to.equal(
             '市町村の代表番号に電話し「困りごとについて相談できる窓口を知りたい」と伝える'
@@ -480,16 +500,28 @@ describe('Referral letter flow', () => {
       'elderly',
       answersFor('elderly', (answer) => answer.urgency !== 'none')
     );
+    candidates.forEach((candidate) => {
+      cy.get(`[data-testid="referral-main-${candidate.id}"]`)
+        .find('[data-testid="referral-urgency-badge"]')
+        .should(
+          'contain',
+          `緊急度：${REFERRAL_URGENCY_LABELS[candidate.urgencyLevel]}`
+        )
+        .and('have.attr', 'data-urgency-level', candidate.urgencyLevel);
+    });
     cy.get(`[data-testid="referral-main-${candidates[0].id}"]`).click();
     cy.contains('その他の困りごとを選ぶ').should('not.exist');
-    cy.contains('緊急度').should('not.exist');
     assertReferralA11y();
     cy.contains('button', /^次へ$/).click();
 
     cy.contains('その他の困りごとを選ぶ');
     cy.contains('選択した主な困りごと')
       .parent()
-      .should('contain', candidates[0].questionLabel);
+      .should('contain', candidates[0].questionLabel)
+      .and(
+        'contain',
+        `緊急度：${REFERRAL_URGENCY_LABELS[candidates[0].urgencyLevel]}`
+      );
     cy.window().then((window) => {
       const savedState = JSON.parse(
         window.sessionStorage.getItem(REFERRAL_STORAGE_KEY)
@@ -501,12 +533,15 @@ describe('Referral letter flow', () => {
     cy.injectAxe();
     candidates.slice(1, 4).forEach((candidate) => {
       cy.get(`[data-testid="referral-other-${candidate.id}"]`)
+        .should(
+          'contain',
+          `緊急度：${REFERRAL_URGENCY_LABELS[candidate.urgencyLevel]}`
+        )
         .click()
         .should('have.attr', 'aria-pressed', 'true')
         .and('not.be.disabled');
     });
     cy.contains(`${MAX_OTHER_CONCERNS} / ${MAX_OTHER_CONCERNS}件を選択中`);
-    cy.contains('緊急度').should('not.exist');
     cy.get(`[data-testid="referral-other-${candidates[4].id}"]`).should(
       'be.disabled'
     );
@@ -531,8 +566,16 @@ describe('Referral letter flow', () => {
     cy.contains('button', '完了').should('not.be.disabled').click();
 
     cy.contains('紹介状ができました');
-    cy.contains('緊急度').should('not.exist');
     cy.get('[data-testid="referral-guide"]').should('be.visible');
+    ['referral-guide', 'referral-letter'].forEach((testId) => {
+      cy.get(`[data-testid="${testId}"]`)
+        .find('[data-testid="referral-urgency-badge"]')
+        .should('have.length', 1)
+        .and(
+          'contain',
+          `緊急度：${REFERRAL_URGENCY_LABELS[candidates[0].urgencyLevel]}`
+        );
+    });
     cy.get('#referral-guide-heading').should(
       'have.css',
       'text-align',
