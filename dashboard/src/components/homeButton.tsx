@@ -1,6 +1,3 @@
-import { Flex, Icon } from '@chakra-ui/react';
-import { Link as RouterLink } from 'react-router-dom';
-import { FaHome } from 'react-icons/fa';
 import {
   defaultNextQuestionKeyAtom,
   nextQuestionKeyAtom,
@@ -8,18 +5,16 @@ import {
   questionKeyHistoryAtom,
   resetQuestionKeys,
 } from '../state';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
+import { HomeLink } from './navigation/HomeLink';
 
 export const HomeButton = () => {
-  const [questionKey, setQuestionKey] = useRecoilState(questionKeyAtom);
-  const [nextQuestionKey, setNextQuestionKey] =
-    useRecoilState(nextQuestionKeyAtom);
-  const [defaultNextQuestionKey, setDefaultNextQuestionKey] = useRecoilState(
+  const setQuestionKey = useSetRecoilState(questionKeyAtom);
+  const setNextQuestionKey = useSetRecoilState(nextQuestionKeyAtom);
+  const setDefaultNextQuestionKey = useSetRecoilState(
     defaultNextQuestionKeyAtom
   );
-  const [questionKeyHistory, setQuestionKeyHistory] = useRecoilState(
-    questionKeyHistoryAtom
-  );
+  const setQuestionKeyHistory = useSetRecoilState(questionKeyHistoryAtom);
 
   const onClick = () => {
     // 質問の1問目に戻る
@@ -32,18 +27,5 @@ export const HomeButton = () => {
     });
   };
 
-  return (
-    <Flex w="90%" justifyContent="left" marginTop="0.5em">
-      <RouterLink to="/">
-        <Icon
-          as={FaHome}
-          paddingLeft="1.5em"
-          justifyContent="left"
-          boxSize="4em"
-          color="cyan.900"
-          onClick={onClick}
-        />
-      </RouterLink>
-    </Flex>
-  );
+  return <HomeLink onClick={onClick} />;
 };

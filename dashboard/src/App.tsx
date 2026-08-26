@@ -12,6 +12,7 @@ import { DetailedQuestionList } from './components/forms/detailedQuestionList';
 import { SimpleQuestionList } from './components/forms/simpleQuestionList';
 import { DisasterQuestionList } from './components/forms/disasterQuestionList';
 import { TopPage } from './components/top/topPage';
+import { ReferralLetterPage } from './components/referral-letter/ReferralLetterPage';
 
 function App() {
   const currentDate = useRecoilState(currentDateAtom);
@@ -39,6 +40,10 @@ function App() {
             {
               path: '/calculate-disaster',
               element: <DisasterQuestionList />,
+            },
+            {
+              path: '/referral-letter',
+              element: <ReferralLetterPage />,
             },
             {
               path: '/result',

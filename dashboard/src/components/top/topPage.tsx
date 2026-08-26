@@ -1,4 +1,5 @@
 import {
+  Badge,
   Button,
   Text,
   Center,
@@ -178,6 +179,34 @@ export function TopPage() {
         onClose={onModalClose}
         to={modalLink}
       />
+      <Button
+        as={RouterLink}
+        to="/referral-letter"
+        position="fixed"
+        right={{ base: 4, md: 6 }}
+        bottom={{
+          base: 'calc(env(safe-area-inset-bottom) + 1rem)',
+          md: 6,
+        }}
+        zIndex="overlay"
+        minH="3rem"
+        px={4}
+        borderRadius="full"
+        borderWidth="2px"
+        borderColor="cyan.800"
+        bg="white"
+        color="cyan.900"
+        boxShadow="lg"
+        _hover={{ bg: 'cyan.50' }}
+        _focusVisible={{ boxShadow: 'outline' }}
+        data-testid="referral-letter-button"
+        aria-label="紹介状（ベータ版）を開く"
+      >
+        紹介状
+        <Badge ml={2} bg="cyan.800" color="white" borderRadius="full" px={2}>
+          β版
+        </Badge>
+      </Button>
     </>
   );
 }
