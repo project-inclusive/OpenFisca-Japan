@@ -567,15 +567,16 @@ describe('Referral letter flow', () => {
 
     cy.contains('紹介状ができました');
     cy.get('[data-testid="referral-guide"]').should('be.visible');
-    ['referral-guide', 'referral-letter'].forEach((testId) => {
-      cy.get(`[data-testid="${testId}"]`)
-        .find('[data-testid="referral-urgency-badge"]')
-        .should('have.length', 1)
-        .and(
-          'contain',
-          `緊急度：${REFERRAL_URGENCY_LABELS[candidates[0].urgencyLevel]}`
-        );
-    });
+    cy.get('[data-testid="referral-guide"]')
+      .find('[data-testid="referral-urgency-badge"]')
+      .should('have.length', 1)
+      .and(
+        'contain',
+        `緊急度：${REFERRAL_URGENCY_LABELS[candidates[0].urgencyLevel]}`
+      );
+    cy.get('[data-testid="referral-letter"]')
+      .find('[data-testid="referral-urgency-badge"]')
+      .should('not.exist');
     cy.get('#referral-guide-heading').should(
       'have.css',
       'text-align',

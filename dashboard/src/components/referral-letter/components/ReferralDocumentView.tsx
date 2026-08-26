@@ -158,7 +158,6 @@ export const ReferralDocumentView = forwardRef<
             <ConcernDetails
               concern={document.letter.mainConcern}
               title="主な困りごと"
-              showUrgency
             />
 
             {document.letter.otherConcerns.map((concern, index) => (
