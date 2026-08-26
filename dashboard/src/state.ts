@@ -315,9 +315,3 @@ export const frontendHouseholdAtom = atom<FrontendHousehold>({
   },
   dangerouslyAllowMutability: true,
 });
-
-export const householdHistoryAtom = atom<any[]>({
-  key: 'householdHistoryAtom',
-  default: [],
-  dangerouslyAllowMutability: true,
-});

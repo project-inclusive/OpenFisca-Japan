@@ -1,0 +1,9 @@
+description: 寄宿手当の月額（訓練を受けるため同居の配偶者等と別居して寄宿する場合に支給）
+metadata:
+  reference: https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/kyushokusha_shien/index.html
+  unit: currency-JPY
+values:
+  2017-04-01:
+    value: 10700
+    metadata:
+      reference: https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/kyushokusha_shien/index.html

@@ -11,7 +11,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
-          node-version: 18.16.0
+          node-version: 26.4.0
       - name: Install packages
         run: npm ci
         working-directory: ./dashboard
@@ -20,6 +20,9 @@ jobs:
         working-directory: ./dashboard
       - name: Prettier
         run: npm run pretty:check
+        working-directory: ./dashboard
+      - name: Unittest
+        run: npm run test
         working-directory: ./dashboard
       - name: Cypress run
         uses: cypress-io/github-action@v6

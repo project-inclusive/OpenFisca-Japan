@@ -5,7 +5,7 @@ import pako from 'pako';
  * @param jsonString - The JSON string to deflate and encode.
  * @returns The deflated and base64-encoded string.
  */
-export function deflate(jsonString: string): string {
+function deflate(jsonString: string): string {
   const utf8Bytes = new TextEncoder().encode(jsonString);
   const compressedBytes = pako.deflate(utf8Bytes, {
     level: 9,

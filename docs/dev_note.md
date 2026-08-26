@@ -179,6 +179,20 @@ sudo apt install xdg-utils
 - `cd dashboard` でdashboardディレクトリにて開発する。
 - http://localhost:30000/ をブラウザに打ち込み、ページを確認する。
 
+#### 初回セットアップ（pre-commitフック）
+
+コミット時に [Husky](https://typicode.github.io/husky/) により自動フォーマット（`npm run pretty`）が実行されるようになっています。
+新たにクローンした場合、以下のコマンドを一度実行してください。
+
+```bash
+# dashboardディレクトリに移動
+cd dashboard
+npm install
+```
+
+- `npm install` 時に `prepare` スクリプトが実行され、Huskyのpre-commitフックが自動でセットアップされます
+- このリポジトリは `.git` がルートディレクトリにあるモノレポ構成のため、`dashboard` ディレクトリ単体では `.git` を検出できません。そのため `prepare` スクリプト内で一度ルートディレクトリに移動してからフックを設定しています（詳細は `dashboard/package.json` の `prepare` スクリプト参照）
+
 #### テスト、linter実行
 
 ```bash
@@ -195,6 +209,23 @@ npm run pretty
 # テスト実行
 npm run cy:run
 ```
+
+#### 一問一答の状態追加
+
+- [XState](https://xstate.js.org/)を使用して各質問間の遷移を定義している
+- 追加手順は [フロントエンドへの質問追加](./add_frontend_question.md) 参照
+- またはskills `/add-question` でLLMによる自動作成も可能
+  - 例: `/add-question 年金の額を聞く質問を年収の後に追加してください。質問名「年金」`
+- 設計
+  - 各状態が各質問に対応
+  - context中の状態と同じ名前のキーに、ユーザーがその質問へ回答した内容を保存
+  - 質問形式（金額、yes/no、選択肢等）ごとに異なる型のcontextで表現
+  - contextの各質問回答は世帯員ごとに構造化（`context[質問名][あなた | 配偶者 | 子ども | 親][i人目]` の形式）
+  - contextの `currentMember` を切り替えることで、質問対象の世帯員を切り替え
+    - 当該世帯員の最後の質問で `changeTo{世帯員}` というダミー状態に遷移し世帯員が切り替わる
+      - 世帯員の順番は `あなた -> 配偶者 -> 子ども（1人目）-> ... -> 子ども（n人目） 親(1人目) -> ... -> 親（n人目）`
+  - 前の質問に戻るための状態遷移を `history` というダミー状態で実現
+    - 参考: [XStateで「前の状態に戻る」を実装したい](https://qiita.com/Syuparn/items/1606c5beeda5519cae62)
 
 ### 制度追加の流れ（バックエンド、フロントエンド開発の連携）
 

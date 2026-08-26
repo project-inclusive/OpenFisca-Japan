@@ -719,11 +719,11 @@ export const baseHospitalData = {
   ブロック拠点病院: blockBaseHospitalData,
 };
 
-export type HIVBaseHospitalData = {
+type HIVBaseHospitalData = {
   [key: string]: { [key: string]: HIVBaseHospital };
 };
 
-export type HIVBaseHospital = {
+type HIVBaseHospital = {
   施設名: string;
   郵便番号: string;
   所在地: string;

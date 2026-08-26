@@ -1,0 +1,408 @@
+import { AddressQuestionTemplate } from './template/addressQuestionTemplate';
+import { QuestionFrame } from './template/questionFrame';
+import {
+  QuestionEvent,
+  QuestionStateContext,
+  questionStateMachine,
+} from '../../state/questionState';
+import { StateFrom } from 'xstate';
+import { HouseholdMember } from '../../state/household';
+import {
+  AddressQuestion,
+  AgeQuestion,
+  AmountOfMoneyQuestion,
+  BooleanQuestion,
+  isAddressQuestion,
+  isAgeQuestion,
+  isAmountOfMoneyQuestion,
+  isBooleanQuestion,
+  isMultipleSelectionQuestion,
+  isPersonNumQuestion,
+  isSelectionQuestion,
+  MultipleSelectionQuestion,
+  multipleSelectionQuestionDefinitions,
+  PersonNumQuestion,
+  QuestionKey,
+  SelectionQuestion,
+  selectionQuestionDefinitions,
+} from '../../state/questionDefinition';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import {
+  currentDateAtom,
+  frontendHouseholdAtom,
+  householdAtom,
+  questionValidatedAtom,
+  showsValidationErrorAtom,
+} from '../../state';
+import { SelectionQuestionTemplate } from './template/selectionQuestionTemplate';
+import { YesNoQuestionTemplate } from './template/yesNoQuestionTemplate';
+import { useNavigate } from 'react-router-dom';
+import { toFrontendHousehold, toOpenFiscaHousehold } from '../../state/convert';
+import { useEffect, useMemo } from 'react';
+import { AgeQuestionTemplate } from './template/ageQuestionTemplate';
+import { AmountOfMoneyQuestionTemplate } from './template/amountOfMoneyQuestionTemplate';
+import { MultipleSelectionQuestionTemplate } from './template/multipleSelectionQuestionTemplate';
+import { PersonNumQuestionTemplate } from './template/personNumQuestionTemplate';
+import { QuestionDescription } from './description';
+import configData from '../../config/app_config.json';
+import { ChildrenAgeQuestionTemplate } from './template/childrenAgeQuestionTemplate';
+import { calculateProgress, maxProgressOf } from '../../state/progress';
+
+const personStr = (member: HouseholdMember): string => {
+  switch (member.relationship) {
+    case 'あなた':
+      return 'あなた';
+    case '配偶者':
+      return '配偶者';
+    case '子ども':
+      return `子ども（${member.index + 1}人目）`;
+    case '親':
+      return `親（${member.index + 1}人目）`;
+    default:
+      const _: never = member.relationship; // 型の網羅性チェック
+      throw new Error(
+        `memberに想定外の形式が指定されています: ${JSON.stringify(member)}`
+      );
+  }
+};
+
+const QuestionContent = ({
+  questionKey,
+  context,
+  send,
+}: {
+  questionKey: QuestionKey;
+  context: QuestionStateContext;
+  send: (e: QuestionEvent) => void;
+}) => {
+  if (isAddressQuestion(questionKey)) {
+    const assignFunc = (question: AddressQuestion) => {
+      send({
+        type: questionKey,
+        value: question,
+      });
+    };
+    // NOTE: 関数化すると型推論が効かないので直接代入
+    const initialValue =
+      context[questionKey][context.currentMember.relationship][
+        context.currentMember.index
+      ];
+
+    return (
+      <AddressQuestionTemplate
+        // 質問を切り替えるたびにフォーム表示をリセットするため、stateごとに一意なkeyを設定
+        key={`${questionKey}-${context.currentMember.relationship}-${context.currentMember.index}`}
+        assignFunc={assignFunc}
+        initialValue={initialValue}
+      />
+    );
+  }
+
+  if (isAgeQuestion(questionKey)) {
+    const assignFunc = (question: AgeQuestion) => {
+      send({
+        type: questionKey,
+        value: question,
+      });
+    };
+    // NOTE: 関数化すると型推論が効かないので直接代入
+    const initialValue =
+      context[questionKey][context.currentMember.relationship][
+        context.currentMember.index
+      ];
+
+    // 子どもには専用フォーム（学年を設定できる）を使用
+    if (context.currentMember.relationship === '子ども') {
+      return (
+        <ChildrenAgeQuestionTemplate
+          // 質問を切り替えるたびにフォーム表示をリセットするため、stateごとに一意なkeyを設定
+          key={`${questionKey}-${context.currentMember.relationship}-${context.currentMember.index}`}
+          assignFunc={assignFunc}
+          initialValue={initialValue}
+        />
+      );
+    }
+
+    return (
+      <AgeQuestionTemplate
+        // 質問を切り替えるたびにフォーム表示をリセットするため、stateごとに一意なkeyを設定
+        key={`${questionKey}-${context.currentMember.relationship}-${context.currentMember.index}`}
+        assignFunc={assignFunc}
+        initialValue={initialValue}
+      />
+    );
+  }
+
+  if (isSelectionQuestion(questionKey)) {
+    const assignFunc = (question: SelectionQuestion<typeof questionKey>) => {
+      // NOTE: 関数化すると型推論が効かないためanyキャストで回避
+      send({
+        type: questionKey,
+        value: question,
+      } as any);
+    };
+    // NOTE: 関数化すると型推論が効かないので直接代入
+    const initialValue =
+      context[questionKey][context.currentMember.relationship][
+        context.currentMember.index
+      ];
+
+    return (
+      <SelectionQuestionTemplate
+        // 質問を切り替えるたびにフォーム表示をリセットするため、stateごとに一意なkeyを設定
+        key={`${questionKey}-${context.currentMember.relationship}-${context.currentMember.index}`}
+        title={questionKey}
+        selections={selectionQuestionDefinitions[questionKey].selections}
+        initialValue={initialValue}
+        assignFunc={assignFunc}
+      />
+    );
+  }
+
+  if (isBooleanQuestion(questionKey)) {
+    const assignFunc = (question: BooleanQuestion) => {
+      send({
+        type: questionKey,
+        value: question,
+      });
+    };
+    // NOTE: 関数化すると型推論が効かないので直接代入
+    const initialValue =
+      context[questionKey][context.currentMember.relationship][
+        context.currentMember.index
+      ];
+
+    return (
+      <YesNoQuestionTemplate
+        // 質問を切り替えるたびにフォーム表示をリセットするため、stateごとに一意なkeyを設定
+        key={`${questionKey}-${context.currentMember.relationship}-${context.currentMember.index}`}
+        title={questionKey}
+        initialValue={initialValue}
+        assignFunc={assignFunc}
+      >
+        {/* 質問特有の補足があれば追加 */}
+        <QuestionDescription questionKey={questionKey} />
+      </YesNoQuestionTemplate>
+    );
+  }
+
+  if (isAmountOfMoneyQuestion(questionKey)) {
+    const assignFunc = (question: AmountOfMoneyQuestion) => {
+      send({
+        type: questionKey,
+        value: question,
+      });
+    };
+    // NOTE: 関数化すると型推論が効かないので直接代入
+    const initialValue =
+      context[questionKey][context.currentMember.relationship][
+        context.currentMember.index
+      ];
+
+    return (
+      <AmountOfMoneyQuestionTemplate
+        // 質問を切り替えるたびにフォーム表示をリセットするため、stateごとに一意なkeyを設定
+        key={`${questionKey}-${context.currentMember.relationship}-${context.currentMember.index}`}
+        title={questionKey}
+        initialValue={initialValue}
+        assignFunc={assignFunc}
+      />
+    );
+  }
+
+  if (isMultipleSelectionQuestion(questionKey)) {
+    const assignFunc = (
+      question: MultipleSelectionQuestion<typeof questionKey>
+    ) => {
+      // NOTE: 関数化すると型推論が効かないためanyキャストで回避
+      send({
+        type: questionKey,
+        value: question,
+      } as any);
+    };
+    const initialValue = context[questionKey][
+      context.currentMember.relationship
+    ][context.currentMember.index] as MultipleSelectionQuestion<
+      typeof questionKey
+    >;
+
+    return (
+      <MultipleSelectionQuestionTemplate
+        // 質問を切り替えるたびにフォーム表示をリセットするため、stateごとに一意なkeyを設定
+        key={`${questionKey}-${context.currentMember.relationship}-${context.currentMember.index}`}
+        title={questionKey}
+        selections={
+          multipleSelectionQuestionDefinitions[questionKey].selections
+        }
+        initialValue={initialValue}
+        assignFunc={assignFunc}
+      />
+    );
+  }
+
+  if (isPersonNumQuestion(questionKey)) {
+    const assignFunc = (question: PersonNumQuestion) => {
+      send({
+        type: questionKey,
+        value: question,
+      });
+    };
+    const initialValue =
+      context[questionKey][context.currentMember.relationship][
+        context.currentMember.index
+      ];
+
+    const maxPersonNum = {
+      子どもの人数: configData.validation.household.maxChildren,
+      親の人数: configData.validation.household.maxParents,
+      '家族に災害で亡くなった方はいますか？':
+        configData.validation.household.maxChildren,
+    }[questionKey];
+
+    return (
+      <PersonNumQuestionTemplate
+        // 質問を切り替えるたびにフォーム表示をリセットするため、stateごとに一意なkeyを設定
+        key={`${questionKey}-${context.currentMember.relationship}-${context.currentMember.index}`}
+        title={questionKey}
+        initialValue={initialValue}
+        assignFunc={assignFunc}
+        maxPersonNum={maxPersonNum}
+      />
+    );
+  }
+
+  const _: never = questionKey; // 型の網羅性チェック
+  throw new Error(`keyが質問と一致しませんでした: ${questionKey as any}`);
+};
+
+export const Question = ({
+  state,
+  send,
+}: {
+  state: StateFrom<typeof questionStateMachine>;
+  send: (e: QuestionEvent) => void;
+}) => {
+  const navigate = useNavigate();
+  const currentDate = useRecoilValue(currentDateAtom);
+  const [household, setHousehold] = useRecoilState(householdAtom);
+  const [frontendHousehold, setFrontendHousehold] = useRecoilState(
+    frontendHouseholdAtom
+  );
+
+  // 進捗の分母計算（重いのでメモ化）
+  const maxProgressMap = useMemo(() => {
+    return maxProgressOf(
+      state.context.見積もりモード.あなた[0].selection ?? 'くわしく見積もり'
+    );
+  }, [state.context.見積もりモード.あなた[0].selection]);
+
+  // バリデーションチェックの状態
+  const [questionValidated, setQuestionValidated] = useRecoilState(
+    questionValidatedAtom
+  );
+  const [showsValidationError, setShowsValidationError] = useRecoilState(
+    showsValidationErrorAtom
+  );
+
+  useEffect(() => {
+    // 質問が切り替わるたびにバリデーションエラー表示をリセット
+    setShowsValidationError(false);
+  }, [state.value, state.context.currentMember]);
+
+  useEffect(() => {
+    // すべての質問に回答し "result" に到達したら見積もり結果へ遷移
+    // HACK: navigateを実行するためuseEffect内で非同期処理
+    if (state.value === 'result') {
+      // 回答結果からバックエンドへ送信するhousehold形式へ変換
+      const updatedHousehold = toOpenFiscaHousehold({
+        context: state.context,
+        currentDate: currentDate,
+      });
+      // 上記を除く、フロントエンド内で計算する対象支援制度を変換
+      const updatedFrontendHousehold = toFrontendHousehold({
+        context: state.context,
+      });
+      setHousehold(updatedHousehold);
+      setFrontendHousehold(updatedFrontendHousehold);
+
+      // 見積もり結果へ遷移
+      navigate('/result', {
+        state: {
+          household: updatedHousehold,
+          isSimpleCalculation: location.pathname === '/calculate-simple',
+          isDisasterCalculation: location.pathname === '/calculate-disaster',
+        },
+      });
+    }
+  }, [state.value]);
+
+  // すべての質問に回答し "result" に到達
+  if (state.value === 'result') {
+    // 非同期処理するため同期処理では空コンポーネントの生成のみ実施
+    return <></>;
+  }
+
+  // HACK: ダミーの状態なので可能性から除外
+  if (
+    state.value === 'history' ||
+    state.value === 'reset' ||
+    state.value === 'changeToSpouse' ||
+    state.value === 'changeToSelfChildrenNum' ||
+    state.value === 'changeToSelfParentNum' ||
+    state.value === 'changeToChild' ||
+    state.value === 'changeToNextChild' ||
+    state.value === 'changeToParent' ||
+    state.value === 'changeToNextParent'
+  ) {
+    throw new Error(
+      `xstateが予期せぬ状態遷移をしています: state: ${state.value}`
+    );
+  }
+
+  // TODO: デバッグ用。終わったら消す
+  const f = () => {
+    state.context.currentMember;
+    console.log(state.context);
+    console.log(state.value);
+  };
+  f();
+
+  // 現在の状態とボタンの定義
+  const back = () => {
+    send({ type: 'back' });
+  };
+  const next = () => {
+    // 入力不備がある場合次の質問には進まない
+    if (!questionValidated) {
+      setShowsValidationError(true);
+      return;
+    }
+
+    send({ type: 'next' });
+  };
+
+  // 進捗の計算
+  const progress = calculateProgress(
+    state.context,
+    state.value,
+    maxProgressMap
+  );
+
+  return (
+    <QuestionFrame
+      title={`${personStr(state.context.currentMember)}について`}
+      progress={progress}
+      backOnClick={back}
+      nextOnClick={next}
+      hasHistory={state.context.histories.length > 0}
+    >
+      {
+        <QuestionContent
+          questionKey={state.value}
+          context={state.context}
+          send={send}
+        />
+      }
+    </QuestionFrame>
+  );
+};

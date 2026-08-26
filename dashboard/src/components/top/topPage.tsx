@@ -20,9 +20,8 @@ import { Links } from './links';
 import { agreedToTermsAtom } from '../../state';
 import TermsModal from '../TermsModal';
 import { HomeButton } from '../homeButton';
-
-// 何もしない関数（onClickで発火する関数のデフォルト値として使用）
-const noop = () => {};
+import { StateFrom } from 'xstate';
+import { QuestionEvent, questionStateMachine } from '../../state/questionState';
 
 // 幅に応じて改行を入れる
 const NarrowBr = () => {
@@ -32,7 +31,13 @@ const NarrowBr = () => {
   return <span />;
 };
 
-export function TopPage() {
+export function TopPage({
+  state,
+  send,
+}: {
+  state: StateFrom<typeof questionStateMachine>;
+  send: (e: QuestionEvent) => void;
+}) {
   const agreedToTerms = useRecoilValue(agreedToTermsAtom);
   const {
     isOpen: isModalOpen,
@@ -40,6 +45,24 @@ export function TopPage() {
     onClose: onModalClose,
   } = useDisclosure();
   const [modalLink, setModalLink] = useState('/');
+
+  // ボタンクリック時にstateの見積もりモードを設定
+  const setMode = (
+    modeName:
+      | 'かんたん見積もり'
+      | 'くわしく見積もり'
+      | '地震被災者支援制度見積もり'
+  ) => {
+    // ホームボタンで戻ってきた場合はすでに状態が進んでいるため、初期状態に戻す
+    send({ type: 'reset' });
+
+    // 見積もりモードの設定
+    send({
+      type: '見積もりモード',
+      value: { type: 'Selection', selection: modeName },
+    });
+    send({ type: 'next' });
+  };
 
   return (
     <>
@@ -88,57 +111,31 @@ export function TopPage() {
             />
           </Stack>
 
-          <Center pt={2} pb={1} pr={4} pl={4} style={{ textAlign: 'center' }}>
-            <Button
-              as={RouterLink}
-              // 規約に同意していない場合のみモーダルが開く
-              to={agreedToTerms ? '/calculate-disaster' : '/'}
-              onClick={
-                agreedToTerms
-                  ? noop
-                  : () => {
-                      setModalLink('/calculate-disaster');
-                      onModalOpen();
-                    }
-              }
-              fontSize={configData.style.subTitleFontSize}
-              borderRadius="xl"
-              pr="1em"
-              pl="1em"
-              height="3.5em"
-              width="100%"
-              bg="orange.400"
-              color="white"
-              _hover={{ bg: 'orange.500' }}
-            >
-              能登半島地震被災者支援制度見積もり
-            </Button>
-          </Center>
-
           <Center pr={4} pl={4} pb={1} style={{ textAlign: 'center' }}>
             <Button
               as={RouterLink}
               // 規約に同意していない場合のみモーダルが開く
               to={agreedToTerms ? '/calculate-simple' : '/'}
-              onClick={
-                agreedToTerms
-                  ? noop
-                  : () => {
-                      setModalLink('/calculate-simple');
-                      onModalOpen();
-                    }
-              }
+              onClick={() => {
+                setMode('かんたん見積もり');
+                if (!agreedToTerms) {
+                  setModalLink('/calculate-simple');
+                  onModalOpen();
+                }
+              }}
               style={{ marginRight: '1%' }}
               fontSize={configData.style.subTitleFontSize}
               borderRadius="xl"
-              height="3.5em"
+              height="auto"
+              width={{ base: '40vw', md: '45%' }}
+              minHeight="3.5em"
               pr="1.2em"
               pl="1.2em"
-              width="45%"
               bg="teal.500"
               color="white"
               _hover={{ bg: 'teal.600' }}
               data-testid="calculate-simple-button"
+              whiteSpace={{ base: 'normal', md: 'nowrap' }}
             >
               かんたん見積もり
             </Button>
@@ -146,28 +143,57 @@ export function TopPage() {
               as={RouterLink}
               // 規約に同意していない場合のみモーダルが開く
               to={agreedToTerms ? '/calculate' : '/'}
-              onClick={
-                agreedToTerms
-                  ? noop
-                  : () => {
-                      setModalLink('/calculate');
-                      onModalOpen();
-                    }
-              }
+              onClick={() => {
+                setMode('くわしく見積もり');
+                if (!agreedToTerms) {
+                  setModalLink('/calculate');
+                  onModalOpen();
+                }
+              }}
               fontSize={configData.style.subTitleFontSize}
               borderRadius="xl"
-              height="3.5em"
+              height="auto"
+              width={{ base: '40vw', md: '45%' }}
+              minHeight="3.5em"
               pr="1.2em"
               pl="1.2em"
-              width="45%"
               bg="blue.500"
               color="white"
               _hover={{ bg: 'blue.600' }}
               data-testid="calculate-detail-button"
+              whiteSpace={{ base: 'normal', md: 'nowrap' }}
             >
               くわしく見積もり
             </Button>
             <br />
+          </Center>
+
+          <Center pt={2} pb={1} pr={4} pl={4} style={{ textAlign: 'center' }}>
+            <Button
+              as={RouterLink}
+              // 規約に同意していない場合のみモーダルが開く
+              to={agreedToTerms ? '/calculate-disaster' : '/'}
+              onClick={() => {
+                setMode('地震被災者支援制度見積もり');
+                if (!agreedToTerms) {
+                  setModalLink('/calculate-disaster');
+                  onModalOpen();
+                }
+              }}
+              fontSize={configData.style.subTitleFontSize}
+              borderRadius="xl"
+              pr="1em"
+              pl="1em"
+              height="auto"
+              width={{ base: '80vw', md: '100%' }}
+              minHeight="3.5em"
+              bg="orange.400"
+              color="white"
+              _hover={{ bg: 'orange.500' }}
+              whiteSpace={{ base: 'normal', md: 'nowrap' }}
+            >
+              地震被災者支援制度見積もり
+            </Button>
           </Center>
         </VStack>
         <Links />

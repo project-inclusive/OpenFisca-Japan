@@ -1,0 +1,7 @@
+description: 母子父子寡婦福祉資金貸付金の対象となる児童の上限年齢
+metadata:
+  reference: https://laws.e-gov.go.jp/law/339AC0000000129
+  unit: year
+values:
+  2000-05-01:
+    value: 20.0

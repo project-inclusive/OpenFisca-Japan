@@ -17,6 +17,9 @@
 - [デプロイ方法](./dev_note.md#デプロイ方法)
 - [TroubleShooting](./dev_note.md#troubleshooting)
 
+### [コントリビューションガイド]
+- [フロントエンドへの質問追加](./add_frontend_question.md)
+
 ### [チャットボット](./chat_bot.md)
 - [LINEチャットボットについて](./chat_bot.md#ラインチャットボットについて)
 - [ChatGPT_Retrieval_Pluginについて](./chat_bot.md#chatgpt_retrieval_pluginについて)

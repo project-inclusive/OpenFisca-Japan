@@ -143,3 +143,14 @@ class 居住級地区分2_世帯員(Variable):
 
     def formula(対象人物, 対象期間, _parameters):
         return 対象人物.世帯("居住級地区分2", 対象期間)
+
+
+class 家賃(Variable):
+    value_type = int
+    default_value = 0
+    entity = 世帯
+    definition_period = DAY
+    label = "月額の家賃"
+    documentation = """
+    住居確保給付金など、家賃額に応じて支給額が決まる制度で使用する。
+    """

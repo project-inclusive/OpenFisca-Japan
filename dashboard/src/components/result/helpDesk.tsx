@@ -193,7 +193,7 @@ export const SocialWelfareCouncilHelpDesk = () => {
 
 // 拠点病院の窓口
 // TODO: 社協の窓口と共通のcomponentにする
-export const BaseHospitalHelpDesk = () => {
+const BaseHospitalHelpDesk = () => {
   const currentDate = useRecoilValue(currentDateAtom);
   const household = useRecoilValue(householdAtom);
   const [prefecture, setPrefecture] = useState('');
@@ -411,127 +411,127 @@ const HelpDeskTemplate = ({ helpDeskData }: { helpDeskData: HelpDeskData }) => {
   );
 };
 
-export const HelloworkHelpDesk = () => {
+const HelloworkHelpDesk = () => {
   return <HelpDeskTemplate helpDeskData={helloWorkData} />;
 };
 
-export const PublicAssistanceHelpDesk = () => {
+const PublicAssistanceHelpDesk = () => {
   return <HelpDeskTemplate helpDeskData={publicAssistanceData} />;
 };
 
-export const NationalHealthInsuranceHelpDesk = () => {
+const NationalHealthInsuranceHelpDesk = () => {
   return <HelpDeskTemplate helpDeskData={nationalHealthInsuranceData} />;
 };
 
-export const NationalPensionSystemHelpDesk = () => {
+const NationalPensionSystemHelpDesk = () => {
   return <HelpDeskTemplate helpDeskData={nationalPensionSystemData} />;
 };
 
-export const PrenatalCheckUpHelpDesk = () => {
+const PrenatalCheckUpHelpDesk = () => {
   return <HelpDeskTemplate helpDeskData={prenatalCheckUpData} />;
 };
 
-export const FujimiChildBirthHelpDesk = () => {
+const FujimiChildBirthHelpDesk = () => {
   return <HelpDeskTemplate helpDeskData={fujimiChildBirthData} />;
 };
 
-export const MidwiferyHelpDesk = () => {
+const MidwiferyHelpDesk = () => {
   return <HelpDeskTemplate helpDeskData={midwiferyData} />;
 };
 
-export const ChildbirthLumpSumAllowanceHelpDesk = () => {
+const ChildbirthLumpSumAllowanceHelpDesk = () => {
   return <HelpDeskTemplate helpDeskData={childbirthLumpSumAllowanceData} />;
 };
 
-export const FujimiPostNatalCareHelpDesk = () => {
+const FujimiPostNatalCareHelpDesk = () => {
   return <HelpDeskTemplate helpDeskData={fujimiPostNatalCareData} />;
 };
 
-export const FujimiChildrenMedicalExpensesHelpDesk = () => {
+const FujimiChildrenMedicalExpensesHelpDesk = () => {
   return <HelpDeskTemplate helpDeskData={fujimiChildrenMedicalExpensesData} />;
 };
 
-export const SingleParentMedicalExpensesHelpDesk = () => {
+const SingleParentMedicalExpensesHelpDesk = () => {
   return <HelpDeskTemplate helpDeskData={singleParentMedicalExpensesData} />;
 };
 
-export const PrematureBabyMedicalExpensesHelpDesk = () => {
+const PrematureBabyMedicalExpensesHelpDesk = () => {
   return <HelpDeskTemplate helpDeskData={prematureBabyMedicalExpensesData} />;
 };
 
-export const ChildrenDiseaseMedicalExpensesHelpDesk = () => {
+const ChildrenDiseaseMedicalExpensesHelpDesk = () => {
   return <HelpDeskTemplate helpDeskData={childrenDiseaseMedicalExpensesData} />;
 };
 
-export const TaxOfficeHelpDesk = () => {
+const TaxOfficeHelpDesk = () => {
   return <HelpDeskTemplate helpDeskData={taxOfficeData} />;
 };
 
-export const ChildSupportHelpDesk = () => {
+const ChildSupportHelpDesk = () => {
   return <HelpDeskTemplate helpDeskData={childSupportData} />;
 };
 
-export const DisabilityCertificateHelpDesk = () => {
+const DisabilityCertificateHelpDesk = () => {
   return <HelpDeskTemplate helpDeskData={disabilityCertificateData} />;
 };
 
-export const DisabilityAllowanceHelpDesk = () => {
+const DisabilityAllowanceHelpDesk = () => {
   return <HelpDeskTemplate helpDeskData={disabilityAllowanceData} />;
 };
 
-export const DisabilityPensionHelpDesk = () => {
+const DisabilityPensionHelpDesk = () => {
   return <HelpDeskTemplate helpDeskData={disabilityPensionData} />;
 };
 
-export const IndependenceSupportMedicalHelpDesk = () => {
+const IndependenceSupportMedicalHelpDesk = () => {
   return <HelpDeskTemplate helpDeskData={independenceSupportMedicalData} />;
 };
 
-export const SevereDisabilityMedialExpensesHelpDesk = () => {
+const SevereDisabilityMedialExpensesHelpDesk = () => {
   return <HelpDeskTemplate helpDeskData={severeDisabilityMedialExpensesData} />;
 };
 
-export const IntractableDiseaseHelpDesk = () => {
+const IntractableDiseaseHelpDesk = () => {
   return <HelpDeskTemplate helpDeskData={intractableDiseaseData} />;
 };
 
-export const DisabledPersonEmploymentHelpDesk = () => {
+const DisabledPersonEmploymentHelpDesk = () => {
   return <HelpDeskTemplate helpDeskData={disabledPersonEmploymentData} />;
 };
 
-export const LongTermCareHelpDesk = () => {
+const LongTermCareHelpDesk = () => {
   return <HelpDeskTemplate helpDeskData={longTermCareData} />;
 };
 
-export const LongTermCarePremiumHelpDesk = () => {
+const LongTermCarePremiumHelpDesk = () => {
   return <HelpDeskTemplate helpDeskData={longTermCarePremiumData} />;
 };
 
-export const LongTermCareAllowanceHelpDesk = () => {
+const LongTermCareAllowanceHelpDesk = () => {
   return <HelpDeskTemplate helpDeskData={longTermCareAllowanceData} />;
 };
 
-export const LongTermCareServiceHelpDesk = () => {
+const LongTermCareServiceHelpDesk = () => {
   return <HelpDeskTemplate helpDeskData={longTermCareServiceData} />;
 };
 
-export const SaitamaSingleParentLoanHelpDesk = () => {
+const SaitamaSingleParentLoanHelpDesk = () => {
   return <HelpDeskTemplate helpDeskData={saitamaSingleParentLoanData} />;
 };
 
-export const SaitamaPrivateSchoolHelpDesk = () => {
+const SaitamaPrivateSchoolHelpDesk = () => {
   return <HelpDeskTemplate helpDeskData={saitamaPrivateSchoolData} />;
 };
 
-export const ChildAllowanceHelpDesk = () => {
+const ChildAllowanceHelpDesk = () => {
   return <HelpDeskTemplate helpDeskData={childAllowanceData} />;
 };
 
-export const InjuryAndIllnessAllowanceHelpDesk = () => {
+const InjuryAndIllnessAllowanceHelpDesk = () => {
   return <HelpDeskTemplate helpDeskData={injuryAndIllnessAllowanceData} />;
 };
 
-export const InsuranceMedicalExpensesHelpDesk = () => {
+const InsuranceMedicalExpensesHelpDesk = () => {
   return <HelpDeskTemplate helpDeskData={insuranceMedicalExpensesData} />;
 };
 

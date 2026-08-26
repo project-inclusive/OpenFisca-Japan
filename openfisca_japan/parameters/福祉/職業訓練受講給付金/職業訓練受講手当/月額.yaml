@@ -1,0 +1,9 @@
+description: 職業訓練受講手当の月額
+metadata:
+  reference: https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/kyushokusha_shien/index.html
+  unit: currency-JPY
+values:
+  2017-04-01:
+    value: 100000
+    metadata:
+      reference: https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/kyushokusha_shien/index.html
