@@ -21,12 +21,14 @@
     "50000": { "label": "Backend (OpenFisca API)", "onAutoForward": "notify" }
   },
 
-  // features: 追加でインストールするツール群（共通ユーティリティ / Claude Code / GitHub Copilot CLI）
+  // features: 追加でインストールするツール群（共通ユーティリティ / GitHub CLI / Claude Code / GitHub Copilot CLI）
   "features": {
     "ghcr.io/devcontainers/features/common-utils:2": {
       "installZsh": false,
       "upgradePackages": false
     },
+    // gh コマンド。post-create.sh の `gh copilot` 拡張インストールに必要。
+    "ghcr.io/devcontainers/features/github-cli:1": {},
     "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {},
     "ghcr.io/devcontainers/features/copilot-cli:1": {}
   },

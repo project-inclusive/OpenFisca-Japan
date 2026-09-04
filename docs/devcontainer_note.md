@@ -66,6 +66,7 @@ devcontainer exec --workspace-folder . bash
 - **Docker CLI**（ホストの Docker ソケット経由で利用）
 - **Node.js 18**（フロントエンド開発・各種 CLI 用）
 - **Python ツール**: `autopep8`, `flake8`
+- **GitHub CLI（`gh`）**（`ghcr.io/devcontainers/features/github-cli` feature。`post-create.sh` の `gh copilot` 拡張インストールにも使われる）
 - **AI コーディング CLI**
   - Claude Code（`ghcr.io/anthropics/devcontainer-features/claude-code` feature）
   - GitHub Copilot CLI（`ghcr.io/devcontainers/features/copilot-cli` feature、加えて `gh copilot` 拡張）
