@@ -1,12 +1,9 @@
-// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
-// https://github.com/microsoft/vscode-dev-containers/tree/v0.238.1/containers/docker-existing-dockerfile
+// For format details, see https://aka.ms/devcontainer.json.
 {
   "name": "OpenFisca-Japan",
 
-  // Sets the run context to one level up instead of the .devcontainer folder.
+  // Build context is the repo root (one level up from .devcontainer).
   "context": "..",
-
-  // Update the 'dockerFile' property if you aren't using the standard 'Dockerfile' filename.
   "dockerFile": "./Dockerfile",
   "shutdownAction": "none",
   
@@ -25,11 +22,9 @@
   "postCreateCommand": "bash .devcontainer/post-create.sh",
   "postStartCommand": "bash .devcontainer/post-start.sh",
 
-  // Uncomment when using a ptrace-based debugger like C++, Go, and Rust
-  // "runArgs": [ "--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined" ],
   "runArgs": ["--init"],
 
-  // Uncomment to use the Docker CLI from inside the container. See https://aka.ms/vscode-remote/samples/docker-from-docker.
+  // Bind the host Docker socket (docker-from-docker) plus per-agent config volumes.
   "mounts": [
     "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
     "source=openfisca-japan-claude,target=/home/user/.claude,type=volume",
@@ -47,7 +42,6 @@
     "LC_CTYPE": "ja_JP.UTF-8"
   },
 
-  // Uncomment to connect as a non-root user if you've added one. See https://aka.ms/vscode-remote/containers/non-root.
   "remoteUser": "user",
   "customizations": {
     "vscode": {
@@ -59,19 +53,10 @@
         },
         "terminal.integrated.defaultProfile.linux": "bash",
         "editor.formatOnSave": true,
-        "python.pythonPath": "/usr/local/bin/python",
-        "python.linting.pylintEnabled": false,
-        "python.linting.flake8Enabled": true,
-        "python.linting.flake8Args": [
-          "--ignore=D101,D107,D401,E128,E133,E251,E501,W503,D102,D200,D400"
-        ],
-        "python.formatting.provider": "autopep8",
-        "python.formatting.autopep8Args": [
-          "--ignore",
-          "D101,D107,D401,E128,E133,E251,E501,W503,D102,D200,D400",
-          "--max-line-length",
-          "150"
-        ]
+        // flake8/autopep8 config is authoritative in setup.cfg; the old
+        // python.linting.*/python.formatting.* settings were removed from the
+        // Python extension and are intentionally not duplicated here.
+        "python.defaultInterpreterPath": "/usr/local/bin/python"
       },
       "extensions": [
         "MS-CEINTL.vscode-language-pack-ja",

@@ -12,20 +12,17 @@ RUN apt update && apt install -y \
 
 RUN curl -fsSL https://get.docker.com | sh
 
-RUN curl -Ls https://deb.nodesource.com/setup_18.x | bash
-RUN apt update && apt install -y nodejs
+# The NodeSource setup script adds the apt repo and runs `apt update` itself.
+RUN curl -Ls https://deb.nodesource.com/setup_18.x | bash \
+    && apt install -y nodejs
 
-RUN pip install --upgrade pip
-RUN pip install --upgrade setuptools
-RUN pip install --no-cache-dir \
-    autopep8 \
-    flake8
+RUN pip install --no-cache-dir --upgrade pip setuptools \
+    && pip install --no-cache-dir autopep8 flake8
 
 WORKDIR /app
 COPY . /app
 
-RUN make install
-RUN make build
+RUN make install && make build
 
 EXPOSE 30000
 EXPOSE 50000

@@ -1,14 +1,5 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-DIRS=(
-  /home/user/.claude
-  /home/user/.codex
-  /home/user/.copilot
-)
-
-for d in "${DIRS[@]}"; do
-  sudo mkdir -p "$d"
-  sudo chown -R user:user "$d"
-  chmod 700 "$d"
-done
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+bash "${SCRIPT_DIR}/prepare-agent-dirs.sh"
