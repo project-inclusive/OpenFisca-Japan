@@ -1,5 +1,7 @@
+# ベースイメージ: OpenFisca(バックエンド)が要求する Python 3.11
 FROM python:3.11-bookworm
 
+# 開発に使う OS パッケージ（git / エディタ / JSON整形 / 日本語コード変換 nkf / tmux 等）
 RUN apt update && apt install -y \
     git \
     curl \
@@ -10,34 +12,44 @@ RUN apt update && apt install -y \
     tmux \
     ncurses-term
 
+# Docker CLI をインストール（ホストの docker.sock 経由で使う: docker-from-docker）
 RUN curl -fsSL https://get.docker.com | sh
 
-# The NodeSource setup script adds the apt repo and runs `apt update` itself.
+# Node.js 18 をインストール（フロントエンド開発・各種 CLI 用）。
+# NodeSource のセットアップスクリプトが apt リポジトリ追加と `apt update` まで行う。
 RUN curl -Ls https://deb.nodesource.com/setup_18.x | bash \
     && apt install -y nodejs
 
+# Python のフォーマッタ / リンタをインストール
 RUN pip install --no-cache-dir --upgrade pip setuptools \
     && pip install --no-cache-dir autopep8 flake8
 
+# リポジトリを /app にコピーしてバックエンドをセットアップ
 WORKDIR /app
 COPY . /app
 
+# 依存インストール + ビルド（テストが動く状態にする）
 RUN make install && make build
 
+# フロントエンド(30000) / バックエンドAPI(50000) のポート
 EXPOSE 30000
 EXPOSE 50000
 
+# 非 root の作業ユーザー user を作成（devcontainer.json の remoteUser=user に対応）
 RUN useradd -m -s /bin/bash user
 
-# Some host terminals send BS (^H) for the Backspace key while others send DEL (^?).
-# Bind both to backward-delete-char so readline sessions (bash, etc.) work either way,
-# instead of relying on the negotiated tty erase character.
+# Backspace キーは端末によって BS(^H) を送るものと DEL(^?) を送るものがある。
+# tty の erase 文字に依存せず両方効くよう、readline(bash 等)で双方を
+# backward-delete-char にバインドしておく。
 RUN printf '%s\n' \
     'set bind-tty-special-chars off' \
     '"\C-h": backward-delete-char' \
     '"\C-?": backward-delete-char' \
     >> /etc/inputrc
 
+# ENTRYPOINT 用スクリプトを生成する。
+# ホストの docker.sock の GID に合わせてグループを作成し user を追加することで、
+# 非 root ユーザーでも docker コマンドが使えるようにしてから、本来のコマンドを exec する。
 ARG NONROOT_USER=user
 RUN echo "#!/bin/sh\n\
     sudoIf() { if [ \"\$(id -u)\" -ne 0 ]; then sudo \"\$@\"; else \"\$@\"; fi }\n\
@@ -50,4 +62,5 @@ RUN echo "#!/bin/sh\n\
     && chmod +x /usr/local/share/docker-init.sh
 
 ENTRYPOINT [ "/usr/local/share/docker-init.sh" ]
+# コンテナを常駐させる（中でプロセスを起動しなくても終了しないようにする）
 CMD [ "sleep", "infinity" ]
