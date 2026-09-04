@@ -17,7 +17,8 @@
       "installZsh": false,
       "upgradePackages": false
     },
-    "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {}
+    "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {},
+    "ghcr.io/devcontainers/features/copilot-cli:1": {}
   },
 
   "postCreateCommand": "bash .devcontainer/post-create.sh",
@@ -30,11 +31,16 @@
   // Uncomment to use the Docker CLI from inside the container. See https://aka.ms/vscode-remote/samples/docker-from-docker.
   "mounts": [
     "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
-    "source=openfisca-japan-claude,target=/home/user/.claude,type=volume"
+    "source=openfisca-japan-claude,target=/home/user/.claude,type=volume",
+    "source=openfisca-japan-codex,target=/home/user/.codex,type=volume",
+    "source=openfisca-japan-copilot,target=/home/user/.copilot,type=volume"
   ],
   "overrideCommand": false,
   "remoteEnv": {
     "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}"
+  },
+  "containerEnv": {
+    "COPILOT_HOME": "/home/user/.copilot"
   },
 
   // Uncomment to connect as a non-root user if you've added one. See https://aka.ms/vscode-remote/containers/non-root.
@@ -73,7 +79,11 @@
         "ms-vsliveshare.vsliveshare",
         "ms-azuretools.vscode-docker",
         "esbenp.prettier-vscode",
-        "mhutchie.git-graph"        
+        "mhutchie.git-graph",
+        "anthropic.claude-code",
+        "github.copilot",
+        "github.copilot-chat",
+        "openai.chatgpt"        
       ]
     }
   }
