@@ -7,8 +7,18 @@
   "dockerFile": "./Dockerfile",
   "shutdownAction": "none",
   
-  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  // appPort: Docker の -p 相当。Mac ホストの 127.0.0.1(ループバック)のみに公開する。
+  // LAN には晒さず、リモートからは SSH の LocalForward 経由でアクセスする（docs/devcontainer_note.md 参照）。
+  "appPort": ["127.0.0.1:30000:30000", "127.0.0.1:50000:50000"],
+
+  // forwardPorts: VS Code で開いたときのエディタ側フォワード（localhost 用）。CLI 運用では無効。
   "forwardPorts": [30000, 50000],
+
+  // portsAttributes: VS Code の UI 用ラベル・通知設定（CLI 運用では効果なし）。
+  "portsAttributes": {
+    "30000": { "label": "Frontend (React)", "onAutoForward": "notify" },
+    "50000": { "label": "Backend (OpenFisca API)", "onAutoForward": "notify" }
+  },
 
   "features": {
     "ghcr.io/devcontainers/features/common-utils:2": {
