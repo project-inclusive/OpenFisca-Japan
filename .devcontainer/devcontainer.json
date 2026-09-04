@@ -1,14 +1,15 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.238.1/containers/docker-existing-dockerfile
 {
-  "name": "Dockerfile",
+  "name": "OpenFisca-Japan",
 
   // Sets the run context to one level up instead of the .devcontainer folder.
   "context": "..",
 
   // Update the 'dockerFile' property if you aren't using the standard 'Dockerfile' filename.
   "dockerFile": "./Dockerfile",
-
+  "shutdownAction": "none",
+  
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   "forwardPorts": [30000, 50000],
 
@@ -40,7 +41,10 @@
     "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}"
   },
   "containerEnv": {
-    "COPILOT_HOME": "/home/user/.copilot"
+    "COPILOT_HOME": "/home/user/.copilot",
+    "LANG": "ja_JP.UTF-8",
+    "LANGUAGE": "ja_JP:ja",
+    "LC_CTYPE": "ja_JP.UTF-8"
   },
 
   // Uncomment to connect as a non-root user if you've added one. See https://aka.ms/vscode-remote/containers/non-root.

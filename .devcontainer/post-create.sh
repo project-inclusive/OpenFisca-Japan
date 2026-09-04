@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Ensure the mounted volume dirs are writable before installing into them below.
+# (post-start.sh repeats this on every start in case the volume gets reset.)
 DIRS=(
   /home/user/.claude
   /home/user/.codex
@@ -22,4 +24,12 @@ fi
 # Add `gh copilot` when the GitHub CLI is present.
 if command -v gh >/dev/null 2>&1; then
   gh extension install github/gh-copilot --force || true
+fi
+
+WORKSPACE_DIR="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+TMUX_CONF_SOURCE="${WORKSPACE_DIR}/.devcontainer/tmux.conf"
+TMUX_CONF_TARGET="${HOME}/.tmux.conf"
+
+if [ -f "$TMUX_CONF_SOURCE" ]; then
+  ln -sfn "$TMUX_CONF_SOURCE" "$TMUX_CONF_TARGET"
 fi

@@ -1,4 +1,4 @@
-FROM python:3.11-bullseye
+FROM python:3.11-bookworm
 
 RUN apt update && apt install -y \
     git \
@@ -6,7 +6,9 @@ RUN apt update && apt install -y \
     vim \
     htop \
     jq \
-    nkf
+    nkf \
+    tmux \
+    ncurses-term
 
 RUN curl -fsSL https://get.docker.com | sh
 
@@ -28,7 +30,16 @@ RUN make build
 EXPOSE 30000
 EXPOSE 50000
 
-RUN useradd -m user
+RUN useradd -m -s /bin/bash user
+
+# Some host terminals send BS (^H) for the Backspace key while others send DEL (^?).
+# Bind both to backward-delete-char so readline sessions (bash, etc.) work either way,
+# instead of relying on the negotiated tty erase character.
+RUN printf '%s\n' \
+    'set bind-tty-special-chars off' \
+    '"\C-h": backward-delete-char' \
+    '"\C-?": backward-delete-char' \
+    >> /etc/inputrc
 
 ARG NONROOT_USER=user
 RUN echo "#!/bin/sh\n\
