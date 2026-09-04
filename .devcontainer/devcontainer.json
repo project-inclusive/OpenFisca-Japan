@@ -64,7 +64,8 @@
         "ms-python.python",
         "ms-vsliveshare.vsliveshare",
         "ms-azuretools.vscode-docker",
-        "esbenp.prettier-vscode"
+        "esbenp.prettier-vscode",
+        "mhutchie.git-graph"        
       ]
     }
   }
