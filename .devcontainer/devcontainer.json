@@ -12,8 +12,16 @@
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   "forwardPorts": [30000, 50000],
 
-  // Uncomment the next line to run commands after the container is created - for example installing curl.
-  // "postCreateCommand": "apt-get update && apt-get install -y curl",
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": false,
+      "upgradePackages": false
+    },
+    "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {}
+  },
+
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "postStartCommand": "bash .devcontainer/post-start.sh",
 
   // Uncomment when using a ptrace-based debugger like C++, Go, and Rust
   // "runArgs": [ "--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined" ],
@@ -21,7 +29,8 @@
 
   // Uncomment to use the Docker CLI from inside the container. See https://aka.ms/vscode-remote/samples/docker-from-docker.
   "mounts": [
-    "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+    "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
+    "source=openfisca-japan-claude,target=/home/user/.claude,type=volume"
   ],
   "overrideCommand": false,
   "remoteEnv": {
@@ -59,7 +68,6 @@
         "wraith13.bracket-lens",
         "vscode-icons-team.vscode-icons",
         "oderwat.indent-rainbow",
-        "VisualStudioExptTeam.vscodeintellicode",
         "mosapride.zenkaku",
         "ms-python.python",
         "ms-vsliveshare.vsliveshare",
