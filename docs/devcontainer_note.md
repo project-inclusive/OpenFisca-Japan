@@ -54,7 +54,7 @@ devcontainer exec --workspace-folder . bash
 | `Dockerfile` | ベースイメージと OS パッケージ・Node.js・Python ツールのインストール、非 root ユーザー `user` の作成、`make install && make build` によるバックエンドのセットアップ。 |
 | `post-create.sh` | コンテナ作成時（初回）に一度だけ実行。AI CLI のディレクトリ準備、Codex CLI と `gh copilot` のインストール、tmux 設定のシンボリックリンク作成。 |
 | `post-start.sh` | コンテナ起動のたびに実行。永続化ボリュームがリセットされた場合に備え、AI CLI のディレクトリ権限を再設定。 |
-| `prepare-agent-dirs.sh` | `post-create.sh` / `post-start.sh` から共通で呼ばれ、`~/.claude` `~/.codex` `~/.copilot` の作成・所有権・権限を整える。 |
+| `prepare-agent-dirs.sh` | `post-create.sh` / `post-start.sh` から共通で呼ばれ、`~/.claude` `~/.codex` `~/.copilot` `~/.config/git` の作成・所有権・権限を整える。 |
 | `tmux.conf` | コンテナ内 tmux の設定。`post-create.sh` により `~/.tmux.conf` へリンクされる。tmux セッション内では `DOCKER_CONFIG` を専用ディレクトリに切り替え、Dev Containers の docker 認証ヘルパー（VS Code 接続時のみ有効）を回避する。 |
 | `devcontainer-lock.json` | `features` で参照する各 feature のバージョン・ダイジェストの固定（ロックファイル）。 |
 
@@ -121,10 +121,12 @@ devcontainer exec --workspace-folder . bash
 
 - `/var/run/docker.sock` … ホストの Docker ソケットをバインドし、コンテナ内から `docker` を実行できるようにする（docker-from-docker）。
 - `openfisca-japan-claude` → `~/.claude`、`openfisca-japan-codex` → `~/.codex`、`openfisca-japan-copilot` → `~/.copilot` … 各 AI CLI の設定・認証情報を名前付きボリュームに保存し、**コンテナをリビルドしてもログイン状態などを保持** する。
+- `openfisca-japan-gitconfig` → `~/.config/git` … `git config --global`（`user.name` / `user.email` や `safe.directory` など）の保存先。**コンテナをリビルドしても git の設定を保持** する。
 
-### ロケール（`containerEnv`）
+### ロケール・git 設定（`containerEnv`）
 
 - `LANG` / `LANGUAGE` / `LC_CTYPE` に `ja_JP.UTF-8` 系を設定し、日本語ファイル名・出力の文字化けを防ぐ。
+- `GIT_CONFIG_GLOBAL` に `~/.config/git/config`（上記の永続化ボリューム上のパス）を指定し、`git config --global` の読み書き先を既定の `~/.gitconfig` からこちらに固定している。`~/.gitconfig` はコンテナのファイルシステム上にしかないためリビルドで消えてしまうが、この設定によりリビルドしても `git config --global user.name` 等を保持できる。
 - `COPILOT_HOME` を `~/.copilot` に固定し、上記ボリュームに設定が保存されるようにしている。
 
 ### コンテナ内ユーザー（`remoteUser`）
@@ -350,6 +352,7 @@ ssh ofj-tmux
 ## トラブルシューティング
 
 - **AI CLI のログインがリビルドで消える** … `~/.claude` 等は名前付きボリューム（`openfisca-japan-claude` など）に保存される。`docker volume rm` でボリュームを削除すると認証情報も消えるので注意。
+- **`git config --global user.name` / `user.email` がリビルドで消える** … `openfisca-japan-gitconfig` ボリューム（`~/.config/git`、`GIT_CONFIG_GLOBAL` で参照）に保存されるため、通常はリビルドしても保持される。それでも消える場合は `docker volume ls` でボリュームが存在するか、`echo $GIT_CONFIG_GLOBAL` が `/home/user/.config/git/config` を指しているかを確認する。
 - **コンテナ内で `docker` が使えない / 権限エラー** … Docker Desktop が起動しているか、`/var/run/docker.sock` がマウントされているかを確認する。ソケットの GID 調整は ENTRYPOINT（`docker-init.sh`）で行われる。
 - **`docker compose up --build` 等が `error getting credentials - err: exit status 255` で失敗する** … Dev Containers が仕込む docker 認証ヘルパー（`~/.docker/config.json` の `credsStore: dev-containers-*`）は VS Code アタッチ時のみ有効で、tmux/SSH 経由の docker では失敗する（公開イメージの取得も巻き込まれる）。`tmux.conf` で tmux セッション内の `DOCKER_CONFIG` を専用ディレクトリに切り替えて回避している。
   - **既に起動中の tmux セッション**では設定が反映されないため、新しいウィンドウ／ペインを開く（`Ctrl-b c`）か、手動で `export DOCKER_CONFIG="$(mktemp -d)"` してから実行する。
@@ -360,3 +363,6 @@ ssh ofj-tmux
 - **日本語ファイル名が文字化けする** … `containerEnv` のロケール設定が効いているか確認する。ホスト側ターミナルの文字コードも UTF-8 にする。
 - **`connect-devcontainer-tmux.sh` が `devcontainer.json が見つかりません` で止まる** … スクリプト冒頭の `workspace_dir` にローカルの OpenFisca-Japan リポジトリのパスを設定する。
 - **`Dev Container CLI is not installed`** … `npm install -g @devcontainers/cli` でインストールする。
+- **ターミナルで文字がコピーできない** … tmux 上では通常のマウス選択やコピー操作が効かないことがある。
+  - **Mac**: tmux はデフォルトでマウス操作を tmux 自身が奪うモード（アプリケーションモード）になっており、この状態ではマウスでドラッグしてもテキスト選択ではなく tmux のペイン操作として扱われてしまう。`Cmd+R` を押すとこのモードをトグル（オン/オフ）で切り替えられる。コピーしたいときは `Cmd+R` を押してモードを解除し、通常のターミナルと同じようにマウスでドラッグして選択・コピーする。選択が終わったら、再度 `Cmd+R` を押してモードを戻せば tmux のマウス操作（ペイン切り替えなど）に戻る。
+  - **Windows**: `Shift+Ctrl+C`（コピー）/ `Shift+Ctrl+X`（カット）/ `Shift+Ctrl+V`（ペースト）を使用する（`Ctrl+C`はプロセスの中断に割り当てられているため）。
