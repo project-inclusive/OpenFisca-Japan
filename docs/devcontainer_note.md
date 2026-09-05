@@ -1,7 +1,7 @@
 # Dev Container 開発環境
 
 `.devcontainer/` 以下は、[Dev Container](https://containers.dev/)（VS Code の Dev Containers 拡張、または Dev Container CLI）で開くための開発環境定義です。
-`docs/dev_note.md` の `docker-compose` を使った手順とは別に、**コンテナ内で完結してバックエンド・フロントエンドを開発できる環境** を提供します。
+アプリ自体は `docs/dev_note.md` と同じく `docker compose up --build` で起動し（Dev Container を使う／使わないで手順を揃える）、その **開発シェル（エディタ・AI CLI・tmux）** を Dev Container として提供します。
 Claude Code / Codex / GitHub Copilot CLI といった AI コーディング支援 CLI もあらかじめ組み込まれています。
 また、ターミナルベースで開発できるよう **tmux の設定**（コンテナ内の `tmux.conf`、および Mac のホストから接続するためのスクリプト）も含まれています。
 
@@ -28,9 +28,9 @@ Claude Code / Codex / GitHub Copilot CLI といった AI コーディング支�
 2. コマンドパレット（`F1`）から `Dev Containers: Reopen in Container` を実行する。
 3. 初回はイメージのビルドと `postCreateCommand` の実行が走るため数分かかる。完了後、コンテナ内のターミナルで開発できる。
 
-- フロントエンド(30000)・バックエンド(50000)のポートは自動でホストへフォワードされる。
-  - フロントエンド起動後は http://localhost:30000/ 、バックエンド起動後は http://localhost:50000/ で確認できる。
-  - リモート（Tailscale）からアクセスする場合は [ポート公開（`appPort` / `forwardPorts`）](#ポート公開appport--forwardports) を参照。
+- アプリの起動は `docker compose up --build`（`docs/dev_note.md` と同じ手順）。ポートは Dev Container ではなく **ホスト（Mac）側に公開** される。
+  - フロントエンド http://localhost:30000/ 、バックエンド http://localhost:50000/ 、Swagger UI http://localhost:8080/ で確認できる。
+  - リモート（Tailscale）や LAN からアクセスする場合は [ポート公開（`docker compose`）](#ポート公開docker-compose) を参照。
 
 ### Dev Container CLI で起動
 
@@ -55,7 +55,7 @@ devcontainer exec --workspace-folder . bash
 | `post-create.sh` | コンテナ作成時（初回）に一度だけ実行。AI CLI のディレクトリ準備、Codex CLI と `gh copilot` のインストール、tmux 設定のシンボリックリンク作成。 |
 | `post-start.sh` | コンテナ起動のたびに実行。永続化ボリュームがリセットされた場合に備え、AI CLI のディレクトリ権限を再設定。 |
 | `prepare-agent-dirs.sh` | `post-create.sh` / `post-start.sh` から共通で呼ばれ、`~/.claude` `~/.codex` `~/.copilot` の作成・所有権・権限を整える。 |
-| `tmux.conf` | コンテナ内 tmux の設定。`post-create.sh` により `~/.tmux.conf` へリンクされる。 |
+| `tmux.conf` | コンテナ内 tmux の設定。`post-create.sh` により `~/.tmux.conf` へリンクされる。tmux セッション内では `DOCKER_CONFIG` を専用ディレクトリに切り替え、Dev Containers の docker 認証ヘルパー（VS Code 接続時のみ有効）を回避する。 |
 | `devcontainer-lock.json` | `features` で参照する各 feature のバージョン・ダイジェストの固定（ロックファイル）。 |
 
 ## 同梱ツール
@@ -74,35 +74,26 @@ devcontainer exec --workspace-folder . bash
 
 ## 主要な設定のポイント
 
-### ポート公開（`appPort` / `forwardPorts`）
+### ポート公開（`docker compose`）
 
 | ポート | 用途 |
 | --- | --- |
-| 30000 | フロントエンド（Vite 開発サーバー、`npm run dev`） |
-| 50000 | バックエンド（`make serve-local` の OpenFisca API サーバー） |
+| 30000 | フロントエンド（Vite 開発サーバー、`dashboard` サービス） |
+| 50000 | バックエンド（OpenFisca API、`openfisca` サービス） |
+| 8080 | Swagger UI（`swagger-ui` サービス） |
 
-この環境では、ポートの扱いに 3 つの設定が関わる。用途に応じて意味が異なるので注意する。
+アプリは `docs/dev_note.md` と同様に **`docker compose up --build` で起動する**（Dev Container を使う場合も使わない場合も手順は同じ）。Dev Container 内から実行しても、ホストの Docker ソケット経由（docker-from-docker）で **ホストの Docker デーモン上に兄弟コンテナとして起動** するため、ポートは Dev Container ではなく **ホスト（Mac）側に公開** される。
 
-| 設定 | 実体 | 効果 |
-| --- | --- | --- |
-| `appPort` | Docker の `-p`（publish）相当。Mac ホスト側にポートを公開する | 本リポジトリでは **`127.0.0.1`（ループバック）限定**で公開する。LAN には晒さず、リモートからは [SSH の `LocalForward` 経由](#リモートから-ssh-で接続するtailscale)でアクセスする |
-| `forwardPorts` | VS Code（エディタ）のポートフォワード。基本 `localhost` バインド | VS Code で開いたときのみ有効。`devcontainer up`（CLI）運用では働かない |
-| `portsAttributes` | VS Code の UI 用ラベル・通知設定 | VS Code 専用。tmux / CLI 運用では効果はない（付けても害はない） |
-
-`devcontainer.json` の設定:
-
-```jsonc
-// Mac ホストの 127.0.0.1 のみに公開（LAN には出さない）
-"appPort": ["127.0.0.1:30000:30000", "127.0.0.1:50000:50000"],
-```
-
-- **リモートアクセスは SSH の `LocalForward` を使う**（[リモートから SSH で接続する](#リモートから-ssh-で接続するtailscale)参照）。`ssh ofj-tmux` の接続中、クライアントの `http://localhost:30000` / `:50000` が SSH トンネル経由で Mac の `127.0.0.1:30000/50000` に転送される。
-  - `LocalForward` の転送先はサーバー（Mac）側で解決されるため、Mac 側は**ループバックだけ開いていれば十分**。LAN（`en0` 等）や Tailscale インターフェースには出さないので、**同一 LAN の他マシンからは見えない**。
-- **コンテナ内アプリは `0.0.0.0` で待ち受ける必要がある**（`127.0.0.1` のみだと publish しても届かない）。本リポジトリでは対応済み。
+- `docker-compose.yml` の `ports:` はバインドアドレスを指定していないため、**全インターフェース（`0.0.0.0`）に公開** される。したがって `localhost` だけでなく、**同一 LAN や Tailscale の別端末からも** `http://<host>:30000/` 等で直接アクセスできる。
+  - リモート（Tailscale）から見るときは `http://<mac-tailscale-host>:30000/`（MagicDNS 名または `100.x.x.x`）。SSH トンネルは不要だが、`localhost` で開きたい／通信を SSH で暗号化したい場合は [SSH の `LocalForward`](#リモートから-ssh-で接続するtailscale) も併用できる。
+- **Dev Container 側でポートを掴まないよう、`devcontainer.json` に `appPort` / `forwardPorts` / `portsAttributes` は設定していない。**
+  - `appPort` を設定すると Dev Container がホストの 30000/50000 を先に確保してしまい、`docker compose up` が `Bind for 0.0.0.0:30000 failed: port is already allocated` で失敗する。
+  - `forwardPorts` / `portsAttributes` は VS Code エディタのフォワード・UI 用で、`docker compose` でホストに publish する本運用では不要（`devcontainer up`／tmux 運用では元々効かない）。
+  - `appPort` は **コンテナ作成時** に適用される（`docker run -p` 相当）。以前設定していた場合、削除を反映するには既に起動中のコンテナを作り直す（`devcontainer up --remove-existing-container` など）。
+- **コンテナ内アプリは `0.0.0.0` で待ち受ける**（対応済み）。
   - フロントエンド: `dashboard/package.json` の `dev` が `vite --port 30000 --host 0.0.0.0`
   - バックエンド: `make serve-local` が `--bind 0.0.0.0:50000`
-- `appPort` は **コンテナ作成時**に適用される（`docker run -p` 相当）。あとから追加・変更した場合は、既存の `vsc-openfisca-japan...` コンテナを削除して作り直す（`devcontainer up --remove-existing-container` など）。
-- SSH を使わず Mac の Tailscale IP に直接（`http://<mac-tailscale-host>:30000/`）アクセスしたい場合は、`127.0.0.1` 限定ではリモートから届かない。その場合は `appPort` を Tailscale IP 限定（`"100.x.x.x:30000:30000"`）か `0.0.0.0`（＝LAN にも公開）に変更する必要がある。
+- Dev Container の tmux/SSH ターミナルから `docker compose up --build` を実行する場合、`DOCKER_CONFIG`（認証ヘルパー回避）と `LOCAL_WORKSPACE_FOLDER`（バインドマウント元のホストパス）が必要。詳細は[トラブルシューティング](#トラブルシューティング)を参照（`tmux.conf` と接続スクリプトで自動設定済み）。
 
 ### コンテナの常駐と停止（`shutdownAction`）
 
@@ -239,11 +230,14 @@ fi
 # Backspace(^H/^?)の不一致は /etc/inputrc 側の二重バインドで吸収するため、
 # ここで stty erase を無理に固定しない（ホストによって送る文字が違い、固定すると逆に合わない場合がある）。
 # -it: 対話端末を割り当て / --detach-keys=ctrl-]: コンテナからデタッチするキー
+# LOCAL_WORKSPACE_FOLDER: docker-from-docker で `docker compose` のバインドマウント元に
+#   ホスト側の実パスが必要なため注入する（workspace_dir はホスト上のリポジトリパス）。
 exec docker exec -it \
   -u "$exec_user" \
   --detach-keys="ctrl-]" \
   -e HOME="$exec_home" \
   -e TERM="${TERM:-xterm-256color}" \
+  -e LOCAL_WORKSPACE_FOLDER="$workspace_dir" \
   -w "$container_workspace_dir" "$container_name" \
   bash -lc 'tmux source-file "$HOME/.tmux.conf" 2>/dev/null || true; exec tmux -u new-session -A -s "'"$tmux_session_name"'"'
 ```
@@ -309,7 +303,7 @@ chmod +x ~/bin/connect-devcontainer-tmux.sh
   ssh-copy-id <username>@<mac-tailscale-host>
   ```
 
-- **`~/.ssh/config` にエイリアス `ofj-tmux` を追加**する。接続スクリプトの起動に加え、`LocalForward` で 30000/50000 をクライアントの `localhost` へ転送する。
+- **`~/.ssh/config` にエイリアス `ofj-tmux` を追加**する。tmux 接続には接続スクリプトの起動だけで十分。`LocalForward` は任意（Web ページは Tailscale 経由で `http://<mac-tailscale-host>:30000/` に直接アクセスできる。`localhost` で開きたい／SSH で暗号化したい場合のみ付ける）。
 
   ```
   # ~/.ssh/config （リモート端末側）
@@ -319,7 +313,7 @@ chmod +x ~/bin/connect-devcontainer-tmux.sh
       RequestTTY force
       # Mac 上に保存した接続スクリプトを実行（~ はリモート側シェルで展開される）
       RemoteCommand bash ~/bin/connect-devcontainer-tmux.sh
-      # フロントエンド/バックエンドのポートをクライアントの localhost へ転送
+      # （任意）フロントエンド/バックエンドを localhost で開きたい場合のみ
       LocalForward 30000 localhost:30000
       LocalForward 50000 localhost:50000
       ServerAliveInterval 30
@@ -328,8 +322,7 @@ chmod +x ~/bin/connect-devcontainer-tmux.sh
 
   - `RequestTTY force` … tmux のために TTY を必ず割り当てる。
   - `RemoteCommand` … `~` はリモート（Mac）側のログインシェルで展開されるためフルパスは不要。「tmux でホストから接続する」で保存した場所に合わせる。
-  - `LocalForward` … `ssh ofj-tmux` の接続中、クライアントの `http://localhost:30000` / `:50000` が Mac 上に公開されたポート（`appPort`）へ SSH トンネル経由で転送される。Tailscale IP を直接指定せず `localhost` で開けるうえ、通信も SSH で暗号化される。
-    - この転送先は Mac の `localhost:30000/50000`。`devcontainer.json` の `appPort` でポートが Mac ホストに公開されている必要がある（[ポート公開](#ポート公開appport--forwardports)参照）。
+  - `LocalForward`（任意） … `ssh ofj-tmux` の接続中、クライアントの `http://localhost:30000` / `:50000` が Mac 上のポートへ SSH トンネル経由で転送される。`docker compose` はホストの `0.0.0.0`（=`127.0.0.1` を含む）に publish しているため、転送先 `localhost:30000/50000` に届く。`localhost` で開けて通信も暗号化される反面、Tailscale 直アクセスで足りるなら省略してよい。
   - `ServerAliveInterval` / `ServerAliveCountMax` … 無通信で切断されにくくする。
 
 ### 3. 接続する
@@ -339,13 +332,13 @@ ssh ofj-tmux
 ```
 
 - Tailscale 経由で Mac に SSH 接続し、`connect-devcontainer-tmux.sh` が Dev Container の tmux セッションへアタッチする。
-- 接続中は `LocalForward` により、クライアントのブラウザから以下を開ける（コンテナ内でフロント／バックエンドを起動しておく）。
-  - フロントエンド: http://localhost:30000/
-  - バックエンド API: http://localhost:50000/
+- あらかじめ `docker compose up --build` でアプリを起動しておけば、クライアントのブラウザから以下を開ける。
+  - Tailscale 直アクセス: `http://<mac-tailscale-host>:30000/` / `:50000/`（`docker compose` がホストの `0.0.0.0` に publish）。
+  - `LocalForward` を設定した場合は http://localhost:30000/ / http://localhost:50000/ でも開ける。
 - キー操作:
   - tmux のデタッチ: `Ctrl-b d`（セッションはコンテナ内に残る）
   - コンテナからのデタッチ: `Ctrl-]`（`--detach-keys`）
-- ※ 本リポジトリの `appPort` は `127.0.0.1` 限定公開のため、ポートへのアクセスは上記 `LocalForward` 経由（`localhost`）のみ。Tailscale IP に直接当てたい場合は `appPort` のバインド変更が必要（[ポート公開](#ポート公開appport--forwardports)参照）。
+- ※ ポートは `docker compose` がホストの `0.0.0.0` に publish する（LAN・Tailscale に公開される）。詳細は[ポート公開（`docker compose`）](#ポート公開docker-compose)を参照。
 
 ### 補足・トラブルシューティング
 
@@ -358,6 +351,12 @@ ssh ofj-tmux
 
 - **AI CLI のログインがリビルドで消える** … `~/.claude` 等は名前付きボリューム（`openfisca-japan-claude` など）に保存される。`docker volume rm` でボリュームを削除すると認証情報も消えるので注意。
 - **コンテナ内で `docker` が使えない / 権限エラー** … Docker Desktop が起動しているか、`/var/run/docker.sock` がマウントされているかを確認する。ソケットの GID 調整は ENTRYPOINT（`docker-init.sh`）で行われる。
+- **`docker compose up --build` 等が `error getting credentials - err: exit status 255` で失敗する** … Dev Containers が仕込む docker 認証ヘルパー（`~/.docker/config.json` の `credsStore: dev-containers-*`）は VS Code アタッチ時のみ有効で、tmux/SSH 経由の docker では失敗する（公開イメージの取得も巻き込まれる）。`tmux.conf` で tmux セッション内の `DOCKER_CONFIG` を専用ディレクトリに切り替えて回避している。
+  - **既に起動中の tmux セッション**では設定が反映されないため、新しいウィンドウ／ペインを開く（`Ctrl-b c`）か、手動で `export DOCKER_CONFIG="$(mktemp -d)"` してから実行する。
+  - 認証が必要なプライベートレジストリを使う場合は、その `DOCKER_CONFIG` 先で `docker login` する。
+- **`docker compose up` が `mounts denied: The path ... is not shared from the host` で失敗する** … docker-from-docker では `docker compose` のバインドマウント元が**ホスト(Mac)側で解釈**される。`docker-compose.yml` は `${LOCAL_WORKSPACE_FOLDER:-.}` を使っており、`LOCAL_WORKSPACE_FOLDER`（ホスト上のリポジトリパス）が未設定だとコンテナ内パス（`/workspaces/...`）が渡されて失敗する。接続スクリプト（`connect-devcontainer-tmux.sh`）が `-e LOCAL_WORKSPACE_FOLDER="$workspace_dir"` で注入する。
+  - 手動で実行する場合は `export LOCAL_WORKSPACE_FOLDER=<ホスト上のリポジトリの絶対パス>` してから `docker compose up`。
+  - ホスト側の実パスは `docker inspect -f '{{range .Mounts}}{{.Source}} => {{.Destination}}{{"\n"}}{{end}}' "$(hostname)"` で確認できる。
 - **日本語ファイル名が文字化けする** … `containerEnv` のロケール設定が効いているか確認する。ホスト側ターミナルの文字コードも UTF-8 にする。
 - **`connect-devcontainer-tmux.sh` が `devcontainer.json が見つかりません` で止まる** … スクリプト冒頭の `workspace_dir` にローカルの OpenFisca-Japan リポジトリのパスを設定する。
 - **`Dev Container CLI is not installed`** … `npm install -g @devcontainers/cli` でインストールする。
