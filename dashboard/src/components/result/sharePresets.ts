@@ -525,6 +525,9 @@ export function stripSharePresets(payload: Record<string, any>): any[] {
     }
     if (Object.keys(collapsed).length > 0) {
       membersOut[name] = collapsed;
+    } else {
+      // 一覧にだけ存在する世帯員でもスロットを残す
+      membersOut[name] = {};
     }
   }
 
@@ -547,18 +550,14 @@ export function stripSharePresets(payload: Record<string, any>): any[] {
 
   const householdExtras: Record<string, any> = {};
   for (const [key, value] of Object.entries(household1In)) {
-    if (
-      key === '居住都道府県' ||
-      key === '居住市区町村' ||
-      key === '子一覧' ||
-      key === '祖父母一覧'
-    ) {
+    if (key === '居住都道府県' || key === '居住市区町村') {
       continue;
     }
     if (key === '親一覧' && isDefaultParentList(value)) {
       continue;
     }
     if (Array.isArray(value)) {
+      // 空の 子一覧 / 祖父母一覧 などはデフォルトとして省略
       if (value.length === 0) {
         continue;
       }
