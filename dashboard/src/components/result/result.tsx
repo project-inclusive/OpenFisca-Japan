@@ -20,7 +20,7 @@ import {
 } from '../../state';
 import { useRecoilState } from 'recoil';
 import shortLink, {
-  inflate,
+  decodeShareData,
   calculationType,
   getShareLink,
   getShareKey,
@@ -99,8 +99,9 @@ export const Result = () => {
     if (!required && key) {
       try {
         // URLパラメータから受け取った圧縮されたデータを展開
+        // NOTE: 短縮形式と旧形式の両方に対応
         setShareUrl(getShareLink(key));
-        householdByURL = JSON.parse(inflate(key));
+        householdByURL = decodeShareData(key);
         // NOTE: 共有リンクの後方互換性を保つため、（バックエンド用）householdにfrontend用householdを埋め込む形でエンコードしている
         // (frontend用householdが存在しない場合無視されるため、従来のリンクも継続して使用可能)
         // フロントエンド用household
