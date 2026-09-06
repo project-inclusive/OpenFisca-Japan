@@ -68,6 +68,10 @@
         },
         "terminal.integrated.defaultProfile.linux": "bash",
         "editor.formatOnSave": true,
+        // Wayland ソケットの自動マウントを無効化し、WSL 側の一時パス変動による
+        // `no such file or directory` での起動失敗を防ぐ。
+        "dev.containers.mountWaylandSocket": false,
+        "remote.containers.mountWaylandSocket": false,
         // flake8/autopep8 の設定は setup.cfg を正とする。旧来の
         // python.linting.* / python.formatting.* は Python 拡張から削除済みのため、
         // ここでは重複して定義しない。
