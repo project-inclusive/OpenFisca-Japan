@@ -20,7 +20,11 @@
     // gh コマンド。post-create.sh の `gh copilot` 拡張インストールに必要。
     "ghcr.io/devcontainers/features/github-cli:1": {},
     "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {},
-    "ghcr.io/devcontainers/features/copilot-cli:1": {}
+    "ghcr.io/devcontainers/features/copilot-cli:1": {},
+    // フロントエンド開発・各種 CLI 用。dashboard/Dockerfile (node:26.4-bullseye) とメジャーバージョンを合わせている。
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "26"
+    }
   },
 
   // postCreateCommand: 作成時（初回）に一度だけ実行 / postStartCommand: 起動のたびに実行

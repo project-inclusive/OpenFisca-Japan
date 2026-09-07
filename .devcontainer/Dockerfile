@@ -10,15 +10,16 @@ RUN apt update && apt install -y \
     jq \
     nkf \
     tmux \
-    ncurses-term
+    ncurses-term \
+    locales
+
+# devcontainer.json の LANG/LC_CTYPE(ja_JP.UTF-8)に対応するロケールを生成
+RUN sed -i 's/^# *ja_JP.UTF-8 UTF-8/ja_JP.UTF-8 UTF-8/' /etc/locale.gen \
+    && locale-gen ja_JP.UTF-8 \
+    && update-locale LANG=ja_JP.UTF-8
 
 # Docker CLI をインストール（ホストの docker.sock 経由で使う: docker-from-docker）
 RUN curl -fsSL https://get.docker.com | sh
-
-# Node.js 18 をインストール（フロントエンド開発・各種 CLI 用）。
-# NodeSource のセットアップスクリプトが apt リポジトリ追加と `apt update` まで行う。
-RUN curl -Ls https://deb.nodesource.com/setup_18.x | bash \
-    && apt install -y nodejs
 
 # Python のフォーマッタ / リンタをインストール
 RUN pip install --no-cache-dir --upgrade pip setuptools \
@@ -55,8 +56,8 @@ RUN echo "#!/bin/sh\n\
     sudoIf() { if [ \"\$(id -u)\" -ne 0 ]; then sudo \"\$@\"; else \"\$@\"; fi }\n\
     SOCKET_GID=\$(stat -c '%g' /var/run/docker.sock) \n\
     if [ \"${SOCKET_GID}\" != '0' ]; then\n\
-        if [ \"\$(cat /etc/group | grep :\${SOCKET_GID}:)\" = '' ]; then sudoIf groupadd --gid \${SOCKET_GID} docker-host; fi \n\
-        if [ \"\$(id ${NONROOT_USER} | grep -E \"groups=.*(=|,)\${SOCKET_GID}\(\")\" = '' ]; then sudoIf usermod -aG \${SOCKET_GID} ${NONROOT_USER}; fi\n\
+    if [ \"\$(cat /etc/group | grep :\${SOCKET_GID}:)\" = '' ]; then sudoIf groupadd --gid \${SOCKET_GID} docker-host; fi \n\
+    if [ \"\$(id ${NONROOT_USER} | grep -E \"groups=.*(=|,)\${SOCKET_GID}\(\")\" = '' ]; then sudoIf usermod -aG \${SOCKET_GID} ${NONROOT_USER}; fi\n\
     fi\n\
     exec \"\$@\"" > /usr/local/share/docker-init.sh \
     && chmod +x /usr/local/share/docker-init.sh
