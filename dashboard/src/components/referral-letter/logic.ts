@@ -190,7 +190,9 @@ export const createReferralDocument = (
       concerns: [mainConcern, ...otherConcerns],
       searchMethods: [
         `市町村の代表番号に電話し「${mainCandidate.questionLabel}について相談できる窓口を知りたい」と伝える`,
-        `ネットで「${mainCandidate.destination} お住まいの市町村名 電話番号」で検索し連絡する`,
+        `ネットで「${mainCandidate.destination
+          .replace(/役所HPから/g, '')
+          .trim()} お住まいの市町村名 電話番号」で検索し連絡する`,
       ],
       contactInstruction:
         '窓口に連絡し「紹介状に記載された困りごとについて相談したい」と伝える',

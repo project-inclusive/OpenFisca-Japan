@@ -145,6 +145,37 @@ const assertReferralA11y = () => {
 };
 
 describe('Referral letter domain rules', () => {
+  it('omits the municipal website prefix only from the search instruction', () => {
+    REFERRAL_AREA_CONFIGS.forEach((area) => {
+      const question = area.questions[0];
+      const answer = getAnswer(question, (option) => option.score === 5);
+      const document = createReferralDocument({
+        ...createInitialReferralState(),
+        areaId: area.id,
+        answers: answersFor(area.id, () => true),
+        mainConcernId: question.id,
+      });
+
+      expect(answer.destination).to.equal('役所HPから「生活保護」');
+      expect(document.guide.concerns[0].destination).to.equal(
+        '役所HPから「生活保護」'
+      );
+      expect(document.letter.mainConcern.destination).to.equal(
+        '役所HPから「生活保護」'
+      );
+      expect(document.guide.searchMethods[1]).to.equal(
+        'ネットで「「生活保護」 お住まいの市町村名 電話番号」で検索し連絡する'
+      );
+      expect(document.guide.searchMethods[1]).not.to.include('役所HPから');
+      expect(
+        resolveReferralDestination({ ...answer, destination: '医療機関' })
+      ).to.equal('医療機関');
+      expect(
+        resolveReferralDestination({ ...answer, destination: null })
+      ).to.equal('お住まいの市町村の相談窓口');
+    });
+  });
+
   it('keeps the three seven-question configs internally consistent', () => {
     expect(REFERRAL_AREA_CONFIGS).to.have.length(3);
 
