@@ -3,6 +3,7 @@
 トップページ右下の「紹介状 β版」から紹介状を生成するまでの、標準的な画面遷移です。
 
 - [納品先への確認事項](stakeholder-confirmation.md)
+- [先方検収用チェックリスト](acceptance-checklist.md)
 - [選択肢表示監査（2026-08-20）](option-display-audit-2026-08-20.md)
 - [紹介先表示監査（2026-08-20）](referral-destination-audit-2026-08-20.md)
 

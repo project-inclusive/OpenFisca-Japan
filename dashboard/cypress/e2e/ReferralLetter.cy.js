@@ -253,7 +253,7 @@ describe('Referral letter domain rules', () => {
             getReferralUrgencyLevel(answer.score)
           );
           expect(document.guide.searchMethods[0]).to.equal(
-            '市町村の代表番号に電話し「困りごとについて相談できる窓口を知りたい」と伝える'
+            `市町村の代表番号に電話し「${question.label}について相談できる窓口を知りたい」と伝える`
           );
           expect(document.guide.contactInstruction).to.equal(
             '窓口に連絡し「紹介状に記載された困りごとについて相談したい」と伝える'

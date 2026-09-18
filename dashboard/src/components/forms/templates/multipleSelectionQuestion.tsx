@@ -6,7 +6,6 @@ import {
   Button,
   VStack,
   Center,
-  keyframes,
 } from '@chakra-ui/react';
 
 import configData from '../../../config/app_config.json';
