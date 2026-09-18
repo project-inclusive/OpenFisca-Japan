@@ -54,11 +54,16 @@
   // containerEnv: コンテナ全体の環境変数。日本語ロケールで文字化けを防ぐ。
   "containerEnv": {
     "COPILOT_HOME": "/home/user/.copilot",
+    // Claude Code の設定ディレクトリを永続化ボリュームに固定する。
+    // 未設定だとログイン状態・プロジェクト設定を持つ ~/.claude.json がホーム直下に作られ、リビルドで消える。
+    // 設定すると ~/.claude/.claude.json に置かれるようになる。
+    "CLAUDE_CONFIG_DIR": "/home/user/.claude",
     "LANG": "ja_JP.UTF-8",
     "LANGUAGE": "ja_JP:ja",
-    "LC_CTYPE": "ja_JP.UTF-8",
-    // git config --global の読み書き先を永続化ボリューム上のファイルに固定する（既定の ~/.gitconfig だとリビルドで消える）
-    "GIT_CONFIG_GLOBAL": "/home/user/.config/git/config"
+    "LC_CTYPE": "ja_JP.UTF-8"
+    // 注意: GIT_CONFIG_GLOBAL は設定しない。設定すると git が ~/.gitconfig を無視するため、
+    // VS Code がホストからコピーする user.name / user.email が読まれなくなる。
+    // 未設定なら ~/.config/git/config（ボリューム）と ~/.gitconfig（ホストからのコピー）の両方が読まれる。
   },
 
   // 非 root ユーザー user で接続（Dockerfile で作成）
