@@ -76,7 +76,7 @@ export const ReferralDocumentView = forwardRef<
                   <Box key={concern.id}>
                     <Flex
                       align="center"
-                      justify="space-between"
+                      justify="flex-start"
                       gap={2}
                       flexWrap="wrap"
                     >
