@@ -23,6 +23,7 @@ import {
   isChromium,
   isEdge,
   isMobile,
+  isSafari,
   isWindows,
 } from 'react-device-detect';
 import { ErrorMessage } from '../../forms/validation/ErrorMessage';
@@ -76,8 +77,8 @@ export const PersonNumQuestionTemplate = ({
   // 「人数」フォームの変更時
   const onChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      // NOTE: WindowsのChromium系ブラウザでは全角入力時に2回入力が発生してしまうため、片方を抑制
-      if (isWindows && (isChrome || isEdge || isChromium)) {
+      // NOTE: WindowsのChromium系ブラウザおよびSafariでは全角入力時に2回入力が発生してしまうため、片方を抑制
+      if ((isWindows && (isChrome || isEdge || isChromium)) || isSafari) {
         if (
           event.nativeEvent instanceof InputEvent &&
           event.nativeEvent.isComposing

@@ -22,6 +22,7 @@ import {
   isChromium,
   isEdge,
   isMobile,
+  isSafari,
   isWindows,
 } from 'react-device-detect';
 import { AgeQuestion } from '../../../state/questionDefinition';
@@ -133,8 +134,8 @@ export const ChildrenAgeQuestionTemplate = ({
     let value: string = toHalf(event.currentTarget.value) ?? '';
     value = value.replace(/[^0-9]/g, '');
 
-    // NOTE: WindowsのChromium系ブラウザでは全角入力時に2回入力が発生してしまうため、片方を抑制
-    if (isWindows && (isChrome || isEdge || isChromium)) {
+    // NOTE: WindowsのChromium系ブラウザおよびSafariでは全角入力時に2回入力が発生してしまうため、片方を抑制
+    if ((isWindows && (isChrome || isEdge || isChromium)) || isSafari) {
       if (
         event.nativeEvent instanceof InputEvent &&
         event.nativeEvent.isComposing
@@ -157,8 +158,8 @@ export const ChildrenAgeQuestionTemplate = ({
   };
 
   function handleSchoolYearChange(event: React.ChangeEvent<HTMLInputElement>) {
-    // NOTE: WindowsのChromium系ブラウザでは全角入力時に2回入力が発生してしまうため、片方を抑制
-    if (isWindows && (isChrome || isEdge || isChromium)) {
+    // NOTE: WindowsのChromium系ブラウザおよびSafariでは全角入力時に2回入力が発生してしまうため、片方を抑制
+    if ((isWindows && (isChrome || isEdge || isChromium)) || isSafari) {
       if (
         event.nativeEvent instanceof InputEvent &&
         event.nativeEvent.isComposing
