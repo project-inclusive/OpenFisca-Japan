@@ -21,6 +21,7 @@ import {
   isChromium,
   isEdge,
   isMobile,
+  isSafari,
   isWindows,
 } from 'react-device-detect';
 import { AgeQuestion } from '../../../state/questionDefinition';
@@ -58,8 +59,9 @@ export const AgeQuestionTemplate = ({
     let value: string = toHalf(event.currentTarget.value) ?? '';
     value = value.replace(/[^0-9]/g, '');
 
-    // NOTE: WindowsのChromium系ブラウザでは全角入力時に2回入力が発生してしまうため、片方を抑制
-    if (isWindows && (isChrome || isEdge || isChromium)) {
+    // NOTE: WindowsのChromium系ブラウザおよびSafariでは全角入力時に2回入力が発生してしまうため、片方を抑制
+    // （Safariでは全角数字の変換中も200歳にクランプされてしまう不具合が発生するため対象に含める）
+    if ((isWindows && (isChrome || isEdge || isChromium)) || isSafari) {
       if (
         event.nativeEvent instanceof InputEvent &&
         event.nativeEvent.isComposing
