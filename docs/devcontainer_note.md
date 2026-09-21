@@ -52,7 +52,7 @@ devcontainer exec --workspace-folder . bash
 | --- | --- |
 | `devcontainer.json` | Dev Container の本体設定（ビルド方法・ポート・マウント・環境変数・VS Code 拡張／設定・features）。 |
 | `Dockerfile` | ベースイメージと OS パッケージ・Python ツールのインストール、非 root ユーザー `user` の作成、`make install && make build` によるバックエンドのセットアップ。 |
-| `post-create.sh` | コンテナ作成時（初回）に一度だけ実行。AI CLI のディレクトリ準備、Codex CLI と `gh copilot` のインストール、tmux 設定のシンボリックリンク作成。 |
+| `post-create.sh` | コンテナ作成時（初回）に一度だけ実行。AI CLI のディレクトリ準備、Claude Code・Codex CLI と `gh copilot` のインストール、tmux 設定のシンボリックリンク作成。 |
 | `post-start.sh` | コンテナ起動のたびに実行。永続化ボリュームがリセットされた場合に備え、AI CLI のディレクトリ権限を再設定。 |
 | `prepare-agent-dirs.sh` | `post-create.sh` / `post-start.sh` から共通で呼ばれ、`~/.claude` `~/.codex` `~/.copilot` `~/.config/git` の作成・所有権・権限を整える。 |
 | `tmux.conf` | コンテナ内 tmux の設定。`post-create.sh` により `~/.tmux.conf` へリンクされる。tmux セッション内では `DOCKER_CONFIG` を専用ディレクトリに切り替え、Dev Containers の docker 認証ヘルパー（VS Code 接続時のみ有効）を回避する。 |
@@ -68,7 +68,7 @@ devcontainer exec --workspace-folder . bash
 - **Python ツール**: `autopep8`, `flake8`
 - **GitHub CLI（`gh`）**（`ghcr.io/devcontainers/features/github-cli` feature。`post-create.sh` の `gh copilot` 拡張インストールにも使われる）
 - **AI コーディング CLI**
-  - Claude Code（`ghcr.io/anthropics/devcontainer-features/claude-code` feature）
+  - Claude Code（`post-create.sh` で公式のネイティブインストーラ、失敗時は npm パッケージにフォールバック）
   - GitHub Copilot CLI（`ghcr.io/devcontainers/features/copilot-cli` feature、加えて `gh copilot` 拡張）
   - Codex CLI（`post-create.sh` で公式インストーラ、失敗時は npm パッケージにフォールバック）
 

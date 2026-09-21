@@ -13,7 +13,8 @@
   // ポート公開は docker-compose が担う（ホストに 0.0.0.0 で publish）。
   // devcontainer 側で appPort を持つと 30000/50000 が競合するため設定しない。詳細: docs/devcontainer_note.md
 
-  // features: 追加でインストールするツール群（共通ユーティリティ / GitHub CLI / Claude Code / GitHub Copilot CLI）
+  // features: 追加でインストールするツール群（共通ユーティリティ / GitHub CLI / GitHub Copilot CLI / Node.js）
+  // 注意: Claude Code は feature ではなく post-create.sh で公式インストーラを使う。詳細: docs/devcontainer_note.md
   "features": {
     "ghcr.io/devcontainers/features/common-utils:2": {
       "installZsh": false,
@@ -21,7 +22,6 @@
     },
     // gh コマンド。post-create.sh の `gh copilot` 拡張インストールに必要。
     "ghcr.io/devcontainers/features/github-cli:1": {},
-    "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {},
     "ghcr.io/devcontainers/features/copilot-cli:1": {},
     // フロントエンド開発・各種 CLI 用。dashboard/Dockerfile (node:26.4-bullseye) とメジャーバージョンを合わせている。
     "ghcr.io/devcontainers/features/node:1": {
@@ -47,7 +47,10 @@
   "overrideCommand": false,
   // remoteEnv: コンテナ内プロセスに渡す環境変数（ホスト側のワークスペースパス）
   "remoteEnv": {
-    "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}"
+    "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}",
+    // Claude Code / Codex の公式インストーラは ~/.local/bin に配置するため、
+    // VS Code 拡張などログインシェルを経由しないプロセスからも見えるようにする。
+    "PATH": "/home/user/.local/bin:${containerEnv:PATH}"
   },
   // containerEnv: コンテナ全体の環境変数。日本語ロケールで文字化けを防ぐ。
   "containerEnv": {
