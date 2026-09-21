@@ -7,6 +7,7 @@
   "dockerFile": "./Dockerfile",
   // VS Code を閉じてもコンテナを停止しない（常駐。停止はユーザーが docker で明示的に行う）
   "shutdownAction": "none",
+  // init: ゾンビプロセス回収のため tini を有効化
   "init": true,
 
   // ポート公開は docker-compose が担う（ホストに 0.0.0.0 で publish）。
@@ -32,9 +33,6 @@
   "postCreateCommand": "bash .devcontainer/post-create.sh",
   "postStartCommand": "bash .devcontainer/post-start.sh",
   "postAttachCommand": "bash .devcontainer/kill-stale-vscode.sh",
-
-  // --init: ゾンビプロセス回収のため tini を有効化
-  "runArgs": ["--init"],
 
   // mounts: ホストの Docker ソケット(docker-from-docker)と、AI CLI 設定・git 設定用の名前付きボリューム。
   // 名前付きボリュームによりリビルドしてもログイン状態や git config が保持される。
