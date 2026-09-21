@@ -8,7 +8,7 @@ Claude Code / Codex / GitHub Copilot CLI といった AI コーディング支�
 ## 概要
 
 - ベースイメージは `python:3.11-bookworm`。
-- バックエンド(OpenFisca)開発に必要な Python ツール（`autopep8`, `flake8`）と、フロントエンド用の Node.js 18 を同梱。
+- バックエンド(OpenFisca)開発に必要な Python ツール（`autopep8`, `flake8`）と、フロントエンド用の Node.js 26 を同梱。
 - 非 root ユーザー `user` で動作し、ホストの Docker ソケットをマウントしてコンテナ内から `docker` コマンドを利用可能（docker-from-docker）。
 - 日本語ロケール（`ja_JP.UTF-8`）を設定済み。
 - Claude Code / Codex / GitHub Copilot CLI の設定・認証情報は名前付きボリュームに永続化され、リビルドしても保持される。
@@ -51,7 +51,7 @@ devcontainer exec --workspace-folder . bash
 | ファイル | 役割 |
 | --- | --- |
 | `devcontainer.json` | Dev Container の本体設定（ビルド方法・ポート・マウント・環境変数・VS Code 拡張／設定・features）。 |
-| `Dockerfile` | ベースイメージと OS パッケージ・Node.js・Python ツールのインストール、非 root ユーザー `user` の作成、`make install && make build` によるバックエンドのセットアップ。 |
+| `Dockerfile` | ベースイメージと OS パッケージ・Python ツールのインストール、非 root ユーザー `user` の作成、`make install && make build` によるバックエンドのセットアップ。 |
 | `post-create.sh` | コンテナ作成時（初回）に一度だけ実行。AI CLI のディレクトリ準備、Codex CLI と `gh copilot` のインストール、tmux 設定のシンボリックリンク作成。 |
 | `post-start.sh` | コンテナ起動のたびに実行。永続化ボリュームがリセットされた場合に備え、AI CLI のディレクトリ権限を再設定。 |
 | `prepare-agent-dirs.sh` | `post-create.sh` / `post-start.sh` から共通で呼ばれ、`~/.claude` `~/.codex` `~/.copilot` `~/.config/git` の作成・所有権・権限を整える。 |
@@ -64,7 +64,7 @@ devcontainer exec --workspace-folder . bash
 
 - **OS パッケージ**: `git`, `curl`, `vim`, `htop`, `jq`, `nkf`（日本語文字コード変換）, `tmux`, `ncurses-term`
 - **Docker CLI**（ホストの Docker ソケット経由で利用）
-- **Node.js 18**（フロントエンド開発・各種 CLI 用）
+- **Node.js 26**（`ghcr.io/devcontainers/features/node` feature。フロントエンド開発・各種 CLI 用）
 - **Python ツール**: `autopep8`, `flake8`
 - **GitHub CLI（`gh`）**（`ghcr.io/devcontainers/features/github-cli` feature。`post-create.sh` の `gh copilot` 拡張インストールにも使われる）
 - **AI コーディング CLI**
