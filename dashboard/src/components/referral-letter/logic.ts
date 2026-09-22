@@ -194,8 +194,7 @@ export const createReferralDocument = (
           .replace(/役所HPから/g, '')
           .trim()} お住まいの市町村名 電話番号」で検索し連絡する`,
       ],
-      contactInstruction:
-        '窓口に連絡し「紹介状に記載された困りごとについて相談したい」と伝える',
+      contactInstruction: `窓口に連絡し「${mainCandidate.questionLabel}について相談したい」と伝える`,
       letterInstruction:
         'そのときに、画面に表示された「紹介状」もご利用ください',
     },

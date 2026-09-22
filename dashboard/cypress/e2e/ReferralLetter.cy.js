@@ -287,7 +287,7 @@ describe('Referral letter domain rules', () => {
             `市町村の代表番号に電話し「${question.label}について相談できる窓口を知りたい」と伝える`
           );
           expect(document.guide.contactInstruction).to.equal(
-            '窓口に連絡し「紹介状に記載された困りごとについて相談したい」と伝える'
+            `窓口に連絡し「${question.label}について相談したい」と伝える`
           );
           expect(document.letter.otherConcerns).to.deep.equal([]);
           checkedCandidates += 1;
