@@ -1,6 +1,6 @@
 # docs は同名のディレクトリ docs/ が存在するため、宣言しないと
 # 「更新済み」と判定されてレシピが実行されない
-.PHONY: docs check-docs
+.PHONY: docs check-docs serve-docs stop-docs
 
 all: clean build test
 
@@ -57,6 +57,16 @@ docs:
 check-docs: docs
 	@# 生成物がソースと乖離していないかを確認する(CI用)。
 	git diff --exit-code -- docs/_data
+
+serve-docs: docs
+	@# docs/ の Jekyll サイトを http://localhost:4000 でプレビューする。
+	@# 初回はイメージのビルドに数分かかる。docs/ を編集したら stop-docs → serve-docs で反映する
+	@# (バインドマウント越しではファイル変更が検知されないため --watch は効かない)。
+	docker compose --profile docs up -d --build docs
+	@echo "http://localhost:4000/ で確認できます (停止: make stop-docs)"
+
+stop-docs:
+	docker compose --profile docs down docs
 
 serve-local:
 	openfisca serve --country-package openfisca_japan --bind 0.0.0.0:50000

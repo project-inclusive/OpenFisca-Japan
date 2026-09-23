@@ -164,6 +164,20 @@ make docs
 - Variable を追加・修正したら `make docs` を実行して差分をコミットする。
   忘れた場合は CI の `make check-docs` が失敗して検知される
 
+#### ドキュメントサイトをローカルで確認する
+
+```bash
+make serve-docs      # http://localhost:4000/ で開く（初回はイメージのビルドに数分かかる）
+make stop-docs       # 停止
+```
+
+- `make docs`（データ生成）も併せて実行されるため、常に最新のソースの内容が表示される
+- **`docs/` を編集したら `make stop-docs` → `make serve-docs` で入れ直す。**
+  バインドマウント越しではファイル変更が検知されないため `--watch` は効かない（再ビルド自体は1秒程度）
+- GitHub Pages はプラグイン・テーマ・既定値を暗黙に有効化しているため、プレビュー用イメージ
+  （`Dockerfile_docs`）では GitHub Pages 本体が使う `github-pages` gem をそのまま入れて構成を揃えている
+- `docs` サービスは `profiles: [docs]` を指定しているため、通常の `docker compose up` では起動しない
+
 #### テスト条件・結果を記載したCSVファイルから、yamlのテストファイルを自動生成する方法
 
 ```bash

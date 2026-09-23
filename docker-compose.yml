@@ -26,6 +26,25 @@ services:
       - 30000:30000
     networks:
       - openfisca
+  # docs/ の Jekyll サイトをローカルで確認するためのサービス。
+  # profiles を指定しているため通常の `docker compose up` では起動せず、
+  # `docker compose --profile docs up -d docs`（= make serve-docs）でのみ起動する。
+  docs:
+    profiles:
+      - docs
+    build:
+      context: ./
+      dockerfile: ./Dockerfile_docs
+    volumes:
+      # Jekyll はソースを読むだけ（出力先はコンテナ内の /tmp/_site）
+      - ${LOCAL_WORKSPACE_FOLDER:-.}/docs:/srv:ro
+    environment:
+      # jekyll-github-metadata がリポジトリ名を必要とする（未設定だとビルドが失敗する）
+      - PAGES_REPO_NWO=project-inclusive/OpenFisca-Japan
+    ports:
+      - 4000:4000
+    networks:
+      - openfisca
   swagger-ui:
     image: swaggerapi/swagger-ui:v5.3.0
     environment:
