@@ -60,6 +60,8 @@ setup(
             "python-dateutil > 2.8.1",
             "PyYAML == 6.0",
             "ruff == 0.1.9",
+            # `make serve-dev`（開発用ホットリロード）で使う watchmedo コマンドを提供する
+            "watchdog >= 4.0.0, < 7.0.0",
             ],
         },
     packages = find_packages(),
