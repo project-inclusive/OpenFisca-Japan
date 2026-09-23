@@ -144,6 +144,26 @@ make serve-local
 - フロントエンドの制約上、見積もり結果に表示する制度のVariableは **`entity = 世帯` にする必要がある**
   - 個人に依存する条件は世帯員単位で計算し、最終的な制度の金額のみ世帯単位で集計すると実装しやすいです
 
+#### 制度ドキュメントの生成
+
+公開ドキュメントの[制度一覧（Variable）](./variables.md)・[パラメータ一覧（Parameter）](./parameters.md)は、
+`openfisca_japan` のソースから自動生成している。
+
+```bash
+make docs
+```
+
+- `tools/make_docs/make_docs.py` が `CountryTaxBenefitSystem()` を構築し、
+  各 Variable の `label` / `documentation` / `reference` 等と、各 Parameter の値・時系列を抽出して
+  `docs/_data/variables.yml` / `docs/_data/parameters.yml` に書き出す
+  - ソースを自前でパースするのではなく OpenFisca が読み込んだ結果を使うため、実装と乖離しない
+- `docs/variables.md` / `docs/parameters.md` はこのデータファイルを Liquid で描画するテンプレート。
+  ページの見せ方を変えたいときはこちらを編集する（データファイルは編集しない）
+- **生成物はコミットする。** GitHub Pages のビルドでは独自プラグインを追加できず、
+  ビルド時に生成できないため
+- Variable を追加・修正したら `make docs` を実行して差分をコミットする。
+  忘れた場合は CI の `make check-docs` が失敗して検知される
+
 #### テスト条件・結果を記載したCSVファイルから、yamlのテストファイルを自動生成する方法
 
 ```bash

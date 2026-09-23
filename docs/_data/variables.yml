@@ -1,0 +1,5693 @@
+# このファイルは tools/make_docs/make_docs.py により自動生成されています。
+# 直接編集せず、`make docs` で再生成してください。
+version: 2.2.0
+items:
+- name: 世帯人数
+  label: 世帯人数
+  documentation: null
+  references: []
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 人口
+  subcategory: ''
+  source: openfisca_japan/variables/人口.py
+- name: 学年
+  label: 人物の学年
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 人口
+  subcategory: ''
+  source: openfisca_japan/variables/人口.py
+- name: 年齢
+  label: 人物の年齢
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 人口
+  subcategory: ''
+  source: openfisca_japan/variables/人口.py
+- name: 誕生年月日
+  label: 人物の誕生年月日
+  documentation: null
+  references:
+  - https://en.wiktionary.org/wiki/birthdate
+  entity: 人物
+  value_type: date
+  possible_values: []
+  definition_period: eternity
+  default_value: '1970-01-01'
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 人口
+  subcategory: ''
+  source: openfisca_japan/variables/人口.py
+- name: 家賃
+  label: 月額の家賃
+  documentation: 住居確保給付金など、家賃額に応じて支給額が決まる制度で使用する。
+  references: []
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 住居
+  subcategory: ''
+  source: openfisca_japan/variables/住居.py
+- name: 居住市区町村
+  label: 居住市区町村
+  documentation: null
+  references: []
+  entity: 世帯
+  value_type: str
+  possible_values: []
+  definition_period: day
+  default_value: その他
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 住居
+  subcategory: ''
+  source: openfisca_japan/variables/住居.py
+- name: 居住級地区分1
+  label: 居住級地区分1
+  documentation: null
+  references:
+  - https://best-selection.co.jp/media/wp-content/uploads/2021/03/seikatsuhogo-kyuchi2022.pdf
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 住居
+  subcategory: ''
+  source: openfisca_japan/variables/住居.py
+- name: 居住級地区分1_世帯員
+  label: 居住級地区分1_世帯員
+  documentation: null
+  references:
+  - https://best-selection.co.jp/media/wp-content/uploads/2021/03/seikatsuhogo-kyuchi2022.pdf
+  entity: 人物
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 住居
+  subcategory: ''
+  source: openfisca_japan/variables/住居.py
+- name: 居住級地区分2
+  label: 居住級地区分2
+  documentation: null
+  references:
+  - https://best-selection.co.jp/media/wp-content/uploads/2021/03/seikatsuhogo-kyuchi2022.pdf
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 住居
+  subcategory: ''
+  source: openfisca_japan/variables/住居.py
+- name: 居住級地区分2_世帯員
+  label: 居住級地区分2_世帯員
+  documentation: null
+  references:
+  - https://best-selection.co.jp/media/wp-content/uploads/2021/03/seikatsuhogo-kyuchi2022.pdf
+  entity: 人物
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 住居
+  subcategory: ''
+  source: openfisca_japan/variables/住居.py
+- name: 居住都道府県
+  label: 居住都道府県
+  documentation: null
+  references: []
+  entity: 世帯
+  value_type: str
+  possible_values: []
+  definition_period: day
+  default_value: 北海道
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 住居
+  subcategory: ''
+  source: openfisca_japan/variables/住居.py
+- name: 人的控除額の差
+  label: 所得税と住民税の控除の差額
+  documentation: '差額計算には一部例外あり
+
+    例外についての詳細は https://www.town.hinode.tokyo.jp/0000000519.html も参考になる'
+  references:
+  - https://money-bu-jpx.com/news/article043882/
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 住民税
+  subcategory: ''
+  source: openfisca_japan/variables/住民税.py
+- name: 住民税
+  label: 住民税
+  documentation: null
+  references:
+  - https://www.soumu.go.jp/main_sosiki/jichi_zeisei/czaisei/czaisei_seido/150790_06.html
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 住民税
+  subcategory: ''
+  source: openfisca_japan/variables/住民税.py
+- name: 住民税ひとり親控除
+  label: 住民税におけるひとり親控除額
+  documentation: '所得税における控除額とはことなるので注意（金額が異なるだけで条件は同じ）。
+
+    OpenFiscaではクラス名をアプリ全体で一意にする必要があるため、先頭に「住民税」を追加。'
+  references:
+  - https://www.tax.metro.tokyo.lg.jp/kazei/kojin_ju.html#gaiyo_07
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '2020-01-01'
+  category: 住民税
+  subcategory: ''
+  source: openfisca_japan/variables/住民税.py
+- name: 住民税勤労学生控除
+  label: 住民税における勤労学生控除
+  documentation: '所得税における控除額とはことなるので注意（金額が異なるだけで条件は同じ）。
+
+    OpenFiscaではクラス名をアプリ全体で一意にする必要があるため、先頭に「住民税」を追加。'
+  references:
+  - https://www.tax.metro.tokyo.lg.jp/kazei/kojin_ju.html#gaiyo_07
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 住民税
+  subcategory: ''
+  source: openfisca_japan/variables/住民税.py
+- name: 住民税均等割
+  label: 住民税均等割
+  documentation: null
+  references:
+  - https://www.soumu.go.jp/main_sosiki/jichi_zeisei/czaisei/czaisei_seido/150790_06.html
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 住民税
+  subcategory: ''
+  source: openfisca_japan/variables/住民税.py
+- name: 住民税基礎控除
+  label: 住民税における基礎控除
+  documentation: null
+  references:
+  - https://www.city.yokohama.lg.jp/kurashi/koseki-zei-hoken/zeikin/y-shizei/kojin-shiminzei-kenminzei/kaisei/R3zeiseikaisei.html
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 住民税
+  subcategory: ''
+  source: openfisca_japan/variables/住民税.py
+- name: 住民税寡婦控除
+  label: 住民税における寡婦控除額
+  documentation: '所得税における控除額とはことなるので注意（金額が異なるだけで条件は同じ）。
+
+    OpenFiscaではクラス名をアプリ全体で一意にする必要があるため、先頭に「住民税」を追加。'
+  references:
+  - https://www.tax.metro.tokyo.lg.jp/kazei/kojin_ju.html#gaiyo_07
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '2020-01-01'
+  category: 住民税
+  subcategory: ''
+  source: openfisca_japan/variables/住民税.py
+- name: 住民税所得割
+  label: 住民税所得割
+  documentation: null
+  references:
+  - https://www.soumu.go.jp/main_sosiki/jichi_zeisei/czaisei/czaisei_seido/150790_06.html
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 住民税
+  subcategory: ''
+  source: openfisca_japan/variables/住民税.py
+- name: 住民税所得控除
+  label: 住民税所得控除
+  documentation: null
+  references:
+  - https://biz.moneyforward.com/tax_return/basic/18507/
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 住民税
+  subcategory: ''
+  source: openfisca_japan/variables/住民税.py
+- name: 住民税扶養控除
+  label: 住民税における扶養控除
+  documentation: '所得税における控除額とはことなるので注意（金額が異なるだけで条件は同じ）。
+
+    OpenFiscaではクラス名をアプリ全体で一意にする必要があるため、先頭に「住民税」を追加。'
+  references:
+  - https://www.town.hinode.tokyo.jp/0000000519.html
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 住民税
+  subcategory: ''
+  source: openfisca_japan/variables/住民税.py
+- name: 住民税配偶者控除
+  label: 住民税における配偶者控除
+  documentation: '所得税における控除額とはことなるので注意（金額が異なるだけで条件は同じ）。
+
+    OpenFiscaではクラス名をアプリ全体で一意にする必要があるため、先頭に「住民税」を追加。
+
+    配偶者特別控除とは異なる。
+
+    配偶者の所得が配偶者控除の所得制限を超えた場合でも、配偶者特別控除が適用される可能性がある。
+
+    老人控除対象かどうかは以下を参照。
+
+    https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1182.htm'
+  references:
+  - https://www.city.hiroshima.lg.jp/soshiki/26/202040.html
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 住民税
+  subcategory: ''
+  source: openfisca_japan/variables/住民税.py
+- name: 住民税配偶者特別控除
+  label: 住民税における配偶者特別控除
+  documentation: '所得税における控除額とはことなるので注意（金額が異なるだけで条件は同じ）。
+
+    OpenFiscaではクラス名をアプリ全体で一意にする必要があるため、先頭に「住民税」を追加。'
+  references:
+  - https://www.city.hiroshima.lg.jp/soshiki/26/202040.html
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 住民税
+  subcategory: ''
+  source: openfisca_japan/variables/住民税.py
+- name: 住民税障害者控除
+  label: 住民税における障害者控除額
+  documentation: '所得税における控除額とはことなるので注意（金額が異なるだけで条件は同じ）。
+
+    OpenFiscaではクラス名をアプリ全体で一意にする必要があるため、先頭に「住民税」を追加。'
+  references:
+  - https://www.tax.metro.tokyo.lg.jp/kazei/kojin_ju.html#gaiyo_07
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 住民税
+  subcategory: ''
+  source: openfisca_japan/variables/住民税.py
+- name: 住民税障害者控除対象額
+  label: 住民税障害者控除額の対象額
+  documentation: 実際の控除額は同一生計配偶者、扶養親族が該当する場合にも加算される
+  references:
+  - https://www.tax.metro.tokyo.lg.jp/kazei/kojin_ju.html#gaiyo_07
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 住民税
+  subcategory: ''
+  source: openfisca_japan/variables/住民税.py
+- name: 住民税非課税世帯
+  label: 住民税非課税世帯か否か（東京23区で所得割と均等割両方が非課税になる世帯）
+  documentation: null
+  references:
+  - https://financial-field.com/tax/entry-173575
+  entity: 世帯
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 住民税
+  subcategory: ''
+  source: openfisca_japan/variables/住民税.py
+- name: 控除後住民税世帯高所得
+  label: 住民税計算において、各種控除が適用された後の世帯高所得額
+  documentation: null
+  references:
+  - https://www.town.hinode.tokyo.jp/0000000516.html
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 住民税
+  subcategory: ''
+  source: openfisca_japan/variables/住民税.py
+- name: 調整控除
+  label: 調整控除
+  documentation: '所得税と住民税の控除の差額（一部例外あり）
+
+    例外についての詳細は https://www.town.hinode.tokyo.jp/0000000519.html も参考になる'
+  references:
+  - https://money-bu-jpx.com/news/article043882/
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 住民税
+  subcategory: ''
+  source: openfisca_japan/variables/住民税.py
+- name: 就労形態
+  label: 人物の就労形態
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: Enum
+  possible_values:
+  - 無
+  - 会社員
+  - 公務員
+  - 自営業
+  - その他
+  definition_period: day
+  default_value: 無
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 全般
+  subcategory: ''
+  source: openfisca_japan/variables/全般.py
+- name: 性別
+  label: 人物の性別
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: Enum
+  possible_values:
+  - 女性
+  - 男性
+  - その他
+  definition_period: day
+  default_value: その他
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 全般
+  subcategory: ''
+  source: openfisca_japan/variables/全般.py
+- name: ひとり親控除
+  label: ひとり親控除額
+  documentation: null
+  references:
+  - https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1171.htm
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '2020-01-01'
+  category: 所得
+  subcategory: ''
+  source: openfisca_japan/variables/所得.py
+- name: 世帯所得
+  label: 世帯全員の収入の合計
+  documentation: null
+  references: []
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 所得
+  subcategory: ''
+  source: openfisca_japan/variables/所得.py
+- name: 世帯高所得
+  label: 世帯で最も所得が高い人物の所得
+  documentation: null
+  references: []
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 所得
+  subcategory: ''
+  source: openfisca_japan/variables/所得.py
+- name: 個人事業主である
+  label: 個人事業主であるか否か
+  documentation: null
+  references:
+  - https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1160.htm
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 所得
+  subcategory: ''
+  source: openfisca_japan/variables/所得.py
+- name: 個人事業主の必要経費
+  label: 個人事業主の必要経費
+  documentation: null
+  references:
+  - https://biz.moneyforward.com/tax_return/basic/12079/
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 所得
+  subcategory: ''
+  source: openfisca_japan/variables/所得.py
+- name: 児童手当の控除後世帯高所得
+  label: 各種控除が適用された後の児童手当における世帯高所得額
+  documentation: '所得税等の控除額とは異なる。
+
+    https://www.nta.go.jp/publication/pamph/koho/kurashi/html/01_1.htm'
+  references:
+  - https://web.archive.org/web/20220930063105/https://www.city.himeji.lg.jp/waku2child/0000013409.html
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 所得
+  subcategory: ''
+  source: openfisca_japan/variables/所得.py
+- name: 児童手当の控除後所得
+  label: 各種控除が適用された後の児童手当における所得額
+  documentation: '所得税等の控除額とは異なる。
+
+    https://www.nta.go.jp/publication/pamph/koho/kurashi/html/01_1.htm'
+  references:
+  - https://web.archive.org/web/20220930063105/https://www.city.himeji.lg.jp/waku2child/0000013409.html
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 所得
+  subcategory: ''
+  source: openfisca_japan/variables/所得.py
+- name: 児童扶養手当の控除後世帯高所得
+  label: 各種控除が適用された後の児童扶養手当の世帯高所得額
+  documentation: null
+  references:
+  - https://www.city.otsu.lg.jp/soshiki/015/1406/g/jidofuyoteate/1389538447829.html
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 所得
+  subcategory: ''
+  source: openfisca_japan/variables/所得.py
+- name: 児童扶養手当の控除後所得
+  label: 各種控除が適用された後の児童扶養手当の世帯高所得額
+  documentation: null
+  references:
+  - https://www.city.otsu.lg.jp/soshiki/015/1406/g/jidofuyoteate/1389538447829.html
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 所得
+  subcategory: ''
+  source: openfisca_japan/variables/所得.py
+- name: 勤労学生控除
+  label: 勤労学生控除
+  documentation: null
+  references:
+  - https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1175.htm
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 所得
+  subcategory: ''
+  source: openfisca_japan/variables/所得.py
+- name: 収入
+  label: 人物の収入
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 所得
+  subcategory: ''
+  source: openfisca_japan/variables/所得.py
+- name: 合計所得金額
+  label: 合計所得金額
+  documentation: null
+  references:
+  - https://www.nta.go.jp/taxes/shiraberu/taxanswer/yogo/senmon.htm#word2
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 所得
+  subcategory: ''
+  source: openfisca_japan/variables/所得.py
+- name: 同一生計配偶者である
+  label: 同一生計配偶者であるか否か
+  documentation: null
+  references:
+  - https://www.nta.go.jp/taxes/shiraberu/shinkoku/tebiki/2022/03/order3/yogo/3-3_y15.htm
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 所得
+  subcategory: ''
+  source: openfisca_japan/variables/所得.py
+- name: 同居特別障害者控除対象
+  label: 同居特別障害者控除の対象になるか否か
+  documentation: null
+  references:
+  - https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1160.htm
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 所得
+  subcategory: ''
+  source: openfisca_japan/variables/所得.py
+- name: 基準所得税額
+  label: 基準所得税額
+  documentation: null
+  references:
+  - https://www.nta.go.jp/publication/pamph/koho/kurashi/html/01_1.htm
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 所得
+  subcategory: ''
+  source: openfisca_japan/variables/所得.py
+- name: 基礎控除
+  label: 基礎控除
+  documentation: null
+  references:
+  - https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1199.htm
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  - '2025-01-01'
+  - '2027-01-01'
+  category: 所得
+  subcategory: ''
+  source: openfisca_japan/variables/所得.py
+- name: 学生
+  label: 小・中・高校、大学、専門学校、職業訓練学校等の学生
+  documentation: null
+  references:
+  - https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1175.htm
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 所得
+  subcategory: ''
+  source: openfisca_japan/variables/所得.py
+- name: 寡婦控除
+  label: 寡婦控除額
+  documentation: null
+  references:
+  - https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1170.htm
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '2020-01-01'
+  category: 所得
+  subcategory: ''
+  source: openfisca_japan/variables/所得.py
+- name: 復興特別所得税
+  label: 復興特別所得税
+  documentation: null
+  references:
+  - https://www.nta.go.jp/publication/pamph/koho/kurashi/html/01_1.htm
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 所得
+  subcategory: ''
+  source: openfisca_japan/variables/所得.py
+- name: 所得
+  label: 人物の所得
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 所得
+  subcategory: ''
+  source: openfisca_japan/variables/所得.py
+- name: 所得控除
+  label: 所得控除
+  documentation: null
+  references:
+  - https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1100.htm
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 所得
+  subcategory: ''
+  source: openfisca_japan/variables/所得.py
+- name: 所得税
+  label: 所得税
+  documentation: null
+  references:
+  - https://www.nta.go.jp/publication/pamph/koho/kurashi/html/01_1.htm
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 所得
+  subcategory: ''
+  source: openfisca_japan/variables/所得.py
+- name: 扶養人数
+  label: 扶養人数
+  documentation: null
+  references: []
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 所得
+  subcategory: ''
+  source: openfisca_japan/variables/所得.py
+- name: 扶養控除
+  label: 扶養控除
+  documentation: null
+  references:
+  - https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1180.htm
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 所得
+  subcategory: ''
+  source: openfisca_japan/variables/所得.py
+- name: 扶養親族である
+  label: 扶養親族であるか否か
+  documentation: null
+  references:
+  - https://www.nta.go.jp/taxes/shiraberu/taxanswer/yogo/senmon.htm
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 所得
+  subcategory: ''
+  source: openfisca_japan/variables/所得.py
+- name: 特別児童扶養手当の控除後世帯高所得
+  label: 各種控除が適用された後の特別児童扶養手当における世帯高所得額
+  documentation: null
+  references:
+  - https://www.city.otsu.lg.jp/soshiki/015/1406/g/jidofuyoteate/1389538447829.html
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 所得
+  subcategory: ''
+  source: openfisca_japan/variables/所得.py
+- name: 特別児童扶養手当の控除後所得
+  label: 各種控除が適用された後の特別児童扶養手当における所得額
+  documentation: null
+  references:
+  - https://www.city.otsu.lg.jp/soshiki/015/1406/g/jidofuyoteate/1389538447829.html
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 所得
+  subcategory: ''
+  source: openfisca_japan/variables/所得.py
+- name: 特別障害者控除対象
+  label: 特別障害者控除の対象になるか否か
+  documentation: null
+  references:
+  - https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1160.htm
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 所得
+  subcategory: ''
+  source: openfisca_japan/variables/所得.py
+- name: 給与所得控除額
+  label: 人物の収入に対する給与所得控除額
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '2017-01-01'
+  - '2020-01-01'
+  category: 所得
+  subcategory: ''
+  source: openfisca_japan/variables/所得.py
+- name: 配偶者控除
+  label: 配偶者控除
+  documentation: '配偶者特別控除とは異なる。
+
+    配偶者の所得が配偶者控除の所得制限を超えた場合でも、配偶者特別控除が適用される可能性がある。'
+  references:
+  - https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1191.htm
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 所得
+  subcategory: ''
+  source: openfisca_japan/variables/所得.py
+- name: 配偶者特別控除
+  label: 配偶者特別控除
+  documentation: null
+  references:
+  - https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1195.htm
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 所得
+  subcategory: ''
+  source: openfisca_japan/variables/所得.py
+- name: 障害児福祉手当の控除後世帯高所得
+  label: 障害児福祉手当の控除後世帯高所得額
+  documentation: null
+  references:
+  - https://web.archive.org/web/20220930063105/https://www.city.himeji.lg.jp/waku2child/0000013409.html
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 所得
+  subcategory: ''
+  source: openfisca_japan/variables/所得.py
+- name: 障害児福祉手当の控除後所得
+  label: 障害児福祉手当の控除後所得額
+  documentation: null
+  references:
+  - https://web.archive.org/web/20220930063105/https://www.city.himeji.lg.jp/waku2child/0000013409.html
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 所得
+  subcategory: ''
+  source: openfisca_japan/variables/所得.py
+- name: 障害者控除
+  label: 障害者控除額
+  documentation: null
+  references:
+  - https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1160.htm
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 所得
+  subcategory: ''
+  source: openfisca_japan/variables/所得.py
+- name: 障害者控除対象
+  label: 障害者控除の対象になるか否か
+  documentation: null
+  references:
+  - https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1160.htm
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 所得
+  subcategory: ''
+  source: openfisca_japan/variables/所得.py
+- name: 障害者控除対象額
+  label: 障害者控除額の対象額
+  documentation: 実際の控除額は同一生計配偶者、扶養親族が該当する場合にも加算される
+  references:
+  - https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1160.htm
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 所得
+  subcategory: ''
+  source: openfisca_japan/variables/所得.py
+- name: 児童育成手当
+  label: 保護者への児童手当
+  documentation: '渋谷区の児童育成手当制度
+
+
+    - 〒150-8010 東京都渋谷区宇田川町1-1
+
+    - 渋谷区子ども青少年課子育て給付係
+
+    - 03-3463-2558'
+  references:
+  - https://web.archive.org/web/20220302155714/https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/hitorioya_teate.html
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 東京都
+  subcategory: 福祉/児童育成手当
+  source: openfisca_japan/variables/東京都/福祉/児童育成手当.py
+- name: 受験生チャレンジ支援貸付
+  label: 受験生チャレンジ支援貸付
+  documentation: null
+  references:
+  - https://www.fukushi.metro.tokyo.lg.jp/seikatsu/teisyotokusyataisaku/jukenseichallenge.html
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 東京都
+  subcategory: 福祉/受験生チャレンジ支援貸付
+  source: openfisca_japan/variables/東京都/福祉/受験生チャレンジ支援貸付.py
+- name: 受験生チャレンジ支援貸付可能
+  label: 受験生チャレンジ支援貸付可能
+  documentation: null
+  references:
+  - https://www.fukushi.metro.tokyo.lg.jp/seikatsu/teisyotokusyataisaku/jukenseichallenge.html
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 東京都
+  subcategory: 福祉/受験生チャレンジ支援貸付
+  source: openfisca_japan/variables/東京都/福祉/受験生チャレンジ支援貸付.py
+- name: 重度心身障害者手当_最大
+  label: 重度心身障害者手当の最大額
+  documentation: '東京都の制度
+
+    厳密な判定には詳細な症状が必要なため、愛の手帳等級、身体障害者手帳等から推定可能な最小値、最大値を算出
+
+
+    算出方法は以下リンクも参考になる。
+
+    https://www.mhlw.go.jp/file/06-Seisakujouhou-12200000-Shakaiengokyokushougaihokenfukushibu/0000172197.pdf'
+  references:
+  - https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/juudo.html
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 東京都
+  subcategory: 福祉/重度心身障害者手当
+  source: openfisca_japan/variables/東京都/福祉/重度心身障害者手当.py
+- name: 重度心身障害者手当_最小
+  label: 重度心身障害者手当の最小額
+  documentation: '東京都の制度
+
+    厳密な判定には詳細な症状が必要なため、愛の手帳等級、身体障害者手帳等から推定可能な最小値、最大値を算出
+
+
+    算出方法は以下リンクも参考になる。
+
+    https://www.mhlw.go.jp/file/06-Seisakujouhou-12200000-Shakaiengokyokushougaihokenfukushibu/0000172197.pdf'
+  references:
+  - https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/juudo.html
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 東京都
+  subcategory: 福祉/重度心身障害者手当
+  source: openfisca_japan/variables/東京都/福祉/重度心身障害者手当.py
+- name: 重度心身障害者手当所得制限
+  label: 重度心身障害者手当の所得制限
+  documentation: null
+  references:
+  - https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/juudo.html
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 東京都
+  subcategory: 福祉/重度心身障害者手当
+  source: openfisca_japan/variables/東京都/福祉/重度心身障害者手当.py
+- name: 障害児童育成手当
+  label: 保護者への障害児童育成手当
+  documentation: '渋谷区の児童育成（障害）手当
+
+
+    - 〒150-8010 東京都渋谷区宇田川町1-1
+
+    - 渋谷区子ども青少年課子育て給付係
+
+    - 03-3463-2558'
+  references:
+  - https://web.archive.org/web/20220308004641/https://www.city.shibuya.tokyo.jp/kodomo/ninshin/teate/jido_i.html
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 東京都
+  subcategory: 福祉/障害児童育成手当
+  source: openfisca_japan/variables/東京都/福祉/障害児童育成手当.py
+- name: 年1回目の賞与
+  label: 人物の年1回目の賞与
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 標準報酬月額
+  subcategory: ''
+  source: openfisca_japan/variables/標準報酬月額.py
+- name: 年2回目の賞与
+  label: 人物の年2回目の賞与
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 標準報酬月額
+  subcategory: ''
+  source: openfisca_japan/variables/標準報酬月額.py
+- name: 年3回目の賞与
+  label: 人物の年3回目の賞与
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 標準報酬月額
+  subcategory: ''
+  source: openfisca_japan/variables/標準報酬月額.py
+- name: 年4回目以降の賞与合計
+  label: 人物の年4回目以降の賞与の合計
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 標準報酬月額
+  subcategory: ''
+  source: openfisca_japan/variables/標準報酬月額.py
+- name: 標準報酬月額_健康保険料
+  label: 標準報酬月額_健康保険料
+  documentation: '被保険者が事業主から受ける毎月の報酬
+
+
+    基本給のほか、役付手当、勤務地手当、家族手当、通勤手当、住宅手当、残業手当等も含まれる
+
+    賞与は年3回以下である場合含まれない。
+
+    また、厳密には毎月の報酬額を一定区分ごとに等級付けするため実際の収入より増減する場合がある。
+
+    (都道府県ごとに設定されている。)'
+  references:
+  - https://www.kyoukaikenpo.or.jp/about/business/insurance_rate/
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 標準報酬月額
+  subcategory: ''
+  source: openfisca_japan/variables/標準報酬月額.py
+- name: 標準報酬月額_厚生年金保険料
+  label: 標準報酬月額_厚生年金保険料
+  documentation: '被保険者が事業主から受ける毎月の報酬
+
+
+    基本給のほか、役付手当、勤務地手当、家族手当、通勤手当、住宅手当、残業手当等も含まれる
+
+    賞与は年3回以下である場合含まれない。
+
+    また、厳密には毎月の報酬額を一定区分ごとに等級付けするため実際の収入より増減する場合がある。
+
+    (都道府県ごとに設定されている。)'
+  references:
+  - https://www.nenkin.go.jp/service/kounen/hokenryo/hoshu/20150515-01.html
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 標準報酬月額
+  subcategory: ''
+  source: openfisca_japan/variables/標準報酬月額.py
+- name: 標準賞与額_月平均_健康保険料
+  label: 標準賞与額_月平均_健康保険料
+  documentation: 被保険者が事業主から受ける賞与の月平均額(健康保険料計算用)
+  references:
+  - https://www.kyoukaikenpo.or.jp/about/business/insurance_rate/
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 標準報酬月額
+  subcategory: ''
+  source: openfisca_japan/variables/標準報酬月額.py
+- name: 標準賞与額_月平均_厚生年金保険料
+  label: 標準賞与額_月平均_厚生年金保険料
+  documentation: 被保険者が事業主から受ける賞与の月平均額(厚生年金保険料計算用)
+  references:
+  - https://www.nenkin.go.jp/service/kounen/hokenryo/hoshu/20150515-01.html
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 標準報酬月額
+  subcategory: ''
+  source: openfisca_japan/variables/標準報酬月額.py
+- name: 賞与以外の年収
+  label: 人物の賞与以外の年収
+  documentation: null
+  references:
+  - https://www.freee.co.jp/kb/kb-payroll/what-standard-monthly-income-is/
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 標準報酬月額
+  subcategory: ''
+  source: openfisca_japan/variables/標準報酬月額.py
+- name: 住宅再建方法
+  label: 被災者の住宅再建方法
+  documentation: null
+  references: []
+  entity: 世帯
+  value_type: Enum
+  possible_values:
+  - 無
+  - 建設または購入
+  - 補修
+  - 賃借
+  definition_period: day
+  default_value: 無
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 災害
+  subcategory: 住宅
+  source: openfisca_japan/variables/災害/住宅.py
+- name: 住宅被害
+  label: 被災者の住宅被害
+  documentation: null
+  references: []
+  entity: 世帯
+  value_type: Enum
+  possible_values:
+  - 無
+  - 中規模半壊
+  - 大規模半壊
+  - 長期避難
+  - 解体
+  - 全壊
+  - 滅失または流失
+  definition_period: day
+  default_value: 無
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 災害
+  subcategory: 住宅
+  source: openfisca_japan/variables/災害/住宅.py
+- name: 家財の損害
+  label: 被災者の住宅の家財の損害
+  documentation: null
+  references: []
+  entity: 世帯
+  value_type: Enum
+  possible_values:
+  - 無
+  - 三分の一未満
+  - 三分の一以上
+  definition_period: day
+  default_value: 無
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 災害
+  subcategory: 住宅
+  source: openfisca_japan/variables/災害/住宅.py
+- name: 災害による負傷の療養期間
+  label: 災害により負傷した被災者の療養期間
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: Enum
+  possible_values:
+  - 無
+  - 一か月未満
+  - 一か月以上
+  definition_period: day
+  default_value: 無
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 災害
+  subcategory: 住宅
+  source: openfisca_japan/variables/災害/住宅.py
+- name: 災害で死亡した世帯員の人数
+  label: 災害で死亡した世帯員の人数
+  documentation: 死亡した世帯員は世帯情報に含められない（含めると他の制度の対象になってしまう）ため、死亡者に関するVariableを別途用意
+  references:
+  - https://www.bousai.go.jp/taisaku/choui/pdf/siryo1-1.pdf
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 災害
+  subcategory: 支援/災害弔慰金
+  source: openfisca_japan/variables/災害/支援/災害弔慰金.py
+- name: 災害で生計維持者が死亡した
+  label: 災害で生計維持者が死亡したかどうか
+  documentation: 死亡した世帯員は世帯情報に含められない（含めると他の制度の対象になってしまう）ため、死亡者に関するVariableを別途用意
+  references:
+  - https://www.bousai.go.jp/taisaku/choui/pdf/siryo1-1.pdf
+  entity: 世帯
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 災害
+  subcategory: 支援/災害弔慰金
+  source: openfisca_japan/variables/災害/支援/災害弔慰金.py
+- name: 災害弔慰金
+  label: 災害弔慰金
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://www.city.hino.lg.jp/kurashi/annzen/hisai/1011473.html'
+  references:
+  - https://www.bousai.go.jp/taisaku/choui/pdf/siryo1-1.pdf
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 災害
+  subcategory: 支援/災害弔慰金
+  source: openfisca_japan/variables/災害/支援/災害弔慰金.py
+- name: 災害援護資金
+  label: 災害援護資金
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://www.mhlw.go.jp/shinsai_jouhou/saigaishien.html'
+  references:
+  - https://www.bousai.go.jp/taisaku/hisaisyagyousei/pdf/kakusyuseido_tsuujou.pdf
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 災害
+  subcategory: 支援/災害援護資金
+  source: openfisca_japan/variables/災害/支援/災害援護資金.py
+- name: 災害援護資金_所得制限額
+  label: 災害援護資金における所得制限額
+  documentation: '「住居が滅失した場合」には全壊、全焼、流出も含まれる
+
+    https://www.mhlw.go.jp/bunya/seikatsuhogo/dl/saigaikyujo6h_03.pdf'
+  references:
+  - https://www.bousai.go.jp/taisaku/hisaisyagyousei/pdf/kakusyuseido_tsuujou.pdf
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 災害
+  subcategory: 支援/災害援護資金
+  source: openfisca_japan/variables/災害/支援/災害援護資金.py
+- name: 災害による重い後遺障害がある
+  label: 災害による重い後遺障害がある
+  documentation: null
+  references:
+  - https://www.city.hino.lg.jp/kurashi/annzen/hisai/1011473.html
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 災害
+  subcategory: 支援/災害障害見舞金
+  source: openfisca_japan/variables/災害/支援/災害障害見舞金.py
+- name: 災害救助法の適用地域である
+  label: 災害救助法の適用地域であるかどうか
+  documentation: '自然災害ごとに、市区町村ごとに適用有無が決まる
+
+    災害発生時は適用有無が変化していくので注意
+
+    適用状況 https://www.bousai.go.jp/taisaku/kyuujo/kyuujo_tekiyou.html'
+  references:
+  - https://elaws.e-gov.go.jp/document?lawid=322AC0000000118
+  entity: 世帯
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 災害
+  subcategory: 支援/災害障害見舞金
+  source: openfisca_japan/variables/災害/支援/災害障害見舞金.py
+- name: 災害障害見舞金_最大
+  label: 災害障害見舞金の最大額
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://www.city.hino.lg.jp/kurashi/annzen/hisai/1011473.html'
+  references:
+  - https://www.bousai.go.jp/taisaku/choui/pdf/siryo1-1.pdf
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 災害
+  subcategory: 支援/災害障害見舞金
+  source: openfisca_japan/variables/災害/支援/災害障害見舞金.py
+- name: 災害障害見舞金_最小
+  label: 災害障害見舞金の最小額
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://www.city.hino.lg.jp/kurashi/annzen/hisai/1011473.html'
+  references:
+  - https://www.bousai.go.jp/taisaku/choui/pdf/siryo1-1.pdf
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 災害
+  subcategory: 支援/災害障害見舞金
+  source: openfisca_japan/variables/災害/支援/災害障害見舞金.py
+- name: 被災者生活再建支援制度
+  label: 被災者生活再建支援制度
+  documentation: '対象となる自然災害は都道府県が公示
+
+
+    算出方法は以下リンクも参考になる。
+
+    https://www.bousai.go.jp/taisaku/hisaisyagyousei/pdf/kakusyuseido_tsuujou.pdf'
+  references:
+  - https://www.bousai.go.jp/taisaku/seikatsusaiken/pdf/140612gaiyou.pdf
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 災害
+  subcategory: 支援/被災者生活再建支援制度
+  source: openfisca_japan/variables/災害/支援/被災者生活再建支援制度.py
+- name: 被災者生活再建支援制度_加算支援金
+  label: 被災者生活再建支援制度における加算支援金
+  documentation: null
+  references:
+  - https://www.bousai.go.jp/taisaku/seikatsusaiken/pdf/140612gaiyou.pdf
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 災害
+  subcategory: 支援/被災者生活再建支援制度
+  source: openfisca_japan/variables/災害/支援/被災者生活再建支援制度.py
+- name: 被災者生活再建支援制度_基礎支援金
+  label: 被災者生活再建支援制度における基礎支援金
+  documentation: null
+  references:
+  - https://www.bousai.go.jp/taisaku/seikatsusaiken/pdf/140612gaiyou.pdf
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 災害
+  subcategory: 支援/被災者生活再建支援制度
+  source: openfisca_japan/variables/災害/支援/被災者生活再建支援制度.py
+- name: 被災者生活再建支援法の適用地域である
+  label: 被災者生活再建支援法の適用地域であるかどうか
+  documentation: '自然災害ごとに、市区町村ごとに適用有無が決まる
+
+    災害発生時は適用有無が変化していくので注意'
+  references:
+  - https://www.bousai.go.jp/taisaku/seikatsusaiken/pdf/140612gaiyou.pdf
+  entity: 世帯
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 災害
+  subcategory: 支援/被災者生活再建支援制度
+  source: openfisca_japan/variables/災害/支援/被災者生活再建支援制度.py
+- name: 被災している
+  label: 被災しているかどうか
+  documentation: null
+  references: []
+  entity: 世帯
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 災害
+  subcategory: 災害
+  source: openfisca_japan/variables/災害/災害.py
+- name: 介護保険料
+  label: 介護保険料
+  documentation: '40歳から64歳までの介護保険第2号被保険者の介護保険料
+
+    介護保険用の標準報酬月額と標準賞与額(月平均)に介護保険料率を掛けた金額の年間合計
+
+
+    NOTE: 65歳以上の第1号被保険者の介護保険料は市区町村ごとに異なるため計算しない。
+
+    個人事業主が加入する介護保険の保険料は市区町村によって異なるため計算しない。
+
+
+    以下リンクの説明も参考になる。
+
+    https://www.freee.co.jp/kb/kb-payroll/how-to-calculate-social-insurance-premium-deduction-from-salary/'
+  references:
+  - https://www.kyoukaikenpo.or.jp/g7/cat330/
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 社会保険料
+  subcategory: 介護保険料
+  source: openfisca_japan/variables/社会保険料/介護保険料.py
+- name: 健康保険料
+  label: 健康保険料
+  documentation: '被保険者の健康保険料(年額)
+
+    健康保険用の標準報酬月額と標準賞与額(月平均)に健康保険料率を掛けた金額
+
+    健康保険料率は協会けんぽと各事業所による健康保険組合でそれぞれ異なるため
+
+    一律で10%とする。
+
+    本来は介護保険料も含むが、簡便のため含めず、別途計算して加算する。
+
+
+    個人事業主が加入する国民健康保険の保険料は市区町村によって異なるため計算しない。
+
+
+    以下リンクの説明も参考になる。
+
+    https://www.freee.co.jp/kb/kb-payroll/how-to-calculate-social-insurance-premium-deduction-from-salary/'
+  references:
+  - https://www.kyoukaikenpo.or.jp/g7/cat330/
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 社会保険料
+  subcategory: 健康保険料
+  source: openfisca_japan/variables/社会保険料/健康保険料.py
+- name: 厚生年金保険料
+  label: 厚生年金保険料
+  documentation: '被保険者の厚生年金保険料(年額)
+
+    厚生年金保険用の標準報酬月額と標準賞与額(月平均)に厚生年金保険料率を掛けた金額
+
+    以下リンクの説明も参考になる。
+
+    https://www.freee.co.jp/kb/kb-payroll/how-to-calculate-social-insurance-premium-deduction-from-salary/'
+  references:
+  - https://www.nenkin.go.jp/service/kounen/hokenryo/ryogaku/ryogakuhyo/index.html
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 社会保険料
+  subcategory: 厚生年金保険料
+  source: openfisca_japan/variables/社会保険料/厚生年金保険料.py
+- name: 厚生年金基金掛金
+  label: 厚生年金基金掛金
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 社会保険料
+  subcategory: 厚生年金基金掛金
+  source: openfisca_japan/variables/社会保険料/厚生年金基金掛金.py
+- name: 国民年金保険に加入している
+  label: 国民年金保険に加入している
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: true
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 社会保険料
+  subcategory: 国民年金保険料
+  source: openfisca_japan/variables/社会保険料/国民年金保険料.py
+- name: 国民年金保険料
+  label: 国民年金保険料
+  documentation: 国民年金保険加入者の年間の保険料
+  references:
+  - https://www.nenkin.go.jp/service/kokunen/hokenryo/hokenryo.html
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 社会保険料
+  subcategory: 国民年金保険料
+  source: openfisca_japan/variables/社会保険料/国民年金保険料.py
+- name: 国民年金基金掛金
+  label: 国民年金基金掛金
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 社会保険料
+  subcategory: 国民年金基金掛金
+  source: openfisca_japan/variables/社会保険料/国民年金基金掛金.py
+- name: 社会保険料
+  label: 社会保険料
+  documentation: '被保険者の社会保険料(年額)
+
+    個人事業主の計算は行わない。'
+  references:
+  - https://www.freee.co.jp/kb/kb-payroll/how-to-calculate-social-insurance-premium-deduction-from-salary/
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 社会保険料
+  subcategory: 社会保険料
+  source: openfisca_japan/variables/社会保険料/社会保険料.py
+- name: 社会保険料控除
+  label: 社会保険料控除
+  documentation: '被保険者の社会保険料控除額(年額)
+
+    対象者・金額が多い、健康保険料・雇用保険料・介護保険料・国民年金保険料・
+
+    厚生年金保険料・国民年金基金掛金・厚生年金基金掛金のみを計算対象とする。
+
+
+    以下リンクも参考になる
+
+    https://biz.moneyforward.com/tax_return/basic/41316/'
+  references:
+  - https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1130.htm
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 社会保険料
+  subcategory: 社会保険料控除
+  source: openfisca_japan/variables/社会保険料/社会保険料控除.py
+- name: 社会保険料納付条件
+  label: 社会保険料納付条件
+  documentation: "社会保険料納付条件を満たすか\nフルタイム->週労働時間20時間以上で基本的に月収要件も満たすため加入\nパート->週労働時間20時間以上で月収要件も満たす場合は加入\n    週労働時間が20時間未満の場合は月収要件を満たしていても加入しない"
+  references:
+  - https://www.nenkin.go.jp/oshirase/topics/2021/0219.html
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 社会保険料
+  subcategory: 社会保険料納付条件
+  source: openfisca_japan/variables/社会保険料/社会保険料納付条件.py
+- name: 週労働時間20時間以上
+  label: 週労働時間20時間以上
+  documentation: 週労働時間20時間以上であるか
+  references:
+  - https://www.nenkin.go.jp/oshirase/topics/2021/0219.html
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: true
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 社会保険料
+  subcategory: 社会保険料納付条件
+  source: openfisca_japan/variables/社会保険料/社会保険料納付条件.py
+- name: 雇用保険料
+  label: 雇用保険料
+  documentation: '被保険者の雇用保険料(年額)
+
+    「一般の事業」の労働者負担分を計算する。
+
+    個人事業主は加入しない。
+
+
+    以下リンクの説明も参考になる。
+
+    https://www.freee.co.jp/kb/kb-payroll/how-to-calculate-employment-insurance/'
+  references:
+  - https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000108634.html
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 社会保険料
+  subcategory: 雇用保険料
+  source: openfisca_japan/variables/社会保険料/雇用保険料.py
+- name: 住居確保給付金_最大
+  label: 住居確保給付金
+  documentation: '離職・廃業等により住居を失うおそれのある世帯に対し、家賃相当額を支給する制度。
+
+    支給額は実際の家賃額（市区町村ごとに定める額を上限とする）で、上限額は生活保護制度の住宅扶助額。
+
+
+    支給期間は原則3か月（延長は2回まで最大9か月間）だが、本 Variable では月額を算出する。
+
+
+    NOTE: 離職等要件・求職活動要件・収入要件は入力項目としていないため、
+
+    それらをすべて満たす場合の額を最大額として算出している。
+
+    満たさない要件がある場合は支給されないため、最小額は0円（住居確保給付金_最小）となる。'
+  references:
+  - https://corona-support.mhlw.go.jp/jukyokakuhokyufukin/index.html
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 住居確保給付金
+  source: openfisca_japan/variables/福祉/住居確保給付金.py
+- name: 住居確保給付金_最小
+  label: 住居確保給付金
+  documentation: "NOTE: 以下の要件は回答の負荷が高いため入力項目とせず、満たさない場合を想定して最小額は0円とする。\n\n- 離職等要件: 主たる生計維持者が離職・廃業後2年以内、または「個人の責任・都合によらず」\n  給与等を得る機会が離職・廃業と同程度まで減少していること\n- 求職活動要件: ハローワークへの求職申込等、誠実かつ熱心な求職活動を行っていること\n- 収入要件: 直近の月の世帯収入合計額が基準額と家賃の合計額以下であること\n  （基準額は市区町村ごとに異なり本リポジトリで算出できない）"
+  references:
+  - https://corona-support.mhlw.go.jp/jukyokakuhokyufukin/index.html
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 住居確保給付金
+  source: openfisca_japan/variables/福祉/住居確保給付金.py
+- name: 住居確保給付金の資産要件を満たす
+  label: 住居確保給付金の資産要件を満たすか否か
+  documentation: '本来の資産要件は「世帯の預貯金合計額が基準額（市町村民税の均等割が非課税となる額の1/12）の
+
+    6月分（ただし100万円を超えない額）以下であること」。
+
+
+    NOTE: 基準額は市区町村ごとに異なり本リポジトリで算出できないため、
+
+    どの市区町村でも共通の上限である100万円のみを判定している。
+
+    実際の上限はこれより低い場合があるため、この要件を満たしても対象外となることがある。'
+  references:
+  - https://corona-support.mhlw.go.jp/jukyokakuhokyufukin/index.html
+  entity: 世帯
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 住居確保給付金
+  source: openfisca_japan/variables/福祉/住居確保給付金.py
+- name: けがによって連続三日以上休業している
+  label: けがによって連続三日以上休業しているか否か
+  documentation: 'TODO: 休業日数による判別が増えたら「休業日数」という変数にする'
+  references: []
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 傷病手当金
+  source: openfisca_japan/variables/福祉/傷病手当金.py
+- name: 休業中に給与の支払いがない
+  label: 休業中に給与の支払いがない
+  documentation: フロントエンドのフォームや制度にあわせて、支払いが「ない」方をTrueとする。
+  references: []
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 傷病手当金
+  source: openfisca_japan/variables/福祉/傷病手当金.py
+- name: 傷病手当金_最大
+  label: 傷病手当金
+  documentation: '休んだ日単位で支給されるため、算出額も一日当たりの金額とする。地方公務員の場合は一月当たりの日数が異なる。
+
+    https://www.chikyosai.or.jp/division/short/scene/works/01.html
+
+
+    算出方法は以下リンクも参考になる。
+
+    https://www.asahi.com/relife/article/15231364'
+  references:
+  - https://www.kyoukaikenpo.or.jp/benefit/injury_and_sickness_allowance/index.html
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 傷病手当金
+  source: openfisca_japan/variables/福祉/傷病手当金.py
+- name: 傷病手当金_最小
+  label: 傷病手当金
+  documentation: '休んだ日単位で支給されるため、算出額も一日当たりの金額とする。
+
+
+    算出方法は以下リンクも参考になる。
+
+    https://www.asahi.com/relife/article/15231364'
+  references:
+  - https://www.kyoukaikenpo.or.jp/benefit/injury_and_sickness_allowance/index.html
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 傷病手当金
+  source: openfisca_japan/variables/福祉/傷病手当金.py
+- name: 業務によってけがをした
+  label: 業務によってけがをしたか否か
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 傷病手当金
+  source: openfisca_japan/variables/福祉/傷病手当金.py
+- name: 業務によって病気になった
+  label: 業務によって病気になったか否か
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 傷病手当金
+  source: openfisca_japan/variables/福祉/傷病手当金.py
+- name: 病気によって連続三日以上休業している
+  label: 病気によって連続三日以上休業しているか否か
+  documentation: 'TODO: 休業日数による判別が増えたら「休業日数」という変数にする'
+  references: []
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 傷病手当金
+  source: openfisca_japan/variables/福祉/傷病手当金.py
+- name: C型肝炎ウイルスに感染している
+  label: C型肝炎ウイルスに感染している
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 感染症/C型肝炎
+  source: openfisca_japan/variables/福祉/感染症/C型肝炎.py
+- name: 肝硬変や肝がんに罹患しているまたは肝移植をおこなった
+  label: 肝硬変、肝がんに罹患している、または肝移植をおこなった
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 感染症/C型肝炎
+  source: openfisca_japan/variables/福祉/感染症/C型肝炎.py
+- name: 血液製剤の投与によってC型肝炎ウイルスに感染した
+  label: 血液製剤の投与によってC型肝炎ウイルスに感染した
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 感染症/C型肝炎
+  source: openfisca_japan/variables/福祉/感染症/C型肝炎.py
+- name: HIV感染者である
+  label: HIV感染者である
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 感染症/HIV関連情報
+  source: openfisca_japan/variables/福祉/感染症/HIV関連情報.py
+- name: エイズを発症している
+  label: エイズを発症している
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 感染症/HIV関連情報
+  source: openfisca_japan/variables/福祉/感染症/HIV関連情報.py
+- name: 家族に血液製剤によるHIV感染者がいる
+  label: 家族に血液凝固因子製剤によるHIV感染者がいる
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 感染症/HIV関連情報
+  source: openfisca_japan/variables/福祉/感染症/HIV関連情報.py
+- name: 血液製剤の投与によってHIVに感染した
+  label: 血液凝固因子製剤の投与によってHIVに感染した
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 感染症/HIV関連情報
+  source: openfisca_japan/variables/福祉/感染症/HIV関連情報.py
+- name: 健康管理支援事業_最大
+  label: 健康管理支援事業の最大額
+  documentation: null
+  references:
+  - https://www.pmda.go.jp/relief-services/hiv-positives/0002.html
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 感染症/健康管理支援事業
+  source: openfisca_japan/variables/福祉/感染症/健康管理支援事業.py
+- name: 健康管理支援事業_最小
+  label: 健康管理支援事業の最小額
+  documentation: null
+  references:
+  - https://www.pmda.go.jp/relief-services/hiv-positives/0002.html
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 感染症/健康管理支援事業
+  source: openfisca_japan/variables/福祉/感染症/健康管理支援事業.py
+- name: 健康管理支援事業の対象である
+  label: 健康管理支援事業の対象であるか否か
+  documentation: null
+  references:
+  - https://www.pmda.go.jp/relief-services/hiv-positives/0002.html
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 感染症/健康管理支援事業
+  source: openfisca_japan/variables/福祉/感染症/健康管理支援事業.py
+- name: 健康管理費用_最大
+  label: 健康管理費用の最大額
+  documentation: CD4(T4)リンパ球の量によって支給額が異なるが、variableで表す代わりに幅を持たせて算出
+  references:
+  - https://www.pmda.go.jp/relief-services/hiv-positives/0002.html
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 感染症/健康管理費用
+  source: openfisca_japan/variables/福祉/感染症/健康管理費用.py
+- name: 健康管理費用_最小
+  label: 健康管理費用の最小額
+  documentation: CD4(T4)リンパ球の量によって支給額が異なるが、variableで表す代わりに幅を持たせて算出
+  references:
+  - https://www.pmda.go.jp/relief-services/hiv-positives/0002.html
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 感染症/健康管理費用
+  source: openfisca_japan/variables/福祉/感染症/健康管理費用.py
+- name: 健康管理費用の対象である
+  label: 健康管理費用の対象であるか否か
+  documentation: CD4(T4)リンパ球の量によって支給額が異なるが、variableで表す代わりに幅を持たせて算出
+  references:
+  - https://www.pmda.go.jp/relief-services/hiv-positives/0002.html
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 感染症/健康管理費用
+  source: openfisca_japan/variables/福祉/感染症/健康管理費用.py
+- name: 先天性の傷病治療によるC型肝炎患者に係るQOL向上等のための調査研究事業_最大
+  label: 先天性の傷病治療によるC型肝炎患者に係るQOL向上等のための調査研究事業の調査研究協力謝金（最大額）
+  documentation: 謝金の金額については https://www.med.niigata-u.ac.jp/ifc/tebiki/blood/05.html
+  references:
+  - https://www.pmda.go.jp/relief-services/health-welfare/0006.html
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 感染症/先天性の傷病治療によるC型肝炎患者に係るQOL向上等のための調査研究事業
+  source: openfisca_japan/variables/福祉/感染症/先天性の傷病治療によるC型肝炎患者に係るQOL向上等のための調査研究事業.py
+- name: 先天性の傷病治療によるC型肝炎患者に係るQOL向上等のための調査研究事業_最小
+  label: 先天性の傷病治療によるC型肝炎患者に係るQOL向上等のための調査研究事業の調査研究協力謝金（最小額）
+  documentation: 謝金の金額については https://www.med.niigata-u.ac.jp/ifc/tebiki/blood/05.html
+  references:
+  - https://www.pmda.go.jp/relief-services/health-welfare/0006.html
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 感染症/先天性の傷病治療によるC型肝炎患者に係るQOL向上等のための調査研究事業
+  source: openfisca_japan/variables/福祉/感染症/先天性の傷病治療によるC型肝炎患者に係るQOL向上等のための調査研究事業.py
+- name: 先天性血液凝固因子障害等治療研究事業の対象者がいる
+  label: 先天性血液凝固因子障害等治療研究事業の対象者の対象者がいるか否か
+  documentation: null
+  references:
+  - https://www.mhlw.go.jp/web/t_doc?dataId=00tb3840&dataType=1&pageNo=1
+  entity: 世帯
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 感染症/先天性血液凝固因子障害等治療研究事業
+  source: openfisca_japan/variables/福祉/感染症/先天性血液凝固因子障害等治療研究事業.py
+- name: 先天性血液凝固因子障害等治療研究事業の対象者である
+  label: 先天性血液凝固因子障害等治療研究事業の対象者である
+  documentation: '医療費負担を軽減する制度であり他制度の計算結果と合計できないため、対象者であるかどうかのみ計算
+
+
+    条件は以下リンクも参考になる。
+
+    https://www.pref.aichi.jp/soshiki/kenkotaisaku/senketsu.html'
+  references:
+  - https://www.mhlw.go.jp/web/t_doc?dataId=00tb3840&dataType=1&pageNo=1
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 感染症/先天性血液凝固因子障害等治療研究事業
+  source: openfisca_japan/variables/福祉/感染症/先天性血液凝固因子障害等治療研究事業.py
+- name: 先天性の血液凝固因子異常症である
+  label: 先天性の血液凝固因子異常症である
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 感染症/血液凝固因子異常症
+  source: openfisca_japan/variables/福祉/感染症/血液凝固因子異常症.py
+- name: 先天性の血液凝固因子異常症である可能性がある
+  label: 先天性の血液凝固因子異常症である可能性がある
+  documentation: 「先天性の血液凝固因子異常症である」の場合と異なり、「その他」の場合も含める
+  references: []
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 感染症/血液凝固因子異常症
+  source: openfisca_japan/variables/福祉/感染症/血液凝固因子異常症.py
+- name: 血友病である
+  label: 血友病である
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 感染症/血液凝固因子異常症
+  source: openfisca_japan/variables/福祉/感染症/血液凝固因子異常症.py
+- name: 血友病の可能性がある
+  label: 血友病の可能性がある
+  documentation: 血友病である場合に加え、分からない場合も含まれる
+  references: []
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 感染症/血液凝固因子異常症
+  source: openfisca_japan/variables/福祉/感染症/血液凝固因子異常症.py
+- name: 血液凝固因子異常症_その他
+  label: 血液凝固因子異常症（その他）
+  documentation: 上記いずれの因子にも該当しない、どれに該当するか分からない、または因子異常症であるかどうか分からない場合に選ばれる
+  references: []
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 感染症/血液凝固因子異常症
+  source: openfisca_japan/variables/福祉/感染症/血液凝固因子異常症.py
+- name: 血液凝固因子異常症_フォンヴィルブランド病
+  label: 血液凝固因子異常症（フォン・ヴィルブランド病）
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 感染症/血液凝固因子異常症
+  source: openfisca_japan/variables/福祉/感染症/血液凝固因子異常症.py
+- name: 血液凝固因子異常症_第II因子欠乏症
+  label: 血液凝固因子異常症（第II因子欠乏症）
+  documentation: プロトロビン欠乏症
+  references: []
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 感染症/血液凝固因子異常症
+  source: openfisca_japan/variables/福祉/感染症/血液凝固因子異常症.py
+- name: 血液凝固因子異常症_第IX因子欠乏症
+  label: 血液凝固因子異常症（第IX因子欠乏症）
+  documentation: 血友病B
+  references: []
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 感染症/血液凝固因子異常症
+  source: openfisca_japan/variables/福祉/感染症/血液凝固因子異常症.py
+- name: 血液凝固因子異常症_第I因子欠乏症
+  label: 血液凝固因子異常症（第I因子欠乏症）
+  documentation: フィブリノゲン欠乏症
+  references: []
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 感染症/血液凝固因子異常症
+  source: openfisca_japan/variables/福祉/感染症/血液凝固因子異常症.py
+- name: 血液凝固因子異常症_第VIII因子欠乏症
+  label: 血液凝固因子異常症（第VIII因子欠乏症）
+  documentation: 血友病A
+  references: []
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 感染症/血液凝固因子異常症
+  source: openfisca_japan/variables/福祉/感染症/血液凝固因子異常症.py
+- name: 血液凝固因子異常症_第VII因子欠乏症
+  label: 血液凝固因子異常症（VII因子欠乏症）
+  documentation: 安定因子欠乏症
+  references: []
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 感染症/血液凝固因子異常症
+  source: openfisca_japan/variables/福祉/感染症/血液凝固因子異常症.py
+- name: 血液凝固因子異常症_第V因子欠乏症
+  label: 血液凝固因子異常症（第V因子欠乏症）
+  documentation: 不安定因子欠乏症
+  references: []
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 感染症/血液凝固因子異常症
+  source: openfisca_japan/variables/福祉/感染症/血液凝固因子異常症.py
+- name: 血液凝固因子異常症_第XIII因子欠乏症
+  label: 血液凝固因子異常症（第XIII因子欠乏症）
+  documentation: フィブリン安定化因子欠乏症
+  references: []
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 感染症/血液凝固因子異常症
+  source: openfisca_japan/variables/福祉/感染症/血液凝固因子異常症.py
+- name: 血液凝固因子異常症_第XII因子欠乏症
+  label: 血液凝固因子異常症（第XII因子欠乏症）
+  documentation: ヘイグマン因子欠乏症
+  references: []
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 感染症/血液凝固因子異常症
+  source: openfisca_japan/variables/福祉/感染症/血液凝固因子異常症.py
+- name: 血液凝固因子異常症_第XI因子欠乏症
+  label: 血液凝固因子異常症（第XI因子欠乏症）
+  documentation: PTA欠乏症
+  references: []
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 感染症/血液凝固因子異常症
+  source: openfisca_japan/variables/福祉/感染症/血液凝固因子異常症.py
+- name: 血液凝固因子異常症_第X因子欠乏症
+  label: 血液凝固因子異常症（第X因子欠乏症）
+  documentation: スチュアートプラウア欠乏症
+  references: []
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 感染症/血液凝固因子異常症
+  source: openfisca_japan/variables/福祉/感染症/血液凝固因子異常症.py
+- name: 重度心身障害者医療費助成制度の対象者がいる
+  label: 重度心身障害者医療費助成制度の対象者がいるか否か
+  documentation: null
+  references:
+  - https://pap-net.jp/medical_bills/subsidy/
+  entity: 世帯
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 感染症/重度心身障害者医療費助成制度
+  source: openfisca_japan/variables/福祉/感染症/重度心身障害者医療費助成制度.py
+- name: 重度心身障害者医療費助成制度の対象者である
+  label: 重度心身障害者医療費助成制度の対象者である可能性があるか否か
+  documentation: '都道府県によって条件や助成額が異なるため、対象か否かのみ計算
+
+    居住地に対応した条件確認はせず、いずれかの都道府県の条件に該当する場合はTrueとする
+
+
+    （参考）
+
+    東京都: https://www.fukushi.metro.tokyo.lg.jp/seikatsu/josei/marusyo.html
+
+    千葉県: https://www.pref.chiba.lg.jp/shoufuku/service/iryou/juudo.html
+
+    埼玉県: https://www.pref.saitama.lg.jp/a0702/jyuudo.html
+
+    山梨県: https://www.pref.yamanashi.jp/shogai-fks/judo/jidoukanpu-ikou.html'
+  references:
+  - https://pap-net.jp/medical_bills/subsidy/
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 感染症/重度心身障害者医療費助成制度
+  source: openfisca_japan/variables/福祉/感染症/重度心身障害者医療費助成制度.py
+- name: 母子父子寡婦福祉資金貸付金_修学資金_最大
+  label: 母子父子寡婦福祉資金貸付金の修学資金（月額）の最大額
+  documentation: '母子及び父子並びに寡婦福祉法施行令第7条第3号（母子）、第31条の5第3号（父子）、
+
+    第36条第3号（寡婦）に定める修学資金について、令和2年3月30日子家発0330第1号の別表1が
+
+    定める学校等種別ごとの貸付限度額（月額）。金額は全国一律。
+
+
+    高等学校に就学する児童について、自宅外から通学する場合の額を最大額としている。
+
+    割り切りの内容は「母子父子寡婦福祉資金貸付金_修学資金_最小」と同じ。'
+  references:
+  - https://www.mhlw.go.jp/web/t_doc?dataId=00tc4886&dataType=1&pageNo=1
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '2020-04-01'
+  category: 福祉
+  subcategory: 母子父子寡婦福祉資金貸付金
+  source: openfisca_japan/variables/福祉/母子父子寡婦福祉資金貸付金.py
+- name: 母子父子寡婦福祉資金貸付金_修学資金_最小
+  label: 母子父子寡婦福祉資金貸付金の修学資金（月額）の最小額
+  documentation: '母子及び父子並びに寡婦福祉法施行令第7条第3号（母子）、第31条の5第3号（父子）、
+
+    第36条第3号（寡婦）に定める修学資金について、令和2年3月30日子家発0330第1号の別表1が
+
+    定める学校等種別ごとの貸付限度額（月額）。金額は全国一律。
+
+
+    高等学校に就学する児童について、自宅から通学する場合の額を最小額としている。
+
+
+    以下は割り切って実装していない。
+
+    - 大学・大学院・高等専門学校・専修学校に就学する場合の修学資金は、就学先を入力できないため未算出。
+
+    - 自宅通学か自宅外通学かを入力できないため、自宅通学の額を最小額、自宅外通学の額を最大額としている。
+
+    - 高校運営種別が未入力の場合は、国公立の額を最小額、私立の額を最大額としている。
+
+    - 18歳到達により児童扶養手当を受けられなくなった児童に対する加算は未算出。
+
+    - 給付型奨学金や授業料の減免を受けられる場合の控除は、大学等の修学資金にのみ関わるため未実装。
+
+    - 貸付は就学期間中の月額であり、実際の貸付額は必要な額の範囲内で決まる。'
+  references:
+  - https://www.mhlw.go.jp/web/t_doc?dataId=00tc4886&dataType=1&pageNo=1
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '2020-04-01'
+  category: 福祉
+  subcategory: 母子父子寡婦福祉資金貸付金
+  source: openfisca_japan/variables/福祉/母子父子寡婦福祉資金貸付金.py
+- name: 母子父子寡婦福祉資金貸付金_就学支度資金_最大
+  label: 母子父子寡婦福祉資金貸付金の就学支度資金の最大額
+  documentation: '母子及び父子並びに寡婦福祉法施行令第7条第11号（母子）、第31条の5第11号（父子）、
+
+    第36条第11号（寡婦）に定める就学支度資金について、令和2年3月30日子家発0330第1号が
+
+    定める学校種別ごとの貸付限度額。金額は全国一律。
+
+
+    小学校・中学校・高等学校に入学する児童について、自宅外から通学する場合の額を最大額としている。
+
+    小学校・中学校への入学は「特に経済的に困難な事情にある」ことが要件であり入力から判定できないため、
+
+    最大額にのみ含めている。その他の割り切りは「母子父子寡婦福祉資金貸付金_就学支度資金_最小」と同じ。'
+  references:
+  - https://www.mhlw.go.jp/web/t_doc?dataId=00tc4886&dataType=1&pageNo=1
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '2020-04-01'
+  category: 福祉
+  subcategory: 母子父子寡婦福祉資金貸付金
+  source: openfisca_japan/variables/福祉/母子父子寡婦福祉資金貸付金.py
+- name: 母子父子寡婦福祉資金貸付金_就学支度資金_最小
+  label: 母子父子寡婦福祉資金貸付金の就学支度資金の最小額
+  documentation: "母子及び父子並びに寡婦福祉法施行令第7条第11号（母子）、第31条の5第11号（父子）、\n第36条第11号（寡婦）に定める就学支度資金について、令和2年3月30日子家発0330第1号が\n定める学校種別ごとの貸付限度額。金額は全国一律。\n\n高等学校に入学する児童について、自宅から通学する場合の額を最小額としている。\n\n以下は割り切って実装していない。\n- 小学校・中学校への入学に係る就学支度資金は、同令が「特に経済的に困難な事情にある」ことを\n  要件としており入力から判定できないため、最小額には含めず最大額にのみ含めている。\n- 大学・大学院・高等専門学校・専修学校（専門課程・専攻科）への入学、修業施設への入所に係る\n  就学支度資金は、進学先を入力できないため未算出。\n- 自宅通学か自宅外通学かを入力できないため、自宅通学の額を最小額、自宅外通学の額を最大額としている。\n- 高校運営種別が未入力の場合は、国公立の額を最小額、私立の額を最大額としている。\n- 入学の年度を入力できないため、小学1年生・中学1年生・高校1年生である間を入学時とみなしている。\n- 入学金の減免を受けられる場合の控除は、大学等の就学支度資金にのみ関わるため未実装。"
+  references:
+  - https://www.mhlw.go.jp/web/t_doc?dataId=00tc4886&dataType=1&pageNo=1
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '2020-04-01'
+  category: 福祉
+  subcategory: 母子父子寡婦福祉資金貸付金
+  source: openfisca_japan/variables/福祉/母子父子寡婦福祉資金貸付金.py
+- name: 母子父子寡婦福祉資金貸付金の対象者がいる
+  label: 母子父子寡婦福祉資金貸付金の貸付対象者がいるか否か
+  documentation: "母子及び父子並びに寡婦福祉法第13条（母子福祉資金）、第31条の6（父子福祉資金）、\n第32条（寡婦福祉資金）に基づく貸付制度。\n\n貸付対象は「配偶者のない女子（男子）で現に児童を扶養しているもの」および「寡婦」。\n「児童」は同法第6条第3項により20歳未満の者を指す。\n\n以下は割り切って実装していない。\n- 「寡婦」は既存の同名Variable（所得税法上の定義）を利用しているため、同法第6条第4項の\n  「かつて配偶者のない女子として児童を扶養していたことのあるもの」という要件は判定していない。\n- 母子・父子福祉団体に対する貸付は世帯を対象とする制度ではないため対象外。\n- 実際に貸付を受けられるかどうかは都道府県等の窓口による審査（償還の見込み、連帯保証人の有無等）\n  によって決まるため、ここでは法令上の対象者の範囲のみを判定している。"
+  references:
+  - https://laws.e-gov.go.jp/law/339AC0000000129
+  entity: 世帯
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 母子父子寡婦福祉資金貸付金
+  source: openfisca_japan/variables/福祉/母子父子寡婦福祉資金貸付金.py
+- name: 特別障害者手当_受給者の所得加算額
+  label: 特別障害者手当_受給者の所得加算額
+  documentation: null
+  references:
+  - https://www.mhlw.go.jp/bunya/shougaihoken/jidou/tokubetsu.html
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 特別障害者手当
+  source: openfisca_japan/variables/福祉/特別障害者手当.py
+- name: 特別障害者手当_扶養義務者の所得加算額
+  label: 特別障害者手当_扶養義務者の所得加算額
+  documentation: null
+  references:
+  - https://www.mhlw.go.jp/bunya/shougaihoken/jidou/tokubetsu.html
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 特別障害者手当
+  source: openfisca_japan/variables/福祉/特別障害者手当.py
+- name: 特別障害者手当_最大
+  label: 特別障害者手当の最大額
+  documentation: '厳密な判定には詳細な症状が必要なため、身体障害者手帳、精神障害者保健福祉手帳等から推定可能な最小値、最大値を算出
+
+
+    算出方法は以下リンクも参考になる。
+
+    https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/toku_shou.html'
+  references:
+  - https://www.mhlw.go.jp/bunya/shougaihoken/jidou/tokubetsu.html
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 特別障害者手当
+  source: openfisca_japan/variables/福祉/特別障害者手当.py
+- name: 特別障害者手当_最小
+  label: 特別障害者手当の最小額
+  documentation: '厳密な判定には詳細な症状が必要なため、身体障害者手帳、精神障害者保健福祉手帳等から推定可能な最小値、最大値を算出
+
+
+    算出方法は以下リンクも参考になる。
+
+    https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/toku_shou.html
+
+    https://h-navi.jp/column/article/35029230'
+  references:
+  - https://www.mhlw.go.jp/bunya/shougaihoken/jidou/tokubetsu.html
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 特別障害者手当
+  source: openfisca_japan/variables/福祉/特別障害者手当.py
+- name: 特別障害者手当の控除後所得_扶養義務者所得
+  label: 各種控除が適用された後の特別障害者手当における世帯高所得額（扶養義務者所得を計算する場合）
+  documentation: null
+  references:
+  - https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/toku_shou.html
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 特別障害者手当
+  source: openfisca_japan/variables/福祉/特別障害者手当.py
+- name: 特別障害者手当の控除後所得_本人所得
+  label: 各種控除が適用された後の特別障害者手当における世帯高所得額（本人所得を計算する場合）
+  documentation: null
+  references:
+  - https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/toku_shou.html
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 特別障害者手当
+  source: openfisca_japan/variables/福祉/特別障害者手当.py
+- name: 特別障害者手当所得制限
+  label: 特別障害者手当の所得制限
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/toku_shou.html'
+  references:
+  - https://www.mhlw.go.jp/bunya/shougaihoken/jidou/tokubetsu.html
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 特別障害者手当
+  source: openfisca_japan/variables/福祉/特別障害者手当.py
+- name: 特定疾病療養の対象者がいる
+  label: 特定疾病療養の対象者がいるか否か
+  documentation: null
+  references:
+  - https://www.kyoukaikenpo.or.jp/shibu/shizuoka/cat080/20130225001/
+  entity: 世帯
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 特定疾病療養
+  source: openfisca_japan/variables/福祉/特定疾病療養.py
+- name: 特定疾病療養の対象者である
+  label: 特定疾病療養の対象者であるか否か
+  documentation: '自己負担限度額を定める制度であり他制度の計算結果と合計できないため、対象者であるかどうかのみ計算
+
+
+    条件は以下リンクも参考になる。
+
+    https://hyogo-kenchiku-kenpo.or.jp/wp-content/Document/特定疾病療養留意事項.pdf'
+  references:
+  - https://www.kyoukaikenpo.or.jp/shibu/shizuoka/cat080/20130225001/
+  entity: 人物
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 特定疾病療養
+  source: openfisca_japan/variables/福祉/特定疾病療養.py
+- name: 三人以下の世帯であって三歳未満の児童が入院している場合の経過的加算
+  label: 児童を養育する場合に係る経過的加算（３人以下の世帯であって、３歳未満の児童が入院している等の場合）
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://www.mhlw.go.jp/content/12002000/000771098.pdf
+
+    https://www.holos.jp/media/welfare-amount-of-money.php
+
+    https://www.wam.go.jp/wamappl/bb16GS70.nsf/0/573310120867b50d4925743c00047cb4/$FILE/20080501_1shiryou5_1.pdf'
+  references:
+  - https://www.mhlw.go.jp/content/000776372.pdf
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 介護施設入所中
+  label: 介護施設に入所しているか否か
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 介護施設入所者加算
+  label: 介護施設入所者加算
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://seikatsuhogo.biz/blogs/105'
+  references:
+  - https://www.mhlw.go.jp/content/12002000/000771098.pdf
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 住宅扶助基準
+  label: 住宅扶助基準
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://www.mhlw.go.jp/content/12002000/000771098.pdf
+
+    https://www.holos.jp/media/welfare-amount-of-money.php
+
+    https://www.wam.go.jp/wamappl/bb16GS70.nsf/0/573310120867b50d4925743c00047cb4/$FILE/20080501_1shiryou5_1.pdf'
+  references:
+  - http://kobekoubora.life.coocan.jp/2021juutakufujo.pdf
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 児童
+  label: 児童かどうか
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://www.mhlw.go.jp/content/12002000/000771098.pdf
+
+    https://www.holos.jp/media/welfare-amount-of-money.php
+
+    https://www.wam.go.jp/wamappl/bb16GS70.nsf/0/573310120867b50d4925743c00047cb4/$FILE/20080501_1shiryou5_1.pdf'
+  references:
+  - https://www.mhlw.go.jp/content/000776372.pdf
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 児童を養育する場合に係る経過的加算
+  label: 児童を養育する場合に係る経過的加算
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://www.mhlw.go.jp/content/12002000/000771098.pdf
+
+    https://www.holos.jp/media/welfare-amount-of-money.php
+
+    https://www.wam.go.jp/wamappl/bb16GS70.nsf/0/573310120867b50d4925743c00047cb4/$FILE/20080501_1shiryou5_1.pdf'
+  references:
+  - https://www.mhlw.go.jp/content/000776372.pdf
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 児童を養育する場合の加算
+  label: 児童を養育する場合の加算
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://www.mhlw.go.jp/content/12002000/000771098.pdf
+
+    https://www.holos.jp/media/welfare-amount-of-money.php
+
+    https://www.wam.go.jp/wamappl/bb16GS70.nsf/0/573310120867b50d4925743c00047cb4/$FILE/20080501_1shiryou5_1.pdf'
+  references:
+  - https://www.mhlw.go.jp/content/000776372.pdf
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 入院中
+  label: 入院しているか否か
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 六か月以内に新規就労
+  label: 6か月以内に新たに継続性のある職業に従事したかどうか
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 冬季
+  label: 冬季加算の対象となる期間内であるかどうか
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://seikatsuhogo.biz/blogs/105'
+  references:
+  - https://www.mhlw.go.jp/file/05-Shingikai-12601000-Seisakutoukatsukan-Sanjikanshitsu_Shakaihoshoutantou/26102103_6.pdf
+  entity: 世帯
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 冬季加算
+  label: 冬季加算
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://www.mhlw.go.jp/content/12002000/000771098.pdf
+
+    https://www.holos.jp/media/welfare-amount-of-money.php
+
+    https://www.wam.go.jp/wamappl/bb16GS70.nsf/0/573310120867b50d4925743c00047cb4/$FILE/20080501_1shiryou5_1.pdf'
+  references:
+  - https://www.mhlw.go.jp/file/05-Shingikai-12601000-Seisakutoukatsukan-Sanjikanshitsu_Shakaihoshoutantou/26102103_6.pdf
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 冬季加算地域区分1
+  label: 冬季加算地域区分
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://www.mhlw.go.jp/content/12002000/000771098.pdf
+
+    https://www.holos.jp/media/welfare-amount-of-money.php
+
+    https://www.wam.go.jp/wamappl/bb16GS70.nsf/0/573310120867b50d4925743c00047cb4/$FILE/20080501_1shiryou5_1.pdf'
+  references:
+  - https://www.mhlw.go.jp/file/05-Shingikai-12601000-Seisakutoukatsukan-Sanjikanshitsu_Shakaihoshoutantou/26102103_6.pdf
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 勤労控除
+  label: 勤労控除
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://www.holos.jp/media/welfare-income-earn.php'
+  references:
+  - https://www.mhlw.go.jp/content/12002000/000771098.pdf
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 四人以上の世帯であって三歳未満の児童がいる場合の経過的加算
+  label: 児童を養育する場合に係る経過的加算（４人以上の世帯であって、３歳未満の児童がいる場合）
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://www.mhlw.go.jp/content/12002000/000771098.pdf
+
+    https://www.holos.jp/media/welfare-amount-of-money.php
+
+    https://www.wam.go.jp/wamappl/bb16GS70.nsf/0/573310120867b50d4925743c00047cb4/$FILE/20080501_1shiryou5_1.pdf'
+  references:
+  - https://www.mhlw.go.jp/content/000776372.pdf
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 在宅患者加算
+  label: 在宅患者加算
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://seikatsuhogo.biz/blogs/105'
+  references:
+  - https://www.mhlw.go.jp/content/12002000/000771098.pdf
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 在宅療養中
+  label: 在宅で療養に専念している患者(結核又は3ヶ月以上の治療を要するもの)か否か
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 妊産婦
+  label: 妊産婦の妊娠、産後状況
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: Enum
+  possible_values:
+  - 無
+  - 妊娠6ヵ月未満
+  - 妊娠6ヵ月以上
+  - 産後6ヵ月以内
+  definition_period: day
+  default_value: 無
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 妊産婦加算
+  label: 妊産婦加算
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://seikatsuhogo.biz/blogs/105'
+  references:
+  - https://www.mhlw.go.jp/content/12002000/000771098.pdf
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 放射線障害
+  label: 放射線障害状況
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: Enum
+  possible_values:
+  - 無
+  - 現罹患者
+  - 元罹患者
+  definition_period: day
+  default_value: 無
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 放射線障害者加算
+  label: 放射線障害者加算
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://seikatsuhogo.biz/blogs/105'
+  references:
+  - https://www.mhlw.go.jp/content/12002000/000771098.pdf
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 教育扶助基準
+  label: 教育扶助基準
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://www.mhlw.go.jp/content/12002000/000771098.pdf
+
+    https://www.holos.jp/media/welfare-amount-of-money.php
+
+    https://www.wam.go.jp/wamappl/bb16GS70.nsf/0/573310120867b50d4925743c00047cb4/$FILE/20080501_1shiryou5_1.pdf'
+  references:
+  - https://www.mhlw.go.jp/content/000776372.pdf
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 新規就労控除
+  label: 新規就労控除
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://www.holos.jp/media/welfare-income-earn.php
+
+    https://www.mhlw.go.jp/stf/shingi/2r9852000001ifbg-att/2r9852000001ifii.pdf (額は現在と異なる部分あり)'
+  references:
+  - https://www.mhlw.go.jp/content/12002000/000771098.pdf
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 期末一時扶助
+  label: 期末一時扶助
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://www.mhlw.go.jp/content/12002000/000771098.pdf
+
+    https://www.holos.jp/media/welfare-amount-of-money.php
+
+    https://www.wam.go.jp/wamappl/bb16GS70.nsf/0/573310120867b50d4925743c00047cb4/$FILE/20080501_1shiryou5_1.pdf'
+  references:
+  - https://seikatsuhogo.biz/blogs/61
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 未成年者控除
+  label: 未成年者控除
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://www.holos.jp/media/welfare-income-earn.php
+
+    https://www.mhlw.go.jp/stf/shingi/2r9852000001ifbg-att/2r9852000001ifii.pdf (額は現在と異なる部分あり)'
+  references:
+  - https://www.mhlw.go.jp/content/12002000/000771098.pdf
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 母子世帯等に係る経過的加算
+  label: 母子世帯等に係る経過的加算（父子世帯も対象）
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://www.mhlw.go.jp/content/12002000/000771098.pdf
+
+    https://www.holos.jp/media/welfare-amount-of-money.php
+
+    https://www.wam.go.jp/wamappl/bb16GS70.nsf/0/573310120867b50d4925743c00047cb4/$FILE/20080501_1shiryou5_1.pdf'
+  references:
+  - https://www.mhlw.go.jp/content/000776372.pdf
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 母子加算
+  label: 母子世帯等に関する加算（父子世帯も対象）
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://www.mhlw.go.jp/content/12002000/000771098.pdf
+
+    https://www.holos.jp/media/welfare-amount-of-money.php
+
+    https://www.wam.go.jp/wamappl/bb16GS70.nsf/0/573310120867b50d4925743c00047cb4/$FILE/20080501_1shiryou5_1.pdf'
+  references:
+  - https://www.mhlw.go.jp/content/000776372.pdf
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 生活保護
+  label: 生活保護
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://www.mhlw.go.jp/content/12002000/000771098.pdf
+
+    https://www.holos.jp/media/welfare-amount-of-money.php
+
+    https://www.wam.go.jp/wamappl/bb16GS70.nsf/0/573310120867b50d4925743c00047cb4/$FILE/20080501_1shiryou5_1.pdf'
+  references:
+  - https://www.mhlw.go.jp/content/000776372.pdf
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 生活保護基礎控除
+  label: 生活保護における基礎控除
+  documentation: '所得税、住民税における基礎控除とは異なる。
+
+    算出方法は以下リンクも参考になる。
+
+    https://www.holos.jp/media/welfare-income-earn.php
+
+    https://www.city.chiba.jp/hokenfukushi/hogo/documents/r3shinkijunngakuhyou.pdf'
+  references:
+  - https://www.mhlw.go.jp/content/12002000/000771098.pdf
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 生活扶助基準1
+  label: 生活扶助基準（第1類+第2類）①
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://www.mhlw.go.jp/content/12002000/000771098.pdf
+
+    https://www.holos.jp/media/welfare-amount-of-money.php
+
+    https://www.wam.go.jp/wamappl/bb16GS70.nsf/0/573310120867b50d4925743c00047cb4/$FILE/20080501_1shiryou5_1.pdf'
+  references:
+  - https://www.mhlw.go.jp/content/000776372.pdf
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 生活扶助基準1_第1類_基準額1
+  label: 生活扶助基準(第1類) 基準額1
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://www.mhlw.go.jp/content/12002000/000771098.pdf
+
+    https://www.holos.jp/media/welfare-amount-of-money.php
+
+    https://www.wam.go.jp/wamappl/bb16GS70.nsf/0/573310120867b50d4925743c00047cb4/$FILE/20080501_1shiryou5_1.pdf'
+  references:
+  - https://www.mhlw.go.jp/content/000776372.pdf
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 生活扶助基準1_第1類_基準額1_世帯員
+  label: 生活扶助基準(第1類) 基準額1
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://www.mhlw.go.jp/content/12002000/000771098.pdf
+
+    https://www.holos.jp/media/welfare-amount-of-money.php
+
+    https://www.wam.go.jp/wamappl/bb16GS70.nsf/0/573310120867b50d4925743c00047cb4/$FILE/20080501_1shiryou5_1.pdf'
+  references:
+  - https://www.mhlw.go.jp/content/000776372.pdf
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 生活扶助基準1_第2類_基準額1
+  label: 生活扶助基準(第2類) 基準額1
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://www.mhlw.go.jp/content/12002000/000771098.pdf
+
+    https://www.holos.jp/media/welfare-amount-of-money.php
+
+    https://www.wam.go.jp/wamappl/bb16GS70.nsf/0/573310120867b50d4925743c00047cb4/$FILE/20080501_1shiryou5_1.pdf'
+  references:
+  - https://www.mhlw.go.jp/content/000776372.pdf
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 生活扶助基準1_逓減率1
+  label: 生活扶助基準 逓減率1
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://www.mhlw.go.jp/content/12002000/000771098.pdf
+
+    https://www.holos.jp/media/welfare-amount-of-money.php
+
+    https://www.wam.go.jp/wamappl/bb16GS70.nsf/0/573310120867b50d4925743c00047cb4/$FILE/20080501_1shiryou5_1.pdf'
+  references:
+  - https://www.mhlw.go.jp/content/000776372.pdf
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 生活扶助基準2
+  label: 生活扶助基準（第1類+第2類）②
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://www.mhlw.go.jp/content/12002000/000771098.pdf
+
+    https://www.holos.jp/media/welfare-amount-of-money.php
+
+    https://www.wam.go.jp/wamappl/bb16GS70.nsf/0/573310120867b50d4925743c00047cb4/$FILE/20080501_1shiryou5_1.pdf'
+  references:
+  - https://www.mhlw.go.jp/content/000776372.pdf
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 生活扶助基準2_第1類_基準額2
+  label: 生活扶助基準(第1類) 基準額2
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://www.mhlw.go.jp/content/12002000/000771098.pdf
+
+    https://www.holos.jp/media/welfare-amount-of-money.php
+
+    https://www.wam.go.jp/wamappl/bb16GS70.nsf/0/573310120867b50d4925743c00047cb4/$FILE/20080501_1shiryou5_1.pdf'
+  references:
+  - https://www.mhlw.go.jp/content/000776372.pdf
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 生活扶助基準2_第1類_基準額2_世帯員
+  label: 生活扶助基準(第1類) 基準額2
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://www.mhlw.go.jp/content/12002000/000771098.pdf
+
+    https://www.holos.jp/media/welfare-amount-of-money.php
+
+    https://www.wam.go.jp/wamappl/bb16GS70.nsf/0/573310120867b50d4925743c00047cb4/$FILE/20080501_1shiryou5_1.pdf'
+  references:
+  - https://www.mhlw.go.jp/content/000776372.pdf
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 生活扶助基準2_第2類_基準額2
+  label: 生活扶助基準(第2類) 基準額2
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://www.mhlw.go.jp/content/12002000/000771098.pdf
+
+    https://www.holos.jp/media/welfare-amount-of-money.php
+
+    https://www.wam.go.jp/wamappl/bb16GS70.nsf/0/573310120867b50d4925743c00047cb4/$FILE/20080501_1shiryou5_1.pdf'
+  references:
+  - https://www.mhlw.go.jp/content/000776372.pdf
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 生活扶助基準2_逓減率2
+  label: 生活扶助基準 逓減率2
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://www.mhlw.go.jp/content/12002000/000771098.pdf
+
+    https://www.holos.jp/media/welfare-amount-of-money.php
+
+    https://www.wam.go.jp/wamappl/bb16GS70.nsf/0/573310120867b50d4925743c00047cb4/$FILE/20080501_1shiryou5_1.pdf'
+  references:
+  - https://www.mhlw.go.jp/content/000776372.pdf
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 生活扶助本体に係る経過的加算
+  label: 生活扶助本体に係る経過的加算
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://www.mhlw.go.jp/content/12002000/000771098.pdf
+
+    https://www.holos.jp/media/welfare-amount-of-money.php
+
+    https://www.wam.go.jp/wamappl/bb16GS70.nsf/0/573310120867b50d4925743c00047cb4/$FILE/20080501_1shiryou5_1.pdf'
+  references:
+  - https://www.mhlw.go.jp/content/000776372.pdf
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 生活扶助本体に係る経過的加算_世帯員
+  label: 生活扶助本体に係る経過的加算
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://www.mhlw.go.jp/content/12002000/000771098.pdf
+
+    https://www.holos.jp/media/welfare-amount-of-money.php
+
+    https://www.wam.go.jp/wamappl/bb16GS70.nsf/0/573310120867b50d4925743c00047cb4/$FILE/20080501_1shiryou5_1.pdf'
+  references:
+  - https://www.mhlw.go.jp/content/000776372.pdf
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 第三子以降の三歳から小学生修了前の児童がいる場合の経過的加算
+  label: 児童を養育する場合に係る経過的加算（第３子以降の「３歳から小学生修了前」の児童がいる場合）
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://www.mhlw.go.jp/content/12002000/000771098.pdf
+
+    https://www.holos.jp/media/welfare-amount-of-money.php
+
+    https://www.wam.go.jp/wamappl/bb16GS70.nsf/0/573310120867b50d4925743c00047cb4/$FILE/20080501_1shiryou5_1.pdf'
+  references:
+  - https://www.mhlw.go.jp/content/000776372.pdf
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 障害者加算
+  label: 障害者に関する加算
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://www.mhlw.go.jp/content/12002000/000771098.pdf
+
+    https://www.holos.jp/media/welfare-amount-of-money.php
+
+    https://www.wam.go.jp/wamappl/bb16GS70.nsf/0/573310120867b50d4925743c00047cb4/$FILE/20080501_1shiryou5_1.pdf'
+  references:
+  - https://www.mhlw.go.jp/content/000776372.pdf
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 高等学校等就学費
+  label: 高等学校等就学費
+  documentation: '算出方法は以下リンクも参考になる。
+
+    https://www.mhlw.go.jp/content/12002000/000771098.pdf
+
+    https://www.holos.jp/media/welfare-amount-of-money.php
+
+    https://www.wam.go.jp/wamappl/bb16GS70.nsf/0/573310120867b50d4925743c00047cb4/$FILE/20080501_1shiryou5_1.pdf'
+  references:
+  - https://www.mhlw.go.jp/content/000776372.pdf
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+- name: 一時生活再建費
+  label: 一時生活再建費
+  documentation: '詳細な金額、条件についてはこちらを参照。
+
+
+    https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/kashitsukejoken.html'
+  references:
+  - https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/index.html
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活福祉資金貸付制度
+  source: openfisca_japan/variables/福祉/生活福祉資金貸付制度.py
+- name: 不動産担保型生活資金
+  label: 不動産担保型生活資金
+  documentation: '詳細な金額、条件についてはこちらを参照。
+
+
+    https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/kashitsukejoken.html'
+  references:
+  - https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/index.html
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活福祉資金貸付制度
+  source: openfisca_japan/variables/福祉/生活福祉資金貸付制度.py
+- name: 中学3年生以上の子供がいる
+  label: 中学3年生以上の子供がいる
+  documentation: null
+  references: []
+  entity: 世帯
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活福祉資金貸付制度
+  source: openfisca_japan/variables/福祉/生活福祉資金貸付制度.py
+- name: 住宅入居費
+  label: 住宅入居費
+  documentation: '詳細な金額、条件についてはこちらを参照。
+
+
+    https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/kashitsukejoken.html'
+  references:
+  - https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/index.html
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活福祉資金貸付制度
+  source: openfisca_japan/variables/福祉/生活福祉資金貸付制度.py
+- name: 六十五歳以上の世帯員がいる
+  label: 六十五歳以上の世帯員がいる
+  documentation: null
+  references: []
+  entity: 世帯
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活福祉資金貸付制度
+  source: openfisca_japan/variables/福祉/生活福祉資金貸付制度.py
+- name: 就学支度費
+  label: 就学支度費
+  documentation: '詳細な金額、条件についてはこちらを参照。
+
+
+    https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/kashitsukejoken.html'
+  references:
+  - https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/index.html
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活福祉資金貸付制度
+  source: openfisca_japan/variables/福祉/生活福祉資金貸付制度.py
+- name: 教育支援費
+  label: 教育支援費
+  documentation: '詳細な金額、条件についてはこちらを参照。
+
+
+    https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/kashitsukejoken.html'
+  references:
+  - https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/index.html
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活福祉資金貸付制度
+  source: openfisca_japan/variables/福祉/生活福祉資金貸付制度.py
+- name: 生活支援費
+  label: 生活支援費
+  documentation: '詳細な金額、条件についてはこちらを参照。
+
+
+    https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/kashitsukejoken.html'
+  references:
+  - https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/index.html
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活福祉資金貸付制度
+  source: openfisca_japan/variables/福祉/生活福祉資金貸付制度.py
+- name: 福祉費
+  label: 福祉費
+  documentation: null
+  references:
+  - https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/index.html
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活福祉資金貸付制度
+  source: openfisca_japan/variables/福祉/生活福祉資金貸付制度.py
+- name: 福祉費_災害
+  label: 福祉費（災害を受けたことにより臨時に必要となる経費）
+  documentation: '福祉費の用途ごとの条件、金額はこちらを参照。
+
+    https://www.mhlw.go.jp/bunya/seikatsuhogo/fukushihi.html'
+  references:
+  - https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/index.html
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活福祉資金貸付制度
+  source: openfisca_japan/variables/福祉/生活福祉資金貸付制度.py
+- name: 福祉費_災害以外
+  label: 福祉費（災害以外の場合）
+  documentation: '福祉費の用途ごとの条件、金額はこちらを参照。
+
+    https://www.mhlw.go.jp/bunya/seikatsuhogo/fukushihi.html'
+  references:
+  - https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/index.html
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活福祉資金貸付制度
+  source: openfisca_japan/variables/福祉/生活福祉資金貸付制度.py
+- name: 緊急小口資金
+  label: 緊急小口資金
+  documentation: '詳細な金額、条件についてはこちらを参照。
+
+
+    https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/kashitsukejoken.html'
+  references:
+  - https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/index.html
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活福祉資金貸付制度
+  source: openfisca_japan/variables/福祉/生活福祉資金貸付制度.py
+- name: 障害者手帳を持つ世帯員がいる
+  label: 障害者手帳を持つ世帯員がいる
+  documentation: null
+  references: []
+  entity: 世帯
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活福祉資金貸付制度
+  source: openfisca_japan/variables/福祉/生活福祉資金貸付制度.py
+- name: 高校1年生以上の子供がいる
+  label: 高校1年生以上の子供がいる
+  documentation: null
+  references: []
+  entity: 世帯
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 生活福祉資金貸付制度
+  source: openfisca_japan/variables/福祉/生活福祉資金貸付制度.py
+- name: 職業訓練受講給付金_最大
+  label: 職業訓練受講給付金
+  documentation: "雇用保険を受給できない求職者が、ハローワークの支援指示を受けて無料の職業訓練を\n受講する間の生活を支援する制度（求職者支援制度）。\nひとり親を対象とする高等職業訓練促進給付金とは別の制度。\n\n職業訓練受講給付金は職業訓練受講手当・通所手当・寄宿手当からなり、\n本 Variable では1か月あたりの合計額を算出する。\n通所手当は通所経路により決まるため、算出には上限額を用いている。\n寄宿手当は訓練を受けるため同居の配偶者等と別居して寄宿する場合にのみ支給されるため、\n寄宿しない場合の最大額は職業訓練受講手当と通所手当の上限額の合計となる。\n\nNOTE: 以下は入力項目としていないため、すべて満たす場合の額を最大額として算出している。\n満たさない要件がある場合は支給されないため、最小額は0円（職業訓練受講給付金_最小）となる。\n\n- 特定求職者であること（ハローワークに求職の申込みをしており、雇用保険の被保険者・\n  受給資格者のいずれでもなく、職業訓練その他の支援措置を行う必要があると\n  公共職業安定所長が認めた者であること）\n- 本人の収入が月8万円以下であり、かつ本人と配偶者等の収入の合計が月30万円以下であること\n  （通所手当のみを受ける場合は、それぞれ月12万円以下・月34万円以下に緩和される）\n- 現に居住している土地・建物以外に土地・建物を所有していないこと\n- 訓練のすべての実施日に受講していること（やむを得ない理由がある場合は8割以上）\n- 配偶者等が同時に職業訓練受講手当の支給を受けた訓練を受講していないこと\n- 過去3年以内に不正行為により失業等給付等を受けていないこと\n\nNOTE: 収入要件は月額で定められているが、本リポジトリの「収入」は年間収入のため判定に\n用いていない。求職者支援制度が主に対象とする離職直後の人は前年の年間収入と現在の月収が\n大きく異なり、年間収入から判定すると対象者を誤って除外してしまう。"
+  references:
+  - https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/kyushokusha_shien/index.html
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '2017-04-01'
+  category: 福祉
+  subcategory: 職業訓練受講給付金
+  source: openfisca_japan/variables/福祉/職業訓練受講給付金.py
+- name: 職業訓練受講給付金_最小
+  label: 職業訓練受講給付金
+  documentation: 'NOTE: 特定求職者であることをはじめとする支給要件は、回答の負荷が高いため入力項目とせず、
+
+    満たさない場合を想定して最小額は0円とする。
+
+    要件の一覧は 職業訓練受講給付金_最大 の documentation に記載している。'
+  references:
+  - https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/kyushokusha_shien/index.html
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 職業訓練受講給付金
+  source: openfisca_japan/variables/福祉/職業訓練受講給付金.py
+- name: 職業訓練受講給付金の資産要件を満たす
+  label: 職業訓練受講給付金の資産要件を満たすか否か
+  documentation: '本来の資産要件は「本人および同居している又は生計を一にする別居の配偶者・子・父母が
+
+    所有する金融資産の合計額が300万円以下であること」。
+
+
+    NOTE: 金融資産には有価証券等も含まれるが、本リポジトリの入力項目は預貯金のみのため、
+
+    世帯員の預貯金の合計額で判定している。このため、この要件を満たしても対象外となることがある。
+
+
+    NOTE: 生計を一にする別居の配偶者等は世帯に含まれないため判定に含めていない。'
+  references:
+  - https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/kyushokusha_shien/index.html
+  entity: 世帯
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '2017-04-01'
+  category: 福祉
+  subcategory: 職業訓練受講給付金
+  source: openfisca_japan/variables/福祉/職業訓練受講給付金.py
+- name: ひとり親
+  label: ひとり親に該当するか否か
+  documentation: '渋谷区の児童扶養手当制度
+
+
+    - 〒150-8010 東京都渋谷区宇田川町1-1
+
+    - 渋谷区子ども青少年課子育て給付係
+
+    - 03-3463-2558'
+  references:
+  - https://web.archive.org/web/20220302155714/https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/hitorioya_teate.html
+  entity: 世帯
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/ひとり親
+  source: openfisca_japan/variables/福祉/育児/ひとり親.py
+- name: 夫と離別死別
+  label: 夫と離別・死別しているか否か
+  documentation: null
+  references:
+  - https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1170.htm
+  entity: 世帯
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 育児/ひとり親
+  source: openfisca_japan/variables/福祉/育児/ひとり親.py
+- name: 寡婦
+  label: 寡婦に該当するか否か
+  documentation: null
+  references:
+  - https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1170.htm
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/ひとり親
+  source: openfisca_japan/variables/福祉/育児/ひとり親.py
+- name: 配偶者がいるがひとり親に該当
+  label: 配偶者がいるがひとり親に該当
+  documentation: null
+  references: []
+  entity: 世帯
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 育児/ひとり親
+  source: openfisca_japan/variables/福祉/育児/ひとり親.py
+- name: 児童手当
+  label: 保護者への児童手当
+  documentation: 児童手当制度
+  references:
+  - https://www.cfa.go.jp/policies/kokoseido/jidouteate/annai/
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/児童手当
+  source: openfisca_japan/variables/福祉/育児/児童手当.py
+- name: 児童扶養手当_最大
+  label: 保護者への児童扶養手当の最大額
+  documentation: 児童扶養手当制度
+  references:
+  - https://www.cfa.go.jp/policies/hitori-oya/fuyou-teate/
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/児童扶養手当
+  source: openfisca_japan/variables/福祉/育児/児童扶養手当.py
+- name: 児童扶養手当_最小
+  label: 保護者への児童扶養手当の最小額
+  documentation: 児童扶養手当制度
+  references:
+  - https://www.cfa.go.jp/policies/hitori-oya/fuyou-teate/
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/児童扶養手当
+  source: openfisca_japan/variables/福祉/育児/児童扶養手当.py
+- name: 児童扶養手当の一部支給所得条件
+  label: 保護者への児童扶養手当の一部支給所得条件
+  documentation: 児童扶養手当制度
+  references:
+  - https://www.cfa.go.jp/policies/hitori-oya/fuyou-teate/
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/児童扶養手当
+  source: openfisca_japan/variables/福祉/育児/児童扶養手当.py
+- name: 児童扶養手当の全部支給所得条件
+  label: 保護者への児童扶養手当の全額支給所得条件
+  documentation: 児童扶養手当制度
+  references:
+  - https://www.cfa.go.jp/policies/hitori-oya/fuyou-teate/
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/児童扶養手当
+  source: openfisca_japan/variables/福祉/育児/児童扶養手当.py
+- name: 児童扶養手当の対象児童人数
+  label: 保護者への児童扶養手当の対象児童人数
+  documentation: 児童扶養手当制度
+  references:
+  - https://www.cfa.go.jp/policies/hitori-oya/fuyou-teate/
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/児童扶養手当
+  source: openfisca_japan/variables/福祉/育児/児童扶養手当.py
+- name: 就学援助の対象者がいる
+  label: 就学援助の対象者がいるか否か
+  documentation: "学校教育法第19条に基づき、経済的理由によって就学困難と認められる学齢児童生徒の保護者に対して\n市町村が行う援助。対象者は生活保護法第6条第2項に規定する要保護者と、\n市町村教育委員会が要保護者に準ずる程度に困窮していると認める準要保護者の2種類。\n\n以下は割り切って実装している。\n- 要保護者であるかどうかは「生活保護の算出額が0円より大きい」ことで判定している。\n  実際の要保護者の認定は福祉事務所等が行う。\n- 準要保護者（令和6年度 約109万人）は判定していない。準要保護者に対する就学援助は\n  平成17年度に国庫補助が廃止され各市町村が単独で実施しており、認定基準を各市町村が\n  規定しているため。生活保護の基準額に係数を掛けて認定基準とする市町村が多いが、\n  係数も基準額の根拠とする扶助の種類も市町村により異なる。\n  したがって、この変数がfalseであっても市町村の基準では対象となる場合がある。\n- 支給される品目（学用品費、修学旅行費、学校給食費等）と金額は市町村により異なるため\n  算出していない。なお生活保護を受給している世帯は学用品費等を教育扶助で受給しているため、\n  就学援助として支給されるのは修学旅行費や医療費等に限られる\n  （要保護児童生徒援助費補助金交付要綱 別記1）。"
+  references:
+  - https://www.mext.go.jp/a_menu/shotou/career/05010502/017.htm
+  entity: 世帯
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/就学援助
+  source: openfisca_japan/variables/福祉/育児/就学援助.py
+- name: 特別児童扶養手当_最大
+  label: 保護者への特別児童扶養手当の最大額
+  documentation: 特別児童扶養手当制度
+  references:
+  - https://www.mhlw.go.jp/bunya/shougaihoken/jidou/huyou.html
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/特別児童扶養手当
+  source: openfisca_japan/variables/福祉/育児/特別児童扶養手当.py
+- name: 特別児童扶養手当_最小
+  label: 保護者への特別児童扶養手当の最小額
+  documentation: 特別児童扶養手当制度
+  references:
+  - https://www.mhlw.go.jp/bunya/shougaihoken/jidou/huyou.html
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/特別児童扶養手当
+  source: openfisca_japan/variables/福祉/育児/特別児童扶養手当.py
+- name: 特別児童扶養手当の所得条件
+  label: 保護者への特別児童扶養手当の所得条件
+  documentation: 特別児童扶養手当制度
+  references:
+  - https://www.mhlw.go.jp/bunya/shougaihoken/jidou/huyou.html
+  entity: 世帯
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/特別児童扶養手当
+  source: openfisca_japan/variables/福祉/育児/特別児童扶養手当.py
+- name: 障害児福祉手当
+  label: 障害児童福祉手当
+  documentation: '手帳について要件は無いが、目安となる等級をもとに算出
+
+    https://h-navi.jp/column/article/35029230'
+  references:
+  - https://www.mhlw.go.jp/bunya/shougaihoken/jidou/hukushi.html
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/障害児福祉手当
+  source: openfisca_japan/variables/福祉/育児/障害児福祉手当.py
+- name: 障害児福祉手当_受給者の所得制限限度額
+  label: 障害児童福祉手当における、受給者の所得制限限度額
+  documentation: null
+  references:
+  - https://www.mhlw.go.jp/bunya/shougaihoken/jidou/hukushi.html
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/障害児福祉手当
+  source: openfisca_japan/variables/福祉/育児/障害児福祉手当.py
+- name: 障害児福祉手当_扶養義務者の所得制限限度額
+  label: 障害児童福祉手当における、扶養義務者の所得制限限度額
+  documentation: 便宜上最も所得が多い世帯員を扶養義務者としているため、この値は世帯ごとに計算される
+  references:
+  - https://www.mhlw.go.jp/bunya/shougaihoken/jidou/hukushi.html
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/障害児福祉手当
+  source: openfisca_japan/variables/福祉/育児/障害児福祉手当.py
+- name: 住民税非課税世帯の高等学校奨学給付金
+  label: 住民税非課税世帯の高等学校奨学給付金
+  documentation: '住民税非課税世帯の世帯員の高等学校奨学給付金
+
+    (東京都HP)https://www.kyoiku.metro.tokyo.lg.jp/admission/tuition/tuition/scholarship_public_school.html
+
+    (兵庫HP)https://web.pref.hyogo.lg.jp/kk35/shougakukyuuhukinn.html
+
+    (東京都私立財団HP)https://www.shigaku-tokyo.or.jp/pa_shougaku.html'
+  references:
+  - https://www.mext.go.jp/a_menu/shotou/mushouka/1344089.htm
+  entity: 人物
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/高等学校奨学給付金
+  source: openfisca_japan/variables/福祉/育児/高等学校奨学給付金.py
+- name: 生活保護受給世帯の高等学校奨学給付金
+  label: 生活保護受給世帯の高等学校奨学給付金
+  documentation: '生活保護受給世帯の世帯員の高等学校奨学給付金
+
+    (東京都HP)https://www.kyoiku.metro.tokyo.lg.jp/admission/tuition/tuition/scholarship_public_school.html
+
+    (兵庫HP)https://web.pref.hyogo.lg.jp/kk35/shougakukyuuhukinn.html'
+  references:
+  - https://www.mext.go.jp/a_menu/shotou/mushouka/1344089.htm
+  entity: 人物
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/高等学校奨学給付金
+  source: openfisca_japan/variables/福祉/育児/高等学校奨学給付金.py
+- name: 通信制課程の高校に通う世帯員がいる
+  label: 通信制課程の高校に通う世帯員がいる
+  documentation: null
+  references: []
+  entity: 世帯
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/高等学校奨学給付金
+  source: openfisca_japan/variables/福祉/育児/高等学校奨学給付金.py
+- name: 高校履修種別
+  label: 高校履修種別
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: Enum
+  possible_values:
+  - 無
+  - 全日制課程
+  - 定時制課程
+  - 通信制課程
+  - 専攻科
+  definition_period: day
+  default_value: 無
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 育児/高等学校奨学給付金
+  source: openfisca_japan/variables/福祉/育児/高等学校奨学給付金.py
+- name: 高校生である
+  label: 高校生であるかどうか
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/高等学校奨学給付金
+  source: openfisca_japan/variables/福祉/育児/高等学校奨学給付金.py
+- name: 高校運営種別
+  label: 高校運営種別
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: Enum
+  possible_values:
+  - 無
+  - 国立
+  - 公立
+  - 私立
+  definition_period: day
+  default_value: 無
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 育児/高等学校奨学給付金
+  source: openfisca_japan/variables/福祉/育児/高等学校奨学給付金.py
+- name: 高等学校奨学給付金_最大
+  label: 高等学校奨学給付金
+  documentation: '高等学校奨学給付金_最大
+
+    (東京都HP)https://www.kyoiku.metro.tokyo.lg.jp/admission/tuition/tuition/scholarship_public_school.html
+
+    (兵庫HP)https://web.pref.hyogo.lg.jp/kk35/shougakukyuuhukinn.html'
+  references:
+  - https://www.mext.go.jp/a_menu/shotou/mushouka/1344089.htm
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/高等学校奨学給付金
+  source: openfisca_japan/variables/福祉/育児/高等学校奨学給付金.py
+- name: 高等学校奨学給付金_最小
+  label: 高等学校奨学給付金
+  documentation: '高等学校奨学給付金_最小
+
+    (東京都HP)https://www.kyoiku.metro.tokyo.lg.jp/admission/tuition/tuition/scholarship_public_school.html
+
+    (兵庫HP)https://web.pref.hyogo.lg.jp/kk35/shougakukyuuhukinn.html'
+  references:
+  - https://www.mext.go.jp/a_menu/shotou/mushouka/1344089.htm
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/高等学校奨学給付金
+  source: openfisca_japan/variables/福祉/育児/高等学校奨学給付金.py
+- name: 世帯主の配偶者の人的控除額の差
+  label: 世帯主の配偶者に対する所得税と住民税の控除の差額
+  documentation: null
+  references:
+  - https://www.town.hinode.tokyo.jp/0000000516.html
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/高等学校等就学支援金
+  source: openfisca_japan/variables/福祉/育児/高等学校等就学支援金.py
+- name: 世帯主の配偶者の控除後住民税所得
+  label: 世帯主の配偶者の控除後住民税所得
+  documentation: null
+  references:
+  - https://www.town.hinode.tokyo.jp/0000000516.html
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/高等学校等就学支援金
+  source: openfisca_japan/variables/福祉/育児/高等学校等就学支援金.py
+- name: 世帯主の配偶者の調整控除
+  label: 世帯主の配偶者の調整控除
+  documentation: null
+  references:
+  - https://money-bu-jpx.com/news/article043882/
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/高等学校等就学支援金
+  source: openfisca_japan/variables/福祉/育児/高等学校等就学支援金.py
+- name: 高等学校等就学支援金_所得判定基準
+  label: 高等学校等就学支援金計算において、支給額の判定基準となる額
+  documentation: null
+  references:
+  - https://www.mext.go.jp/a_menu/shotou/mushouka/20220329-mxt_kouhou02-3.pdf
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/高等学校等就学支援金
+  source: openfisca_japan/variables/福祉/育児/高等学校等就学支援金.py
+- name: 高等学校等就学支援金_最大
+  label: 高等学校等就学支援金
+  documentation: '専攻科は対象外。
+
+    算出方法は以下リンクも参考になる。
+
+    (条件) https://www.mext.go.jp/a_menu/shotou/mushouka/20220329-mxt_kouhou02-3.pdf
+
+    (金額) https://www.mext.go.jp/a_menu/shotou/mushouka/__icsFiles/afieldfile/2020/04/30/100014428_4.pdf'
+  references:
+  - https://www.mext.go.jp/a_menu/shotou/mushouka/1342674.htm
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/高等学校等就学支援金
+  source: openfisca_japan/variables/福祉/育児/高等学校等就学支援金.py
+- name: 高等学校等就学支援金_最小
+  label: 高等学校等就学支援金
+  documentation: '専攻科は対象外。
+
+    算出方法は以下リンクも参考になる。
+
+    (条件) https://www.mext.go.jp/a_menu/shotou/mushouka/20220329-mxt_kouhou02-3.pdf
+
+    (金額) https://www.mext.go.jp/a_menu/shotou/mushouka/__icsFiles/afieldfile/2020/04/30/100014428_4.pdf'
+  references:
+  - https://www.mext.go.jp/a_menu/shotou/mushouka/1342674.htm
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/高等学校等就学支援金
+  source: openfisca_japan/variables/福祉/育児/高等学校等就学支援金.py
+- name: 大学等履修種別
+  label: 在学する大学等の種別
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: Enum
+  possible_values:
+  - 無
+  - 大学
+  - 短期大学
+  - 高等専門学校
+  - 専修学校専門課程
+  definition_period: day
+  default_value: 無
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 育児/高等教育の修学支援新制度
+  source: openfisca_japan/variables/福祉/育児/高等教育の修学支援新制度.py
+- name: 大学等運営種別
+  label: 在学する大学等の運営種別
+  documentation: '国が設置する大学等と地方公共団体が設置する大学等とで減免上限額が同額であるため、
+
+    「国公立」としてまとめている。'
+  references: []
+  entity: 人物
+  value_type: Enum
+  possible_values:
+  - 無
+  - 国公立
+  - 私立
+  definition_period: day
+  default_value: 無
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 育児/高等教育の修学支援新制度
+  source: openfisca_japan/variables/福祉/育児/高等教育の修学支援新制度.py
+- name: 私立理工農系の学部等に在学している
+  label: 私立の大学等の理学・工学・農学の分野の学部等に在学しているか否か
+  documentation: '令和6年度からの中間所得世帯への対象拡充において、多子世帯とともに支援の対象となる
+
+    「私立の理工農系の学部・学科に通う学生」であるかどうか。'
+  references:
+  - https://www.mext.go.jp/a_menu/koutou/hutankeigen/index.htm
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 育児/高等教育の修学支援新制度
+  source: openfisca_japan/variables/福祉/育児/高等教育の修学支援新制度.py
+- name: 高等教育の修学支援新制度_入学金減免額
+  label: 高等教育の修学支援新制度による世帯員ごとの入学金の減免額
+  documentation: '施行令第2条第1項第2号の規定により、減免額は対象者ごとに百円未満の端数を切り上げる。
+
+    大学等に在学していない場合は0円。入学した年度のみ減免が行われる。'
+  references:
+  - https://laws.e-gov.go.jp/law/501CO0000000049
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/高等教育の修学支援新制度
+  source: openfisca_japan/variables/福祉/育児/高等教育の修学支援新制度.py
+- name: 高等教育の修学支援新制度_多子世帯である
+  label: 高等教育の修学支援新制度において多子世帯に該当するか否か
+  documentation: '扶養する子が3人以上いる世帯。
+
+
+    世帯の子の人数で判定している。実際には生計維持者が扶養する子等の人数で判定するため、
+
+    扶養から外れた子は数えない。'
+  references:
+  - https://www.mext.go.jp/a_menu/koutou/hutankeigen/index.htm
+  entity: 世帯
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/高等教育の修学支援新制度
+  source: openfisca_japan/variables/福祉/育児/高等教育の修学支援新制度.py
+- name: 高等教育の修学支援新制度_履修種別インデックス
+  label: 高等教育の修学支援新制度の減免上限額表における履修種別の行番号
+  documentation: 減免上限額表の行に対応する番号。大学等に在学していない場合は-1とする。
+  references:
+  - https://laws.e-gov.go.jp/law/501CO0000000049
+  entity: 人物
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: -1
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/高等教育の修学支援新制度
+  source: openfisca_japan/variables/福祉/育児/高等教育の修学支援新制度.py
+- name: 高等教育の修学支援新制度_授業料減免額
+  label: 高等教育の修学支援新制度による世帯員ごとの授業料の減免額
+  documentation: '施行令第2条第1項第2号の規定により、減免額は対象者ごとに百円未満の端数を切り上げる。
+
+    大学等に在学していない場合は0円。'
+  references:
+  - https://laws.e-gov.go.jp/law/501CO0000000049
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/高等教育の修学支援新制度
+  source: openfisca_japan/variables/福祉/育児/高等教育の修学支援新制度.py
+- name: 高等教育の修学支援新制度_授業料等減免_最大
+  label: 高等教育の修学支援新制度による授業料等減免の最大額
+  documentation: '大学等における修学の支援に関する法律第4条に基づく授業料等の減免額。
+
+    入学した年度は入学金の減免も行われるため、授業料と入学金の減免額の合計を最大額としている。
+
+    その他の割り切りは「高等教育の修学支援新制度_授業料等減免_最小」と同じ。'
+  references:
+  - https://laws.e-gov.go.jp/law/501CO0000000049
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/高等教育の修学支援新制度
+  source: openfisca_japan/variables/福祉/育児/高等教育の修学支援新制度.py
+- name: 高等教育の修学支援新制度_授業料等減免_最小
+  label: 高等教育の修学支援新制度による授業料等減免の最小額
+  documentation: "大学等における修学の支援に関する法律第4条に基づく授業料等の減免額。\n入学時以外は入学金の減免が行われないため、授業料の減免額のみを最小額としている。\n\n以下は割り切って実装している。\n- 夜間の課程および通信による教育は、入力から判別できないため昼間の課程として算出している\n  （夜間の課程と通信教育の減免上限額は昼間の課程より低い）。\n- 減免を受けられる期間（正規の修業年限）の判定は行っていない。\n- 授業料または入学金の実額が減免上限額を下回る場合は実額が上限となるが、\n  実額を入力できないため上限額で算出している。\n- 独立行政法人日本学生支援機構が行う給付型奨学金（学資支給金）は算出していない。"
+  references:
+  - https://laws.e-gov.go.jp/law/501CO0000000049
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/高等教育の修学支援新制度
+  source: openfisca_japan/variables/福祉/育児/高等教育の修学支援新制度.py
+- name: 高等教育の修学支援新制度_減免割合
+  label: 高等教育の修学支援新制度において世帯の所得により定まる授業料等の減免割合
+  documentation: "大学等における修学の支援に関する法律施行令（https://laws.e-gov.go.jp/law/501CO0000000049）\n第2条第1項第2号イからハに定める減免の割合。減免額算定基準額に応じて全額、3分の2、3分の1となる。\n\n令和7年4月1日からは、多子世帯（3人以上の子等の生計を維持する者に生計を維持されている場合）は\n所得にかかわらず上限額まで全額となる。これは1つの条文には書かれておらず、\n大学等における修学の支援に関する法律（https://laws.e-gov.go.jp/law/501AC0000000008）\nと上記施行令の次の3つを合わせて読んだ結果である。\n\n- 法第4条第1項第1号: 多子世帯であることが認定事由の1つ\n  （「当該学生が三人以上の子等の生計を維持する者に生計を維持されている子等であること」）\n- 法第4条第2項第1号: 第1項第1号に該当する者の減免額は「確認大学等の種別その他の事情を\n  考慮して政令で定める額」。収入の状況を考慮すると定める同項第2号とは異なり、収入を考慮しない\n- 施行令第2条第1項第1号: その額は授業料の年額および入学金の額（それぞれ上限額まで）。\n  同項第2号のような3分の2・3分の1・4分の1の区分がない\n\n文部科学省も「令和7年度から、多子世帯の学生に対し所得制限なく、国が定める一定額まで、\n大学等の授業料・入学金の減免を行っております」と説明している。\nhttps://www.mext.go.jp/a_menu/koutou/hutankeigen/index.htm\n\n中間所得世帯に対する4分の1の減免（施行令第2条第1項第2号ニ）は、多子世帯または私立の理工農系の\n学部等に在学する学生に限られるため、この変数には含めていない。\nこの限定は施行令および施行規則には規定がなく、文部科学省の「令和6年度からは、対象を\n世帯年収約600万（目安）までの世帯のうち、子供3人以上を扶養する多子世帯や私立理工農系の\n学部・学科に通う学生について対象を拡充しました」という説明による。\nhttps://www.mext.go.jp/a_menu/koutou/hutankeigen/index.htm\n\n「特に優れた者」という学業成績等の要件、および資産に関する要件は判定していない。"
+  references:
+  - https://laws.e-gov.go.jp/law/501CO0000000049
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/高等教育の修学支援新制度
+  source: openfisca_japan/variables/福祉/育児/高等教育の修学支援新制度.py
+- name: 高等教育の修学支援新制度_減免割合_世帯員
+  label: 高等教育の修学支援新制度において世帯員ごとに定まる授業料等の減免割合
+  documentation: '世帯の所得により定まる減免割合に、4分の1の減免（施行令第2条第1項第2号ニ）を加えたもの。
+
+
+    4分の1の減免は減免額算定基準額が3分の1の減免の上限以上、4分の1の減免の上限未満の範囲
+
+    （令和6年度に追加）で、かつ多子世帯または私立の理工農系の学部等に在学する学生に限られる。
+
+    在学する学部等は世帯員ごとに異なるため、世帯ではなく世帯員ごとに算出している。
+
+
+    全額から3分の1までの減免に該当する場合は、そちらが適用される。'
+  references:
+  - https://laws.e-gov.go.jp/law/501CO0000000049
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/高等教育の修学支援新制度
+  source: openfisca_japan/variables/福祉/育児/高等教育の修学支援新制度.py
+- name: 高等教育の修学支援新制度_減免額算定基準額
+  label: 高等教育の修学支援新制度において減免割合の判定基準となる額
+  documentation: '大学等における修学の支援に関する法律施行令第2条第2項に定める減免額算定基準額。
+
+    市町村民税の課税標準額に所得割の税率を乗じた額から調整控除を差し引いて算出する。
+
+
+    「高等学校等就学支援金_所得判定基準」と算出方法は同じだが、施行令第2条第2項が
+
+    0円を下回る場合を0円と定めているため、別の Variable としている。
+
+
+    以下は割り切って実装している。
+
+    - 生計維持者は世帯の親としている。実際には学生本人の所得も合算する。
+
+    - 前年度の12月31日時点で19歳に達している場合の12万円の控除は未実装。
+
+    - 指定都市に住所を有する場合に調整控除を4分の3とする調整は未実装。
+
+    - 市町村民税の所得割が課されない場合に零とする規定は、算出結果が0円を下回る場合に0円とすることで表現している。'
+  references:
+  - https://laws.e-gov.go.jp/law/501CO0000000049
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/高等教育の修学支援新制度
+  source: openfisca_japan/variables/福祉/育児/高等教育の修学支援新制度.py
+- name: 高等教育の修学支援新制度_運営種別インデックス
+  label: 高等教育の修学支援新制度の減免上限額表における運営種別の列番号
+  documentation: 減免上限額表の列に対応する番号。大学等に在学していない場合は-1とする。
+  references:
+  - https://laws.e-gov.go.jp/law/501CO0000000049
+  entity: 人物
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: -1
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/高等教育の修学支援新制度
+  source: openfisca_japan/variables/福祉/育児/高等教育の修学支援新制度.py
+- name: 高等職業訓練促進給付金_最大
+  label: 高等職業訓練促進給付金の最大額
+  documentation: 'ひとり親が就職に有利な資格の取得を目指して養成機関で修業する期間の生活費を支援する制度。
+
+
+    訓練を受けている期間の最後の1年間は月額が4万円増額されるため、
+
+    加算後の額を最大額とする。
+
+
+    NOTE: 「仕事または育児と修業の両立が困難であると認められる」要件は、
+
+    自治体の個別判断のため条件に含めていない。
+
+    NOTE: 支給額は令和8年4月1日適用の実施要綱に基づくため、formula の適用開始日を
+
+    2026-04-01 としている（それ以前の期間は0円を返す）。'
+  references:
+  - https://www.cfa.go.jp/policies/hitori-oya/syokugyou-kunren
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '2026-04-01'
+  category: 福祉
+  subcategory: 育児/高等職業訓練促進給付金
+  source: openfisca_japan/variables/福祉/育児/高等職業訓練促進給付金.py
+- name: 高等職業訓練促進給付金_最小
+  label: 高等職業訓練促進給付金の最小額
+  documentation: 'ひとり親が就職に有利な資格の取得を目指して養成機関で修業する期間の生活費を支援する制度。
+
+
+    訓練を受けている期間の最後の1年間は月額が4万円増額されるが、
+
+    修業期間のどの時点にいるかを入力できないため、加算前の額を最小額とする。
+
+
+    NOTE: 「仕事または育児と修業の両立が困難であると認められる」要件は、
+
+    自治体の個別判断のため条件に含めていない。
+
+    NOTE: 支給額は令和8年4月1日適用の実施要綱に基づくため、formula の適用開始日を
+
+    2026-04-01 としている（それ以前の期間は0円を返す）。'
+  references:
+  - https://www.cfa.go.jp/policies/hitori-oya/syokugyou-kunren
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/高等職業訓練促進給付金
+  source: openfisca_japan/variables/福祉/育児/高等職業訓練促進給付金.py
+- name: 高等職業訓練促進給付金の対象訓練を修了した
+  label: 養成機関で6月以上のカリキュラムを修了したか否か
+  documentation: null
+  references:
+  - https://www.cfa.go.jp/policies/hitori-oya/syokugyou-kunren
+  entity: 世帯
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 育児/高等職業訓練促進給付金
+  source: openfisca_japan/variables/福祉/育児/高等職業訓練促進給付金.py
+- name: 高等職業訓練促進給付金の対象訓練を受けている
+  label: 養成機関で6月以上のカリキュラムを修業しているか否か
+  documentation: null
+  references:
+  - https://www.cfa.go.jp/policies/hitori-oya/syokugyou-kunren
+  entity: 世帯
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 育児/高等職業訓練促進給付金
+  source: openfisca_japan/variables/福祉/育児/高等職業訓練促進給付金.py
+- name: 高等職業訓練促進給付金の所得条件
+  label: 高等職業訓練促進給付金の所得条件を満たすか否か
+  documentation: '「児童扶養手当の支給を受けているか、同等の所得水準にある方」が対象のため、
+
+    児童扶養手当の所得条件（全部支給・一部支給のいずれか）を満たすことを条件とする。
+
+
+    NOTE: 所得水準を超過した場合であっても1年に限り引き続き対象となる特例は、
+
+    超過した時期を入力できないため対象外としている。'
+  references:
+  - https://www.cfa.go.jp/policies/hitori-oya/syokugyou-kunren
+  entity: 世帯
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/高等職業訓練促進給付金
+  source: openfisca_japan/variables/福祉/育児/高等職業訓練促進給付金.py
+- name: 高等職業訓練促進給付金の支給条件
+  label: 高等職業訓練促進給付金の支給条件を満たすか否か
+  documentation: null
+  references:
+  - https://www.cfa.go.jp/policies/hitori-oya/syokugyou-kunren
+  entity: 世帯
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 育児/高等職業訓練促進給付金
+  source: openfisca_japan/variables/福祉/育児/高等職業訓練促進給付金.py
+- name: 高等職業訓練促進給付金の月額
+  label: 高等職業訓練促進給付金の月額（最終年度加算前）
+  documentation: null
+  references:
+  - https://www.cfa.go.jp/policies/hitori-oya/syokugyou-kunren
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '2026-04-01'
+  category: 福祉
+  subcategory: 育児/高等職業訓練促進給付金
+  source: openfisca_japan/variables/福祉/育児/高等職業訓練促進給付金.py
+- name: 高等職業訓練修了支援給付金
+  label: 高等職業訓練修了支援給付金
+  documentation: '高等職業訓練促進給付金の対象となる訓練を修了した場合に支給される一時金。
+
+
+    NOTE: 「仕事または育児と修業の両立が困難であると認められる」要件は、
+
+    自治体の個別判断のため条件に含めていない。
+
+    NOTE: 支給額は令和8年4月1日適用の実施要綱に基づくため、formula の適用開始日を
+
+    2026-04-01 としている（それ以前の期間は0円を返す）。'
+  references:
+  - https://www.cfa.go.jp/policies/hitori-oya/syokugyou-kunren
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '2026-04-01'
+  category: 福祉
+  subcategory: 育児/高等職業訓練促進給付金
+  source: openfisca_japan/variables/福祉/育児/高等職業訓練促進給付金.py
+- name: 人工透析を行っている
+  label: 人工透析を行っている
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 腎不全
+  source: openfisca_japan/variables/福祉/腎不全.py
+- name: 慢性腎不全である
+  label: 慢性腎不全である
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: bool
+  possible_values: []
+  definition_period: day
+  default_value: false
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 福祉
+  subcategory: 腎不全
+  source: openfisca_japan/variables/福祉/腎不全.py
+- name: 障害基礎年金_最大
+  label: 障害基礎年金の最大額
+  documentation: '保険料納付済期間の条件（納付条件）については、利用者の回答負荷が高いため考慮せずに計算している。
+
+
+    障害者手帳等級と障害基礎年金の等級には互換性がないため、最大値、最小額として幅を持たせて計算
+
+    https://www.iizuka-nenkin.net/14097085633831'
+  references:
+  - https://www.nenkin.go.jp/service/jukyu/shougainenkin/jukyu-yoken/20150514.html
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 障害基礎年金
+  source: openfisca_japan/variables/福祉/障害基礎年金.py
+- name: 障害基礎年金_最小
+  label: 障害基礎年金の最小額
+  documentation: '保険料納付済期間の条件（納付条件）については、利用者の回答負荷が高いため考慮せずに計算している。
+
+
+    障害者手帳等級と障害基礎年金の等級には互換性がないため、最大値、最小額として幅を持たせて計算
+
+    https://www.iizuka-nenkin.net/14097085633831'
+  references:
+  - https://www.nenkin.go.jp/service/jukyu/shougainenkin/jukyu-yoken/20150514.html
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 障害基礎年金
+  source: openfisca_japan/variables/福祉/障害基礎年金.py
+- name: 障害基礎年金_等級_最大
+  label: 障害基礎年金の障害等級の最大値
+  documentation: '障害者手帳等級と障害基礎年金の等級には互換性がないため、手帳等級から年金の等級を幅を持たせて推定
+
+    https://www.iizuka-nenkin.net/14097085633831
+
+
+    すでに受給していないと等級は分からないため、直接利用者が入力する形式にはしない
+
+    該当しない場合は0とする'
+  references:
+  - https://www.nenkin.go.jp/service/jukyu/shougainenkin/jukyu-yoken/20150514.html
+  entity: 人物
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 障害基礎年金
+  source: openfisca_japan/variables/福祉/障害基礎年金.py
+- name: 障害基礎年金_等級_最小
+  label: 障害基礎年金の障害等級の最小値
+  documentation: '障害者手帳等級と障害基礎年金の等級には互換性がないため、手帳等級から年金の等級を幅を持たせて推定
+
+    https://www.iizuka-nenkin.net/14097085633831
+
+
+    すでに受給していないと等級は分からないため、直接利用者が入力する形式にはしない
+
+    該当しない場合は0とする'
+  references:
+  - https://www.nenkin.go.jp/service/jukyu/shougainenkin/jukyu-yoken/20150514.html
+  entity: 人物
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 障害基礎年金
+  source: openfisca_japan/variables/福祉/障害基礎年金.py
+- name: 障害基礎年金の子の加算額_最大
+  label: 障害基礎年金の子の加算額の最大額
+  documentation: null
+  references:
+  - https://www.nenkin.go.jp/service/jukyu/shougainenkin/jukyu-yoken/20150514.html
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 障害基礎年金
+  source: openfisca_japan/variables/福祉/障害基礎年金.py
+- name: 障害基礎年金の子の加算額_最小
+  label: 障害基礎年金の子の加算額の最小額
+  documentation: null
+  references:
+  - https://www.nenkin.go.jp/service/jukyu/shougainenkin/jukyu-yoken/20150514.html
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 障害基礎年金
+  source: openfisca_japan/variables/福祉/障害基礎年金.py
+- name: 障害基礎年金の対象児童人数_最大
+  label: 障害基礎年金の対象児童人数の最大値
+  documentation: 障害等級の算出に幅があるため、対象人数も最大、最小で算出
+  references:
+  - https://www.nenkin.go.jp/service/jukyu/shougainenkin/jukyu-yoken/20150514.html
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 障害基礎年金
+  source: openfisca_japan/variables/福祉/障害基礎年金.py
+- name: 障害基礎年金の対象児童人数_最小
+  label: 障害基礎年金の対象児童人数の最小値
+  documentation: 障害等級の算出に幅があるため、対象人数も最大、最小で算出
+  references:
+  - https://www.nenkin.go.jp/service/jukyu/shougainenkin/jukyu-yoken/20150514.html
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 福祉
+  subcategory: 障害基礎年金
+  source: openfisca_japan/variables/福祉/障害基礎年金.py
+- name: 内部障害
+  label: 人物の内部障害パターン
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: Enum
+  possible_values:
+  - 無
+  - 有
+  definition_period: day
+  default_value: 無
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 障害
+  subcategory: 内部障害
+  source: openfisca_japan/variables/障害/内部障害.py
+- name: 愛の手帳等級
+  label: 人物の愛の手帳の等級
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: Enum
+  possible_values:
+  - 無
+  - 一度
+  - 二度
+  - 三度
+  - 四度
+  definition_period: day
+  default_value: 無
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 障害
+  subcategory: 愛の手帳
+  source: openfisca_japan/variables/障害/愛の手帳.py
+- name: 療育手帳等級
+  label: 人物の療育手帳の等級
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: Enum
+  possible_values:
+  - 無
+  - A
+  - B
+  definition_period: day
+  default_value: 無
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 障害
+  subcategory: 療育手帳
+  source: openfisca_japan/variables/障害/療育手帳.py
+- name: 精神障害者保健福祉手帳等級
+  label: 人物の精神障害者保健福祉手帳の等級
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: Enum
+  possible_values:
+  - 無
+  - 一級
+  - 二級
+  - 三級
+  definition_period: day
+  default_value: 無
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 障害
+  subcategory: 精神障害者保健福祉手帳
+  source: openfisca_japan/variables/障害/精神障害者保健福祉手帳.py
+- name: 脳性まひ_進行性筋萎縮症
+  label: 人物の脳性まひ・進行性筋萎縮症パターン
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: Enum
+  possible_values:
+  - 無
+  - 有
+  definition_period: day
+  default_value: 無
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 障害
+  subcategory: 脳性まひ_進行性筋萎縮症
+  source: openfisca_japan/variables/障害/脳性まひ_進行性筋萎縮症.py
+- name: 身体障害者手帳等級
+  label: 人物の身体障害者手帳等級
+  documentation: null
+  references: []
+  entity: 人物
+  value_type: Enum
+  possible_values:
+  - 無
+  - 一級
+  - 二級
+  - 三級
+  - 四級
+  - 五級
+  - 六級
+  - 七級
+  definition_period: day
+  default_value: 無
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 障害
+  subcategory: 身体障害者手帳
+  source: openfisca_japan/variables/障害/身体障害者手帳.py
+- name: 子供の預貯金
+  label: 子供の預貯金
+  documentation: null
+  references:
+  - https://www.fukushi.metro.tokyo.lg.jp/seikatsu/teisyotokusyataisaku/jukenseichallenge.html
+  entity: 世帯
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  category: 預貯金
+  subcategory: ''
+  source: openfisca_japan/variables/預貯金.py
+- name: 預貯金
+  label: 預貯金
+  documentation: null
+  references:
+  - https://www.fukushi.metro.tokyo.lg.jp/seikatsu/teisyotokusyataisaku/jukenseichallenge.html
+  entity: 人物
+  value_type: int
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: false
+  formula_start_dates: []
+  category: 預貯金
+  subcategory: ''
+  source: openfisca_japan/variables/預貯金.py

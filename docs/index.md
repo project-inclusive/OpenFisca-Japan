@@ -24,6 +24,10 @@
 - [tmux でホストから接続する（Mac）](./devcontainer_note.md#tmux-でホストから接続するmac)
 - [リモートから SSH で接続する（Tailscale）](./devcontainer_note.md#リモートから-ssh-で接続するtailscale)
 
+### 制度ドキュメント（自動生成）
+- [制度一覧（Variable）](./variables.md)
+- [パラメータ一覧（Parameter）](./parameters.md)
+
 ### [コントリビューションガイド]
 - [フロントエンドへの質問追加](./add_frontend_question.md)
 
