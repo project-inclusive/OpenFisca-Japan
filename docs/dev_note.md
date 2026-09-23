@@ -157,6 +157,13 @@ make docs
   各 Variable の `label` / `documentation` / `reference` 等と、各 Parameter の値・時系列を抽出して
   `docs/_data/variables.yml` / `docs/_data/parameters.yml` に書き出す
   - ソースを自前でパースするのではなく OpenFisca が読み込んだ結果を使うため、実装と乖離しない
+- あわせて `openfisca_japan/variables/` 配下の `# TODO:` コメントを抽出し
+  `docs/_data/todos.yml` に書き出す（[未実装・簡略化の一覧](./todos.md)のデータ）
+  - `ast` でクラスの行範囲を取得し、TODO を囲む Variable に紐付けている。
+    どの Variable にも属さない TODO はファイル単位として扱う
+  - TODO 行の直後に続くコメント行は、その TODO の補足として本文に連結する
+  - **制度の未実装・簡略化は `# TODO:` で書けば自動的に公開ドキュメントに載る。**
+    逆に、利用者に伝える必要がない純粋な実装都合のメモは `# NOTE:` を使う
 - `docs/variables.md` / `docs/parameters.md` はこのデータファイルを Liquid で描画するテンプレート。
   ページの見せ方を変えたいときはこちらを編集する（データファイルは編集しない）
 - **生成物はコミットする。** GitHub Pages のビルドでは独自プラグインを追加できず、

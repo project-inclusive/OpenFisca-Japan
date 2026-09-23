@@ -11,10 +11,12 @@ TaxBenefitSystem から label / documentation / reference 等を読み出すた�
 """
 
 import argparse
+import ast
 from importlib import metadata
 import logging
 import os
 from pathlib import Path
+import re
 
 from openfisca_core.parameters import Parameter, ParameterNode
 from openfisca_japan import CountryTaxBenefitSystem
@@ -29,6 +31,12 @@ GENERATED_HEADER = (
     "# このファイルは tools/make_docs/make_docs.py により自動生成されています。\n"
     "# 直接編集せず、`make docs` で再生成してください。\n"
 )
+
+# `# TODO: ...` 形式のコメント。TODO 直後の連続コメント行は補足として本文に取り込む
+TODO_COMMENT_PATTERN = re.compile(r"^\s*#\s*TODO\s*[:：]?\s*(.*)$")
+COMMENT_PATTERN = re.compile(r"^\s*#\s?(.*)$")
+# documentation（docstring）内に書かれた TODO
+TODO_TEXT_PATTERN = re.compile(r"^\s*TODO\s*[:：]?\s*(.*)$")
 
 logger = logging.getLogger(__name__)
 
@@ -89,8 +97,82 @@ def describe_default_value(variable):
     return str(default)
 
 
-def build_variable_entries(tax_benefit_system):
+def extract_source_todos(variables_dir, known_variable_names):
+    """
+    ソース中の `# TODO:` コメントを variables 配下の .py から抽出する。
+
+    ast でクラスの行範囲を取得し、TODO 行を囲むクラス（= Variable）に紐付ける。
+    どのクラスにも属さない TODO はファイル単位のものとして variable=None で返す。
+    """
+    todos = []
+    for path in sorted(variables_dir.rglob("*.py")):
+        source = path.read_text(encoding="utf-8")
+        lines = source.split("\n")
+        classes = [
+            (node.lineno, node.end_lineno, node.name)
+            for node in ast.walk(ast.parse(source))
+            if isinstance(node, ast.ClassDef)
+            ]
+
+        index = 0
+        while index < len(lines):
+            matched = TODO_COMMENT_PATTERN.match(lines[index])
+            if not matched:
+                index += 1
+                continue
+
+            text = matched.group(1).strip()
+            # 直後に続くコメント行は TODO の補足とみなして連結する
+            cursor = index + 1
+            while cursor < len(lines) and not TODO_COMMENT_PATTERN.match(lines[cursor]):
+                comment = COMMENT_PATTERN.match(lines[cursor])
+                if not comment:
+                    break
+                text = f"{text} {comment.group(1).strip()}".strip()
+                cursor += 1
+
+            # 最も内側のクラスに紐付ける（Variable でないクラスはファイル単位として扱う）
+            owner = None
+            for start, end, name in classes:
+                if start <= index + 1 <= end and name in known_variable_names:
+                    owner = name
+
+            todos.append({
+                "variable": owner,
+                "text": text,
+                "source": to_repo_relative(str(path)),
+                "line": index + 1,
+                })
+            index = cursor
+
+    return todos
+
+
+def extract_documentation_todos(tax_benefit_system):
+    """Variable の documentation に書かれた TODO を抽出する。"""
+    todos = []
+    for name, variable in tax_benefit_system.variables.items():
+        for line in (variable.documentation or "").split("\n"):
+            matched = TODO_TEXT_PATTERN.match(line)
+            if matched:
+                todos.append({
+                    "variable": name,
+                    "text": matched.group(1).strip(),
+                    "source": to_repo_relative(
+                        variable.introspection_data[0] if variable.introspection_data else None,
+                        ),
+                    "line": None,
+                    })
+    return todos
+
+
+def build_variable_entries(tax_benefit_system, todos):
     """全 Variable を TaxBenefitSystem から読み出し、データファイル用の辞書のリストにする。"""
+    todos_by_variable = {}
+    for todo in todos:
+        if todo["variable"]:
+            todos_by_variable.setdefault(todo["variable"], []).append(todo)
+
     entries = []
     for name, variable in tax_benefit_system.variables.items():
         source = to_repo_relative(
@@ -113,6 +195,11 @@ def build_variable_entries(tax_benefit_system):
             # formula を持たない Variable は利用者に入力してもらう値
             "computed": bool(variable.formulas),
             "formula_start_dates": [str(key) for key in variable.formulas.keys()],
+            # 制度の未実装・簡略化を示す TODO コメント
+            "todos": [
+                {"text": todo["text"], "line": todo["line"]}
+                for todo in todos_by_variable.get(name, [])
+                ],
             "category": category,
             "subcategory": subcategory,
             "source": source,
@@ -155,6 +242,39 @@ def build_parameter_entries(parameter_node):
     return entries
 
 
+def build_todo_entries(todos, variable_entries):
+    """TODO 一覧ページ用に、Variable の分類・ラベルを付与した平坦なリストを作る。"""
+    by_name = {entry["name"]: entry for entry in variable_entries}
+
+    entries = []
+    for todo in todos:
+        variable = by_name.get(todo["variable"]) if todo["variable"] else None
+        if variable:
+            category = variable["category"]
+            subcategory = variable["subcategory"]
+        else:
+            # どの Variable にも属さない TODO はファイルの位置から分類する
+            category, subcategory = split_category(todo["source"], "variables")
+
+        entries.append({
+            "text": todo["text"],
+            "variable": todo["variable"],
+            "label": variable["label"] if variable else None,
+            "category": category,
+            "subcategory": subcategory,
+            "source": todo["source"],
+            "line": todo["line"],
+            })
+
+    entries.sort(key=lambda entry: (
+        entry["category"],
+        entry["subcategory"],
+        entry["variable"] or "",
+        entry["line"] or 0,
+        ))
+    return entries
+
+
 def dump(path, payload):
     """YAML データファイルを書き出す。"""
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -184,8 +304,16 @@ def main():
     logging.basicConfig(level=logging.INFO, format="%(message)s")
 
     tax_benefit_system = CountryTaxBenefitSystem()
-    variables = build_variable_entries(tax_benefit_system)
+
+    todos = extract_source_todos(
+        REPO_ROOT / "openfisca_japan" / "variables",
+        set(tax_benefit_system.variables.keys()),
+        )
+    todos += extract_documentation_todos(tax_benefit_system)
+
+    variables = build_variable_entries(tax_benefit_system, todos)
     parameters = build_parameter_entries(tax_benefit_system.parameters)
+    todo_entries = build_todo_entries(todos, variables)
 
     try:
         version = metadata.version("OpenFisca-Japan")
@@ -194,9 +322,11 @@ def main():
 
     dump(output_dir / "variables.yml", {"version": version, "items": variables})
     dump(output_dir / "parameters.yml", {"version": version, "items": parameters})
+    dump(output_dir / "todos.yml", {"version": version, "items": todo_entries})
 
     logger.info("生成しました: %s (Variable %d件)", output_dir / "variables.yml", len(variables))
     logger.info("生成しました: %s (Parameter %d件)", output_dir / "parameters.yml", len(parameters))
+    logger.info("生成しました: %s (TODO %d件)", output_dir / "todos.yml", len(todo_entries))
 
 
 if __name__ == "__main__":

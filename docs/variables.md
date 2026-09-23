@@ -11,7 +11,9 @@
 {% assign computed = items | where: "computed", true %}
 {% assign groups = items | group_by: "category" | sort: "name" %}
 
+{% assign with_todo = items | where_exp: "i", "i.todos.size > 0" %}
 全 **{{ items | size }}** 項目（計算値 {{ computed | size }} / 入力値 {{ items | size | minus: computed.size }}）
+うち **{{ with_todo | size }}** 項目に未実装・簡略化の注記があります（[一覧](./todos.md)）。
 
 <input type="search" id="of-filter" placeholder="制度名・ラベル・説明で絞り込み（例: 児童手当、障害）" aria-label="制度の絞り込み">
 <p id="of-filter-result" role="status"></p>
@@ -21,8 +23,8 @@
 
 {% assign sorted = group.items | sort: "subcategory" %}
 {% for item in sorted %}
-<details class="of-item" data-search="{{ item.name | append: ' ' | append: item.label | append: ' ' | append: item.documentation | append: ' ' | append: item.category | append: ' ' | append: item.subcategory | strip_newlines | escape }}">
-<summary><code>{{ item.name }}</code>{% if item.label and item.label != item.name %} — {{ item.label }}{% endif %} <span class="of-tag">{{ item.entity }}</span>{% unless item.computed %} <span class="of-tag of-tag-input">入力値</span>{% endunless %}</summary>
+<details class="of-item" id="v-{{ item.name }}" data-search="{{ item.name | append: ' ' | append: item.label | append: ' ' | append: item.documentation | append: ' ' | append: item.category | append: ' ' | append: item.subcategory | strip_newlines | escape }}">
+<summary><code>{{ item.name }}</code>{% if item.label and item.label != item.name %} — {{ item.label }}{% endif %} <span class="of-tag">{{ item.entity }}</span>{% unless item.computed %} <span class="of-tag of-tag-input">入力値</span>{% endunless %}{% if item.todos.size > 0 %} <span class="of-tag of-tag-todo">未実装 {{ item.todos.size }}</span>{% endif %}</summary>
 
 <dl>
 {% if item.documentation %}<dt>説明</dt><dd>{{ item.documentation | newline_to_br }}</dd>{% endif %}
@@ -30,6 +32,7 @@
 {% if item.possible_values.size > 0 %}<dt>選択肢</dt><dd>{% for value in item.possible_values %}<code>{{ value }}</code>{% unless forloop.last %} / {% endunless %}{% endfor %}</dd>{% endif %}
 <dt>適用単位</dt><dd>{{ item.definition_period }}</dd>
 {% if item.formula_start_dates.size > 1 %}<dt>計算式の適用開始日</dt><dd>{% for date in item.formula_start_dates %}<code>{{ date }}</code>{% unless forloop.last %} / {% endunless %}{% endfor %}</dd>{% endif %}
+{% if item.todos.size > 0 %}<dt>未実装・簡略化</dt><dd><ul class="of-todo">{% for todo in item.todos %}<li>{{ todo.text }}{% if todo.line %} <a href="{{ site.source_base_url }}/{{ item.source }}#L{{ todo.line }}" class="of-line">L{{ todo.line }}</a>{% endif %}</li>{% endfor %}</ul></dd>{% endif %}
 {% if item.references.size > 0 %}<dt>参照</dt><dd>{% for reference in item.references %}<a href="{{ reference }}">{{ reference }}</a>{% unless forloop.last %}<br>{% endunless %}{% endfor %}</dd>{% endif %}
 <dt>ソース</dt><dd><a href="{{ site.source_base_url }}/{{ item.source }}"><code>{{ item.source }}</code></a></dd>
 </dl>
@@ -50,6 +53,10 @@
 .of-item dd { margin: 0 0 .5em; }
 .of-tag { font-size: .7rem; padding: .1em .5em; border-radius: 1em; background: #e9ebec; color: #1e6bb8; white-space: nowrap; }
 .of-tag-input { background: #fce8b2; color: #7a5c00; }
+.of-tag-todo { background: #ffdce0; color: #86181d; }
+.of-todo { margin: 0; padding-left: 1.2em; }
+.of-todo li { margin: .2em 0; }
+.of-line { font-size: .8rem; color: #606c71; }
 .of-hidden { display: none; }
 </style>
 

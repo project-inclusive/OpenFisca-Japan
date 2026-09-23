@@ -27,6 +27,7 @@
 ### 制度ドキュメント（自動生成）
 - [制度一覧（Variable）](./variables.md)
 - [パラメータ一覧（Parameter）](./parameters.md)
+- [未実装・簡略化の一覧](./todos.md)
 
 ### [コントリビューションガイド]
 - [フロントエンドへの質問追加](./add_frontend_question.md)
