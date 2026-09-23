@@ -159,8 +159,12 @@ make serve-dev
   - バックエンドは editable install（`make install` = `pip install -e .`）されているため、
     ソースの修正がそのままテスト・APIサーバーに反映される
   - `make build`（wheel を作って `--force-reinstall`）を実行すると editable install が
-    **ビルド時点のコードのコピーで上書きされ**、以降ソースを修正しても反映されなくなるので注意。
-    誤って実行してしまった場合は `make install` で editable install に戻す
+    **ビルド時点のコードのコピーで上書きされ**、以降ソースを修正しても反映されなくなるので注意
+    （`make build` は配布物と同じ wheel をテストするための CI 向けターゲット）
+  - 誤って実行してしまった場合の戻し方は
+    [Dev Container 開発環境](./devcontainer_note.md#バックエンドのホットリロードeditable-install)を参照。
+    特に `sudo` なしで `make build` すると pip が `~/.local` 側へインストールし、
+    そちらが優先されるため `make install` だけでは直らない
 - 通常は標準出力は表示されませんが、例外を発生させると標準出力が表示されデバッグが容易になります
 - フロントエンドの制約上、見積もり結果に表示する制度のVariableは **`entity = 世帯` にする必要がある**
   - 個人に依存する条件は世帯員単位で計算し、最終的な制度の金額のみ世帯単位で集計すると実装しやすいです

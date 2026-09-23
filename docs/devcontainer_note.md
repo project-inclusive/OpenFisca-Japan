@@ -109,13 +109,27 @@ devcontainer exec --workspace-folder . bash
     そのためワークスペース上でコマンドを実行しても、editable install を入れ直さないと
     `site-packages` 側の `/app` のコピーが import されてしまう。
 - API サーバーをソース監視付きで起動するには `make serve-dev` を使う（詳細は[開発ドキュメント](./dev_note)）。
-- **`make build` を実行してしまった場合**は `sudo make install` で editable install に戻す。
-  現在どちらの状態かは以下で確認できる。
+- 現在どこから import されているかは、リポジトリ外で確認する
+  （リポジトリ内で実行するとカレントディレクトリが優先され、常に正常に見えてしまう）。
 
   ```bash
-  cat /usr/local/lib/python3.11/site-packages/openfisca_japan-*.dist-info/direct_url.json
-  # editable の場合: {"dir_info": {"editable": true}, "url": "file:///workspaces/OpenFisca-Japan"}
+  (cd /tmp && python -c "import openfisca_japan; print(openfisca_japan.__file__)")
+  # 正常: /workspaces/OpenFisca-Japan/openfisca_japan/__init__.py
+  # 異常: ~/.local/... または /usr/local/... 配下（コピーを見ている）
   ```
+
+- **`make build` を実行してしまった場合**（特に `sudo` を付けずに実行した場合）は、以下で戻す。
+
+  ```bash
+  pip uninstall -y openfisca-japan  # sudo を付けない。~/.local 側のコピーを消す
+  sudo make install                 # システム側を editable install に戻す
+  ```
+
+  `sudo` なしの `make build` が厄介なのは、`/usr/local/lib/python3.11/site-packages` が
+  `user` から書けないため **pip が自動的に `--user`（`~/.local/...`）へフォールバック**する点。
+  user site は `sys.path` 上でシステム側より**先**に来るので、ビルド時点のコピーが
+  システム側の editable install を覆い隠してしまう。
+  この状態では `sudo make install` を実行しても解消しないため、先に user site 側を消す必要がある。
 
 ### コンテナの常駐と停止（`shutdownAction`）
 
