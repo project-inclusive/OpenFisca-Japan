@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, Stack, Text } from '@chakra-ui/react';
+import { Box, Flex, Heading, Link, Stack, Text } from '@chakra-ui/react';
 import { forwardRef } from 'react';
 
 import { ReferralDocument, ReferralDocumentConcern } from '../types';
@@ -7,11 +7,9 @@ import { ReferralUrgencyBadge } from './ReferralUrgencyBadge';
 const ConcernDetails = ({
   concern,
   title,
-  showUrgency = false,
 }: {
   concern: ReferralDocumentConcern;
   title: string;
-  showUrgency?: boolean;
 }) => (
   <Box>
     <Flex align="center" justify="space-between" gap={2} flexWrap="wrap">
@@ -21,16 +19,7 @@ const ConcernDetails = ({
         </Text>
         <Text as="span">（{concern.answer}）</Text>
       </Text>
-      {showUrgency ? (
-        <ReferralUrgencyBadge level={concern.urgencyLevel} />
-      ) : null}
     </Flex>
-    <Text mt={1} overflowWrap="anywhere">
-      <Text as="span" fontWeight="bold">
-        相談先：
-      </Text>
-      {concern.destination}
-    </Text>
   </Box>
 );
 
@@ -62,6 +51,9 @@ export const ReferralDocumentView = forwardRef<
             textAlign="center"
           >
             説明書
+            <Text as="span" display="block" fontSize="sm" mt={1}>
+              （あなたに読んでいただく用）
+            </Text>
           </Heading>
 
           <Stack spacing={4}>
@@ -90,9 +82,42 @@ export const ReferralDocumentView = forwardRef<
                         <ReferralUrgencyBadge level={concern.urgencyLevel} />
                       ) : null}
                     </Flex>
-                    <Text overflowWrap="anywhere">
-                      相談先：{concern.destination}
-                    </Text>
+                    {concern.destinations.map(
+                      (destination, destinationIndex) => (
+                        <Box
+                          key={`${destinationIndex}-${destination.name}`}
+                          mt={1}
+                          overflowWrap="anywhere"
+                          data-testid="referral-destination"
+                        >
+                          <Text>
+                            相談先
+                            {concern.destinations.length > 1
+                              ? ['①', '②'][destinationIndex]
+                              : ''}
+                            ：{destination.name}
+                          </Text>
+                          {destination.url ? (
+                            <Box fontSize="sm">
+                              <Link
+                                href={destination.url}
+                                isExternal
+                                color="cyan.800"
+                                textDecoration="underline"
+                                aria-label={`${destination.name}の案内ページを開く`}
+                              >
+                                案内ページを開く
+                              </Link>
+                              <Text className="referral-destination-url">
+                                {destination.url}
+                              </Text>
+                            </Box>
+                          ) : (
+                            <Text fontSize="sm">案内ページのリンクなし</Text>
+                          )}
+                        </Box>
+                      )
+                    )}
                   </Box>
                 ))}
               </Stack>
@@ -103,9 +128,16 @@ export const ReferralDocumentView = forwardRef<
                 主な困りごとの窓口の検索方法
               </Text>
               <Stack as="ol" pl={5} spacing={1}>
-                {document.guide.searchMethods.map((method) => (
-                  <Text as="li" key={method}>
-                    {method}
+                {document.guide.searchMethods.map((method, index) => (
+                  <Text
+                    as="li"
+                    key={`${index}-${method.destination.name}`}
+                    overflowWrap="anywhere"
+                  >
+                    <Text as="span" fontWeight="semibold">
+                      {method.destination.name}：
+                    </Text>
+                    {method.instruction}
                   </Text>
                 ))}
               </Stack>
@@ -113,72 +145,82 @@ export const ReferralDocumentView = forwardRef<
 
             <Text>{document.guide.contactInstruction}</Text>
             <Text>{document.guide.letterInstruction}</Text>
+            <Text fontSize="sm">{document.guide.disclaimer}</Text>
           </Stack>
         </Box>
 
-        <Box
-          as="section"
-          data-testid="referral-letter"
-          className="referral-print-card"
-          bg="white"
-          borderRadius="lg"
-          p={{ base: 4, md: 6 }}
-          aria-labelledby="referral-letter-heading"
-        >
-          <Heading
-            id="referral-letter-heading"
-            as="h2"
-            size="md"
-            mb={4}
-            textAlign="center"
+        <Box className="referral-letter-print-group">
+          <Box className="referral-print-cutline" aria-hidden="true">
+            切り取り線
+          </Box>
+          <Box
+            as="section"
+            data-testid="referral-letter"
+            className="referral-print-card"
+            bg="white"
+            borderRadius="lg"
+            p={{ base: 4, md: 6 }}
+            aria-labelledby="referral-letter-heading"
           >
-            紹介状
-          </Heading>
-
-          <Stack spacing={4}>
-            <Text whiteSpace="pre-line">{document.letter.introduction}</Text>
-
-            {document.letter.name ? (
-              <Text overflowWrap="anywhere">
-                <Text as="span" fontWeight="bold">
-                  氏名（任意）：
-                </Text>
-                {document.letter.name}
+            <Heading
+              id="referral-letter-heading"
+              as="h2"
+              size="md"
+              mb={4}
+              textAlign="center"
+            >
+              紹介状
+              <Text as="span" display="block" fontSize="sm" mt={1}>
+                （相談窓口にお渡しする用）
               </Text>
-            ) : null}
-            {document.letter.email ? (
-              <Text overflowWrap="anywhere">
-                <Text as="span" fontWeight="bold">
-                  メールアドレス（任意）：
+            </Heading>
+
+            <Stack spacing={4}>
+              <Text whiteSpace="pre-line">{document.letter.introduction}</Text>
+
+              {document.letter.name ? (
+                <Text overflowWrap="anywhere">
+                  <Text as="span" fontWeight="bold">
+                    氏名（任意）：
+                  </Text>
+                  {document.letter.name}
                 </Text>
-                {document.letter.email}
-              </Text>
-            ) : null}
+              ) : null}
+              {document.letter.email ? (
+                <Text overflowWrap="anywhere">
+                  <Text as="span" fontWeight="bold">
+                    メールアドレス（任意）：
+                  </Text>
+                  {document.letter.email}
+                </Text>
+              ) : null}
 
-            <ConcernDetails
-              concern={document.letter.mainConcern}
-              title="主な困りごと"
-            />
-
-            {document.letter.otherConcerns.map((concern, index) => (
               <ConcernDetails
-                key={concern.id}
-                concern={concern}
-                title={`他の困りごと${['①', '②', '③'][index]}`}
+                concern={document.letter.mainConcern}
+                title="主な困りごと"
               />
-            ))}
 
-            {document.letter.message ? (
-              <Text whiteSpace="pre-wrap" overflowWrap="anywhere">
-                <Text as="span" fontWeight="bold">
-                  他に伝えたいこと（任意）：
+              {document.letter.otherConcerns.map((concern, index) => (
+                <ConcernDetails
+                  key={concern.id}
+                  concern={concern}
+                  title={`他の困りごと${['①', '②', '③'][index]}`}
+                />
+              ))}
+
+              {document.letter.message ? (
+                <Text whiteSpace="pre-wrap" overflowWrap="anywhere">
+                  <Text as="span" fontWeight="bold">
+                    他に伝えたいこと（任意）：
+                  </Text>
+                  {document.letter.message}
                 </Text>
-                {document.letter.message}
-              </Text>
-            ) : null}
+              ) : null}
 
-            <Text textAlign="right">作成：{document.letter.creator}</Text>
-          </Stack>
+              <Text fontSize="sm">{document.letter.disclaimer}</Text>
+              <Text textAlign="right">作成：{document.letter.creator}</Text>
+            </Stack>
+          </Box>
         </Box>
       </Stack>
     </Box>

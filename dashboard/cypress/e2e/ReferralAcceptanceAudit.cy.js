@@ -159,11 +159,11 @@ describe('Acceptance checklist supplemental audit', () => {
       blockers
     );
     expect(
-      blockers.every((area) => area.unavoidableCandidates.includes('お金'))
+      blockers.every((area) => area.unavoidableCandidates.length === 0)
     ).to.equal(true);
   });
 
-  it('checks question backtracking, zero other concerns, email limit, trimming and fallback destination', () => {
+  it('checks question backtracking, zero other concerns, email limit and trimming', () => {
     const area = REFERRAL_AREA_CONFIGS[0];
     const state = seed(area, { kind: 'questions', questionIndex: 1 });
     visitState(state);
@@ -171,10 +171,8 @@ describe('Acceptance checklist supplemental audit', () => {
     cy.get(
       `[data-testid="referral-answer-${state.answers[area.questions[0].id]}"]`
     ).should('have.attr', 'aria-pressed', 'true');
-    const q = area.questions.find((q) =>
-      q.answers.some((a) => a.urgency !== 'none' && !a.destination)
-    );
-    const a = q.answers.find((a) => a.urgency !== 'none' && !a.destination);
+    const q = area.questions[0];
+    const a = q.answers[0];
     state.answers[q.id] = a.id;
     state.mainConcernId = q.id;
     state.otherConcernIds = [];
@@ -192,7 +190,7 @@ describe('Acceptance checklist supplemental audit', () => {
     cy.get('textarea[name="message"]').type(' 確認用の文章 ');
     cy.contains('button', '完了').click();
     cy.get('[data-testid="referral-letter"]')
-      .should('contain', 'お住まいの市町村の相談窓口')
+      .should('not.contain', '相談先')
       .and('not.contain', '他の困りごと');
     cy.get('[data-testid="referral-letter"]')
       .invoke('text')
@@ -215,6 +213,7 @@ describe('Acceptance checklist supplemental audit', () => {
   it('checks print-media visibility, A4 settings and restores screen media', () => {
     visitState(seed(REFERRAL_AREA_CONFIGS[0]));
     cy.get('[data-referral-print-page]').should('contain', 'A4 portrait');
+    cy.get('.referral-print-cutline').should('not.be.visible');
     cy.then(() =>
       Cypress.automation('remote:debugger:protocol', {
         command: 'Emulation.setEmulatedMedia',
@@ -228,6 +227,7 @@ describe('Acceptance checklist supplemental audit', () => {
       cy.wrap(el).should('have.css', 'visibility', 'visible');
       cy.wrap(el).should('have.css', 'break-inside', 'avoid');
     });
+    cy.get('.referral-print-cutline').should('be.visible');
     cy.screenshot('acceptance-print-media', { capture: 'fullPage' });
     cy.then(() =>
       Cypress.automation('remote:debugger:protocol', {
@@ -235,5 +235,6 @@ describe('Acceptance checklist supplemental audit', () => {
         params: { media: '' },
       })
     );
+    cy.get('.referral-print-cutline').should('not.be.visible');
   });
 });

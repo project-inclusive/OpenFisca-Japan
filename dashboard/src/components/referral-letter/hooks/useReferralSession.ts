@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import {
   createInitialReferralState,
   REFERRAL_STORAGE_KEY,
+  LEGACY_REFERRAL_STORAGE_KEY,
   sanitizeReferralState,
 } from '../state';
 import { ReferralState } from '../types';
@@ -13,6 +14,7 @@ export const loadReferralSession = (): ReferralState => {
   }
 
   try {
+    window.sessionStorage.removeItem(LEGACY_REFERRAL_STORAGE_KEY);
     const savedState = window.sessionStorage.getItem(REFERRAL_STORAGE_KEY);
     if (!savedState) {
       return createInitialReferralState();
@@ -41,6 +43,7 @@ export const clearReferralSession = (): void => {
   }
 
   try {
+    window.sessionStorage.removeItem(LEGACY_REFERRAL_STORAGE_KEY);
     window.sessionStorage.removeItem(REFERRAL_STORAGE_KEY);
   } catch {
     // Storage can be unavailable in privacy-restricted browsers. The in-memory

@@ -8,7 +8,34 @@
   page-break-inside: avoid;
 }
 
+.referral-print-cutline {
+  display: none;
+}
+
+.referral-destination-url {
+  overflow-wrap: anywhere;
+  word-break: break-all;
+}
+
 @media print {
+  .referral-print-document > div {
+    display: block !important;
+  }
+
+  .referral-letter-print-group {
+    break-inside: avoid-page;
+    page-break-inside: avoid;
+  }
+
+  .referral-print-cutline {
+    display: block;
+    border-top: 1px dashed #718096;
+    text-align: center;
+    font-size: 9pt;
+    padding: 2mm 0 4mm;
+    break-after: avoid-page;
+    page-break-after: avoid;
+  }
   body.referral-print-page {
     background: #fff !important;
   }

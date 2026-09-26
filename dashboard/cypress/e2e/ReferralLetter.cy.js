@@ -9,15 +9,15 @@ import {
   REFERRAL_URGENCY_LABELS,
   createReferralDocument,
   deriveConcernCandidates,
-  getReferralUrgencyLevel,
+  createDestinationInstruction,
   isReferralCandidateAnswer,
   isValidReferralEmail,
   reconcileConcernSelection,
-  resolveReferralDestination,
 } from '../../src/components/referral-letter/logic';
 import {
   REFERRAL_INPUT_LIMITS,
   REFERRAL_STORAGE_KEY,
+  LEGACY_REFERRAL_STORAGE_KEY,
   createInitialReferralState,
   referralReducer,
   sanitizeReferralState,
@@ -145,157 +145,137 @@ const assertReferralA11y = () => {
 };
 
 describe('Referral letter domain rules', () => {
-  it('omits the municipal website prefix only from the search instruction', () => {
+  it('matches every source cell from the revised tabs (2026-09-26)', () => {
+    // FNV-1a over JSON rows independently copied from Sheets B,D:I.
+    // Numeric prefixes in B are removed; blank repeated B cells are filled down.
+    const expected = {
+      elderly: '958f9cdb',
+      childcare: 'e2e182d0',
+      'young-adult': '6e4608b7',
+    };
+    const labels = { none: '無', low: '低', medium: '中', high: '高' };
+    const ids = [];
     REFERRAL_AREA_CONFIGS.forEach((area) => {
-      const question = area.questions[0];
-      const answer = getAnswer(question, (option) => option.score === 5);
-      const document = createReferralDocument({
-        ...createInitialReferralState(),
-        areaId: area.id,
-        answers: answersFor(area.id, () => true),
-        mainConcernId: question.id,
+      expect(area.questions).to.have.length(7);
+      const rows = area.questions.flatMap((question) => {
+        ids.push(question.id);
+        expect(question.answers).to.have.length(6);
+        return question.answers.map((answer) => {
+          ids.push(answer.id);
+          expect(answer).not.to.have.property('score');
+          expect(answer.destinations.length).to.be.at.most(2);
+          if (answer.urgency !== 'none')
+            expect(answer.destinations).not.to.be.empty;
+          answer.destinations.forEach((destination) => {
+            expect(destination.name).to.match(/\S/);
+            if (destination.url)
+              expect(new URL(destination.url).protocol).to.equal('https:');
+          });
+          return [
+            question.label,
+            labels[answer.urgency],
+            answer.label,
+            answer.destinations[0]?.name || '',
+            answer.destinations[0]?.url || '',
+            answer.destinations[1]?.name || '',
+            answer.destinations[1]?.url || '',
+          ];
+        });
       });
-
-      expect(answer.destination).to.equal('役所HPから「生活保護」');
-      expect(document.guide.concerns[0].destination).to.equal(
-        '役所HPから「生活保護」'
-      );
-      expect(document.letter.mainConcern.destination).to.equal(
-        '役所HPから「生活保護」'
-      );
-      expect(document.guide.searchMethods[1]).to.equal(
-        'ネットで「「生活保護」 お住まいの市町村名 電話番号」で検索し連絡する'
-      );
-      expect(document.guide.searchMethods[1]).not.to.include('役所HPから');
-      expect(
-        resolveReferralDestination({ ...answer, destination: '医療機関' })
-      ).to.equal('医療機関');
-      expect(
-        resolveReferralDestination({ ...answer, destination: null })
-      ).to.equal('お住まいの市町村の相談窓口');
+      let hash = 2166136261;
+      for (const character of JSON.stringify(rows).split(''))
+        hash = Math.imul(hash ^ character.charCodeAt(0), 16777619) >>> 0;
+      expect(hash.toString(16), area.id).to.equal(expected[area.id]);
     });
+    expect(new Set(ids).size).to.equal(ids.length);
   });
 
-  it('keeps the three seven-question configs internally consistent', () => {
-    expect(REFERRAL_AREA_CONFIGS).to.have.length(3);
-
-    const questions = REFERRAL_AREA_CONFIGS.flatMap((area) => {
-      expect(area.questions, area.id).to.have.length(7);
-      return area.questions;
+  it('uses the new urgency column, never the former numeric score', () => {
+    [
+      'childcare-child-future',
+      'childcare-career-plan',
+      'young-adult-career-plan',
+    ].forEach((id) => {
+      const question = REFERRAL_AREA_CONFIGS.flatMap(
+        (area) => area.questions
+      ).find((q) => q.id === id);
+      expect(question.answers.map((a) => a.urgency)).to.deep.equal([
+        'medium',
+        'medium',
+        'low',
+        'none',
+        'none',
+        'none',
+      ]);
     });
-    const questionIds = questions.map((question) => question.id);
-    const answerIds = questions.flatMap((question) =>
-      question.answers.map((answer) => answer.id)
-    );
-
-    expect(new Set(questionIds).size).to.equal(questionIds.length);
-    expect(new Set(answerIds).size).to.equal(answerIds.length);
-
-    questions.forEach((question) => {
-      expect(
-        question.answers.some((answer) => answer.urgency === 'none'),
-        `${question.id} has a none answer`
-      ).to.equal(true);
-
-      question.answers.filter(isReferralCandidateAnswer).forEach((answer) => {
-        expect(resolveReferralDestination(answer)).to.match(/\S/);
-      });
-    });
-
-    const answers = questions.flatMap((question) => question.answers);
-    expect(answers.filter(isReferralCandidateAnswer)).to.have.length(107);
+    const question = getReferralAreaConfig('childcare').questions[1];
+    expect(question.answers[3].urgency).to.equal('low');
     expect(
-      answers.filter(
-        (answer) =>
-          answer.urgency === 'none' && isReferralCandidateAnswer(answer)
-      )
-    ).to.have.length(5);
+      isReferralCandidateAnswer({
+        urgency: 'none',
+        destinations: [{ name: '紹介先があっても候補外', url: null }],
+      })
+    ).to.equal(false);
   });
 
-  it('maps the Sheet urgency score to the displayed low, medium, and high levels', () => {
-    expect([0, 1].map(getReferralUrgencyLevel)).to.deep.equal(['low', 'low']);
-    expect([2, 3].map(getReferralUrgencyLevel)).to.deep.equal([
-      'medium',
-      'medium',
-    ]);
-    expect([4, 5].map(getReferralUrgencyLevel)).to.deep.equal(['high', 'high']);
-    expect(getReferralUrgencyLevel(null)).to.equal(null);
-
-    const childFuture = getReferralAreaConfig('childcare').questions.find(
-      (question) => question.id === 'childcare-child-future'
-    );
-    const careerPlan = getReferralAreaConfig('young-adult').questions.find(
-      (question) => question.id === 'young-adult-career-plan'
-    );
-
-    expect(childFuture).to.exist;
-    expect(careerPlan).to.exist;
-    expect(
-      getAnswer(childFuture, (answer) => answer.score === 5).urgency
-    ).to.equal('medium');
-    expect(
-      getReferralUrgencyLevel(
-        getAnswer(childFuture, (answer) => answer.score === 5).score
-      )
-    ).to.equal('high');
-    expect(
-      getAnswer(careerPlan, (answer) => answer.score === 5).urgency
-    ).to.equal('medium');
-    expect(
-      getReferralUrgencyLevel(
-        getAnswer(careerPlan, (answer) => answer.score === 5).score
-      )
-    ).to.equal('high');
-  });
-
-  it('keeps every candidate answer destination in the final document', () => {
-    let checkedCandidates = 0;
-
+  it('keeps the selected destinations, URLs and urgency for all 90 candidate answers', () => {
+    let checked = 0;
     REFERRAL_AREA_CONFIGS.forEach((area) => {
       area.questions.forEach((question) => {
         question.answers.filter(isReferralCandidateAnswer).forEach((answer) => {
           const answers = answersFor(area.id, () => true);
           answers[question.id] = answer.id;
           const candidate = deriveConcernCandidates(area.id, answers).find(
-            ({ questionId }) => questionId === question.id
+            (c) => c.questionId === question.id
           );
           const document = createReferralDocument({
             ...createInitialReferralState(),
             areaId: area.id,
             answers,
-            mainConcernId: candidate.id,
+            mainConcernId: question.id,
           });
-
-          expect(document, `${area.id}/${answer.id}`).not.to.equal(null);
-          expect(candidate.answerId).to.equal(answer.id);
-          expect(candidate.destination).to.equal(
-            resolveReferralDestination(answer)
+          expect(candidate.destinations).to.deep.equal(answer.destinations);
+          expect(candidate.urgencyLevel).to.equal(answer.urgency);
+          expect(document.guide.concerns[0].destinations).to.deep.equal(
+            answer.destinations
           );
-          expect(candidate.urgencyLevel).to.equal(
-            getReferralUrgencyLevel(answer.score)
-          );
-          expect(document.guide.concerns).to.deep.equal([
-            document.letter.mainConcern,
-          ]);
-          expect(document.letter.mainConcern.destination).to.equal(
-            resolveReferralDestination(answer)
-          );
-          expect(document.letter.mainConcern.urgencyLevel).to.equal(
-            getReferralUrgencyLevel(answer.score)
-          );
-          expect(document.guide.searchMethods[0]).to.equal(
-            `市町村の代表番号に電話し「${question.label}について相談できる窓口を知りたい」と伝える`
+          expect(document.guide.searchMethods).to.deep.equal(
+            answer.destinations.map((destination) => ({
+              destination,
+              instruction: createDestinationInstruction(destination),
+            }))
           );
           expect(document.guide.contactInstruction).to.equal(
-            `窓口に連絡し「${question.label}について相談したい」と伝える`
+            `連絡先が見つかった場合は、窓口に電話し「${question.label}について相談したい」と伝えてください。`
           );
           expect(document.letter.otherConcerns).to.deep.equal([]);
-          checkedCandidates += 1;
+          checked++;
         });
       });
     });
+    expect(checked).to.equal(90);
+  });
 
-    expect(checkedCandidates).to.equal(107);
+  it('branches each destination independently, preserving labels and removing the prefix only from search words', () => {
+    const withoutLink = { name: '役所HPから「生活保護」', url: null };
+    expect(createDestinationInstruction(withoutLink)).to.equal(
+      'ネットで「「生活保護」 お住まいの市町村名 電話番号」で検索してください。'
+    );
+    expect(withoutLink.name).to.equal('役所HPから「生活保護」');
+    expect(
+      createDestinationInstruction({
+        ...withoutLink,
+        url: 'https://example.com',
+      })
+    ).to.include('案内ページを開き');
+    REFERRAL_AREA_CONFIGS.forEach((area) => {
+      expect(
+        deriveConcernCandidates(
+          area.id,
+          answersFor(area.id, (a) => a.urgency === 'none')
+        )
+      ).to.deep.equal([]);
+    });
   });
 
   it('derives candidates in question order and caps other concerns at three', () => {
@@ -485,32 +465,44 @@ describe('Referral letter domain rules', () => {
 });
 
 describe('Referral letter flow', () => {
-  it('shows a configured destination even when all answers have none urgency', () => {
+  it('does not create a letter when all answers have no urgency', () => {
     beginReferral('elderly');
     answerReferralQuestions('elderly', (answer) => answer.urgency === 'none');
+    cy.contains('現在、大きな困り事はなさそうです');
+    cy.get('[data-testid="referral-document"]').should('not.exist');
+  });
 
-    const candidates = deriveConcernCandidates(
-      'elderly',
-      answersFor('elderly', (answer) => answer.urgency === 'none')
-    );
-    expect(candidates).to.have.length(1);
-    cy.contains('困りごとを選ぶ');
-    cy.get(`[data-testid="referral-main-${candidates[0].id}"]`).click();
-    cy.contains('button', /^次へ$/).click();
-    cy.contains('その他の困りごとを選ぶ');
-    cy.contains('button', /^次へ$/).click();
-    cy.contains('伝えたいこと');
-    cy.contains('button', '完了').click();
-
-    cy.contains('紹介状ができました');
-    cy.get('[data-testid="referral-guide"]').should(
-      'contain',
-      `相談先：${candidates[0].destination}`
-    );
-    cy.get('[data-testid="referral-letter"]').should(
-      'contain',
-      `相談先：${candidates[0].destination}`
-    );
+  it('discards all legacy answers and personal inputs', () => {
+    cy.visit('/referral-letter', {
+      onBeforeLoad(window) {
+        window.sessionStorage.removeItem(REFERRAL_STORAGE_KEY);
+        window.sessionStorage.setItem(
+          LEGACY_REFERRAL_STORAGE_KEY,
+          JSON.stringify({
+            ...createInitialReferralState(),
+            version: 1,
+            noticeAccepted: true,
+            inputs: {
+              name: TEST_NAME,
+              email: TEST_EMAIL,
+              message: TEST_MESSAGE,
+            },
+          })
+        );
+      },
+    });
+    cy.contains('紹介状をつくる');
+    cy.window().then((window) => {
+      expect(
+        window.sessionStorage.getItem(LEGACY_REFERRAL_STORAGE_KEY)
+      ).to.equal(null);
+      const state = JSON.parse(
+        window.sessionStorage.getItem(REFERRAL_STORAGE_KEY)
+      );
+      expect(state.version).to.equal(2);
+      expect(state.noticeAccepted).to.equal(false);
+      expect(state.inputs).to.deep.equal({ name: '', email: '', message: '' });
+    });
   });
 
   it('creates, restores, edits, and prints a referral letter without sending PII', () => {
@@ -628,7 +620,10 @@ describe('Referral letter flow', () => {
       .then((guideText) => {
         selectedCandidates.forEach((candidate) => {
           expect(guideText).to.include(candidate.questionLabel);
-          expect(guideText).to.include(`相談先：${candidate.destination}`);
+          candidate.destinations.forEach((destination) => {
+            expect(guideText).to.include(destination.name);
+            if (destination.url) expect(guideText).to.include(destination.url);
+          });
         });
       });
     cy.get('[data-testid="referral-letter"]').within(() => {
@@ -648,7 +643,7 @@ describe('Referral letter flow', () => {
       .then((letterText) => {
         selectedCandidates.forEach((candidate) => {
           expect(letterText).to.include(candidate.questionLabel);
-          expect(letterText).to.include(`相談先：${candidate.destination}`);
+          expect(letterText).not.to.include('相談先');
         });
       });
     cy.contains(

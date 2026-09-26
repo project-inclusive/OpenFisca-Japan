@@ -7,12 +7,11 @@ import type {
   ReferralAreaId,
   ReferralDocument,
   ReferralDocumentConcern,
+  ReferralDestination,
   ReferralQuestion,
   ReferralState,
   ReferralUrgencyLevel,
 } from './types';
-
-export const DEFAULT_REFERRAL_DESTINATION = 'お住まいの市町村の相談窓口';
 
 export const MAX_OTHER_CONCERNS = 3;
 
@@ -24,20 +23,14 @@ export const REFERRAL_URGENCY_LABELS: Readonly<
   high: '高',
 };
 
-export const getReferralUrgencyLevel = (
-  score: number | null
-): ReferralUrgencyLevel | null => {
-  if (score === 0 || score === 1) {
-    return 'low';
-  }
-  if (score === 2 || score === 3) {
-    return 'medium';
-  }
-  if (score === 4 || score === 5) {
-    return 'high';
-  }
-  return null;
-};
+export const createDestinationInstruction = (
+  destination: ReferralDestination
+): string =>
+  destination.url
+    ? '案内ページを開き、お住まいの地域の連絡先や必要な情報を確認してください。'
+    : `ネットで「${destination.name
+        .replace(/役所HPから/g, '')
+        .trim()} お住まいの市町村名 電話番号」で検索してください。`;
 
 export const getSelectedAnswer = (
   question: ReferralQuestion,
@@ -55,14 +48,9 @@ export const areAllQuestionsAnswered = (
     (question) => getSelectedAnswer(question, answers) !== undefined
   );
 
-export const resolveReferralDestination = (
-  answer: ReferralAnswerOption
-): string => answer.destination?.trim() || DEFAULT_REFERRAL_DESTINATION;
-
 export const isReferralCandidateAnswer = (
   answer: ReferralAnswerOption
-): boolean =>
-  answer.urgency !== 'none' || (answer.destination?.trim().length ?? 0) > 0;
+): boolean => answer.urgency !== 'none';
 
 export const deriveConcernCandidates = (
   areaId: ReferralAreaId | null,
@@ -74,13 +62,8 @@ export const deriveConcernCandidates = (
 
   return getReferralAreaConfig(areaId).questions.flatMap((question, order) => {
     const answer = getSelectedAnswer(question, answers);
-    if (answer === undefined || !isReferralCandidateAnswer(answer)) {
+    if (answer === undefined || answer.urgency === 'none') {
       return [];
-    }
-
-    const urgencyLevel = getReferralUrgencyLevel(answer.score);
-    if (urgencyLevel === null) {
-      throw new Error(`紹介状候補 ${answer.id} の緊急度合が不正です。`);
     }
 
     return [
@@ -90,11 +73,9 @@ export const deriveConcernCandidates = (
         questionLabel: question.label,
         answerId: answer.id,
         answerLabel: answer.label,
-        score: answer.score,
         urgency: answer.urgency,
-        urgencyLevel,
-        destination: resolveReferralDestination(answer),
-        sourceDestination: answer.destination,
+        urgencyLevel: answer.urgency,
+        destinations: answer.destinations,
         order,
       },
     ];
@@ -142,7 +123,7 @@ const toDocumentConcern = (
   id: candidate.id,
   label: candidate.questionLabel,
   answer: candidate.answerLabel,
-  destination: candidate.destination,
+  destinations: candidate.destinations,
   urgencyLevel: candidate.urgencyLevel,
 });
 
@@ -188,15 +169,15 @@ export const createReferralDocument = (
       introduction:
         '回答いただいた内容に基づいて紹介状を作成しました。説明書の内容をよく確認の上、窓口へ相談に行ってみましょう。',
       concerns: [mainConcern, ...otherConcerns],
-      searchMethods: [
-        `市町村の代表番号に電話し「${mainCandidate.questionLabel}について相談できる窓口を知りたい」と伝える`,
-        `ネットで「${mainCandidate.destination
-          .replace(/役所HPから/g, '')
-          .trim()} お住まいの市町村名 電話番号」で検索し連絡する`,
-      ],
-      contactInstruction: `窓口に連絡し「${mainCandidate.questionLabel}について相談したい」と伝える`,
+      searchMethods: mainCandidate.destinations.map((destination) => ({
+        destination,
+        instruction: createDestinationInstruction(destination),
+      })),
+      contactInstruction: `連絡先が見つかった場合は、窓口に電話し「${mainCandidate.questionLabel}について相談したい」と伝えてください。`,
       letterInstruction:
-        'そのときに、画面に表示された「紹介状」もご利用ください',
+        '窓口に直接訪問した際に、画面に表示された「紹介状」もご利用ください。',
+      disclaimer:
+        '☆当説明書は相談を保証するものではありません。少しでも相談や支援につながれる可能性を高めるよう準備しました。',
     },
     letter: {
       introduction:
@@ -207,6 +188,8 @@ export const createReferralDocument = (
       otherConcerns,
       ...(message.length > 0 ? { message } : {}),
       creator: '防窮研究会',
+      disclaimer:
+        '☆当紹介状は相談・支援を強制するものではありません。お困りの方が、少しでも相談や支援につながれる可能性を高めるよう準備しました。',
     },
   };
 };

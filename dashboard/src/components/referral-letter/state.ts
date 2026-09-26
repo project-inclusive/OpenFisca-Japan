@@ -14,9 +14,10 @@ import type {
   ReferralStep,
 } from './types';
 
-export const REFERRAL_STATE_VERSION = 1 as const;
+export const REFERRAL_STATE_VERSION = 2 as const;
 
-export const REFERRAL_STORAGE_KEY = 'yadokari.referral-letter.v1';
+export const REFERRAL_STORAGE_KEY = 'yadokari.referral-letter.v2';
+export const LEGACY_REFERRAL_STORAGE_KEY = 'yadokari.referral-letter.v1';
 
 export const REFERRAL_INPUT_LIMITS: Readonly<
   Record<keyof ReferralInputs, number>

@@ -4,13 +4,16 @@ export type Urgency = 'none' | 'low' | 'medium' | 'high';
 
 export type ReferralUrgencyLevel = 'low' | 'medium' | 'high';
 
+export interface ReferralDestination {
+  readonly name: string;
+  readonly url: string | null;
+}
+
 export interface ReferralAnswerOption {
   readonly id: string;
   readonly label: string;
-  readonly score: number | null;
   readonly urgency: Urgency;
-  /** The answer-specific destination exactly as recorded in the source Sheet. */
-  readonly destination: string | null;
+  readonly destinations: readonly ReferralDestination[];
 }
 
 export interface ReferralQuestion {
@@ -35,13 +38,9 @@ export interface ConcernCandidate {
   readonly questionLabel: string;
   readonly answerId: string;
   readonly answerLabel: string;
-  readonly score: number | null;
   readonly urgency: Urgency;
   readonly urgencyLevel: ReferralUrgencyLevel;
-  /** A non-empty destination, with the documented fallback applied. */
-  readonly destination: string;
-  /** The unmodified answer-specific destination from the source Sheet. */
-  readonly sourceDestination: string | null;
+  readonly destinations: readonly ReferralDestination[];
   readonly order: number;
 }
 
@@ -68,7 +67,7 @@ export type ReferralStep =
   | { kind: 'result' };
 
 export interface ReferralState {
-  readonly version: 1;
+  readonly version: 2;
   step: ReferralStep;
   noticeAccepted: boolean;
   areaId: ReferralAreaId | null;
@@ -102,16 +101,20 @@ export interface ReferralDocumentConcern {
   readonly id: string;
   readonly label: string;
   readonly answer: string;
-  readonly destination: string;
+  readonly destinations: readonly ReferralDestination[];
   readonly urgencyLevel: ReferralUrgencyLevel;
 }
 
 export interface ReferralGuide {
   readonly introduction: string;
   readonly concerns: readonly ReferralDocumentConcern[];
-  readonly searchMethods: readonly [string, string];
+  readonly searchMethods: readonly {
+    destination: ReferralDestination;
+    instruction: string;
+  }[];
   readonly contactInstruction: string;
   readonly letterInstruction: string;
+  readonly disclaimer: string;
 }
 
 export interface ReferralLetter {
@@ -122,6 +125,7 @@ export interface ReferralLetter {
   readonly otherConcerns: readonly ReferralDocumentConcern[];
   readonly message?: string;
   readonly creator: '防窮研究会';
+  readonly disclaimer: string;
 }
 
 export interface ReferralDocument {
