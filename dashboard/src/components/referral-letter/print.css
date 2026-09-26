@@ -56,7 +56,7 @@
     box-sizing: border-box;
     margin: 0;
     /* Keep a safe inset even when the print dialog uses no page margins. */
-    padding: 0 10mm;
+    padding: 10mm;
     background: #fff !important;
     color: #000;
     -webkit-print-color-adjust: exact;

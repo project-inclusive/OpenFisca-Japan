@@ -21,6 +21,20 @@ const rows = [
   ['更新に伴う補足\nメール項目外・実装計画で合意', '新旧の対応表の混在を防ぎ、途中入力の復元を新しい版に対応させる。', '更新前の回答・同意・氏名等の途中入力は引き継がず、説明画面から開始します。更新後の入力は同じタブ内で再読み込みしても復元されます。', '実装・動作確認済み\n旧入力の破棄、新入力の復元、回答変更時の選択解除、その他3件の上限を確認。', '更新時には途中入力のやり直しが必要です。入力した個人情報を通信やURLへ送らない構成を維持しています。'],
 ];
 
+// Reflect the supplied print PDF and the subsequent safe-margin fix.
+rows[0][0] = '全体\n2026年9月26日\n印刷確認結果を更新';
+rows[0][2] = '追加改修（d149591）は先方確認用サイトへ反映・代表操作確認済みです。その後、印刷時の左右10mmの余白を追加しました。\n確認先：https://feat-referral-letter.openfisca-japan.pages.dev/referral-letter';
+rows[0][3] = '添付PDFでA4縦1ページの表示を確認済み。余白修正後の依存パッケージのインストール・ビルドも成功。\n全42件の自動テスト成功は余白修正前の結果です。';
+rows[0][4] = '残る確認：余白修正後の公開反映・PDF再出力、複数ページになる場合の改ページ、実機印刷。一般向け本番サイトへの反映とは別です。';
+rows[4][3] = '画面・保存画像に加え、提供PDFでもURL文字列を確認済み。A4縦1ページに収まり、掲載文字の欠け・重なりはありませんでした。';
+rows[4][4] = '今回のPDFは余白修正前のものです。修正後の再出力、および長いURLや任意入力で複数ページになる場合は追加確認が必要です。';
+rows[5][3] = '提供PDFで、説明書と紹介状の間に切り取り線があることを確認済み。通常画面・保存画像では非表示です。';
+rows[5][4] = '今回のPDFは1ページです。紹介状が次ページに移る場合に切り取り線も紹介状側に付くことは、引き続き確認が必要です。';
+rows[11][3] = '画面・保存画像に加え、提供PDFでも確認済み。説明書のみ相談先・主な困りごとのバッジがあり、紹介状にはどちらもありません。主1件＋その他3件を表示。';
+rows[13][3] = '画面・保存画像に加え、提供PDFでも両方の注意書きが欠けずに表示されることを確認済み。';
+rows[13][4] = '提供PDFの1ページ内での表示は確認済みです。余白修正後の再出力と、複数ページ時の配置は未確認です。';
+rows.push(['9/26追加調整\n印刷時の左右余白', '印刷用ファイルの両サイドに余白を設ける。', '印刷時のみ、内容の左右にそれぞれ10mmの内側余白を追加しました。画面表示・画像保存のスタイルは変更していません。ブラウザーで指定する用紙余白とは別に確保します。', '修正・ビルド済み\n余白修正はコミット0075f00に含まれます。npm ci・npm run buildは成功。パッケージ定義・ロックファイルの変更なし。', '修正後の公開反映と再出力PDFは未確認です。提供済みPDFにはこの余白は含まれません。実機印刷でも枠線・文字が欠けないか確認が必要です。']);
+
 const wb = Workbook.create();
 const s = wb.worksheets.add('メール項目別対応表');
 s.showGridLines = false;
@@ -49,7 +63,7 @@ s.freezePanes.freezeRows(1);
 wb.recalculate();
 console.log((await wb.inspect({kind:'table',range:`メール項目別対応表!A1:E${last}`,include:'values',tableMaxRows:18,tableMaxCols:1,maxChars:3000})).ndjson);
 console.log((await wb.inspect({kind:'match',searchTerm:'#REF!|#DIV/0!|#VALUE!|#NAME\\?|#N/A|#NUM!|#NULL!|#SPILL!|#CALC!',options:{useRegex:true,maxResults:20},summary:'Error check'})).ndjson);
-for (const [name, range] of [['preview-top','A1:E7'], ['preview-bottom','A11:E16']]) {
+for (const [name, range] of [['preview-top','A1:E7'], ['preview-bottom',`A11:E${last}`]]) {
   const image = await wb.render({sheetName:s.name,range,scale:1,format:'png'});
   await fs.writeFile(`${dir}${name}.png`, new Uint8Array(await image.arrayBuffer()));
 }
