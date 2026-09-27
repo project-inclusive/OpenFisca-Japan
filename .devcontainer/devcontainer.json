@@ -1,37 +1,77 @@
-// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
-// https://github.com/microsoft/vscode-dev-containers/tree/v0.238.1/containers/docker-existing-dockerfile
+// devcontainer.json の書式: https://aka.ms/devcontainer.json
 {
-  "name": "Dockerfile",
+  "name": "OpenFisca-Japan",
 
-  // Sets the run context to one level up instead of the .devcontainer folder.
+  // ビルドコンテキストはリポジトリのルート（.devcontainer の 1 つ上）
   "context": "..",
-
-  // Update the 'dockerFile' property if you aren't using the standard 'Dockerfile' filename.
   "dockerFile": "./Dockerfile",
+  // VS Code を閉じてもコンテナを停止しない（常駐。停止はユーザーが docker で明示的に行う）
+  "shutdownAction": "none",
+  // init: ゾンビプロセス回収のため tini を有効化
+  "init": true,
 
-  // Use 'forwardPorts' to make a list of ports inside the container available locally.
-  "forwardPorts": [30000, 50000],
+  // ポート公開は docker-compose が担う（ホストに 0.0.0.0 で publish）。
+  // devcontainer 側で appPort を持つと 30000/50000 が競合するため設定しない。詳細: docs/devcontainer_note.md
 
-  // Uncomment the next line to run commands after the container is created - for example installing curl.
-  // "postCreateCommand": "apt-get update && apt-get install -y curl",
-
-  // Uncomment when using a ptrace-based debugger like C++, Go, and Rust
-  // "runArgs": [ "--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined" ],
-  "runArgs": ["--init"],
-
-  // Uncomment to use the Docker CLI from inside the container. See https://aka.ms/vscode-remote/samples/docker-from-docker.
-  "mounts": [
-    "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
-  ],
-  "overrideCommand": false,
-  "remoteEnv": {
-    "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}"
+  // features: 追加でインストールするツール群（共通ユーティリティ / GitHub CLI / GitHub Copilot CLI / Node.js）
+  // 注意: Claude Code は feature ではなく post-create.sh で公式インストーラを使う。詳細: docs/devcontainer_note.md
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": false,
+      "upgradePackages": false
+    },
+    // gh コマンド。post-create.sh の `gh copilot` 拡張インストールに必要。
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers/features/copilot-cli:1": {},
+    // フロントエンド開発・各種 CLI 用。dashboard/Dockerfile (node:26.4-bullseye) とメジャーバージョンを合わせている。
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "26"
+    }
   },
 
-  // Uncomment to connect as a non-root user if you've added one. See https://aka.ms/vscode-remote/containers/non-root.
+  // postCreateCommand: 作成時（初回）に一度だけ実行 / postStartCommand: 起動のたびに実行
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "postStartCommand": "bash .devcontainer/post-start.sh",
+  "postAttachCommand": "bash .devcontainer/kill-stale-vscode.sh",
+
+  // mounts: ホストの Docker ソケット(docker-from-docker)と、AI CLI 設定・git 設定用の名前付きボリューム。
+  // 名前付きボリュームによりリビルドしてもログイン状態や git config が保持される。
+  "mounts": [
+    "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
+    "source=openfisca-japan-claude,target=/home/user/.claude,type=volume",
+    "source=openfisca-japan-codex,target=/home/user/.codex,type=volume",
+    "source=openfisca-japan-copilot,target=/home/user/.copilot,type=volume",
+    "source=openfisca-japan-gitconfig,target=/home/user/.config/git,type=volume"
+  ],
+  // overrideCommand: false = Dockerfile の CMD(sleep infinity)をそのまま使う（常駐させる）
+  "overrideCommand": false,
+  // remoteEnv: コンテナ内プロセスに渡す環境変数（ホスト側のワークスペースパス）
+  "remoteEnv": {
+    "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}",
+    // Claude Code / Codex の公式インストーラは ~/.local/bin に配置するため、
+    // VS Code 拡張などログインシェルを経由しないプロセスからも見えるようにする。
+    "PATH": "/home/user/.local/bin:${containerEnv:PATH}"
+  },
+  // containerEnv: コンテナ全体の環境変数。日本語ロケールで文字化けを防ぐ。
+  "containerEnv": {
+    "COPILOT_HOME": "/home/user/.copilot",
+    // Claude Code の設定ディレクトリを永続化ボリュームに固定する。
+    // 未設定だとログイン状態・プロジェクト設定を持つ ~/.claude.json がホーム直下に作られ、リビルドで消える。
+    // 設定すると ~/.claude/.claude.json に置かれるようになる。
+    "CLAUDE_CONFIG_DIR": "/home/user/.claude",
+    "LANG": "ja_JP.UTF-8",
+    "LANGUAGE": "ja_JP:ja",
+    "LC_CTYPE": "ja_JP.UTF-8"
+    // 注意: GIT_CONFIG_GLOBAL は設定しない。設定すると git が ~/.gitconfig を無視するため、
+    // VS Code がホストからコピーする user.name / user.email が読まれなくなる。
+    // 未設定なら ~/.config/git/config（ボリューム）と ~/.gitconfig（ホストからのコピー）の両方が読まれる。
+  },
+
+  // 非 root ユーザー user で接続（Dockerfile で作成）
   "remoteUser": "user",
   "customizations": {
     "vscode": {
+      // VS Code の設定
       "settings": {
         "terminal.integrated.profiles.linux": {
           "bash": {
@@ -40,31 +80,30 @@
         },
         "terminal.integrated.defaultProfile.linux": "bash",
         "editor.formatOnSave": true,
-        "python.pythonPath": "/usr/local/bin/python",
-        "python.linting.pylintEnabled": false,
-        "python.linting.flake8Enabled": true,
-        "python.linting.flake8Args": [
-          "--ignore=D101,D107,D401,E128,E133,E251,E501,W503,D102,D200,D400"
-        ],
-        "python.formatting.provider": "autopep8",
-        "python.formatting.autopep8Args": [
-          "--ignore",
-          "D101,D107,D401,E128,E133,E251,E501,W503,D102,D200,D400",
-          "--max-line-length",
-          "150"
-        ]
+        // Wayland ソケットの自動マウントを無効化し、WSL 側の一時パス変動による
+        // `no such file or directory` での起動失敗を防ぐ。
+        "dev.containers.mountWaylandSocket": false,
+        "remote.containers.mountWaylandSocket": false,
+        // flake8/autopep8 の設定は setup.cfg を正とする。旧来の
+        // python.linting.* / python.formatting.* は Python 拡張から削除済みのため、
+        // ここでは重複して定義しない。
+        "python.defaultInterpreterPath": "/usr/local/bin/python"
       },
+      // 自動インストールする VS Code 拡張（日本語パック / Python / Docker / 各種 AI 支援 等）
       "extensions": [
         "MS-CEINTL.vscode-language-pack-ja",
         "wraith13.bracket-lens",
         "vscode-icons-team.vscode-icons",
         "oderwat.indent-rainbow",
-        "VisualStudioExptTeam.vscodeintellicode",
         "mosapride.zenkaku",
         "ms-python.python",
         "ms-vsliveshare.vsliveshare",
         "ms-azuretools.vscode-docker",
-        "esbenp.prettier-vscode"
+        "esbenp.prettier-vscode",
+        "mhutchie.git-graph",
+        "anthropic.claude-code",
+        "github.copilot",
+        "openai.chatgpt"
       ]
     }
   }
