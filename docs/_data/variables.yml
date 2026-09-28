@@ -16,6 +16,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 人口
   subcategory: ''
   source: openfisca_japan/variables/人口.py
@@ -33,6 +35,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 人口
   subcategory: ''
   source: openfisca_japan/variables/人口.py
@@ -50,6 +54,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 人口
   subcategory: ''
   source: openfisca_japan/variables/人口.py
@@ -67,6 +73,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 人口
   subcategory: ''
   source: openfisca_japan/variables/人口.py
@@ -83,6 +91,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 住居
   subcategory: ''
   source: openfisca_japan/variables/住居.py
@@ -99,6 +109,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 住居
   subcategory: ''
   source: openfisca_japan/variables/住居.py
@@ -117,6 +129,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 住居
   subcategory: ''
   source: openfisca_japan/variables/住居.py
@@ -135,6 +149,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 住居
   subcategory: ''
   source: openfisca_japan/variables/住居.py
@@ -153,6 +169,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 住居
   subcategory: ''
   source: openfisca_japan/variables/住居.py
@@ -171,6 +189,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 住居
   subcategory: ''
   source: openfisca_japan/variables/住居.py
@@ -187,6 +207,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 住居
   subcategory: ''
   source: openfisca_japan/variables/住居.py
@@ -207,6 +229,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 住民税
   subcategory: ''
   source: openfisca_japan/variables/住民税.py
@@ -225,6 +249,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 住民税
   subcategory: ''
   source: openfisca_japan/variables/住民税.py
@@ -245,6 +271,8 @@ items:
   formula_start_dates:
   - '2020-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 住民税
   subcategory: ''
   source: openfisca_japan/variables/住民税.py
@@ -265,6 +293,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 住民税
   subcategory: ''
   source: openfisca_japan/variables/住民税.py
@@ -283,6 +313,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 住民税
   subcategory: ''
   source: openfisca_japan/variables/住民税.py
@@ -301,6 +333,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 住民税
   subcategory: ''
   source: openfisca_japan/variables/住民税.py
@@ -321,6 +355,8 @@ items:
   formula_start_dates:
   - '2020-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 住民税
   subcategory: ''
   source: openfisca_japan/variables/住民税.py
@@ -339,6 +375,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 住民税
   subcategory: ''
   source: openfisca_japan/variables/住民税.py
@@ -357,6 +395,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 住民税
   subcategory: ''
   source: openfisca_japan/variables/住民税.py
@@ -379,6 +419,8 @@ items:
   todos:
   - text: 「同居していない親族」も世帯内で扱うようになったら同居老親かどうかの判定追加
     line: 306
+  role: 計算項目
+  institution: null
   category: 住民税
   subcategory: ''
   source: openfisca_japan/variables/住民税.py
@@ -407,6 +449,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 住民税
   subcategory: ''
   source: openfisca_japan/variables/住民税.py
@@ -427,6 +471,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 住民税
   subcategory: ''
   source: openfisca_japan/variables/住民税.py
@@ -447,6 +493,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 住民税
   subcategory: ''
   source: openfisca_japan/variables/住民税.py
@@ -465,6 +513,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 住民税
   subcategory: ''
   source: openfisca_japan/variables/住民税.py
@@ -483,6 +533,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 住民税
   subcategory: ''
   source: openfisca_japan/variables/住民税.py
@@ -501,6 +553,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 住民税
   subcategory: ''
   source: openfisca_japan/variables/住民税.py
@@ -521,6 +575,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 住民税
   subcategory: ''
   source: openfisca_japan/variables/住民税.py
@@ -542,6 +598,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 全般
   subcategory: ''
   source: openfisca_japan/variables/全般.py
@@ -561,6 +619,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 全般
   subcategory: ''
   source: openfisca_japan/variables/全般.py
@@ -579,6 +639,8 @@ items:
   formula_start_dates:
   - '2020-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 所得
   subcategory: ''
   source: openfisca_japan/variables/所得.py
@@ -596,6 +658,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 所得
   subcategory: ''
   source: openfisca_japan/variables/所得.py
@@ -613,6 +677,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 所得
   subcategory: ''
   source: openfisca_japan/variables/所得.py
@@ -631,6 +697,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 所得
   subcategory: ''
   source: openfisca_japan/variables/所得.py
@@ -648,6 +716,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 所得
   subcategory: ''
   source: openfisca_japan/variables/所得.py
@@ -668,6 +738,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 所得
   subcategory: ''
   source: openfisca_japan/variables/所得.py
@@ -688,6 +760,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 所得
   subcategory: ''
   source: openfisca_japan/variables/所得.py
@@ -706,6 +780,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 所得
   subcategory: ''
   source: openfisca_japan/variables/所得.py
@@ -724,6 +800,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 所得
   subcategory: ''
   source: openfisca_japan/variables/所得.py
@@ -742,6 +820,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 所得
   subcategory: ''
   source: openfisca_japan/variables/所得.py
@@ -758,6 +838,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 所得
   subcategory: ''
   source: openfisca_japan/variables/所得.py
@@ -776,6 +858,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 所得
   subcategory: ''
   source: openfisca_japan/variables/所得.py
@@ -794,6 +878,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 所得
   subcategory: ''
   source: openfisca_japan/variables/所得.py
@@ -814,6 +900,8 @@ items:
   todos:
   - text: 「同居していない親族」も世帯内で扱うようになったら以下の判定追加（現状フロントエンドでは同居している親族しか扱っていない） 「納税者自身、配偶者、その納税者と生計を一にする親族のいずれかとの同居を常況としている」
     line: 306
+  role: 計算項目
+  institution: null
   category: 所得
   subcategory: ''
   source: openfisca_japan/variables/所得.py
@@ -832,6 +920,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 所得
   subcategory: ''
   source: openfisca_japan/variables/所得.py
@@ -852,6 +942,8 @@ items:
   - '2025-01-01'
   - '2027-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 所得
   subcategory: ''
   source: openfisca_japan/variables/所得.py
@@ -869,6 +961,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 所得
   subcategory: ''
   source: openfisca_japan/variables/所得.py
@@ -887,6 +981,8 @@ items:
   formula_start_dates:
   - '2020-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 所得
   subcategory: ''
   source: openfisca_japan/variables/所得.py
@@ -905,6 +1001,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 所得
   subcategory: ''
   source: openfisca_japan/variables/所得.py
@@ -922,6 +1020,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 所得
   subcategory: ''
   source: openfisca_japan/variables/所得.py
@@ -940,6 +1040,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 所得
   subcategory: ''
   source: openfisca_japan/variables/所得.py
@@ -958,6 +1060,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 所得
   subcategory: ''
   source: openfisca_japan/variables/所得.py
@@ -975,6 +1079,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 所得
   subcategory: ''
   source: openfisca_japan/variables/所得.py
@@ -995,6 +1101,8 @@ items:
   todos:
   - text: 「同居していない親族」も世帯内で扱うようになったら同居老親かどうかの判定追加
     line: 513
+  role: 計算項目
+  institution: null
   category: 所得
   subcategory: ''
   source: openfisca_japan/variables/所得.py
@@ -1013,6 +1121,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 所得
   subcategory: ''
   source: openfisca_japan/variables/所得.py
@@ -1031,6 +1141,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 所得
   subcategory: ''
   source: openfisca_japan/variables/所得.py
@@ -1049,6 +1161,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 所得
   subcategory: ''
   source: openfisca_japan/variables/所得.py
@@ -1067,6 +1181,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 所得
   subcategory: ''
   source: openfisca_japan/variables/所得.py
@@ -1087,6 +1203,8 @@ items:
   todos:
   - text: 必要であれば平成28(2016)年より前の計算式も追加
     line: 183
+  role: 計算項目
+  institution: null
   category: 所得
   subcategory: ''
   source: openfisca_japan/variables/所得.py
@@ -1107,6 +1225,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 所得
   subcategory: ''
   source: openfisca_japan/variables/所得.py
@@ -1125,6 +1245,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 所得
   subcategory: ''
   source: openfisca_japan/variables/所得.py
@@ -1143,6 +1265,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 所得
   subcategory: ''
   source: openfisca_japan/variables/所得.py
@@ -1161,6 +1285,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 所得
   subcategory: ''
   source: openfisca_japan/variables/所得.py
@@ -1179,6 +1305,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 所得
   subcategory: ''
   source: openfisca_japan/variables/所得.py
@@ -1197,6 +1325,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 所得
   subcategory: ''
   source: openfisca_japan/variables/所得.py
@@ -1215,6 +1345,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 所得
   subcategory: ''
   source: openfisca_japan/variables/所得.py
@@ -1240,6 +1372,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 児童育成手当
   category: 東京都
   subcategory: 福祉/児童育成手当
   source: openfisca_japan/variables/東京都/福祉/児童育成手当.py
@@ -1258,6 +1392,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 受験生チャレンジ支援貸付
   category: 東京都
   subcategory: 福祉/受験生チャレンジ支援貸付
   source: openfisca_japan/variables/東京都/福祉/受験生チャレンジ支援貸付.py
@@ -1276,6 +1412,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 受験生チャレンジ支援貸付
   category: 東京都
   subcategory: 福祉/受験生チャレンジ支援貸付
   source: openfisca_japan/variables/東京都/福祉/受験生チャレンジ支援貸付.py
@@ -1301,6 +1439,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 重度心身障害者手当
   category: 東京都
   subcategory: 福祉/重度心身障害者手当
   source: openfisca_japan/variables/東京都/福祉/重度心身障害者手当.py
@@ -1326,6 +1466,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 重度心身障害者手当
   category: 東京都
   subcategory: 福祉/重度心身障害者手当
   source: openfisca_japan/variables/東京都/福祉/重度心身障害者手当.py
@@ -1348,6 +1490,8 @@ items:
     line: 99
   - text: 同居特別障害者の場合も通常の特別障害者と同じ額に補正する必要がある？ 単純に記載を省略しているだけの可能性もあり (https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/toku_shou.html で国の制度を照会しているが同居特別障害者の記載はない)
     line: 133
+  role: 計算項目
+  institution: 重度心身障害者手当
   category: 東京都
   subcategory: 福祉/重度心身障害者手当
   source: openfisca_japan/variables/東京都/福祉/重度心身障害者手当.py
@@ -1373,6 +1517,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 障害児童育成手当
   category: 東京都
   subcategory: 福祉/障害児童育成手当
   source: openfisca_japan/variables/東京都/福祉/障害児童育成手当.py
@@ -1389,6 +1535,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 標準報酬月額
   subcategory: ''
   source: openfisca_japan/variables/標準報酬月額.py
@@ -1405,6 +1553,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 標準報酬月額
   subcategory: ''
   source: openfisca_japan/variables/標準報酬月額.py
@@ -1421,6 +1571,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 標準報酬月額
   subcategory: ''
   source: openfisca_japan/variables/標準報酬月額.py
@@ -1437,6 +1589,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 標準報酬月額
   subcategory: ''
   source: openfisca_japan/variables/標準報酬月額.py
@@ -1464,6 +1618,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 標準報酬月額
   subcategory: ''
   source: openfisca_japan/variables/標準報酬月額.py
@@ -1491,6 +1647,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 標準報酬月額
   subcategory: ''
   source: openfisca_japan/variables/標準報酬月額.py
@@ -1509,6 +1667,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 標準報酬月額
   subcategory: ''
   source: openfisca_japan/variables/標準報酬月額.py
@@ -1527,6 +1687,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 標準報酬月額
   subcategory: ''
   source: openfisca_japan/variables/標準報酬月額.py
@@ -1545,6 +1707,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 標準報酬月額
   subcategory: ''
   source: openfisca_japan/variables/標準報酬月額.py
@@ -1565,6 +1729,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 災害
   subcategory: 住宅
   source: openfisca_japan/variables/災害/住宅.py
@@ -1588,6 +1754,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 災害
   subcategory: 住宅
   source: openfisca_japan/variables/災害/住宅.py
@@ -1607,6 +1775,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 災害
   subcategory: 住宅
   source: openfisca_japan/variables/災害/住宅.py
@@ -1626,6 +1796,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 災害
   subcategory: 住宅
   source: openfisca_japan/variables/災害/住宅.py
@@ -1643,6 +1815,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: 災害弔慰金
   category: 災害
   subcategory: 支援/災害弔慰金
   source: openfisca_japan/variables/災害/支援/災害弔慰金.py
@@ -1660,6 +1834,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: 災害弔慰金
   category: 災害
   subcategory: 支援/災害弔慰金
   source: openfisca_japan/variables/災害/支援/災害弔慰金.py
@@ -1680,6 +1856,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 災害弔慰金
   category: 災害
   subcategory: 支援/災害弔慰金
   source: openfisca_japan/variables/災害/支援/災害弔慰金.py
@@ -1700,6 +1878,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 災害援護資金
   category: 災害
   subcategory: 支援/災害援護資金
   source: openfisca_japan/variables/災害/支援/災害援護資金.py
@@ -1720,6 +1900,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 災害援護資金
   category: 災害
   subcategory: 支援/災害援護資金
   source: openfisca_japan/variables/災害/支援/災害援護資金.py
@@ -1737,6 +1919,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: 災害障害見舞金
   category: 災害
   subcategory: 支援/災害障害見舞金
   source: openfisca_japan/variables/災害/支援/災害障害見舞金.py
@@ -1758,6 +1942,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: 災害障害見舞金
   category: 災害
   subcategory: 支援/災害障害見舞金
   source: openfisca_japan/variables/災害/支援/災害障害見舞金.py
@@ -1778,6 +1964,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 災害障害見舞金
   category: 災害
   subcategory: 支援/災害障害見舞金
   source: openfisca_japan/variables/災害/支援/災害障害見舞金.py
@@ -1798,6 +1986,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 災害障害見舞金
   category: 災害
   subcategory: 支援/災害障害見舞金
   source: openfisca_japan/variables/災害/支援/災害障害見舞金.py
@@ -1821,6 +2011,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 被災者生活再建支援制度
   category: 災害
   subcategory: 支援/被災者生活再建支援制度
   source: openfisca_japan/variables/災害/支援/被災者生活再建支援制度.py
@@ -1839,6 +2031,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 被災者生活再建支援制度
   category: 災害
   subcategory: 支援/被災者生活再建支援制度
   source: openfisca_japan/variables/災害/支援/被災者生活再建支援制度.py
@@ -1857,6 +2051,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 被災者生活再建支援制度
   category: 災害
   subcategory: 支援/被災者生活再建支援制度
   source: openfisca_japan/variables/災害/支援/被災者生活再建支援制度.py
@@ -1876,6 +2072,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: 被災者生活再建支援制度
   category: 災害
   subcategory: 支援/被災者生活再建支援制度
   source: openfisca_japan/variables/災害/支援/被災者生活再建支援制度.py
@@ -1892,6 +2090,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 災害
   subcategory: 災害
   source: openfisca_japan/variables/災害/災害.py
@@ -1922,6 +2122,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 社会保険料
   subcategory: 介護保険料
   source: openfisca_japan/variables/社会保険料/介護保険料.py
@@ -1956,6 +2158,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 社会保険料
   subcategory: 健康保険料
   source: openfisca_japan/variables/社会保険料/健康保険料.py
@@ -1980,6 +2184,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 社会保険料
   subcategory: 厚生年金保険料
   source: openfisca_japan/variables/社会保険料/厚生年金保険料.py
@@ -1996,6 +2202,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 社会保険料
   subcategory: 厚生年金基金掛金
   source: openfisca_japan/variables/社会保険料/厚生年金基金掛金.py
@@ -2012,6 +2220,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 社会保険料
   subcategory: 国民年金保険料
   source: openfisca_japan/variables/社会保険料/国民年金保険料.py
@@ -2030,6 +2240,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 社会保険料
   subcategory: 国民年金保険料
   source: openfisca_japan/variables/社会保険料/国民年金保険料.py
@@ -2046,6 +2258,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 社会保険料
   subcategory: 国民年金基金掛金
   source: openfisca_japan/variables/社会保険料/国民年金基金掛金.py
@@ -2066,6 +2280,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 社会保険料
   subcategory: 社会保険料
   source: openfisca_japan/variables/社会保険料/社会保険料.py
@@ -2093,6 +2309,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 社会保険料
   subcategory: 社会保険料控除
   source: openfisca_japan/variables/社会保険料/社会保険料控除.py
@@ -2111,6 +2329,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 社会保険料
   subcategory: 社会保険料納付条件
   source: openfisca_japan/variables/社会保険料/社会保険料納付条件.py
@@ -2128,6 +2348,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 社会保険料
   subcategory: 社会保険料納付条件
   source: openfisca_japan/variables/社会保険料/社会保険料納付条件.py
@@ -2155,6 +2377,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 社会保険料
   subcategory: 雇用保険料
   source: openfisca_japan/variables/社会保険料/雇用保険料.py
@@ -2185,6 +2409,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 住居確保給付金
   category: 福祉
   subcategory: 住居確保給付金
   source: openfisca_japan/variables/福祉/住居確保給付金.py
@@ -2203,6 +2429,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 住居確保給付金
   category: 福祉
   subcategory: 住居確保給付金
   source: openfisca_japan/variables/福祉/住居確保給付金.py
@@ -2230,6 +2458,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 住居確保給付金
   category: 福祉
   subcategory: 住居確保給付金
   source: openfisca_japan/variables/福祉/住居確保給付金.py
@@ -2248,6 +2478,8 @@ items:
   todos:
   - text: 休業日数による判別が増えたら「休業日数」という変数にする
     line: null
+  role: 入力項目
+  institution: 傷病手当金
   category: 福祉
   subcategory: 傷病手当金
   source: openfisca_japan/variables/福祉/傷病手当金.py
@@ -2264,6 +2496,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: 傷病手当金
   category: 福祉
   subcategory: 傷病手当金
   source: openfisca_japan/variables/福祉/傷病手当金.py
@@ -2289,6 +2523,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 傷病手当金
   category: 福祉
   subcategory: 傷病手当金
   source: openfisca_japan/variables/福祉/傷病手当金.py
@@ -2312,6 +2548,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 傷病手当金
   category: 福祉
   subcategory: 傷病手当金
   source: openfisca_japan/variables/福祉/傷病手当金.py
@@ -2328,6 +2566,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: 傷病手当金
   category: 福祉
   subcategory: 傷病手当金
   source: openfisca_japan/variables/福祉/傷病手当金.py
@@ -2344,6 +2584,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: 傷病手当金
   category: 福祉
   subcategory: 傷病手当金
   source: openfisca_japan/variables/福祉/傷病手当金.py
@@ -2362,6 +2604,8 @@ items:
   todos:
   - text: 休業日数による判別が増えたら「休業日数」という変数にする
     line: null
+  role: 入力項目
+  institution: 傷病手当金
   category: 福祉
   subcategory: 傷病手当金
   source: openfisca_japan/variables/福祉/傷病手当金.py
@@ -2378,6 +2622,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 福祉
   subcategory: 感染症/C型肝炎
   source: openfisca_japan/variables/福祉/感染症/C型肝炎.py
@@ -2394,6 +2640,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 福祉
   subcategory: 感染症/C型肝炎
   source: openfisca_japan/variables/福祉/感染症/C型肝炎.py
@@ -2410,6 +2658,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 福祉
   subcategory: 感染症/C型肝炎
   source: openfisca_japan/variables/福祉/感染症/C型肝炎.py
@@ -2426,6 +2676,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 福祉
   subcategory: 感染症/HIV関連情報
   source: openfisca_japan/variables/福祉/感染症/HIV関連情報.py
@@ -2442,6 +2694,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 福祉
   subcategory: 感染症/HIV関連情報
   source: openfisca_japan/variables/福祉/感染症/HIV関連情報.py
@@ -2458,6 +2712,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 福祉
   subcategory: 感染症/HIV関連情報
   source: openfisca_japan/variables/福祉/感染症/HIV関連情報.py
@@ -2474,6 +2730,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 福祉
   subcategory: 感染症/HIV関連情報
   source: openfisca_japan/variables/福祉/感染症/HIV関連情報.py
@@ -2492,6 +2750,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 健康管理支援事業
   category: 福祉
   subcategory: 感染症/健康管理支援事業
   source: openfisca_japan/variables/福祉/感染症/健康管理支援事業.py
@@ -2510,6 +2770,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 健康管理支援事業
   category: 福祉
   subcategory: 感染症/健康管理支援事業
   source: openfisca_japan/variables/福祉/感染症/健康管理支援事業.py
@@ -2528,6 +2790,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 健康管理支援事業
   category: 福祉
   subcategory: 感染症/健康管理支援事業
   source: openfisca_japan/variables/福祉/感染症/健康管理支援事業.py
@@ -2546,6 +2810,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 健康管理費用
   category: 福祉
   subcategory: 感染症/健康管理費用
   source: openfisca_japan/variables/福祉/感染症/健康管理費用.py
@@ -2564,6 +2830,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 健康管理費用
   category: 福祉
   subcategory: 感染症/健康管理費用
   source: openfisca_japan/variables/福祉/感染症/健康管理費用.py
@@ -2582,6 +2850,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 健康管理費用
   category: 福祉
   subcategory: 感染症/健康管理費用
   source: openfisca_japan/variables/福祉/感染症/健康管理費用.py
@@ -2600,6 +2870,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 先天性の傷病治療によるC型肝炎患者に係るQOL向上等のための調査研究事業
   category: 福祉
   subcategory: 感染症/先天性の傷病治療によるC型肝炎患者に係るQOL向上等のための調査研究事業
   source: openfisca_japan/variables/福祉/感染症/先天性の傷病治療によるC型肝炎患者に係るQOL向上等のための調査研究事業.py
@@ -2618,6 +2890,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 先天性の傷病治療によるC型肝炎患者に係るQOL向上等のための調査研究事業
   category: 福祉
   subcategory: 感染症/先天性の傷病治療によるC型肝炎患者に係るQOL向上等のための調査研究事業
   source: openfisca_japan/variables/福祉/感染症/先天性の傷病治療によるC型肝炎患者に係るQOL向上等のための調査研究事業.py
@@ -2636,6 +2910,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 先天性血液凝固因子障害等治療研究事業
   category: 福祉
   subcategory: 感染症/先天性血液凝固因子障害等治療研究事業
   source: openfisca_japan/variables/福祉/感染症/先天性血液凝固因子障害等治療研究事業.py
@@ -2659,6 +2935,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 先天性血液凝固因子障害等治療研究事業
   category: 福祉
   subcategory: 感染症/先天性血液凝固因子障害等治療研究事業
   source: openfisca_japan/variables/福祉/感染症/先天性血液凝固因子障害等治療研究事業.py
@@ -2676,6 +2954,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 福祉
   subcategory: 感染症/血液凝固因子異常症
   source: openfisca_japan/variables/福祉/感染症/血液凝固因子異常症.py
@@ -2693,6 +2973,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 福祉
   subcategory: 感染症/血液凝固因子異常症
   source: openfisca_japan/variables/福祉/感染症/血液凝固因子異常症.py
@@ -2710,6 +2992,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 福祉
   subcategory: 感染症/血液凝固因子異常症
   source: openfisca_japan/variables/福祉/感染症/血液凝固因子異常症.py
@@ -2727,6 +3011,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 福祉
   subcategory: 感染症/血液凝固因子異常症
   source: openfisca_japan/variables/福祉/感染症/血液凝固因子異常症.py
@@ -2743,6 +3029,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 福祉
   subcategory: 感染症/血液凝固因子異常症
   source: openfisca_japan/variables/福祉/感染症/血液凝固因子異常症.py
@@ -2759,6 +3047,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 福祉
   subcategory: 感染症/血液凝固因子異常症
   source: openfisca_japan/variables/福祉/感染症/血液凝固因子異常症.py
@@ -2775,6 +3065,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 福祉
   subcategory: 感染症/血液凝固因子異常症
   source: openfisca_japan/variables/福祉/感染症/血液凝固因子異常症.py
@@ -2791,6 +3083,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 福祉
   subcategory: 感染症/血液凝固因子異常症
   source: openfisca_japan/variables/福祉/感染症/血液凝固因子異常症.py
@@ -2807,6 +3101,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 福祉
   subcategory: 感染症/血液凝固因子異常症
   source: openfisca_japan/variables/福祉/感染症/血液凝固因子異常症.py
@@ -2823,6 +3119,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 福祉
   subcategory: 感染症/血液凝固因子異常症
   source: openfisca_japan/variables/福祉/感染症/血液凝固因子異常症.py
@@ -2839,6 +3137,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 福祉
   subcategory: 感染症/血液凝固因子異常症
   source: openfisca_japan/variables/福祉/感染症/血液凝固因子異常症.py
@@ -2855,6 +3155,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 福祉
   subcategory: 感染症/血液凝固因子異常症
   source: openfisca_japan/variables/福祉/感染症/血液凝固因子異常症.py
@@ -2871,6 +3173,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 福祉
   subcategory: 感染症/血液凝固因子異常症
   source: openfisca_japan/variables/福祉/感染症/血液凝固因子異常症.py
@@ -2887,6 +3191,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 福祉
   subcategory: 感染症/血液凝固因子異常症
   source: openfisca_japan/variables/福祉/感染症/血液凝固因子異常症.py
@@ -2903,6 +3209,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 福祉
   subcategory: 感染症/血液凝固因子異常症
   source: openfisca_japan/variables/福祉/感染症/血液凝固因子異常症.py
@@ -2919,6 +3227,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 福祉
   subcategory: 感染症/血液凝固因子異常症
   source: openfisca_japan/variables/福祉/感染症/血液凝固因子異常症.py
@@ -2937,6 +3247,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 重度心身障害者医療費助成制度
   category: 福祉
   subcategory: 感染症/重度心身障害者医療費助成制度
   source: openfisca_japan/variables/福祉/感染症/重度心身障害者医療費助成制度.py
@@ -2968,6 +3280,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 重度心身障害者医療費助成制度
   category: 福祉
   subcategory: 感染症/重度心身障害者医療費助成制度
   source: openfisca_japan/variables/福祉/感染症/重度心身障害者医療費助成制度.py
@@ -2995,6 +3309,8 @@ items:
   formula_start_dates:
   - '2020-04-01'
   todos: []
+  role: 制度
+  institution: 母子父子寡婦福祉資金貸付金
   category: 福祉
   subcategory: 母子父子寡婦福祉資金貸付金
   source: openfisca_japan/variables/福祉/母子父子寡婦福祉資金貸付金.py
@@ -3035,6 +3351,8 @@ items:
   formula_start_dates:
   - '2020-04-01'
   todos: []
+  role: 制度
+  institution: 母子父子寡婦福祉資金貸付金
   category: 福祉
   subcategory: 母子父子寡婦福祉資金貸付金
   source: openfisca_japan/variables/福祉/母子父子寡婦福祉資金貸付金.py
@@ -3064,6 +3382,8 @@ items:
   formula_start_dates:
   - '2020-04-01'
   todos: []
+  role: 制度
+  institution: 母子父子寡婦福祉資金貸付金
   category: 福祉
   subcategory: 母子父子寡婦福祉資金貸付金
   source: openfisca_japan/variables/福祉/母子父子寡婦福祉資金貸付金.py
@@ -3082,6 +3402,8 @@ items:
   formula_start_dates:
   - '2020-04-01'
   todos: []
+  role: 制度
+  institution: 母子父子寡婦福祉資金貸付金
   category: 福祉
   subcategory: 母子父子寡婦福祉資金貸付金
   source: openfisca_japan/variables/福祉/母子父子寡婦福祉資金貸付金.py
@@ -3100,6 +3422,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 母子父子寡婦福祉資金貸付金
   category: 福祉
   subcategory: 母子父子寡婦福祉資金貸付金
   source: openfisca_japan/variables/福祉/母子父子寡婦福祉資金貸付金.py
@@ -3120,6 +3444,8 @@ items:
   todos:
   - text: 特定扶養親族と控除対象扶養親族をvariableに切り出す
     line: 240
+  role: 計算項目
+  institution: 特別障害者手当
   category: 福祉
   subcategory: 特別障害者手当
   source: openfisca_japan/variables/福祉/特別障害者手当.py
@@ -3138,6 +3464,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 特別障害者手当
   category: 福祉
   subcategory: 特別障害者手当
   source: openfisca_japan/variables/福祉/特別障害者手当.py
@@ -3163,6 +3491,8 @@ items:
   todos:
   - text: 介護施設以外の施設に入所中の場合も考慮する 3か月以上継続して入院している場合のみ対象外となるため、最小額では「入院中」条件を参照せず満額とする
     line: 51
+  role: 制度
+  institution: 特別障害者手当
   category: 福祉
   subcategory: 特別障害者手当
   source: openfisca_japan/variables/福祉/特別障害者手当.py
@@ -3190,6 +3520,8 @@ items:
   todos:
   - text: 介護施設以外の施設に入所中の場合も考慮する
     line: 98
+  role: 制度
+  institution: 特別障害者手当
   category: 福祉
   subcategory: 特別障害者手当
   source: openfisca_japan/variables/福祉/特別障害者手当.py
@@ -3210,6 +3542,8 @@ items:
   todos:
   - text: 障害年金実装時に所得に加算する (障害年金、遺族年金等の公的年金も所得に加算される)
     line: 151
+  role: 計算項目
+  institution: 特別障害者手当
   category: 福祉
   subcategory: 特別障害者手当
   source: openfisca_japan/variables/福祉/特別障害者手当.py
@@ -3232,6 +3566,8 @@ items:
     line: 181
   - text: 同居特別障害者の場合も通常の特別障害者と同じ額に補正する必要がある？ 単純に記載を省略しているだけの可能性もあり (https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/toku_shou.html で国の制度を照会しているが同居特別障害者の記載はない)
     line: 204
+  role: 計算項目
+  institution: 特別障害者手当
   category: 福祉
   subcategory: 特別障害者手当
   source: openfisca_japan/variables/福祉/特別障害者手当.py
@@ -3252,6 +3588,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 特別障害者手当
   category: 福祉
   subcategory: 特別障害者手当
   source: openfisca_japan/variables/福祉/特別障害者手当.py
@@ -3270,6 +3608,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 特定疾病療養
   category: 福祉
   subcategory: 特定疾病療養
   source: openfisca_japan/variables/福祉/特定疾病療養.py
@@ -3293,6 +3633,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 特定疾病療養
   category: 福祉
   subcategory: 特定疾病療養
   source: openfisca_japan/variables/福祉/特定疾病療養.py
@@ -3317,6 +3659,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -3333,6 +3677,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -3353,6 +3699,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -3377,6 +3725,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -3401,6 +3751,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -3425,6 +3777,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -3449,6 +3803,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -3465,6 +3821,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -3481,6 +3839,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -3501,6 +3861,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -3525,6 +3887,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -3549,6 +3913,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -3569,6 +3935,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -3593,6 +3961,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -3613,6 +3983,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -3629,6 +4001,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -3649,6 +4023,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -3669,6 +4045,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -3688,6 +4066,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -3708,6 +4088,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -3732,6 +4114,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -3754,6 +4138,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -3780,6 +4166,8 @@ items:
   todos:
   - text: 計算式について、官公庁の参考リンクも追加
     line: 1324
+  role: 計算項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -3804,6 +4192,8 @@ items:
   todos:
   - text: 収入として年金等も入力するようになったら、勤労収入のみ計算対象に入れるようにする
     line: 1456
+  role: 計算項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -3828,6 +4218,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -3852,6 +4244,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -3878,6 +4272,8 @@ items:
   todos:
   - text: 実装される手当てが増えるたびに追記しなくてもよい仕組みが必要？
     line: 298
+  role: 制度
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -3904,6 +4300,8 @@ items:
   todos:
   - text: 収入として年金等も入力するようになったら、勤労収入のみ計算対象に入れるようにする
     line: 1399
+  role: 計算項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -3928,6 +4326,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -3952,6 +4352,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -3976,6 +4378,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -4000,6 +4404,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -4024,6 +4430,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -4048,6 +4456,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -4072,6 +4482,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -4096,6 +4508,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -4120,6 +4534,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -4144,6 +4560,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -4168,6 +4586,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -4192,6 +4612,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -4216,6 +4638,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -4240,6 +4664,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -4264,6 +4690,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 生活保護
   category: 福祉
   subcategory: 生活保護
   source: openfisca_japan/variables/福祉/生活保護.py
@@ -4285,6 +4713,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 生活福祉資金貸付制度
   category: 福祉
   subcategory: 生活福祉資金貸付制度
   source: openfisca_japan/variables/福祉/生活福祉資金貸付制度.py
@@ -4306,6 +4736,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 生活福祉資金貸付制度
   category: 福祉
   subcategory: 生活福祉資金貸付制度
   source: openfisca_japan/variables/福祉/生活福祉資金貸付制度.py
@@ -4323,6 +4755,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 生活福祉資金貸付制度
   category: 福祉
   subcategory: 生活福祉資金貸付制度
   source: openfisca_japan/variables/福祉/生活福祉資金貸付制度.py
@@ -4344,6 +4778,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 生活福祉資金貸付制度
   category: 福祉
   subcategory: 生活福祉資金貸付制度
   source: openfisca_japan/variables/福祉/生活福祉資金貸付制度.py
@@ -4361,6 +4797,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 生活福祉資金貸付制度
   category: 福祉
   subcategory: 生活福祉資金貸付制度
   source: openfisca_japan/variables/福祉/生活福祉資金貸付制度.py
@@ -4382,6 +4820,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 生活福祉資金貸付制度
   category: 福祉
   subcategory: 生活福祉資金貸付制度
   source: openfisca_japan/variables/福祉/生活福祉資金貸付制度.py
@@ -4403,6 +4843,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 生活福祉資金貸付制度
   category: 福祉
   subcategory: 生活福祉資金貸付制度
   source: openfisca_japan/variables/福祉/生活福祉資金貸付制度.py
@@ -4424,6 +4866,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 生活福祉資金貸付制度
   category: 福祉
   subcategory: 生活福祉資金貸付制度
   source: openfisca_japan/variables/福祉/生活福祉資金貸付制度.py
@@ -4442,6 +4886,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 生活福祉資金貸付制度
   category: 福祉
   subcategory: 生活福祉資金貸付制度
   source: openfisca_japan/variables/福祉/生活福祉資金貸付制度.py
@@ -4464,6 +4910,8 @@ items:
   todos:
   - text: 災害によって特例措置が適用される場合その条件にも対応
     line: 159
+  role: 計算項目
+  institution: 生活福祉資金貸付制度
   category: 福祉
   subcategory: 生活福祉資金貸付制度
   source: openfisca_japan/variables/福祉/生活福祉資金貸付制度.py
@@ -4484,6 +4932,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 生活福祉資金貸付制度
   category: 福祉
   subcategory: 生活福祉資金貸付制度
   source: openfisca_japan/variables/福祉/生活福祉資金貸付制度.py
@@ -4505,6 +4955,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 生活福祉資金貸付制度
   category: 福祉
   subcategory: 生活福祉資金貸付制度
   source: openfisca_japan/variables/福祉/生活福祉資金貸付制度.py
@@ -4522,6 +4974,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 生活福祉資金貸付制度
   category: 福祉
   subcategory: 生活福祉資金貸付制度
   source: openfisca_japan/variables/福祉/生活福祉資金貸付制度.py
@@ -4539,6 +4993,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 生活福祉資金貸付制度
   category: 福祉
   subcategory: 生活福祉資金貸付制度
   source: openfisca_japan/variables/福祉/生活福祉資金貸付制度.py
@@ -4557,6 +5013,8 @@ items:
   formula_start_dates:
   - '2017-04-01'
   todos: []
+  role: 制度
+  institution: 職業訓練受講給付金
   category: 福祉
   subcategory: 職業訓練受講給付金
   source: openfisca_japan/variables/福祉/職業訓練受講給付金.py
@@ -4579,6 +5037,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 職業訓練受講給付金
   category: 福祉
   subcategory: 職業訓練受講給付金
   source: openfisca_japan/variables/福祉/職業訓練受講給付金.py
@@ -4607,6 +5067,8 @@ items:
   formula_start_dates:
   - '2017-04-01'
   todos: []
+  role: 計算項目
+  institution: 職業訓練受講給付金
   category: 福祉
   subcategory: 職業訓練受講給付金
   source: openfisca_japan/variables/福祉/職業訓練受講給付金.py
@@ -4632,6 +5094,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 福祉
   subcategory: 育児/ひとり親
   source: openfisca_japan/variables/福祉/育児/ひとり親.py
@@ -4649,6 +5113,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 福祉
   subcategory: 育児/ひとり親
   source: openfisca_japan/variables/福祉/育児/ひとり親.py
@@ -4667,6 +5133,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 福祉
   subcategory: 育児/ひとり親
   source: openfisca_japan/variables/福祉/育児/ひとり親.py
@@ -4683,6 +5151,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 福祉
   subcategory: 育児/ひとり親
   source: openfisca_japan/variables/福祉/育児/ひとり親.py
@@ -4701,6 +5171,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 児童手当
   category: 福祉
   subcategory: 育児/児童手当
   source: openfisca_japan/variables/福祉/育児/児童手当.py
@@ -4723,6 +5195,8 @@ items:
     line: 40
   - text: 公的年金額が児童扶養手当額より低い場合はその差額を児童扶養手当として受け取れる 参考：https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/heikyu.html
     line: 41
+  role: 制度
+  institution: 児童扶養手当
   category: 福祉
   subcategory: 育児/児童扶養手当
   source: openfisca_japan/variables/福祉/育児/児童扶養手当.py
@@ -4745,6 +5219,8 @@ items:
     line: 76
   - text: 公的年金額が児童扶養手当額より低い場合はその差額を児童扶養手当として受け取れる 参考：https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/heikyu.html
     line: 77
+  role: 制度
+  institution: 児童扶養手当
   category: 福祉
   subcategory: 育児/児童扶養手当
   source: openfisca_japan/variables/福祉/育児/児童扶養手当.py
@@ -4763,6 +5239,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 児童扶養手当
   category: 福祉
   subcategory: 育児/児童扶養手当
   source: openfisca_japan/variables/福祉/育児/児童扶養手当.py
@@ -4781,6 +5259,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 児童扶養手当
   category: 福祉
   subcategory: 育児/児童扶養手当
   source: openfisca_japan/variables/福祉/育児/児童扶養手当.py
@@ -4799,6 +5279,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 児童扶養手当
   category: 福祉
   subcategory: 育児/児童扶養手当
   source: openfisca_japan/variables/福祉/育児/児童扶養手当.py
@@ -4817,6 +5299,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 就学援助
   category: 福祉
   subcategory: 育児/就学援助
   source: openfisca_japan/variables/福祉/育児/就学援助.py
@@ -4837,6 +5321,8 @@ items:
   todos:
   - text: 障がいを事由とする公的年金を受けているときは対象にならない
     line: 59
+  role: 制度
+  institution: 特別児童扶養手当
   category: 福祉
   subcategory: 育児/特別児童扶養手当
   source: openfisca_japan/variables/福祉/育児/特別児童扶養手当.py
@@ -4857,6 +5343,8 @@ items:
   todos:
   - text: 障がいを事由とする公的年金を受けているときは対象にならない
     line: 105
+  role: 制度
+  institution: 特別児童扶養手当
   category: 福祉
   subcategory: 育児/特別児童扶養手当
   source: openfisca_japan/variables/福祉/育児/特別児童扶養手当.py
@@ -4877,6 +5365,8 @@ items:
   todos:
   - text: 所得税控除を世帯員ごとに計算できるようになったら以下のように修正 児童扶養手当 = 対象世帯("児童扶養手当", 対象期間) 所得制限限度額 = np.select( [児童扶養手当 <= 0, 0 < 児童扶養手当], [ 特別児童扶養手当.所得制限限度額.児童扶養手当受給者[扶養人数], 特別児童扶養手当.所得制限限度額.扶養義務者[扶養人数], ], )
     line: 135
+  role: 計算項目
+  institution: 特別児童扶養手当
   category: 福祉
   subcategory: 育児/特別児童扶養手当
   source: openfisca_japan/variables/福祉/育児/特別児童扶養手当.py
@@ -4899,6 +5389,8 @@ items:
   todos:
   - text: 重度心身障害者手当所得制限と同じ控除を適用する https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/jidou.html
     line: 24
+  role: 制度
+  institution: 障害児福祉手当
   category: 福祉
   subcategory: 育児/障害児福祉手当
   source: openfisca_japan/variables/福祉/育児/障害児福祉手当.py
@@ -4917,6 +5409,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 障害児福祉手当
   category: 福祉
   subcategory: 育児/障害児福祉手当
   source: openfisca_japan/variables/福祉/育児/障害児福祉手当.py
@@ -4935,6 +5429,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 障害児福祉手当
   category: 福祉
   subcategory: 育児/障害児福祉手当
   source: openfisca_japan/variables/福祉/育児/障害児福祉手当.py
@@ -4959,6 +5455,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 高等学校奨学給付金
   category: 福祉
   subcategory: 育児/高等学校奨学給付金
   source: openfisca_japan/variables/福祉/育児/高等学校奨学給付金.py
@@ -4981,6 +5479,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 高等学校奨学給付金
   category: 福祉
   subcategory: 育児/高等学校奨学給付金
   source: openfisca_japan/variables/福祉/育児/高等学校奨学給付金.py
@@ -4998,6 +5498,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 高等学校奨学給付金
   category: 福祉
   subcategory: 育児/高等学校奨学給付金
   source: openfisca_japan/variables/福祉/育児/高等学校奨学給付金.py
@@ -5019,6 +5521,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: 高等学校奨学給付金
   category: 福祉
   subcategory: 育児/高等学校奨学給付金
   source: openfisca_japan/variables/福祉/育児/高等学校奨学給付金.py
@@ -5036,6 +5540,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 高等学校奨学給付金
   category: 福祉
   subcategory: 育児/高等学校奨学給付金
   source: openfisca_japan/variables/福祉/育児/高等学校奨学給付金.py
@@ -5056,6 +5562,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: 高等学校奨学給付金
   category: 福祉
   subcategory: 育児/高等学校奨学給付金
   source: openfisca_japan/variables/福祉/育児/高等学校奨学給付金.py
@@ -5078,6 +5586,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 高等学校奨学給付金
   category: 福祉
   subcategory: 育児/高等学校奨学給付金
   source: openfisca_japan/variables/福祉/育児/高等学校奨学給付金.py
@@ -5100,6 +5610,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 高等学校奨学給付金
   category: 福祉
   subcategory: 育児/高等学校奨学給付金
   source: openfisca_japan/variables/福祉/育児/高等学校奨学給付金.py
@@ -5120,6 +5632,8 @@ items:
   todos:
   - text: 各種控除のentityが人物になったら削除 （世帯主が「自分」または「配偶者」でないと実際の額とずれるため）
     line: 226
+  role: 計算項目
+  institution: 高等学校等就学支援金
   category: 福祉
   subcategory: 育児/高等学校等就学支援金
   source: openfisca_japan/variables/福祉/育児/高等学校等就学支援金.py
@@ -5142,6 +5656,8 @@ items:
     line: 192
   - text: 世帯高所得ではなく自分、配偶者それぞれの所得から控除額を算出
     line: 203
+  role: 計算項目
+  institution: 高等学校等就学支援金
   category: 福祉
   subcategory: 育児/高等学校等就学支援金
   source: openfisca_japan/variables/福祉/育児/高等学校等就学支援金.py
@@ -5162,6 +5678,8 @@ items:
   todos:
   - text: 各種控除のentityが人物になったら削除 （世帯主が「自分」または「配偶者」でないと実際の額とずれるため）
     line: 247
+  role: 計算項目
+  institution: 高等学校等就学支援金
   category: 福祉
   subcategory: 育児/高等学校等就学支援金
   source: openfisca_japan/variables/福祉/育児/高等学校等就学支援金.py
@@ -5180,6 +5698,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 高等学校等就学支援金
   category: 福祉
   subcategory: 育児/高等学校等就学支援金
   source: openfisca_japan/variables/福祉/育児/高等学校等就学支援金.py
@@ -5204,6 +5724,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 高等学校等就学支援金
   category: 福祉
   subcategory: 育児/高等学校等就学支援金
   source: openfisca_japan/variables/福祉/育児/高等学校等就学支援金.py
@@ -5228,6 +5750,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 高等学校等就学支援金
   category: 福祉
   subcategory: 育児/高等学校等就学支援金
   source: openfisca_japan/variables/福祉/育児/高等学校等就学支援金.py
@@ -5249,6 +5773,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: 高等教育の修学支援新制度
   category: 福祉
   subcategory: 育児/高等教育の修学支援新制度
   source: openfisca_japan/variables/福祉/育児/高等教育の修学支援新制度.py
@@ -5270,6 +5796,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: 高等教育の修学支援新制度
   category: 福祉
   subcategory: 育児/高等教育の修学支援新制度
   source: openfisca_japan/variables/福祉/育児/高等教育の修学支援新制度.py
@@ -5289,6 +5817,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: 高等教育の修学支援新制度
   category: 福祉
   subcategory: 育児/高等教育の修学支援新制度
   source: openfisca_japan/variables/福祉/育児/高等教育の修学支援新制度.py
@@ -5309,6 +5839,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 高等教育の修学支援新制度
   category: 福祉
   subcategory: 育児/高等教育の修学支援新制度
   source: openfisca_japan/variables/福祉/育児/高等教育の修学支援新制度.py
@@ -5332,6 +5864,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 高等教育の修学支援新制度
   category: 福祉
   subcategory: 育児/高等教育の修学支援新制度
   source: openfisca_japan/variables/福祉/育児/高等教育の修学支援新制度.py
@@ -5350,6 +5884,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 高等教育の修学支援新制度
   category: 福祉
   subcategory: 育児/高等教育の修学支援新制度
   source: openfisca_japan/variables/福祉/育児/高等教育の修学支援新制度.py
@@ -5370,6 +5906,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 高等教育の修学支援新制度
   category: 福祉
   subcategory: 育児/高等教育の修学支援新制度
   source: openfisca_japan/variables/福祉/育児/高等教育の修学支援新制度.py
@@ -5392,6 +5930,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 高等教育の修学支援新制度
   category: 福祉
   subcategory: 育児/高等教育の修学支援新制度
   source: openfisca_japan/variables/福祉/育児/高等教育の修学支援新制度.py
@@ -5410,6 +5950,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 高等教育の修学支援新制度
   category: 福祉
   subcategory: 育児/高等教育の修学支援新制度
   source: openfisca_japan/variables/福祉/育児/高等教育の修学支援新制度.py
@@ -5428,6 +5970,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 高等教育の修学支援新制度
   category: 福祉
   subcategory: 育児/高等教育の修学支援新制度
   source: openfisca_japan/variables/福祉/育児/高等教育の修学支援新制度.py
@@ -5456,6 +6000,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 高等教育の修学支援新制度
   category: 福祉
   subcategory: 育児/高等教育の修学支援新制度
   source: openfisca_japan/variables/福祉/育児/高等教育の修学支援新制度.py
@@ -5492,6 +6038,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 高等教育の修学支援新制度
   category: 福祉
   subcategory: 育児/高等教育の修学支援新制度
   source: openfisca_japan/variables/福祉/育児/高等教育の修学支援新制度.py
@@ -5510,6 +6058,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 高等教育の修学支援新制度
   category: 福祉
   subcategory: 育児/高等教育の修学支援新制度
   source: openfisca_japan/variables/福祉/育児/高等教育の修学支援新制度.py
@@ -5542,6 +6092,8 @@ items:
   formula_start_dates:
   - '2026-04-01'
   todos: []
+  role: 制度
+  institution: 高等職業訓練促進給付金
   category: 福祉
   subcategory: 育児/高等職業訓練促進給付金
   source: openfisca_japan/variables/福祉/育児/高等職業訓練促進給付金.py
@@ -5574,6 +6126,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 高等職業訓練促進給付金
   category: 福祉
   subcategory: 育児/高等職業訓練促進給付金
   source: openfisca_japan/variables/福祉/育児/高等職業訓練促進給付金.py
@@ -5591,6 +6145,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: 高等職業訓練促進給付金
   category: 福祉
   subcategory: 育児/高等職業訓練促進給付金
   source: openfisca_japan/variables/福祉/育児/高等職業訓練促進給付金.py
@@ -5608,6 +6164,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: 高等職業訓練促進給付金
   category: 福祉
   subcategory: 育児/高等職業訓練促進給付金
   source: openfisca_japan/variables/福祉/育児/高等職業訓練促進給付金.py
@@ -5633,6 +6191,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 高等職業訓練促進給付金
   category: 福祉
   subcategory: 育児/高等職業訓練促進給付金
   source: openfisca_japan/variables/福祉/育児/高等職業訓練促進給付金.py
@@ -5651,6 +6211,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 高等職業訓練促進給付金
   category: 福祉
   subcategory: 育児/高等職業訓練促進給付金
   source: openfisca_japan/variables/福祉/育児/高等職業訓練促進給付金.py
@@ -5669,6 +6231,8 @@ items:
   formula_start_dates:
   - '2026-04-01'
   todos: []
+  role: 計算項目
+  institution: 高等職業訓練促進給付金
   category: 福祉
   subcategory: 育児/高等職業訓練促進給付金
   source: openfisca_japan/variables/福祉/育児/高等職業訓練促進給付金.py
@@ -5696,6 +6260,8 @@ items:
   formula_start_dates:
   - '2026-04-01'
   todos: []
+  role: 計算項目
+  institution: 高等職業訓練促進給付金
   category: 福祉
   subcategory: 育児/高等職業訓練促進給付金
   source: openfisca_japan/variables/福祉/育児/高等職業訓練促進給付金.py
@@ -5712,6 +6278,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 福祉
   subcategory: 腎不全
   source: openfisca_japan/variables/福祉/腎不全.py
@@ -5728,6 +6296,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 福祉
   subcategory: 腎不全
   source: openfisca_japan/variables/福祉/腎不全.py
@@ -5751,6 +6321,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 障害基礎年金
   category: 福祉
   subcategory: 障害基礎年金
   source: openfisca_japan/variables/福祉/障害基礎年金.py
@@ -5774,6 +6346,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 制度
+  institution: 障害基礎年金
   category: 福祉
   subcategory: 障害基礎年金
   source: openfisca_japan/variables/福祉/障害基礎年金.py
@@ -5799,6 +6373,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 障害基礎年金
   category: 福祉
   subcategory: 障害基礎年金
   source: openfisca_japan/variables/福祉/障害基礎年金.py
@@ -5824,6 +6400,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 障害基礎年金
   category: 福祉
   subcategory: 障害基礎年金
   source: openfisca_japan/variables/福祉/障害基礎年金.py
@@ -5842,6 +6420,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 障害基礎年金
   category: 福祉
   subcategory: 障害基礎年金
   source: openfisca_japan/variables/福祉/障害基礎年金.py
@@ -5860,6 +6440,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 障害基礎年金
   category: 福祉
   subcategory: 障害基礎年金
   source: openfisca_japan/variables/福祉/障害基礎年金.py
@@ -5878,6 +6460,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 障害基礎年金
   category: 福祉
   subcategory: 障害基礎年金
   source: openfisca_japan/variables/福祉/障害基礎年金.py
@@ -5896,6 +6480,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: 障害基礎年金
   category: 福祉
   subcategory: 障害基礎年金
   source: openfisca_japan/variables/福祉/障害基礎年金.py
@@ -5914,6 +6500,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 障害
   subcategory: 内部障害
   source: openfisca_japan/variables/障害/内部障害.py
@@ -5935,6 +6523,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 障害
   subcategory: 愛の手帳
   source: openfisca_japan/variables/障害/愛の手帳.py
@@ -5954,6 +6544,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 障害
   subcategory: 療育手帳
   source: openfisca_japan/variables/障害/療育手帳.py
@@ -5974,6 +6566,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 障害
   subcategory: 精神障害者保健福祉手帳
   source: openfisca_japan/variables/障害/精神障害者保健福祉手帳.py
@@ -5992,6 +6586,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 障害
   subcategory: 脳性まひ_進行性筋萎縮症
   source: openfisca_japan/variables/障害/脳性まひ_進行性筋萎縮症.py
@@ -6016,6 +6612,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 障害
   subcategory: 身体障害者手帳
   source: openfisca_japan/variables/障害/身体障害者手帳.py
@@ -6034,6 +6632,8 @@ items:
   formula_start_dates:
   - '0001-01-01'
   todos: []
+  role: 計算項目
+  institution: null
   category: 預貯金
   subcategory: ''
   source: openfisca_japan/variables/預貯金.py
@@ -6051,6 +6651,8 @@ items:
   computed: false
   formula_start_dates: []
   todos: []
+  role: 入力項目
+  institution: null
   category: 預貯金
   subcategory: ''
   source: openfisca_japan/variables/預貯金.py

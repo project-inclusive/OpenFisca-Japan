@@ -1,0 +1,19 @@
+{%- comment -%}
+制度一覧（variables.md）で Variable 1件を描画する。
+引数: item = site.data.variables.items の要素
+{%- endcomment -%}
+{% assign item = include.item %}
+<details class="of-item" id="v-{{ item.name }}" data-search="{{ item.name | append: ' ' | append: item.label | append: ' ' | append: item.documentation | append: ' ' | append: item.institution | append: ' ' | append: item.category | append: ' ' | append: item.subcategory | strip_newlines | escape }}">
+<summary><code>{{ item.name }}</code>{% if item.label and item.label != item.name %} — {{ item.label }}{% endif %} <span class="of-tag">{{ item.entity }}</span>{% if item.todos.size > 0 %} <span class="of-tag of-tag-todo">未実装 {{ item.todos.size }}</span>{% endif %}</summary>
+
+<dl>
+{% if item.documentation %}<dt>説明</dt><dd>{{ item.documentation | newline_to_br }}</dd>{% endif %}
+<dt>値の型</dt><dd><code>{{ item.value_type }}</code>{% if item.unit %}（単位: {{ item.unit }}）{% endif %}{% if item.default_value != nil %} / 既定値 <code>{{ item.default_value }}</code>{% endif %}</dd>
+{% if item.possible_values.size > 0 %}<dt>選択肢</dt><dd>{% for value in item.possible_values %}<code>{{ value }}</code>{% unless forloop.last %} / {% endunless %}{% endfor %}</dd>{% endif %}
+<dt>適用単位</dt><dd>{{ item.definition_period }}</dd>
+{% if item.formula_start_dates.size > 1 %}<dt>計算式の適用開始日</dt><dd>{% for date in item.formula_start_dates %}<code>{{ date }}</code>{% unless forloop.last %} / {% endunless %}{% endfor %}</dd>{% endif %}
+{% if item.todos.size > 0 %}<dt>未実装・簡略化</dt><dd><ul class="of-todo">{% for todo in item.todos %}<li>{{ todo.text }}{% if todo.line %} <a href="{{ site.source_base_url }}/{{ item.source }}#L{{ todo.line }}" class="of-line">L{{ todo.line }}</a>{% endif %}</li>{% endfor %}</ul></dd>{% endif %}
+{% if item.references.size > 0 %}<dt>参照</dt><dd>{% for reference in item.references %}<a href="{{ reference }}">{{ reference }}</a>{% unless forloop.last %}<br>{% endunless %}{% endfor %}</dd>{% endif %}
+<dt>ソース</dt><dd><a href="{{ site.source_base_url }}/{{ item.source }}"><code>{{ item.source }}</code></a></dd>
+</dl>
+</details>

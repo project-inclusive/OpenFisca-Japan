@@ -6,9 +6,12 @@ items:
   description: 住民税におけるひとり親控除の所得制限額
   reference: https://www.city.machida.tokyo.jp/kurashi/tax/shimin/kaiseiten/R3Kaisei/hitorioya.html
   unit: currency-JPY
-  values:
-  - date: '2020-01-01'
+  latest: &id001
+    date: '2020-01-01'
     value: 5000000
+    display: 5,000,000 円
+  values:
+  - *id001
   category: 住民税
   subcategory: ひとり親控除_所得制限額
   source: openfisca_japan/parameters/住民税/ひとり親控除_所得制限額.yaml
@@ -16,9 +19,12 @@ items:
   description: 住民税におけるひとり親控除額
   reference: https://www.tax.metro.tokyo.lg.jp/kazei/kojin_ju.html#gaiyo_07
   unit: currency-JPY
-  values:
-  - date: '2020-01-01'
+  latest: &id002
+    date: '2020-01-01'
     value: 300000
+    display: 300,000 円
+  values:
+  - *id002
   category: 住民税
   subcategory: ひとり親控除額
   source: openfisca_japan/parameters/住民税/ひとり親控除額.yaml
@@ -26,9 +32,12 @@ items:
   description: 住民税における勤労学生の所得制限控除額
   reference: https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1175.htm
   unit: currency-JPY
-  values:
-  - date: '2020-01-01'
+  latest: &id003
+    date: '2020-01-01'
     value: 750000
+    display: 750,000 円
+  values:
+  - *id003
   category: 住民税
   subcategory: 勤労学生_所得制限額
   source: openfisca_japan/parameters/住民税/勤労学生_所得制限額.yaml
@@ -36,9 +45,12 @@ items:
   description: 住民税における勤労学生控除額
   reference: https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1175.htm
   unit: currency-JPY
-  values:
-  - date: '2020-01-01'
+  latest: &id004
+    date: '2020-01-01'
     value: 260000
+    display: 260,000 円
+  values:
+  - *id004
   category: 住民税
   subcategory: 勤労学生控除額
   source: openfisca_japan/parameters/住民税/勤労学生控除額.yaml
@@ -46,9 +58,12 @@ items:
   description: 住民税における同居特別障害者控除額
   reference: https://www.tax.metro.tokyo.lg.jp/kazei/kojin_ju.html#gaiyo_07
   unit: currency-JPY
-  values:
-  - date: '2000-04-01'
+  latest: &id005
+    date: '2000-04-01'
     value: 530000
+    display: 530,000 円
+  values:
+  - *id005
   category: 住民税
   subcategory: 同居特別障害者控除額
   source: openfisca_japan/parameters/住民税/同居特別障害者控除額.yaml
@@ -56,9 +71,12 @@ items:
   description: 住民税における均等割
   reference: https://www.soumu.go.jp/main_sosiki/jichi_zeisei/czaisei/czaisei_seido/150790_06.html
   unit: currency-JPY
-  values:
-  - date: '2000-01-01'
+  latest: &id006
+    date: '2000-01-01'
     value: 4000
+    display: 4,000 円
+  values:
+  - *id006
   category: 住民税
   subcategory: 均等割
   source: openfisca_japan/parameters/住民税/均等割.yaml
@@ -66,9 +84,12 @@ items:
   description: 住民税における寡婦控除の所得制限額
   reference: https://www.city.machida.tokyo.jp/kurashi/tax/shimin/kaiseiten/R3Kaisei/hitorioya.html
   unit: currency-JPY
-  values:
-  - date: '2020-01-01'
+  latest: &id007
+    date: '2020-01-01'
     value: 5000000
+    display: 5,000,000 円
+  values:
+  - *id007
   category: 住民税
   subcategory: 寡婦控除_所得制限額
   source: openfisca_japan/parameters/住民税/寡婦控除_所得制限額.yaml
@@ -76,9 +97,12 @@ items:
   description: 住民税における寡婦控除額
   reference: https://www.town.hinode.tokyo.jp/0000000519.html
   unit: currency-JPY
-  values:
-  - date: '2020-01-01'
+  latest: &id008
+    date: '2020-01-01'
     value: 260000
+    display: 260,000 円
+  values:
+  - *id008
   category: 住民税
   subcategory: 寡婦控除額
   source: openfisca_japan/parameters/住民税/寡婦控除額.yaml
@@ -86,9 +110,12 @@ items:
   description: 扶養控除額_一般
   reference: https://www.town.hinode.tokyo.jp/0000000519.html
   unit: currency-JPY
-  values:
-  - date: '2020-01-01'
+  latest: &id009
+    date: '2020-01-01'
     value: 330000
+    display: 330,000 円
+  values:
+  - *id009
   category: 住民税
   subcategory: 扶養控除_一般
   source: openfisca_japan/parameters/住民税/扶養控除_一般.yaml
@@ -96,9 +123,12 @@ items:
   description: 扶養控除額_特定扶養親族(その年の12月31日時点で19歳以上23歳未満の者)
   reference: https://www.town.hinode.tokyo.jp/0000000519.html
   unit: currency-JPY
-  values:
-  - date: '2020-01-01'
+  latest: &id010
+    date: '2020-01-01'
     value: 450000
+    display: 450,000 円
+  values:
+  - *id010
   category: 住民税
   subcategory: 扶養控除_特定扶養親族
   source: openfisca_japan/parameters/住民税/扶養控除_特定扶養親族.yaml
@@ -106,9 +136,12 @@ items:
   description: 扶養控除額_老人扶養親族_同居老親等(その年の12月31日時点で70歳以上、かつ同居している者)
   reference: https://www.town.hinode.tokyo.jp/0000000519.html
   unit: currency-JPY
-  values:
-  - date: '2020-01-01'
+  latest: &id011
+    date: '2020-01-01'
     value: 450000
+    display: 450,000 円
+  values:
+  - *id011
   category: 住民税
   subcategory: 扶養控除_老人扶養親族_同居老親等
   source: openfisca_japan/parameters/住民税/扶養控除_老人扶養親族_同居老親等.yaml
@@ -116,9 +149,12 @@ items:
   description: 扶養控除額_老人扶養親族_同居老親等以外の者(その年の12月31日時点で70歳以上の者)
   reference: https://www.town.hinode.tokyo.jp/0000000519.html
   unit: currency-JPY
-  values:
-  - date: '2020-01-01'
+  latest: &id012
+    date: '2020-01-01'
     value: 380000
+    display: 380,000 円
+  values:
+  - *id012
   category: 住民税
   subcategory: 扶養控除_老人扶養親族_同居老親等以外の者
   source: openfisca_japan/parameters/住民税/扶養控除_老人扶養親族_同居老親等以外の者.yaml
@@ -126,9 +162,12 @@ items:
   description: 住民税における森林環境税
   reference: https://www.soumu.go.jp/main_sosiki/jichi_zeisei/czaisei/czaisei_seido/150790_06.html
   unit: currency-JPY
-  values:
-  - date: '2024-01-01'
+  latest: &id013
+    date: '2024-01-01'
     value: 1000
+    display: 1,000 円
+  values:
+  - *id013
   category: 住民税
   subcategory: 森林環境税
   source: openfisca_japan/parameters/住民税/森林環境税.yaml
@@ -136,9 +175,12 @@ items:
   description: 住民税における標準税率
   reference: https://www.soumu.go.jp/main_sosiki/jichi_zeisei/czaisei/czaisei_seido/150790_06.html
   unit: currency-JPY
-  values:
-  - date: '2000-01-01'
+  latest: &id014
+    date: '2000-01-01'
     value: 0.1
+    display: '0.1'
+  values:
+  - *id014
   category: 住民税
   subcategory: 標準税率
   source: openfisca_japan/parameters/住民税/標準税率.yaml
@@ -146,9 +188,12 @@ items:
   description: 住民税における特別障害者控除額
   reference: https://www.tax.metro.tokyo.lg.jp/kazei/kojin_ju.html#gaiyo_07
   unit: currency-JPY
-  values:
-  - date: '2000-04-01'
+  latest: &id015
+    date: '2000-04-01'
     value: 300000
+    display: 300,000 円
+  values:
+  - *id015
   category: 住民税
   subcategory: 特別障害者控除額
   source: openfisca_japan/parameters/住民税/特別障害者控除額.yaml
@@ -156,9 +201,12 @@ items:
   description: 住民税における障害者控除額
   reference: https://www.tax.metro.tokyo.lg.jp/kazei/kojin_ju.html#gaiyo_07
   unit: currency-JPY
-  values:
-  - date: '2000-04-01'
+  latest: &id016
+    date: '2000-04-01'
     value: 260000
+    display: 260,000 円
+  values:
+  - *id016
   category: 住民税
   subcategory: 障害者控除額
   source: openfisca_japan/parameters/住民税/障害者控除額.yaml
@@ -166,11 +214,15 @@ items:
   description: フランスで定年になる年齢
   reference: https://fr.wikipedia.org/wiki/Retraite_(économie)
   unit: year
-  values:
-  - date: 2017-01-01-01
+  latest: &id017
+    date: 2017-01-01-01
     value: 62.0
+    display: '62'
+  values:
+  - *id017
   - date: '1951-07-01'
     value: 60.33
+    display: '60.33'
   category: 全般
   subcategory: 定年年齢
   source: openfisca_japan/parameters/全般/定年年齢.yaml
@@ -178,11 +230,15 @@ items:
   description: 成人年齢
   reference: https://www.moj.go.jp/MINJI/minji07_00238.html
   unit: year
-  values:
-  - date: '2022-04-01'
+  latest: &id018
+    date: '2022-04-01'
     value: 18.0
+    display: '18'
+  values:
+  - *id018
   - date: '1876-01-01'
     value: 20.0
+    display: '20'
   category: 全般
   subcategory: 成人年齢
   source: openfisca_japan/parameters/全般/成人年齢.yaml
@@ -190,9 +246,12 @@ items:
   description: ひとり親控除_所得制限額
   reference: https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1171.htm
   unit: currency-JPY
-  values:
-  - date: '2020-01-01'
+  latest: &id019
+    date: '2020-01-01'
     value: 5000000
+    display: 5,000,000 円
+  values:
+  - *id019
   category: 所得
   subcategory: ひとり親控除_所得制限額
   source: openfisca_japan/parameters/所得/ひとり親控除_所得制限額.yaml
@@ -200,9 +259,12 @@ items:
   description: ひとり親控除額
   reference: https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1171.htm
   unit: currency-JPY
-  values:
-  - date: '2020-01-01'
+  latest: &id020
+    date: '2020-01-01'
     value: 350000
+    display: 350,000 円
+  values:
+  - *id020
   category: 所得
   subcategory: ひとり親控除額
   source: openfisca_japan/parameters/所得/ひとり親控除額.yaml
@@ -210,9 +272,12 @@ items:
   description: 勤労学生_所得制限控除額
   reference: https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1175.htm
   unit: currency-JPY
-  values:
-  - date: '2020-01-01'
+  latest: &id021
+    date: '2020-01-01'
     value: 750000
+    display: 750,000 円
+  values:
+  - *id021
   category: 所得
   subcategory: 勤労学生_所得制限額
   source: openfisca_japan/parameters/所得/勤労学生_所得制限額.yaml
@@ -220,9 +285,12 @@ items:
   description: 勤労学生控除額
   reference: https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1175.htm
   unit: currency-JPY
-  values:
-  - date: '2020-01-01'
+  latest: &id022
+    date: '2020-01-01'
     value: 270000
+    display: 270,000 円
+  values:
+  - *id022
   category: 所得
   subcategory: 勤労学生控除額
   source: openfisca_japan/parameters/所得/勤労学生控除額.yaml
@@ -230,9 +298,12 @@ items:
   description: 同一生計配偶者_所得制限額
   reference: https://www.nta.go.jp/taxes/shiraberu/shinkoku/tebiki/2022/03/order3/yogo/3-3_y15.htm
   unit: currency-JPY
-  values:
-  - date: '2020-01-01'
+  latest: &id023
+    date: '2020-01-01'
     value: 480000
+    display: 480,000 円
+  values:
+  - *id023
   category: 所得
   subcategory: 同一生計配偶者_所得制限額
   source: openfisca_japan/parameters/所得/同一生計配偶者_所得制限額.yaml
@@ -240,9 +311,12 @@ items:
   description: 同居特別障害者控除額
   reference: https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1160.htm
   unit: currency-JPY
-  values:
-  - date: '2000-04-01'
+  latest: &id024
+    date: '2000-04-01'
     value: 750000
+    display: 750,000 円
+  values:
+  - *id024
   category: 所得
   subcategory: 同居特別障害者控除額
   source: openfisca_japan/parameters/所得/同居特別障害者控除額.yaml
@@ -250,9 +324,12 @@ items:
   description: 寡婦控除の所得制限額
   reference: https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1170.htm
   unit: currency-JPY
-  values:
-  - date: '2020-01-01'
+  latest: &id025
+    date: '2020-01-01'
     value: 5000000
+    display: 5,000,000 円
+  values:
+  - *id025
   category: 所得
   subcategory: 寡婦控除_所得制限額
   source: openfisca_japan/parameters/所得/寡婦控除_所得制限額.yaml
@@ -260,9 +337,12 @@ items:
   description: 寡婦控除額
   reference: https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1170.htm
   unit: currency-JPY
-  values:
-  - date: '2020-01-01'
+  latest: &id026
+    date: '2020-01-01'
     value: 270000
+    display: 270,000 円
+  values:
+  - *id026
   category: 所得
   subcategory: 寡婦控除額
   source: openfisca_japan/parameters/所得/寡婦控除額.yaml
@@ -270,9 +350,12 @@ items:
   description: 復興特別所得税率
   reference: https://www.nta.go.jp/publication/pamph/koho/kurashi/html/01_1.htm
   unit: currency-JPY
-  values:
-  - date: '2013-01-01'
+  latest: &id027
+    date: '2013-01-01'
     value: 0.021
+    display: '0.021'
+  values:
+  - *id027
   category: 所得
   subcategory: 復興特別所得税率
   source: openfisca_japan/parameters/所得/復興特別所得税率.yaml
@@ -280,9 +363,12 @@ items:
   description: 扶養控除額_一般
   reference: https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1180.htm
   unit: currency-JPY
-  values:
-  - date: '2020-01-01'
+  latest: &id028
+    date: '2020-01-01'
     value: 380000
+    display: 380,000 円
+  values:
+  - *id028
   category: 所得
   subcategory: 扶養控除_一般
   source: openfisca_japan/parameters/所得/扶養控除_一般.yaml
@@ -290,9 +376,12 @@ items:
   description: 扶養控除額_特定扶養親族(その年の12月31日時点で19歳以上23歳未満の者)
   reference: https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1180.htm
   unit: currency-JPY
-  values:
-  - date: '2020-01-01'
+  latest: &id029
+    date: '2020-01-01'
     value: 630000
+    display: 630,000 円
+  values:
+  - *id029
   category: 所得
   subcategory: 扶養控除_特定扶養親族
   source: openfisca_japan/parameters/所得/扶養控除_特定扶養親族.yaml
@@ -300,9 +389,12 @@ items:
   description: 扶養控除額_老人扶養親族_同居老親等(その年の12月31日時点で70歳以上、かつ同居している者)
   reference: https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1180.htm
   unit: currency-JPY
-  values:
-  - date: '2020-01-01'
+  latest: &id030
+    date: '2020-01-01'
     value: 580000
+    display: 580,000 円
+  values:
+  - *id030
   category: 所得
   subcategory: 扶養控除_老人扶養親族_同居老親等
   source: openfisca_japan/parameters/所得/扶養控除_老人扶養親族_同居老親等.yaml
@@ -310,9 +402,12 @@ items:
   description: 扶養控除額_老人扶養親族_同居老親等以外の者(その年の12月31日時点で70歳以上の者)
   reference: https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1180.htm
   unit: currency-JPY
-  values:
-  - date: '2020-01-01'
+  latest: &id031
+    date: '2020-01-01'
     value: 480000
+    display: 480,000 円
+  values:
+  - *id031
   category: 所得
   subcategory: 扶養控除_老人扶養親族_同居老親等以外の者
   source: openfisca_japan/parameters/所得/扶養控除_老人扶養親族_同居老親等以外の者.yaml
@@ -320,9 +415,12 @@ items:
   description: 扶養親族となる所得の上限
   reference: https://www.city.shibuya.tokyo.jp/kodomo/teate/teate/teate_gendogaku.html
   unit: currency-JPY
-  values:
-  - date: '2000-05-01'
+  latest: &id032
+    date: '2000-05-01'
     value: 480000.0
+    display: 480,000 円
+  values:
+  - *id032
   category: 所得
   subcategory: 扶養親族所得金額
   source: openfisca_japan/parameters/所得/扶養親族所得金額.yaml
@@ -330,9 +428,12 @@ items:
   description: 特別障害者控除額
   reference: https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1160.htm
   unit: currency-JPY
-  values:
-  - date: '2000-04-01'
+  latest: &id033
+    date: '2000-04-01'
     value: 400000
+    display: 400,000 円
+  values:
+  - *id033
   category: 所得
   subcategory: 特別障害者控除額
   source: openfisca_japan/parameters/所得/特別障害者控除額.yaml
@@ -340,9 +441,12 @@ items:
   description: 所得控除の算出に用いる社会保険料相当額
   reference: https://www.city.okayama.jp/kurashi/0000011187.html
   unit: currency-JPY
-  values:
-  - date: '2000-04-01'
+  latest: &id034
+    date: '2000-04-01'
     value: 80000
+    display: 80,000 円
+  values:
+  - *id034
   category: 所得
   subcategory: 社会保険料相当額
   source: openfisca_japan/parameters/所得/社会保険料相当額.yaml
@@ -350,9 +454,12 @@ items:
   description: 給与所得金額及び雑所得金額からの控除額
   reference: https://www.city.hirakata.osaka.jp/kosodate/0000000544.html
   unit: currency-JPY
-  values:
-  - date: '2021-06-01'
+  latest: &id035
+    date: '2021-06-01'
     value: 100000
+    display: 100,000 円
+  values:
+  - *id035
   category: 所得
   subcategory: 給与所得及び雑所得からの控除額
   source: openfisca_japan/parameters/所得/給与所得及び雑所得からの控除額.yaml
@@ -360,9 +467,12 @@ items:
   description: 超過所得割合
   reference: https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2260.htm
   unit: currency-JPY
-  values:
-  - date: '2025-01-01'
+  latest: &id036
+    date: '2025-01-01'
     value: 0.225
+    display: '0.225'
+  values:
+  - *id036
   category: 所得
   subcategory: 超過所得割合
   source: openfisca_japan/parameters/所得/超過所得割合.yaml
@@ -370,9 +480,12 @@ items:
   description: 超過所得基準額
   reference: https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2260.htm
   unit: currency-JPY
-  values:
-  - date: '2025-01-01'
+  latest: &id037
+    date: '2025-01-01'
     value: 330000000
+    display: 330,000,000 円
+  values:
+  - *id037
   category: 所得
   subcategory: 超過所得基準額
   source: openfisca_japan/parameters/所得/超過所得基準額.yaml
@@ -380,9 +493,12 @@ items:
   description: 障害者控除額
   reference: https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1160.htm
   unit: currency-JPY
-  values:
-  - date: '2000-04-01'
+  latest: &id038
+    date: '2000-04-01'
     value: 270000
+    display: 270,000 円
+  values:
+  - *id038
   category: 所得
   subcategory: 障害者控除額
   source: openfisca_japan/parameters/所得/障害者控除額.yaml
@@ -390,9 +506,12 @@ items:
   description: 大学受験料
   reference: https://www.fukushi.metro.tokyo.lg.jp/seikatsu/teisyotokusyataisaku/jukenseichallenge.html
   unit: currency-JPY
-  values:
-  - date: '2023-04-01'
+  latest: &id039
+    date: '2023-04-01'
     value: 80000
+    display: 80,000 円
+  values:
+  - *id039
   category: 東京都
   subcategory: 福祉/受験生チャレンジ支援貸付/大学受験料
   source: openfisca_japan/parameters/東京都/福祉/受験生チャレンジ支援貸付/大学受験料.yaml
@@ -400,9 +519,12 @@ items:
   description: 学習塾等受講料
   reference: https://www.fukushi.metro.tokyo.lg.jp/seikatsu/teisyotokusyataisaku/jukenseichallenge.html
   unit: currency-JPY
-  values:
-  - date: '2023-04-01'
+  latest: &id040
+    date: '2023-04-01'
     value: 200000
+    display: 200,000 円
+  values:
+  - *id040
   category: 東京都
   subcategory: 福祉/受験生チャレンジ支援貸付/学習塾等受講料
   source: openfisca_japan/parameters/東京都/福祉/受験生チャレンジ支援貸付/学習塾等受講料.yaml
@@ -410,9 +532,12 @@ items:
   description: 高校受験料
   reference: https://www.fukushi.metro.tokyo.lg.jp/seikatsu/teisyotokusyataisaku/jukenseichallenge.html
   unit: currency-JPY
-  values:
-  - date: '2023-04-01'
+  latest: &id041
+    date: '2023-04-01'
     value: 27400
+    display: 27,400 円
+  values:
+  - *id041
   category: 東京都
   subcategory: 福祉/受験生チャレンジ支援貸付/高校受験料
   source: openfisca_japan/parameters/東京都/福祉/受験生チャレンジ支援貸付/高校受験料.yaml
@@ -420,8 +545,8 @@ items:
   description: 東京都の重度心身障害者手当の所得制限限度額(扶養人数が0人から増えるごとに増額する)
   reference: https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/juudo.html
   unit: null
-  values:
-  - date: '2000-05-01'
+  latest: &id042
+    date: '2000-05-01'
     value:
     - 3604000
     - 3984000
@@ -429,6 +554,9 @@ items:
     - 4744000
     - 5124000
     - 5504000
+    display: 3,604,000 / 3,984,000 / 4,364,000 / 4,744,000 / 5,124,000 / 5,504,000
+  values:
+  - *id042
   category: 東京都
   subcategory: 福祉/重度心身障害者手当/所得制限限度額
   source: openfisca_japan/parameters/東京都/福祉/重度心身障害者手当/所得制限限度額.yaml
@@ -436,9 +564,12 @@ items:
   description: 重度心身障害者手当の金額
   reference: https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/juudo.html
   unit: currency-JPY
-  values:
-  - date: '2000-05-01'
+  latest: &id043
+    date: '2000-05-01'
     value: 60000
+    display: 60,000 円
+  values:
+  - *id043
   category: 東京都
   subcategory: 福祉/重度心身障害者手当/重度心身障害者手当額
   source: openfisca_japan/parameters/東京都/福祉/重度心身障害者手当/重度心身障害者手当額.yaml
@@ -446,9 +577,12 @@ items:
   description: 標準報酬月額_健康保険料_最大等級
   reference: https://www.kyoukaikenpo.or.jp/assets/r60213tokyo.pdf
   unit: currency-JPY
-  values:
-  - date: '2000-01-01'
+  latest: &id044
+    date: '2000-01-01'
     value: 1390000
+    display: 1,390,000 円
+  values:
+  - *id044
   category: 標準報酬月額
   subcategory: 標準報酬月額_健康保険料_最大等級
   source: openfisca_japan/parameters/標準報酬月額/標準報酬月額_健康保険料_最大等級.yaml
@@ -456,9 +590,12 @@ items:
   description: 標準報酬月額_健康保険料_最小等級
   reference: https://www.kyoukaikenpo.or.jp/assets/r60213tokyo.pdf
   unit: currency-JPY
-  values:
-  - date: '2000-01-01'
+  latest: &id045
+    date: '2000-01-01'
     value: 58000
+    display: 58,000 円
+  values:
+  - *id045
   category: 標準報酬月額
   subcategory: 標準報酬月額_健康保険料_最小等級
   source: openfisca_japan/parameters/標準報酬月額/標準報酬月額_健康保険料_最小等級.yaml
@@ -466,9 +603,12 @@ items:
   description: 標準報酬月額_厚生年金保険料_最大等級
   reference: https://www.kyoukaikenpo.or.jp/~/media/Files/shared/hokenryouritu/r5/ippan/r50213tokyo.pdf
   unit: currency-JPY
-  values:
-  - date: '2000-01-01'
+  latest: &id046
+    date: '2000-01-01'
     value: 650000
+    display: 650,000 円
+  values:
+  - *id046
   category: 標準報酬月額
   subcategory: 標準報酬月額_厚生年金保険料_最大等級
   source: openfisca_japan/parameters/標準報酬月額/標準報酬月額_厚生年金保険料_最大等級.yaml
@@ -476,9 +616,12 @@ items:
   description: 標準報酬月額_厚生年金保険料_最小等級
   reference: https://www.nenkin.go.jp/service/kounen/hokenryo/hoshu/20150515-01.html
   unit: currency-JPY
-  values:
-  - date: '2000-01-01'
+  latest: &id047
+    date: '2000-01-01'
     value: 88000
+    display: 88,000 円
+  values:
+  - *id047
   category: 標準報酬月額
   subcategory: 標準報酬月額_厚生年金保険料_最小等級
   source: openfisca_japan/parameters/標準報酬月額/標準報酬月額_厚生年金保険料_最小等級.yaml
@@ -486,9 +629,12 @@ items:
   description: 標準賞与額_健康保険料_最大額
   reference: https://www.kyoukaikenpo.or.jp/about/business/insurance_rate/
   unit: currency-JPY
-  values:
-  - date: '2000-01-01'
+  latest: &id048
+    date: '2000-01-01'
     value: 5730000
+    display: 5,730,000 円
+  values:
+  - *id048
   category: 標準報酬月額
   subcategory: 標準賞与額_健康保険料_最大額
   source: openfisca_japan/parameters/標準報酬月額/標準賞与額_健康保険料_最大額.yaml
@@ -496,9 +642,12 @@ items:
   description: 標準賞与額_厚生年金保険料_最大額
   reference: https://www.nenkin.go.jp/service/kounen/hokenryo/hoshu/20150515-01.html
   unit: currency-JPY
-  values:
-  - date: '2000-01-01'
+  latest: &id049
+    date: '2000-01-01'
     value: 1500000
+    display: 1,500,000 円
+  values:
+  - *id049
   category: 標準報酬月額
   subcategory: 標準賞与額_厚生年金保険料_最大額
   source: openfisca_japan/parameters/標準報酬月額/標準賞与額_厚生年金保険料_最大額.yaml
@@ -506,9 +655,12 @@ items:
   description: 生計維持者以外への支給額
   reference: https://www.bousai.go.jp/taisaku/choui/pdf/siryo1-1.pdf
   unit: currency-JPY
-  values:
-  - date: '2000-04-01'
+  latest: &id050
+    date: '2000-04-01'
     value: 2500000
+    display: 2,500,000 円
+  values:
+  - *id050
   category: 災害
   subcategory: 支援/災害弔慰金/生計維持者以外死亡の場合の支給額
   source: openfisca_japan/parameters/災害/支援/災害弔慰金/生計維持者以外死亡の場合の支給額.yaml
@@ -516,9 +668,12 @@ items:
   description: 生計維持者への支給額
   reference: https://www.bousai.go.jp/taisaku/choui/pdf/siryo1-1.pdf
   unit: currency-JPY
-  values:
-  - date: '2000-04-01'
+  latest: &id051
+    date: '2000-04-01'
     value: 5000000
+    display: 5,000,000 円
+  values:
+  - *id051
   category: 災害
   subcategory: 支援/災害弔慰金/生計維持者死亡の場合の支給額
   source: openfisca_japan/parameters/災害/支援/災害弔慰金/生計維持者死亡の場合の支給額.yaml
@@ -526,14 +681,17 @@ items:
   description: 世帯人数ごとの所得制限額
   reference: https://www.bousai.go.jp/taisaku/hisaisyagyousei/pdf/kakusyuseido_tsuujou.pdf
   unit: null
-  values:
-  - date: '2023-04-01'
+  latest: &id052
+    date: '2023-04-01'
     value:
     - 0
     - 2200000
     - 4300000
     - 6200000
     - 7300000
+    display: 0 / 2,200,000 / 4,300,000 / 6,200,000 / 7,300,000
+  values:
+  - *id052
   category: 災害
   subcategory: 支援/災害援護資金/所得制限額
   source: openfisca_japan/parameters/災害/支援/災害援護資金/所得制限額.yaml
@@ -541,9 +699,12 @@ items:
   description: 世帯人数が5人以上の場合の、1人当たり所得制限追加額
   reference: https://www.bousai.go.jp/taisaku/hisaisyagyousei/pdf/kakusyuseido_tsuujou.pdf
   unit: null
-  values:
-  - date: '2023-04-01'
+  latest: &id053
+    date: '2023-04-01'
     value: 300000
+    display: 300,000
+  values:
+  - *id053
   category: 災害
   subcategory: 支援/災害援護資金/所得制限額_一人当たり追加額
   source: openfisca_japan/parameters/災害/支援/災害援護資金/所得制限額_一人当たり追加額.yaml
@@ -551,9 +712,12 @@ items:
   description: 所得制限額_住居が滅失した場合
   reference: https://www.bousai.go.jp/taisaku/hisaisyagyousei/pdf/kakusyuseido_tsuujou.pdf
   unit: null
-  values:
-  - date: '2023-04-01'
+  latest: &id054
+    date: '2023-04-01'
     value: 12700000
+    display: 12,700,000
+  values:
+  - *id054
   category: 災害
   subcategory: 支援/災害援護資金/所得制限額_住居が滅失した場合
   source: openfisca_japan/parameters/災害/支援/災害援護資金/所得制限額_住居が滅失した場合.yaml
@@ -561,9 +725,12 @@ items:
   description: 生計維持者への支給額
   reference: https://www.bousai.go.jp/taisaku/choui/pdf/siryo1-1.pdf
   unit: currency-JPY
-  values:
-  - date: '2000-04-01'
+  latest: &id055
+    date: '2000-04-01'
     value: 2500000
+    display: 2,500,000 円
+  values:
+  - *id055
   category: 災害
   subcategory: 支援/災害障害見舞金/生計維持者への支給額
   source: openfisca_japan/parameters/災害/支援/災害障害見舞金/生計維持者への支給額.yaml
@@ -571,9 +738,12 @@ items:
   description: 生計維持者以外への支給額
   reference: https://www.bousai.go.jp/taisaku/choui/pdf/siryo1-1.pdf
   unit: currency-JPY
-  values:
-  - date: '2000-04-01'
+  latest: &id056
+    date: '2000-04-01'
     value: 1250000
+    display: 1,250,000 円
+  values:
+  - *id056
   category: 災害
   subcategory: 支援/災害障害見舞金/生計維持者以外への支給額
   source: openfisca_japan/parameters/災害/支援/災害障害見舞金/生計維持者以外への支給額.yaml
@@ -581,9 +751,12 @@ items:
   description: 介護保険料率
   reference: https://www.kyoukaikenpo.or.jp/about/business/insurance_rate/
   unit: currency-JPY
-  values:
-  - date: '2015-01-01'
+  latest: &id057
+    date: '2015-01-01'
     value: 0.016
+    display: '0.016'
+  values:
+  - *id057
   category: 社会保険料
   subcategory: 介護保険料率
   source: openfisca_japan/parameters/社会保険料/介護保険料率.yaml
@@ -591,9 +764,12 @@ items:
   description: 健康保険料率
   reference: https://www.kyoukaikenpo.or.jp/g7/cat330/
   unit: currency-JPY
-  values:
-  - date: '2000-01-01'
+  latest: &id058
+    date: '2000-01-01'
     value: 0.1
+    display: '0.1'
+  values:
+  - *id058
   category: 社会保険料
   subcategory: 健康保険料率
   source: openfisca_japan/parameters/社会保険料/健康保険料率.yaml
@@ -601,9 +777,12 @@ items:
   description: 厚生年金保険料率
   reference: https://www.nenkin.go.jp/service/kounen/hokenryo/ryogaku/ryogakuhyo/index.html
   unit: currency-JPY
-  values:
-  - date: '2017-09-01'
+  latest: &id059
+    date: '2017-09-01'
     value: 0.183
+    display: '0.183'
+  values:
+  - *id059
   category: 社会保険料
   subcategory: 厚生年金保険料率
   source: openfisca_japan/parameters/社会保険料/厚生年金保険料率.yaml
@@ -611,9 +790,12 @@ items:
   description: 国民年金保険料(月額)
   reference: https://www.nenkin.go.jp/service/kokunen/hokenryo/hokenryo.html
   unit: currency-JPY
-  values:
-  - date: '2015-01-01'
+  latest: &id060
+    date: '2015-01-01'
     value: 17510
+    display: 17,510 円
+  values:
+  - *id060
   category: 社会保険料
   subcategory: 国民年金保険料
   source: openfisca_japan/parameters/社会保険料/国民年金保険料.yaml
@@ -621,9 +803,12 @@ items:
   description: 扶養者収入基準_19歳以上23歳未満
   reference: https://nenkinkikou-kenpo.or.jp/health-insurance-top/fuyousha_hani/
   unit: currency-JPY
-  values:
-  - date: '2017-09-01'
+  latest: &id061
+    date: '2017-09-01'
     value: 1500000
+    display: 1,500,000 円
+  values:
+  - *id061
   category: 社会保険料
   subcategory: 扶養者収入基準_19歳以上23歳未満
   source: openfisca_japan/parameters/社会保険料/扶養者収入基準_19歳以上23歳未満.yaml
@@ -631,9 +816,12 @@ items:
   description: 扶養者収入基準_23歳以上60歳未満
   reference: https://nenkinkikou-kenpo.or.jp/health-insurance-top/fuyousha_hani/
   unit: currency-JPY
-  values:
-  - date: '2017-09-01'
+  latest: &id062
+    date: '2017-09-01'
     value: 1300000
+    display: 1,300,000 円
+  values:
+  - *id062
   category: 社会保険料
   subcategory: 扶養者収入基準_23歳以上60歳未満
   source: openfisca_japan/parameters/社会保険料/扶養者収入基準_23歳以上60歳未満.yaml
@@ -641,9 +829,12 @@ items:
   description: 扶養者収入基準_60歳以上
   reference: https://nenkinkikou-kenpo.or.jp/health-insurance-top/fuyousha_hani/
   unit: currency-JPY
-  values:
-  - date: '2017-09-01'
+  latest: &id063
+    date: '2017-09-01'
     value: 1800000
+    display: 1,800,000 円
+  values:
+  - *id063
   category: 社会保険料
   subcategory: 扶養者収入基準_60歳以上
   source: openfisca_japan/parameters/社会保険料/扶養者収入基準_60歳以上.yaml
@@ -651,11 +842,15 @@ items:
   description: 雇用保険料率
   reference: https://www.mhlw.go.jp/content/001672589.pdf
   unit: currency-JPY
-  values:
-  - date: '2026-04-01'
+  latest: &id064
+    date: '2026-04-01'
     value: 0.005
+    display: '0.005'
+  values:
+  - *id064
   - date: '2020-01-01'
     value: 0.0055
+    display: '0.0055'
   category: 社会保険料
   subcategory: 雇用保険料率
   source: openfisca_japan/parameters/社会保険料/雇用保険料率.yaml
@@ -663,9 +858,12 @@ items:
   description: 住居確保給付金の資産要件の上限額（基準額の6月分。ただしこの額を超えない）
   reference: https://corona-support.mhlw.go.jp/jukyokakuhokyufukin/index.html
   unit: currency-JPY
-  values:
-  - date: '2020-04-20'
+  latest: &id065
+    date: '2020-04-20'
     value: 1000000
+    display: 1,000,000 円
+  values:
+  - *id065
   category: 福祉
   subcategory: 住居確保給付金/資産要件上限額
   source: openfisca_japan/parameters/福祉/住居確保給付金/資産要件上限額.yaml
@@ -673,9 +871,12 @@ items:
   description: 傷病手当金における一月当たりの日数（会社員の場合）
   reference: https://www.kyoukaikenpo.or.jp/benefit/injury_and_sickness_allowance/index.html
   unit: null
-  values:
-  - date: '2023-04-01'
+  latest: &id066
+    date: '2023-04-01'
     value: 30
+    display: '30'
+  values:
+  - *id066
   category: 福祉
   subcategory: 傷病手当金/日数_会社員
   source: openfisca_japan/parameters/福祉/傷病手当金/日数_会社員.yaml
@@ -683,9 +884,12 @@ items:
   description: 傷病手当金における一月当たりの日数（地方公務員の場合）
   reference: https://www.chikyosai.or.jp/division/short/scene/works/01.html
   unit: null
-  values:
-  - date: '2023-04-01'
+  latest: &id067
+    date: '2023-04-01'
     value: 22
+    display: '22'
+  values:
+  - *id067
   category: 福祉
   subcategory: 傷病手当金/日数_公務員
   source: openfisca_japan/parameters/福祉/傷病手当金/日数_公務員.yaml
@@ -693,9 +897,12 @@ items:
   description: 健康管理支援事業の支給額(月額)
   reference: https://www.pmda.go.jp/relief-services/hiv-positives/0002.html
   unit: null
-  values:
-  - date: '2024-04-01'
+  latest: &id068
+    date: '2024-04-01'
     value: 150000
+    display: 150,000
+  values:
+  - *id068
   category: 福祉
   subcategory: 感染症/健康管理支援事業/支給額
   source: openfisca_japan/parameters/福祉/感染症/健康管理支援事業/支給額.yaml
@@ -703,11 +910,15 @@ items:
   description: 健康管理費用の最大支給額（ CD4（T4）リンパ球が1マイクロリットル当たり200以下の方、月額）
   reference: https://www.pmda.go.jp/relief-services/hiv-positives/0002.html
   unit: null
-  values:
-  - date: '2025-04-01'
+  latest: &id069
+    date: '2025-04-01'
     value: 55900
+    display: 55,900
+  values:
+  - *id069
   - date: '2024-04-01'
     value: 54900
+    display: 54,900
   category: 福祉
   subcategory: 感染症/健康管理費用/支給額_最大
   source: openfisca_japan/parameters/福祉/感染症/健康管理費用/支給額_最大.yaml
@@ -715,11 +926,15 @@ items:
   description: 健康管理費用の最小支給額（月額）
   reference: https://www.pmda.go.jp/relief-services/hiv-positives/0002.html
   unit: null
-  values:
-  - date: '2025-04-01'
+  latest: &id070
+    date: '2025-04-01'
     value: 39900
+    display: 39,900
+  values:
+  - *id070
   - date: '2024-04-01'
     value: 38900
+    display: 38,900
   category: 福祉
   subcategory: 感染症/健康管理費用/支給額_最小
   source: openfisca_japan/parameters/福祉/感染症/健康管理費用/支給額_最小.yaml
@@ -727,9 +942,12 @@ items:
   description: 先天性の傷病治療によるC型肝炎患者に係るQOL向上等のための調査研究事業の調査研究協力謝金（月額）
   reference: https://www.med.niigata-u.ac.jp/ifc/tebiki/blood/05.html
   unit: null
-  values:
-  - date: '2000-05-01'
+  latest: &id071
+    date: '2000-05-01'
     value: 51500
+    display: 51,500
+  values:
+  - *id071
   category: 福祉
   subcategory: 感染症/先天性の傷病治療によるC型肝炎患者に係るQOL向上等のための調査研究事業/調査研究協力謝金
   source: openfisca_japan/parameters/福祉/感染症/先天性の傷病治療によるC型肝炎患者に係るQOL向上等のための調査研究事業/調査研究協力謝金.yaml
@@ -737,9 +955,12 @@ items:
   description: 母子父子寡婦福祉資金貸付金_修学資金_高等学校_国公立_自宅外通学_月額
   reference: https://www.mhlw.go.jp/web/t_doc?dataId=00tc4886&dataType=1&pageNo=1
   unit: currency-JPY
-  values:
-  - date: '2020-04-01'
+  latest: &id072
+    date: '2020-04-01'
     value: 34500
+    display: 34,500 円
+  values:
+  - *id072
   category: 福祉
   subcategory: 母子父子寡婦福祉資金貸付金/修学資金/高等学校_国公立_自宅外通学
   source: openfisca_japan/parameters/福祉/母子父子寡婦福祉資金貸付金/修学資金/高等学校_国公立_自宅外通学.yaml
@@ -747,9 +968,12 @@ items:
   description: 母子父子寡婦福祉資金貸付金_修学資金_高等学校_国公立_自宅通学_月額
   reference: https://www.mhlw.go.jp/web/t_doc?dataId=00tc4886&dataType=1&pageNo=1
   unit: currency-JPY
-  values:
-  - date: '2020-04-01'
+  latest: &id073
+    date: '2020-04-01'
     value: 27000
+    display: 27,000 円
+  values:
+  - *id073
   category: 福祉
   subcategory: 母子父子寡婦福祉資金貸付金/修学資金/高等学校_国公立_自宅通学
   source: openfisca_japan/parameters/福祉/母子父子寡婦福祉資金貸付金/修学資金/高等学校_国公立_自宅通学.yaml
@@ -757,9 +981,12 @@ items:
   description: 母子父子寡婦福祉資金貸付金_修学資金_高等学校_私立_自宅外通学_月額
   reference: https://www.mhlw.go.jp/web/t_doc?dataId=00tc4886&dataType=1&pageNo=1
   unit: currency-JPY
-  values:
-  - date: '2020-04-01'
+  latest: &id074
+    date: '2020-04-01'
     value: 52500
+    display: 52,500 円
+  values:
+  - *id074
   category: 福祉
   subcategory: 母子父子寡婦福祉資金貸付金/修学資金/高等学校_私立_自宅外通学
   source: openfisca_japan/parameters/福祉/母子父子寡婦福祉資金貸付金/修学資金/高等学校_私立_自宅外通学.yaml
@@ -767,9 +994,12 @@ items:
   description: 母子父子寡婦福祉資金貸付金_修学資金_高等学校_私立_自宅通学_月額
   reference: https://www.mhlw.go.jp/web/t_doc?dataId=00tc4886&dataType=1&pageNo=1
   unit: currency-JPY
-  values:
-  - date: '2020-04-01'
+  latest: &id075
+    date: '2020-04-01'
     value: 45000
+    display: 45,000 円
+  values:
+  - *id075
   category: 福祉
   subcategory: 母子父子寡婦福祉資金貸付金/修学資金/高等学校_私立_自宅通学
   source: openfisca_japan/parameters/福祉/母子父子寡婦福祉資金貸付金/修学資金/高等学校_私立_自宅通学.yaml
@@ -777,9 +1007,12 @@ items:
   description: 母子父子寡婦福祉資金貸付金の対象となる児童の上限年齢
   reference: https://laws.e-gov.go.jp/law/339AC0000000129
   unit: year
-  values:
-  - date: '2000-05-01'
+  latest: &id076
+    date: '2000-05-01'
     value: 20.0
+    display: '20'
+  values:
+  - *id076
   category: 福祉
   subcategory: 母子父子寡婦福祉資金貸付金/児童の上限年齢
   source: openfisca_japan/parameters/福祉/母子父子寡婦福祉資金貸付金/児童の上限年齢.yaml
@@ -787,9 +1020,12 @@ items:
   description: 母子父子寡婦福祉資金貸付金_就学支度資金_中学校
   reference: https://www.mhlw.go.jp/web/t_doc?dataId=00tc4886&dataType=1&pageNo=1
   unit: currency-JPY
-  values:
-  - date: '2020-04-01'
+  latest: &id077
+    date: '2020-04-01'
     value: 81000
+    display: 81,000 円
+  values:
+  - *id077
   category: 福祉
   subcategory: 母子父子寡婦福祉資金貸付金/就学支度資金/中学校
   source: openfisca_japan/parameters/福祉/母子父子寡婦福祉資金貸付金/就学支度資金/中学校.yaml
@@ -797,9 +1033,12 @@ items:
   description: 母子父子寡婦福祉資金貸付金_就学支度資金_小学校
   reference: https://www.mhlw.go.jp/web/t_doc?dataId=00tc4886&dataType=1&pageNo=1
   unit: currency-JPY
-  values:
-  - date: '2020-04-01'
+  latest: &id078
+    date: '2020-04-01'
     value: 64300
+    display: 64,300 円
+  values:
+  - *id078
   category: 福祉
   subcategory: 母子父子寡婦福祉資金貸付金/就学支度資金/小学校
   source: openfisca_japan/parameters/福祉/母子父子寡婦福祉資金貸付金/就学支度資金/小学校.yaml
@@ -807,9 +1046,12 @@ items:
   description: 母子父子寡婦福祉資金貸付金_就学支度資金_高等学校_国公立_自宅外通学
   reference: https://www.mhlw.go.jp/web/t_doc?dataId=00tc4886&dataType=1&pageNo=1
   unit: currency-JPY
-  values:
-  - date: '2020-04-01'
+  latest: &id079
+    date: '2020-04-01'
     value: 160000
+    display: 160,000 円
+  values:
+  - *id079
   category: 福祉
   subcategory: 母子父子寡婦福祉資金貸付金/就学支度資金/高等学校_国公立_自宅外通学
   source: openfisca_japan/parameters/福祉/母子父子寡婦福祉資金貸付金/就学支度資金/高等学校_国公立_自宅外通学.yaml
@@ -817,9 +1059,12 @@ items:
   description: 母子父子寡婦福祉資金貸付金_就学支度資金_高等学校_国公立_自宅通学
   reference: https://www.mhlw.go.jp/web/t_doc?dataId=00tc4886&dataType=1&pageNo=1
   unit: currency-JPY
-  values:
-  - date: '2020-04-01'
+  latest: &id080
+    date: '2020-04-01'
     value: 150000
+    display: 150,000 円
+  values:
+  - *id080
   category: 福祉
   subcategory: 母子父子寡婦福祉資金貸付金/就学支度資金/高等学校_国公立_自宅通学
   source: openfisca_japan/parameters/福祉/母子父子寡婦福祉資金貸付金/就学支度資金/高等学校_国公立_自宅通学.yaml
@@ -827,9 +1072,12 @@ items:
   description: 母子父子寡婦福祉資金貸付金_就学支度資金_高等学校_私立_自宅外通学
   reference: https://www.mhlw.go.jp/web/t_doc?dataId=00tc4886&dataType=1&pageNo=1
   unit: currency-JPY
-  values:
-  - date: '2020-04-01'
+  latest: &id081
+    date: '2020-04-01'
     value: 420000
+    display: 420,000 円
+  values:
+  - *id081
   category: 福祉
   subcategory: 母子父子寡婦福祉資金貸付金/就学支度資金/高等学校_私立_自宅外通学
   source: openfisca_japan/parameters/福祉/母子父子寡婦福祉資金貸付金/就学支度資金/高等学校_私立_自宅外通学.yaml
@@ -837,9 +1085,12 @@ items:
   description: 母子父子寡婦福祉資金貸付金_就学支度資金_高等学校_私立_自宅通学
   reference: https://www.mhlw.go.jp/web/t_doc?dataId=00tc4886&dataType=1&pageNo=1
   unit: currency-JPY
-  values:
-  - date: '2020-04-01'
+  latest: &id082
+    date: '2020-04-01'
     value: 410000
+    display: 410,000 円
+  values:
+  - *id082
   category: 福祉
   subcategory: 母子父子寡婦福祉資金貸付金/就学支度資金/高等学校_私立_自宅通学
   source: openfisca_japan/parameters/福祉/母子父子寡婦福祉資金貸付金/就学支度資金/高等学校_私立_自宅通学.yaml
@@ -847,8 +1098,8 @@ items:
   description: 特別障害者手当の所得制限限度額(配偶者及び扶養義務者の場合。扶養人数が0人から増えるごとに増額する。6人以上の場合は https://www.city.date.hokkaido.jp/hotnews/files/00000300/00000337/20130212173224.pdf 参照)
   reference: https://www.mhlw.go.jp/bunya/shougaihoken/jidou/tokubetsu.html
   unit: null
-  values:
-  - date: '2000-05-01'
+  latest: &id083
+    date: '2000-05-01'
     value:
     - 6287000
     - 6536000
@@ -860,6 +1111,9 @@ items:
     - 8148000
     - 8528000
     - 8908000
+    display: 6,287,000 / 6,536,000 / 6,749,000 / 6,962,000 / 7,175,000 / 7,388,000 / 7,768,000 / 8,148,000 / 8,528,000 / 8,908,000
+  values:
+  - *id083
   category: 福祉
   subcategory: 特別障害者手当/所得制限限度額/扶養義務者
   source: openfisca_japan/parameters/福祉/特別障害者手当/所得制限限度額/扶養義務者.yaml
@@ -867,9 +1121,12 @@ items:
   description: 特別障害者手当の所得制限限度額加算額(配偶者及び扶養義務者の場合。老人扶養親族1人につきこの金額が加算される)
   reference: https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/toku_shou.html
   unit: null
-  values:
-  - date: '2000-05-01'
+  latest: &id084
+    date: '2000-05-01'
     value: 60000
+    display: 60,000
+  values:
+  - *id084
   category: 福祉
   subcategory: 特別障害者手当/所得制限限度額/扶養義務者_老人扶養親族加算額
   source: openfisca_japan/parameters/福祉/特別障害者手当/所得制限限度額/扶養義務者_老人扶養親族加算額.yaml
@@ -877,8 +1134,8 @@ items:
   description: 特別障害者手当の所得制限限度額(本人の場合。扶養人数が0人から増えるごとに増額する。6人以上の場合は https://www.city.date.hokkaido.jp/hotnews/files/00000300/00000337/20130212173224.pdf 参照)
   reference: https://www.mhlw.go.jp/bunya/shougaihoken/jidou/tokubetsu.html
   unit: null
-  values:
-  - date: '2000-05-01'
+  latest: &id085
+    date: '2000-05-01'
     value:
     - 3604000
     - 3984000
@@ -890,6 +1147,9 @@ items:
     - 6264000
     - 6644000
     - 7024000
+    display: 3,604,000 / 3,984,000 / 4,364,000 / 4,744,000 / 5,124,000 / 5,504,000 / 5,884,000 / 6,264,000 / 6,644,000 / 7,024,000
+  values:
+  - *id085
   category: 福祉
   subcategory: 特別障害者手当/所得制限限度額/本人
   source: openfisca_japan/parameters/福祉/特別障害者手当/所得制限限度額/本人.yaml
@@ -897,9 +1157,12 @@ items:
   description: 特別障害者手当の所得制限限度額加算額(本人の場合。同一生計配偶者のうち特定扶養親族または控除対象扶養親族(19歳未満)1人につきこの金額が加算される)
   reference: https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/toku_shou.html
   unit: null
-  values:
-  - date: '2000-05-01'
+  latest: &id086
+    date: '2000-05-01'
     value: 250000
+    display: 250,000
+  values:
+  - *id086
   category: 福祉
   subcategory: 特別障害者手当/所得制限限度額/本人_特定扶養親族加算額
   source: openfisca_japan/parameters/福祉/特別障害者手当/所得制限限度額/本人_特定扶養親族加算額.yaml
@@ -907,9 +1170,12 @@ items:
   description: 特別障害者手当の所得制限限度額加算額(本人の場合。同一生計配偶者のうち70歳以上の者または老人扶養親族1人につきこの金額が加算される)
   reference: https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/toku_shou.html
   unit: null
-  values:
-  - date: '2000-05-01'
+  latest: &id087
+    date: '2000-05-01'
     value: 100000
+    display: 100,000
+  values:
+  - *id087
   category: 福祉
   subcategory: 特別障害者手当/所得制限限度額/本人_老人扶養親族加算額
   source: openfisca_japan/parameters/福祉/特別障害者手当/所得制限限度額/本人_老人扶養親族加算額.yaml
@@ -917,9 +1183,12 @@ items:
   description: 特別障害者手当の支給額（月額）
   reference: https://www.mhlw.go.jp/bunya/shougaihoken/jidou/tokubetsu.html
   unit: null
-  values:
-  - date: '2000-05-01'
+  latest: &id088
+    date: '2000-05-01'
     value: 28840
+    display: 28,840
+  values:
+  - *id088
   category: 福祉
   subcategory: 特別障害者手当/支給額
   source: openfisca_japan/parameters/福祉/特別障害者手当/支給額.yaml
@@ -927,9 +1196,12 @@ items:
   description: 一時生活再建費_貸付上限額
   reference: https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/kashitsukejoken.html
   unit: currency-JPY
-  values:
-  - date: '2000-04-01'
+  latest: &id089
+    date: '2000-04-01'
     value: 600000
+    display: 600,000 円
+  values:
+  - *id089
   category: 福祉
   subcategory: 生活福祉資金貸付制度/一時生活再建費_貸付上限額
   source: openfisca_japan/parameters/福祉/生活福祉資金貸付制度/一時生活再建費_貸付上限額.yaml
@@ -937,9 +1209,12 @@ items:
   description: 不動産担保型生活資金_貸付上限額
   reference: https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/kashitsukejoken.html
   unit: currency-JPY
-  values:
-  - date: '2000-04-01'
+  latest: &id090
+    date: '2000-04-01'
     value: 300000
+    display: 300,000 円
+  values:
+  - *id090
   category: 福祉
   subcategory: 生活福祉資金貸付制度/不動産担保型生活資金_貸付上限額
   source: openfisca_japan/parameters/福祉/生活福祉資金貸付制度/不動産担保型生活資金_貸付上限額.yaml
@@ -947,9 +1222,12 @@ items:
   description: 住宅入居費_貸付上限額
   reference: https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/kashitsukejoken.html
   unit: currency-JPY
-  values:
-  - date: '2000-04-01'
+  latest: &id091
+    date: '2000-04-01'
     value: 400000
+    display: 400,000 円
+  values:
+  - *id091
   category: 福祉
   subcategory: 生活福祉資金貸付制度/住宅入居費_貸付上限額
   source: openfisca_japan/parameters/福祉/生活福祉資金貸付制度/住宅入居費_貸付上限額.yaml
@@ -957,9 +1235,12 @@ items:
   description: 就学支度費_貸付上限額
   reference: https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/kashitsukejoken.html
   unit: currency-JPY
-  values:
-  - date: '2000-04-01'
+  latest: &id092
+    date: '2000-04-01'
     value: 500000
+    display: 500,000 円
+  values:
+  - *id092
   category: 福祉
   subcategory: 生活福祉資金貸付制度/就学支度費_貸付上限額
   source: openfisca_japan/parameters/福祉/生活福祉資金貸付制度/就学支度費_貸付上限額.yaml
@@ -967,9 +1248,12 @@ items:
   description: 教育支援費_貸付上限額
   reference: https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/kashitsukejoken.html
   unit: currency-JPY
-  values:
-  - date: '2000-04-01'
+  latest: &id093
+    date: '2000-04-01'
     value: 100000
+    display: 100,000 円
+  values:
+  - *id093
   category: 福祉
   subcategory: 生活福祉資金貸付制度/教育支援費_貸付上限額
   source: openfisca_japan/parameters/福祉/生活福祉資金貸付制度/教育支援費_貸付上限額.yaml
@@ -977,9 +1261,12 @@ items:
   description: 生活支援費_貸付上限額_二人以上
   reference: https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/kashitsukejoken.html
   unit: currency-JPY
-  values:
-  - date: '2000-04-01'
+  latest: &id094
+    date: '2000-04-01'
     value: 200000
+    display: 200,000 円
+  values:
+  - *id094
   category: 福祉
   subcategory: 生活福祉資金貸付制度/生活支援費_貸付上限額_二人以上
   source: openfisca_japan/parameters/福祉/生活福祉資金貸付制度/生活支援費_貸付上限額_二人以上.yaml
@@ -987,9 +1274,12 @@ items:
   description: 生活支援費_貸付上限額_単身
   reference: https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/kashitsukejoken.html
   unit: currency-JPY
-  values:
-  - date: '2000-04-01'
+  latest: &id095
+    date: '2000-04-01'
     value: 150000
+    display: 150,000 円
+  values:
+  - *id095
   category: 福祉
   subcategory: 生活福祉資金貸付制度/生活支援費_貸付上限額_単身
   source: openfisca_japan/parameters/福祉/生活福祉資金貸付制度/生活支援費_貸付上限額_単身.yaml
@@ -997,9 +1287,12 @@ items:
   description: 福祉費_災害_貸付上限額
   reference: https://www.mhlw.go.jp/bunya/seikatsuhogo/fukushihi.html
   unit: currency-JPY
-  values:
-  - date: '2000-04-01'
+  latest: &id096
+    date: '2000-04-01'
     value: 1500000
+    display: 1,500,000 円
+  values:
+  - *id096
   category: 福祉
   subcategory: 生活福祉資金貸付制度/福祉費_災害_貸付上限額
   source: openfisca_japan/parameters/福祉/生活福祉資金貸付制度/福祉費_災害_貸付上限額.yaml
@@ -1007,9 +1300,12 @@ items:
   description: 福祉費_貸付上限額
   reference: https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/kashitsukejoken.html
   unit: currency-JPY
-  values:
-  - date: '2000-04-01'
+  latest: &id097
+    date: '2000-04-01'
     value: 5800000
+    display: 5,800,000 円
+  values:
+  - *id097
   category: 福祉
   subcategory: 生活福祉資金貸付制度/福祉費_貸付上限額
   source: openfisca_japan/parameters/福祉/生活福祉資金貸付制度/福祉費_貸付上限額.yaml
@@ -1017,9 +1313,12 @@ items:
   description: 緊急小口資金_貸付上限額
   reference: https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/seikatsuhogo/seikatsu-fukushi-shikin1/kashitsukejoken.html
   unit: currency-JPY
-  values:
-  - date: '2000-04-01'
+  latest: &id098
+    date: '2000-04-01'
     value: 100000
+    display: 100,000 円
+  values:
+  - *id098
   category: 福祉
   subcategory: 生活福祉資金貸付制度/緊急小口資金_貸付上限額
   source: openfisca_japan/parameters/福祉/生活福祉資金貸付制度/緊急小口資金_貸付上限額.yaml
@@ -1027,9 +1326,12 @@ items:
   description: 寄宿手当の月額（訓練を受けるため同居の配偶者等と別居して寄宿する場合に支給）
   reference: https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/kyushokusha_shien/index.html
   unit: currency-JPY
-  values:
-  - date: '2017-04-01'
+  latest: &id099
+    date: '2017-04-01'
     value: 10700
+    display: 10,700 円
+  values:
+  - *id099
   category: 福祉
   subcategory: 職業訓練受講給付金/寄宿手当/月額
   source: openfisca_japan/parameters/福祉/職業訓練受講給付金/寄宿手当/月額.yaml
@@ -1037,9 +1339,12 @@ items:
   description: 職業訓練受講手当の月額
   reference: https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/kyushokusha_shien/index.html
   unit: currency-JPY
-  values:
-  - date: '2017-04-01'
+  latest: &id100
+    date: '2017-04-01'
     value: 100000
+    display: 100,000 円
+  values:
+  - *id100
   category: 福祉
   subcategory: 職業訓練受講給付金/職業訓練受講手当/月額
   source: openfisca_japan/parameters/福祉/職業訓練受講給付金/職業訓練受講手当/月額.yaml
@@ -1047,9 +1352,12 @@ items:
   description: 職業訓練受講給付金の資産要件の上限額（本人および配偶者等が所有する金融資産の合計額）
   reference: https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/kyushokusha_shien/index.html
   unit: currency-JPY
-  values:
-  - date: '2017-04-01'
+  latest: &id101
+    date: '2017-04-01'
     value: 3000000
+    display: 3,000,000 円
+  values:
+  - *id101
   category: 福祉
   subcategory: 職業訓練受講給付金/資産要件上限額
   source: openfisca_japan/parameters/福祉/職業訓練受講給付金/資産要件上限額.yaml
@@ -1057,9 +1365,12 @@ items:
   description: 通所手当の月額の上限（通所経路により決まる額の上限）
   reference: https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/kyushokusha_shien/index.html
   unit: currency-JPY
-  values:
-  - date: '2017-04-01'
+  latest: &id102
+    date: '2017-04-01'
     value: 42500
+    display: 42,500 円
+  values:
+  - *id102
   category: 福祉
   subcategory: 職業訓練受講給付金/通所手当/月額上限
   source: openfisca_japan/parameters/福祉/職業訓練受講給付金/通所手当/月額上限.yaml
@@ -1067,9 +1378,12 @@ items:
   description: 児童手当の金額
   reference: https://www.city.shibuya.tokyo.jp/kodomo/kodomo-teate-josei/kodomo-teate/R6jidouteate_seidokaisei.html
   unit: currency-JPY
-  values:
-  - date: '2024-10-01'
+  latest: &id103
+    date: '2024-10-01'
     value: 10000
+    display: 10,000 円
+  values:
+  - *id103
   category: 福祉
   subcategory: 育児/児童手当/金額/三歳以上かつ高校生以下かつ第二子以前
   source: openfisca_japan/parameters/福祉/育児/児童手当/金額/三歳以上かつ高校生以下かつ第二子以前.yaml
@@ -1077,9 +1391,12 @@ items:
   description: 児童手当の金額
   reference: https://www.city.shibuya.tokyo.jp/kodomo/kodomo-teate-josei/kodomo-teate/R6jidouteate_seidokaisei.html
   unit: currency-JPY
-  values:
-  - date: '2024-10-01'
+  latest: &id104
+    date: '2024-10-01'
     value: 15000
+    display: 15,000 円
+  values:
+  - *id104
   category: 福祉
   subcategory: 育児/児童手当/金額/三歳未満かつ第二子以前
   source: openfisca_japan/parameters/福祉/育児/児童手当/金額/三歳未満かつ第二子以前.yaml
@@ -1087,9 +1404,12 @@ items:
   description: 児童手当の金額
   reference: https://www.city.shibuya.tokyo.jp/kodomo/kodomo-teate-josei/kodomo-teate/R6jidouteate_seidokaisei.html
   unit: currency-JPY
-  values:
-  - date: '2024-10-01'
+  latest: &id105
+    date: '2024-10-01'
     value: 30000
+    display: 30,000 円
+  values:
+  - *id105
   category: 福祉
   subcategory: 育児/児童手当/金額/高校生以下かつ第三子以降
   source: openfisca_japan/parameters/福祉/育児/児童手当/金額/高校生以下かつ第三子以降.yaml
@@ -1097,11 +1417,15 @@ items:
   description: 児童扶養手当の上限学年(18歳3ヶ月のため高校3年生としたときの小学1年生からの通算学年を記載)
   reference: https://web.archive.org/web/20220302155714/https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/hitorioya_teate.html
   unit: year
-  values:
-  - date: '2024-11-01'
+  latest: &id106
+    date: '2024-11-01'
     value: 12
+    display: '12'
+  values:
+  - *id106
   - date: '2010-05-01'
     value: 12
+    display: '12'
   category: 福祉
   subcategory: 育児/児童扶養手当/上限学年
   source: openfisca_japan/parameters/福祉/育児/児童扶養手当/上限学年.yaml
@@ -1109,8 +1433,8 @@ items:
   description: 渋谷区の児童扶養手当の一部支給の所得制限限度額(扶養人数が0人から増えるごとに増額する。6人以上の場合は https://www.city.osaka.lg.jp/kodomo/page/0000002395.html 参照)
   reference: https://www.city.shibuya.tokyo.jp/kodomo/teate/teate/teate_gendogaku.html
   unit: null
-  values:
-  - date: '2024-11-01'
+  latest: &id107
+    date: '2024-11-01'
     value:
     - 2080000
     - 2460000
@@ -1122,6 +1446,9 @@ items:
     - 4740000
     - 5120000
     - 5500000
+    display: 2,080,000 / 2,460,000 / 2,840,000 / 3,220,000 / 3,600,000 / 3,980,000 / 4,360,000 / 4,740,000 / 5,120,000 / 5,500,000
+  values:
+  - *id107
   - date: '2000-05-01'
     value:
     - 1920000
@@ -1134,6 +1461,7 @@ items:
     - 4580000
     - 4960000
     - 5340000
+    display: 1,920,000 / 2,300,000 / 2,680,000 / 3,060,000 / 3,440,000 / 3,820,000 / 4,200,000 / 4,580,000 / 4,960,000 / 5,340,000
   category: 福祉
   subcategory: 育児/児童扶養手当/所得制限限度額/一部支給
   source: openfisca_japan/parameters/福祉/育児/児童扶養手当/所得制限限度額/一部支給.yaml
@@ -1141,8 +1469,8 @@ items:
   description: 渋谷区の児童扶養手当の全部支給の所得制限限度額(扶養人数が0人から増えるごとに増額する6人以上の場合は https://www.city.osaka.lg.jp/kodomo/page/0000002395.html 参照)
   reference: https://www.city.shibuya.tokyo.jp/kodomo/teate/teate/teate_gendogaku.html
   unit: null
-  values:
-  - date: '2024-11-01'
+  latest: &id108
+    date: '2024-11-01'
     value:
     - 690000
     - 1070000
@@ -1154,6 +1482,9 @@ items:
     - 3350000
     - 3730000
     - 4110000
+    display: 690,000 / 1,070,000 / 1,450,000 / 1,830,000 / 2,210,000 / 2,590,000 / 2,970,000 / 3,350,000 / 3,730,000 / 4,110,000
+  values:
+  - *id108
   - date: '2000-05-01'
     value:
     - 490000
@@ -1166,6 +1497,7 @@ items:
     - 3150000
     - 3530000
     - 3910000
+    display: 490,000 / 870,000 / 1,250,000 / 1,630,000 / 2,010,000 / 2,390,000 / 2,770,000 / 3,150,000 / 3,530,000 / 3,910,000
   category: 福祉
   subcategory: 育児/児童扶養手当/所得制限限度額/全部支給
   source: openfisca_japan/parameters/福祉/育児/児童扶養手当/所得制限限度額/全部支給.yaml
@@ -1173,8 +1505,8 @@ items:
   description: 渋谷区の児童扶養手当の扶養義務者の所得制限限度額(扶養人数が0人から増えるごとに増額する。6人以上の場合は https://www.city.osaka.lg.jp/kodomo/page/0000002395.html 参照)
   reference: https://www.city.shibuya.tokyo.jp/kodomo/teate/teate/teate_gendogaku.html
   unit: null
-  values:
-  - date: '2024-11-01'
+  latest: &id109
+    date: '2024-11-01'
     value:
     - 2360000
     - 2740000
@@ -1186,6 +1518,9 @@ items:
     - 5020000
     - 5400000
     - 5780000
+    display: 2,360,000 / 2,740,000 / 3,120,000 / 3,500,000 / 3,880,000 / 4,260,000 / 4,640,000 / 5,020,000 / 5,400,000 / 5,780,000
+  values:
+  - *id109
   - date: '2000-05-01'
     value:
     - 2360000
@@ -1198,6 +1533,7 @@ items:
     - 5020000
     - 5400000
     - 5780000
+    display: 2,360,000 / 2,740,000 / 3,120,000 / 3,500,000 / 3,880,000 / 4,260,000 / 4,640,000 / 5,020,000 / 5,400,000 / 5,780,000
   category: 福祉
   subcategory: 育児/児童扶養手当/所得制限限度額/扶養義務者
   source: openfisca_japan/parameters/福祉/育児/児童扶養手当/所得制限限度額/扶養義務者.yaml
@@ -1205,11 +1541,15 @@ items:
   description: 児童扶養手当の金額（児童1人目の一部支給最大額）
   reference: https://web.archive.org/web/20220302155714/https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/hitorioya_teate.html
   unit: currency-JPY
-  values:
-  - date: '2024-11-01'
+  latest: &id110
+    date: '2024-11-01'
     value: 46680
+    display: 46,680 円
+  values:
+  - *id110
   - date: '2010-05-01'
     value: 44130
+    display: 44,130 円
   category: 福祉
   subcategory: 育児/児童扶養手当/金額/一部支給_最大額/児童1人
   source: openfisca_japan/parameters/福祉/育児/児童扶養手当/金額/一部支給_最大額/児童1人.yaml
@@ -1217,11 +1557,15 @@ items:
   description: 児童扶養手当の金額（児童2人目の一部支給最大額）
   reference: https://web.archive.org/web/20220302155714/https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/hitorioya_teate.html
   unit: currency-JPY
-  values:
-  - date: '2024-11-01'
+  latest: &id111
+    date: '2024-11-01'
     value: 11020
+    display: 11,020 円
+  values:
+  - *id111
   - date: '2010-05-01'
     value: 10410
+    display: 10,410 円
   category: 福祉
   subcategory: 育児/児童扶養手当/金額/一部支給_最大額/児童2人
   source: openfisca_japan/parameters/福祉/育児/児童扶養手当/金額/一部支給_最大額/児童2人.yaml
@@ -1229,11 +1573,15 @@ items:
   description: 児童扶養手当の金額（3人目以降1人ごとの一部支給最大額）
   reference: https://web.archive.org/web/20220302155714/https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/hitorioya_teate.html
   unit: currency-JPY
-  values:
-  - date: '2024-11-01'
+  latest: &id112
+    date: '2024-11-01'
     value: 11020
+    display: 11,020 円
+  values:
+  - *id112
   - date: '2010-05-01'
     value: 6240
+    display: 6,240 円
   category: 福祉
   subcategory: 育児/児童扶養手当/金額/一部支給_最大額/児童3人目以降
   source: openfisca_japan/parameters/福祉/育児/児童扶養手当/金額/一部支給_最大額/児童3人目以降.yaml
@@ -1241,11 +1589,15 @@ items:
   description: 児童扶養手当の金額（児童1人目の一部支給最小額）
   reference: https://web.archive.org/web/20220302155714/https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/hitorioya_teate.html
   unit: currency-JPY
-  values:
-  - date: '2024-11-01'
+  latest: &id113
+    date: '2024-11-01'
     value: 11010
+    display: 11,010 円
+  values:
+  - *id113
   - date: '2010-05-01'
     value: 10410
+    display: 10,410 円
   category: 福祉
   subcategory: 育児/児童扶養手当/金額/一部支給_最小額/児童1人
   source: openfisca_japan/parameters/福祉/育児/児童扶養手当/金額/一部支給_最小額/児童1人.yaml
@@ -1253,11 +1605,15 @@ items:
   description: 児童扶養手当の金額（児童2人目の一部支給最小額）
   reference: https://web.archive.org/web/20220302155714/https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/hitorioya_teate.html
   unit: currency-JPY
-  values:
-  - date: '2024-11-01'
+  latest: &id114
+    date: '2024-11-01'
     value: 5520
+    display: 5,520 円
+  values:
+  - *id114
   - date: '2010-05-01'
     value: 5210
+    display: 5,210 円
   category: 福祉
   subcategory: 育児/児童扶養手当/金額/一部支給_最小額/児童2人
   source: openfisca_japan/parameters/福祉/育児/児童扶養手当/金額/一部支給_最小額/児童2人.yaml
@@ -1265,11 +1621,15 @@ items:
   description: 児童扶養手当の金額（3人目以降1人ごとの一部支給最小額）
   reference: https://web.archive.org/web/20220302155714/https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/hitorioya_teate.html
   unit: currency-JPY
-  values:
-  - date: '2024-11-01'
+  latest: &id115
+    date: '2024-11-01'
     value: 5520
+    display: 5,520 円
+  values:
+  - *id115
   - date: '2010-05-01'
     value: 3130
+    display: 3,130 円
   category: 福祉
   subcategory: 育児/児童扶養手当/金額/一部支給_最小額/児童3人目以降
   source: openfisca_japan/parameters/福祉/育児/児童扶養手当/金額/一部支給_最小額/児童3人目以降.yaml
@@ -1277,11 +1637,15 @@ items:
   description: 児童扶養手当の金額（児童1人目の全額支給額）
   reference: https://web.archive.org/web/20220302155714/https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/hitorioya_teate.html
   unit: currency-JPY
-  values:
-  - date: '2024-11-01'
+  latest: &id116
+    date: '2024-11-01'
     value: 46690
+    display: 46,690 円
+  values:
+  - *id116
   - date: '2010-05-01'
     value: 44140
+    display: 44,140 円
   category: 福祉
   subcategory: 育児/児童扶養手当/金額/全部支給/児童1人
   source: openfisca_japan/parameters/福祉/育児/児童扶養手当/金額/全部支給/児童1人.yaml
@@ -1289,11 +1653,15 @@ items:
   description: 児童扶養手当の金額（児童2人目の全額支給額）
   reference: https://web.archive.org/web/20220302155714/https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/hitorioya_teate.html
   unit: currency-JPY
-  values:
-  - date: '2024-11-01'
+  latest: &id117
+    date: '2024-11-01'
     value: 11030
+    display: 11,030 円
+  values:
+  - *id117
   - date: '2010-05-01'
     value: 10420
+    display: 10,420 円
   category: 福祉
   subcategory: 育児/児童扶養手当/金額/全部支給/児童2人
   source: openfisca_japan/parameters/福祉/育児/児童扶養手当/金額/全部支給/児童2人.yaml
@@ -1301,11 +1669,15 @@ items:
   description: 児童扶養手当の金額（児童3人目以降1人当たりの全額支給額）
   reference: https://web.archive.org/web/20220302155714/https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/hitorioya_teate.html
   unit: currency-JPY
-  values:
-  - date: '2024-11-01'
+  latest: &id118
+    date: '2024-11-01'
     value: 11030
+    display: 11,030 円
+  values:
+  - *id118
   - date: '2010-05-01'
     value: 6250
+    display: 6,250 円
   category: 福祉
   subcategory: 育児/児童扶養手当/金額/全部支給/児童3人目以降
   source: openfisca_japan/parameters/福祉/育児/児童扶養手当/金額/全部支給/児童3人目以降.yaml
@@ -1313,11 +1685,15 @@ items:
   description: 児童扶養手当の障害児の上限年齢
   reference: https://web.archive.org/web/20220302155714/https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/hitorioya_teate.html
   unit: year
-  values:
-  - date: '2024-11-01'
+  latest: &id119
+    date: '2024-11-01'
     value: 20
+    display: '20'
+  values:
+  - *id119
   - date: '2010-05-01'
     value: 20
+    display: '20'
   category: 福祉
   subcategory: 育児/児童扶養手当/障害児の上限年齢
   source: openfisca_japan/parameters/福祉/育児/児童扶養手当/障害児の上限年齢.yaml
@@ -1325,9 +1701,12 @@ items:
   description: 児童育成手当の上限学年(18歳3ヶ月のため高校3年生としたときの小学1年生からの通算学年を記載)
   reference: https://web.archive.org/web/20220302155714/https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/hitorioya_teate.html
   unit: year
-  values:
-  - date: '2010-05-01'
+  latest: &id120
+    date: '2010-05-01'
     value: 12
+    display: '12'
+  values:
+  - *id120
   category: 福祉
   subcategory: 育児/児童育成手当/上限学年
   source: openfisca_japan/parameters/福祉/育児/児童育成手当/上限学年.yaml
@@ -1335,8 +1714,8 @@ items:
   description: 渋谷区の児童育成手当の所得制限限度額(扶養人数が0人から増えるごとに増額する)
   reference: https://www.city.shibuya.tokyo.jp/kodomo/teate/teate/teate_gendogaku.html#ikusei
   unit: null
-  values:
-  - date: '2000-05-01'
+  latest: &id121
+    date: '2000-05-01'
     value:
     - 3604000
     - 3984000
@@ -1344,6 +1723,9 @@ items:
     - 4744000
     - 5124000
     - 5504000
+    display: 3,604,000 / 3,984,000 / 4,364,000 / 4,744,000 / 5,124,000 / 5,504,000
+  values:
+  - *id121
   category: 福祉
   subcategory: 育児/児童育成手当/所得制限限度額
   source: openfisca_japan/parameters/福祉/育児/児童育成手当/所得制限限度額.yaml
@@ -1351,9 +1733,12 @@ items:
   description: 児童育成手当の金額
   reference: https://web.archive.org/web/20220302155714/https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/hitorioya_teate.html
   unit: currency-JPY
-  values:
-  - date: '2010-05-01'
+  latest: &id122
+    date: '2010-05-01'
     value: 13500
+    display: 13,500 円
+  values:
+  - *id122
   category: 福祉
   subcategory: 育児/児童育成手当/金額
   source: openfisca_japan/parameters/福祉/育児/児童育成手当/金額.yaml
@@ -1361,9 +1746,12 @@ items:
   description: 特別児童扶養手当の上限年齢
   reference: https://web.archive.org/web/20220302155714/https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/hitorioya_teate.html
   unit: year
-  values:
-  - date: '2000-05-01'
+  latest: &id123
+    date: '2000-05-01'
     value: 20.0
+    display: '20'
+  values:
+  - *id123
   category: 福祉
   subcategory: 育児/特別児童扶養手当/上限年齢
   source: openfisca_japan/parameters/福祉/育児/特別児童扶養手当/上限年齢.yaml
@@ -1371,8 +1759,8 @@ items:
   description: 渋谷区の特別児童扶養手当の受給者の所得制限限度額(扶養人数が0人から増えるごとに増額する。6人以上の場合は https://www.city.yao.osaka.jp/0000001125.html 参照)
   reference: null
   unit: null
-  values:
-  - date: '2000-05-01'
+  latest: &id124
+    date: '2000-05-01'
     value:
     - 4596000
     - 4976000
@@ -1384,6 +1772,9 @@ items:
     - 7256000
     - 7636000
     - 8016000
+    display: 4,596,000 / 4,976,000 / 5,356,000 / 5,736,000 / 6,116,000 / 6,496,000 / 6,876,000 / 7,256,000 / 7,636,000 / 8,016,000
+  values:
+  - *id124
   category: 福祉
   subcategory: 育児/特別児童扶養手当/所得制限限度額/受給者
   source: openfisca_japan/parameters/福祉/育児/特別児童扶養手当/所得制限限度額/受給者.yaml
@@ -1391,8 +1782,8 @@ items:
   description: 渋谷区の特別児童扶養手当の扶養義務者の所得制限限度額(扶養人数が0人から増えるごとに増額する6人以上の場合は https://www.city.yao.osaka.jp/0000001125.html 参照)
   reference: null
   unit: null
-  values:
-  - date: '2000-05-01'
+  latest: &id125
+    date: '2000-05-01'
     value:
     - 6287000
     - 6536000
@@ -1404,6 +1795,9 @@ items:
     - 7814000
     - 8027000
     - 8240000
+    display: 6,287,000 / 6,536,000 / 6,749,000 / 6,962,000 / 7,175,000 / 7,388,000 / 7,601,000 / 7,814,000 / 8,027,000 / 8,240,000
+  values:
+  - *id125
   category: 福祉
   subcategory: 育児/特別児童扶養手当/所得制限限度額/扶養義務者
   source: openfisca_japan/parameters/福祉/育児/特別児童扶養手当/所得制限限度額/扶養義務者.yaml
@@ -1411,11 +1805,15 @@ items:
   description: 特別児童扶養手当の金額
   reference: https://www.city.shibuya.tokyo.jp/kodomo/teate/teate/jido_f.html
   unit: currency-JPY
-  values:
-  - date: '2023-04-01'
+  latest: &id126
+    date: '2023-04-01'
     value: 53700
+    display: 53,700 円
+  values:
+  - *id126
   - date: '2022-04-01'
     value: 52400
+    display: 52,400 円
   category: 福祉
   subcategory: 育児/特別児童扶養手当/金額/一級
   source: openfisca_japan/parameters/福祉/育児/特別児童扶養手当/金額/一級.yaml
@@ -1423,11 +1821,15 @@ items:
   description: 特別児童扶養手当の金額
   reference: https://www.city.shibuya.tokyo.jp/kodomo/teate/teate/jido_f.html
   unit: currency-JPY
-  values:
-  - date: '2023-04-01'
+  latest: &id127
+    date: '2023-04-01'
     value: 35760
+    display: 35,760 円
+  values:
+  - *id127
   - date: '2022-04-01'
     value: 34900
+    display: 34,900 円
   category: 福祉
   subcategory: 育児/特別児童扶養手当/金額/二級
   source: openfisca_japan/parameters/福祉/育児/特別児童扶養手当/金額/二級.yaml
@@ -1435,9 +1837,12 @@ items:
   description: 障害児福祉手当の上限年齢
   reference: https://www.city.shibuya.tokyo.jp/kurashi/shogaisha/teate.html
   unit: year
-  values:
-  - date: '2010-05-01'
+  latest: &id128
+    date: '2010-05-01'
     value: 20.0
+    display: '20'
+  values:
+  - *id128
   category: 福祉
   subcategory: 育児/障害児福祉手当/上限年齢
   source: openfisca_japan/parameters/福祉/育児/障害児福祉手当/上限年齢.yaml
@@ -1445,8 +1850,8 @@ items:
   description: 障害児福祉手当の受給者の所得制限限度額(扶養人数が0人から増えるごとに増額する。6人以上の場合は https://www.city.date.hokkaido.jp/hotnews/files/00000500/00000589/20130221214915.pdf 参照)
   reference: https://www.mhlw.go.jp/bunya/shougaihoken/jidou/hukushi.html
   unit: null
-  values:
-  - date: '2000-05-01'
+  latest: &id129
+    date: '2000-05-01'
     value:
     - 3604000
     - 3984000
@@ -1458,6 +1863,9 @@ items:
     - 6264000
     - 6644000
     - 7024000
+    display: 3,604,000 / 3,984,000 / 4,364,000 / 4,744,000 / 5,124,000 / 5,504,000 / 5,884,000 / 6,264,000 / 6,644,000 / 7,024,000
+  values:
+  - *id129
   category: 福祉
   subcategory: 育児/障害児福祉手当/所得制限限度額/受給者
   source: openfisca_japan/parameters/福祉/育児/障害児福祉手当/所得制限限度額/受給者.yaml
@@ -1465,8 +1873,8 @@ items:
   description: 障害児福祉手当の扶養義務者の所得制限限度額(扶養人数が0人から増えるごとに増額する。6人以上の場合は https://www.city.date.hokkaido.jp/hotnews/files/00000500/00000589/20130221214915.pdf 参照)
   reference: https://www.mhlw.go.jp/bunya/shougaihoken/jidou/hukushi.html
   unit: null
-  values:
-  - date: '2000-05-01'
+  latest: &id130
+    date: '2000-05-01'
     value:
     - 6287000
     - 6536000
@@ -1478,6 +1886,9 @@ items:
     - 8148000
     - 8528000
     - 8908000
+    display: 6,287,000 / 6,536,000 / 6,749,000 / 6,962,000 / 7,175,000 / 7,388,000 / 7,768,000 / 8,148,000 / 8,528,000 / 8,908,000
+  values:
+  - *id130
   category: 福祉
   subcategory: 育児/障害児福祉手当/所得制限限度額/扶養義務者
   source: openfisca_japan/parameters/福祉/育児/障害児福祉手当/所得制限限度額/扶養義務者.yaml
@@ -1485,9 +1896,12 @@ items:
   description: 障害児福祉手当の金額
   reference: https://www.mhlw.go.jp/bunya/shougaihoken/jidou/hukushi.html
   unit: currency-JPY
-  values:
-  - date: '2023-04-01'
+  latest: &id131
+    date: '2023-04-01'
     value: 15220
+    display: 15,220 円
+  values:
+  - *id131
   category: 福祉
   subcategory: 育児/障害児福祉手当/金額
   source: openfisca_japan/parameters/福祉/育児/障害児福祉手当/金額.yaml
@@ -1495,9 +1909,12 @@ items:
   description: 障害児童育成手当の上限年齢
   reference: https://web.archive.org/web/20220308004641/https://www.city.shibuya.tokyo.jp/kodomo/ninshin/teate/jido_i.html
   unit: year
-  values:
-  - date: '2010-05-01'
+  latest: &id132
+    date: '2010-05-01'
     value: 20.0
+    display: '20'
+  values:
+  - *id132
   category: 福祉
   subcategory: 育児/障害児童育成手当/上限年齢
   source: openfisca_japan/parameters/福祉/育児/障害児童育成手当/上限年齢.yaml
@@ -1505,8 +1922,8 @@ items:
   description: 渋谷区の障害児童育成手当の所得制限限度額(扶養人数が0人から増えるごとに増額する)
   reference: https://www.city.shibuya.tokyo.jp/kodomo/teate/teate/teate_gendogaku.html#ikusei
   unit: null
-  values:
-  - date: '2000-05-01'
+  latest: &id133
+    date: '2000-05-01'
     value:
     - 3604000
     - 3984000
@@ -1514,6 +1931,9 @@ items:
     - 4744000
     - 5124000
     - 5504000
+    display: 3,604,000 / 3,984,000 / 4,364,000 / 4,744,000 / 5,124,000 / 5,504,000
+  values:
+  - *id133
   category: 福祉
   subcategory: 育児/障害児童育成手当/所得制限限度額
   source: openfisca_japan/parameters/福祉/育児/障害児童育成手当/所得制限限度額.yaml
@@ -1521,9 +1941,12 @@ items:
   description: 障害児童育成手当の金額
   reference: https://web.archive.org/web/20220308004641/https://www.city.shibuya.tokyo.jp/kodomo/ninshin/teate/jido_i.html
   unit: currency-JPY
-  values:
-  - date: '2000-05-01'
+  latest: &id134
+    date: '2000-05-01'
     value: 15500
+    display: 15,500 円
+  values:
+  - *id134
   category: 福祉
   subcategory: 育児/障害児童育成手当/金額
   source: openfisca_japan/parameters/福祉/育児/障害児童育成手当/金額.yaml
@@ -1531,9 +1954,12 @@ items:
   description: 高等学校等就学支援金が加算される場合の所得判定基準
   reference: https://www.mext.go.jp/a_menu/shotou/mushouka/20220329-mxt_kouhou02-3.pdf
   unit: currency-JPY
-  values:
-  - date: '2000-05-01'
+  latest: &id135
+    date: '2000-05-01'
     value: 154500
+    display: 154,500 円
+  values:
+  - *id135
   category: 福祉
   subcategory: 育児/高等学校等就学支援金/所得判定基準/加算_所得判定基準
   source: openfisca_japan/parameters/福祉/育児/高等学校等就学支援金/所得判定基準/加算_所得判定基準.yaml
@@ -1541,9 +1967,12 @@ items:
   description: 高等学校等就学支援金の所得判定基準
   reference: https://www.mext.go.jp/a_menu/shotou/mushouka/20220329-mxt_kouhou02-3.pdf
   unit: currency-JPY
-  values:
-  - date: '2000-05-01'
+  latest: &id136
+    date: '2000-05-01'
     value: 304200
+    display: 304,200 円
+  values:
+  - *id136
   category: 福祉
   subcategory: 育児/高等学校等就学支援金/所得判定基準/所得判定基準
   source: openfisca_japan/parameters/福祉/育児/高等学校等就学支援金/所得判定基準/所得判定基準.yaml
@@ -1551,9 +1980,12 @@ items:
   description: 高等教育の修学支援新制度_多子世帯に該当する子の人数
   reference: https://www.mext.go.jp/a_menu/koutou/hutankeigen/index.htm
   unit: 人
-  values:
-  - date: '2024-04-01'
+  latest: &id137
+    date: '2024-04-01'
     value: 3
+    display: 3 人
+  values:
+  - *id137
   category: 福祉
   subcategory: 育児/高等教育の修学支援新制度/多子世帯の子の人数
   source: openfisca_japan/parameters/福祉/育児/高等教育の修学支援新制度/多子世帯の子の人数.yaml
@@ -1561,9 +1993,12 @@ items:
   description: 高等教育の修学支援新制度_授業料等の三分の一が減免される減免額算定基準額の上限
   reference: https://laws.e-gov.go.jp/law/501CO0000000049
   unit: currency-JPY
-  values:
-  - date: '2020-04-01'
+  latest: &id138
+    date: '2020-04-01'
     value: 51300
+    display: 51,300 円
+  values:
+  - *id138
   category: 福祉
   subcategory: 育児/高等教育の修学支援新制度/減免額算定基準額の上限/三分の一
   source: openfisca_japan/parameters/福祉/育児/高等教育の修学支援新制度/減免額算定基準額の上限/三分の一.yaml
@@ -1571,9 +2006,12 @@ items:
   description: 高等教育の修学支援新制度_授業料等の三分の二が減免される減免額算定基準額の上限
   reference: https://laws.e-gov.go.jp/law/501CO0000000049
   unit: currency-JPY
-  values:
-  - date: '2020-04-01'
+  latest: &id139
+    date: '2020-04-01'
     value: 25600
+    display: 25,600 円
+  values:
+  - *id139
   category: 福祉
   subcategory: 育児/高等教育の修学支援新制度/減免額算定基準額の上限/三分の二
   source: openfisca_japan/parameters/福祉/育児/高等教育の修学支援新制度/減免額算定基準額の上限/三分の二.yaml
@@ -1581,9 +2019,12 @@ items:
   description: 高等教育の修学支援新制度_授業料等の全額が減免される減免額算定基準額の上限
   reference: https://laws.e-gov.go.jp/law/501CO0000000049
   unit: currency-JPY
-  values:
-  - date: '2020-04-01'
+  latest: &id140
+    date: '2020-04-01'
     value: 100
+    display: 100 円
+  values:
+  - *id140
   category: 福祉
   subcategory: 育児/高等教育の修学支援新制度/減免額算定基準額の上限/全額
   source: openfisca_japan/parameters/福祉/育児/高等教育の修学支援新制度/減免額算定基準額の上限/全額.yaml
@@ -1591,9 +2032,12 @@ items:
   description: 高等教育の修学支援新制度_授業料等の四分の一が減免される減免額算定基準額の上限
   reference: https://laws.e-gov.go.jp/law/501CO0000000049
   unit: currency-JPY
-  values:
-  - date: '2024-04-01'
+  latest: &id141
+    date: '2024-04-01'
     value: 154500
+    display: 154,500 円
+  values:
+  - *id141
   category: 福祉
   subcategory: 育児/高等教育の修学支援新制度/減免額算定基準額の上限/四分の一
   source: openfisca_japan/parameters/福祉/育児/高等教育の修学支援新制度/減免額算定基準額の上限/四分の一.yaml
@@ -1601,9 +2045,12 @@ items:
   description: 高等教育の修学支援新制度_減免額算定基準額の算定に用いる市町村民税所得割の税率
   reference: https://laws.e-gov.go.jp/law/501CO0000000049
   unit: /1
-  values:
-  - date: '2020-04-01'
+  latest: &id142
+    date: '2020-04-01'
     value: 0.06
+    display: '0.06'
+  values:
+  - *id142
   category: 福祉
   subcategory: 育児/高等教育の修学支援新制度/減免額算定基準額の税率
   source: openfisca_japan/parameters/福祉/育児/高等教育の修学支援新制度/減免額算定基準額の税率.yaml
@@ -1611,9 +2058,12 @@ items:
   description: 高等職業訓練修了支援給付金の額（住民税課税世帯）
   reference: https://www.cfa.go.jp/policies/hitori-oya/syokugyou-kunren
   unit: currency-JPY
-  values:
-  - date: '2026-04-01'
+  latest: &id143
+    date: '2026-04-01'
     value: 25000
+    display: 25,000 円
+  values:
+  - *id143
   category: 福祉
   subcategory: 育児/高等職業訓練促進給付金/修了支援給付金/住民税課税世帯
   source: openfisca_japan/parameters/福祉/育児/高等職業訓練促進給付金/修了支援給付金/住民税課税世帯.yaml
@@ -1621,9 +2071,12 @@ items:
   description: 高等職業訓練修了支援給付金の額（住民税非課税世帯）
   reference: https://www.cfa.go.jp/policies/hitori-oya/syokugyou-kunren
   unit: currency-JPY
-  values:
-  - date: '2026-04-01'
+  latest: &id144
+    date: '2026-04-01'
     value: 50000
+    display: 50,000 円
+  values:
+  - *id144
   category: 福祉
   subcategory: 育児/高等職業訓練促進給付金/修了支援給付金/住民税非課税世帯
   source: openfisca_japan/parameters/福祉/育児/高等職業訓練促進給付金/修了支援給付金/住民税非課税世帯.yaml
@@ -1631,9 +2084,12 @@ items:
   description: 高等職業訓練促進給付金の最終年度加算額（訓練を受けている期間の最後の1年間の増額分）
   reference: https://www.cfa.go.jp/policies/hitori-oya/syokugyou-kunren
   unit: currency-JPY
-  values:
-  - date: '2026-04-01'
+  latest: &id145
+    date: '2026-04-01'
     value: 40000
+    display: 40,000 円
+  values:
+  - *id145
   category: 福祉
   subcategory: 育児/高等職業訓練促進給付金/最終年度加算額
   source: openfisca_japan/parameters/福祉/育児/高等職業訓練促進給付金/最終年度加算額.yaml
@@ -1641,9 +2097,12 @@ items:
   description: 高等職業訓練促進給付金の月額（住民税課税世帯）
   reference: https://www.cfa.go.jp/policies/hitori-oya/syokugyou-kunren
   unit: currency-JPY
-  values:
-  - date: '2026-04-01'
+  latest: &id146
+    date: '2026-04-01'
     value: 70500
+    display: 70,500 円
+  values:
+  - *id146
   category: 福祉
   subcategory: 育児/高等職業訓練促進給付金/月額/住民税課税世帯
   source: openfisca_japan/parameters/福祉/育児/高等職業訓練促進給付金/月額/住民税課税世帯.yaml
@@ -1651,9 +2110,12 @@ items:
   description: 高等職業訓練促進給付金の月額（住民税非課税世帯）
   reference: https://www.cfa.go.jp/policies/hitori-oya/syokugyou-kunren
   unit: currency-JPY
-  values:
-  - date: '2026-04-01'
+  latest: &id147
+    date: '2026-04-01'
     value: 100000
+    display: 100,000 円
+  values:
+  - *id147
   category: 福祉
   subcategory: 育児/高等職業訓練促進給付金/月額/住民税非課税世帯
   source: openfisca_japan/parameters/福祉/育児/高等職業訓練促進給付金/月額/住民税非課税世帯.yaml
@@ -1661,9 +2123,12 @@ items:
   description: 障害基礎年金の年金額に対する子の加算額（子の人数分加算、三人目以降）
   reference: https://www.nenkin.go.jp/service/jukyu/shougainenkin/jukyu-yoken/20150514.html
   unit: currency-JPY
-  values:
-  - date: '2024-04-01'
+  latest: &id148
+    date: '2024-04-01'
     value: 78300
+    display: 78,300 円
+  values:
+  - *id148
   category: 福祉
   subcategory: 障害基礎年金/支給額/子の加算額_三人目以降
   source: openfisca_japan/parameters/福祉/障害基礎年金/支給額/子の加算額_三人目以降.yaml
@@ -1671,9 +2136,12 @@ items:
   description: 障害基礎年金の年金額に対する子の加算額（子の人数分加算、二人目まで）
   reference: https://www.nenkin.go.jp/service/jukyu/shougainenkin/jukyu-yoken/20150514.html
   unit: currency-JPY
-  values:
-  - date: '2024-04-01'
+  latest: &id149
+    date: '2024-04-01'
     value: 234800
+    display: 234,800 円
+  values:
+  - *id149
   category: 福祉
   subcategory: 障害基礎年金/支給額/子の加算額_二人目まで
   source: openfisca_japan/parameters/福祉/障害基礎年金/支給額/子の加算額_二人目まで.yaml
@@ -1681,9 +2149,12 @@ items:
   description: 障害基礎年金の年金額(1級、昭和31年4月1日以前生まれ)
   reference: https://www.nenkin.go.jp/service/jukyu/shougainenkin/jukyu-yoken/20150514.html
   unit: currency-JPY
-  values:
-  - date: '2024-04-01'
+  latest: &id150
+    date: '2024-04-01'
     value: 1017125
+    display: 1,017,125 円
+  values:
+  - *id150
   category: 福祉
   subcategory: 障害基礎年金/支給額/支給額_一級_昭和三〇年度以前
   source: openfisca_japan/parameters/福祉/障害基礎年金/支給額/支給額_一級_昭和三〇年度以前.yaml
@@ -1691,9 +2162,12 @@ items:
   description: 障害基礎年金の年金額(1級、昭和31年4月2日以後生まれ)
   reference: https://www.nenkin.go.jp/service/jukyu/shougainenkin/jukyu-yoken/20150514.html
   unit: currency-JPY
-  values:
-  - date: '2024-04-01'
+  latest: &id151
+    date: '2024-04-01'
     value: 1020000
+    display: 1,020,000 円
+  values:
+  - *id151
   category: 福祉
   subcategory: 障害基礎年金/支給額/支給額_一級_昭和三一年度以降
   source: openfisca_japan/parameters/福祉/障害基礎年金/支給額/支給額_一級_昭和三一年度以降.yaml
@@ -1701,9 +2175,12 @@ items:
   description: 障害基礎年金の年金額(2級、昭和31年4月1日以前生まれ)
   reference: https://www.nenkin.go.jp/service/jukyu/shougainenkin/jukyu-yoken/20150514.html
   unit: currency-JPY
-  values:
-  - date: '2024-04-01'
+  latest: &id152
+    date: '2024-04-01'
     value: 813700
+    display: 813,700 円
+  values:
+  - *id152
   category: 福祉
   subcategory: 障害基礎年金/支給額/支給額_二級_昭和三〇年度以前
   source: openfisca_japan/parameters/福祉/障害基礎年金/支給額/支給額_二級_昭和三〇年度以前.yaml
@@ -1711,9 +2188,12 @@ items:
   description: 障害基礎年金の年金額(2級、昭和31年4月2日以後生まれ)
   reference: https://www.nenkin.go.jp/service/jukyu/shougainenkin/jukyu-yoken/20150514.html
   unit: currency-JPY
-  values:
-  - date: '2024-04-01'
+  latest: &id153
+    date: '2024-04-01'
     value: 816000
+    display: 816,000 円
+  values:
+  - *id153
   category: 福祉
   subcategory: 障害基礎年金/支給額/支給額_二級_昭和三一年度以降
   source: openfisca_japan/parameters/福祉/障害基礎年金/支給額/支給額_二級_昭和三一年度以降.yaml
