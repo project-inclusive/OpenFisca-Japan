@@ -9,10 +9,9 @@ export const CalculationLabel = ({
 }) => (
   <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '15px' }}>
     <Tag
-      variant="outline"
+      variant="unstyled"
       size="lg"
-      colorScheme={colour}
-      sx={{ height: '48px' }}
+      color={colour}
       whiteSpace="nowrap"
     >
       {text}
