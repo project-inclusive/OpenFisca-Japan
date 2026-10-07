@@ -52,3 +52,7 @@ jobs:
         run: make check-style
       - name: Run backend tests
         run: make test
+      # docs/_data の生成物がソースと乖離していないかを確認する
+      # (Variable/Parameter を変更したのに `make docs` を忘れた場合に失敗する)
+      - name: Check generated docs are up to date
+        run: make check-docs

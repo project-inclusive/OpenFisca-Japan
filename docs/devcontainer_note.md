@@ -147,6 +147,8 @@ VS Code を使わず、**Mac のホストターミナルから** Dev Container �
 このスクリプトは各自のローカル環境（Node の bin パスなど）に依存する個人用途のものなので、**リポジトリでは管理していません**。下記の内容を Mac 上の任意の場所（例: `~/bin/connect-devcontainer-tmux.sh`）に保存して使ってください。
 保存したら、**スクリプト冒頭の設定変数（`===== 各自の環境に合わせて編集する設定 =====` の部分）を自分の環境に合わせて直接書き換えて**ください。`<username>` は自分の Mac のユーザー名に読み替えます。
 
+<!-- docker の --format 指定を Jekyll(Liquid) に解釈させないため raw で囲む -->
+{% raw %}
 ```bash
 #!/usr/bin/env bash
 set -euo pipefail
@@ -243,6 +245,7 @@ exec docker exec -it \
   -w "$container_workspace_dir" "$container_name" \
   bash -lc 'tmux source-file "$HOME/.tmux.conf" 2>/dev/null || true; exec tmux -u new-session -A -s "'"$tmux_session_name"'"'
 ```
+{% endraw %}
 
 保存したら実行権限を付けて起動します（保存先は例です。各自のパスに読み替えてください）。
 
@@ -359,7 +362,7 @@ ssh ofj-tmux
   - 認証が必要なプライベートレジストリを使う場合は、その `DOCKER_CONFIG` 先で `docker login` する。
 - **`docker compose up` が `mounts denied: The path ... is not shared from the host` で失敗する** … docker-from-docker では `docker compose` のバインドマウント元が**ホスト(Mac)側で解釈**される。`docker-compose.yml` は `${LOCAL_WORKSPACE_FOLDER:-.}` を使っており、`LOCAL_WORKSPACE_FOLDER`（ホスト上のリポジトリパス）が未設定だとコンテナ内パス（`/workspaces/...`）が渡されて失敗する。接続スクリプト（`connect-devcontainer-tmux.sh`）が `-e LOCAL_WORKSPACE_FOLDER="$workspace_dir"` で注入する。
   - 手動で実行する場合は `export LOCAL_WORKSPACE_FOLDER=<ホスト上のリポジトリの絶対パス>` してから `docker compose up`。
-  - ホスト側の実パスは `docker inspect -f '{{range .Mounts}}{{.Source}} => {{.Destination}}{{"\n"}}{{end}}' "$(hostname)"` で確認できる。
+  - ホスト側の実パスは {% raw %}`docker inspect -f '{{range .Mounts}}{{.Source}} => {{.Destination}}{{"\n"}}{{end}}' "$(hostname)"`{% endraw %} で確認できる。
 - **日本語ファイル名が文字化けする** … `containerEnv` のロケール設定が効いているか確認する。ホスト側ターミナルの文字コードも UTF-8 にする。
 - **`connect-devcontainer-tmux.sh` が `devcontainer.json が見つかりません` で止まる** … スクリプト冒頭の `workspace_dir` にローカルの OpenFisca-Japan リポジトリのパスを設定する。
 - **`Dev Container CLI is not installed`** … `npm install -g @devcontainers/cli` でインストールする。

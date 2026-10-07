@@ -144,6 +144,56 @@ make serve-local
 - フロントエンドの制約上、見積もり結果に表示する制度のVariableは **`entity = 世帯` にする必要がある**
   - 個人に依存する条件は世帯員単位で計算し、最終的な制度の金額のみ世帯単位で集計すると実装しやすいです
 
+#### 制度ドキュメントの生成
+
+公開ドキュメントの[制度一覧（Variable）](./variables.md)・[パラメータ一覧（Parameter）](./parameters.md)は、
+`openfisca_japan` のソースから自動生成している。
+
+```bash
+make docs
+```
+
+- `tools/make_docs/make_docs.py` が `CountryTaxBenefitSystem()` を構築し、
+  各 Variable の `label` / `documentation` / `reference` 等と、各 Parameter の値・時系列を抽出して
+  `docs/_data/variables.yml` / `docs/_data/parameters.yml` に書き出す
+  - ソースを自前でパースするのではなく OpenFisca が読み込んだ結果を使うため、実装と乖離しない
+- あわせて `openfisca_japan/variables/` 配下の `# TODO:` コメントを抽出し
+  `docs/_data/todos.yml` に書き出す（[未実装・簡略化の一覧](./todos.md)のデータ）
+  - `ast` でクラスの行範囲を取得し、TODO を囲む Variable に紐付けている。
+    どの Variable にも属さない TODO はファイル単位として扱う
+  - TODO 行の直後に続くコメント行は、その TODO の補足として本文に連結する
+  - **制度の未実装・簡略化は `# TODO:` で書けば自動的に公開ドキュメントに載る。**
+    逆に、利用者に伝える必要がない純粋な実装都合のメモは `# NOTE:` を使う
+- 制度一覧は Variable を **制度 / 計算項目 / 入力項目** に分類し、制度ごとに関連する項目をまとめて表示する
+  （`docs/_data/institutions.yml`）
+  - 制度の最終結果とみなす Variable は、フロントエンドの見積もり結果の定義
+    （`dashboard/src/config/app_config.json` の `給付制度` / `貸付制度` / `該当制度`）と、
+    命名規則（制度名 = ファイル名、`{制度名}_最大` / `{制度名}_最小`、`{制度名}の対象者がいる`。
+    いずれも `entity = 世帯`）から判定する。フロントエンド未対応の制度は「アプリ未掲載」と表示される
+  - 制度の結果を含むファイルを1つの制度とみなし、同じファイル内の計算項目・入力項目をその制度に属するものとして扱う。
+    どの制度にも属さない項目は「共通の計算項目」「共通の入力項目」に表示される
+  - `app_config.json` を変更した場合も `make docs` の再実行が必要（CI の `make check-docs` で検知される）
+- `docs/variables.md` / `docs/parameters.md` はこのデータファイルを Liquid で描画するテンプレート。
+  ページの見せ方を変えたいときはこちらを編集する（データファイルは編集しない）
+- **生成物はコミットする。** GitHub Pages のビルドでは独自プラグインを追加できず、
+  ビルド時に生成できないため
+- Variable を追加・修正したら `make docs` を実行して差分をコミットする。
+  忘れた場合は CI の `make check-docs` が失敗して検知される
+
+#### ドキュメントサイトをローカルで確認する
+
+```bash
+make serve-docs      # http://localhost:4000/ で開く（初回はイメージのビルドに数分かかる）
+make stop-docs       # 停止
+```
+
+- `make docs`（データ生成）も併せて実行されるため、常に最新のソースの内容が表示される
+- **`docs/` を編集したら `make stop-docs` → `make serve-docs` で入れ直す。**
+  バインドマウント越しではファイル変更が検知されないため `--watch` は効かない（再ビルド自体は1秒程度）
+- GitHub Pages はプラグイン・テーマ・既定値を暗黙に有効化しているため、プレビュー用イメージ
+  （`Dockerfile_docs`）では GitHub Pages 本体が使う `github-pages` gem をそのまま入れて構成を揃えている
+- `docs` サービスは `profiles: [docs]` を指定しているため、通常の `docker compose up` では起動しない
+
 #### テスト条件・結果を記載したCSVファイルから、yamlのテストファイルを自動生成する方法
 
 ```bash
