@@ -291,6 +291,7 @@ export type AddressQuestion = {
 export type AgeQuestion = {
   type: 'Age';
   selection: number | undefined;
+  birthDate?: string;
 };
 
 export type AmountOfMoneyQuestion = {

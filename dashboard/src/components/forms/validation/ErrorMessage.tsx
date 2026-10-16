@@ -4,7 +4,11 @@ import { useRecoilValue } from 'recoil';
 
 import { showsValidationErrorAtom } from '../../../state';
 
-export const ErrorMessage = () => {
+export const ErrorMessage = ({
+  message = '入力必須項目です',
+}: {
+  message?: string;
+}) => {
   const showsValidationError = useRecoilValue(showsValidationErrorAtom);
 
   // HACK: spanタグのinvalidクラスをバリデーションエラーの存在チェックに使用
@@ -23,7 +27,7 @@ export const ErrorMessage = () => {
           mt={1}
           mb={1}
         >
-          入力必須項目です
+          {message}
         </Center>
       )}
     </>

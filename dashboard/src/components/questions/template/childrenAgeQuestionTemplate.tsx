@@ -13,7 +13,10 @@ import {
 import configData from '../../../config/app_config.json';
 
 import { ErrorMessage } from '../../forms/validation/ErrorMessage';
-import { questionValidatedAtom } from '../../../state';
+import {
+  questionValidatedAtom,
+  showsValidationErrorAtom,
+} from '../../../state';
 import { useRecoilState } from 'recoil';
 
 import { toHalf } from '../../../utils/toHalf';
@@ -85,11 +88,16 @@ export const ChildrenAgeQuestionTemplate = ({
   assignFunc: (question: AgeQuestion) => void;
   initialValue?: AgeQuestion;
 }) => {
-  const [questionValidated, setQuestionValidated] = useRecoilState(
-    questionValidatedAtom
-  );
+  const [, setQuestionValidated] = useRecoilState(questionValidatedAtom);
+  const [, setShowsValidationError] = useRecoilState(showsValidationErrorAtom);
   const [ageState, setAgeState] = useState<number | undefined>(
     initialValue?.selection
+  );
+  const [birthDateState, setBirthDateState] = useState(
+    initialValue?.birthDate ?? ''
+  );
+  const [isBirthDateValid, setIsBirthDateValid] = useState(
+    initialValue?.birthDate != null
   );
 
   // 学年に関する状態
@@ -97,10 +105,14 @@ export const ChildrenAgeQuestionTemplate = ({
   const [schoolEducationalAuthority, setSchoolEducationalAuthority] =
     useState<string>('');
   const [suffix, setSuffix] = useState<string>();
-
+  const isPostHighSchool = schoolEducationalAuthority === '高校卒業後相当';
   useEffect(() => {
-    setQuestionValidated(ageState != null);
-  }, [ageState, initialValue]);
+    if (isPostHighSchool) {
+      setQuestionValidated(isBirthDateValid);
+    } else {
+      setQuestionValidated(ageState != null);
+    }
+  }, [ageState, isBirthDateValid, isPostHighSchool]);
 
   const changeAge = (age: number | undefined) => {
     if (typeof age === 'number' && age < 0) {
@@ -130,6 +142,78 @@ export const ChildrenAgeQuestionTemplate = ({
     []
   );
 
+  const handleBirthDateChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setShowsValidationError(false);
+
+    const digits = event.currentTarget.value.replace(/\D/g, '').slice(0, 8);
+
+    let formattedValue = digits;
+
+    if (digits.length > 4) {
+      formattedValue = `${digits.slice(0, 4)}-${digits.slice(4)}`;
+    }
+
+    if (digits.length > 6) {
+      formattedValue = `${digits.slice(0, 4)}-${digits.slice(
+        4,
+        6
+      )}-${digits.slice(6)}`;
+    }
+
+    let isValidDate = false;
+
+    if (/^\d{4}-\d{2}-\d{2}$/.test(formattedValue)) {
+      const [year, month, day] = formattedValue.split('-').map(Number);
+
+      const date = new Date(year, month - 1, day);
+      const today = new Date();
+
+      date.setHours(0, 0, 0, 0);
+      today.setHours(0, 0, 0, 0);
+
+      isValidDate =
+        date.getFullYear() === year &&
+        date.getMonth() === month - 1 &&
+        date.getDate() === day &&
+        date <= today;
+    }
+
+    setBirthDateState(formattedValue);
+    setIsBirthDateValid(isValidDate);
+
+    assignFunc({
+      type: 'Age',
+      selection: ageState,
+      birthDate: isValidDate ? formattedValue : undefined,
+    });
+  };
+
+  const handleSchoolEducationalAuthorityChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const newAuthority = event.currentTarget.value;
+
+    setSchoolEducationalAuthority(newAuthority);
+    setShowsValidationError(false);
+
+    if (newAuthority === '高校卒業後相当') {
+      return;
+    }
+
+    setBirthDateState('');
+    setIsBirthDateValid(false);
+
+    if (schoolYear) {
+      calcBirthdayFromSchoolYear(Number(schoolYear), newAuthority);
+    } else {
+      assignFunc({
+        type: 'Age',
+        selection: ageState,
+      });
+    }
+  };
   const handleAgeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     let value: string = toHalf(event.currentTarget.value) ?? '';
     value = value.replace(/[^0-9]/g, '');
@@ -241,43 +325,62 @@ export const ChildrenAgeQuestionTemplate = ({
 
   return (
     <VStack flex={1}>
-      <ErrorMessage />
+      <ErrorMessage
+        message={
+          isPostHighSchool && birthDateState !== '' && !isBirthDateValid
+            ? '正しい生年月日を入力してください'
+            : undefined
+        }
+      />
       <HStack>
         <FormControl paddingRight={4}>
           <FormLabel fontSize={configData.style.subTitleFontSize}>
             <Center>
               <HStack>
-                <Box>年齢</Box>
+                <Box>{isPostHighSchool ? '誕生日' : '年齢'}</Box>
               </HStack>
             </Center>
           </FormLabel>
 
           <HStack mt={8} mb={8}>
-            <Input
-              width="3em"
-              height="3.5em"
-              fontSize={configData.style.itemFontSize}
-              type={isMobile ? 'number' : 'text'}
-              value={ageState ?? ''}
-              onChange={handleAgeChange}
-              onKeyDown={(event) => {
-                if (event.key === 'ArrowUp') {
-                  event.preventDefault();
-                  changeAge(ageState ? ageState + 1 : 1);
-                }
+            {isPostHighSchool ? (
+              <Input
+                width="11em"
+                height="3.5em"
+                fontSize={configData.style.itemFontSize}
+                type="text"
+                inputMode="numeric"
+                placeholder="年-月-日"
+                maxLength={10}
+                value={birthDateState}
+                onChange={handleBirthDateChange}
+              />
+            ) : (
+              <>
+                <Input
+                  width="3em"
+                  height="3.5em"
+                  fontSize={configData.style.itemFontSize}
+                  type={isMobile ? 'number' : 'text'}
+                  value={ageState ?? ''}
+                  onChange={handleAgeChange}
+                  onKeyDown={(event) => {
+                    if (event.key === 'ArrowUp') {
+                      event.preventDefault();
+                      changeAge(ageState ? ageState + 1 : 1);
+                    }
 
-                if (event.key === 'ArrowDown') {
-                  event.preventDefault();
-                  if (event.key === 'ArrowDown') {
-                    event.preventDefault();
-                    const newAge = ageState ? Math.max(ageState - 1, 0) : 0;
-                    changeAge(Number(newAge === 0 ? undefined : newAge));
-                  }
-                }
-              }}
-              {...(isMobile && { pattern: '[0-9]*' })}
-            />
-            <Box>歳</Box>
+                    if (event.key === 'ArrowDown') {
+                      event.preventDefault();
+                      const newAge = ageState ? Math.max(ageState - 1, 0) : 0;
+                      changeAge(Number(newAge === 0 ? undefined : newAge));
+                    }
+                  }}
+                  {...(isMobile && { pattern: '[0-9]*' })}
+                />
+                <Box>歳</Box>
+              </>
+            )}
           </HStack>
         </FormControl>
         <FormControl>
@@ -300,19 +403,7 @@ export const ChildrenAgeQuestionTemplate = ({
               value={schoolEducationalAuthority}
               placeholder="学校教育機関"
               fontSize={configData.style.itemFontSize}
-              onChange={(e: any) => {
-                setSchoolEducationalAuthority(
-                  e.target.value as typeof schoolEducationalAuthority
-                );
-
-                if (schoolYear) {
-                  calcBirthdayFromSchoolYear(
-                    Number(schoolYear),
-                    e.target.value as typeof schoolEducationalAuthority
-                  );
-                }
-                setQuestionValidated(ageState != null);
-              }}
+              onChange={handleSchoolEducationalAuthorityChange}
             >
               {schoolInfo.map((item, index) => (
                 <option value={item.building} key={index}>
