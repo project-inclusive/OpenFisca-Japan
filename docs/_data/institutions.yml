@@ -1,0 +1,392 @@
+# このファイルは tools/make_docs/make_docs.py により自動生成されています。
+# 直接編集せず、`make docs` で再生成してください。
+version: 2.2.0
+items:
+- name: 児童育成手当
+  kinds:
+  - 給付
+  in_app: true
+  description: ひとり親家庭に給付される手当。
+  category: 東京都
+  subcategory: 福祉/児童育成手当
+  source: openfisca_japan/variables/東京都/福祉/児童育成手当.py
+  outputs:
+  - 児童育成手当
+  todo_count: 0
+- name: 受験生チャレンジ支援貸付
+  kinds:
+  - 貸付
+  in_app: true
+  description: '高校や大学等の受験料や塾などの受講料。
+
+    返済期限：5年以内（高校・大学等に入学した場合、返済が免除されます）
+
+    利子：無利子'
+  category: 東京都
+  subcategory: 福祉/受験生チャレンジ支援貸付
+  source: openfisca_japan/variables/東京都/福祉/受験生チャレンジ支援貸付.py
+  outputs:
+  - 受験生チャレンジ支援貸付
+  todo_count: 0
+- name: 重度心身障害者手当
+  kinds:
+  - 給付
+  in_app: true
+  description: 精神又は身体に重度の障害を持ち、常時複雑な介護を必要とする方に給付される手当。
+  category: 東京都
+  subcategory: 福祉/重度心身障害者手当
+  source: openfisca_japan/variables/東京都/福祉/重度心身障害者手当.py
+  outputs:
+  - 重度心身障害者手当_最大
+  - 重度心身障害者手当_最小
+  todo_count: 2
+- name: 障害児童育成手当
+  kinds:
+  - 給付
+  in_app: true
+  description: 精神又は身体に障害をもつ20歳未満の児童を養育している方に給付される手当。
+  category: 東京都
+  subcategory: 福祉/障害児童育成手当
+  source: openfisca_japan/variables/東京都/福祉/障害児童育成手当.py
+  outputs:
+  - 障害児童育成手当
+  todo_count: 0
+- name: 災害弔慰金
+  kinds:
+  - 給付
+  in_app: true
+  description: 災害により亡くなられた方のご遺族に支給されるお金。
+  category: 災害
+  subcategory: 支援/災害弔慰金
+  source: openfisca_japan/variables/災害/支援/災害弔慰金.py
+  outputs:
+  - 災害弔慰金
+  todo_count: 0
+- name: 災害援護資金
+  kinds:
+  - 貸付
+  in_app: true
+  description: '生活の再建に必要な資金。
+
+    返済期限：10年以内
+
+    利子：年3%以内'
+  category: 災害
+  subcategory: 支援/災害援護資金
+  source: openfisca_japan/variables/災害/支援/災害援護資金.py
+  outputs:
+  - 災害援護資金
+  todo_count: 0
+- name: 災害障害見舞金
+  kinds:
+  - 給付
+  in_app: true
+  description: 災害による負傷・疾病で精神又は身体に著しい障害が出た方に支給されるお金。
+  category: 災害
+  subcategory: 支援/災害障害見舞金
+  source: openfisca_japan/variables/災害/支援/災害障害見舞金.py
+  outputs:
+  - 災害障害見舞金_最大
+  - 災害障害見舞金_最小
+  todo_count: 0
+- name: 被災者生活再建支援制度
+  kinds:
+  - 給付
+  in_app: true
+  description: 災害により居住する住宅が全壊するなど、生活基盤に著しい被害を受けた世帯に対する支援金。
+  category: 災害
+  subcategory: 支援/被災者生活再建支援制度
+  source: openfisca_japan/variables/災害/支援/被災者生活再建支援制度.py
+  outputs:
+  - 被災者生活再建支援制度
+  todo_count: 0
+- name: 住居確保給付金
+  kinds: []
+  in_app: false
+  description: null
+  category: 福祉
+  subcategory: 住居確保給付金
+  source: openfisca_japan/variables/福祉/住居確保給付金.py
+  outputs:
+  - 住居確保給付金_最大
+  - 住居確保給付金_最小
+  todo_count: 0
+- name: 傷病手当金
+  kinds:
+  - 給付
+  in_app: true
+  description: '病気やケガで会社を休み、その期間の給与が無い場合に代わりに支給されるお金。
+
+    健康保険（会社員）や共済組合（公務員）等に加入している必要があります。'
+  category: 福祉
+  subcategory: 傷病手当金
+  source: openfisca_japan/variables/福祉/傷病手当金.py
+  outputs:
+  - 傷病手当金_最大
+  - 傷病手当金_最小
+  todo_count: 2
+- name: 健康管理支援事業
+  kinds:
+  - 給付
+  in_app: true
+  description: '血液製剤によりエイズを発症した方へ、健康管理の費用負担を軽減するために給付される手当。
+
+    支給を受けるには裁判上の和解が成立している必要があります。'
+  category: 福祉
+  subcategory: 感染症/健康管理支援事業
+  source: openfisca_japan/variables/福祉/感染症/健康管理支援事業.py
+  outputs:
+  - 健康管理支援事業_最大
+  - 健康管理支援事業_最小
+  todo_count: 0
+- name: 健康管理費用
+  kinds:
+  - 給付
+  in_app: true
+  description: '血液製剤によるHIV感染者の方へ、エイズ発症予防に役立てるために支給されるお金。
+
+    給付を受ける場合、健康状態の定期的な報告が必要です。'
+  category: 福祉
+  subcategory: 感染症/健康管理費用
+  source: openfisca_japan/variables/福祉/感染症/健康管理費用.py
+  outputs:
+  - 健康管理費用_最大
+  - 健康管理費用_最小
+  todo_count: 0
+- name: 先天性の傷病治療によるC型肝炎患者に係るQOL向上等のための調査研究事業
+  kinds:
+  - 給付
+  in_app: true
+  description: '先天性の血液凝固因子異常症の治療のためC型肝炎を発症し健康被害を受けた方へ、生活の質（QOL）向上のため日常生活の状況を把握する事業。
+
+    健康状態や生活状況を報告することで、謝礼金を受け取れます。'
+  category: 福祉
+  subcategory: 感染症/先天性の傷病治療によるC型肝炎患者に係るQOL向上等のための調査研究事業
+  source: openfisca_japan/variables/福祉/感染症/先天性の傷病治療によるC型肝炎患者に係るQOL向上等のための調査研究事業.py
+  outputs:
+  - 先天性の傷病治療によるC型肝炎患者に係るQOL向上等のための調査研究事業_最大
+  - 先天性の傷病治療によるC型肝炎患者に係るQOL向上等のための調査研究事業_最小
+  todo_count: 0
+- name: 先天性血液凝固因子障害等治療研究事業
+  kinds:
+  - 対象判定
+  in_app: true
+  description: 先天性血液凝固因子欠乏症（血友病等）や、血液製剤によるHIV感染などに関する医療費の負担を減らす制度。
+  category: 福祉
+  subcategory: 感染症/先天性血液凝固因子障害等治療研究事業
+  source: openfisca_japan/variables/福祉/感染症/先天性血液凝固因子障害等治療研究事業.py
+  outputs:
+  - 先天性血液凝固因子障害等治療研究事業の対象者がいる
+  todo_count: 0
+- name: 重度心身障害者医療費助成制度
+  kinds:
+  - 対象判定
+  in_app: true
+  description: '重度の障害のある方が病気やケガで医療機関にかかったときの診察料を一部助成する制度。
+
+    自治体によって基準と助成の内容が異なるため、くわしくは市区町村の役所窓口にお問い合わせください。'
+  category: 福祉
+  subcategory: 感染症/重度心身障害者医療費助成制度
+  source: openfisca_japan/variables/福祉/感染症/重度心身障害者医療費助成制度.py
+  outputs:
+  - 重度心身障害者医療費助成制度の対象者がいる
+  todo_count: 0
+- name: 母子父子寡婦福祉資金貸付金
+  kinds: []
+  in_app: false
+  description: null
+  category: 福祉
+  subcategory: 母子父子寡婦福祉資金貸付金
+  source: openfisca_japan/variables/福祉/母子父子寡婦福祉資金貸付金.py
+  outputs:
+  - 母子父子寡婦福祉資金貸付金_修学資金_最大
+  - 母子父子寡婦福祉資金貸付金_修学資金_最小
+  - 母子父子寡婦福祉資金貸付金_就学支度資金_最大
+  - 母子父子寡婦福祉資金貸付金_就学支度資金_最小
+  - 母子父子寡婦福祉資金貸付金の対象者がいる
+  todo_count: 0
+- name: 特別障害者手当
+  kinds:
+  - 給付
+  in_app: true
+  description: 精神または身体に重度の障害をもち介護が必要な方に給付される手当。
+  category: 福祉
+  subcategory: 特別障害者手当
+  source: openfisca_japan/variables/福祉/特別障害者手当.py
+  outputs:
+  - 特別障害者手当_最大
+  - 特別障害者手当_最小
+  todo_count: 6
+- name: 特定疾病療養
+  kinds:
+  - 対象判定
+  in_app: true
+  description: 長期間の治療と高額な医療費が必要な病気に対して医療費の負担を減らす制度。
+  category: 福祉
+  subcategory: 特定疾病療養
+  source: openfisca_japan/variables/福祉/特定疾病療養.py
+  outputs:
+  - 特定疾病療養の対象者がいる
+  todo_count: 0
+- name: 生活保護
+  kinds:
+  - 給付
+  in_app: true
+  description: '家賃や水光熱費、食費、医療費、教育費などのふつうに暮らすために必要なお金の給付。
+
+    働いて収入がある場合も、働いていない場合も対象になります。
+
+    算出された額に加え、医療費・介護費等が実費で給付されます。'
+  category: 福祉
+  subcategory: 生活保護
+  source: openfisca_japan/variables/福祉/生活保護.py
+  outputs:
+  - 生活保護
+  todo_count: 4
+- name: 生活福祉資金貸付制度
+  kinds:
+  - 貸付
+  in_app: true
+  description: null
+  category: 福祉
+  subcategory: 生活福祉資金貸付制度
+  source: openfisca_japan/variables/福祉/生活福祉資金貸付制度.py
+  outputs:
+  - 一時生活再建費
+  - 不動産担保型生活資金
+  - 住宅入居費
+  - 就学支度費
+  - 教育支援費
+  - 生活支援費
+  - 福祉費
+  - 緊急小口資金
+  todo_count: 1
+- name: 職業訓練受講給付金
+  kinds: []
+  in_app: false
+  description: null
+  category: 福祉
+  subcategory: 職業訓練受講給付金
+  source: openfisca_japan/variables/福祉/職業訓練受講給付金.py
+  outputs:
+  - 職業訓練受講給付金_最大
+  - 職業訓練受講給付金_最小
+  todo_count: 0
+- name: 児童手当
+  kinds:
+  - 給付
+  in_app: true
+  description: 中学校卒業までの児童を養育している方に給付される手当。
+  category: 福祉
+  subcategory: 育児/児童手当
+  source: openfisca_japan/variables/福祉/育児/児童手当.py
+  outputs:
+  - 児童手当
+  todo_count: 0
+- name: 児童扶養手当
+  kinds:
+  - 給付
+  in_app: true
+  description: ひとり親家庭に給付される手当。
+  category: 福祉
+  subcategory: 育児/児童扶養手当
+  source: openfisca_japan/variables/福祉/育児/児童扶養手当.py
+  outputs:
+  - 児童扶養手当_最大
+  - 児童扶養手当_最小
+  todo_count: 4
+- name: 就学援助
+  kinds: []
+  in_app: false
+  description: null
+  category: 福祉
+  subcategory: 育児/就学援助
+  source: openfisca_japan/variables/福祉/育児/就学援助.py
+  outputs:
+  - 就学援助の対象者がいる
+  todo_count: 0
+- name: 特別児童扶養手当
+  kinds:
+  - 給付
+  in_app: true
+  description: 精神又は身体に障害をもつ20歳未満の児童を養育している方に給付される手当。
+  category: 福祉
+  subcategory: 育児/特別児童扶養手当
+  source: openfisca_japan/variables/福祉/育児/特別児童扶養手当.py
+  outputs:
+  - 特別児童扶養手当_最大
+  - 特別児童扶養手当_最小
+  todo_count: 3
+- name: 障害児福祉手当
+  kinds:
+  - 給付
+  in_app: true
+  description: 精神又は身体に重度の障害をもつ20歳未満の方に給付される手当。
+  category: 福祉
+  subcategory: 育児/障害児福祉手当
+  source: openfisca_japan/variables/福祉/育児/障害児福祉手当.py
+  outputs:
+  - 障害児福祉手当
+  todo_count: 1
+- name: 高等学校奨学給付金
+  kinds:
+  - 給付
+  in_app: true
+  description: 教材費、通学用品費等、高校で安心して教育を受けるために必要なお金の給付。
+  category: 福祉
+  subcategory: 育児/高等学校奨学給付金
+  source: openfisca_japan/variables/福祉/育児/高等学校奨学給付金.py
+  outputs:
+  - 高等学校奨学給付金_最大
+  - 高等学校奨学給付金_最小
+  todo_count: 0
+- name: 高等学校等就学支援金
+  kinds:
+  - 給付
+  in_app: true
+  description: 高校の授業料の支援金。本人が直接受け取る代わりに、授業料が減額されます。
+  category: 福祉
+  subcategory: 育児/高等学校等就学支援金
+  source: openfisca_japan/variables/福祉/育児/高等学校等就学支援金.py
+  outputs:
+  - 高等学校等就学支援金_最大
+  - 高等学校等就学支援金_最小
+  todo_count: 4
+- name: 高等教育の修学支援新制度
+  kinds: []
+  in_app: false
+  description: null
+  category: 福祉
+  subcategory: 育児/高等教育の修学支援新制度
+  source: openfisca_japan/variables/福祉/育児/高等教育の修学支援新制度.py
+  outputs:
+  - 高等教育の修学支援新制度_授業料等減免_最大
+  - 高等教育の修学支援新制度_授業料等減免_最小
+  todo_count: 0
+- name: 高等職業訓練促進給付金
+  kinds: []
+  in_app: false
+  description: null
+  category: 福祉
+  subcategory: 育児/高等職業訓練促進給付金
+  source: openfisca_japan/variables/福祉/育児/高等職業訓練促進給付金.py
+  outputs:
+  - 高等職業訓練促進給付金_最大
+  - 高等職業訓練促進給付金_最小
+  todo_count: 0
+- name: 障害基礎年金
+  kinds:
+  - 給付
+  in_app: true
+  description: '病気やケガによって仕事などが制限された方が受け取ることができる年金。
+
+    20歳以上で国民年金に加入している場合、年金の支払い状況による条件があります。
+
+    また、障害についてはじめて診断を受けた日（初診日）が65歳未満である必要があります。'
+  category: 福祉
+  subcategory: 障害基礎年金
+  source: openfisca_japan/variables/福祉/障害基礎年金.py
+  outputs:
+  - 障害基礎年金_最大
+  - 障害基礎年金_最小
+  todo_count: 0
