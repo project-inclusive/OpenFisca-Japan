@@ -2,3 +2,5 @@ title: OpenFisca-Japan Docs
 description: OpenFisca-Japan Documentation
 google_analytics:
 theme: jekyll-theme-cayman
+# 制度一覧・パラメータ一覧ページからソースコードへリンクするためのベースURL
+source_base_url: https://github.com/project-inclusive/OpenFisca-Japan/blob/main

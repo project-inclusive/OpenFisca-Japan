@@ -1,0 +1,32 @@
+# docs/ の Jekyll サイトをローカルでプレビューするためのイメージ。
+# GitHub Pages(classic) はプラグイン・テーマ・既定値を暗黙に有効化しているため、
+# それらを手で並べると本番と差異が出る(例: jekyll-relative-links が効かず
+# 目次の .md リンクが .html に書き換わらない)。
+# GitHub Pages 本体が使う github-pages gem をそのまま入れて構成を一致させる。
+FROM ruby:3.2-slim
+
+RUN apt-get update -qq \
+    && apt-get install -y -qq --no-install-recommends \
+    build-essential \
+    git \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /site
+
+# webrick は Ruby 3.0 で標準添付から外れたため jekyll serve 用に明示的に入れる
+RUN printf '%s\n' \
+    'source "https://rubygems.org"' \
+    'gem "github-pages", group: :jekyll_plugins' \
+    'gem "webrick"' \
+    > Gemfile \
+    && bundle install --quiet
+
+EXPOSE 4000
+
+# --source は読み取り専用でマウントするため、出力先はコンテナ内の /tmp に置く
+CMD ["bundle", "exec", "jekyll", "serve", \
+    "--source", "/srv", \
+    "--destination", "/tmp/_site", \
+    "--host", "0.0.0.0", \
+    "--port", "4000"]
