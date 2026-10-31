@@ -260,6 +260,18 @@ npm run pretty
 npm run cy:run
 ```
 
+#### フロントエンドのテストの分担
+
+| 層       | 確認する内容                                      | 方法                                                                                                                                                                    |
+| -------- | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ロジック | 状態・変換・入力の検証など、UI から切り離せる処理 | Vitest の node 環境で確認する                                                                                                                                           |
+| 画面     | 質問テンプレートの描画、入力操作、表示状態        | 現在は Vitest と jsdom、Testing Library。[[prj-0001:pjr-dfwv-frontend-storybook-component-tests\|PJR-DFWV]] の後は Storybook の story と Vitest Browser Mode で確認する |
+| API      | API の応答による表示                              | [[prj-0001:pjr-bzgg-frontend-result-error-regression\|PJR-BZGG]] で導入する MSW を使い HTTP の境界で差し替える                                                          |
+| 導線     | 主要な画面遷移と一連の操作                        | [[prj-0001:pjr-1rje-frontend-playwright-e2e\|PJR-1RJE]] の Playwright E2E で主要な導線のみ確認する                                                                      |
+
+`dashboard` で `npm run test` を実行すると、既存のロジックのテストは node 環境、質問テンプレートのテストはファイル先頭の `// @vitest-environment jsdom` により jsdom 環境で動く。
+描画用 Provider と固定データは `dashboard/src/components/questions/template/questionTemplateTestUtils.tsx` にまとめ、各描画で新しい RecoilRoot を作る。テンプレートは Router を使わないため、現在のヘルパーは ChakraProvider と RecoilRoot を提供する。
+
 #### 一問一答の状態追加
 
 - [XState](https://xstate.js.org/)を使用して各質問間の遷移を定義している
