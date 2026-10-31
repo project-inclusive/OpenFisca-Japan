@@ -302,6 +302,8 @@ npx storybook build
 
 既存の Vite 設定には `unit` project、`vitest.browser.config.mts` には `storybook` と `browser` projects を定義する。単体テストの node 用 MSW setup はブラウザーには読み込まない。`*.browser.test.tsx` は単体テストから除外する。
 
+ブラウザー設定は `browser()` で project ごとに新しく生成する。Vitest はブラウザーの instance に名前を書き込むため、同じ設定オブジェクトを複数の project で共有すると、Chromium の project 名が重複して起動に失敗する。
+
 #### story の追加と検査
 
 コンポーネントの隣に `*.stories.tsx` を置き、CSF 3 の named export でケースを定義する。`questionTemplates.stories.tsx`、`result.stories.tsx`、`errors.stories.tsx` が実例である。
