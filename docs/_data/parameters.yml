@@ -178,7 +178,7 @@ items:
   latest: &id014
     date: '2000-01-01'
     value: 0.1
-    display: '0.1'
+    display: 10%
   values:
   - *id014
   category: 住民税
@@ -217,12 +217,12 @@ items:
   latest: &id017
     date: 2017-01-01-01
     value: 62.0
-    display: '62'
+    display: 62 歳
   values:
   - *id017
   - date: '1951-07-01'
     value: 60.33
-    display: '60.33'
+    display: 60.33 歳
   category: 全般
   subcategory: 定年年齢
   source: openfisca_japan/parameters/全般/定年年齢.yaml
@@ -233,12 +233,12 @@ items:
   latest: &id018
     date: '2022-04-01'
     value: 18.0
-    display: '18'
+    display: 18 歳
   values:
   - *id018
   - date: '1876-01-01'
     value: 20.0
-    display: '20'
+    display: 20 歳
   category: 全般
   subcategory: 成人年齢
   source: openfisca_japan/parameters/全般/成人年齢.yaml
@@ -353,7 +353,7 @@ items:
   latest: &id027
     date: '2013-01-01'
     value: 0.021
-    display: '0.021'
+    display: 2.1%
   values:
   - *id027
   category: 所得
@@ -470,7 +470,7 @@ items:
   latest: &id036
     date: '2025-01-01'
     value: 0.225
-    display: '0.225'
+    display: 22.5%
   values:
   - *id036
   category: 所得
@@ -754,7 +754,7 @@ items:
   latest: &id057
     date: '2015-01-01'
     value: 0.016
-    display: '0.016'
+    display: 1.6%
   values:
   - *id057
   category: 社会保険料
@@ -767,7 +767,7 @@ items:
   latest: &id058
     date: '2000-01-01'
     value: 0.1
-    display: '0.1'
+    display: 10%
   values:
   - *id058
   category: 社会保険料
@@ -780,7 +780,7 @@ items:
   latest: &id059
     date: '2017-09-01'
     value: 0.183
-    display: '0.183'
+    display: 18.3%
   values:
   - *id059
   category: 社会保険料
@@ -845,12 +845,12 @@ items:
   latest: &id064
     date: '2026-04-01'
     value: 0.005
-    display: '0.005'
+    display: 0.5%
   values:
   - *id064
   - date: '2020-01-01'
     value: 0.0055
-    display: '0.0055'
+    display: 0.55%
   category: 社会保険料
   subcategory: 雇用保険料率
   source: openfisca_japan/parameters/社会保険料/雇用保険料率.yaml
@@ -874,7 +874,7 @@ items:
   latest: &id066
     date: '2023-04-01'
     value: 30
-    display: '30'
+    display: 30 日
   values:
   - *id066
   category: 福祉
@@ -887,7 +887,7 @@ items:
   latest: &id067
     date: '2023-04-01'
     value: 22
-    display: '22'
+    display: 22 日
   values:
   - *id067
   category: 福祉
@@ -1010,7 +1010,7 @@ items:
   latest: &id076
     date: '2000-05-01'
     value: 20.0
-    display: '20'
+    display: 20 歳
   values:
   - *id076
   category: 福祉
@@ -1420,12 +1420,12 @@ items:
   latest: &id106
     date: '2024-11-01'
     value: 12
-    display: '12'
+    display: 12 学年
   values:
   - *id106
   - date: '2010-05-01'
     value: 12
-    display: '12'
+    display: 12 学年
   category: 福祉
   subcategory: 育児/児童扶養手当/上限学年
   source: openfisca_japan/parameters/福祉/育児/児童扶養手当/上限学年.yaml
@@ -1688,12 +1688,12 @@ items:
   latest: &id119
     date: '2024-11-01'
     value: 20
-    display: '20'
+    display: 20 歳
   values:
   - *id119
   - date: '2010-05-01'
     value: 20
-    display: '20'
+    display: 20 歳
   category: 福祉
   subcategory: 育児/児童扶養手当/障害児の上限年齢
   source: openfisca_japan/parameters/福祉/育児/児童扶養手当/障害児の上限年齢.yaml
@@ -1704,7 +1704,7 @@ items:
   latest: &id120
     date: '2010-05-01'
     value: 12
-    display: '12'
+    display: 12 学年
   values:
   - *id120
   category: 福祉
@@ -1749,7 +1749,7 @@ items:
   latest: &id123
     date: '2000-05-01'
     value: 20.0
-    display: '20'
+    display: 20 歳
   values:
   - *id123
   category: 福祉
@@ -1840,7 +1840,7 @@ items:
   latest: &id128
     date: '2010-05-01'
     value: 20.0
-    display: '20'
+    display: 20 歳
   values:
   - *id128
   category: 福祉
@@ -1912,7 +1912,7 @@ items:
   latest: &id132
     date: '2010-05-01'
     value: 20.0
-    display: '20'
+    display: 20 歳
   values:
   - *id132
   category: 福祉
@@ -2048,7 +2048,7 @@ items:
   latest: &id142
     date: '2020-04-01'
     value: 0.06
-    display: '0.06'
+    display: 6%
   values:
   - *id142
   category: 福祉
