@@ -16,8 +16,17 @@ export default () => {
   return defineConfig({
     plugins: [react(), htmlPlugin()],
     test: {
-      include: ['src/**/*.{test,spec}.{ts,tsx}'],
-      setupFiles: ['./src/testSetup.ts'],
+      projects: [
+        {
+          test: {
+            name: 'unit',
+            environment: 'node',
+            include: ['src/**/*.{test,spec}.{ts,tsx}'],
+            exclude: ['src/**/*.browser.test.{ts,tsx}'],
+            setupFiles: ['./src/testSetup.ts'],
+          },
+        },
+      ],
     },
     base: process.env.GITHUB_PAGES
       ? '/OpenFisca-Japan/' // レポジトリ名を設定

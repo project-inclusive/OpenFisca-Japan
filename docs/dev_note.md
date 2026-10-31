@@ -256,7 +256,7 @@ npm run pretty:check
 # formatter (上記でエラーが出た場合に解消)
 npm run pretty
 
-# ロジック・画面のテスト実行
+# 単体テスト（node・jsdom）
 npm run test
 
 # E2E スモークテスト（build 後の preview を自動起動）
@@ -274,22 +274,55 @@ E2E の安定性を確認するときは `npm run test:e2e` を続けて 2 回�
 
 #### フロントエンドのテストの分担
 
-| 層       | 確認する内容                                      | 方法                                                                                                   |
-| -------- | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| ロジック | 状態・変換・入力の検証など、UI から切り離せる処理 | Vitest の node 環境で確認する                                                                          |
-| 画面     | 質問テンプレートの描画、入力操作、表示状態        | 現在は Vitest と jsdom、Testing Library。Storybook の導入後は、story と Vitest Browser Mode で確認する |
-| API      | API の応答による表示                              | MSW を使い、HTTP の境界で応答を差し替える                                                              |
-| 導線     | 主要な画面遷移と一連の操作                        | Playwright の E2E で、主要な導線だけを確認する                                                         |
+| 層           | 確認する内容                                           | 方法                                           |
+| ------------ | ------------------------------------------------------ | ---------------------------------------------- |
+| ロジック     | 状態・変換・入力の検証など                             | Vitest の node 環境                            |
+| 単体の画面   | 数値入力の境界値・日付による学年変換・API hook         | Vitest の jsdom 環境                           |
+| story        | 質問の選択操作と復元・結果表示・エラーと戻る導線・a11y | Storybook と addon-vitest、Playwright Chromium |
+| Browser Mode | story を必要としない実際のキーボードやフォーカスの検査 | vitest-browser-react、Playwright Chromium      |
+| API          | API の応答による表示                                   | MSW 2 の共通 handler                           |
+| 導線         | 主要な画面遷移と一連の操作                             | Playwright E2E のスモーク                      |
 
-`dashboard` で `npm run test` を実行すると、既存のロジックのテストは node 環境、質問テンプレートのテストはファイル先頭の `// @vitest-environment jsdom` により jsdom 環境で動く。
-描画用 Provider と固定データは `dashboard/src/components/questions/template/questionTemplateTestUtils.tsx` にまとめ、各描画で新しい RecoilRoot を作る。テンプレートは Router を使わないため、現在のヘルパーは ChakraProvider と RecoilRoot を提供する。
+`dashboard` で以下を実行する。ブラウザーの検査には、Playwright と同じ版の Chromium と OS ライブラリが必要。初回は `npx playwright install --with-deps chromium` で用意する。
+
+```bash
+# node・jsdom の単体テスト。従来の npm run test も同じ対象
+npx vitest run --project unit
+# story の play 関数と a11y の検査
+npx vitest run --config vitest.browser.config.mts --project storybook
+# story にしない Browser Mode の検査
+npx vitest run --config vitest.browser.config.mts --project browser
+# story と Browser Mode をまとめて検査
+npx vitest run --config vitest.browser.config.mts
+# 対話的な Storybook（http://localhost:6006）
+npx storybook dev -p 6006
+# Storybook の静的ビルド（storybook-static/）
+npx storybook build
+```
+
+既存の Vite 設定には `unit` project、`vitest.browser.config.mts` には `storybook` と `browser` projects を定義する。単体テストの node 用 MSW setup はブラウザーには読み込まない。`*.browser.test.tsx` は単体テストから除外する。
+
+#### story の追加と検査
+
+コンポーネントの隣に `*.stories.tsx` を置き、CSF 3 の named export でケースを定義する。`questionTemplates.stories.tsx`、`result.stories.tsx`、`errors.stories.tsx` が実例である。
+
+- 質問の描画には `src/components/questions/template/questionTemplateTestUtils.tsx` の `TestProviders` と固定データを使う。各 mount が ChakraProvider と新しい RecoilRoot を持つ。`QuestionValidity` で回答の有効性を観測する。
+- `play` では `storybook/test` の `expect`・`userEvent`・`fn` を使い、`canvas` 内の要素を取得する。ボタンの選択色を調べる場合は hover を外し、実際の computed style を検査する。
+- 結果には `src/mocks/resultTestUtils.tsx` の `ResultTestPage` を使う。固定日の Recoil 状態と複製したリクエストを設定し、MemoryRouter で遷移先を観測できる。エラー単体には `ErrorTestPage` を使う。
+- API 応答は `parameters.msw.handlers` に `src/mocks/handlers.ts` の handler を指定する。`fetch` の直接置換や別の固定応答を追加しない。例: `parameters: { msw: { handlers: [calculateSuccessHandler('none')] } }`。
+- `.storybook/preview.ts` が `msw-storybook-addon/csf3` の `mswLoader` を通じて worker を開始し、story ごとに handler をリセットする。未定義の `/calculate` はエラーにし、静的ファイルは通す。Service Worker は `.storybook/public/` だけから配信するため、通常のアプリの build には含まれない。MSW を更新した際は `node_modules/msw/lib/mockServiceWorker.js` を同じ場所へコピーし直す。
+- story にする必要がないブラウザー操作は `*.browser.test.tsx` に置き、`vitest-browser-react` の `render` と `vitest/browser` の locator・実キーボードを使う。年齢入力の ArrowDown とフォーカスの検査を実例としている。
+
+a11y addon は全 story で自動実行する。現在は違反を別途直すため `parameters.a11y.test: 'todo'` とし、警告として報告する。検査を無効化する `off` は使わない。Storybook の Accessibility パネルとテストレポートで、story 名・axe の rule ID・重大度・対象要素を確認し、修正を別途追跡する。エラーから移動する story とは別に、エラーを表示したままにする story も置き、a11y の対象が遷移後の画面だけにならないようにする。
+
+画面の同じ確認を jsdom と story の両方に追加しない。数値の正規化・境界値や学年の暦依存は jsdom に残し、ネイティブの選択操作・computed style・フォーカスはブラウザーで確認する。スクリーンショットの比較と Chromatic は使わない。
 
 #### 計算 API の固定データと再記録
 
-結果・エラー画面は Vitest と jsdom で確認し、`fetch` を直接置き換えず MSW 2 系で `/calculate` の HTTP 応答を差し替える。
+結果・エラー画面は story と Chromium で確認し、`fetch` を直接置き換えず MSW 2 系で `/calculate` の HTTP 応答を差し替える。
 共通の `dashboard/src/mocks/handlers.ts` は正常応答の `calculateSuccessHandler`（`benefit-only`・`loan-only`・`both`・`none`）と、HTTP 500・通信失敗の `calculateFailureHandlers` を提供する。Storybook でも同じ handlers を利用できる。
 Vitest の `src/testSetup.ts` から node 用の `src/mocks/server.ts` を起動し、未定義の通信をエラーにして、テストごとに応答の上書きをリセットする。
-描画には質問テンプレートと共通の `renderWithProviders` を使い、結果・エラー画面では `src/mocks/resultTestUtils.tsx` で Router と固定日の Recoil 状態を加える。
+描画には質問テンプレートと共通の `TestProviders` を使い、結果・エラー画面では `src/mocks/resultTestUtils.tsx` で Router と固定日の Recoil 状態を加える。API hook の単体テストだけは jsdom と node 用 MSW を使う。
 
 `dashboard/src/mocks/calculate/` に、4 ケースそれぞれの POST 本文（`*.request.json`）と応答（`*.response.json`）を置く。
 日付は `2026-01-15` に固定し、依頼する計算結果はリクエスト側で `null` にする。応答は現時点では画面が読む形に合わせた手作りのデータであり、実 API の記録や制度の適格性・金額の根拠ではない。
@@ -312,7 +345,7 @@ done
 4 件すべてが成功したら、`tmp/calculate-recordings/` の JSON と同名の固定応答を比較する。
 `世帯一覧.世帯1` の日付付きの金額（`児童手当`、`児童扶養手当_最小`・`児童扶養手当_最大`、`生活支援費`、`緊急小口資金`）、`世帯員`、居住地、配列の形を確認する。
 手作りの応答と違う場合は、差分と実行した API の版を記録して別途修正する。実応答が同じ表示ケースになるとは限らないため、期待する表示を確認せずに固定データへ上書きしない。
-固定データを更新した場合は `dashboard` で `npm run test`、`npm run build`、`npm run lint`、`npm run pretty:check` を実行する。
+固定データを更新した場合は `dashboard` で `npm run test`、`npx vitest run --config vitest.browser.config.mts`、`npm run build`、`npm run lint`、`npm run pretty:check` を実行する。
 
 #### 一問一答の状態追加
 

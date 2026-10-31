@@ -1,21 +1,21 @@
-import { ReactElement } from 'react';
+import { ReactNode } from 'react';
 import { ChakraProvider } from '@chakra-ui/react';
-import { render } from '@testing-library/react';
 import { useRecoilValue, RecoilRoot, MutableSnapshot } from 'recoil';
 import { questionValidatedAtom } from '../../../state';
 import { MultipleSelectionQuestion } from '../../../state/questionDefinition';
 
-export const renderWithProviders = (
-  ui: ReactElement,
-  initializeState?: (snapshot: MutableSnapshot) => void
-) =>
-  render(
-    <RecoilRoot initializeState={initializeState}>
-      <ChakraProvider>{ui}</ChakraProvider>
-    </RecoilRoot>
-  );
-
-export const renderQuestion = renderWithProviders;
+// Shared by jsdom, Storybook and Vitest Browser Mode. Each mount owns its state.
+export const TestProviders = ({
+  children,
+  initializeState,
+}: {
+  children: ReactNode;
+  initializeState?: (snapshot: MutableSnapshot) => void;
+}) => (
+  <RecoilRoot initializeState={initializeState}>
+    <ChakraProvider>{children}</ChakraProvider>
+  </RecoilRoot>
+);
 
 export const questionChoices = ['会社員', '自営業'] as const;
 export const multipleChoices = ['病気がある', '障害がある'] as const;
