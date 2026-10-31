@@ -1,16 +1,21 @@
 import { ReactElement } from 'react';
 import { ChakraProvider } from '@chakra-ui/react';
 import { render } from '@testing-library/react';
-import { useRecoilValue, RecoilRoot } from 'recoil';
+import { useRecoilValue, RecoilRoot, MutableSnapshot } from 'recoil';
 import { questionValidatedAtom } from '../../../state';
 import { MultipleSelectionQuestion } from '../../../state/questionDefinition';
 
-export const renderQuestion = (ui: ReactElement) =>
+export const renderWithProviders = (
+  ui: ReactElement,
+  initializeState?: (snapshot: MutableSnapshot) => void
+) =>
   render(
-    <RecoilRoot>
+    <RecoilRoot initializeState={initializeState}>
       <ChakraProvider>{ui}</ChakraProvider>
     </RecoilRoot>
   );
+
+export const renderQuestion = renderWithProviders;
 
 export const questionChoices = ['会社員', '自営業'] as const;
 export const multipleChoices = ['病気がある', '障害がある'] as const;

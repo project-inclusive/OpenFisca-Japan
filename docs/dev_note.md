@@ -272,6 +272,36 @@ npm run cy:run
 `dashboard` で `npm run test` を実行すると、既存のロジックのテストは node 環境、質問テンプレートのテストはファイル先頭の `// @vitest-environment jsdom` により jsdom 環境で動く。
 描画用 Provider と固定データは `dashboard/src/components/questions/template/questionTemplateTestUtils.tsx` にまとめ、各描画で新しい RecoilRoot を作る。テンプレートは Router を使わないため、現在のヘルパーは ChakraProvider と RecoilRoot を提供する。
 
+#### 計算 API の固定データと再記録
+
+結果・エラー画面は Vitest と jsdom で確認し、`fetch` を直接置き換えず MSW 2 系で `/calculate` の HTTP 応答を差し替える。
+共通の `dashboard/src/mocks/handlers.ts` は正常応答の `calculateSuccessHandler`（`benefit-only`・`loan-only`・`both`・`none`）と、HTTP 500・通信失敗の `calculateFailureHandlers` を提供する。Storybook でも同じ handlers を利用できる。
+Vitest の `src/testSetup.ts` から node 用の `src/mocks/server.ts` を起動し、未定義の通信をエラーにして、テストごとに応答の上書きをリセットする。
+描画には質問テンプレートと共通の `renderWithProviders` を使い、結果・エラー画面では `src/mocks/resultTestUtils.tsx` で Router と固定日の Recoil 状態を加える。
+
+`dashboard/src/mocks/calculate/` に、4 ケースそれぞれの POST 本文（`*.request.json`）と応答（`*.response.json`）を置く。
+日付は `2026-01-15` に固定し、依頼する計算結果はリクエスト側で `null` にする。応答は現時点では画面が読む形に合わせた手作りのデータであり、実 API の記録や制度の適格性・金額の根拠ではない。
+給付は月額の確定値と最小〜最大、貸付は月額と一時金、対象なしはすべて 0 とし、世帯員・居住地などの入力を応答にも残している。
+
+実 API との差を確認するときは、リポジトリのルートから次を実行する。`curl --fail-with-body` が失敗した場合は応答を採用せず、API のログを調べる。
+
+```bash
+docker compose up -d openfisca
+mkdir -p tmp/calculate-recordings
+for scenario in benefit-only loan-only both none; do
+  curl --fail-with-body --silent --show-error \
+    -X POST http://localhost:50000/calculate \
+    -H 'Content-Type: application/json' \
+    --data-binary "@dashboard/src/mocks/calculate/${scenario}.request.json" \
+    --output "tmp/calculate-recordings/${scenario}.response.json" || break
+done
+```
+
+4 件すべてが成功したら、`tmp/calculate-recordings/` の JSON と同名の固定応答を比較する。
+`世帯一覧.世帯1` の日付付きの金額（`児童手当`、`児童扶養手当_最小`・`児童扶養手当_最大`、`生活支援費`、`緊急小口資金`）、`世帯員`、居住地、配列の形を確認する。
+手作りの応答と違う場合は、差分と実行した API の版を記録して別途修正する。実応答が同じ表示ケースになるとは限らないため、期待する表示を確認せずに固定データへ上書きしない。
+固定データを更新した場合は `dashboard` で `npm run test`、`npm run build`、`npm run lint`、`npm run pretty:check` を実行する。
+
 #### 一問一答の状態追加
 
 - [XState](https://xstate.js.org/)を使用して各質問間の遷移を定義している
