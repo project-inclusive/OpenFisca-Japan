@@ -109,7 +109,7 @@ make serve-local
 主なディレクトリ
 
 - `dashboard`: フロントエンド(React製)
-  - `cypress`: e2eテスト
+  - `e2e`: Playwright による主要導線の E2E スモークテスト
   - `src`: アプリのソースコード
     - `assets`: 画像等のファイル
     - `components`: UIを構成するReactコンポーネント
@@ -256,9 +256,21 @@ npm run pretty:check
 # formatter (上記でエラーが出た場合に解消)
 npm run pretty
 
-# テスト実行
-npm run cy:run
+# ロジック・画面のテスト実行
+npm run test
+
+# E2E スモークテスト（build 後の preview を自動起動）
+npm run build
+npm run test:e2e
 ```
+
+E2E は `dashboard/e2e/` と `dashboard/playwright.config.ts` で管理し、Chromium だけで実行する。
+初回は `dashboard` で `npx playwright install --with-deps chromium` を実行してブラウザーと OS のライブラリを用意する。導入済みの開発コンテナでは再実行は不要。
+preview のポート 30000 を空けてから実行する。`webServer` が既存サーバーを再利用せず build 済みの preview を起動・停止するため、開発サーバーの手動起動は不要。
+トップの見出しと入口、かんたん・くわしく各 1 本の同意・入力・送信・具体的な結果表示を確認する。
+計算 API は `page.route` で `src/mocks/calculate/` の JSON を返し、ブラウザーの日付を `2026-01-15` に固定するため、バックエンドの起動は不要。
+戻る操作と API エラーの分岐は画面のテストで確認する。Playwright のコンポーネントテストは使わない。
+E2E の安定性を確認するときは `npm run test:e2e` を続けて 2 回実行する。失敗時の trace は `tmp/playwright/test-results/`（リポジトリルートからの相対パス）に残る。
 
 #### フロントエンドのテストの分担
 

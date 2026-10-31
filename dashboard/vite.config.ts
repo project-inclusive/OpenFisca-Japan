@@ -16,7 +16,10 @@ export default ({ mode }: { mode: string }) => {
   return defineConfig({
     // Fast Refresh needs Vite's browser preamble; Vitest runs without HTML.
     plugins: [react({ fastRefresh: mode !== 'test' }), htmlPlugin()],
-    test: { setupFiles: ['./src/testSetup.ts'] },
+    test: {
+      include: ['src/**/*.{test,spec}.{ts,tsx}'],
+      setupFiles: ['./src/testSetup.ts'],
+    },
     base: process.env.GITHUB_PAGES
       ? 'OpenFisca-Japan' // レポジトリ名を設定
       : '/',
