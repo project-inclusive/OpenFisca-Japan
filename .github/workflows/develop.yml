@@ -37,7 +37,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: "18"
+          node-version: "26.4.0"
       - name: Clean install dependencies and build
         run: |
           npm ci
