@@ -27,6 +27,12 @@ jobs:
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
         working-directory: ./dashboard
+      - name: Storybook and Browser Mode
+        run: npm run test:ui
+        working-directory: ./dashboard
+      - name: Build Storybook
+        run: npm run build-storybook
+        working-directory: ./dashboard
       - name: Build
         run: npm run build
         working-directory: ./dashboard
