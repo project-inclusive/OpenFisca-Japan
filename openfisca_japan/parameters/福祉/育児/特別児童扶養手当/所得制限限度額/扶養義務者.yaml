@@ -1,7 +1,7 @@
 description: 渋谷区の特別児童扶養手当の扶養義務者の所得制限限度額(扶養人数が0人から増えるごとに増額する6人以上の場合は https://www.city.yao.osaka.jp/0000001125.html 参照)
 metadata:
   threshold_unit: person
-  rate_unit: 1
+  unit: currency-JPY
 values:
   2000-05-01:
     value:
