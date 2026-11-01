@@ -16,6 +16,19 @@ export default () => {
   return defineConfig({
     plugins: [react(), htmlPlugin()],
     test: {
+      coverage: {
+        provider: 'v8',
+        include: ['src/**/*.{ts,tsx}'],
+        exclude: [
+          'src/**/*.d.ts',
+          'src/**/*.{test,spec,stories}.{ts,tsx}',
+          'src/mocks/**',
+          'src/testSetup.ts',
+          'src/**/*TestUtils.{ts,tsx}',
+        ],
+        reporter: ['text', 'html', 'json-summary'],
+        reportsDirectory: './coverage/unit',
+      },
       projects: [
         {
           test: {
