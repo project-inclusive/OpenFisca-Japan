@@ -1,0 +1,9 @@
+description: 専攻科の多子世帯として判定する扶養人数の下限
+metadata:
+  reference:
+    - https://www.mext.go.jp/a_menu/shotou/mushouka/1344146.htm
+    - https://www.mext.go.jp/content/20250711-mxt_kouhou02-1.pdf
+  unit: person
+values:
+  2025-04-01:
+    value: 3
