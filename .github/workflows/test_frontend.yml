@@ -24,7 +24,7 @@ jobs:
       - name: Unittest
         run: npm run test
         working-directory: ./dashboard
-      - name: Install Playwright Chromium
+      - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium firefox webkit
         working-directory: ./dashboard
       - name: Storybook and Browser Mode
