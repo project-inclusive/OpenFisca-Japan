@@ -51,8 +51,8 @@ devcontainer exec --workspace-folder . bash
 | ファイル | 役割 |
 | --- | --- |
 | `devcontainer.json` | Dev Container の本体設定（ビルド方法・ポート・マウント・環境変数・VS Code 拡張／設定・features）。 |
-| `Dockerfile` | ベースイメージと OS パッケージ・Python ツールのインストール、非 root ユーザー `user` の作成、`make install && make build` によるバックエンドのセットアップ。 |
-| `post-create.sh` | コンテナ作成時（初回）に一度だけ実行。AI CLI のディレクトリ準備、Claude Code・Codex CLI と `gh copilot` のインストール、tmux 設定のシンボリックリンク作成。 |
+| `Dockerfile` | ベースイメージと OS パッケージ・Python ツールのインストール、非 root ユーザー `user` の作成、`make install`（editable install）によるバックエンドのセットアップ。`make build` は実行しない（[ホットリロード](#バックエンドのホットリロードeditable-install)参照）。 |
+| `post-create.sh` | コンテナ作成時（初回）に一度だけ実行。AI CLI のディレクトリ準備、バックエンドのワークスペースに対する editable install、Claude Code・Codex CLI と `gh copilot` のインストール、tmux 設定のシンボリックリンク作成。 |
 | `post-start.sh` | コンテナ起動のたびに実行。永続化ボリュームがリセットされた場合に備え、AI CLI のディレクトリ権限を再設定。 |
 | `prepare-agent-dirs.sh` | `post-create.sh` / `post-start.sh` から共通で呼ばれ、`~/.claude` `~/.codex` `~/.copilot` `~/.config/git` の作成・所有権・権限を整える。 |
 | `tmux.conf` | コンテナ内 tmux の設定。`post-create.sh` により `~/.tmux.conf` へリンクされる。tmux セッション内では `DOCKER_CONFIG` を専用ディレクトリに切り替え、Dev Containers の docker 認証ヘルパー（VS Code 接続時のみ有効）を回避する。 |
@@ -92,8 +92,44 @@ devcontainer exec --workspace-folder . bash
   - `appPort` は **コンテナ作成時** に適用される（`docker run -p` 相当）。以前設定していた場合、削除を反映するには既に起動中のコンテナを作り直す（`devcontainer up --remove-existing-container` など）。
 - **コンテナ内アプリは `0.0.0.0` で待ち受ける**（対応済み）。
   - フロントエンド: `dashboard/package.json` の `dev` が `vite --port 30000 --host 0.0.0.0`
-  - バックエンド: `make serve-local` が `--bind 0.0.0.0:50000`
+  - バックエンド: `make serve-local` / `make serve-dev` が `--bind 0.0.0.0:50000`
 - Dev Container の tmux/SSH ターミナルから `docker compose up --build` を実行する場合、`DOCKER_CONFIG`（認証ヘルパー回避）と `LOCAL_WORKSPACE_FOLDER`（バインドマウント元のホストパス）が必要。詳細は[トラブルシューティング](#トラブルシューティング)を参照（`tmux.conf` と接続スクリプトで自動設定済み）。
+
+### バックエンドのホットリロード（editable install）
+
+バックエンド（`openfisca_japan`）は **editable install**（`make install` = `pip install -e .`）で
+インストールされており、ソースを編集すればそのまま `make test` / API サーバーに反映される。
+
+- `Dockerfile` では `make install` のみを行い、**`make build` は実行しない**。
+  `make build` は wheel を作って `pip install --force-reinstall` するため、editable install が
+  ビルド時点のコードのコピーで上書きされ、ソースを編集しても反映されなくなる。
+- `Dockerfile` 内の `make install` が指すのはビルドコンテキストのコピー（`/app`）なので、
+  `post-create.sh` でワークスペース（`/workspaces/OpenFisca-Japan`）に対して `make install` をやり直している。
+  - `openfisca` はコンソールスクリプトのためカレントディレクトリが `sys.path` に入らない。
+    そのためワークスペース上でコマンドを実行しても、editable install を入れ直さないと
+    `site-packages` 側の `/app` のコピーが import されてしまう。
+- API サーバーをソース監視付きで起動するには `make serve-dev` を使う（詳細は[開発ドキュメント](./dev_note)）。
+- 現在どこから import されているかは、リポジトリ外で確認する
+  （リポジトリ内で実行するとカレントディレクトリが優先され、常に正常に見えてしまう）。
+
+  ```bash
+  (cd /tmp && python -c "import openfisca_japan; print(openfisca_japan.__file__)")
+  # 正常: /workspaces/OpenFisca-Japan/openfisca_japan/__init__.py
+  # 異常: ~/.local/... または /usr/local/... 配下（コピーを見ている）
+  ```
+
+- **`make build` を実行してしまった場合**（特に `sudo` を付けずに実行した場合）は、以下で戻す。
+
+  ```bash
+  pip uninstall -y openfisca-japan  # sudo を付けない。~/.local 側のコピーを消す
+  sudo make install                 # システム側を editable install に戻す
+  ```
+
+  `sudo` なしの `make build` が厄介なのは、`/usr/local/lib/python3.11/site-packages` が
+  `user` から書けないため **pip が自動的に `--user`（`~/.local/...`）へフォールバック**する点。
+  user site は `sys.path` 上でシステム側より**先**に来るので、ビルド時点のコピーが
+  システム側の editable install を覆い隠してしまう。
+  この状態では `sudo make install` を実行しても解消しないため、先に user site 側を消す必要がある。
 
 ### コンテナの常駐と停止（`shutdownAction`）
 
