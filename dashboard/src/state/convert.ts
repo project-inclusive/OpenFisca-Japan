@@ -637,13 +637,20 @@ export const toOpenFiscaHousehold = ({
     for (let i = 0; i < childrenNum; i++) {
       const childMember: OpenFiscaMember = {};
 
-      // 年齢 → 誕生年月日
-      const childAge = context['年齢'].子ども[i]?.selection;
-      if (childAge != null) {
-        const birthYear = parseInt(currentDate.substring(0, 4)) - childAge;
-        childMember.誕生年月日 = { ETERNITY: `${birthYear}-01-01` };
-      }
+      const childAgeQuestion = context['年齢'].子ども[i];
 
+      if (childAgeQuestion?.birthDate) {
+        childMember.誕生年月日 = {
+          ETERNITY: childAgeQuestion.birthDate,
+        };
+      } else if (childAgeQuestion?.selection != null) {
+        const birthYear =
+          parseInt(currentDate.substring(0, 4)) - childAgeQuestion.selection;
+
+        childMember.誕生年月日 = {
+          ETERNITY: `${birthYear}-01-01`,
+        };
+      }
       // 年収・預貯金（万円 → 円）
       const childIncome = context['年収'].子ども[i]?.selection;
       if (childIncome != null) {
