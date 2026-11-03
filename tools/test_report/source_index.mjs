@@ -6,6 +6,7 @@ import ts from '../../dashboard/node_modules/typescript/lib/typescript.js';
 const root = process.argv[2] || 'dashboard';
 const tests = [];
 const targets = [];
+const files = [];
 const strings = (node) =>
   node && ts.isArrayLiteralExpression(node)
     ? node.elements.filter(ts.isStringLiteralLike).map((item) => item.text)
@@ -28,6 +29,31 @@ function walk(file) {
     ts.ScriptKind.TSX
   );
   const isTest = /\.(test|spec|stories)\.tsx?$/.test(file);
+  if (isTest) {
+    const imports = [];
+    for (const statement of source.statements) {
+      if (
+        !ts.isImportDeclaration(statement) ||
+        !statement.moduleSpecifier.text.startsWith('.')
+      )
+        continue;
+      const imported = path.posix.normalize(
+        path.posix.join(
+          path.posix.dirname(file),
+          statement.moduleSpecifier.text
+        )
+      );
+      const resolved = ['', '.ts', '.tsx', '/index.ts', '/index.tsx']
+        .map((ext) => imported + ext)
+        .find(
+          (candidate) =>
+            fs.existsSync(path.join(root, candidate)) &&
+            fs.statSync(path.join(root, candidate)).isFile()
+        );
+      if (resolved) imports.push(resolved);
+    }
+    files.push({ file, imports: [...new Set(imports)].sort() });
+  }
   function visit(node) {
     if (isTest && ts.isCallExpression(node)) {
       const callee = node.expression.getText(source);
@@ -171,4 +197,4 @@ for (const match of calculate.matchAll(/VITE_BRANCH\s*===\s*'([^']+)'/g))
     group: 'environment',
     source: 'src/hooks/calculate.ts',
   });
-console.log(JSON.stringify({ tests, targets }));
+console.log(JSON.stringify({ tests, targets, files }));

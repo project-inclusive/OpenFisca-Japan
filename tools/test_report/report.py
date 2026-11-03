@@ -130,6 +130,12 @@ def check_definitions(config, source, dashboard, targets):
     for file, cells in config.get("file_cells", {}).items():
         if "file:" + file not in targets or set(cells) - tags:
             raise ValueError("Invalid file cells: " + file)
+    for rule in config.get("classification_rules", []):
+        if not any(fnmatch.fnmatch(row["file"], rule["file"]) for row in source["tests"]):
+            raise ValueError("Stale classification file: " + rule["file"])
+        if not rule.get("tags") or set(rule["tags"]) - tags:
+            raise ValueError("Invalid classification tags: " + str(rule))
+        re.compile(rule["name"])
     for rule in config.get("bindings", []):
         if not any(fnmatch.fnmatch(row["file"], rule["file"]) for row in source["tests"]):
             raise ValueError("Stale binding file: " + rule["file"])
@@ -153,6 +159,95 @@ def source_tags(test, declarations):
     exact = [row for row in candidates
              if test.get("line") in (row["line"], row.get("callLine", row["line"]))]
     return exact[0]["tags"] if len(exact) == 1 else []
+
+
+def classification_tags(test, config):
+    """Apply file/name patterns independently from source metadata and targets."""
+    return sorted({tag for rule in config.get("classification_rules", [])
+                   if fnmatch.fnmatch(test["file"], rule["file"]) and re.search(rule["name"], test["name"])
+                   for tag in rule["tags"]})
+
+
+def excluded_file(file, config):
+    """Only whole-file exclusions remove a file from coverage gap candidates."""
+    return any(fnmatch.fnmatch("file:" + file, rule["target"]) and "*" in rule["cells"]
+               for rule in config.get("exclusions", []))
+
+
+def coverage_gaps(coverage, config, threshold):
+    """Use the higher stage value per metric; never add percentages or imply a union."""
+    low, zero = [], []
+    if any(coverage.get(scope) is None for scope in ("unit", "ui")):
+        return low, zero
+    for file in sorted(coverage["unit"].keys() & coverage["ui"].keys() - {"total"}):
+        if excluded_file(file, config):
+            continue
+        below = []
+        for metric in METRICS:
+            rows = [coverage[scope][file][metric] for scope in ("unit", "ui")]
+            measured = [row["pct"] for row in rows if row["total"] > 0 and isinstance(row["pct"], (int, float))]
+            unknown = any(row["total"] > 0 and not isinstance(row["pct"], (int, float)) for row in rows)
+            if measured and not unknown and max(measured) < threshold:
+                below.append(f"{metric}={max(measured):g}%")
+        if below:
+            low.append(file + " (" + ", ".join(below) + ")")
+        if all(coverage[scope][file]["statements"]["total"] > 0 and coverage[scope][file]["statements"]["pct"] == 0
+               for scope in ("unit", "ui")):
+            zero.append(file)
+    return low, zero
+
+
+def composition_lines(config, tests, source, problems):
+    """Combine automatic imports/counts with explicit human descriptions."""
+    files = {row["file"]: row.get("imports", []) for row in (source or {}).get("files", [])}
+    files.update({test["file"]: files.get(test["file"], []) for test in tests})
+    lines = ["## テストの構成", "", "対象は直接のローカル import から抽出（型・補助コードも含む）。件数と観点は一覧から集計し、説明は定義ファイルで管理する。", "",
+             "| ファイル | 段階 | 確かめる対象（import） | 件数 | 観点の内訳 | 確かめていること | 確かめていないこと |",
+             "| --- | --- | --- | ---: | --- | --- | --- |"]
+    for file, imports in sorted(files.items()):
+        rows = [test for test in tests if test["file"] == file]
+        stage_id = "e2e" if file.startswith("e2e/") else "ui" if re.search(r"\.(browser\.test|stories)\.", file) else "unit"
+        stages = sorted({test["stage"] for test in rows}) or [stage_id]
+        # Count a test once per viewpoint even when it carries several conditions.
+        counts = Counter(view for test in rows for view in {tag.split(":")[0] for tag in test["tags"]})
+        breakdown = ", ".join(f"{view}: {count}" for view, count in sorted(counts.items())) or "未分類"
+        description = config.get("test_descriptions", {}).get(file, {})
+        unavailable = any(stage in problems for stage in stages)
+        count = "未取得" if unavailable else str(len(rows))
+        if unavailable:
+            breakdown = "未取得"
+        cells = [file, ", ".join(stages), ", ".join(imports) or "直接のローカルimportなし", count,
+                 breakdown, description.get("verifies", "説明なし"), description.get("does_not_verify", "説明なし")]
+        lines.append("| " + " | ".join(escape(value) for value in cells) + " |")
+    lines += ["", "| 全体の受け持ち | 段階 | 範囲 |", "| --- | --- | --- |"]
+    lines += ["| " + " | ".join(escape(row[key]) for key in ("area", "stages", "scope")) + " |" for row in config.get("responsibilities", [])]
+    return lines
+
+
+def transition_lines(machine, trace):
+    """Distinguish structural alternatives, representative probes, and executed evidence."""
+    lines = ["### 状態機械の分かれ道", ""]
+    if machine is None:
+        return lines + ["遷移未取得。状態機械の抽出を実行する。", ""]
+    valid_trace = trace is not None and trace.get("fingerprint") == machine["fingerprint"]
+    observed = trace["tests"] if valid_trace else {}
+    edges = machine["transitions"]
+    covered = sum(edge["id"] in observed for edge in edges)
+    lines += [f"宣言された遷移: {len(edges)}。ガードの選択肢・回答保存の自己遷移・alwaysを個別に数える。",
+              f"代表回答での1段の隣接探索: {machine['probes']} 試行、重複を除く状態・世帯員・event・到着先: {machine['sampled']}。",
+              "グラフの宣言から全分岐を列挙し、getAdjacencyMapで代表回答を試す。合成contextと履歴の探索は到達可能性や全回答組合せの保証ではない。",
+              "通過の根拠は既存questionStateテスト実行時のXState microstep（ガードの選択肢を含む）。通過はassertionの強さを表さない。",
+              f"テストが通した遷移: {covered if valid_trace else '未取得'} / 通していない遷移: {len(edges) - covered if valid_trace else '判定不能'}。",
+              "実行記録はモデル・質問定義・テストのハッシュが一致する場合だけ採用する。実行結果の成功・同じ版での採取もテストの状況と合わせて確認する。", ""]
+    if not valid_trace:
+        lines += ["実行記録なし、または版が不一致。`cd dashboard && npm run test -- --config ../tools/test_report/trace.config.mjs` で採取する。", ""]
+    lines += ["| 質問 | 代表回答 |", "| --- | --- |"]
+    lines += [f"| {escape(key)} | {escape(json.dumps(values, ensure_ascii=False))} |" for key, values in sorted(machine["representatives"].items())]
+    lines += ["", "| 遷移ID（出発 / event / 分岐番号） | 到着 | ガード | テストの通過 |", "| --- | --- | --- | --- |"]
+    for edge in edges:
+        evidence = "; ".join(observed.get(edge["id"], [])) or ("未通過" if valid_trace else "記録未取得")
+        lines.append(f"| {escape(edge['id'])} | {escape(edge['target'])} | {'あり' if edge['guarded'] else 'なし'} | {escape(evidence)} |")
+    return lines + [""]
 
 
 def bindings_for(test, config, targets):
@@ -208,9 +303,9 @@ def escape(value):
     return str(value).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("|", "&#124;").replace("\n", " ").replace("`", "&#96;").replace("_", "&#95;")
 
 
-def render(config, tests, targets, matrix, unclassified, statuses, coverage, problems, threshold):
+def render(config, tests, targets, matrix, unclassified, statuses, coverage, problems, threshold, source=None, machine=None, trace=None):
     """Render inventory, evidence, coverage and actionable missing cells as Markdown."""
-    lines = ["# フロントエンドのテストレポート", "", "## 概要", "",
+    lines = ["# フロントエンドのテストレポート", ""] + composition_lines(config, tests, source, problems) + ["", "## 概要", "",
              "一覧はテスト本体を実行せず収集する。件数はパラメーターと project を展開した件数。E2E はモック応答の smoke。", "",
              "| 段階 | ファイル数 | 件数 |", "| --- | ---: | ---: |"]
     for stage in config["stages"]:
@@ -222,7 +317,7 @@ def render(config, tests, targets, matrix, unclassified, statuses, coverage, pro
                 lines.append(f"| E2E / {project} | — | {sum(t['project'] == project for t in rows)} |")
     for stage, problem in problems.items():
         lines += ["", f"- 一覧未取得（{stage}）: {escape(problem)}。この段階の不足候補は一覧取得後に再確認する。"]
-    lines += ["", "## 観点×条件", "", "空きは不足の候補。タグは検証内容の分類であり成功を意味しない。", "",
+    lines += ["", "## 観点×条件", "", "空きは不足の候補。タグは確かめていることの分類であり、確かめ方の強さ（1本の経路だけ、1項目だけ等）や成功を示さない。", "",
               "| 対象（実装） | 観点・条件 | 確かめているテスト（段階 / project / 名前） |", "| --- | --- | --- |"]
     gaps = []
     for (target, cell), evidence in matrix.items():
@@ -245,8 +340,9 @@ def render(config, tests, targets, matrix, unclassified, statuses, coverage, pro
             listed = sum(test["stage"] == stage["id"] for test in tests)
             if actual != listed:
                 lines += [f"  - 一覧 {listed} 件と結果 {actual} 件が不一致。採取時刻、フィルター、コードの版を確認する。"]
+    lines += [""] + transition_lines(machine, trace)
     lines += ["", "## 網羅率", "", "unit と UI は同じ実装を別々に測る。百分率を足さない。n/a は未計測として扱う。", ""]
-    low = []
+    low, zero = coverage_gaps(coverage, config, threshold)
     for scope in ("unit", "ui"):
         rows = coverage.get(scope)
         if rows is None:
@@ -254,13 +350,9 @@ def render(config, tests, targets, matrix, unclassified, statuses, coverage, pro
             continue
         lines += [f"### {scope}", "", "| ファイル | Statements | Branches | Functions | Lines |", "| --- | ---: | ---: | ---: | ---: |"]
         for file, metrics in sorted(rows.items()):
-            lines.append("| " + escape(file) + " | " + " | ".join(pct(metrics[m]) for m in METRICS) + " |")
-            if file != "total":
-                below = [m for m in METRICS if metrics[m]["total"] > 0 and isinstance(metrics[m]["pct"], (int, float)) and metrics[m]["pct"] < threshold]
-                if below:
-                    low.append(f"{scope}: {file} ({', '.join(m + '=' + pct(metrics[m]) for m in below)})")
+            lines.append("| " + escape(file) + ("（対象外）" if excluded_file(file, config) else "") + " | " + " | ".join(pct(metrics[m]) for m in METRICS) + " |")
         lines.append("")
-    lines += ["## 不足しているテスト", "", f"低網羅率の抽出基準: {threshold:g}% 未満（既定 80%。改善候補を絞る目安であり合否条件ではない）。", "",
+    lines += ["## 不足しているテスト", "", f"低網羅率の抽出基準: 指標ごとのunit/UIの最大値が {threshold:g}% 未満（既定80%）。両段階を照合し、片方で十分な実装を不足候補にしない。値は足さず、結合網羅率ではない。両段階のデータが揃わない、またはn/aの指標は判定しない。分母0の指標は候補に使わない。全条件が対象外のファイルは不足候補から除く。", "",
               f"### 理由のない空きのます（{len(gaps)}）", ""]
     lines += [f"- {escape(target)} / {escape(cell)}" for target, cell in gaps] or ["なし。"]
     used = {tag.split(":")[0] for test in tests for tag in test["tags"]}
@@ -274,10 +366,6 @@ def render(config, tests, targets, matrix, unclassified, statuses, coverage, pro
     if coverage.get("unit") is None or coverage.get("ui") is None:
         lines += ["未計測のため判定できない。両方の網羅率を採取する。"]
     else:
-        zero = []
-        for file in sorted(coverage["unit"].keys() & coverage["ui"].keys() - {"total"}):
-            if all(coverage[scope][file]["statements"]["total"] > 0 and coverage[scope][file]["statements"]["pct"] == 0 for scope in ("unit", "ui")):
-                zero.append(file)
         lines += ["- " + escape(file) for file in zero] or ["なし。"]
     lines += ["", "## 対象の抽出根拠", "", "| 対象 | ソース | 手動定義の理由 |", "| --- | --- | --- |"]
     lines += [f"| {escape(target)} | {escape(row['source'])} | {escape(row.get('reason', '構文・ファイルから抽出'))} |" for target, row in targets.items()]
@@ -341,7 +429,7 @@ def main(argv=None):
                 syntax_tags = source_tags(test, source["tests"])
                 if test["tags"] and set(test["tags"]) != set(syntax_tags):
                     raise ValueError("Runtime/source tag mismatch: " + test["name"])
-                test["tags"] = test["tags"] or syntax_tags
+                test["tags"] = sorted(set(test["tags"] or syntax_tags) | set(classification_tags(test, config)))
                 tests.append(test)
         result = read_json(directory / stage["result"])
         statuses[stage["id"]] = None if result is None else result_counts(result, "playwright" if stage["id"] == "e2e" else "vitest")
@@ -349,10 +437,12 @@ def main(argv=None):
     for scope in ("unit", "ui"):
         data = read_json(dashboard / "coverage" / scope / "coverage-summary.json")
         coverage[scope] = None if data is None else coverage_rows(data)
+    machine = json.loads(subprocess.check_output(["node", "tools/test_report/machine_graph.cjs"], cwd=root, text=True))
+    trace = read_json(directory / "transitions.trace.json")
     matrix, unclassified = build_matrix(tests, targets, config)
     output = root / args.output
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(render(config, tests, targets, matrix, unclassified, statuses, coverage, problems, args.low_coverage), encoding="utf-8")
+    output.write_text(render(config, tests, targets, matrix, unclassified, statuses, coverage, problems, args.low_coverage, source, machine, trace), encoding="utf-8")
     display_path = output.relative_to(root) if output.is_relative_to(root) else output
     sys.stdout.write(f"{display_path}: {len(tests)} tests; {len(targets)} targets; {len(problems)} unavailable lists\n")
 

@@ -155,7 +155,15 @@ describe.each([390, 820, 1440])('UI at %i CSS pixels', (width) => {
 
   it.each(errors)(
     '画面幅ごとに、$name エラーが収まりキーボードで復帰できる',
-    { tags: ['a11y:keyboard', 'a11y:focus', 'display:viewport'] },
+    {
+      tags: [
+        'a11y:keyboard',
+        'a11y:focus',
+        'display:viewport',
+        'display:present',
+        'transition:back',
+      ],
+    },
     async ({ ui, path }) => {
       await page.viewport(width, 900);
       await render(

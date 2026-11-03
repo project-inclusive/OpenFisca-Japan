@@ -9,7 +9,10 @@ from tools.test_report.report import (
     BASE,
     build_matrix,
     check_definitions,
+    classification_tags,
     collect,
+    composition_lines,
+    coverage_gaps,
     coverage_rows,
     extract_targets,
     main,
@@ -18,6 +21,7 @@ from tools.test_report.report import (
     render,
     result_counts,
     source_tags,
+    transition_lines,
     vitest_list,
     )
 import yaml
@@ -141,6 +145,9 @@ def test_coverage_and_markdown(config):
     assert "### unit と UI の両方で 0%" in text
     assert "- src/age.ts" in text
     assert "branches=0%" in text
+    headings = ["## テストの構成", "## 概要", "## 観点×条件", "## テストの状況", "## 網羅率", "## 不足しているテスト"]
+    assert [text.index(heading) for heading in headings] == sorted(text.index(heading) for heading in headings)
+    assert "確かめ方の強さ" in text
 
 
 def test_optional_and_malformed_json(tmp_path):
@@ -171,7 +178,7 @@ def test_source_extraction_does_not_execute_test_bodies(tmp_path):
         "src/components/errors/NewError.tsx": "export const Error = () => null;",
         "src/components/result/benefit.tsx": "export const Benefit = () => null;",
         "src/hooks/calculate.ts": "const url = import.meta.env.VITE_BRANCH === 'new' ? 'url' : 'fallback';",
-        "src/example.test.ts": "throw new Error('must never execute');\nit.each([1,2])('value %s', {tags: ['input:normal']}, () => {});",  # noqa: FS003
+        "src/example.test.ts": "import { Template } from './components/questions/template/newQuestionTemplate'; throw new Error('must never execute');\nit.each([1,2])('value %s', {tags: ['input:normal']}, () => {});",  # noqa: FS003
         "e2e/flow.spec.ts": "test('next', {tag: ['@input:normal']}, () => {});",  # noqa: FS003
         "playwright.config.ts": "const config = {projects: [{name: 'new-browser'}]};",  # noqa: FS003
         }
@@ -182,6 +189,7 @@ def test_source_extraction_does_not_execute_test_bodies(tmp_path):
     result = json.loads(subprocess.check_output(["node", "tools/test_report/source_index.mjs", str(tmp_path)], cwd=BASE, text=True))
     ids = {row["id"] for row in result["targets"]}
     assert {"route:/new", "question:新しい質問", "template:newQuestionTemplate", "mode:災害", "device:new-browser", "environment:new", "error:NewError", "result:給付"} <= ids
+    assert next(row for row in result["files"] if row["file"] == "src/example.test.ts")["imports"] == ["src/components/questions/template/newQuestionTemplate.tsx"]
     assert len(result["tests"]) == 2
     assert all(row["tags"] == ["input:normal"] for row in result["tests"])
 
@@ -194,7 +202,7 @@ def test_current_target_inventory_and_definition_consistency():
     check_definitions(config, source, BASE / "dashboard", targets)
     assert sum(row["group"] == "mode" for row in targets.values()) == 3
     assert sum(row["group"] == "device" for row in targets.values()) == 5
-    assert all(row["tags"] for row in source["tests"])
+    assert all(row["tags"] or classification_tags(row, config) for row in source["tests"])
 
 
 def test_offline_cli_accepts_browser_instance_and_story_metadata(tmp_path):
@@ -211,3 +219,88 @@ def test_offline_cli_accepts_browser_instance_and_story_metadata(tmp_path):
     assert "ui / storybook (chromium) / 汎用エラー" in report
     assert "未分類のテスト（0）" in report
     assert "一覧未取得（unit）" in report
+
+
+@pytest.mark.parametrize("file,name,expected", [
+    ("src/state/questionState.test.ts", "あなた: 年齢: 値が設定されている", ["state:conversion"]),
+    ("src/state/questionState.test.ts", "あなた: 年齢: 次の質問が年収", ["transition:forward"]),
+    ("src/state/questionState.test.ts", "あなた: 年齢: next->backで元の質問に戻る", ["transition:back"]),
+    ("src/state/questionState.test.ts", "新しい名前の型", []),
+    ("src/state/convert.test.ts", "未回答のときは省略する", ["state:optional"]),
+    ("src/state/convert.test.ts", "年収を換算する", ["state:conversion"]),
+    ("src/state/progress.test.ts", "最初の進捗は0", ["state:progress"]),
+    ("src/state/progress.test.ts", "新しい名前の型", []),
+    ("src/components/result/shareLink.test.ts", "旧形式を読む", ["sharing:legacy"]),
+    ("src/components/result/shareLink.test.ts", "往復する", ["sharing:roundtrip"]),
+    ("src/new.test.ts", "値が設定されている", []),
+])
+def test_legacy_classification_is_scoped_and_unknown_names_remain_visible(file, name, expected):
+    """Match the existing naming conventions without classifying unrelated files."""
+    config = yaml.safe_load((BASE / "tools/test_report/viewpoints.yaml").read_text())
+    assert classification_tags({"file": file, "name": name}, config) == expected
+
+
+def test_composition_imports_counts_descriptions_and_missing_explanation(config):
+    """Multiple tags in one viewpoint count once; undocumented files remain visible."""
+    rows = [{"file": "src/age.test.ts", "stage": "unit", "tags": ["input:normal", "input:empty"]}]
+    source = {"files": [{"file": "src/age.test.ts", "imports": ["src/age.ts"]}]}
+    text = "\n".join(composition_lines(config, rows, source, {}))
+    assert "src/age.ts | 1 | input: 1 | 説明なし | 説明なし" in text
+    assert "src/age.ts | 未取得" in "\n".join(composition_lines(config, rows, source, {"unit": "unavailable"}))
+
+
+def test_coverage_combines_stages_and_omits_exclusions_and_unknown_metrics(config):
+    """A strong unit result must not become a UI-only gap; excluded files stay out."""
+    def metrics(value):
+        return {key: metric(value) for key in ("statements", "branches", "functions", "lines")}
+
+    coverage = {"unit": {"strong.ts": metrics(95), "weak.ts": metrics(20), "excluded.ts": metrics(0)},
+                "ui": {"strong.ts": metrics(0), "weak.ts": metrics(30), "excluded.ts": metrics(0)}}
+    config["exclusions"] = [{"target": "file:excluded.ts", "cells": ["*"], "reason": "entry"}]
+    low, zero = coverage_gaps(coverage, config, 80)
+    assert len(low) == 1 and low[0].startswith("weak.ts (statements=30%")
+    assert zero == []
+    for metric_row in coverage["ui"]["weak.ts"].values():
+        metric_row["pct"] = "Unknown"
+    assert coverage_gaps(coverage, config, 80) == ([], [])
+    coverage["ui"] = None
+    assert coverage_gaps(coverage, config, 80) == ([], [])
+
+
+def test_transition_evidence_requires_matching_fingerprint():
+    """Stale execution must never count as covered; distinct guarded alternatives survive."""
+    machine = {"fingerprint": "current", "probes": 3, "sampled": 2, "representatives": {}, "transitions": [
+        {"id": "age / next / 0", "target": "income", "guarded": True},
+        {"id": "age / next / 1", "target": "result", "guarded": False}]}
+    trace = {"fingerprint": "old", "tests": {"age / next / 0": ["forward test"]}}
+    assert "テストが通した遷移: 未取得" in "\n".join(transition_lines(machine, trace))
+    trace["fingerprint"] = "current"
+    text = "\n".join(transition_lines(machine, trace))
+    assert "テストが通した遷移: 1 / 通していない遷移: 1" in text
+    assert "forward test" in text and "未通過" in text
+
+
+def test_error_width_cases_and_rerender_have_matrix_bindings():
+    """Each-expanded error titles and the nameless age rerender must fill real cells."""
+    config = yaml.safe_load((BASE / "tools/test_report/viewpoints.yaml").read_text())
+    targets = {"error:" + name: {"group": "error", "source": name} for name in ["GenericError", "NotFoundError", "FormResponseError"]}
+    targets["template:ageQuestionTemplate"] = {"group": "template", "source": "age"}
+    rows = [{"file": "src/components/layout/uiCompatibility.browser.test.tsx", "name": f"画面幅ごとに、{name} エラーが収まりキーボードで復帰できる", "project": "browser", "tags": ["display:present", "a11y:keyboard", "a11y:focus", "transition:back"]}
+            for name in ["generic", "not found", "response"]]
+    rows.append({"file": "src/components/questions/template/questionTemplates.test.tsx", "name": "再描画したとき、前の回答とDOMを引き継がない", "project": "unit", "tags": ["input:normal"]})
+    assert build_matrix(rows, targets, config)[1] == []
+
+
+def test_machine_graph_keeps_automatic_and_guarded_alternatives_and_representatives():
+    """Extract the actual machine, retaining all declarations beyond representative probes."""
+    graph = json.loads(subprocess.check_output(["node", "tools/test_report/machine_graph.cjs"], cwd=BASE, text=True))
+    edges = graph["transitions"]
+    assert len({edge["id"] for edge in edges}) == len(edges)
+    assert any(edge["source"] == "history" and edge["event"] == "always" for edge in edges)
+    assert any(edge["source"] == "年齢" and edge["guarded"] for edge in edges)
+    assert any(edge["source"] == "年齢" and edge["target"] == "年齢" for edge in edges)
+    assert graph["sampled"] > 0 and graph["probes"] >= graph["sampled"]
+    values = graph["representatives"]
+    assert {row.get("selection") for row in values["配偶者はいますか？"]} == {False, True, None}
+    assert {row.get("selection") for row in values["子どもの人数"]} == {0, 1, 2, None}
+    assert len(values["見積もりモード"]) == 4
