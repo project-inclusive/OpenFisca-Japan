@@ -76,6 +76,8 @@ export const Empty = {
 
 Vitest の一覧 JSON はタグを出さない。JSON reporter の `assertionResults[].tags` はタグを出す。Playwright の一覧と結果は `specs[].tags` にタグを出す（この版では `@` は除去済み）。このため、テストを実行しなくても分類できるよう、TypeScript の構文解析で各テスト宣言のタグを読み、一覧のファイル・行番号と結ぶ。`each` の複数ケースは同じ宣言に対応する。story は生成された行番号が異なる場合に、明示した story 名で照合する。Vitest の Browser Mode が展開した `storybook (chromium)` などの project 名も受け入れる。
 
+テストの行番号は、第1引数の名前の開始行（`nameLine`）、呼び出し対象の式の末尾行（`callLine`）、宣言の開始行（`line`）の順で照合する。Browser Mode が `it.each` の次の行の名前を指す場合にも、同じ宣言のタグを使う。同じ優先順位で複数の宣言が一致した場合は、構文の走査順で先の宣言を採用し、別の宣言のタグは混ぜない。行番号がない、または一致する宣言がない場合はタグを補わない。
+
 タグは各 `test` / `it` の第 2 引数、Playwright の `tag`、各 story のオブジェクトに、文字列の配列リテラルで直接書く。共有変数や `describe` からの継承・計算したタグは構文アダプターの対象外なので、各宣言にも明記する。対応できない宣言や対象との対応がないテストは「未分類」に残る。Storybook のタグは story のメタデータとして扱い、Vitest の実行結果に同じタグが出ることを前提にしない。
 
 条件を増やす場合は YAML を直し、次で Vitest / Playwright 共通のタグ定義を再生成する。

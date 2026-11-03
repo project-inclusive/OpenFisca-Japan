@@ -69,6 +69,8 @@ function walk(file) {
           callLine:
             source.getLineAndCharacterOfPosition(node.expression.end - 1).line +
             1,
+          nameLine:
+            source.getLineAndCharacterOfPosition(name.getStart()).line + 1,
           name: name.text,
           tags: strings(properties(node.arguments[1]).tags)
             .concat(

@@ -60,6 +60,20 @@ def test_story_names_are_explicit_fallback():
     assert source_tags(row, [wrong_story, declaration]) == ["input:empty"]
 
 
+def test_source_location_priority_and_same_line_ties():
+    """Prefer precise locations and retain the first declaration's tags on ties."""
+    row = {"file": "src/age.test.ts", "name": "age 0", "line": 12}  # noqa: FS003
+    start = dict(row, tags=["input:normal"], kind="test")
+    call = dict(start, line=10, callLine=12, tags=["input:empty"])
+    name = dict(start, line=8, callLine=9, nameLine=12, tags=["input:boundary"])
+    assert source_tags(row, [start, call, name]) == name["tags"]
+    assert source_tags(row, [start, call]) == call["tags"]
+    assert source_tags(row, [start, dict(start, tags=["input:empty"])]) == start["tags"]
+    assert source_tags(row, [name, dict(name, tags=["input:empty"])]) == name["tags"]
+    assert source_tags(dict(row, line=None), [start]) == []
+    assert source_tags(dict(row, file="src/other.test.ts"), [name]) == []  # noqa: FS003
+
+
 def pw_data(statuses):
     """Make nested suites containing two browser instances and retry attempts."""
     return {"suites": [{"title": "file.spec.ts", "suites": [{"title": "flow", "line": 1,
@@ -145,6 +159,7 @@ def test_coverage_and_markdown(config):
     assert "### unit と UI の両方で 0%" in text
     assert "- src/age.ts" in text
     assert "branches=0%" in text
+    assert text.splitlines().count("### 網羅率が低いファイル") == 1
     headings = ["## テストの構成", "## 概要", "## 観点×条件", "## テストの状況", "## 網羅率", "## 不足しているテスト"]
     assert [text.index(heading) for heading in headings] == sorted(text.index(heading) for heading in headings)
     assert "確かめ方の強さ" in text
@@ -178,7 +193,7 @@ def test_source_extraction_does_not_execute_test_bodies(tmp_path):
         "src/components/errors/NewError.tsx": "export const Error = () => null;",
         "src/components/result/benefit.tsx": "export const Benefit = () => null;",
         "src/hooks/calculate.ts": "const url = import.meta.env.VITE_BRANCH === 'new' ? 'url' : 'fallback';",
-        "src/example.test.ts": "import { Template } from './components/questions/template/newQuestionTemplate'; throw new Error('must never execute');\nit.each([1,2])('value %s', {tags: ['input:normal']}, () => {});",  # noqa: FS003
+        "src/example.test.ts": "import { Template } from './components/questions/template/newQuestionTemplate'; throw new Error('must never execute');\nit.each([1,2])(\n  'value %s', {tags: ['input:normal']}, () => {});",  # noqa: FS003
         "e2e/flow.spec.ts": "test('next', {tag: ['@input:normal']}, () => {});",  # noqa: FS003
         "playwright.config.ts": "const config = {projects: [{name: 'new-browser'}]};",  # noqa: FS003
         }
@@ -192,6 +207,8 @@ def test_source_extraction_does_not_execute_test_bodies(tmp_path):
     assert next(row for row in result["files"] if row["file"] == "src/example.test.ts")["imports"] == ["src/components/questions/template/newQuestionTemplate.tsx"]
     assert len(result["tests"]) == 2
     assert all(row["tags"] == ["input:normal"] for row in result["tests"])
+    declaration = next(row for row in result["tests"] if row["name"] == "value %s")
+    assert (declaration["line"], declaration["callLine"], declaration["nameLine"]) == (2, 2, 3)
 
 
 def test_current_target_inventory_and_definition_consistency():
@@ -219,6 +236,37 @@ def test_offline_cli_accepts_browser_instance_and_story_metadata(tmp_path):
     assert "ui / storybook (chromium) / 汎用エラー" in report
     assert "未分類のテスト（0）" in report
     assert "一覧未取得（unit）" in report
+
+
+def test_browser_name_line_classifies_all_error_width_cases(tmp_path):
+    """Real Browser Mode list locations classify all nine expanded error cases."""
+    errors = {"generic": "GenericError", "not found": "NotFoundError", "response": "FormResponseError"}
+    data = [{"name": f"UI at {width} CSS pixels > 画面幅ごとに、{name} エラーが収まりキーボードで復帰できる",
+             "file": "/copied/dashboard/src/components/layout/uiCompatibility.browser.test.tsx",
+             "projectName": "browser (chromium)", "location": {"line": 157, "column": 4}}
+            for width in (390, 820, 1440) for name in errors]
+    config = yaml.safe_load((BASE / "tools/test_report/viewpoints.yaml").read_text())
+    source = json.loads(subprocess.check_output(["node", "tools/test_report/source_index.mjs", "dashboard"], cwd=BASE, text=True))
+    rows = vitest_list(data)
+    for row in rows:
+        row["stage"] = "ui"
+        row["tags"] = source_tags(row, source["tests"])
+        assert set(row["tags"]) == {"a11y:keyboard", "a11y:focus", "display:viewport", "display:present", "transition:back"}
+    targets = {"error:" + name: {"group": "error", "source": name} for name in errors.values()}
+    matrix, unclassified = build_matrix(rows, targets, config)
+    assert unclassified == []
+    for name, target in errors.items():
+        expected = [row for row in rows if f"{name} エラーが収まり" in row["name"]]
+        assert len(expected) == 3
+        for tag in ("display:present", "transition:back", "a11y:keyboard", "a11y:focus"):
+            assert matrix["error:" + target, tag]["tests"] == expected
+    (tmp_path / "ui.list.json").write_text(json.dumps(data))
+    output = tmp_path / "frontend.md"
+    main(["--offline", "--input-dir", str(tmp_path), "--output", str(output)])
+    report = output.read_text()
+    assert "コンポーネント（story・Browser Mode） | 1 | 9" in report
+    assert "未分類のテスト（0）" in report
+    assert report.splitlines().count("### 網羅率が低いファイル") == 1
 
 
 @pytest.mark.parametrize("file,name,expected", [

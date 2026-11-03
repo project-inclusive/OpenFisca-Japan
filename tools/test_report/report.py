@@ -156,9 +156,16 @@ def source_tags(test, declarations):
     if stories:
         named = [row for row in stories if row["name"] == test["name"].split(" > ")[-1]]
         return named[0]["tags"] if len(named) == 1 else []
-    exact = [row for row in candidates
-             if test.get("line") in (row["line"], row.get("callLine", row["line"]))]
-    return exact[0]["tags"] if len(exact) == 1 else []
+    line = test.get("line")
+    if line is None:
+        return []
+    # Prefer the name, then the callee end, then the declaration start.
+    # Source traversal order breaks ties without merging unrelated test tags.
+    for field in ("nameLine", "callLine", "line"):
+        exact = [row for row in candidates if row.get(field) == line]
+        if exact:
+            return exact[0]["tags"]
+    return []
 
 
 def classification_tags(test, config):
