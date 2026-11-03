@@ -12,6 +12,7 @@ TaxBenefitSystem から label / documentation / reference 等を読み出すた�
 
 import argparse
 import ast
+from decimal import Decimal
 from importlib import metadata
 import json
 import logging
@@ -347,16 +348,18 @@ def format_number(number, unit):
         return "はい" if number else "いいえ"
     if not isinstance(number, (int, float)):
         return str(number)
+    if unit == "/1":
+        # float のまま100倍すると 18.299999999999997 等の誤差が出るため、
+        # YAML の数値の文字列表現から十進数に変換する。
+        percentage = (Decimal(str(number)) * 100).normalize()
+        return f"{percentage:,f}%"
     # YAML で `62.0` のように書かれた整数値は小数点を落とす
     if isinstance(number, float) and number.is_integer():
         number = int(number)
     text = f"{number:,}"
-    # 税率など、円でない値に currency-JPY が付いているパラメータがあるため、
-    # 円を付けるのは整数値のときだけにする
-    if unit == "currency-JPY" and isinstance(number, int):
-        return f"{text} 円"
-    if unit == "人":
-        return f"{text} 人"
+    display_units = {"currency-JPY": "円", "year": "歳", "day": "日", "人": "人", "学年": "学年"}
+    if unit in display_units:
+        return f"{text} {display_units[unit]}"
     return text
 
 
@@ -408,7 +411,20 @@ def build_parameter_entries(parameter_node):
 
     walk(parameter_node)
     entries.sort(key=lambda entry: entry["name"])
+    missing_units = [
+        entry["name"] for entry in entries
+        if not entry["unit"] and any(has_numeric_value(value["value"]) for value in entry["values"])
+        ]
+    if missing_units:
+        logger.warning("単位のない数値パラメータ (%d件):\n%s", len(missing_units), "\n".join(missing_units))
     return entries
+
+
+def has_numeric_value(value):
+    """真偽値を除き、配列内や過去の値も含めて単位が必要な数値を判定する。"""
+    if isinstance(value, list):
+        return any(has_numeric_value(element) for element in value)
+    return isinstance(value, (int, float)) and not isinstance(value, bool)
 
 
 def build_todo_entries(todos, variable_entries):
