@@ -48,6 +48,8 @@ const selected = async (button: HTMLElement, value: boolean) => {
 };
 
 export const Address: Story = {
+  name: '住所を選び直したとき、市区町村と有効性が更新される',
+  tags: ['a11y:audit', 'input:normal', 'input:empty'],
   render: (args) => <AddressQuestionTemplate {...args} />,
   play: async ({ canvas, args }) => {
     const prefecture = canvas.getByTestId('select-prefecture');
@@ -96,6 +98,8 @@ export const Address: Story = {
   },
 };
 export const RestoredAddress: Story = {
+  name: '住所を復元したとき、選択値と有効性を保つ',
+  tags: ['a11y:audit', 'transition:restore'],
   render: (args) => (
     <AddressQuestionTemplate {...args} initialValue={initialAnswers.address} />
   ),
@@ -109,11 +113,15 @@ export const RestoredAddress: Story = {
   },
 };
 export const RestoredAge: Story = {
+  name: '年齢を復元したとき、入力欄を表示する',
+  tags: ['a11y:audit'],
   render: (args) => (
     <AgeQuestionTemplate {...args} initialValue={initialAnswers.age} />
   ),
 };
 export const RestoredMoney: Story = {
+  name: '金額0を復元したとき、有効な入力として表示する',
+  tags: ['a11y:audit', 'transition:restore'],
   render: (args) => (
     <AmountOfMoneyQuestionTemplate
       {...args}
@@ -129,6 +137,8 @@ export const RestoredMoney: Story = {
   },
 };
 export const RestoredChildAge: Story = {
+  name: '子の年齢を復元したとき、入力欄を表示する',
+  tags: ['a11y:audit'],
   render: (args) => (
     <ChildrenAgeQuestionTemplate
       {...args}
@@ -137,6 +147,8 @@ export const RestoredChildAge: Story = {
   ),
 };
 export const MultipleSelection: Story = {
+  name: '複数選択を切り替えたとき、選択値と空の状態が対応する',
+  tags: ['a11y:audit', 'input:normal', 'input:empty'],
   render: (args) => (
     <MultipleSelectionQuestionTemplate
       {...args}
@@ -185,6 +197,8 @@ export const MultipleSelection: Story = {
   },
 };
 export const RestoredMultipleSelection: Story = {
+  name: '複数選択を復元したとき、選択状態を保つ',
+  tags: ['a11y:audit', 'transition:restore'],
   render: (args) => (
     <MultipleSelectionQuestionTemplate
       {...args}
@@ -202,6 +216,8 @@ export const RestoredMultipleSelection: Story = {
   },
 };
 export const PersonCount: Story = {
+  name: '人数を切り替えクリアしたとき、有効性とフォーカスが対応する',
+  tags: ['a11y:audit', 'input:normal', 'input:empty', 'a11y:focus'],
   render: (args) => (
     <PersonNumQuestionTemplate {...args} title="子ども" maxPersonNum={5} />
   ),
@@ -248,6 +264,8 @@ export const PersonCount: Story = {
   },
 };
 export const RestoredPersonCount: Story = {
+  name: '人数を復元したとき、有効な入力として表示する',
+  tags: ['a11y:audit', 'transition:restore'],
   render: (args) => (
     <PersonNumQuestionTemplate
       {...args}
@@ -265,6 +283,8 @@ export const RestoredPersonCount: Story = {
   },
 };
 export const Selection: Story = {
+  name: '選択肢を変更したとき、選択値と有効性が対応する',
+  tags: ['a11y:audit', 'input:normal'],
   render: (args) => (
     <SelectionQuestionTemplate
       {...args}
@@ -296,6 +316,8 @@ export const Selection: Story = {
   },
 };
 export const RestoredSelection: Story = {
+  name: '選択肢を復元したとき、選択状態を保つ',
+  tags: ['a11y:audit', 'transition:restore'],
   render: (args) => (
     <SelectionQuestionTemplate
       {...args}
@@ -313,6 +335,8 @@ export const RestoredSelection: Story = {
   },
 };
 export const YesNo: Story = {
+  name: 'はいからいいえへキーボードで変えたとき、回答とフォーカスが対応する',
+  tags: ['a11y:audit', 'input:normal', 'a11y:focus', 'a11y:keyboard'],
   render: (args) => (
     <YesNoQuestionTemplate {...args} title="現在仕事をしていますか？" />
   ),
@@ -345,6 +369,8 @@ export const YesNo: Story = {
   },
 };
 export const RestoredYesNo: Story = {
+  name: 'いいえを復元したとき、選択状態を保つ',
+  tags: ['a11y:audit', 'transition:restore'],
   render: (args) => (
     <YesNoQuestionTemplate
       {...args}

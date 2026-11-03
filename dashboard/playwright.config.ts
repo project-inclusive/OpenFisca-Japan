@@ -1,7 +1,9 @@
+import { testReportTags } from './testReportTags';
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './e2e',
+  metadata: { reportTags: testReportTags.map(({ name }) => `@${name}`) },
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: 0,

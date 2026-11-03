@@ -57,87 +57,105 @@ const errors: { name: string; ui: ReactElement; path: string }[] = [
 
 // Viewport changes test CSS breakpoints; they do not emulate a mobile user agent.
 describe.each([390, 820, 1440])('UI at %i CSS pixels', (width) => {
-  it('keeps question input and next reachable with Tab, skipping disabled back', async () => {
-    await page.viewport(width, 900);
-    const next = vi.fn();
-    const assign = vi.fn();
-    await render(
-      <TestProviders>
-        <MemoryRouter
-          initialEntries={['/calculate']}
-          future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-        >
-          <QuestionFrame
-            title="あなたについて"
-            progress={0.1}
-            hasHistory={false}
-            backOnClick={vi.fn()}
-            nextOnClick={next}
+  it(
+    '画面幅ごとに、Tabで無効な戻るを飛ばし入力と次へに届く',
+    { tags: ['a11y:keyboard', 'a11y:focus', 'display:viewport'] },
+    async () => {
+      await page.viewport(width, 900);
+      const next = vi.fn();
+      const assign = vi.fn();
+      await render(
+        <TestProviders>
+          <MemoryRouter
+            initialEntries={['/calculate']}
+            future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
           >
-            <AgeQuestionTemplate
-              assignFunc={assign}
-              initialValue={initialAnswers.age}
-            />
-          </QuestionFrame>
-        </MemoryRouter>
-      </TestProviders>
-    );
-    page.getByRole('link').element().focus();
-    await userEvent.tab();
-    const input = page.getByRole('textbox', { name: '年齢', exact: true });
-    await expectFocused(input.element());
-    expectFitsWidth(input.element());
-    await userEvent.keyboard('{ArrowUp}');
-    expect(assign).toHaveBeenLastCalledWith({ type: 'Age', selection: 1 });
-    await userEvent.tab();
-    const nextButton = page.getByRole('button', { name: '次へ', exact: true });
-    await expectFocused(nextButton.element());
-    expectFitsWidth(nextButton.element());
-    await userEvent.tab({ shift: true });
-    await expectFocused(input.element());
-    await userEvent.tab();
-    await userEvent.keyboard('{Enter}');
-    expect(next).toHaveBeenCalledOnce();
-    await expectNoHorizontalOverflow();
-  });
+            <QuestionFrame
+              title="あなたについて"
+              progress={0.1}
+              hasHistory={false}
+              backOnClick={vi.fn()}
+              nextOnClick={next}
+            >
+              <AgeQuestionTemplate
+                assignFunc={assign}
+                initialValue={initialAnswers.age}
+              />
+            </QuestionFrame>
+          </MemoryRouter>
+        </TestProviders>
+      );
+      page.getByRole('link').element().focus();
+      await userEvent.tab();
+      const input = page.getByRole('textbox', { name: '年齢', exact: true });
+      await expectFocused(input.element());
+      expectFitsWidth(input.element());
+      await userEvent.keyboard('{ArrowUp}');
+      expect(assign).toHaveBeenLastCalledWith({ type: 'Age', selection: 1 });
+      await userEvent.tab();
+      const nextButton = page.getByRole('button', {
+        name: '次へ',
+        exact: true,
+      });
+      await expectFocused(nextButton.element());
+      expectFitsWidth(nextButton.element());
+      await userEvent.tab({ shift: true });
+      await expectFocused(input.element());
+      await userEvent.tab();
+      await userEvent.keyboard('{Enter}');
+      expect(next).toHaveBeenCalledOnce();
+      await expectNoHorizontalOverflow();
+    }
+  );
 
-  it('fits expanded results and keeps accordion arrow navigation focused', async () => {
-    await page.viewport(width, 900);
-    await render(
-      <TestProviders
-        initializeState={({ set }) => set(currentDateAtom, calculationDate)}
-      >
-        <NarrowWidth>
-          <Benefit result={calculateFixtures.both.response} />
-          <Loan result={calculateFixtures.both.response} />
-        </NarrowWidth>
-      </TestProviders>
-    );
-    const benefit = page.getByRole('button', { name: '児童手当 1.5 万円/月' });
-    await expectVisible(benefit.element());
-    benefit.element().focus();
-    await userEvent.keyboard('{Enter}');
-    await expectExpanded(benefit.element(), 'true');
-    const first = page.getByRole('button', { name: '生活支援費 ~15 万円/月' });
-    const second = page.getByRole('button', { name: '緊急小口資金 ~20 万円' });
-    first.element().focus();
-    await userEvent.keyboard('{ArrowDown}');
-    await expectFocused(second.element());
-    await userEvent.keyboard(' ');
-    await expectExpanded(second.element(), 'true');
-    const panel = document.getElementById(
-      second.element().getAttribute('aria-controls')!
-    )!;
-    await expectVisible(panel);
-    expectFitsWidth(panel);
-    await expectNoHorizontalOverflow();
-    await userEvent.keyboard('{Enter}');
-    await expectExpanded(second.element(), 'false');
-    await expectFocused(second.element());
-  });
+  it(
+    '画面幅ごとに、結果が収まり矢印キーでアコーディオンのフォーカスが移る',
+    { tags: ['a11y:keyboard', 'a11y:focus', 'display:viewport'] },
+    async () => {
+      await page.viewport(width, 900);
+      await render(
+        <TestProviders
+          initializeState={({ set }) => set(currentDateAtom, calculationDate)}
+        >
+          <NarrowWidth>
+            <Benefit result={calculateFixtures.both.response} />
+            <Loan result={calculateFixtures.both.response} />
+          </NarrowWidth>
+        </TestProviders>
+      );
+      const benefit = page.getByRole('button', {
+        name: '児童手当 1.5 万円/月',
+      });
+      await expectVisible(benefit.element());
+      benefit.element().focus();
+      await userEvent.keyboard('{Enter}');
+      await expectExpanded(benefit.element(), 'true');
+      const first = page.getByRole('button', {
+        name: '生活支援費 ~15 万円/月',
+      });
+      const second = page.getByRole('button', {
+        name: '緊急小口資金 ~20 万円',
+      });
+      first.element().focus();
+      await userEvent.keyboard('{ArrowDown}');
+      await expectFocused(second.element());
+      await userEvent.keyboard(' ');
+      await expectExpanded(second.element(), 'true');
+      const panel = document.getElementById(
+        second.element().getAttribute('aria-controls')!
+      )!;
+      await expectVisible(panel);
+      expectFitsWidth(panel);
+      await expectNoHorizontalOverflow();
+      await userEvent.keyboard('{Enter}');
+      await expectExpanded(second.element(), 'false');
+      await expectFocused(second.element());
+    }
+  );
 
   it.each(errors)(
-    'fits $name error and activates its recovery link by keyboard',
+    '画面幅ごとに、$name エラーが収まりキーボードで復帰できる',
+    { tags: ['a11y:keyboard', 'a11y:focus', 'display:viewport'] },
     async ({ ui, path }) => {
       await page.viewport(width, 900);
       await render(
@@ -177,34 +195,40 @@ const TermsTestPage = () => {
   );
 };
 
-it('traps focus in the terms modal and restores it to the trigger after Escape', async () => {
-  await page.viewport(390, 900);
-  await render(
-    <TestProviders>
-      <MemoryRouter
-        future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-      >
-        <TermsTestPage />
-      </MemoryRouter>
-    </TestProviders>
-  );
-  const trigger = page.getByRole('button', { name: '同意画面を開く' });
-  trigger.element().focus();
-  await userEvent.keyboard('{Enter}');
-  const dialog = page.getByRole('dialog');
-  await expectVisible(dialog.element());
-  await expect
-    .poll(() => dialog.element().contains(document.activeElement))
-    .toBe(true);
-  await userEvent.tab({ shift: true });
-  await expect
-    .poll(() => dialog.element().contains(document.activeElement))
-    .toBe(true);
-  await userEvent.tab();
-  await expect
-    .poll(() => dialog.element().contains(document.activeElement))
-    .toBe(true);
-  await userEvent.keyboard('{Escape}');
-  await expect.poll(() => document.querySelector('[role="dialog"]')).toBeNull();
-  await expectFocused(trigger.element());
-});
+it(
+  '同意モーダルを開いたとき、フォーカスを閉じ込めEscapeで起点に戻す',
+  { tags: ['a11y:keyboard', 'a11y:focus', 'transition:consent'] },
+  async () => {
+    await page.viewport(390, 900);
+    await render(
+      <TestProviders>
+        <MemoryRouter
+          future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+        >
+          <TermsTestPage />
+        </MemoryRouter>
+      </TestProviders>
+    );
+    const trigger = page.getByRole('button', { name: '同意画面を開く' });
+    trigger.element().focus();
+    await userEvent.keyboard('{Enter}');
+    const dialog = page.getByRole('dialog');
+    await expectVisible(dialog.element());
+    await expect
+      .poll(() => dialog.element().contains(document.activeElement))
+      .toBe(true);
+    await userEvent.tab({ shift: true });
+    await expect
+      .poll(() => dialog.element().contains(document.activeElement))
+      .toBe(true);
+    await userEvent.tab();
+    await expect
+      .poll(() => dialog.element().contains(document.activeElement))
+      .toBe(true);
+    await userEvent.keyboard('{Escape}');
+    await expect
+      .poll(() => document.querySelector('[role="dialog"]'))
+      .toBeNull();
+    await expectFocused(trigger.element());
+  }
+);

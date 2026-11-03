@@ -1,0 +1,498 @@
+# 観点・条件の正本。対象の期待条件とテストとの対応は別に管理する。
+version: 1
+viewpoints:
+  input:
+    name: 入力
+    description: 値の変換、未回答と入力制約
+    conditions:
+      - normal
+      - boundary
+      - empty
+      - invalid
+      - ime
+      - mobile
+  transition:
+    name: 遷移
+    description: 画面・質問間の移動と状態の復元
+    conditions:
+      - forward
+      - back
+      - restore
+      - save
+      - member
+      - consent
+  communication:
+    name: 通信
+    description: 送信と失敗時の状態
+    conditions:
+      - success
+      - http500
+      - network
+      - absent
+      - retry
+      - environment
+  a11y:
+    name: アクセシビリティ
+    description: 操作と意味のあるラベル
+    conditions:
+      - keyboard
+      - label
+      - focus
+      - audit
+  display:
+    name: 表示
+    description: 結果の有無と画面幅、データによる表示分岐
+    conditions:
+      - present
+      - absent
+      - viewport
+      - region
+      - url
+      - range
+      - unit
+      - hiv
+  compatibility:
+    name: 互換
+    description: ブラウザーと端末での smoke
+    conditions:
+      - smoke
+  sharing:
+    name: 共有
+    description: 共有データの互換性と共有操作
+    conditions:
+      - roundtrip
+      - legacy
+      - invalid
+      - defaults
+      - unknown
+      - copy
+      - qr
+      - image
+  state:
+    name: 状態
+    description: 世帯変換と進捗の算出
+    conditions:
+      - conversion
+      - progress
+      - optional
+stages:
+  - id: unit
+    name: 単体
+    projects:
+      - unit
+    list: unit.list.json
+    result: unit.results.json
+    command:
+      - node_modules/.bin/vitest
+      - list
+      - --no-static-parse
+      - --includeTaskLocation
+      - --json
+    run: npm run test -- --reporter=json --outputFile=../tmp/test-report/unit.results.json
+  - id: ui
+    name: コンポーネント（story・Browser Mode）
+    projects:
+      - storybook
+      - browser
+    list: ui.list.json
+    result: ui.results.json
+    command:
+      - node_modules/.bin/vitest
+      - list
+      - --config
+      - vitest.browser.config.mts
+      - --no-static-parse
+      - --includeTaskLocation
+      - --json
+    run: npm run test:ui -- --reporter=json --outputFile=../tmp/test-report/ui.results.json
+  - id: e2e
+    name: E2E（モック応答の smoke）
+    projects:
+      - chromium
+      - firefox
+      - webkit
+      - mobile-safari
+      - mobile-chromium
+    list: e2e.list.json
+    result: e2e.results.json
+    command:
+      - node_modules/.bin/playwright
+      - test
+      - --list
+      - --reporter=json
+    run:
+      PLAYWRIGHT_JSON_OUTPUT_NAME=../tmp/test-report/e2e.results.json npm run test:e2e
+      -- --reporter=json
+applicability:
+  route:
+    - transition:forward
+    - transition:back
+    - a11y:keyboard
+  question:
+    - state:conversion
+    - transition:forward
+    - transition:back
+  template:
+    - input:normal
+    - input:boundary
+    - input:empty
+    - input:invalid
+    - input:ime
+    - input:mobile
+    - transition:restore
+    - a11y:keyboard
+    - a11y:label
+    - a11y:focus
+    - a11y:audit
+  mode:
+    - transition:forward
+    - transition:back
+    - transition:save
+    - transition:member
+  result:
+    - display:present
+    - display:absent
+    - display:region
+    - display:url
+    - display:range
+    - display:unit
+    - display:hiv
+    - a11y:keyboard
+    - a11y:audit
+  environment:
+    - communication:environment
+  error:
+    - display:present
+    - transition:back
+    - a11y:keyboard
+    - a11y:focus
+    - a11y:audit
+  device:
+    - compatibility:smoke
+  share:
+    - sharing:roundtrip
+    - sharing:legacy
+    - sharing:invalid
+    - sharing:defaults
+    - sharing:unknown
+    - sharing:copy
+    - sharing:qr
+    - sharing:image
+  file:
+    - display:present
+manual_targets:
+  - id: environment:other
+    group: environment
+    source: src/hooks/calculate.ts
+    reason: else 分岐は列挙値を持たないため、比較対象以外を一つの同値クラスとして手で定義する。
+  - id: share:compact-raw
+    group: share
+    source: src/components/result/shareLink.ts
+    reason: 生配列とdeflateの選択はデータ長に依存するため、意味上の形式を手で定義する。
+  - id: share:compact-deflate
+    group: share
+    source: src/components/result/shareLink.ts
+    reason: 圧縮形式は構文上の独立した識別子を持たないため手で定義する。
+  - id: share:legacy-object
+    group: share
+    source: src/components/result/shareLink.ts
+    reason: 旧形式のオブジェクトと空白になった+の互換性を手で定義する。
+exclusions:
+  - target: file:src/components/PrivacyPolicy.tsx
+    cells:
+      - '*'
+    reason: 説明文だけの部品、または起動入口のため対象外（2026-11-03 承認）。
+  - target: file:src/components/Description.tsx
+    cells:
+      - '*'
+    reason: 説明文だけの部品、または起動入口のため対象外（2026-11-03 承認）。
+  - target: file:src/components/questions/description.tsx
+    cells:
+      - '*'
+    reason: 説明文だけの部品、または起動入口のため対象外（2026-11-03 承認）。
+  - target: file:src/components/questions/descriptions/spouseExistsButSingleParent.tsx
+    cells:
+      - '*'
+    reason: 説明文だけの部品、または起動入口のため対象外（2026-11-03 承認）。
+  - target: file:src/main.tsx
+    cells:
+      - '*'
+    reason: 説明文だけの部品、または起動入口のため対象外（2026-11-03 承認）。
+  - target: route:/privacypolicy
+    cells:
+      - '*'
+    reason: 説明文だけのプライバシーポリシー画面は対象外（2026-11-03 承認）。
+  - target: result:給付
+    cells:
+      - display:unit
+      - display:hiv
+    reason: 貸付の単位と窓口のHIV分岐は給付の責務ではない。
+  - target: result:貸付
+    cells:
+      - display:range
+      - display:hiv
+    reason: 給付の最小最大と窓口のHIV分岐は貸付の責務ではない。
+  - target: result:窓口
+    cells:
+      - display:range
+      - display:unit
+    reason: 給付の金額範囲と貸付の単位は窓口の責務ではない。
+  - target: template:addressQuestionTemplate
+    cells:
+      - input:boundary
+      - input:invalid
+      - input:ime
+      - input:mobile
+    reason: 選択肢から回答する部品であり、自由入力・数値の境界・IME・数値入力属性を持たない。
+  - target: template:selectionQuestionTemplate
+    cells:
+      - input:boundary
+      - input:invalid
+      - input:ime
+      - input:mobile
+    reason: 選択肢から回答する部品であり、自由入力・数値の境界・IME・数値入力属性を持たない。
+  - target: template:multipleSelectionQuestionTemplate
+    cells:
+      - input:boundary
+      - input:invalid
+      - input:ime
+      - input:mobile
+    reason: 選択肢から回答する部品であり、自由入力・数値の境界・IME・数値入力属性を持たない。
+  - target: template:yesNoQuestionTemplate
+    cells:
+      - input:boundary
+      - input:invalid
+      - input:ime
+      - input:mobile
+    reason: 選択肢から回答する部品であり、自由入力・数値の境界・IME・数値入力属性を持たない。
+bindings:
+  - file: src/state/convert.test.ts
+    targets:
+      - file:src/state/convert.ts
+  - file: src/state/progress.test.ts
+    targets:
+      - file:src/state/progress.ts
+  - file: src/state/questionState.test.ts
+    targets:
+      - file:src/state/questionState.ts
+  - file: src/components/result/shareLink.test.ts
+    targets:
+      - file:src/components/result/shareLink.ts
+      - file:src/components/result/sharePresets.ts
+  - file: src/components/result/shareLink.test.ts
+    targets:
+      - share:legacy-object
+    name: 旧形式
+  - file: src/components/result/shareLink.test.ts
+    targets:
+      - share:compact-raw
+      - share:compact-deflate
+    name: ラウンドトリップ|短縮
+  - file: src/hooks/calculate.test.tsx
+    targets:
+      - file:src/hooks/calculate.ts
+  - file: src/components/questions/template/questionTemplates.test.tsx
+    targets:
+      - template:ageQuestionTemplate
+    name: ^(?!.*子の年齢)(?!.*学年)(?!.*7歳).*年齢
+  - file: src/components/questions/template/questionTemplates.stories.tsx
+    targets:
+      - template:ageQuestionTemplate
+    name: ^(?!.*子の年齢)(?!.*学年)(?!.*7歳).*年齢
+  - file: src/components/questions/template/questionTemplates.test.tsx
+    targets:
+      - template:amountOfMoneyQuestionTemplate
+    name: 金額
+  - file: src/components/questions/template/questionTemplates.stories.tsx
+    targets:
+      - template:amountOfMoneyQuestionTemplate
+    name: 金額
+  - file: src/components/questions/template/questionTemplates.test.tsx
+    targets:
+      - template:childrenAgeQuestionTemplate
+    name: 子の年齢|学年|7歳
+  - file: src/components/questions/template/questionTemplates.stories.tsx
+    targets:
+      - template:childrenAgeQuestionTemplate
+    name: 子の年齢|学年|7歳
+  - file: src/components/questions/template/questionTemplates.test.tsx
+    targets:
+      - template:personNumQuestionTemplate
+    name: 人数
+  - file: src/components/questions/template/questionTemplates.stories.tsx
+    targets:
+      - template:personNumQuestionTemplate
+    name: 人数
+  - file: src/components/questions/template/questionTemplates.test.tsx
+    targets:
+      - template:addressQuestionTemplate
+    name: 住所
+  - file: src/components/questions/template/questionTemplates.stories.tsx
+    targets:
+      - template:addressQuestionTemplate
+    name: 住所
+  - file: src/components/questions/template/questionTemplates.test.tsx
+    targets:
+      - template:multipleSelectionQuestionTemplate
+    name: 複数選択
+  - file: src/components/questions/template/questionTemplates.stories.tsx
+    targets:
+      - template:multipleSelectionQuestionTemplate
+    name: 複数選択
+  - file: src/components/questions/template/questionTemplates.test.tsx
+    targets:
+      - template:selectionQuestionTemplate
+    name: 選択肢
+  - file: src/components/questions/template/questionTemplates.stories.tsx
+    targets:
+      - template:selectionQuestionTemplate
+    name: 選択肢
+  - file: src/components/questions/template/questionTemplates.test.tsx
+    targets:
+      - template:yesNoQuestionTemplate
+    name: はい|いいえ
+  - file: src/components/questions/template/questionTemplates.stories.tsx
+    targets:
+      - template:yesNoQuestionTemplate
+    name: はい|いいえ
+  - file: src/components/questions/template/ageQuestionTemplate.browser.test.tsx
+    targets:
+      - template:ageQuestionTemplate
+  - file: src/components/errors/errors.stories.tsx
+    targets:
+      - error:GenericError
+    name: 汎用
+  - file: src/components/errors/errors.stories.tsx
+    targets:
+      - error:NotFoundError
+    name: 存在しない
+  - file: src/components/errors/errors.stories.tsx
+    targets:
+      - error:FormResponseError
+    name: 応答|モード
+  - file: src/components/errors/errors.stories.tsx
+    targets:
+      - mode:かんたん見積もり
+    name: かんたん
+  - file: src/components/result/result.stories.tsx
+    targets:
+      - mode:かんたん見積もり
+    name: かんたん
+  - file: e2e/SimpleCalculation.spec.ts
+    targets:
+      - mode:かんたん見積もり
+    name: かんたん
+  - file: e2e/DetailedCalculation.spec.ts
+    targets:
+      - mode:かんたん見積もり
+    name: かんたん
+  - file: src/components/errors/errors.stories.tsx
+    targets:
+      - mode:くわしく見積もり
+    name: くわしく
+  - file: src/components/result/result.stories.tsx
+    targets:
+      - mode:くわしく見積もり
+    name: くわしく
+  - file: e2e/SimpleCalculation.spec.ts
+    targets:
+      - mode:くわしく見積もり
+    name: くわしく
+  - file: e2e/DetailedCalculation.spec.ts
+    targets:
+      - mode:くわしく見積もり
+    name: くわしく
+  - file: src/components/errors/errors.stories.tsx
+    targets:
+      - mode:地震被災者支援制度見積もり
+    name: 災害
+  - file: src/components/result/result.stories.tsx
+    targets:
+      - mode:地震被災者支援制度見積もり
+    name: 災害
+  - file: e2e/SimpleCalculation.spec.ts
+    targets:
+      - mode:地震被災者支援制度見積もり
+    name: 災害
+  - file: e2e/DetailedCalculation.spec.ts
+    targets:
+      - mode:地震被災者支援制度見積もり
+    name: 災害
+  - file: src/components/result/result.stories.tsx
+    targets:
+      - result:給付
+      - result:貸付
+    name: 給付|貸付|支援がない
+  - file: src/components/result/result.stories.tsx
+    targets:
+      - file:src/components/result/result.tsx
+  - file: e2e/Homepage.spec.ts
+    targets:
+      - route:/
+  - file: e2e/SimpleCalculation.spec.ts
+    targets:
+      - route:/calculate-simple
+      - route:/result
+  - file: e2e/DetailedCalculation.spec.ts
+    targets:
+      - route:/calculate
+      - route:/result
+  - file: src/components/layout/uiCompatibility.browser.test.tsx
+    targets:
+      - file:src/components/layout/narrowWidth.tsx
+  - file: src/components/result/result.stories.tsx
+    name: HTTP 500|ネットワーク失敗
+    targets:
+      - file:src/hooks/calculate.ts
+  - file: src/components/layout/uiCompatibility.browser.test.tsx
+    name: 同意モーダル
+    targets:
+      - file:src/components/TermsModal.tsx
+file_cells:
+  src/hooks/calculate.ts:
+    - communication:success
+    - communication:http500
+    - communication:network
+    - communication:absent
+    - communication:retry
+    - communication:environment
+  src/state/convert.ts:
+    - state:conversion
+    - state:optional
+  src/state/progress.ts:
+    - state:progress
+    - state:optional
+  src/state/questionState.ts:
+    - state:conversion
+    - transition:forward
+    - transition:back
+    - transition:restore
+  src/components/questions/question.tsx:
+    - input:empty
+    - transition:forward
+    - transition:back
+    - transition:restore
+    - transition:save
+    - transition:member
+  src/components/top/topPage.tsx:
+    - transition:consent
+    - transition:forward
+  src/components/TermsModal.tsx:
+    - transition:consent
+    - a11y:focus
+  src/components/result/result.tsx:
+    - sharing:roundtrip
+    - sharing:invalid
+    - sharing:copy
+    - sharing:qr
+    - sharing:image
+  src/components/result/shareLink.ts:
+    - sharing:roundtrip
+    - sharing:legacy
+    - sharing:invalid
+  src/components/result/sharePresets.ts:
+    - sharing:roundtrip
+    - sharing:defaults
+    - sharing:unknown
+  src/components/layout/narrowWidth.tsx:
+    - display:viewport

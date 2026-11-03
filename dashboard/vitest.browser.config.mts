@@ -1,3 +1,4 @@
+import { testReportTags } from './testReportTags';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
@@ -13,6 +14,7 @@ const browser = () => ({
 
 export default defineConfig({
   test: {
+    tags: testReportTags,
     coverage: {
       provider: 'v8',
       include: ['src/**/*.{ts,tsx}'],
@@ -33,12 +35,13 @@ export default defineConfig({
             configDir: fileURLToPath(new URL('./.storybook', import.meta.url)),
           }),
         ],
-        test: { name: 'storybook', browser: browser() },
+        test: { name: 'storybook', tags: testReportTags, browser: browser() },
       },
       {
         plugins: [react()],
         test: {
           name: 'browser',
+          tags: testReportTags,
           include: ['src/**/*.browser.test.{ts,tsx}'],
           browser: browser(),
         },

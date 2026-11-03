@@ -15,9 +15,18 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 // Keep these views mounted so the audit inspects each error rather than its destination.
-export const Generic: Story = {};
-export const NotFound: Story = { args: { ui: <NotFoundError /> } };
+export const Generic: Story = {
+  name: '汎用エラーのとき、エラー画面を表示する',
+  tags: ['a11y:audit', 'display:present'],
+};
+export const NotFound: Story = {
+  name: '存在しないページのとき、エラー画面を表示する',
+  tags: ['a11y:audit', 'display:present'],
+  args: { ui: <NotFoundError /> },
+};
 export const Response: Story = {
+  name: '応答エラーのとき、エラー画面を表示する',
+  tags: ['a11y:audit', 'display:present'],
   args: { ui: <FormResponseError />, state: calculationModes[1].state },
 };
 
@@ -35,10 +44,26 @@ const goHome =
     );
   };
 export const GenericReturnsHome: Story = {
+  name: '汎用エラーのとき、キーボードでトップに戻る',
+  tags: [
+    'a11y:audit',
+    'display:present',
+    'transition:back',
+    'a11y:keyboard',
+    'a11y:focus',
+  ],
   play: goHome('予期せぬエラーが発生しました。'),
 };
 export const NotFoundReturnsHome: Story = {
   ...NotFound,
+  name: '存在しないページのとき、キーボードでトップに戻る',
+  tags: [
+    'a11y:audit',
+    'display:present',
+    'transition:back',
+    'a11y:keyboard',
+    'a11y:focus',
+  ],
   play: goHome('ページが見つかりませんでした。'),
 };
 
@@ -61,18 +86,50 @@ const returnsTo =
     );
   };
 export const SimpleReturnsToForm: Story = {
+  name: 'かんたんモードの応答エラーのとき、入力画面に戻る',
+  tags: [
+    'a11y:audit',
+    'display:present',
+    'transition:back',
+    'a11y:keyboard',
+    'a11y:focus',
+  ],
   args: { ui: <FormResponseError />, state: calculationModes[0].state },
   play: returnsTo(calculationModes[0].formPath),
 };
 export const DetailedReturnsToForm: Story = {
   ...Response,
+  name: 'くわしくモードの応答エラーのとき、入力画面に戻る',
+  tags: [
+    'a11y:audit',
+    'display:present',
+    'transition:back',
+    'a11y:keyboard',
+    'a11y:focus',
+  ],
   play: returnsTo(calculationModes[1].formPath),
 };
 export const DisasterReturnsToForm: Story = {
+  name: '災害モードの応答エラーのとき、入力画面に戻る',
+  tags: [
+    'a11y:audit',
+    'display:present',
+    'transition:back',
+    'a11y:keyboard',
+    'a11y:focus',
+  ],
   args: { ui: <FormResponseError />, state: calculationModes[2].state },
   play: returnsTo(calculationModes[2].formPath),
 };
 export const DetailedRedirectsHome: Story = {
+  name: 'くわしくモードで戻り先指定があるとき、トップに戻る',
+  tags: [
+    'a11y:audit',
+    'display:present',
+    'transition:back',
+    'a11y:keyboard',
+    'a11y:focus',
+  ],
   args: {
     ui: <FormResponseError />,
     state: { ...calculationModes[1].state, redirect: '/' },
@@ -80,6 +137,14 @@ export const DetailedRedirectsHome: Story = {
   play: returnsTo('/'),
 };
 export const SimplePrioritizesForm: Story = {
+  name: 'かんたんモードで戻り先指定があるとき、入力画面を優先する',
+  tags: [
+    'a11y:audit',
+    'display:present',
+    'transition:back',
+    'a11y:keyboard',
+    'a11y:focus',
+  ],
   args: {
     ui: <FormResponseError />,
     state: { ...calculationModes[0].state, redirect: '/' },
@@ -87,6 +152,14 @@ export const SimplePrioritizesForm: Story = {
   play: returnsTo(calculationModes[0].formPath),
 };
 export const DisasterPrioritizesForm: Story = {
+  name: '災害モードで戻り先指定があるとき、入力画面を優先する',
+  tags: [
+    'a11y:audit',
+    'display:present',
+    'transition:back',
+    'a11y:keyboard',
+    'a11y:focus',
+  ],
   args: {
     ui: <FormResponseError />,
     state: { ...calculationModes[2].state, redirect: '/' },

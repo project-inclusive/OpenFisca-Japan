@@ -1,0 +1,213 @@
+"""Test report adapters and gap accounting with small, isolated inputs."""
+
+import copy
+import json
+import subprocess
+
+import pytest
+from tools.test_report.report import (
+    BASE,
+    build_matrix,
+    check_definitions,
+    collect,
+    coverage_rows,
+    extract_targets,
+    main,
+    playwright_tests,
+    read_json,
+    render,
+    result_counts,
+    source_tags,
+    vitest_list,
+    )
+import yaml
+
+
+@pytest.fixture
+def config():
+    """Use two independent expectations rather than deriving them from tests."""
+    return {"viewpoints": {"input": {"name": "入力", "conditions": ["normal", "empty"]}},
+            "applicability": {"template": ["input:normal", "input:empty"]},
+            "bindings": [{"file": "src/age.test.ts", "targets": ["template:age"]}],  # noqa: FS003
+            "stages": [{"id": "unit", "name": "単体", "projects": ["unit"], "run": "npm test"}],
+            "manual_targets": [], "exclusions": []}
+
+
+def test_vitest_list_and_source_locations():
+    """Each-expanded tests share a declaration; copied absolute paths normalize."""
+    rows = vitest_list([{"name": "age 0", "file": "/old/dashboard/src/age.test.ts",
+                         "projectName": "unit", "location": {"line": 12}}])
+    declaration = {"file": "src/age.test.ts", "line": 12, "tags": ["input:normal"], "kind": "test"}  # noqa: FS003
+    assert source_tags(rows[0], [declaration]) == ["input:normal"]
+    rows[0]["line"] = 15
+    assert source_tags(rows[0], [dict(declaration, callLine=15)]) == ["input:normal"]
+    rows[0]["line"] = 99
+    assert source_tags(rows[0], [declaration]) == []
+    with pytest.raises(ValueError):
+        vitest_list({"testResults": []})
+
+
+def test_story_names_are_explicit_fallback():
+    """Generated Storybook locations can differ from the original story source."""
+    row = {"file": "src/age.stories.tsx", "name": "空のとき、進めない", "line": 3}  # noqa: FS003
+    declaration = dict(row, line=20, tags=["input:empty"], kind="story")
+    assert source_tags(row, [declaration]) == ["input:empty"]
+    wrong_story = dict(declaration, line=3, name="別のstory", tags=["input:normal"])
+    assert source_tags(row, [wrong_story, declaration]) == ["input:empty"]
+
+
+def pw_data(statuses):
+    """Make nested suites containing two browser instances and retry attempts."""
+    return {"suites": [{"title": "file.spec.ts", "suites": [{"title": "flow", "line": 1,
+            "specs": [{"file": "file.spec.ts", "title": "next", "line": 5,
+                       "tags": ["@input:normal"], "tests": [
+                           {"projectName": project, "results": [{"status": s} for s in attempts]}
+                           for project, attempts in statuses.items()]}]}]}]}
+
+
+def test_playwright_list_and_final_outcomes():
+    """Count browser instances and the final retry, not the sum of attempts."""
+    data = pw_data({"chromium": [], "webkit": []})
+    rows = playwright_tests(data)
+    assert len(rows) == 2
+    assert rows[0]["file"] == "e2e/file.spec.ts"
+    assert rows[0]["name"] == "flow > next"
+    assert rows[0]["tags"] == ["input:normal"]
+    assert result_counts(data, "playwright")["unexecuted"] == 2
+    counts = result_counts(pw_data({"chromium": ["failed", "passed"], "webkit": ["skipped"]}), "playwright")
+    assert counts == {"passed": 1, "skipped": 1}
+    assert result_counts(pw_data({"chromium": ["timedOut"]}), "playwright")["failed"] == 1
+    with pytest.raises(ValueError):
+        playwright_tests({"errors": [{"message": "collection failed"}]})
+
+
+def test_vitest_results_include_skips_and_suite_errors():
+    """Do not report an import failure with zero assertions as a passing run."""
+    counts = result_counts({"numFailedTestSuites": 1, "testResults": [{"assertionResults": [
+        {"status": "passed"}, {"status": "pending"}, {"status": "todo"}]}]}, "vitest")
+    assert counts == {"passed": 1, "skipped": 2, "suite_errors": 1}
+
+
+def test_expected_matrix_does_not_depend_on_tests(config):
+    """Empty expectations remain gaps; exclusions require explicit reasons."""
+    targets = {"template:age": {"group": "template", "source": "src/age.ts"}}  # noqa: FS003
+    row = {"file": "src/age.test.ts", "name": "age 0", "project": "unit", "stage": "unit", "tags": ["input:normal"]}  # noqa: FS003
+    matrix, unclassified = build_matrix([row], targets, config)
+    assert matrix["template:age", "input:normal"]["tests"] == [row]
+    assert matrix["template:age", "input:empty"]["tests"] == []
+    assert unclassified == []
+    config["exclusions"] = [{"target": "template:age", "cells": ["input:empty"], "reason": "optional"}]
+    assert build_matrix([], targets, config)[0]["template:age", "input:empty"]["exclusion"] == "optional"
+    assert build_matrix([dict(row, tags=[])], targets, config)[1]
+    assert build_matrix([dict(row, file="src/new.test.ts")], targets, config)[1]
+
+
+def test_drift_and_invalid_exclusion_fail(config, tmp_path):
+    """Editing either definition independently must produce an actionable error."""
+    declarations = {"tests": [{"file": "src/age.test.ts", "line": 1, "tags": ["input:normal"]}]}  # noqa: FS003
+    targets = {"template:age": {"group": "template", "source": "src/age.ts"}}  # noqa: FS003
+    tags = tmp_path / "testReportTags.ts"
+    tags.write_text("[{name: 'input:normal'}, {name: 'input:empty'}]")  # noqa: FS003
+    check_definitions(config, declarations, tmp_path, targets)
+    tags.write_text("[{name: 'input:normal'}]")  # noqa: FS003
+    with pytest.raises(ValueError, match="drift"):
+        check_definitions(config, declarations, tmp_path, targets)
+    tags.write_text("[{name: 'input:normal'}, {name: 'input:empty'}]")  # noqa: FS003
+    config["exclusions"] = [{"target": "template:age", "cells": ["*"], "reason": ""}]
+    with pytest.raises(ValueError, match="reason"):
+        check_definitions(config, declarations, tmp_path, targets)
+
+
+def metric(value):
+    """Construct an Istanbul summary metric."""
+    return {"total": 10, "covered": value / 10, "pct": value, "skipped": 0}
+
+
+def test_coverage_and_markdown(config):
+    """Keep unit/UI separate, include all metrics and expose uncategorized tests."""
+    data = {"total": {key: metric(90) for key in ("statements", "branches", "functions", "lines")},
+            "/old/dashboard/src/age.ts": {key: metric(0) for key in ("statements", "branches", "functions", "lines")}}
+    coverage = coverage_rows(data)
+    assert coverage["src/age.ts"]["lines"]["pct"] == 0
+    targets = {"template:age": {"group": "template", "source": "src/age.ts"}}  # noqa: FS003
+    row = {"file": "src/age.test.ts", "name": "a|b_<script>", "stage": "unit", "project": "unit", "tags": []}  # noqa: FS003
+    matrix, unknown = build_matrix([row], targets, config)
+    text = render(config, [row], targets, matrix, unknown, {"unit": None}, {"unit": coverage, "ui": copy.deepcopy(coverage)}, {}, 80)
+    assert "未実行" in text
+    assert "理由のない空きのます（2）" in text
+    assert "未分類のテスト（1）" in text
+    assert "a&#124;b&#95;&lt;script&gt;" in text
+    assert "### unit" in text and "### ui" in text
+    assert "### unit と UI の両方で 0%" in text
+    assert "- src/age.ts" in text
+    assert "branches=0%" in text
+
+
+def test_optional_and_malformed_json(tmp_path):
+    """Missing evidence is unknown; malformed evidence must never look unmeasured."""
+    path = tmp_path / "optional.json"
+    assert read_json(path) is None
+    path.write_text("not json")
+    with pytest.raises(json.JSONDecodeError):
+        read_json(path)
+
+
+def test_collection_failure_removes_stale_inventory(tmp_path, monkeypatch):
+    """A failed new collection cannot silently reuse an older successful list."""
+    output = tmp_path / "unit.list.json"
+    output.write_text("[]")
+    monkeypatch.setattr(subprocess, "run", lambda *args, **kwargs: subprocess.CompletedProcess(args, 1, "", "blocked server"))
+    assert collect({"list": output.name, "command": ["vitest", "list"]}, tmp_path, tmp_path) == "blocked server"
+    assert not output.exists()
+    assert output.with_suffix(".error.txt").read_text() == "blocked server"
+
+
+def test_source_extraction_does_not_execute_test_bodies(tmp_path):
+    """Syntax extraction discovers new routes, questions, templates and projects."""
+    files = {
+        "src/App.tsx": "const routes = [{path: '/new'}];",  # noqa: FS003
+        "src/state/questionDefinition.ts": "const q = {'新しい質問': {type: 'Age'}, 見積もりモード: {type: 'Selection', selections: ['簡単', '詳細', '災害']}};",  # noqa: FS003
+        "src/components/questions/template/newQuestionTemplate.tsx": "export const Template = () => null;",
+        "src/components/errors/NewError.tsx": "export const Error = () => null;",
+        "src/components/result/benefit.tsx": "export const Benefit = () => null;",
+        "src/hooks/calculate.ts": "const url = import.meta.env.VITE_BRANCH === 'new' ? 'url' : 'fallback';",
+        "src/example.test.ts": "throw new Error('must never execute');\nit.each([1,2])('value %s', {tags: ['input:normal']}, () => {});",  # noqa: FS003
+        "e2e/flow.spec.ts": "test('next', {tag: ['@input:normal']}, () => {});",  # noqa: FS003
+        "playwright.config.ts": "const config = {projects: [{name: 'new-browser'}]};",  # noqa: FS003
+        }
+    for file, text in files.items():
+        path = tmp_path / file
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(text)
+    result = json.loads(subprocess.check_output(["node", "tools/test_report/source_index.mjs", str(tmp_path)], cwd=BASE, text=True))
+    ids = {row["id"] for row in result["targets"]}
+    assert {"route:/new", "question:新しい質問", "template:newQuestionTemplate", "mode:災害", "device:new-browser", "environment:new", "error:NewError", "result:給付"} <= ids
+    assert len(result["tests"]) == 2
+    assert all(row["tags"] == ["input:normal"] for row in result["tests"])
+
+
+def test_current_target_inventory_and_definition_consistency():
+    """The checked-in configuration must reference real targets and declarations."""
+    config = yaml.safe_load((BASE / "tools/test_report/viewpoints.yaml").read_text())
+    source = json.loads(subprocess.check_output(["node", "tools/test_report/source_index.mjs", "dashboard"], cwd=BASE, text=True))
+    targets = extract_targets(source, config, BASE / "dashboard")
+    check_definitions(config, source, BASE / "dashboard", targets)
+    assert sum(row["group"] == "mode" for row in targets.values()) == 3
+    assert sum(row["group"] == "device" for row in targets.values()) == 5
+    assert all(row["tags"] for row in source["tests"])
+
+
+def test_offline_cli_accepts_browser_instance_and_story_metadata(tmp_path):
+    """Handle Vitest's expanded browser project name and generated story lines."""
+    (tmp_path / "ui.list.json").write_text(json.dumps([{
+        "file": "/copied/dashboard/src/components/errors/errors.stories.tsx",
+        "name": "汎用エラーのとき、エラー画面を表示する",
+        "projectName": "storybook (chromium)", "location": {"line": 999},
+        }]))
+    output = tmp_path / "frontend.md"
+    main(["--offline", "--input-dir", str(tmp_path), "--output", str(output)])
+    report = output.read_text()
+    assert "コンポーネント（story・Browser Mode） | 1 | 1" in report
+    assert "ui / storybook (chromium) / 汎用エラー" in report
+    assert "未分類のテスト（0）" in report
+    assert "一覧未取得（unit）" in report
