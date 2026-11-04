@@ -1,4 +1,8 @@
-import { defineConfig } from 'vitest/config';
+import { defineConfig } from 'vite';
+import type { UserConfig } from 'vite';
+// Vitest は型だけを読み込む。'vitest/config' を読み込むと、Vitest が持つ ES Module だけの
+// Vite が build のときにも読み込まれ、Node.js 18 では require() できずに build が失敗するため。
+import type { InlineConfig } from 'vitest';
 import react from '@vitejs/plugin-react';
 
 // https://vitejs.dev/config/
@@ -13,7 +17,7 @@ export default ({ mode }: { mode: string }) => {
       html.replace(/%=(.*?)%/g, (match, p1) => env[p1] ?? match),
   });
 
-  return defineConfig({
+  const config: UserConfig & { test: InlineConfig } = {
     // Fast Refresh needs Vite's browser preamble; Vitest runs without HTML.
     plugins: [react({ fastRefresh: mode !== 'test' }), htmlPlugin()],
     test: {
@@ -23,5 +27,6 @@ export default ({ mode }: { mode: string }) => {
     base: process.env.GITHUB_PAGES
       ? 'OpenFisca-Japan' // レポジトリ名を設定
       : '/',
-  });
+  };
+  return defineConfig(config);
 };
