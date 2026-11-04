@@ -24,9 +24,12 @@ jobs:
       - name: Unittest
         run: npm run test
         working-directory: ./dashboard
-      - name: Cypress run
-        uses: cypress-io/github-action@v6
-        with:
-          build: npm run build
-          start: npm run preview
-          working-directory: ./dashboard
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+        working-directory: ./dashboard
+      - name: Build
+        run: npm run build
+        working-directory: ./dashboard
+      - name: Playwright smoke
+        run: npm run test:e2e
+        working-directory: ./dashboard
