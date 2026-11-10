@@ -297,6 +297,32 @@ preview のポート 30000 を空けてから実行する。`webServer` が既�
 戻る操作と API エラーの分岐は画面のテストで確認する。Playwright のコンポーネントテストは使わない。
 E2E の安定性を確認するときは `npm run test:e2e` を続けて 2 回実行する。失敗時の trace は `tmp/playwright/test-results/`（リポジトリルートからの相対パス）に残る。
 
+#### 画面の画像・ARIA スナップショットの比較
+
+`dashboard/playwright.visual.config.ts` は通常の E2E と独立している。
+トップ、同意モーダル、かんたん見積もりの住所・年収・配偶者、くわしく見積もりの住所、結果4種（給付だけ・貸付だけ・両方・対象なし）、API 500、404、地震被災者支援の最初の質問の13画面を、PC（1280×800）とスマートフォン（390×844）で確認する。各ケースで全ページの画像を `toHaveScreenshot`、body の見出し・ボタン・ラベル・文字を `toMatchAriaSnapshot` で比較する。
+
+撮影と比較には、ともに `mcr.microsoft.com/playwright:v1.64.1-noble` の Chromium と `@playwright/test` 1.64.1 を使う。Docker Desktop などを起動し、`dashboard` で次を実行する。
+
+```bash
+# 更新前 develop（6e5a6c6）のソースを build して、初回の期待値を撮影する
+bash e2e/visual/docker.sh capture
+# 現在のソースを build して、保存済みの期待値と比較する
+bash e2e/visual/docker.sh compare
+# ブラウザーを起動せず、13画面 × 2 = 26件を確認する
+npx playwright test --config playwright.visual.config.ts --list
+```
+
+capture は指定した commit の `dashboard` を `git archive` で取り出し、コンテナの一時ディレクトリで、その commit の lockfile により `npm ci` と `npm run build` を行う。その古い build の出力だけを preview で配信し、現在のテストコードで撮影する。初回の期待値を更新後の build から作らないこと。ローカルの未commitのアプリ変更も撮影に混入しない。compare は現在の作業ツリーを build して配信する。両方とも Linux 用の依存をコンテナ専用の一時 volume に入れるため、ホストの `node_modules` を使わない。初回のイメージ取得と依存のインストールにはネットワークが必要。
+
+実行環境は `linux/amd64` に固定する。日時は `2026-01-15T12:00:00+09:00`、locale は `ja-JP`、timezone は `Asia/Tokyo`、`deviceScaleFactor` は1、`reducedMotion` は `reduce`。アニメーション・transition・caret を止め、通信の完了とフォントの準備後400ms待つ。Google Fonts・Analytics・Tag Manager は遮断する。計算 API は `src/mocks/calculate/*.response.json` の固定応答（エラーは HTTP 500）に置き換え、結果遷移後800ms待つ。
+
+期待値は `dashboard/e2e/visual/snapshots/{desktop,mobile}/` の PNG と `.aria.yml`（計52ファイル）、出典は `snapshots/source.json` に保存する。OS・ブラウザー・フォントを Docker で固定するため、`snapshotPathTemplate` の名前に OS を含めない。画素差の許容は `threshold: 0`・`maxDiffPixels: 0`、ARIA の子要素は `deep-equal` で比較する。期待値のない compare は保存先と撮影コマンドを示して失敗し、自動で期待値を追加しない。
+
+初回は `6e5a6c6` から撮った期待値と出典をレビューしてPRに含め、更新後のブランチで compare が通ることを確認する。意図した見た目の変更を含む次のPRでは、アプリ変更を commit した後、`bash e2e/visual/docker.sh capture <変更のcommit>` で期待値を撮り直す。撮影後に compare を実行し、PNG と ARIA の差分および `source.json` の出典をコード変更と一緒にレビューする。説明できない差に合わせて期待値を更新したり、許容値を引き上げたりしない。
+
+失敗時の expected・actual・diff 画像、ARIA の差分と trace は、リポジトリルートの `tmp/playwright-visual/test-results/` と HTML report の `tmp/playwright-visual/report/` で確認する。コンテナが root で生成したファイルは、必要に応じてホストで所有者を直す。
+
 #### フロントエンドのテストの分担
 
 | 層           | 確認する内容                                           | 方法                                           |
@@ -342,7 +368,7 @@ npx storybook build
 
 a11y addon は全 story で自動実行する。現在は違反を別途直すため `parameters.a11y.test: 'todo'` とし、警告として報告する。検査を無効化する `off` は使わない。Storybook の Accessibility パネルとテストレポートで、story 名・axe の rule ID・重大度・対象要素を確認し、修正を別途追跡する。エラーから移動する story とは別に、エラーを表示したままにする story も置き、a11y の対象が遷移後の画面だけにならないようにする。
 
-画面の同じ確認を jsdom と story の両方に追加しない。数値の正規化・境界値や学年の暦依存は jsdom に残し、ネイティブの選択操作・computed style・フォーカスはブラウザーで確認する。スクリーンショットの比較と Chromatic は使わない。
+画面の同じ確認を jsdom と story の両方に追加しない。数値の正規化・境界値や学年の暦依存は jsdom に残し、ネイティブの選択操作・computed style・フォーカスはブラウザーで確認する。story でのスクリーンショット比較と Chromatic は使わない。画面全体の比較は専用の Playwright 設定で行う。
 
 #### 計算 API の固定データと再記録
 
