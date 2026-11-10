@@ -15,6 +15,10 @@ export default () => {
 
   return defineConfig({
     plugins: [react(), htmlPlugin()],
+    build: {
+      // Vite 8 raised the default target; preserve Vite 2.9's browser support.
+      target: ['es2019', 'edge88', 'firefox78', 'chrome87', 'safari13.1'],
+    },
     test: {
       projects: [
         {
