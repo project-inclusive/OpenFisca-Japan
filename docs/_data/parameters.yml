@@ -174,11 +174,11 @@ items:
 - name: 住民税.標準税率
   description: 住民税における標準税率
   reference: https://www.soumu.go.jp/main_sosiki/jichi_zeisei/czaisei/czaisei_seido/150790_06.html
-  unit: currency-JPY
+  unit: /1
   latest: &id014
     date: '2000-01-01'
     value: 0.1
-    display: '0.1'
+    display: 10%
   values:
   - *id014
   category: 住民税
@@ -217,12 +217,12 @@ items:
   latest: &id017
     date: 2017-01-01-01
     value: 62.0
-    display: '62'
+    display: 62 歳
   values:
   - *id017
   - date: '1951-07-01'
     value: 60.33
-    display: '60.33'
+    display: 60.33 歳
   category: 全般
   subcategory: 定年年齢
   source: openfisca_japan/parameters/全般/定年年齢.yaml
@@ -233,12 +233,12 @@ items:
   latest: &id018
     date: '2022-04-01'
     value: 18.0
-    display: '18'
+    display: 18 歳
   values:
   - *id018
   - date: '1876-01-01'
     value: 20.0
-    display: '20'
+    display: 20 歳
   category: 全般
   subcategory: 成人年齢
   source: openfisca_japan/parameters/全般/成人年齢.yaml
@@ -349,11 +349,11 @@ items:
 - name: 所得.復興特別所得税率
   description: 復興特別所得税率
   reference: https://www.nta.go.jp/publication/pamph/koho/kurashi/html/01_1.htm
-  unit: currency-JPY
+  unit: /1
   latest: &id027
     date: '2013-01-01'
     value: 0.021
-    display: '0.021'
+    display: 2.1%
   values:
   - *id027
   category: 所得
@@ -466,11 +466,11 @@ items:
 - name: 所得.超過所得割合
   description: 超過所得割合
   reference: https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2260.htm
-  unit: currency-JPY
+  unit: /1
   latest: &id036
     date: '2025-01-01'
     value: 0.225
-    display: '0.225'
+    display: 22.5%
   values:
   - *id036
   category: 所得
@@ -544,7 +544,7 @@ items:
 - name: 東京都.福祉.重度心身障害者手当.所得制限限度額
   description: 東京都の重度心身障害者手当の所得制限限度額(扶養人数が0人から増えるごとに増額する)
   reference: https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/juudo.html
-  unit: null
+  unit: currency-JPY
   latest: &id042
     date: '2000-05-01'
     value:
@@ -554,7 +554,7 @@ items:
     - 4744000
     - 5124000
     - 5504000
-    display: 3,604,000 / 3,984,000 / 4,364,000 / 4,744,000 / 5,124,000 / 5,504,000
+    display: 3,604,000 円 / 3,984,000 円 / 4,364,000 円 / 4,744,000 円 / 5,124,000 円 / 5,504,000 円
   values:
   - *id042
   category: 東京都
@@ -680,7 +680,7 @@ items:
 - name: 災害.支援.災害援護資金.所得制限額
   description: 世帯人数ごとの所得制限額
   reference: https://www.bousai.go.jp/taisaku/hisaisyagyousei/pdf/kakusyuseido_tsuujou.pdf
-  unit: null
+  unit: currency-JPY
   latest: &id052
     date: '2023-04-01'
     value:
@@ -689,7 +689,7 @@ items:
     - 4300000
     - 6200000
     - 7300000
-    display: 0 / 2,200,000 / 4,300,000 / 6,200,000 / 7,300,000
+    display: 0 円 / 2,200,000 円 / 4,300,000 円 / 6,200,000 円 / 7,300,000 円
   values:
   - *id052
   category: 災害
@@ -698,11 +698,11 @@ items:
 - name: 災害.支援.災害援護資金.所得制限額_一人当たり追加額
   description: 世帯人数が5人以上の場合の、1人当たり所得制限追加額
   reference: https://www.bousai.go.jp/taisaku/hisaisyagyousei/pdf/kakusyuseido_tsuujou.pdf
-  unit: null
+  unit: currency-JPY
   latest: &id053
     date: '2023-04-01'
     value: 300000
-    display: 300,000
+    display: 300,000 円
   values:
   - *id053
   category: 災害
@@ -711,11 +711,11 @@ items:
 - name: 災害.支援.災害援護資金.所得制限額_住居が滅失した場合
   description: 所得制限額_住居が滅失した場合
   reference: https://www.bousai.go.jp/taisaku/hisaisyagyousei/pdf/kakusyuseido_tsuujou.pdf
-  unit: null
+  unit: currency-JPY
   latest: &id054
     date: '2023-04-01'
     value: 12700000
-    display: 12,700,000
+    display: 12,700,000 円
   values:
   - *id054
   category: 災害
@@ -750,11 +750,11 @@ items:
 - name: 社会保険料.介護保険料率
   description: 介護保険料率
   reference: https://www.kyoukaikenpo.or.jp/about/business/insurance_rate/
-  unit: currency-JPY
+  unit: /1
   latest: &id057
     date: '2015-01-01'
     value: 0.016
-    display: '0.016'
+    display: 1.6%
   values:
   - *id057
   category: 社会保険料
@@ -763,11 +763,11 @@ items:
 - name: 社会保険料.健康保険料率
   description: 健康保険料率
   reference: https://www.kyoukaikenpo.or.jp/g7/cat330/
-  unit: currency-JPY
+  unit: /1
   latest: &id058
     date: '2000-01-01'
     value: 0.1
-    display: '0.1'
+    display: 10%
   values:
   - *id058
   category: 社会保険料
@@ -776,11 +776,11 @@ items:
 - name: 社会保険料.厚生年金保険料率
   description: 厚生年金保険料率
   reference: https://www.nenkin.go.jp/service/kounen/hokenryo/ryogaku/ryogakuhyo/index.html
-  unit: currency-JPY
+  unit: /1
   latest: &id059
     date: '2017-09-01'
     value: 0.183
-    display: '0.183'
+    display: 18.3%
   values:
   - *id059
   category: 社会保険料
@@ -841,16 +841,16 @@ items:
 - name: 社会保険料.雇用保険料率
   description: 雇用保険料率
   reference: https://www.mhlw.go.jp/content/001672589.pdf
-  unit: currency-JPY
+  unit: /1
   latest: &id064
     date: '2026-04-01'
     value: 0.005
-    display: '0.005'
+    display: 0.5%
   values:
   - *id064
   - date: '2020-01-01'
     value: 0.0055
-    display: '0.0055'
+    display: 0.55%
   category: 社会保険料
   subcategory: 雇用保険料率
   source: openfisca_japan/parameters/社会保険料/雇用保険料率.yaml
@@ -870,11 +870,11 @@ items:
 - name: 福祉.傷病手当金.日数_会社員
   description: 傷病手当金における一月当たりの日数（会社員の場合）
   reference: https://www.kyoukaikenpo.or.jp/benefit/injury_and_sickness_allowance/index.html
-  unit: null
+  unit: day
   latest: &id066
     date: '2023-04-01'
     value: 30
-    display: '30'
+    display: 30 日
   values:
   - *id066
   category: 福祉
@@ -883,11 +883,11 @@ items:
 - name: 福祉.傷病手当金.日数_公務員
   description: 傷病手当金における一月当たりの日数（地方公務員の場合）
   reference: https://www.chikyosai.or.jp/division/short/scene/works/01.html
-  unit: null
+  unit: day
   latest: &id067
     date: '2023-04-01'
     value: 22
-    display: '22'
+    display: 22 日
   values:
   - *id067
   category: 福祉
@@ -896,11 +896,11 @@ items:
 - name: 福祉.感染症.健康管理支援事業.支給額
   description: 健康管理支援事業の支給額(月額)
   reference: https://www.pmda.go.jp/relief-services/hiv-positives/0002.html
-  unit: null
+  unit: currency-JPY
   latest: &id068
     date: '2024-04-01'
     value: 150000
-    display: 150,000
+    display: 150,000 円
   values:
   - *id068
   category: 福祉
@@ -909,43 +909,43 @@ items:
 - name: 福祉.感染症.健康管理費用.支給額_最大
   description: 健康管理費用の最大支給額（ CD4（T4）リンパ球が1マイクロリットル当たり200以下の方、月額）
   reference: https://www.pmda.go.jp/relief-services/hiv-positives/0002.html
-  unit: null
+  unit: currency-JPY
   latest: &id069
     date: '2025-04-01'
     value: 55900
-    display: 55,900
+    display: 55,900 円
   values:
   - *id069
   - date: '2024-04-01'
     value: 54900
-    display: 54,900
+    display: 54,900 円
   category: 福祉
   subcategory: 感染症/健康管理費用/支給額_最大
   source: openfisca_japan/parameters/福祉/感染症/健康管理費用/支給額_最大.yaml
 - name: 福祉.感染症.健康管理費用.支給額_最小
   description: 健康管理費用の最小支給額（月額）
   reference: https://www.pmda.go.jp/relief-services/hiv-positives/0002.html
-  unit: null
+  unit: currency-JPY
   latest: &id070
     date: '2025-04-01'
     value: 39900
-    display: 39,900
+    display: 39,900 円
   values:
   - *id070
   - date: '2024-04-01'
     value: 38900
-    display: 38,900
+    display: 38,900 円
   category: 福祉
   subcategory: 感染症/健康管理費用/支給額_最小
   source: openfisca_japan/parameters/福祉/感染症/健康管理費用/支給額_最小.yaml
 - name: 福祉.感染症.先天性の傷病治療によるC型肝炎患者に係るQOL向上等のための調査研究事業.調査研究協力謝金
   description: 先天性の傷病治療によるC型肝炎患者に係るQOL向上等のための調査研究事業の調査研究協力謝金（月額）
   reference: https://www.med.niigata-u.ac.jp/ifc/tebiki/blood/05.html
-  unit: null
+  unit: currency-JPY
   latest: &id071
     date: '2000-05-01'
     value: 51500
-    display: 51,500
+    display: 51,500 円
   values:
   - *id071
   category: 福祉
@@ -1010,7 +1010,7 @@ items:
   latest: &id076
     date: '2000-05-01'
     value: 20.0
-    display: '20'
+    display: 20 歳
   values:
   - *id076
   category: 福祉
@@ -1097,7 +1097,7 @@ items:
 - name: 福祉.特別障害者手当.所得制限限度額.扶養義務者
   description: 特別障害者手当の所得制限限度額(配偶者及び扶養義務者の場合。扶養人数が0人から増えるごとに増額する。6人以上の場合は https://www.city.date.hokkaido.jp/hotnews/files/00000300/00000337/20130212173224.pdf 参照)
   reference: https://www.mhlw.go.jp/bunya/shougaihoken/jidou/tokubetsu.html
-  unit: null
+  unit: currency-JPY
   latest: &id083
     date: '2000-05-01'
     value:
@@ -1111,7 +1111,7 @@ items:
     - 8148000
     - 8528000
     - 8908000
-    display: 6,287,000 / 6,536,000 / 6,749,000 / 6,962,000 / 7,175,000 / 7,388,000 / 7,768,000 / 8,148,000 / 8,528,000 / 8,908,000
+    display: 6,287,000 円 / 6,536,000 円 / 6,749,000 円 / 6,962,000 円 / 7,175,000 円 / 7,388,000 円 / 7,768,000 円 / 8,148,000 円 / 8,528,000 円 / 8,908,000 円
   values:
   - *id083
   category: 福祉
@@ -1120,11 +1120,11 @@ items:
 - name: 福祉.特別障害者手当.所得制限限度額.扶養義務者_老人扶養親族加算額
   description: 特別障害者手当の所得制限限度額加算額(配偶者及び扶養義務者の場合。老人扶養親族1人につきこの金額が加算される)
   reference: https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/toku_shou.html
-  unit: null
+  unit: currency-JPY
   latest: &id084
     date: '2000-05-01'
     value: 60000
-    display: 60,000
+    display: 60,000 円
   values:
   - *id084
   category: 福祉
@@ -1133,7 +1133,7 @@ items:
 - name: 福祉.特別障害者手当.所得制限限度額.本人
   description: 特別障害者手当の所得制限限度額(本人の場合。扶養人数が0人から増えるごとに増額する。6人以上の場合は https://www.city.date.hokkaido.jp/hotnews/files/00000300/00000337/20130212173224.pdf 参照)
   reference: https://www.mhlw.go.jp/bunya/shougaihoken/jidou/tokubetsu.html
-  unit: null
+  unit: currency-JPY
   latest: &id085
     date: '2000-05-01'
     value:
@@ -1147,7 +1147,7 @@ items:
     - 6264000
     - 6644000
     - 7024000
-    display: 3,604,000 / 3,984,000 / 4,364,000 / 4,744,000 / 5,124,000 / 5,504,000 / 5,884,000 / 6,264,000 / 6,644,000 / 7,024,000
+    display: 3,604,000 円 / 3,984,000 円 / 4,364,000 円 / 4,744,000 円 / 5,124,000 円 / 5,504,000 円 / 5,884,000 円 / 6,264,000 円 / 6,644,000 円 / 7,024,000 円
   values:
   - *id085
   category: 福祉
@@ -1156,11 +1156,11 @@ items:
 - name: 福祉.特別障害者手当.所得制限限度額.本人_特定扶養親族加算額
   description: 特別障害者手当の所得制限限度額加算額(本人の場合。同一生計配偶者のうち特定扶養親族または控除対象扶養親族(19歳未満)1人につきこの金額が加算される)
   reference: https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/toku_shou.html
-  unit: null
+  unit: currency-JPY
   latest: &id086
     date: '2000-05-01'
     value: 250000
-    display: 250,000
+    display: 250,000 円
   values:
   - *id086
   category: 福祉
@@ -1169,11 +1169,11 @@ items:
 - name: 福祉.特別障害者手当.所得制限限度額.本人_老人扶養親族加算額
   description: 特別障害者手当の所得制限限度額加算額(本人の場合。同一生計配偶者のうち70歳以上の者または老人扶養親族1人につきこの金額が加算される)
   reference: https://www.fukushi.metro.tokyo.lg.jp/shinsho/teate/toku_shou.html
-  unit: null
+  unit: currency-JPY
   latest: &id087
     date: '2000-05-01'
     value: 100000
-    display: 100,000
+    display: 100,000 円
   values:
   - *id087
   category: 福祉
@@ -1182,11 +1182,11 @@ items:
 - name: 福祉.特別障害者手当.支給額
   description: 特別障害者手当の支給額（月額）
   reference: https://www.mhlw.go.jp/bunya/shougaihoken/jidou/tokubetsu.html
-  unit: null
+  unit: currency-JPY
   latest: &id088
     date: '2000-05-01'
     value: 28840
-    display: 28,840
+    display: 28,840 円
   values:
   - *id088
   category: 福祉
@@ -1416,23 +1416,23 @@ items:
 - name: 福祉.育児.児童扶養手当.上限学年
   description: 児童扶養手当の上限学年(18歳3ヶ月のため高校3年生としたときの小学1年生からの通算学年を記載)
   reference: https://web.archive.org/web/20220302155714/https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/hitorioya_teate.html
-  unit: year
+  unit: 学年
   latest: &id106
     date: '2024-11-01'
     value: 12
-    display: '12'
+    display: 12 学年
   values:
   - *id106
   - date: '2010-05-01'
     value: 12
-    display: '12'
+    display: 12 学年
   category: 福祉
   subcategory: 育児/児童扶養手当/上限学年
   source: openfisca_japan/parameters/福祉/育児/児童扶養手当/上限学年.yaml
 - name: 福祉.育児.児童扶養手当.所得制限限度額.一部支給
   description: 渋谷区の児童扶養手当の一部支給の所得制限限度額(扶養人数が0人から増えるごとに増額する。6人以上の場合は https://www.city.osaka.lg.jp/kodomo/page/0000002395.html 参照)
   reference: https://www.city.shibuya.tokyo.jp/kodomo/teate/teate/teate_gendogaku.html
-  unit: null
+  unit: currency-JPY
   latest: &id107
     date: '2024-11-01'
     value:
@@ -1446,7 +1446,7 @@ items:
     - 4740000
     - 5120000
     - 5500000
-    display: 2,080,000 / 2,460,000 / 2,840,000 / 3,220,000 / 3,600,000 / 3,980,000 / 4,360,000 / 4,740,000 / 5,120,000 / 5,500,000
+    display: 2,080,000 円 / 2,460,000 円 / 2,840,000 円 / 3,220,000 円 / 3,600,000 円 / 3,980,000 円 / 4,360,000 円 / 4,740,000 円 / 5,120,000 円 / 5,500,000 円
   values:
   - *id107
   - date: '2000-05-01'
@@ -1461,14 +1461,14 @@ items:
     - 4580000
     - 4960000
     - 5340000
-    display: 1,920,000 / 2,300,000 / 2,680,000 / 3,060,000 / 3,440,000 / 3,820,000 / 4,200,000 / 4,580,000 / 4,960,000 / 5,340,000
+    display: 1,920,000 円 / 2,300,000 円 / 2,680,000 円 / 3,060,000 円 / 3,440,000 円 / 3,820,000 円 / 4,200,000 円 / 4,580,000 円 / 4,960,000 円 / 5,340,000 円
   category: 福祉
   subcategory: 育児/児童扶養手当/所得制限限度額/一部支給
   source: openfisca_japan/parameters/福祉/育児/児童扶養手当/所得制限限度額/一部支給.yaml
 - name: 福祉.育児.児童扶養手当.所得制限限度額.全部支給
   description: 渋谷区の児童扶養手当の全部支給の所得制限限度額(扶養人数が0人から増えるごとに増額する6人以上の場合は https://www.city.osaka.lg.jp/kodomo/page/0000002395.html 参照)
   reference: https://www.city.shibuya.tokyo.jp/kodomo/teate/teate/teate_gendogaku.html
-  unit: null
+  unit: currency-JPY
   latest: &id108
     date: '2024-11-01'
     value:
@@ -1482,7 +1482,7 @@ items:
     - 3350000
     - 3730000
     - 4110000
-    display: 690,000 / 1,070,000 / 1,450,000 / 1,830,000 / 2,210,000 / 2,590,000 / 2,970,000 / 3,350,000 / 3,730,000 / 4,110,000
+    display: 690,000 円 / 1,070,000 円 / 1,450,000 円 / 1,830,000 円 / 2,210,000 円 / 2,590,000 円 / 2,970,000 円 / 3,350,000 円 / 3,730,000 円 / 4,110,000 円
   values:
   - *id108
   - date: '2000-05-01'
@@ -1497,14 +1497,14 @@ items:
     - 3150000
     - 3530000
     - 3910000
-    display: 490,000 / 870,000 / 1,250,000 / 1,630,000 / 2,010,000 / 2,390,000 / 2,770,000 / 3,150,000 / 3,530,000 / 3,910,000
+    display: 490,000 円 / 870,000 円 / 1,250,000 円 / 1,630,000 円 / 2,010,000 円 / 2,390,000 円 / 2,770,000 円 / 3,150,000 円 / 3,530,000 円 / 3,910,000 円
   category: 福祉
   subcategory: 育児/児童扶養手当/所得制限限度額/全部支給
   source: openfisca_japan/parameters/福祉/育児/児童扶養手当/所得制限限度額/全部支給.yaml
 - name: 福祉.育児.児童扶養手当.所得制限限度額.扶養義務者
   description: 渋谷区の児童扶養手当の扶養義務者の所得制限限度額(扶養人数が0人から増えるごとに増額する。6人以上の場合は https://www.city.osaka.lg.jp/kodomo/page/0000002395.html 参照)
   reference: https://www.city.shibuya.tokyo.jp/kodomo/teate/teate/teate_gendogaku.html
-  unit: null
+  unit: currency-JPY
   latest: &id109
     date: '2024-11-01'
     value:
@@ -1518,7 +1518,7 @@ items:
     - 5020000
     - 5400000
     - 5780000
-    display: 2,360,000 / 2,740,000 / 3,120,000 / 3,500,000 / 3,880,000 / 4,260,000 / 4,640,000 / 5,020,000 / 5,400,000 / 5,780,000
+    display: 2,360,000 円 / 2,740,000 円 / 3,120,000 円 / 3,500,000 円 / 3,880,000 円 / 4,260,000 円 / 4,640,000 円 / 5,020,000 円 / 5,400,000 円 / 5,780,000 円
   values:
   - *id109
   - date: '2000-05-01'
@@ -1533,7 +1533,7 @@ items:
     - 5020000
     - 5400000
     - 5780000
-    display: 2,360,000 / 2,740,000 / 3,120,000 / 3,500,000 / 3,880,000 / 4,260,000 / 4,640,000 / 5,020,000 / 5,400,000 / 5,780,000
+    display: 2,360,000 円 / 2,740,000 円 / 3,120,000 円 / 3,500,000 円 / 3,880,000 円 / 4,260,000 円 / 4,640,000 円 / 5,020,000 円 / 5,400,000 円 / 5,780,000 円
   category: 福祉
   subcategory: 育児/児童扶養手当/所得制限限度額/扶養義務者
   source: openfisca_japan/parameters/福祉/育児/児童扶養手当/所得制限限度額/扶養義務者.yaml
@@ -1688,23 +1688,23 @@ items:
   latest: &id119
     date: '2024-11-01'
     value: 20
-    display: '20'
+    display: 20 歳
   values:
   - *id119
   - date: '2010-05-01'
     value: 20
-    display: '20'
+    display: 20 歳
   category: 福祉
   subcategory: 育児/児童扶養手当/障害児の上限年齢
   source: openfisca_japan/parameters/福祉/育児/児童扶養手当/障害児の上限年齢.yaml
 - name: 福祉.育児.児童育成手当.上限学年
   description: 児童育成手当の上限学年(18歳3ヶ月のため高校3年生としたときの小学1年生からの通算学年を記載)
   reference: https://web.archive.org/web/20220302155714/https://www.city.shibuya.tokyo.jp/kodomo/teate/hitorioya/hitorioya_teate.html
-  unit: year
+  unit: 学年
   latest: &id120
     date: '2010-05-01'
     value: 12
-    display: '12'
+    display: 12 学年
   values:
   - *id120
   category: 福祉
@@ -1713,7 +1713,7 @@ items:
 - name: 福祉.育児.児童育成手当.所得制限限度額
   description: 渋谷区の児童育成手当の所得制限限度額(扶養人数が0人から増えるごとに増額する)
   reference: https://www.city.shibuya.tokyo.jp/kodomo/teate/teate/teate_gendogaku.html#ikusei
-  unit: null
+  unit: currency-JPY
   latest: &id121
     date: '2000-05-01'
     value:
@@ -1723,7 +1723,7 @@ items:
     - 4744000
     - 5124000
     - 5504000
-    display: 3,604,000 / 3,984,000 / 4,364,000 / 4,744,000 / 5,124,000 / 5,504,000
+    display: 3,604,000 円 / 3,984,000 円 / 4,364,000 円 / 4,744,000 円 / 5,124,000 円 / 5,504,000 円
   values:
   - *id121
   category: 福祉
@@ -1749,7 +1749,7 @@ items:
   latest: &id123
     date: '2000-05-01'
     value: 20.0
-    display: '20'
+    display: 20 歳
   values:
   - *id123
   category: 福祉
@@ -1758,7 +1758,7 @@ items:
 - name: 福祉.育児.特別児童扶養手当.所得制限限度額.受給者
   description: 渋谷区の特別児童扶養手当の受給者の所得制限限度額(扶養人数が0人から増えるごとに増額する。6人以上の場合は https://www.city.yao.osaka.jp/0000001125.html 参照)
   reference: null
-  unit: null
+  unit: currency-JPY
   latest: &id124
     date: '2000-05-01'
     value:
@@ -1772,7 +1772,7 @@ items:
     - 7256000
     - 7636000
     - 8016000
-    display: 4,596,000 / 4,976,000 / 5,356,000 / 5,736,000 / 6,116,000 / 6,496,000 / 6,876,000 / 7,256,000 / 7,636,000 / 8,016,000
+    display: 4,596,000 円 / 4,976,000 円 / 5,356,000 円 / 5,736,000 円 / 6,116,000 円 / 6,496,000 円 / 6,876,000 円 / 7,256,000 円 / 7,636,000 円 / 8,016,000 円
   values:
   - *id124
   category: 福祉
@@ -1781,7 +1781,7 @@ items:
 - name: 福祉.育児.特別児童扶養手当.所得制限限度額.扶養義務者
   description: 渋谷区の特別児童扶養手当の扶養義務者の所得制限限度額(扶養人数が0人から増えるごとに増額する6人以上の場合は https://www.city.yao.osaka.jp/0000001125.html 参照)
   reference: null
-  unit: null
+  unit: currency-JPY
   latest: &id125
     date: '2000-05-01'
     value:
@@ -1795,7 +1795,7 @@ items:
     - 7814000
     - 8027000
     - 8240000
-    display: 6,287,000 / 6,536,000 / 6,749,000 / 6,962,000 / 7,175,000 / 7,388,000 / 7,601,000 / 7,814,000 / 8,027,000 / 8,240,000
+    display: 6,287,000 円 / 6,536,000 円 / 6,749,000 円 / 6,962,000 円 / 7,175,000 円 / 7,388,000 円 / 7,601,000 円 / 7,814,000 円 / 8,027,000 円 / 8,240,000 円
   values:
   - *id125
   category: 福祉
@@ -1840,7 +1840,7 @@ items:
   latest: &id128
     date: '2010-05-01'
     value: 20.0
-    display: '20'
+    display: 20 歳
   values:
   - *id128
   category: 福祉
@@ -1849,7 +1849,7 @@ items:
 - name: 福祉.育児.障害児福祉手当.所得制限限度額.受給者
   description: 障害児福祉手当の受給者の所得制限限度額(扶養人数が0人から増えるごとに増額する。6人以上の場合は https://www.city.date.hokkaido.jp/hotnews/files/00000500/00000589/20130221214915.pdf 参照)
   reference: https://www.mhlw.go.jp/bunya/shougaihoken/jidou/hukushi.html
-  unit: null
+  unit: currency-JPY
   latest: &id129
     date: '2000-05-01'
     value:
@@ -1863,7 +1863,7 @@ items:
     - 6264000
     - 6644000
     - 7024000
-    display: 3,604,000 / 3,984,000 / 4,364,000 / 4,744,000 / 5,124,000 / 5,504,000 / 5,884,000 / 6,264,000 / 6,644,000 / 7,024,000
+    display: 3,604,000 円 / 3,984,000 円 / 4,364,000 円 / 4,744,000 円 / 5,124,000 円 / 5,504,000 円 / 5,884,000 円 / 6,264,000 円 / 6,644,000 円 / 7,024,000 円
   values:
   - *id129
   category: 福祉
@@ -1872,7 +1872,7 @@ items:
 - name: 福祉.育児.障害児福祉手当.所得制限限度額.扶養義務者
   description: 障害児福祉手当の扶養義務者の所得制限限度額(扶養人数が0人から増えるごとに増額する。6人以上の場合は https://www.city.date.hokkaido.jp/hotnews/files/00000500/00000589/20130221214915.pdf 参照)
   reference: https://www.mhlw.go.jp/bunya/shougaihoken/jidou/hukushi.html
-  unit: null
+  unit: currency-JPY
   latest: &id130
     date: '2000-05-01'
     value:
@@ -1886,7 +1886,7 @@ items:
     - 8148000
     - 8528000
     - 8908000
-    display: 6,287,000 / 6,536,000 / 6,749,000 / 6,962,000 / 7,175,000 / 7,388,000 / 7,768,000 / 8,148,000 / 8,528,000 / 8,908,000
+    display: 6,287,000 円 / 6,536,000 円 / 6,749,000 円 / 6,962,000 円 / 7,175,000 円 / 7,388,000 円 / 7,768,000 円 / 8,148,000 円 / 8,528,000 円 / 8,908,000 円
   values:
   - *id130
   category: 福祉
@@ -1912,7 +1912,7 @@ items:
   latest: &id132
     date: '2010-05-01'
     value: 20.0
-    display: '20'
+    display: 20 歳
   values:
   - *id132
   category: 福祉
@@ -1921,7 +1921,7 @@ items:
 - name: 福祉.育児.障害児童育成手当.所得制限限度額
   description: 渋谷区の障害児童育成手当の所得制限限度額(扶養人数が0人から増えるごとに増額する)
   reference: https://www.city.shibuya.tokyo.jp/kodomo/teate/teate/teate_gendogaku.html#ikusei
-  unit: null
+  unit: currency-JPY
   latest: &id133
     date: '2000-05-01'
     value:
@@ -1931,7 +1931,7 @@ items:
     - 4744000
     - 5124000
     - 5504000
-    display: 3,604,000 / 3,984,000 / 4,364,000 / 4,744,000 / 5,124,000 / 5,504,000
+    display: 3,604,000 円 / 3,984,000 円 / 4,364,000 円 / 4,744,000 円 / 5,124,000 円 / 5,504,000 円
   values:
   - *id133
   category: 福祉
@@ -2048,7 +2048,7 @@ items:
   latest: &id142
     date: '2020-04-01'
     value: 0.06
-    display: '0.06'
+    display: 6%
   values:
   - *id142
   category: 福祉

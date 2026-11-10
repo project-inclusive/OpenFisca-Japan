@@ -102,6 +102,24 @@ make serve-local
 - GET http://localhost:50000/variables
 - GET http://localhost:50000/parameters
 
+##### API サーバーをホットリロード付きで動かす
+
+```bash
+make serve-dev
+```
+
+- `make serve-local` と同じ API サーバーを、ソース監視付きで起動する
+- 以下のファイルを変更すると自動でサーバーが再起動し、変更が反映される（数秒かかる）
+  - `openfisca_japan/**/*.py`（Variable の計算式など）
+  - `openfisca_japan/parameters/**/*.yaml`（パラメータ）
+  - `openfisca_japan/assets/**/*.csv`（制度計算に使うデータ）
+- `openfisca_japan/tests/` 配下の変更は（サーバーの動作に影響しないため）再起動の対象外
+- `docker compose up` で起動する `openfisca` サービスはこのターゲットを使うので、
+  ホスト側でソースを編集すればそのままコンテナ内のサーバーに反映される
+- 仕組み: `openfisca serve`（内部は gunicorn）は起動時に一度だけ `TaxBenefitSystem` を構築するため
+  ソース変更を検知できない。そこで [watchdog](https://github.com/gorakhargosh/watchdog) の
+  `watchmedo auto-restart` でプロセスごと監視・再起動している（詳細は `Makefile` の `serve-dev`）
+
 ## 開発方法
 
 ### ディレクトリ構成
@@ -137,9 +155,16 @@ make serve-local
 
 #### 内部計算方法の修正
 - openfisca_japan/variables/~.py等の計算方法を規定するファイルを修正する
-- 以下のコマンドでビルドを行わないとテスト時に修正が反映されない
-  - `make build`
-- その後、上述のテストを行う
+- そのまま上述のテストを行えば修正が反映される
+  - バックエンドは editable install（`make install` = `pip install -e .`）されているため、
+    ソースの修正がそのままテスト・APIサーバーに反映される
+  - `make build`（wheel を作って `--force-reinstall`）を実行すると editable install が
+    **ビルド時点のコードのコピーで上書きされ**、以降ソースを修正しても反映されなくなるので注意
+    （`make build` は配布物と同じ wheel をテストするための CI 向けターゲット）
+  - 誤って実行してしまった場合の戻し方は
+    [Dev Container 開発環境](./devcontainer_note.md#バックエンドのホットリロードeditable-install)を参照。
+    特に `sudo` なしで `make build` すると pip が `~/.local` 側へインストールし、
+    そちらが優先されるため `make install` だけでは直らない
 - 通常は標準出力は表示されませんが、例外を発生させると標準出力が表示されデバッグが容易になります
 - フロントエンドの制約上、見積もり結果に表示する制度のVariableは **`entity = 世帯` にする必要がある**
   - 個人に依存する条件は世帯員単位で計算し、最終的な制度の金額のみ世帯単位で集計すると実装しやすいです
