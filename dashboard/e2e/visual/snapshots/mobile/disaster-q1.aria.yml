@@ -1,0 +1,66 @@
+- progressbar
+- link:
+  - /url: /
+  - img
+- text: 地震被災者支援見積もり あなたについて
+- group:
+  - text: 寝泊まりしている地域
+  - combobox "寝泊まりしている地域":
+    - option "都道府県" [selected]
+    - option "北海道"
+    - option "青森県"
+    - option "岩手県"
+    - option "宮城県"
+    - option "秋田県"
+    - option "山形県"
+    - option "福島県"
+    - option "茨城県"
+    - option "栃木県"
+    - option "群馬県"
+    - option "埼玉県"
+    - option "千葉県"
+    - option "東京都"
+    - option "神奈川県"
+    - option "新潟県"
+    - option "富山県"
+    - option "石川県"
+    - option "福井県"
+    - option "山梨県"
+    - option "長野県"
+    - option "岐阜県"
+    - option "静岡県"
+    - option "愛知県"
+    - option "三重県"
+    - option "滋賀県"
+    - option "京都府"
+    - option "大阪府"
+    - option "兵庫県"
+    - option "奈良県"
+    - option "和歌山県"
+    - option "鳥取県"
+    - option "島根県"
+    - option "岡山県"
+    - option "広島県"
+    - option "山口県"
+    - option "徳島県"
+    - option "香川県"
+    - option "愛媛県"
+    - option "高知県"
+    - option "福岡県"
+    - option "佐賀県"
+    - option "長崎県"
+    - option "熊本県"
+    - option "大分県"
+    - option "宮崎県"
+    - option "鹿児島県"
+    - option "沖縄県"
+  - combobox:
+    - option "市区町村" [selected]
+- button "前へ" [disabled]
+- button "次へ"
+- region
+- region
+- region
+- region
+- region
+- region
