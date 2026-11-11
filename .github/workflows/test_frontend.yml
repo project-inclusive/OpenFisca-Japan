@@ -39,3 +39,33 @@ jobs:
       - name: Playwright smoke
         run: npm run test:e2e
         working-directory: ./dashboard
+
+  visual:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.64.1-noble
+      options: --ipc=host
+    defaults:
+      run:
+        working-directory: dashboard
+    env:
+      HUSKY: '0'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install packages
+        run: npm ci
+      - name: Check Playwright version
+        run: node -e "require('node:assert/strict').equal(require('@playwright/test/package.json').version, '1.64.1')"
+      - name: Build
+        run: npm run build
+      - name: Compare visual and ARIA snapshots
+        run: npx --no-install playwright test --config playwright.visual.config.ts
+      - name: Upload visual differences
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-visual-differences
+          path: tmp/playwright-visual/
+          if-no-files-found: warn
+          retention-days: 14
