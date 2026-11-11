@@ -302,7 +302,7 @@ E2E の安定性を確認するときは `npm run test:e2e` を続けて 2 回�
 `dashboard/playwright.visual.config.ts` は通常の E2E と独立している。
 トップ、同意モーダル、かんたん見積もりの住所・年収・配偶者、くわしく見積もりの住所、結果4種（給付だけ・貸付だけ・両方・対象なし）、API 500、404、地震被災者支援の最初の質問の13画面を、PC（1280×800）とスマートフォン（390×844）で確認する。各ケースで全ページの画像を `toHaveScreenshot`、body の見出し・ボタン・ラベル・文字を `toMatchAriaSnapshot` で比較する。
 
-撮影と比較には、ともに `mcr.microsoft.com/playwright:v1.64.1-noble` の Chromium と `@playwright/test` 1.64.1 を使う。Docker Desktop などを起動し、`dashboard` で次を実行する。
+撮影と比較には、ともに `mcr.microsoft.com/playwright:v1.64.1-noble` の Chromium と `@playwright/test` 1.64.1 を使う。Docker Desktop などを起動し、`dashboard` で次を実行する。ホストで直接実行する場合も、ホストの Docker を共有する devcontainer（docker-outside-of-docker）内で実行する場合も、同じコマンドを使える。実行する環境に Docker CLI・Git・tar が必要。
 
 ```bash
 # 更新前 develop（6e5a6c6）のソースを build して、初回の期待値を撮影する
@@ -313,7 +313,9 @@ bash e2e/visual/docker.sh compare
 npx playwright test --config playwright.visual.config.ts --list
 ```
 
-capture は指定した commit の `dashboard` を `git archive` で取り出し、コンテナの一時ディレクトリで、その commit の lockfile により `npm ci` と `npm run build` を行う。その古い build の出力だけを preview で配信し、現在のテストコードで撮影する。初回の期待値を更新後の build から作らないこと。ローカルの未commitのアプリ変更も撮影に混入しない。compare は現在の作業ツリーを build して配信する。両方とも Linux 用の依存をコンテナ専用の一時 volume に入れるため、ホストの `node_modules` を使わない。初回のイメージ取得と依存のインストールにはネットワークが必要。
+capture は指定した commit の `dashboard` を `git archive` で取り出し、コンテナの一時ディレクトリで、その commit の lockfile により `npm ci` と `npm run build` を行う。その古い build の出力だけを preview で配信し、現在のテストコードで撮影する。初回の期待値を更新後の build から作らないこと。ローカルの未commitのアプリ変更も撮影に混入しない。compare は現在の作業ツリーを build して配信する。commit 前の画面変更も確認できるよう、未commit・未追跡のファイルと保存済みの期待値も渡す。
+
+スクリプトは bind mount を使わず、`node_modules`・`dist`・`tmp` を除いた現在の `dashboard` と、capture 時の指定 commit のアーカイブを `docker cp` で渡す。Linux 用の依存と build は使い捨てのコンテナ内に置き、ホストの `node_modules` や `dist` は使わず書き換えない。capture が成功すると、撮影した期待値と完全な commit 値を記録した `source.json` を `dashboard/e2e/visual/snapshots/` に戻す。初回のイメージ取得と依存のインストールにはネットワークが必要。
 
 実行環境は `linux/amd64` に固定する。日時は `2026-01-15T12:00:00+09:00`、locale は `ja-JP`、timezone は `Asia/Tokyo`、`deviceScaleFactor` は1、`reducedMotion` は `reduce`。アニメーション・transition・caret を止め、通信の完了とフォントの準備後400ms待つ。Google Fonts・Analytics・Tag Manager は遮断する。計算 API は `src/mocks/calculate/*.response.json` の固定応答（エラーは HTTP 500）に置き換え、結果遷移後800ms待つ。
 
@@ -321,7 +323,7 @@ capture は指定した commit の `dashboard` を `git archive` で取り出し
 
 初回は `6e5a6c6` から撮った期待値と出典をレビューしてPRに含め、更新後のブランチで compare が通ることを確認する。意図した見た目の変更を含む次のPRでは、アプリ変更を commit した後、`bash e2e/visual/docker.sh capture <変更のcommit>` で期待値を撮り直す。撮影後に compare を実行し、PNG と ARIA の差分および `source.json` の出典をコード変更と一緒にレビューする。説明できない差に合わせて期待値を更新したり、許容値を引き上げたりしない。
 
-失敗時の expected・actual・diff 画像、ARIA の差分と trace は、リポジトリルートの `tmp/playwright-visual/test-results/` と HTML report の `tmp/playwright-visual/report/` で確認する。コンテナが root で生成したファイルは、必要に応じてホストで所有者を直す。
+失敗時の expected・actual・diff 画像、ARIA の差分と trace は、リポジトリルートの `tmp/playwright-visual/test-results/` と HTML report の `tmp/playwright-visual/report/` で確認する。スクリプトはテストが失敗した場合も結果を `docker cp` で回収し、その終了コードを返す。結果は実行のたびに置き換え、コンテナは成功・失敗にかかわらず削除する。回収したファイルの所有者は、スクリプトを実行したユーザーになる。
 
 #### フロントエンドのテストの分担
 
