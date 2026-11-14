@@ -1,0 +1,7 @@
+description: 高等教育の修学支援新制度_給付型奨学金が支給される学生と生計維持者の資産の合計額の上限
+metadata:
+  reference: https://laws.e-gov.go.jp/law/416M60000080023
+  unit: currency-JPY
+values:
+  2025-04-01:
+    value: 50000000

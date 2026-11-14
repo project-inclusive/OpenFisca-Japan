@@ -363,6 +363,17 @@ items:
   - 高等教育の修学支援新制度_授業料等減免_最大
   - 高等教育の修学支援新制度_授業料等減免_最小
   todo_count: 0
+- name: 高等教育の修学支援新制度_給付型奨学金
+  kinds: []
+  in_app: false
+  description: null
+  category: 福祉
+  subcategory: 育児/高等教育の修学支援新制度_給付型奨学金
+  source: openfisca_japan/variables/福祉/育児/高等教育の修学支援新制度_給付型奨学金.py
+  outputs:
+  - 高等教育の修学支援新制度_給付型奨学金_最大
+  - 高等教育の修学支援新制度_給付型奨学金_最小
+  todo_count: 0
 - name: 高等職業訓練促進給付金
   kinds: []
   in_app: false
