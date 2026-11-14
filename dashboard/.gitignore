@@ -27,3 +27,6 @@ dist-ssr
 /coverage
 cypress/videos
 cypress/screenshots
+
+# Local Storybook build
+/storybook-static/

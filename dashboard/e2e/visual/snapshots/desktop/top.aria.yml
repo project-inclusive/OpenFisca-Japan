@@ -1,0 +1,40 @@
+- link:
+  - /url: /
+  - img
+- paragraph: 受けられそうな支援をかんたん見積もり
+- img
+- paragraph: わかりやすい
+- paragraph: あなたが受けられそうな
+- paragraph: 支援制度の給付額などを
+- paragraph: 簡単な世帯情報から
+- paragraph: 見積もります。
+- img
+- paragraph: 安心
+- paragraph: 入力された情報はサーバーに
+- paragraph: 保存されません。また、入力
+- paragraph: された情報が本アプリの目的
+- paragraph: 以外で使用されたり、第三者に
+- paragraph: 提供されることもありません。
+- img
+- paragraph: 窓口へ
+- paragraph: 申請のときはお住まいの
+- paragraph: 自治体の窓口へ！他にも
+- paragraph: 申請できる制度があるかも？
+- link "かんたん見積もり":
+  - /url: /
+- link "くわしく見積もり":
+  - /url: /
+- link "地震被災者支援制度見積もり":
+  - /url: /
+- link "Contact":
+  - /url: https://poverty-prevention.or.jp/
+- link "GitHub":
+  - /url: https://github.com/project-inclusive/OpenFisca-Japan
+- link "個人情報の扱いについて":
+  - /url: /privacypolicy
+- region
+- region
+- region
+- region
+- region
+- region

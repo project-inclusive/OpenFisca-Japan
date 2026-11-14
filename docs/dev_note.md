@@ -281,7 +281,7 @@ npm run pretty:check
 # formatter (上記でエラーが出た場合に解消)
 npm run pretty
 
-# ロジック・画面のテスト実行
+# 単体テスト（node・jsdom）
 npm run test
 
 # E2E スモークテスト（build 後の preview を自動起動）
@@ -297,24 +297,87 @@ preview のポート 30000 を空けてから実行する。`webServer` が既�
 戻る操作と API エラーの分岐は画面のテストで確認する。Playwright のコンポーネントテストは使わない。
 E2E の安定性を確認するときは `npm run test:e2e` を続けて 2 回実行する。失敗時の trace は `tmp/playwright/test-results/`（リポジトリルートからの相対パス）に残る。
 
+#### 画面の画像・ARIA スナップショットの比較
+
+`dashboard/playwright.visual.config.ts` は通常の E2E と独立している。
+トップ、同意モーダル、かんたん見積もりの住所・年収・配偶者、くわしく見積もりの住所、結果4種（給付だけ・貸付だけ・両方・対象なし）、API 500、404、地震被災者支援の最初の質問の13画面を、PC（1280×800）とスマートフォン（390×844）で確認する。各ケースで全ページの画像を `toHaveScreenshot`、body の見出し・ボタン・ラベル・文字を `toMatchAriaSnapshot` で比較する。
+
+撮影と比較には、ともに `mcr.microsoft.com/playwright:v1.64.1-noble` の Chromium と `@playwright/test` 1.64.1 を使う。Docker Desktop などを起動し、`dashboard` で次を実行する。ホストで直接実行する場合も、ホストの Docker を共有する devcontainer（docker-outside-of-docker）内で実行する場合も、同じコマンドを使える。実行する環境に Docker CLI・Git・tar が必要。
+
+```bash
+# 更新前 develop（6e5a6c6）のソースを build して、初回の期待値を撮影する
+bash e2e/visual/docker.sh capture
+# 現在のソースを build して、保存済みの期待値と比較する
+bash e2e/visual/docker.sh compare
+# ブラウザーを起動せず、13画面 × 2 = 26件を確認する
+npx playwright test --config playwright.visual.config.ts --list
+```
+
+capture は指定した commit の `dashboard` を `git archive` で取り出し、コンテナの一時ディレクトリで、その commit の lockfile により `npm ci` と `npm run build` を行う。その古い build の出力だけを preview で配信し、現在のテストコードで撮影する。初回の期待値を更新後の build から作らないこと。ローカルの未commitのアプリ変更も撮影に混入しない。compare は現在の作業ツリーを build して配信する。commit 前の画面変更も確認できるよう、未commit・未追跡のファイルと保存済みの期待値も渡す。
+
+スクリプトは bind mount を使わず、`node_modules`・`dist`・`tmp` を除いた現在の `dashboard` と、capture 時の指定 commit のアーカイブを `docker cp` で渡す。Linux 用の依存と build は使い捨てのコンテナ内に置き、ホストの `node_modules` や `dist` は使わず書き換えない。capture が成功すると、撮影した期待値と完全な commit 値を記録した `source.json` を `dashboard/e2e/visual/snapshots/` に戻す。初回のイメージ取得と依存のインストールにはネットワークが必要。
+
+実行環境は `linux/amd64` に固定する。日時は `2026-01-15T12:00:00+09:00`、locale は `ja-JP`、timezone は `Asia/Tokyo`、`deviceScaleFactor` は1、`reducedMotion` は `reduce`。アニメーション・transition・caret を止め、通信の完了とフォントの準備後400ms待つ。Google Fonts・Analytics・Tag Manager は遮断する。計算 API は `src/mocks/calculate/*.response.json` の固定応答（エラーは HTTP 500）に置き換え、結果遷移後800ms待つ。
+
+期待値は `dashboard/e2e/visual/snapshots/{desktop,mobile}/` の PNG と `.aria.yml`（計52ファイル）、出典は `snapshots/source.json` に保存する。OS・ブラウザー・フォントを Docker で固定するため、`snapshotPathTemplate` の名前に OS を含めない。画素差の許容は `threshold: 0`・`maxDiffPixels: 0`、ARIA の子要素は `deep-equal` で比較する。期待値のない compare は保存先と撮影コマンドを示して失敗し、自動で期待値を追加しない。
+
+初回は `6e5a6c6` から撮った期待値と出典をレビューしてPRに含め、更新後のブランチで compare が通ることを確認する。意図した見た目の変更を含む次のPRでは、アプリ変更を commit した後、`bash e2e/visual/docker.sh capture <変更のcommit>` で期待値を撮り直す。撮影後に compare を実行し、PNG と ARIA の差分および `source.json` の出典をコード変更と一緒にレビューする。説明できない差に合わせて期待値を更新したり、許容値を引き上げたりしない。
+
+失敗時の expected・actual・diff 画像、ARIA の差分と trace は、リポジトリルートの `tmp/playwright-visual/test-results/` と HTML report の `tmp/playwright-visual/report/` で確認する。スクリプトはテストが失敗した場合も結果を `docker cp` で回収し、その終了コードを返す。結果は実行のたびに置き換え、コンテナは成功・失敗にかかわらず削除する。回収したファイルの所有者は、スクリプトを実行したユーザーになる。
+
 #### フロントエンドのテストの分担
 
-| 層       | 確認する内容                                      | 方法                                                                                                   |
-| -------- | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| ロジック | 状態・変換・入力の検証など、UI から切り離せる処理 | Vitest の node 環境で確認する                                                                          |
-| 画面     | 質問テンプレートの描画、入力操作、表示状態        | 現在は Vitest と jsdom、Testing Library。Storybook の導入後は、story と Vitest Browser Mode で確認する |
-| API      | API の応答による表示                              | MSW を使い、HTTP の境界で応答を差し替える                                                              |
-| 導線     | 主要な画面遷移と一連の操作                        | Playwright の E2E で、主要な導線だけを確認する                                                         |
+| 層           | 確認する内容                                           | 方法                                           |
+| ------------ | ------------------------------------------------------ | ---------------------------------------------- |
+| ロジック     | 状態・変換・入力の検証など                             | Vitest の node 環境                            |
+| 単体の画面   | 数値入力の境界値・日付による学年変換・API hook         | Vitest の jsdom 環境                           |
+| story        | 質問の選択操作と復元・結果表示・エラーと戻る導線・a11y | Storybook と addon-vitest、Playwright Chromium |
+| Browser Mode | story を必要としない実際のキーボードやフォーカスの検査 | vitest-browser-react、Playwright Chromium      |
+| API          | API の応答による表示                                   | MSW 2 の共通 handler                           |
+| 導線         | 主要な画面遷移と一連の操作                             | Playwright E2E のスモーク                      |
 
-`dashboard` で `npm run test` を実行すると、既存のロジックのテストは node 環境、質問テンプレートのテストはファイル先頭の `// @vitest-environment jsdom` により jsdom 環境で動く。
-描画用 Provider と固定データは `dashboard/src/components/questions/template/questionTemplateTestUtils.tsx` にまとめ、各描画で新しい RecoilRoot を作る。テンプレートは Router を使わないため、現在のヘルパーは ChakraProvider と RecoilRoot を提供する。
+`dashboard` で以下を実行する。ブラウザーの検査には、Playwright と同じ版の Chromium と OS ライブラリが必要。初回は `npx playwright install --with-deps chromium` で用意する。
+
+```bash
+# node・jsdom の単体テスト。従来の npm run test も同じ対象
+npx vitest run --project unit
+# story の play 関数と a11y の検査
+npx vitest run --config vitest.browser.config.mts --project storybook
+# story にしない Browser Mode の検査
+npx vitest run --config vitest.browser.config.mts --project browser
+# story と Browser Mode をまとめて検査
+npx vitest run --config vitest.browser.config.mts
+# 対話的な Storybook（http://localhost:6006）
+npx storybook dev -p 6006
+# Storybook の静的ビルド（storybook-static/）
+npx storybook build
+```
+
+既存の Vite 設定には `unit` project、`vitest.browser.config.mts` には `storybook` と `browser` projects を定義する。単体テストの node 用 MSW setup はブラウザーには読み込まない。`*.browser.test.tsx` は単体テストから除外する。
+
+ブラウザー設定は `browser()` で project ごとに新しく生成する。Vitest はブラウザーの instance に名前を書き込むため、同じ設定オブジェクトを複数の project で共有すると、Chromium の project 名が重複して起動に失敗する。
+
+#### story の追加と検査
+
+コンポーネントの隣に `*.stories.tsx` を置き、CSF 3 の named export でケースを定義する。`questionTemplates.stories.tsx`、`result.stories.tsx`、`errors.stories.tsx` が実例である。
+
+- 質問の描画には `src/components/questions/template/questionTemplateTestUtils.tsx` の `TestProviders` と固定データを使う。各 mount が ChakraProvider と新しい RecoilRoot を持つ。`QuestionValidity` で回答の有効性を観測する。
+- `play` では `storybook/test` の `expect`・`userEvent`・`fn` を使い、`canvas` 内の要素を取得する。ボタンの選択色を調べる場合は hover を外し、実際の computed style を検査する。
+- 結果には `src/mocks/resultTestUtils.tsx` の `ResultTestPage` を使う。固定日の Recoil 状態と複製したリクエストを設定し、MemoryRouter で遷移先を観測できる。エラー単体には `ErrorTestPage` を使う。
+- API 応答は `parameters.msw.handlers` に `src/mocks/handlers.ts` の handler を指定する。`fetch` の直接置換や別の固定応答を追加しない。例: `parameters: { msw: { handlers: [calculateSuccessHandler('none')] } }`。
+- `.storybook/preview.ts` が `msw-storybook-addon/csf3` の `mswLoader` を通じて worker を開始し、story ごとに handler をリセットする。未定義の `/calculate` はエラーにし、静的ファイルは通す。Service Worker は `.storybook/public/` だけから配信するため、通常のアプリの build には含まれない。MSW を更新した際は `node_modules/msw/lib/mockServiceWorker.js` を同じ場所へコピーし直す。
+- story にする必要がないブラウザー操作は `*.browser.test.tsx` に置き、`vitest-browser-react` の `render` と `vitest/browser` の locator・実キーボードを使う。年齢入力の ArrowDown とフォーカスの検査を実例としている。
+
+a11y addon は全 story で自動実行する。現在は違反を別途直すため `parameters.a11y.test: 'todo'` とし、警告として報告する。検査を無効化する `off` は使わない。Storybook の Accessibility パネルとテストレポートで、story 名・axe の rule ID・重大度・対象要素を確認し、修正を別途追跡する。エラーから移動する story とは別に、エラーを表示したままにする story も置き、a11y の対象が遷移後の画面だけにならないようにする。
+
+画面の同じ確認を jsdom と story の両方に追加しない。数値の正規化・境界値や学年の暦依存は jsdom に残し、ネイティブの選択操作・computed style・フォーカスはブラウザーで確認する。story でのスクリーンショット比較と Chromatic は使わない。画面全体の比較は専用の Playwright 設定で行う。
 
 #### 計算 API の固定データと再記録
 
-結果・エラー画面は Vitest と jsdom で確認し、`fetch` を直接置き換えず MSW 2 系で `/calculate` の HTTP 応答を差し替える。
+結果・エラー画面は story と Chromium で確認し、`fetch` を直接置き換えず MSW 2 系で `/calculate` の HTTP 応答を差し替える。
 共通の `dashboard/src/mocks/handlers.ts` は正常応答の `calculateSuccessHandler`（`benefit-only`・`loan-only`・`both`・`none`）と、HTTP 500・通信失敗の `calculateFailureHandlers` を提供する。Storybook でも同じ handlers を利用できる。
 Vitest の `src/testSetup.ts` から node 用の `src/mocks/server.ts` を起動し、未定義の通信をエラーにして、テストごとに応答の上書きをリセットする。
-描画には質問テンプレートと共通の `renderWithProviders` を使い、結果・エラー画面では `src/mocks/resultTestUtils.tsx` で Router と固定日の Recoil 状態を加える。
+描画には質問テンプレートと共通の `TestProviders` を使い、結果・エラー画面では `src/mocks/resultTestUtils.tsx` で Router と固定日の Recoil 状態を加える。API hook の単体テストだけは jsdom と node 用 MSW を使う。
 
 `dashboard/src/mocks/calculate/` に、4 ケースそれぞれの POST 本文（`*.request.json`）と応答（`*.response.json`）を置く。
 日付は `2026-01-15` に固定し、依頼する計算結果はリクエスト側で `null` にする。応答は現時点では画面が読む形に合わせた手作りのデータであり、実 API の記録や制度の適格性・金額の根拠ではない。
@@ -337,7 +400,7 @@ done
 4 件すべてが成功したら、`tmp/calculate-recordings/` の JSON と同名の固定応答を比較する。
 `世帯一覧.世帯1` の日付付きの金額（`児童手当`、`児童扶養手当_最小`・`児童扶養手当_最大`、`生活支援費`、`緊急小口資金`）、`世帯員`、居住地、配列の形を確認する。
 手作りの応答と違う場合は、差分と実行した API の版を記録して別途修正する。実応答が同じ表示ケースになるとは限らないため、期待する表示を確認せずに固定データへ上書きしない。
-固定データを更新した場合は `dashboard` で `npm run test`、`npm run build`、`npm run lint`、`npm run pretty:check` を実行する。
+固定データを更新した場合は `dashboard` で `npm run test`、`npx vitest run --config vitest.browser.config.mts`、`npm run build`、`npm run lint`、`npm run pretty:check` を実行する。
 
 #### 一問一答の状態追加
 
