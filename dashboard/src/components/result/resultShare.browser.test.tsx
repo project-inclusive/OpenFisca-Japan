@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { page } from 'vitest/browser';
 import { cleanup, render } from 'vitest-browser-react';
+import { act } from '@testing-library/react';
 import { toPng } from 'html-to-image';
 import {
   calculateFixtures,
@@ -66,7 +67,7 @@ const shown = (text: string) =>
 const button = (name: string) =>
   page.getByRole('button', { name, exact: true });
 const qrUrl = () =>
-  page.getByRole('status', { name: 'QR コードの URL' }).element().textContent;
+  page.getByRole('status', { name: 'QR コードの URL' }).query()?.textContent;
 const resultShown = async () => {
   await shown('見積もり結果');
   await expect
@@ -102,12 +103,14 @@ describe('opening saved result links', () => {
         });
         expect(requests[0]).not.toHaveProperty('frontend');
         // Legacy '+' is recovered even when URLSearchParams interprets it as space.
-        expect(qrUrl()).toBe(
-          `${window.location.origin}/result${shareQuery(
-            savedShareKeys[format],
-            mode.flags
-          )}`
-        );
+        await expect
+          .poll(qrUrl)
+          .toBe(
+            `${window.location.origin}/result${shareQuery(
+              savedShareKeys[format],
+              mode.flags
+            )}`
+          );
         if (mode.name === 'simple') {
           expect(
             page
@@ -190,8 +193,13 @@ describe('sharing a result', () => {
       const flags = new URLSearchParams(mode.flags);
       expect(url.searchParams.get('1')).toBe(flags.get('1'));
       expect(url.searchParams.get('2')).toBe(flags.get('2'));
-      await shown('クリップボードにコピーしました');
-      expect(qrUrl()).toBe(copied);
+      await expect
+        .poll(
+          () =>
+            button('クリップボードにコピーしました').query()?.checkVisibility()
+        )
+        .toBe(true);
+      await expect.poll(qrUrl).toBe(copied);
       await expect
         .poll(() => button('結果のリンクをコピー').query()?.checkVisibility(), {
           timeout: 5000,
@@ -200,33 +208,34 @@ describe('sharing a result', () => {
     }
   );
 
-  it('currently shows the copied message even when the clipboard rejects', async () => {
-    await mount(savedShareKeys.compact);
-    await resultShown();
-    const rejection = new DOMException(
-      'Clipboard access denied',
-      'NotAllowedError'
-    );
-    const writeText = vi
-      .spyOn(navigator.clipboard, 'writeText')
-      .mockRejectedValue(rejection);
-    const error = vi
-      .spyOn(console, 'error')
-      .mockImplementation(() => undefined);
-    await button('結果のリンクをコピー').click();
-    await expect
-      .poll(() => error.mock.calls)
-      .toContainEqual(['Failed to copy text:', rejection]);
-    // Characterize the existing UI; correcting the false success message is a
-    // separate application change. The QR remains usable after denial.
-    await shown('クリップボードにコピーしました');
-    expect(qrUrl()).toBe(writeText.mock.calls[0][0]);
-    await expect
-      .poll(() => button('結果のリンクをコピー').query()?.checkVisibility(), {
-        timeout: 5000,
-      })
-      .toBe(true);
-  });
+  it.fails(
+    'does not show the copied message when the clipboard rejects',
+    async () => {
+      await mount(savedShareKeys.compact);
+      await resultShown();
+      const rejection = new DOMException(
+        'Clipboard access denied',
+        'NotAllowedError'
+      );
+      const writeText = vi
+        .spyOn(navigator.clipboard, 'writeText')
+        .mockRejectedValue(rejection);
+      const error = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => undefined);
+      // Flush the rejected promise and its UI updates before checking absence.
+      await act(async () => {
+        await button('結果のリンクをコピー').click();
+      });
+      await expect
+        .poll(() => error.mock.calls)
+        .toContainEqual(['Failed to copy text:', rejection]);
+      await expect.poll(qrUrl).toBe(writeText.mock.calls[0][0]);
+      // Known application bug: a rejected write currently reports success.
+      // Keep the intended behavior so fixing it makes this expected failure fail.
+      expect(button('クリップボードにコピーしました').query()).toBeNull();
+    }
+  );
 });
 
 it('saves the result as an image and clears the loading state', async () => {
@@ -252,7 +261,15 @@ it('saves the result as an image and clears the loading state', async () => {
   expect(node.textContent).toContain('見積もり結果');
   expect(node.textContent).toContain('児童手当');
   expect(options).toMatchObject({ backgroundColor: '#C4F1F9' });
-  await shown('読み込み中...');
+  await expect
+    .poll(
+      () =>
+        page
+          .getByRole('button', { name: /読み込み中/ })
+          .query()
+          ?.checkVisibility()
+    )
+    .toBe(true);
   expect(
     (
       page

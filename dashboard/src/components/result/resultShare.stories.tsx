@@ -25,9 +25,9 @@ const restored =
   (label: string, frontend = true): NonNullable<Story['play']> =>
   async ({ canvas }) => {
     await expect(await canvas.findByText('見積もり結果')).toBeVisible();
-    await expect(canvas.getByText(label, { exact: true })).toBeVisible();
+    await expect(await canvas.findByText(label, { exact: true })).toBeVisible();
     await expect(
-      canvas.getByRole('button', { name: '児童手当 1.5 万円/月' })
+      await canvas.findByRole('button', { name: '児童手当 1.5 万円/月' })
     ).toBeVisible();
     if (frontend) {
       await expect(
@@ -69,12 +69,11 @@ export const CorruptLink: Story = {
       })
     ).toBeVisible();
     await expect(
-      canvas.getByText('お手数ですがもう一度情報を入力してください。')
+      await canvas.findByText('お手数ですがもう一度情報を入力してください。')
     ).toBeVisible();
-    await expect(canvas.getByRole('link', { name: '戻る' })).toHaveAttribute(
-      'href',
-      '/'
-    );
+    await expect(
+      await canvas.findByRole('link', { name: '戻る' })
+    ).toHaveAttribute('href', '/');
     await expect(canvas.queryByText('見積もり結果')).not.toBeInTheDocument();
   },
 };
