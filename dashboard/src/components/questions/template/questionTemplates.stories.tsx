@@ -238,8 +238,8 @@ export const PersonCount: Story = {
       type: 'PersonNum',
       selection: 0,
     });
-    // Preserve the current behavior: validity updates when yes is clicked again.
-    await expect(valid).toHaveTextContent('true');
+    // Immediate validity after clearing is covered by an expected-failure unit
+    // test. Clicking yes again explicitly revalidates the empty count here.
     await click(yes);
     await expect(valid).toHaveTextContent('false');
   },
