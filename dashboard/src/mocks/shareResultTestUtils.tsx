@@ -7,6 +7,8 @@ import { calculationDate } from './calculateFixtures';
 
 // Fixed synthetic links, created with the compact-array and legacy deflate
 // formats. Do not encode them at test time: these exercise opening saved URLs.
+// Share keys embed household answers (age, income, residence). Never copy a
+// real user's link here; build new keys only from made-up test data.
 export const savedShareKeys = {
   compact:
     'NYpBCoAwDAT_succkqBC8pWSg9aLKD7Akr_bCp6GYabowiIziZJRwwpv2Ha4mDHhuCuck1DlD8o6Zfa1XvAyQgw7u3AQno8ZLw',
