@@ -25,6 +25,8 @@ dist-ssr
 
 # testing
 /coverage
+# Vitest Browser Mode attachments (screenshots on failure)
+/.vitest/
 cypress/videos
 cypress/screenshots
 
