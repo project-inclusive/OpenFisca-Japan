@@ -1,7 +1,7 @@
 description: 障害児福祉手当の受給者の所得制限限度額(扶養人数が0人から増えるごとに増額する。6人以上の場合は https://www.city.date.hokkaido.jp/hotnews/files/00000500/00000589/20130221214915.pdf 参照)
 metadata:
   threshold_unit: person
-  rate_unit: 1
+  unit: currency-JPY
   reference: https://www.mhlw.go.jp/bunya/shougaihoken/jidou/hukushi.html
 values:
   2000-05-01:

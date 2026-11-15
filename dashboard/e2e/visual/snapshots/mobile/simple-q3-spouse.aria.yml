@@ -1,0 +1,17 @@
+- progressbar
+- link:
+  - /url: /
+  - img
+- text: かんたん見積もり あなたについて
+- group:
+  - text: 配偶者はいますか？
+  - button "はい"
+  - button "いいえ"
+- button "前へ"
+- button "次へ"
+- region
+- region
+- region
+- region
+- region
+- region

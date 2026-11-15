@@ -6,7 +6,10 @@ services:
       dockerfile: ./Dockerfile
     volumes:
       - ${LOCAL_WORKSPACE_FOLDER:-.}:/app
-    command: make serve-local
+    # serve-dev: ソース(.py / parameters の .yaml / assets の .csv)の変更を監視して
+    # サーバーを自動再起動する開発用ターゲット。bind mount したソースがそのまま
+    # import されるよう、Dockerfile 側は editable install のままにしてある。
+    command: make serve-dev
     user: user:user
     ports:
       - 50000:50000

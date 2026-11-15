@@ -1,0 +1,6 @@
+{
+  "revision": "6e5a6c66853386ba689bbc7b2ab986dbe81517c3",
+  "image": "mcr.microsoft.com/playwright:v1.64.1-noble",
+  "platform": "linux/amd64",
+  "playwright": "1.64.1"
+}

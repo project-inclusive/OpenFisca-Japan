@@ -29,8 +29,13 @@ RUN pip install --no-cache-dir --upgrade pip setuptools \
 WORKDIR /app
 COPY . /app
 
-# 依存インストール + ビルド（テストが動く状態にする）
-RUN make install && make build
+# 依存インストール（テストが動く状態にする）。
+# ここでの editable install はビルドコンテキストのコピー(/app)を指すため、実際の
+# ワークスペース(${containerWorkspaceFolder})に対しては post-create.sh で入れ直す。
+# `make build`（wheel 化 + --force-reinstall）は実行しない。実行すると editable install が
+# ビルド時点のコードのコピーで上書きされ、ソースを編集しても `openfisca test` /
+# `make serve-dev` に反映されなくなる。
+RUN make install
 
 # フロントエンド(30000) / バックエンドAPI(50000) のポート
 EXPOSE 30000

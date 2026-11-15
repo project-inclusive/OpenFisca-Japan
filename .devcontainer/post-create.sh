@@ -9,6 +9,15 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # 永続化ボリューム上の AI CLI 用ディレクトリを作成・権限調整（この後の install で書き込めるように）
 bash "${SCRIPT_DIR}/prepare-agent-dirs.sh"
 
+# バックエンド(openfisca_japan)をワークスペースの実体に対して editable install し直す。
+# Dockerfile 内の `make install` はビルドコンテキストのコピー(/app)を指しているため、
+# そのままだとワークスペースのソースを編集しても import 先が変わらず、
+# `make test` / `make serve-dev` にコード変更が反映されない。
+# （openfisca コマンドはコンソールスクリプトなので cwd が sys.path に入らず、
+#   カレントディレクトリがワークスペースでも site-packages 側が import される）
+REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+sudo make -C "${REPO_ROOT}" install
+
 # Claude Code をインストール（公式の推奨方法であるネイティブインストーラ。
 # 失敗時は npm パッケージにフォールバック）。
 # feature(ghcr.io/anthropics/devcontainer-features/claude-code) を使わない理由:

@@ -1,5 +1,9 @@
-# 使うべきでない関数を使用しているかどうかのみ検証
-select = ["TID"]
+# TID: 使うべきでない関数を使用しているかどうかを検証
+# COM: 末尾カンマの検証。もともと flake8-commas (C81x) で行っていたが、
+#      flake8-commas が setuptools 82 で削除された pkg_resources を import しており
+#      flake8 自体が起動しなくなるため、同等のルールを持つ ruff に移行した。
+#      (COM812 = C812/C815/C816, COM818 = C818, COM819 = C819 に対応)
+select = ["TID", "COM"]
 
 [lint.flake8-tidy-imports.banned-api]
 "enum".msg = "Enumを表現したい場合は openfisca_core.indexed_enums.Enum を使用してください。"
