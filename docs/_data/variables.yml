@@ -6063,6 +6063,140 @@ items:
   category: 福祉
   subcategory: 育児/高等教育の修学支援新制度
   source: openfisca_japan/variables/福祉/育児/高等教育の修学支援新制度.py
+- name: 高等教育の修学支援新制度_給付型奨学金_支給割合
+  label: 高等教育の修学支援新制度の給付型奨学金（学資支給金）において世帯の所得等により定まる支給割合
+  documentation: "独立行政法人日本学生支援機構法施行令第8条の2第1項各号に定める支給の割合。\n支給額算定基準額に応じて全額、3分の2、3分の1、4分の1となる。\n\n支給額算定基準額は同条第4項に定められており、算出方法は授業料等減免の減免額算定基準額\n（大学等における修学の支援に関する法律施行令第2条第2項）と同じであるため、\n「高等教育の修学支援新制度_減免額算定基準額」を用いている。区分の境界の額も同じであるため、\n減免額算定基準額の上限のパラメータを用いている。\n\n4分の1の支給は多子世帯に限られる。施行令には限定がないが、独立行政法人日本学生支援機構に関する省令\n（https://laws.e-gov.go.jp/law/416M60000080023）が次のように定めているためである。\n- 第23条の2第2項第4号ロ: 支給額算定基準額が51,300円以上の場合は、多子世帯または\n  私立の理工農系の学部等（公示対象学部等）に在学する者に限り対象となる\n- 第40条第1項第4号・第2項第2号: 多子世帯でない理工農系の学生は、支給額算定基準額を\n  154,500円以上とみなす（＝給付型奨学金は支給されず、授業料等減免のみ受けられる）\n- 第40条第1項第5号・第2項第3号: 多子世帯で資産の合計額が5000万円以上3億円未満の場合も、\n  支給額算定基準額を154,500円とみなす（＝給付型奨学金は支給されない）\n\n授業料等減免と異なり、多子世帯でも所得にかかわらず全額とはならない。\n\n資産の要件は、省令第23条の2第2項第4号により、多子世帯でなければ5000万円未満が対象となり、\n多子世帯であれば5000万円以上で上記のとおり支給されないため、いずれも5000万円未満で判定している。\n\nNOTE: 資産には現金や有価証券も含まれるが、本リポジトリの入力項目は預貯金のみのため、\n世帯員の預貯金の合計額で判定している。\n「特に優れた者」という学業成績等の要件は判定していない。"
+  references:
+  - https://laws.e-gov.go.jp/law/416CO0000000002
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  todos: []
+  role: 計算項目
+  institution: 高等教育の修学支援新制度_給付型奨学金
+  category: 福祉
+  subcategory: 育児/高等教育の修学支援新制度_給付型奨学金
+  source: openfisca_japan/variables/福祉/育児/高等教育の修学支援新制度_給付型奨学金.py
+- name: 高等教育の修学支援新制度_給付型奨学金_最大
+  label: 高等教育の修学支援新制度による給付型奨学金（学資支給金）の月額の最大額
+  documentation: '独立行政法人日本学生支援機構法第17条の2に基づく学資支給金の月額。
+
+    自宅通学か自宅外通学かは入力項目としていないため、月額の高い自宅外通学の場合を最大額としている。
+
+    その他の割り切りは「高等教育の修学支援新制度_給付型奨学金_最小」と同じ。'
+  references:
+  - https://www.jasso.go.jp/shogakukin/about/kyufu/index.html
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  todos: []
+  role: 制度
+  institution: 高等教育の修学支援新制度_給付型奨学金
+  category: 福祉
+  subcategory: 育児/高等教育の修学支援新制度_給付型奨学金
+  source: openfisca_japan/variables/福祉/育児/高等教育の修学支援新制度_給付型奨学金.py
+- name: 高等教育の修学支援新制度_給付型奨学金_最小
+  label: 高等教育の修学支援新制度による給付型奨学金（学資支給金）の月額の最小額
+  documentation: '独立行政法人日本学生支援機構法第17条の2に基づく学資支給金の月額。
+
+    自宅通学か自宅外通学かは入力項目としていないため、月額の低い自宅通学の場合を最小額としている。
+
+
+    以下は割り切って実装している。
+
+    - 高等専門学校は第4学年・第5学年のみが対象だが、学年を入力できないため判定していない。
+
+    - 夜間の課程および通信による教育は、入力から判別できないため昼間の課程として算出している。
+
+    - 支給を受けられる期間（正規の修業年限）の判定は行っていない。
+
+    - 職業訓練受講給付金等を受けている場合の調整（施行令第8条の2第5項）は行っていない。'
+  references:
+  - https://www.jasso.go.jp/shogakukin/about/kyufu/index.html
+  entity: 世帯
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  todos: []
+  role: 制度
+  institution: 高等教育の修学支援新制度_給付型奨学金
+  category: 福祉
+  subcategory: 育児/高等教育の修学支援新制度_給付型奨学金
+  source: openfisca_japan/variables/福祉/育児/高等教育の修学支援新制度_給付型奨学金.py
+- name: 高等教育の修学支援新制度_給付型奨学金の月額_自宅外通学
+  label: 高等教育の修学支援新制度による世帯員ごとの自宅外通学の場合の給付型奨学金の月額
+  documentation: '独立行政法人日本学生支援機構法施行令第8条の2第1項に定める自宅外通学の場合の月額。
+
+    3分の2等を乗じた額に百円未満の端数がある場合は百円に切り上げる。
+
+    大学等に在学していない場合は0円。'
+  references:
+  - https://laws.e-gov.go.jp/law/416CO0000000002
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  todos: []
+  role: 計算項目
+  institution: 高等教育の修学支援新制度_給付型奨学金
+  category: 福祉
+  subcategory: 育児/高等教育の修学支援新制度_給付型奨学金
+  source: openfisca_japan/variables/福祉/育児/高等教育の修学支援新制度_給付型奨学金.py
+- name: 高等教育の修学支援新制度_給付型奨学金の月額_自宅通学
+  label: 高等教育の修学支援新制度による世帯員ごとの自宅通学の場合の給付型奨学金の月額
+  documentation: '独立行政法人日本学生支援機構法施行令第8条の2第1項に定める自宅通学の場合の月額。
+
+    3分の2等を乗じた額に百円未満の端数がある場合は百円に切り上げる。
+
+    大学等に在学していない場合は0円。
+
+
+    NOTE: 生計維持者が生活保護を受けている場合や、児童養護施設に入所していた場合等は、
+
+    自宅通学でも同条第2項のより高い額となる。本リポジトリの「生活保護」は受給できる見込みの額であり
+
+    実際に受給しているかは判別できないため、第2項の額は用いていない。
+
+    第2項の額は自宅外通学の額を超えないため、最小額と最大額の範囲には収まる。'
+  references:
+  - https://laws.e-gov.go.jp/law/416CO0000000002
+  entity: 人物
+  value_type: float
+  possible_values: []
+  definition_period: day
+  default_value: 0
+  unit: null
+  computed: true
+  formula_start_dates:
+  - '0001-01-01'
+  todos: []
+  role: 計算項目
+  institution: 高等教育の修学支援新制度_給付型奨学金
+  category: 福祉
+  subcategory: 育児/高等教育の修学支援新制度_給付型奨学金
+  source: openfisca_japan/variables/福祉/育児/高等教育の修学支援新制度_給付型奨学金.py
 - name: 高等職業訓練促進給付金_最大
   label: 高等職業訓練促進給付金の最大額
   documentation: 'ひとり親が就職に有利な資格の取得を目指して養成機関で修業する期間の生活費を支援する制度。

@@ -2054,16 +2054,29 @@ items:
   category: 福祉
   subcategory: 育児/高等教育の修学支援新制度/減免額算定基準額の税率
   source: openfisca_japan/parameters/福祉/育児/高等教育の修学支援新制度/減免額算定基準額の税率.yaml
+- name: 福祉.育児.高等教育の修学支援新制度.給付型奨学金の資産の上限
+  description: 高等教育の修学支援新制度_給付型奨学金が支給される学生と生計維持者の資産の合計額の上限
+  reference: https://laws.e-gov.go.jp/law/416M60000080023
+  unit: currency-JPY
+  latest: &id143
+    date: '2025-04-01'
+    value: 50000000
+    display: 50,000,000 円
+  values:
+  - *id143
+  category: 福祉
+  subcategory: 育児/高等教育の修学支援新制度/給付型奨学金の資産の上限
+  source: openfisca_japan/parameters/福祉/育児/高等教育の修学支援新制度/給付型奨学金の資産の上限.yaml
 - name: 福祉.育児.高等職業訓練促進給付金.修了支援給付金.住民税課税世帯
   description: 高等職業訓練修了支援給付金の額（住民税課税世帯）
   reference: https://www.cfa.go.jp/policies/hitori-oya/syokugyou-kunren
   unit: currency-JPY
-  latest: &id143
+  latest: &id144
     date: '2026-04-01'
     value: 25000
     display: 25,000 円
   values:
-  - *id143
+  - *id144
   category: 福祉
   subcategory: 育児/高等職業訓練促進給付金/修了支援給付金/住民税課税世帯
   source: openfisca_japan/parameters/福祉/育児/高等職業訓練促進給付金/修了支援給付金/住民税課税世帯.yaml
@@ -2071,12 +2084,12 @@ items:
   description: 高等職業訓練修了支援給付金の額（住民税非課税世帯）
   reference: https://www.cfa.go.jp/policies/hitori-oya/syokugyou-kunren
   unit: currency-JPY
-  latest: &id144
+  latest: &id145
     date: '2026-04-01'
     value: 50000
     display: 50,000 円
   values:
-  - *id144
+  - *id145
   category: 福祉
   subcategory: 育児/高等職業訓練促進給付金/修了支援給付金/住民税非課税世帯
   source: openfisca_japan/parameters/福祉/育児/高等職業訓練促進給付金/修了支援給付金/住民税非課税世帯.yaml
@@ -2084,12 +2097,12 @@ items:
   description: 高等職業訓練促進給付金の最終年度加算額（訓練を受けている期間の最後の1年間の増額分）
   reference: https://www.cfa.go.jp/policies/hitori-oya/syokugyou-kunren
   unit: currency-JPY
-  latest: &id145
+  latest: &id146
     date: '2026-04-01'
     value: 40000
     display: 40,000 円
   values:
-  - *id145
+  - *id146
   category: 福祉
   subcategory: 育児/高等職業訓練促進給付金/最終年度加算額
   source: openfisca_japan/parameters/福祉/育児/高等職業訓練促進給付金/最終年度加算額.yaml
@@ -2097,12 +2110,12 @@ items:
   description: 高等職業訓練促進給付金の月額（住民税課税世帯）
   reference: https://www.cfa.go.jp/policies/hitori-oya/syokugyou-kunren
   unit: currency-JPY
-  latest: &id146
+  latest: &id147
     date: '2026-04-01'
     value: 70500
     display: 70,500 円
   values:
-  - *id146
+  - *id147
   category: 福祉
   subcategory: 育児/高等職業訓練促進給付金/月額/住民税課税世帯
   source: openfisca_japan/parameters/福祉/育児/高等職業訓練促進給付金/月額/住民税課税世帯.yaml
@@ -2110,12 +2123,12 @@ items:
   description: 高等職業訓練促進給付金の月額（住民税非課税世帯）
   reference: https://www.cfa.go.jp/policies/hitori-oya/syokugyou-kunren
   unit: currency-JPY
-  latest: &id147
+  latest: &id148
     date: '2026-04-01'
     value: 100000
     display: 100,000 円
   values:
-  - *id147
+  - *id148
   category: 福祉
   subcategory: 育児/高等職業訓練促進給付金/月額/住民税非課税世帯
   source: openfisca_japan/parameters/福祉/育児/高等職業訓練促進給付金/月額/住民税非課税世帯.yaml
@@ -2123,12 +2136,12 @@ items:
   description: 障害基礎年金の年金額に対する子の加算額（子の人数分加算、三人目以降）
   reference: https://www.nenkin.go.jp/service/jukyu/shougainenkin/jukyu-yoken/20150514.html
   unit: currency-JPY
-  latest: &id148
+  latest: &id149
     date: '2024-04-01'
     value: 78300
     display: 78,300 円
   values:
-  - *id148
+  - *id149
   category: 福祉
   subcategory: 障害基礎年金/支給額/子の加算額_三人目以降
   source: openfisca_japan/parameters/福祉/障害基礎年金/支給額/子の加算額_三人目以降.yaml
@@ -2136,12 +2149,12 @@ items:
   description: 障害基礎年金の年金額に対する子の加算額（子の人数分加算、二人目まで）
   reference: https://www.nenkin.go.jp/service/jukyu/shougainenkin/jukyu-yoken/20150514.html
   unit: currency-JPY
-  latest: &id149
+  latest: &id150
     date: '2024-04-01'
     value: 234800
     display: 234,800 円
   values:
-  - *id149
+  - *id150
   category: 福祉
   subcategory: 障害基礎年金/支給額/子の加算額_二人目まで
   source: openfisca_japan/parameters/福祉/障害基礎年金/支給額/子の加算額_二人目まで.yaml
@@ -2149,12 +2162,12 @@ items:
   description: 障害基礎年金の年金額(1級、昭和31年4月1日以前生まれ)
   reference: https://www.nenkin.go.jp/service/jukyu/shougainenkin/jukyu-yoken/20150514.html
   unit: currency-JPY
-  latest: &id150
+  latest: &id151
     date: '2024-04-01'
     value: 1017125
     display: 1,017,125 円
   values:
-  - *id150
+  - *id151
   category: 福祉
   subcategory: 障害基礎年金/支給額/支給額_一級_昭和三〇年度以前
   source: openfisca_japan/parameters/福祉/障害基礎年金/支給額/支給額_一級_昭和三〇年度以前.yaml
@@ -2162,12 +2175,12 @@ items:
   description: 障害基礎年金の年金額(1級、昭和31年4月2日以後生まれ)
   reference: https://www.nenkin.go.jp/service/jukyu/shougainenkin/jukyu-yoken/20150514.html
   unit: currency-JPY
-  latest: &id151
+  latest: &id152
     date: '2024-04-01'
     value: 1020000
     display: 1,020,000 円
   values:
-  - *id151
+  - *id152
   category: 福祉
   subcategory: 障害基礎年金/支給額/支給額_一級_昭和三一年度以降
   source: openfisca_japan/parameters/福祉/障害基礎年金/支給額/支給額_一級_昭和三一年度以降.yaml
@@ -2175,12 +2188,12 @@ items:
   description: 障害基礎年金の年金額(2級、昭和31年4月1日以前生まれ)
   reference: https://www.nenkin.go.jp/service/jukyu/shougainenkin/jukyu-yoken/20150514.html
   unit: currency-JPY
-  latest: &id152
+  latest: &id153
     date: '2024-04-01'
     value: 813700
     display: 813,700 円
   values:
-  - *id152
+  - *id153
   category: 福祉
   subcategory: 障害基礎年金/支給額/支給額_二級_昭和三〇年度以前
   source: openfisca_japan/parameters/福祉/障害基礎年金/支給額/支給額_二級_昭和三〇年度以前.yaml
@@ -2188,12 +2201,12 @@ items:
   description: 障害基礎年金の年金額(2級、昭和31年4月2日以後生まれ)
   reference: https://www.nenkin.go.jp/service/jukyu/shougainenkin/jukyu-yoken/20150514.html
   unit: currency-JPY
-  latest: &id153
+  latest: &id154
     date: '2024-04-01'
     value: 816000
     display: 816,000 円
   values:
-  - *id153
+  - *id154
   category: 福祉
   subcategory: 障害基礎年金/支給額/支給額_二級_昭和三一年度以降
   source: openfisca_japan/parameters/福祉/障害基礎年金/支給額/支給額_二級_昭和三一年度以降.yaml
