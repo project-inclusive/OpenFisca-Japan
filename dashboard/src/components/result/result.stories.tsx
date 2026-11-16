@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect } from 'storybook/test';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { ResultTestPage } from '../../mocks/resultTestUtils';
 import { resultCases, calculationModes } from '../../mocks/calculateFixtures';
 import {
@@ -14,6 +14,27 @@ const meta = {
 } satisfies Meta<typeof ResultTestPage>;
 export default meta;
 type Story = StoryObj<typeof meta>;
+
+const checkAccordionKeyboard = async (button: HTMLElement) => {
+  button.focus();
+  await expect(button).toHaveFocus();
+  await expect(button).toHaveAttribute('aria-expanded', 'false');
+  await userEvent.keyboard(' ');
+  await expect(button).toHaveAttribute('aria-expanded', 'true');
+  const panel = document.getElementById(button.getAttribute('aria-controls')!)!;
+  await waitFor(() => expect(panel).toBeVisible());
+  await userEvent.tab();
+  await expect(
+    within(panel).getByRole('link', { name: '詳細リンク' })
+  ).toHaveFocus();
+  await userEvent.tab({ shift: true });
+  await expect(button).toHaveFocus();
+  await userEvent.keyboard('{Enter}');
+  await expect(button).toHaveAttribute('aria-expanded', 'false');
+  await expect(button).toHaveFocus();
+  // Let the exit animation finish before the story's accessibility audit.
+  await waitFor(() => expect(panel).not.toBeVisible());
+};
 
 const checkResult: NonNullable<Story['play']> = async ({ canvas, args }) => {
   await expect(await canvas.findByText('見積もり結果')).toBeVisible();
@@ -80,6 +101,14 @@ const checkResult: NonNullable<Story['play']> = async ({ canvas, args }) => {
   await expect(
     canvas.queryByText('予期せぬエラーが発生しました')
   ).not.toBeInTheDocument();
+  if (benefit)
+    await checkAccordionKeyboard(
+      canvas.getByRole('button', { name: '児童手当 1.5 万円/月' })
+    );
+  if (loan)
+    await checkAccordionKeyboard(
+      canvas.getByRole('button', { name: '生活支援費 ~15 万円/月' })
+    );
 };
 
 export const BenefitOnly: Story = {

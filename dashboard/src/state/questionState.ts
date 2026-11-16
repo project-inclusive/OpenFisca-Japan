@@ -203,6 +203,7 @@ const hasDisability = ({ context }: { context: QuestionStateContext }) => {
 
 // 質問の状態を管理するステートマシン
 export const questionStateMachine = setup({
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- XState infers event and context types from this assertion.
   types: {} as {
     events: QuestionEvent;
     context: QuestionStateContext;

@@ -1,9 +1,3 @@
-- region
-- region
-- region
-- region
-- region
-- region
 - dialog "制限事項":
   - button "Close"
   - banner:

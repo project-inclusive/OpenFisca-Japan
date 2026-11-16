@@ -49,7 +49,7 @@ export const MultipleSelectionQuestionTemplate = <
 
   const selectNone = () => {
     setSelectedItems([]);
-    assignFunc({ type: 'MultipleSelection', selection: [] as any });
+    assignFunc({ type: 'MultipleSelection', selection: [] });
   };
 
   const neitherSelected = selectedItems?.length === 0;

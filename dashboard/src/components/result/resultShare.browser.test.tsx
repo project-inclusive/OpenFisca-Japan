@@ -34,7 +34,8 @@ beforeEach(() => {
     vi.fn((input: unknown, init?: RequestInit) => {
       expect(String(input)).toMatch(/\/calculate$/);
       expect(init?.method).toBe('POST');
-      requests.push(JSON.parse(String(init?.body)));
+      expect(typeof init?.body).toBe('string');
+      requests.push(JSON.parse(init?.body as string));
       return Promise.resolve(
         new Response(JSON.stringify(calculateFixtures.both.response), {
           headers: { 'Content-Type': 'application/json' },

@@ -328,7 +328,11 @@ export const YesNo: Story = {
     await selected(yes, true);
     await selected(no, false);
     await expect(valid).toHaveTextContent('true');
-    await click(no);
+    await expect(yes).toHaveFocus();
+    await userEvent.tab();
+    await expect(no).toHaveFocus();
+    await userEvent.keyboard(' ');
+    await userEvent.unhover(yes);
     await expect(args.assignFunc).toHaveBeenLastCalledWith(
       initialAnswers.yesNo
     );

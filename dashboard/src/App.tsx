@@ -28,6 +28,7 @@ function App() {
     <>
       <RouterProvider
         fallbackElement={<GenericError />}
+        future={{ v7_startTransition: true }}
         router={createBrowserRouter(
           [
             {
@@ -65,6 +66,7 @@ function App() {
           ],
           {
             basename: import.meta.env.BASE_URL,
+            future: { v7_relativeSplatPath: true },
           }
         )}
       />

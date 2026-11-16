@@ -36,10 +36,10 @@ export const AddressQuestionTemplate = ({
 
   // TODO: 初期値設定
   const [selectedPrefecture, setSelectedPrefecture] = useState(
-    initialValue?.prefecure ?? ('' as string)
+    initialValue?.prefecure ?? ''
   );
   const [selectedMunicipality, setSelectedMunicipality] = useState(
-    initialValue?.municipality ?? ('' as string)
+    initialValue?.municipality ?? ''
   );
   const prefectureArray = Object.keys(pmObj);
 

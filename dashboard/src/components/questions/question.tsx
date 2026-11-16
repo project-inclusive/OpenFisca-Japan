@@ -361,7 +361,6 @@ export const Question = ({
 
   // TODO: デバッグ用。終わったら消す
   const f = () => {
-    state.context.currentMember;
     console.log(state.context);
     console.log(state.value);
   };

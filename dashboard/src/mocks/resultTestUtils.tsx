@@ -23,7 +23,10 @@ export const ErrorTestPage = ({
   state?: object;
 }) => (
   <TestProviders>
-    <MemoryRouter initialEntries={[{ pathname: '/error', state }]}>
+    <MemoryRouter
+      initialEntries={[{ pathname: '/error', state }]}
+      future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+    >
       <Routes>
         <Route path="/error" element={ui} />
         <Route path="*" element={<Location />} />
@@ -46,7 +49,10 @@ export const ResultTestPage = ({
       set(householdAtom, structuredClone(calculateFixtures[scenario].request));
     }}
   >
-    <MemoryRouter initialEntries={[{ pathname: '/result', state }]}>
+    <MemoryRouter
+      initialEntries={[{ pathname: '/result', state }]}
+      future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+    >
       <Location />
       <Routes>
         <Route path="/result" element={<Result />} />

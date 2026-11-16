@@ -27,7 +27,9 @@ const goHome =
     await expect(canvas.getByText(message)).toBeVisible();
     const back = canvas.getByRole('link', { name: 'トップページに戻る' });
     await expect(back).toHaveAttribute('href', '/');
-    await userEvent.click(back);
+    back.focus();
+    await expect(back).toHaveFocus();
+    await userEvent.keyboard('{Enter}');
     await waitFor(() =>
       expect(canvas.getByTestId('pathname').textContent).toBe('/')
     );
@@ -51,7 +53,9 @@ const returnsTo =
     ).toBeVisible();
     const back = canvas.getByRole('link', { name: '戻る' });
     await expect(back).toHaveAttribute('href', path);
-    await userEvent.click(back);
+    back.focus();
+    await expect(back).toHaveFocus();
+    await userEvent.keyboard('{Enter}');
     await waitFor(() =>
       expect(canvas.getByTestId('pathname').textContent).toBe(path)
     );
