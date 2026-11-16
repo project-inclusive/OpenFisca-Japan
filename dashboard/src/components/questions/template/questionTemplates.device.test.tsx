@@ -338,44 +338,35 @@ describe('restored answers and clearing', () => {
     }
   );
 
-  it.fails(
-    'invalidates a restored person count as soon as it is cleared',
-    () => {
-      const { input, assign } = mount(templates[3], 2);
-      validity(true);
-      fireEvent.change(input, { target: { value: '' } });
-      expect(input).toHaveValue('');
-      expect(assign).toHaveBeenLastCalledWith(answer(templates[3], 0));
-      validity(false);
-    }
-  );
+  it('invalidates a restored person count as soon as it is cleared', () => {
+    const { input, assign } = mount(templates[3], 2);
+    validity(true);
+    fireEvent.change(input, { target: { value: '' } });
+    expect(input).toHaveValue('');
+    expect(assign).toHaveBeenLastCalledWith(answer(templates[3], 0));
+    validity(false);
+  });
 
-  it.fails(
-    'validates a person count re-entered after confirming an empty yes answer',
-    () => {
-      const { input, assign } = mount(templates[3], 2);
-      fireEvent.change(input, { target: { value: '' } });
-      fireEvent.click(screen.getByRole('button', { name: 'はい' }));
-      validity(false);
-      fireEvent.change(input, { target: { value: '3' } });
-      expect(input).toHaveValue('3');
-      expect(assign).toHaveBeenLastCalledWith(answer(templates[3], 3));
-      validity(true);
-    }
-  );
+  it('validates a person count re-entered after confirming an empty yes answer', () => {
+    const { input, assign } = mount(templates[3], 2);
+    fireEvent.change(input, { target: { value: '' } });
+    fireEvent.click(screen.getByRole('button', { name: 'はい' }));
+    validity(false);
+    fireEvent.change(input, { target: { value: '3' } });
+    expect(input).toHaveValue('3');
+    expect(assign).toHaveBeenLastCalledWith(answer(templates[3], 3));
+    validity(true);
+  });
 
-  it.fails(
-    'validates a count typed after choosing yes on an unanswered form',
-    () => {
-      const { input, assign } = mount(templates[3]);
-      fireEvent.click(screen.getByRole('button', { name: 'はい' }));
-      validity(false);
-      fireEvent.change(input, { target: { value: '2' } });
-      expect(input).toHaveValue('2');
-      expect(assign).toHaveBeenLastCalledWith(answer(templates[3], 2));
-      validity(true);
-    }
-  );
+  it('validates a count typed after choosing yes on an unanswered form', () => {
+    const { input, assign } = mount(templates[3]);
+    fireEvent.click(screen.getByRole('button', { name: 'はい' }));
+    validity(false);
+    fireEvent.change(input, { target: { value: '2' } });
+    expect(input).toHaveValue('2');
+    expect(assign).toHaveBeenLastCalledWith(answer(templates[3], 2));
+    validity(true);
+  });
 
   it('accepts no without a count and requires a count when yes is selected again', () => {
     const { input, assign } = mount(templates[3]);
