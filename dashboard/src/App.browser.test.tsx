@@ -237,16 +237,11 @@ describe('opening App routes directly', () => {
     await pathname('/response-error');
   });
 
-  // FormResponseError destructures null location.state on a direct visit.
-  // Keep the recovery UI as the expectation until the application is fixed.
-  it.fails(
-    'offers recovery when /response-error has no navigation payload',
-    async () => {
-      await mount('/response-error');
-      await shown('お手数ですがもう一度情報を入力してください。');
-      await href(link('戻る'), '/calculate');
-    }
-  );
+  it('offers recovery when /response-error has no navigation payload', async () => {
+    await mount('/response-error');
+    await shown('お手数ですがもう一度情報を入力してください。');
+    await href(link('戻る'), '/calculate');
+  });
 
   it('shows not-found for an unknown URL and returns to the top page', async () => {
     await mount('/unknown-page');
