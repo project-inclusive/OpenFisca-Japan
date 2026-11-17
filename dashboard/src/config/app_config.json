@@ -174,6 +174,7 @@
     "environmentButtonCopiedToClipboard": "クリップボードにコピーしました",
     "shareLinkButtonText": "結果のリンクをコピー",
     "shareLinkButtonCopiedToClipboard": "クリップボードにコピーしました",
+    "clipboardCopyFailed": "クリップボードにコピーできませんでした",
     "consultationDescription": "まずは窓口に相談してみませんか？ きっとあなたの相談に寄り添ってくれるはずです",
     "externalLinks": {
       "カタリバ": {

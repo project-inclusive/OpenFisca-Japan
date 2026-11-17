@@ -42,6 +42,8 @@ const createFileName = (extension: string = '', ...names: string[]) => {
   return `${names.join('')}.${extension}`;
 };
 
+type CopyStatus = 'idle' | 'success' | 'error';
+
 export const Result = () => {
   const location = useLocation();
 
@@ -89,8 +91,10 @@ export const Result = () => {
 
   const [result, calculate] = useCalculate();
 
-  const [shareLink, setShareLink] = useState(false);
-  const [enviroment, setEnvironment] = useState(false);
+  const [shareLinkCopyStatus, setShareLinkCopyStatus] =
+    useState<CopyStatus>('idle');
+  const [environmentCopyStatus, setEnvironmentCopyStatus] =
+    useState<CopyStatus>('idle');
   const [shareUrl, setShareUrl] = useState<string>('');
 
   useEffect(() => {
@@ -170,11 +174,13 @@ export const Result = () => {
     }
   };
 
-  const clipBoard = async (text: string): Promise<void> => {
+  const clipBoard = async (text: string): Promise<boolean> => {
     try {
       await navigator.clipboard.writeText(text);
+      return true;
     } catch (error) {
       console.error('Failed to copy text:', error);
+      return false;
     }
   };
 
@@ -190,16 +196,12 @@ export const Result = () => {
       isDisasterCalculation
     );
     setShareUrl(url);
-    clipBoard(url)
-      .then(() => {
-        setShareLink(true);
-        setTimeout(() => {
-          setShareLink(false);
-        }, 3000);
-      })
-      .catch((e: any) => {
-        console.error('Failed to copy text:', e);
-      });
+    clipBoard(url).then((copied) => {
+      setShareLinkCopyStatus(copied ? 'success' : 'error');
+      setTimeout(() => {
+        setShareLinkCopyStatus('idle');
+      }, 3000);
+    });
   };
 
   const deviceData = useDeviceData(window.navigator.userAgent);
@@ -208,16 +210,12 @@ export const Result = () => {
     // 必要な情報のみ抽出し文字列化
     const { browser, os } = deviceData;
     const envInfoText = JSON.stringify({ browser, os });
-    clipBoard(envInfoText)
-      .then(() => {
-        setEnvironment(true);
-        setTimeout(() => {
-          setEnvironment(false);
-        }, 3000);
-      })
-      .catch((e: any) => {
-        console.error('Failed to copy text:', e);
-      });
+    clipBoard(envInfoText).then((copied) => {
+      setEnvironmentCopyStatus(copied ? 'success' : 'error');
+      setTimeout(() => {
+        setEnvironmentCopyStatus('idle');
+      }, 3000);
+    });
   };
 
   const resuiredHousehold = (household: any) => {
@@ -417,8 +415,10 @@ export const Result = () => {
                 color="white"
                 _hover={{ bg: 'gray.600' }}
               >
-                {shareLink
+                {shareLinkCopyStatus === 'success'
                   ? configData.result.shareLinkButtonCopiedToClipboard
+                  : shareLinkCopyStatus === 'error'
+                  ? configData.result.clipboardCopyFailed
                   : configData.result.shareLinkButtonText}
               </Button>
             </Center>
@@ -459,8 +459,10 @@ export const Result = () => {
                 color="white"
                 _hover={{ bg: 'gray.600' }}
               >
-                {enviroment
+                {environmentCopyStatus === 'success'
                   ? configData.result.environmentButtonCopiedToClipboard
+                  : environmentCopyStatus === 'error'
+                  ? configData.result.clipboardCopyFailed
                   : configData.result.environmentButtonText}
               </Button>
             </Center>
