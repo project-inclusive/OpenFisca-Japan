@@ -60,17 +60,14 @@ describe('social welfare council help desk', () => {
     ['hamura', '羽村市社会福祉協議会'],
     ['toshima', '利島村社会福祉協議会'],
   ] as const) {
-    it.fails(
-      `does not link the facility name to a non-URL value (${residence})`,
-      async () => {
-        await mount(residence, helpDesk('socialWelfareCouncil'));
-        await visible(link('地図を開く'));
-        await visible(page.getByText(council, { exact: true }));
-        const href = link(council).query()?.getAttribute('href') ?? null;
-        // Correct data either links to a website or shows plain text.
-        expect(href === null || /^https?:\/\//.test(href)).toBe(true);
-      }
-    );
+    it(`does not link the facility name to a non-URL value (${residence})`, async () => {
+      await mount(residence, helpDesk('socialWelfareCouncil'));
+      await visible(link('地図を開く'));
+      await visible(page.getByText(council, { exact: true }));
+      const href = link(council).query()?.getAttribute('href') ?? null;
+      // Correct data either links to a website or shows plain text.
+      expect(href === null || /^https?:\/\//.test(href)).toBe(true);
+    });
   }
 });
 
