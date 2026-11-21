@@ -238,10 +238,13 @@ export const PersonCount: Story = {
       type: 'PersonNum',
       selection: 0,
     });
-    // Immediate validity after clearing is covered by an expected-failure unit
-    // test. Clicking yes again explicitly revalidates the empty count here.
-    await click(yes);
+    await selected(yes, true);
     await expect(valid).toHaveTextContent('false');
+    await userEvent.type(input, '2');
+    await expect(args.assignFunc).toHaveBeenLastCalledWith(
+      initialAnswers.personNum
+    );
+    await expect(valid).toHaveTextContent('true');
   },
 };
 export const RestoredPersonCount: Story = {

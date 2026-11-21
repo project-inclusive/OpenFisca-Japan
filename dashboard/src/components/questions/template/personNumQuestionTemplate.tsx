@@ -68,7 +68,7 @@ export const PersonNumQuestionTemplate = ({
     setQuestionValidated(
       boolState === false || (boolState === true && formValidated)
     );
-  }, [boolState, title, initialValue]);
+  }, [boolState, formValidated, title, initialValue, setQuestionValidated]);
 
   const updatePersonInfo = (personNum: number) => {
     assignFunc({ type: 'PersonNum', selection: personNum });
@@ -178,6 +178,7 @@ export const PersonNumQuestionTemplate = ({
           <FormControl>
             <HStack>
               <Input
+                aria-label="人数"
                 height="3.5em"
                 type={isMobile ? 'number' : 'text'}
                 value={shownPersonNum}

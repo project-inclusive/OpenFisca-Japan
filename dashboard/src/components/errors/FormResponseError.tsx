@@ -6,10 +6,10 @@ import { NarrowWidth } from '../layout/narrowWidth';
 export const FormResponseError = () => {
   const location = useLocation();
   const { isSimpleCalculation, isDisasterCalculation, redirect } =
-    location.state as {
-      isSimpleCalculation: boolean;
-      isDisasterCalculation: boolean;
-      redirect: string;
+    (location.state ?? {}) as {
+      isSimpleCalculation?: boolean;
+      isDisasterCalculation?: boolean;
+      redirect?: string;
     };
 
   return (

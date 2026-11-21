@@ -218,6 +218,43 @@ describe('question templates', () => {
     }
   );
 
+  it.each([undefined, initialAnswers.personNum])(
+    'updates person count validity immediately when clearing and re-entering with initial answer %j',
+    (initialValue) => {
+      const assign = vi.fn();
+      renderWithValidity(
+        <PersonNumQuestionTemplate
+          title="子ども"
+          assignFunc={assign}
+          maxPersonNum={5}
+          initialValue={initialValue}
+        />
+      );
+      const input = screen.getByRole('textbox', { name: '人数' });
+      fireEvent.click(screen.getByRole('button', { name: 'はい' }));
+      fireEvent.change(input, { target: { value: '3' } });
+      expectValidity(true);
+
+      fireEvent.change(input, { target: { value: '' } });
+      expect(input).toHaveValue('');
+      expect(assign).toHaveBeenLastCalledWith({
+        type: 'PersonNum',
+        selection: 0,
+      });
+      expectSelected('はい', true);
+      expectValidity(false);
+
+      fireEvent.change(input, { target: { value: '2' } });
+      expect(assign).toHaveBeenLastCalledWith(initialAnswers.personNum);
+      expectValidity(true);
+
+      fireEvent.change(input, { target: { value: '' } });
+      expectValidity(false);
+      fireEvent.click(screen.getByRole('button', { name: 'いいえ' }));
+      expectValidity(true);
+    }
+  );
+
   it('isolates Recoil state and DOM between fresh renders', () => {
     const first = renderWithValidity(
       <AgeQuestionTemplate

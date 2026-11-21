@@ -34,7 +34,7 @@ export const HomeButton = () => {
 
   return (
     <Flex w="90%" justifyContent="left" marginTop="0.5em">
-      <RouterLink to="/">
+      <RouterLink to="/" aria-label="トップへ戻る">
         <Icon
           as={FaHome}
           paddingLeft="1.5em"

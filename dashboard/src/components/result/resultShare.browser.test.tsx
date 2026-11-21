@@ -209,34 +209,91 @@ describe('sharing a result', () => {
     }
   );
 
-  it.fails(
-    'does not show the copied message when the clipboard rejects',
-    async () => {
-      await mount(savedShareKeys.compact);
-      await resultShown();
-      const rejection = new DOMException(
-        'Clipboard access denied',
-        'NotAllowedError'
-      );
-      const writeText = vi
-        .spyOn(navigator.clipboard, 'writeText')
-        .mockRejectedValue(rejection);
-      const error = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => undefined);
-      // Flush the rejected promise and its UI updates before checking absence.
-      await act(async () => {
-        await button('結果のリンクをコピー').click();
-      });
-      await expect
-        .poll(() => error.mock.calls)
-        .toContainEqual(['Failed to copy text:', rejection]);
-      await expect.poll(qrUrl).toBe(writeText.mock.calls[0][0]);
-      // Known application bug: a rejected write currently reports success.
-      // Keep the intended behavior so fixing it makes this expected failure fail.
-      expect(button('クリップボードにコピーしました').query()).toBeNull();
-    }
-  );
+  it('does not show the copied message when the clipboard rejects', async () => {
+    await mount(savedShareKeys.compact);
+    await resultShown();
+    const rejection = new DOMException(
+      'Clipboard access denied',
+      'NotAllowedError'
+    );
+    const writeText = vi
+      .spyOn(navigator.clipboard, 'writeText')
+      .mockRejectedValue(rejection);
+    const error = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => undefined);
+    // Flush the rejected promise and its UI updates before checking absence.
+    await act(async () => {
+      await button('結果のリンクをコピー').click();
+    });
+    await expect
+      .poll(() => error.mock.calls)
+      .toContainEqual(['Failed to copy text:', rejection]);
+    await expect.poll(qrUrl).toBe(writeText.mock.calls[0][0]);
+    expect(button('クリップボードにコピーしました').query()).toBeNull();
+    await expect
+      .poll(
+        () =>
+          button('クリップボードにコピーできませんでした')
+            .query()
+            ?.checkVisibility()
+      )
+      .toBe(true);
+  });
+
+  it('reports an environment copy failure and allows a successful retry', async () => {
+    await mount(savedShareKeys.compact);
+    await resultShown();
+    const rejection = new DOMException(
+      'Clipboard access denied',
+      'NotAllowedError'
+    );
+    const writeText = vi
+      .spyOn(navigator.clipboard, 'writeText')
+      .mockRejectedValueOnce(rejection)
+      .mockResolvedValue();
+    const error = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => undefined);
+    await act(async () => {
+      await button('環境情報を取得').click();
+    });
+    await expect
+      .poll(() => error.mock.calls)
+      .toContainEqual(['Failed to copy text:', rejection]);
+    expect(button('クリップボードにコピーしました').query()).toBeNull();
+    await expect
+      .poll(
+        () =>
+          button('クリップボードにコピーできませんでした')
+            .query()
+            ?.checkVisibility()
+      )
+      .toBe(true);
+    expect(JSON.parse(writeText.mock.calls[0][0])).toEqual({
+      browser: expect.any(Object),
+      os: expect.any(Object),
+    });
+    // The other copy action keeps its normal label.
+    expect(button('結果のリンクをコピー').query()?.checkVisibility()).toBe(
+      true
+    );
+    await button('クリップボードにコピーできませんでした').click();
+    await expect
+      .poll(
+        () =>
+          button('クリップボードにコピーしました').query()?.checkVisibility()
+      )
+      .toBe(true);
+    expect(writeText.mock.calls).toHaveLength(2);
+    expect(writeText.mock.calls[1][0]).toBe(writeText.mock.calls[0][0]);
+    expect(button('クリップボードにコピーできませんでした').query()).toBeNull();
+    await expect
+      .poll(() => button('環境情報を取得').query()?.checkVisibility(), {
+        timeout: 5000,
+      })
+      .toBe(true);
+  });
 });
 
 it('saves the result as an image and clears the loading state', async () => {
