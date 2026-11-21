@@ -560,7 +560,7 @@ export const data: { [key: string]: { [key: string]: CityTypes } } = {
       緯度: 34.52935,
       座標系: 'JGD2011',
       電話番号: '04992-9-0018',
-      WebサイトURL: '',
+      WebサイトURL: 'https://toshimamura-csw.main.jp/',
     },
     新島村: {
       施設名: '新島村社会福祉協議会',
