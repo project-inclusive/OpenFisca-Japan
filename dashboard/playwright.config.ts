@@ -15,7 +15,13 @@ export default defineConfig({
     timezoneId: 'Asia/Tokyo',
     trace: 'retain-on-failure',
   },
-  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+  projects: [
+    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+    { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
+    { name: 'webkit', use: { ...devices['Desktop Safari'] } },
+    { name: 'mobile-safari', use: { ...devices['iPhone 13'] } },
+    { name: 'mobile-chromium', use: { ...devices['Pixel 7'] } },
+  ],
   webServer: {
     command: 'npm run preview -- --strictPort',
     url: 'http://127.0.0.1:30000',

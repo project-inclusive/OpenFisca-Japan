@@ -20,7 +20,7 @@ test('くわしく見積もりで同意・家族の入力・送信から給付�
   });
   await startCalculation(page, 'detailed');
   await answerAddress(page);
-  await page.getByRole('textbox', { name: '年齢', exact: true }).fill('36');
+  await page.getByLabel('年齢', { exact: true }).fill('36');
   await next(page);
   await answerAmount(page, '年収');
   await answerAmount(page, '預貯金');
@@ -46,12 +46,12 @@ test('くわしく見積もりで同意・家族の入力・送信から給付�
   await answerChoice(page, '配偶者はいますか？', 'いいえ');
 
   await expect(page.getByText('子どもの人数', { exact: true })).toBeVisible();
-  await page.getByRole('textbox').fill('1');
+  await page.getByLabel('人数', { exact: true }).fill('1');
   await next(page);
   await expect(
     page.getByText('子ども（1人目）について', { exact: true })
   ).toBeVisible();
-  await page.getByRole('textbox', { name: '年齢', exact: true }).fill('2');
+  await page.getByLabel('年齢', { exact: true }).fill('2');
   await next(page);
   await answerChoice(page, '高校に通っていますか？', 'いいえ');
   await answerChoice(page, '現在仕事をしていますか？', 'いいえ');
