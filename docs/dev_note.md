@@ -289,13 +289,44 @@ npm run build
 npm run test:e2e
 ```
 
-E2E は `dashboard/e2e/` と `dashboard/playwright.config.ts` で管理し、Chromium だけで実行する。
-初回は `dashboard` で `npx playwright install --with-deps chromium` を実行してブラウザーと OS のライブラリを用意する。導入済みの開発コンテナでは再実行は不要。
+E2E は `dashboard/e2e/` と `dashboard/playwright.config.ts` で管理し、5 つの project（`chromium`・`firefox`・`webkit`・`mobile-safari`（iPhone 13）・`mobile-chromium`（Pixel 7））で実行する。
+初回は `dashboard` で `npx playwright install --with-deps chromium firefox webkit` を実行してブラウザーと OS のライブラリを用意する。導入済みの開発コンテナでは再実行は不要。
 preview のポート 30000 を空けてから実行する。`webServer` が既存サーバーを再利用せず build 済みの preview を起動・停止するため、開発サーバーの手動起動は不要。
 トップの見出しと入口、かんたん・くわしく各 1 本の同意・入力・送信・具体的な結果表示を確認する。
 計算 API は `page.route` で `src/mocks/calculate/` の JSON を返し、ブラウザーの日付を `2026-01-15` に固定するため、バックエンドの起動は不要。
 戻る操作と API エラーの分岐は画面のテストで確認する。Playwright のコンポーネントテストは使わない。
 E2E の安定性を確認するときは `npm run test:e2e` を続けて 2 回実行する。失敗時の trace は `tmp/playwright/test-results/`（リポジトリルートからの相対パス）に残る。
+
+#### テストの網羅率
+
+`dashboard` で既存のテストスクリプトに `--coverage` を渡す。通常のテスト実行では網羅率を計測しない。
+`@vitest/coverage-v8` は Vitest と同じ版を使い、ブラウザー側は Chromium で計測する。
+
+```bash
+# node・jsdom の単体テスト
+npm run test:unit -- --coverage
+# story と Browser Mode をまとめて計測
+npm run test:ui -- --coverage
+```
+
+単体テストは `coverage/unit/`、story と Browser Mode の合算は `coverage/ui/` に出力する。
+それぞれ端末のファイル別一覧、`index.html`（未実行行・分岐）、`coverage-summary.json`（ファイル別の Statements・Branches・Functions・Lines）を生成する。
+`dashboard/.gitignore` の `/coverage` で生成物を除外している。各実行は自分の出力先を消して作り直すため、前回の結果と混ざらない。
+
+両設定とも `src/**/*.{ts,tsx}` を対象とし、テストが一度も読み込まない実装も 0% として含める。
+型宣言、`*.test.*`・`*.spec.*`・`*.stories.*`、`src/mocks/`、`src/testSetup.ts`、`*TestUtils.*` はテスト用のコードなので除外する。
+設定データを含む実装の TypeScript は対象に残し、JSON・CSS・画像、`e2e/` や `.storybook/` の補助コードは対象に含めない。
+unit と UI は同じ対象を別々に測った値であり、両者の百分率は足さない。E2E の網羅率はここには含まれない。
+
+story と Browser Mode の寄与を分けて調べる場合は、出力先も分けて上書きを防ぐ。
+
+```bash
+npm run test:stories -- --coverage --coverage.reportsDirectory=coverage/stories
+npm run test:browser -- --coverage --coverage.reportsDirectory=coverage/browser
+```
+
+数値はテスト追加先を探すために使う。網羅率の閾値や CI での強制は設定していない。
+未実行行・分岐と既存テストの操作・期待値を照合し、表示しただけで検証していない操作や異常系も確認する。
 
 #### 画面の画像・ARIA スナップショットの比較
 
