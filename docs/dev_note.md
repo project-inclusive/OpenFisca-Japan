@@ -102,6 +102,24 @@ make serve-local
 - GET http://localhost:50000/variables
 - GET http://localhost:50000/parameters
 
+##### API サーバーをホットリロード付きで動かす
+
+```bash
+make serve-dev
+```
+
+- `make serve-local` と同じ API サーバーを、ソース監視付きで起動する
+- 以下のファイルを変更すると自動でサーバーが再起動し、変更が反映される（数秒かかる）
+  - `openfisca_japan/**/*.py`（Variable の計算式など）
+  - `openfisca_japan/parameters/**/*.yaml`（パラメータ）
+  - `openfisca_japan/assets/**/*.csv`（制度計算に使うデータ）
+- `openfisca_japan/tests/` 配下の変更は（サーバーの動作に影響しないため）再起動の対象外
+- `docker compose up` で起動する `openfisca` サービスはこのターゲットを使うので、
+  ホスト側でソースを編集すればそのままコンテナ内のサーバーに反映される
+- 仕組み: `openfisca serve`（内部は gunicorn）は起動時に一度だけ `TaxBenefitSystem` を構築するため
+  ソース変更を検知できない。そこで [watchdog](https://github.com/gorakhargosh/watchdog) の
+  `watchmedo auto-restart` でプロセスごと監視・再起動している（詳細は `Makefile` の `serve-dev`）
+
 ## 開発方法
 
 ### ディレクトリ構成
@@ -137,9 +155,16 @@ make serve-local
 
 #### 内部計算方法の修正
 - openfisca_japan/variables/~.py等の計算方法を規定するファイルを修正する
-- 以下のコマンドでビルドを行わないとテスト時に修正が反映されない
-  - `make build`
-- その後、上述のテストを行う
+- そのまま上述のテストを行えば修正が反映される
+  - バックエンドは editable install（`make install` = `pip install -e .`）されているため、
+    ソースの修正がそのままテスト・APIサーバーに反映される
+  - `make build`（wheel を作って `--force-reinstall`）を実行すると editable install が
+    **ビルド時点のコードのコピーで上書きされ**、以降ソースを修正しても反映されなくなるので注意
+    （`make build` は配布物と同じ wheel をテストするための CI 向けターゲット）
+  - 誤って実行してしまった場合の戻し方は
+    [Dev Container 開発環境](./devcontainer_note.md#バックエンドのホットリロードeditable-install)を参照。
+    特に `sudo` なしで `make build` すると pip が `~/.local` 側へインストールし、
+    そちらが優先されるため `make install` だけでは直らない
 - 通常は標準出力は表示されませんが、例外を発生させると標準出力が表示されデバッグが容易になります
 - フロントエンドの制約上、見積もり結果に表示する制度のVariableは **`entity = 世帯` にする必要がある**
   - 個人に依存する条件は世帯員単位で計算し、最終的な制度の金額のみ世帯単位で集計すると実装しやすいです
@@ -272,6 +297,34 @@ preview のポート 30000 を空けてから実行する。`webServer` が既�
 戻る操作と API エラーの分岐は画面のテストで確認する。Playwright のコンポーネントテストは使わない。
 E2E の安定性を確認するときは `npm run test:e2e` を続けて 2 回実行する。失敗時の trace は `tmp/playwright/test-results/`（リポジトリルートからの相対パス）に残る。
 
+#### 画面の画像・ARIA スナップショットの比較
+
+`dashboard/playwright.visual.config.ts` は通常の E2E と独立している。
+トップ、同意モーダル、かんたん見積もりの住所・年収・配偶者、くわしく見積もりの住所、結果4種（給付だけ・貸付だけ・両方・対象なし）、API 500、404、地震被災者支援の最初の質問の13画面を、PC（1280×800）とスマートフォン（390×844）で確認する。各ケースで全ページの画像を `toHaveScreenshot`、body の見出し・ボタン・ラベル・文字を `toMatchAriaSnapshot` で比較する。
+
+撮影と比較には、ともに `mcr.microsoft.com/playwright:v1.64.1-noble` の Chromium と `@playwright/test` 1.64.1 を使う。Docker Desktop などを起動し、`dashboard` で次を実行する。ホストで直接実行する場合も、ホストの Docker を共有する devcontainer（docker-outside-of-docker）内で実行する場合も、同じコマンドを使える。実行する環境に Docker CLI・Git・tar が必要。
+
+```bash
+# 更新前 develop（6e5a6c6）のソースを build して、初回の期待値を撮影する
+bash e2e/visual/docker.sh capture
+# 現在のソースを build して、保存済みの期待値と比較する
+bash e2e/visual/docker.sh compare
+# ブラウザーを起動せず、13画面 × 2 = 26件を確認する
+npx playwright test --config playwright.visual.config.ts --list
+```
+
+capture は指定した commit の `dashboard` を `git archive` で取り出し、コンテナの一時ディレクトリで、その commit の lockfile により `npm ci` と `npm run build` を行う。その古い build の出力だけを preview で配信し、現在のテストコードで撮影する。初回の期待値を更新後の build から作らないこと。ローカルの未commitのアプリ変更も撮影に混入しない。compare は現在の作業ツリーを build して配信する。commit 前の画面変更も確認できるよう、未commit・未追跡のファイルと保存済みの期待値も渡す。
+
+スクリプトは bind mount を使わず、`node_modules`・`dist`・`tmp` を除いた現在の `dashboard` と、capture 時の指定 commit のアーカイブを `docker cp` で渡す。Linux 用の依存と build は使い捨てのコンテナ内に置き、ホストの `node_modules` や `dist` は使わず書き換えない。capture が成功すると、撮影した期待値と完全な commit 値を記録した `source.json` を `dashboard/e2e/visual/snapshots/` に戻す。初回のイメージ取得と依存のインストールにはネットワークが必要。
+
+実行環境は `linux/amd64` に固定する。日時は `2026-01-15T12:00:00+09:00`、locale は `ja-JP`、timezone は `Asia/Tokyo`、`deviceScaleFactor` は1、`reducedMotion` は `reduce`。アニメーション・transition・caret を止め、通信の完了とフォントの準備後400ms待つ。Google Fonts・Analytics・Tag Manager は遮断する。計算 API は `src/mocks/calculate/*.response.json` の固定応答（エラーは HTTP 500）に置き換え、結果遷移後800ms待つ。
+
+期待値は `dashboard/e2e/visual/snapshots/{desktop,mobile}/` の PNG と `.aria.yml`（計52ファイル）、出典は `snapshots/source.json` に保存する。OS・ブラウザー・フォントを Docker で固定するため、`snapshotPathTemplate` の名前に OS を含めない。画素差の許容は `threshold: 0`・`maxDiffPixels: 0`、ARIA の子要素は `deep-equal` で比較する。期待値のない compare は保存先と撮影コマンドを示して失敗し、自動で期待値を追加しない。
+
+初回は `6e5a6c6` から撮った期待値と出典をレビューしてPRに含め、更新後のブランチで compare が通ることを確認する。意図した見た目の変更を含む次のPRでは、アプリ変更を commit した後、`bash e2e/visual/docker.sh capture <変更のcommit>` で期待値を撮り直す。撮影後に compare を実行し、PNG と ARIA の差分および `source.json` の出典をコード変更と一緒にレビューする。説明できない差に合わせて期待値を更新したり、許容値を引き上げたりしない。
+
+失敗時の expected・actual・diff 画像、ARIA の差分と trace は、リポジトリルートの `tmp/playwright-visual/test-results/` と HTML report の `tmp/playwright-visual/report/` で確認する。スクリプトはテストが失敗した場合も結果を `docker cp` で回収し、その終了コードを返す。結果は実行のたびに置き換え、コンテナは成功・失敗にかかわらず削除する。回収したファイルの所有者は、スクリプトを実行したユーザーになる。
+
 #### フロントエンドのテストの分担
 
 | 層           | 確認する内容                                           | 方法                                           |
@@ -317,7 +370,7 @@ npx storybook build
 
 a11y addon は全 story で自動実行する。現在は違反を別途直すため `parameters.a11y.test: 'todo'` とし、警告として報告する。検査を無効化する `off` は使わない。Storybook の Accessibility パネルとテストレポートで、story 名・axe の rule ID・重大度・対象要素を確認し、修正を別途追跡する。エラーから移動する story とは別に、エラーを表示したままにする story も置き、a11y の対象が遷移後の画面だけにならないようにする。
 
-画面の同じ確認を jsdom と story の両方に追加しない。数値の正規化・境界値や学年の暦依存は jsdom に残し、ネイティブの選択操作・computed style・フォーカスはブラウザーで確認する。スクリーンショットの比較と Chromatic は使わない。
+画面の同じ確認を jsdom と story の両方に追加しない。数値の正規化・境界値や学年の暦依存は jsdom に残し、ネイティブの選択操作・computed style・フォーカスはブラウザーで確認する。story でのスクリーンショット比較と Chromatic は使わない。画面全体の比較は専用の Playwright 設定で行う。
 
 #### 計算 API の固定データと再記録
 

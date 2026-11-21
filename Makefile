@@ -71,6 +71,24 @@ stop-docs:
 serve-local:
 	openfisca serve --country-package openfisca_japan --bind 0.0.0.0:50000
 
+serve-dev:
+	@# 開発用のホットリロード付きサーバー。
+	@# openfisca serve (gunicorn) 自体にはソース監視の仕組みが無いため、watchdog の
+	@# watchmedo でプロセスごと監視・自動再起動する。parameters の YAML や assets の CSV も
+	@# TaxBenefitSystem のロード時にしか読まれないため、.py と同様に監視対象に含める。
+	@# 前提: `make install`（editable install）済みであること。`make build` 済みの環境では
+	@# site-packages 側のコピーが import されるため、ソースを編集しても反映されない。
+	@# --debug-force-polling: bind mount 上のファイルは inotify が届かない環境があるためポーリングを強制する。
+	watchmedo auto-restart \
+		--directory=openfisca_japan \
+		--recursive \
+		--patterns='*.py;*.yaml;*.yml;*.csv' \
+		--ignore-patterns='*/tests/*;*/__pycache__/*' \
+		--debug-force-polling \
+		--debounce-interval=1 \
+		--signal=SIGTERM \
+		-- openfisca serve --country-package openfisca_japan --bind 0.0.0.0:50000
+
 serve-public:
 	openfisca serve --country-package openfisca_japan --bind 0.0.0.0:8080
 
