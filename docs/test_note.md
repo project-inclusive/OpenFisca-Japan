@@ -23,25 +23,49 @@
 | `input` に使うだけで、`output` で確かめていない変数 | 80 |
 | どのテストにも名前が出てこない変数 | 70 |
 
-変数は、`output:`・`input:` の行から次の 2 字下げ以下の行までの区間にあるキーのうち、変数の定義の名前と完全に一致するものを数える。世帯・世帯員の名前や日付のキーは一致しないため数えない。一つの変数が、あるケースでは `input`、別のケースでは `output` にあれば、`output` で確かめている変数に数える。`output` で確かめていることは値を比べたケースがあることだけを示し、制度の条件や境界をどこまで確かめたかは示さない。
+下のコマンドは、テストの YAML を PyYAML（開発の依存に入っている）で読んで数える。ファイルは `generated/` を含む `*.yaml`・`*.yml`、ケースは各ファイルの一覧の要素（一覧でないファイルは 1 ケース）である。変数の定義は `openfisca_japan/variables/` の `class …(Variable)` の名前で、各ケースの `input`・`output` の値にあるキー（世帯・世帯員の下などの入れ子を含む）のうち、定義の名前と完全に一致するものを数える。世帯・世帯員の名前や期間のキーは一致しないため数えない。一つの変数が、あるケースでは `input`、別のケースでは `output` にあれば、`output` で確かめている変数に数える。`output` で確かめていることは値を比べたケースがあることだけを示し、制度の条件や境界をどこまで確かめたかは示さない。
 
 ```bash
-# ファイルとケース（ケースごとに output の行が 1 つある）
-grep -rl --include='*.yaml' --include='*.yml' '' openfisca_japan/tests | wc -l
-grep -rh --include='*.yaml' --include='*.yml' '^  output:' openfisca_japan/tests | wc -l
-grep -rh '^- ' openfisca_japan/tests/generated | wc -l
-# 変数の定義の名前と、output・input の区間のキー
-mkdir -p tmp/backend-count
-grep -rhoP '^class \K\w+(?=\(Variable\))' openfisca_japan/variables | sort -u > tmp/backend-count/variables.txt
-grep -rhPzo --include='*.yaml' --include='*.yml' '(?m)^  output:\n(?:(?!\S)(?! \S)(?!  \S)[^\n]*\n)*' openfisca_japan/tests | tr '\0' '\n' | grep -oP '^   +\K[^- #:"\x27][^:]*(?=:)' | sort -u > tmp/backend-count/output.txt
-grep -rhPzo --include='*.yaml' --include='*.yml' '(?m)^  input:\n(?:(?!\S)(?! \S)(?!  \S)[^\n]*\n)*' openfisca_japan/tests | tr '\0' '\n' | grep -oP '^   +\K[^- #:"\x27][^:]*(?=:)' | sort -u > tmp/backend-count/input.txt
-wc -l < tmp/backend-count/variables.txt
-# output で確かめている変数
-comm -12 tmp/backend-count/variables.txt tmp/backend-count/output.txt | wc -l
-# input に使うだけの変数
-comm -12 tmp/backend-count/variables.txt tmp/backend-count/input.txt | comm -23 - tmp/backend-count/output.txt | wc -l
-# どのテストにも出てこない変数
-comm -23 tmp/backend-count/variables.txt tmp/backend-count/output.txt | comm -23 - tmp/backend-count/input.txt | wc -l
+python - <<'EOF'
+import pathlib, re, yaml
+
+root = pathlib.Path("openfisca_japan")
+variables = set()
+for path in (root / "variables").rglob("*.py"):
+    text = path.read_text(encoding="utf-8")
+    variables |= set(re.findall(r"^class (\w+)\(Variable\)", text, re.M))
+
+def keys(value):
+    if isinstance(value, dict):
+        for key, child in value.items():
+            yield str(key)
+            yield from keys(child)
+    elif isinstance(value, list):
+        for child in value:
+            yield from keys(child)
+
+files = sorted(p for p in (root / "tests").rglob("*") if p.suffix in (".yaml", ".yml"))
+counts = {"files": 0, "generated files": 0, "cases": 0, "generated cases": 0}
+used = {"input": set(), "output": set()}
+for path in files:
+    data = yaml.safe_load(path.read_text(encoding="utf-8"))
+    data = data if isinstance(data, list) else [data]
+    generated = "generated" in path.parts
+    counts["files"] += 1
+    counts["cases"] += len(data)
+    counts["generated files"] += generated
+    counts["generated cases"] += len(data) if generated else 0
+    for case in data:
+        for part in used:
+            used[part] |= set(keys(case.get(part))) & variables
+
+for name, count in counts.items():
+    print(name, count)
+print("variables", len(variables))
+print("output", len(used["output"]))
+print("input only", len(used["input"] - used["output"]))
+print("not in tests", len(variables - used["input"] - used["output"]))
+EOF
 ```
 
 残っていること:
@@ -67,7 +91,7 @@ cd dashboard && npx playwright test --config playwright.visual.config.ts --list
 
 残っていること: テストが通っても本番で起こりうること（金額と判定の誤り、本物の API との形の食い違い、地震被災者支援のモードの通しの操作、実機の IME、a11y の違反、既知の不具合 1 件）と、テストの作り方による制約は、[保証していないこと・既知の制約](./frontend_test_note.md#保証していないこと既知の制約) にある。テストのない確認ケースは、`make test-report` の `cases.csv` で確かめる。
 
-詳しい文書: 機能ごとに保証していることは [フロントエンドのテストで保証していること](./frontend_test_note.md)、流し方は [開発ドキュメントの「フロントエンド」](./dev_note.md#フロントエンド)、レポートの出し方は [`tools/test_report/README.md`](../tools/test_report/README.md) にある。
+詳しい文書: 機能ごとに保証していることは [フロントエンドのテストで保証していること](./frontend_test_note.md)、流し方は [開発ドキュメントの「フロントエンド」](./dev_note.md#フロントエンド)、レポートの出し方は [`tools/test_report/README.md`](https://github.com/project-inclusive/OpenFisca-Japan/blob/main/tools/test_report/README.md) にある。
 
 ## 道具
 
@@ -84,7 +108,7 @@ python -m pytest tools/make_docs tools/test_report --collect-only -q
 - **CI で流れない。** 道具を変えてテストが失敗しても、pull request では気づけない。
 - **テストのない道具がある。** `tools/make_tests`（バックエンドのテストの YAML の生成）・`tools/dependency_graph`・`tools/municipalities_order`。
 
-詳しい文書: フロントエンドのテストレポートの道具は [`tools/test_report/README.md`](../tools/test_report/README.md) にある。
+詳しい文書: フロントエンドのテストレポートの道具は [`tools/test_report/README.md`](https://github.com/project-inclusive/OpenFisca-Japan/blob/main/tools/test_report/README.md) にある。
 
 ## 契約テスト（フロントエンドとバックエンドの突き合わせ）
 
@@ -94,7 +118,7 @@ python -m pytest tools/make_docs tools/test_report --collect-only -q
 
 ```bash
 # 何も出なければ、/spec と突き合わせるコードはない
-grep -rln "/spec\b\|SituationInput\|SituationOutput" dashboard/src dashboard/e2e tools .github
+grep -rlE '/spec([^A-Za-z0-9_]|$)|SituationInput|SituationOutput' dashboard/src dashboard/e2e tools .github
 ```
 
 残っていること（まだない突き合わせ）:
