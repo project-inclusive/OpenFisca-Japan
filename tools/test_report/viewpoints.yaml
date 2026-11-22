@@ -207,7 +207,7 @@ manual_targets:
     group: share
     source: src/components/result/shareLink.ts
     reason: 旧形式のオブジェクトと空白になった+の互換性を手で定義する。
-# 対象と条件のますを、理由つきで対象外にする。target は glob を使え、cells の '*' はすべての条件。
+# 確認ケース（対象と条件の組み合わせ）を、理由つきで対象外にする。target は glob を使え、cells の '*' はすべての条件。
 exclusions:
   - target: file:src/components/PrivacyPolicy.tsx
     cells:

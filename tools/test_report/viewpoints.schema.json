@@ -136,7 +136,7 @@
       }
     },
     "exclusions": {
-      "description": "対象と条件のますを、理由つきで対象外にする。",
+      "description": "確認ケース（対象と条件の組み合わせ）を、理由つきで対象外にする。",
       "type": "array",
       "items": {
         "type": "object",
@@ -158,7 +158,7 @@
             }
           },
           "reason": {
-            "description": "対象外にする理由。cells.csv に出る。",
+            "description": "対象外にする理由。cases.csv に出る。",
             "type": "string",
             "minLength": 1
           }

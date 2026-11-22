@@ -334,17 +334,49 @@ def coverage_gaps(coverage, config, threshold):
     return low, zero
 
 
+NOTE_KEYS = ("listing", "results", "cases", "composition", "graph", "trace", "coverage", "threshold", "targets", "csv")
+
+
+def ref(key):
+    """Point at a numbered note; the notes always appear in NOTE_KEYS order, so numbers never shift."""
+    return f"注記 {NOTE_KEYS.index(key) + 1}"
+
+
+def number(value):
+    """Group digits in prose, as in 1,248."""
+    return f"{value:,}"
+
+
+def spaced(text):
+    """Put a space between Latin letters or digits and Japanese, as the documents do."""
+    japanese = "ぁ-んァ-ヶ一-龥"
+    return re.sub(rf"(?<=[A-Za-z0-9])(?=[{japanese}])|(?<=[{japanese}])(?=[A-Za-z0-9])", " ", text)
+
+
+def stage_names(config):
+    """Short stage names for sentences: the stage name without its parenthesized remark."""
+    return {stage["id"]: re.sub(r"（[^（]*）$", "", stage["name"]) for stage in config["stages"]}
+
+
+def scope_name(config, scope):
+    """Name a coverage scope (unit, ui) by the stage it is measured in."""
+    return stage_names(config).get(scope, scope)
+
+
 def composition_lines(config, tests, source, problems):
     """Fold the per-file table; the human descriptions are in docs/test_note.md, not repeated here."""
     files = {row["file"]: row.get("imports", []) for row in (source or {}).get("files", [])}
     files.update({test["file"]: files.get(test["file"], []) for test in tests})
     undescribed = sorted(set(files) - set(config.get("test_descriptions", {})))
     count = f"{len(tests)} 件" + ("（一覧未取得の段階あり）" if problems else "")
-    lines = ["## テストの構成", "",
-             "対象は直接のローカル import から抽出（型・補助コードも含む）。件数と観点は一覧から集計する。"
-             "ファイルごとの確かめていること・確かめていないことは `docs/test_note.md` の「機能ごとに保証していること」にある（正本は `viewpoints.yaml` の `test_descriptions`）。", ""]
-    if undescribed:
-        lines += ["- `test_descriptions` に説明がないファイル: " + ", ".join(escape(file) for file in undescribed), ""]
+    sizes = Counter(test["file"] for test in tests)
+    largest = "・".join(f"`{file}`（{number(size)}）" for file, size in
+                       sorted(sizes.items(), key=lambda item: (-item[1], item[0]))[:3])
+    conclusion = f"テストは {len(files)} ファイルにある。" + (f"件数が多いのは {largest}である。" if largest else "")
+    conclusion += ("説明のないファイルはない。" if not undescribed else
+                   f"説明のないファイルが {len(undescribed)} ある: " + "、".join(f"`{file}`" for file in undescribed) + "。")
+    lines = ["## テストの構成", "", conclusion
+             + f"ファイルごとに確かめていること・確かめていないことは `docs/test_note.md` の「機能ごとに保証していること」にある（{ref('composition')}）。", ""]
     lines += ["<details>", f"<summary>テストのファイル {len(files)}・テスト {count}（ファイルごとの段階・import・件数・観点の内訳）</summary>", "",
               "| ファイル | 段階 | 確かめる対象（import） | 件数 | 観点の内訳 |",
               "| --- | --- | --- | ---: | --- |"]
@@ -416,19 +448,24 @@ def transition_lines(machine, trace):
     """Distinguish structural alternatives, representative probes, and executed evidence; rows go to CSV."""
     lines = ["### 状態機械の分かれ道", ""]
     if machine is None:
-        return lines + ["遷移未取得。状態機械の抽出を実行する。", ""]
+        return lines + ["状態機械の遷移を取り出せなかったため、分かれ道は数えていない。", ""]
     observed = observed_transitions(machine, trace)
     rows = transition_rows(machine, trace)
     counts = transition_counts(rows)
     guarded = sum(row[5] == "あり" for row in rows)
-    lines += [f"宣言された遷移: {len(rows)}（うちガードあり {guarded}）。ガードの選択肢・回答保存の自己遷移・alwaysを個別に数える。",
-              f"代表回答での1段の隣接探索: {machine['probes']} 試行、重複を除く状態・世帯員・event・到着先: {machine['sampled']}。代表回答を決めた質問: {len(machine['representatives'])}。",
-              "グラフの宣言から全分岐を列挙し、getAdjacencyMapで代表回答を試す。合成contextと履歴の探索は到達可能性や全回答組合せの保証ではない。",
-              "通過の根拠は既存questionStateテスト実行時のXState microstep（ガードの選択肢を含む）。通過はassertionの強さを表さない。",
-              "実行記録はモデル・質問定義・テストのハッシュが一致する場合だけ採用する。実行結果の成功・同じ版での採取もテストの状況と合わせて確認する。", ""]
-    if observed is None:
-        lines += [f"実行記録なし、または版が不一致。`cd dashboard && {TRACE_RUN}` で採取する（unit の実行結果も同時に取る）。", ""]
-    lines += ["| 遷移の分母 | 通過 | 未通過 | 判定不能 |", "| ---: | ---: | ---: | ---: |",
+    if observed is not None:
+        conclusion = f"{number(len(rows))} の遷移のうち {number(counts['通過'])} を通った。" + (
+            f"未通過の {number(counts['未通過'])} は `transitions.csv` で確かめられる。" if counts["未通過"] else "未通過の遷移はない。")
+    elif trace is None:
+        conclusion = (f"{number(len(rows))} の遷移があるが、通過の記録がないため、どれを通ったかは分からない。"
+                      f"記録の取り方は{ref('trace')}。")
+    else:
+        conclusion = (f"{number(len(rows))} の遷移があるが、通過の記録が今の状態機械・質問の定義・テストと版が違うため、"
+                      f"どれを通ったかは分からない。記録の取り直し方は{ref('trace')}。")
+    lines += [conclusion
+              + f"ガードのある遷移は {number(guarded)} である。代表回答を {number(len(machine['representatives']))} の質問に決め、"
+              f"各質問の 1 段先を {number(machine['probes'])} 回試して、重複を除く {number(machine['sampled'])} 通りの到着を確かめた（{ref('graph')}）。", "",
+              "| 遷移の分母 | 通過 | 未通過 | 判定不能 |", "| ---: | ---: | ---: | ---: |",
               f"| {len(rows)} | " + " | ".join(str(counts[key]) for key in TRANSITION_PASSED) + " |", "",
               "遷移ごとの到着先・ガード・通過したテストは `transitions.csv`、質問ごとの代表回答は `representatives.csv` にある。"]
     return lines + [""]
@@ -487,12 +524,13 @@ def escape(value):
     return str(value).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("|", "&#124;").replace("\n", " ").replace("`", "&#96;").replace("_", "&#95;")
 
 
-CELL_STATES = ("埋まり", "空き", "対象外")
+CELL_STATES = ("テストあり", "テストなし（不足の候補）", "対象外（理由つき）")
+FILLED, GAP, EXCLUDED = CELL_STATES
 
 
 def cell_state(evidence):
-    """A cell is excluded with a reason, filled by at least one test, or an unexplained gap."""
-    return "対象外" if evidence["exclusion"] else "埋まり" if evidence["tests"] else "空き"
+    """A check case is excluded with a reason, tested by at least one test, or an unexplained gap."""
+    return EXCLUDED if evidence["exclusion"] else FILLED if evidence["tests"] else GAP
 
 
 def label_of(test):
@@ -531,7 +569,7 @@ def state_counts(cells, key):
 
 def state_table(heading, names, counts):
     """Markdown rows of filled / gap / excluded counts with a total row."""
-    lines = [f"| {heading} | " + " | ".join(CELL_STATES) + " | ます |", "| --- | " + " | ".join(["---:"] * (len(CELL_STATES) + 1)) + " |"]
+    lines = [f"| {heading} | " + " | ".join(CELL_STATES) + " | 確認ケース |", "| --- | " + " | ".join(["---:"] * (len(CELL_STATES) + 1)) + " |"]
     total = Counter()
     for key, name in names:
         row = counts.get(key, Counter())
@@ -543,18 +581,94 @@ def state_table(heading, names, counts):
 
 CSV_GUIDE = [
     ("tests.csv", "一覧のテスト 1 件", "`未分類` を「はい」に絞る。`結果` を「失敗」に絞る。`ファイル` で並べる。"),
-    ("cells.csv", "対象×観点・条件のます 1 つ", "`状態` を「空き」に絞る（理由のない空き）。さらに `観点` や `対象のグループ` で絞る。「対象外」に絞って `対象外の理由` を読む。"),
+    ("cases.csv", "確認ケース（対象×観点×条件）1 つ", "`状態` を「テストなし（不足の候補）」に絞る。さらに `観点` や `対象のグループ` で絞る。「対象外（理由つき）」に絞って `対象外の理由` を読む。"),
     ("transitions.csv", "宣言された遷移 1 つ", "`通過` を「未通過」に絞り `状態` で並べる。`ガード` を「あり」に絞る。"),
     ("representatives.csv", "代表回答を決めた質問 1 つ", "`質問` で探し、`代表回答（JSON）` を読む。"),
-    ("coverage.csv", "ファイル×段階（unit・ui）", "`基準未満の指標` が空でない行に絞る（低網羅率）。`段階` を絞り `Branches` を昇順に並べる。`両方で0%` を「はい」に絞る。"),
+    ("coverage.csv", "ファイル×段階（unit・ui）", "`基準未満の指標` が空でない行に絞る（網羅率が低いファイル）。`段階` を絞り `Branches` を昇順に並べる。`両方で0%` を「はい」に絞る。"),
     ("targets.csv", "対象 1 つ", "`抽出` を「手動」に絞り `手動定義の理由` を読む。`グループ` で絞る。"),
 ]
+METRIC_NAMES = {"statements": "文", "branches": "分岐", "functions": "関数", "lines": "行"}
+RESULT_LABELS = {"failed": "失敗", "skipped": "スキップ", "unexecuted": "未実行"}
+
+
+def joined(names):
+    """Join names with と for a sentence."""
+    return "と".join(names)
+
+
+def clean_run(counts, listed):
+    """Every listed test has a passing final result and nothing else was reported."""
+    return counts["passed"] == listed and not any(value for key, value in counts.items() if key != "passed")
+
+
+def result_sentences(config, tests, statuses, problems, head=True):
+    """The conclusion about the test results; `head` puts the listed counts in front."""
+    names = stage_names(config)
+    ids = [stage["id"] for stage in config["stages"] if stage["id"] not in problems]
+    listed = {stage: sum(test["stage"] == stage for test in tests) for stage in ids}
+    have = [stage for stage in ids if statuses.get(stage) is not None]
+    missing = [stage for stage in ids if statuses.get(stage) is None]
+    passed = [stage for stage in have if clean_run(statuses[stage], listed[stage])]
+    everything = bool(have) and not missing and passed == have
+    sentences = []
+    if head:
+        breakdown = "・".join(spaced(f"{names[stage]} {number(listed[stage])}") for stage in ids)
+        start = f"テスト {number(len(tests))} 件（{breakdown}）"
+        sentences.append(start + ("はすべて通った。" if everything else f"を集めた（{ref('listing')}）。"))
+    elif everything:
+        sentences.append("すべての段階のテストが通った。")
+    if passed and not everything:
+        sentences.append(spaced(joined(names[stage] for stage in passed) + "の")
+                         + f" {number(sum(listed[stage] for stage in passed))} 件はすべて通った。")
+    failed = 0
+    for stage in have:
+        if stage in passed:
+            continue
+        counts = statuses[stage]
+        failed += counts["failed"]
+        others = [(RESULT_LABELS[key], counts[key]) for key in RESULT_LABELS if counts[key]]
+        others += [(key, value) for key, value in sorted(counts.items())
+                   if key not in RESULT_LABELS and key not in ("passed", "suite_errors") and value]
+        sentence = spaced(names[stage] + "は") + f" {number(counts['passed'])} 件が通り、"
+        sentence += ("・".join(f"{label} {number(value)}" for label, value in others) + " 件だった。") if others else "ほかの結果はなかった。"
+        sentences.append(sentence)
+        if counts["suite_errors"]:
+            sentences.append(spaced(names[stage] + "は") + f"テストのファイルの読み込みに {number(counts['suite_errors'])} 件失敗した。")
+        actual = sum(value for key, value in counts.items() if key != "suite_errors")
+        if actual != listed[stage]:
+            sentences.append(spaced(names[stage] + "は") + f"一覧の {number(listed[stage])} 件に対して結果が {number(actual)} 件で、数が合わない（{ref('results')}）。")
+    if failed:
+        sentences.append(f"失敗した {number(failed)} 件は `tests.csv` の `結果` を「失敗」に絞ると確かめられる。")
+    if missing:
+        sentences.append(spaced(joined(names[stage] for stage in missing) + "は")
+                         + f"実行結果がないため、通ったかは分からない。取り方は{ref('results')}。")
+    for stage, problem in problems.items():
+        sentences.append(spaced(names.get(stage, stage) + "は") + f"一覧を取れなかったため、件数と不足の候補に含めていない（{escape(problem)}）。")
+    return sentences
+
+
+def gap_sentence(config, matrix):
+    """How many check cases have no test, and the viewpoints with the most of them."""
+    gaps = Counter(cell.split(":")[0] for (_, cell), evidence in matrix.items() if cell_state(evidence) == GAP)
+    if not gaps:
+        return "テストのない確認ケースはない。"
+    order = list(config["viewpoints"])
+    top = sorted(gaps, key=lambda view: (-gaps[view], order.index(view)))[:3]
+    return (f"テストのない確認ケース（不足の候補）は {number(sum(gaps.values()))} か所で、多いのは"
+            + "・".join(f"{config['viewpoints'][view]['name']}（{number(gaps[view])}）" for view in top) + "である。")
+
+
+CASE_DEFINITION = ("確認ケースは、確かめる対象 × 観点 × 条件の組み合わせである。"
+                   "たとえば「年齢の入力欄 × 入力 × 境界値」が 1 つの確認ケースで、テスト 1 件とは別に数える。"
+                   "1 つの確認ケースを複数のテストが確かめることも、1 つのテストが複数の確認ケースを確かめることもある。")
 
 
 def summary_lines(config, tests, matrix, unclassified, statuses, coverage, problems, threshold, machine, trace):
-    """The counts a reader needs first; each row names the section and CSV that hold the details."""
-    lines = ["## 集計", "",
-             "一覧はテスト本体を実行せず収集する。件数はパラメーターと project を展開した件数。E2E はモック応答の smoke。", "",
+    """The conclusion first, then the counts a reader needs; each row names the section and CSV that hold the details."""
+    unknown = ("未分類のテストは 0 件である。" if not unclassified else
+               f"未分類のテストが {number(len(unclassified))} 件あり、分類が要る（「不足しているテスト」の節）。")
+    lines = ["## 集計", "", "".join(result_sentences(config, tests, statuses, problems)) + unknown + gap_sentence(config, matrix), "",
+             CASE_DEFINITION, "",
              "| 段階 | ファイル数 | 件数 |", "| --- | ---: | ---: |"]
     for stage in config["stages"]:
         rows = [t for t in tests if t["stage"] == stage["id"]]
@@ -563,28 +677,27 @@ def summary_lines(config, tests, matrix, unclassified, statuses, coverage, probl
         if stage["id"] == "e2e":
             for project in stage["projects"]:
                 lines.append(f"| E2E / {project} | — | {sum(t['project'] == project for t in rows)} |")
-    for stage, problem in problems.items():
-        lines += ["", f"- 一覧未取得（{stage}）: {escape(problem)}。この段階の不足候補は一覧取得後に再確認する。"]
-    gaps = Counter(cell.split(":")[0] for (_, cell), evidence in matrix.items() if cell_state(evidence) == "空き")
+    gaps = Counter(cell.split(":")[0] for (_, cell), evidence in matrix.items() if cell_state(evidence) == GAP)
     by_view = "・".join(f"{view} {gaps[view]}" for view in config["viewpoints"])
+    names = stage_names(config)
     results = []
     for stage in config["stages"]:
         counts = statuses.get(stage["id"])
-        results.append(f"{stage['id']}: " + ("未実行" if counts is None else
-                       f"成功 {counts['passed']}・失敗 {counts['failed']}" + (f"・suite エラー {counts['suite_errors']}" if counts["suite_errors"] else "")))
+        results.append(f"{names[stage['id']]}: " + ("結果なし" if counts is None else
+                       f"成功 {counts['passed']}・失敗 {counts['failed']}" + (f"・読み込みの失敗 {counts['suite_errors']}" if counts["suite_errors"] else "")))
     totals = []
     for scope in ("unit", "ui"):
         total = (coverage.get(scope) or {}).get("total")
-        totals.append(f"{scope}: " + ("未計測" if coverage.get(scope) is None else " / ".join(pct(total[m]) for m in METRICS) if total else "—"))
+        totals.append(f"{scope_name(config, scope)}: " + ("未計測" if coverage.get(scope) is None else " / ".join(pct(total[m]) for m in METRICS) if total else "—"))
     judged = coverage_judgements(coverage, config, threshold)
-    below = "判定できない（unit と UI の両方の網羅率が要る）" if judged is None else str(sum(bool(row) for row, _ in judged.values()))
+    below = "判定できない（単体とコンポーネントの両方の網羅率が要る）" if judged is None else str(sum(bool(row) for row, _ in judged.values()))
     edges = transition_rows(machine, trace)
     passed = transition_counts(edges)
     transitions = "遷移未取得" if machine is None else \
         f"通過 {passed['通過']} / {len(edges)}（未通過 {passed['未通過']}・判定不能 {passed['判定不能']}）"
     lines += ["", "| 項目 | 値 | 詳細 |", "| --- | --- | --- |",
-              f"| 未分類のテスト | {len(unclassified)} | 「未分類のテスト」の節（0 件を保つ）、`tests.csv` の `未分類` |",
-              f"| 理由のない空きのます | {sum(gaps.values())}（観点ごと: {by_view}） | 「観点×条件」の節、`cells.csv` の `状態` |",
+              f"| 未分類のテスト | {len(unclassified)} | 「不足しているテスト」の節（0 件を保つ）、`tests.csv` の `未分類` |",
+              f"| テストのない確認ケース（不足の候補） | {sum(gaps.values())}（観点ごと: {by_view}） | 「確認ケース」の節、`cases.csv` の `状態` |",
               f"| テストの実行結果 | {'、'.join(results)} | 「テストの状況」の節、`tests.csv` の `結果` |",
               f"| 網羅率の全体（Statements / Branches / Functions / Lines） | {'、'.join(totals)} | 「網羅率」の節、`coverage.csv` |",
               f"| 網羅率が基準（{threshold:g}%）を下回ったファイル | {below} | 「網羅率」の節、`coverage.csv` の `基準未満の指標` |",
@@ -592,80 +705,150 @@ def summary_lines(config, tests, matrix, unclassified, statuses, coverage, probl
     return lines
 
 
+def coverage_sentences(config, coverage, judged, threshold):
+    """The conclusion about coverage: the overall values, then the low files or why they cannot be judged."""
+    measured = [scope for scope in ("unit", "ui") if coverage.get(scope) is not None]
+    missing = [scope for scope in ("unit", "ui") if coverage.get(scope) is None]
+    values = []
+    for scope in measured:
+        total = coverage[scope].get("total")
+        values.append(spaced(scope_name(config, scope) + "が") + (
+            " " + "・".join(f"{METRIC_NAMES[m]} {pct(total[m])}" for m in METRICS) if total else "全体の値なし"))
+    sentences = []
+    if values:
+        sentences.append("全体の網羅率は、" + "、".join(values) + f" である（{ref('coverage')}）。")
+    if missing:
+        sentences.append(spaced(joined(scope_name(config, scope) for scope in missing) + "の")
+                         + f"網羅率を測っていないため、網羅率が低いファイルは判定できない。測り方は{ref('coverage')}。")
+    if judged is not None:
+        low = sum(bool(below) for below, _ in judged.values())
+        zero = sum(zero for _, zero in judged.values())
+        sentences.append(f"基準の {threshold:g}% を下回ったファイルは {number(low)}、単体とコンポーネントの両方で 0% のファイルは {number(zero)} である（{ref('threshold')}）。"
+                         + ("下回ったファイルは `coverage.csv` の `基準未満の指標` が空でない行で確かめられる。" if low else ""))
+    return sentences
+
+
+def notes(config, targets, threshold):
+    """Numbered notes in NOTE_KEYS order: how the report was made, counted and should be read."""
+    names = stage_names(config)
+    runs = [f"   - {names[stage['id']]}: `cd dashboard && {stage['run']}`" for stage in config["stages"]]
+    origin = Counter(row["group"] for row in targets.values() if row.get("reason"))
+    manual = sum(origin.values())
+    text = {
+        "listing": ["一覧はテストの本体を実行せずに集める（段階ごとのコマンドは `tools/test_report/viewpoints.yaml` の `stages` の `command`）。"
+                    "件数は、パラメーター（`each`）と project を展開した件数である。E2E はモックの応答で固定の経路を通す smoke である。"
+                    "一覧を取れない段階は件数と不足の候補に含めず、エラーの全文を `*.list.error.txt` に残す。"],
+        "results": ["実行結果は、次のコマンドで採った JSON の最終試行の成功・失敗・スキップを数える。採ったあとに `make test-report` を流す。"
+                    "単体は補助の設定で流し、同じ実行で状態機械の遷移の通過も記録する。"
+                    "結果が今の一覧・コードと同じ版で採ったものかは自動では見分けないため、コードを変えたら採り直す。"
+                    "結果は、ファイルと名前（E2E は project も）で一覧のテストに結ぶ。", *runs],
+        "cases": ["確認ケースは、対象のグループごと（`applicability`）と実装ファイルごと（`file_cells`）に期待する条件から、テストの有無によらず作る。"
+                  "テストのタグ（`観点:条件`）と、テストと対象の対応（`bindings`）が一致した確認ケースを「テストあり」にする。"
+                  "「対象外（理由つき）」は `exclusions` に理由がある確認ケースである。"
+                  "タグは確かめていることの分類であり、確かめ方の強さ（1 本の経路だけ、1 項目だけなど）や成功を示さない。"
+                  "表の観点の括弧の前の値（`input` など）と対象のグループの値（`file` など）は、`cases.csv` の `観点`・`対象のグループ` の値である。"],
+        "composition": ["「確かめる対象（import）」は、テストのファイルが直接 import するローカルのファイルで、型と補助のコードも含む。"
+                        "観点の内訳は、1 件のテストを観点ごとに 1 回数える。"
+                        "ファイルごとの説明の正本は `viewpoints.yaml` の `test_descriptions` で、`docs/test_note.md` に出す。"
+                        "`e2e/visual/` の見た目の比較は通常の E2E の一覧に入らないため、件数が 0 になる。"],
+        "graph": ["遷移は、状態機械の宣言から全部の分岐を数える。ガードの選択肢、回答の保存の自己遷移、`always` を 1 つずつ数え、到達できない宣言も分母に残す。"
+                  "1 段先の探索は、`xstate/graph` の `getAdjacencyMap` で、代表回答を使ってモード・続柄・回答の組ごとに各質問の隣を試す。"
+                  "到着は、重複を除く状態・世帯員・event・到着先の組で数える。"
+                  "合成した context と履歴での探索であり、到達できることや全回答の組み合わせを保証しない。"],
+        "trace": ["通過は、単体の質問状態のテスト（`src/state/questionState.test.ts`）を補助の設定 `tools/test_report/trace.config.mjs` で流したときの "
+                  "XState の `@xstate.microstep` から、ガードの選択肢まで区別して `tmp/test-report/transitions.trace.json` に記録する。"
+                  "記録は、状態機械・質問の定義・テストの SHA-256 が今のものと一致するときだけ使い、記録がない・一致しないときは「判定不能」とする。"
+                  f"記録は{ref('results')} の単体のコマンドで、実行結果と同時に採る。"
+                  "通過は assertion の強さを示さない。単体の実行結果が成功で、同じ版で採ったものかも合わせて確かめる。"],
+        "coverage": ["網羅率は、`dashboard/coverage/unit/coverage-summary.json` と `dashboard/coverage/ui/coverage-summary.json` の全体（Istanbul の `total`）の値である。"
+                     "文・分岐・関数・行は Statements・Branches・Functions・Lines である。"
+                     "単体とコンポーネントは同じ実装を別々に測った値であり、百分率を足さない。`n/a` は 0% とせず、測っていない値として扱う。"
+                     "測り方: 単体は `cd dashboard && npm run test:unit -- --coverage`、コンポーネントは `cd dashboard && npm run test:ui -- --coverage`。"],
+        "threshold": [f"網羅率が低いファイルは、両方の段階にあるファイルについて、指標ごとに単体とコンポーネントの高い方が {threshold:g}% 未満なら選ぶ"
+                      "（既定は 80% で、`--low-coverage` で変える）。片方で十分に測れた実装を、もう片方の 0% だけで選ばないためであり、結合した網羅率ではない。"
+                      "両方の段階がそろわないとき、`n/a` の指標、分母が 0 の指標は判定しない。全条件が対象外のファイルは除く。"
+                      "「両方で 0%」は、両方の段階で文の分母が正で、値が 0% のファイルである。"],
+        "targets": [f"確かめる対象 {number(len(targets))} のうち、{number(len(targets) - manual)} は構文と実装ファイルから取り出し、"
+                    + (f"{number(manual)} は構文で決まらないため理由をつけて手で定義した（"
+                       + "・".join(f"`{group}` {count}" for group, count in sorted(origin.items())) + "）。" if manual else "手で定義した対象はない。")
+                    + "対象ごとのソースと理由は `targets.csv` にある。"],
+        "csv": ["CSV はどれも BOM 付きの UTF-8 で、この文書と同じディレクトリに出る。表計算のソフトで開き、「データ」→「フィルター」で絞る。"
+                "1 つのセルに複数の値があるときは、テストと遷移の一覧は改行、観点・条件・対象は `; ` で区切る。"
+                "行は決まった順に並ぶ。列の意味と行の順は `tools/test_report/README.md` にある。"],
+    }
+    lines = ["## 注記", ""]
+    for index, key in enumerate(NOTE_KEYS, 1):
+        first, *rest = text[key]
+        lines += [f"{index}. {first}", *rest]
+    return lines
+
+
 def render(config, tests, targets, matrix, unclassified, statuses, coverage, problems, threshold, source=None, machine=None, trace=None):
-    """Render the summary and counts as Markdown; per-row details are written to the CSV files."""
+    """Render the conclusions and counts as Markdown; per-row details are written to the CSV files."""
     tables = detail_tables(config, tests, targets, matrix, unclassified, {}, coverage, threshold, machine, trace)
     lines = ["# フロントエンドのテストレポート", "",
-             "この文書は集計だけを載せる。ます・遷移・網羅率・対象の1行ずつの詳細は、同じディレクトリの CSV にある（「詳細の CSV」の節）。", ""]
+             "この文書は、テストの件数と結果、不足の候補、網羅率、状態機械の遷移の通過をまとめる。"
+             "1 行ずつの詳細は同じディレクトリの CSV にあり（「詳細の CSV」の節）、作り方と読み方の注意は最後の「注記」にある。", ""]
     lines += summary_lines(config, tests, matrix, unclassified, statuses, coverage, problems, threshold, machine, trace)
     lines += [""] + composition_lines(config, tests, source, problems)
     cells = list(matrix.items())
     views = state_counts(cells, lambda target, cell: cell.split(":")[0])
     groups = state_counts(cells, lambda target, cell: targets[target]["group"])
     group_targets = Counter(targets[target]["group"] for target in {target for target, _ in matrix})
-    lines += ["", "## 観点×条件", "",
-              "対象（実装）ごとに期待する観点・条件のますを、埋まり（確かめているテストがある）・空き（不足候補）・対象外（理由付き）に分けて数える。"
-              "タグは確かめていることの分類であり、確かめ方の強さ（1本の経路だけ、1項目だけ等）や成功を示さない。"
-              "ますごとの埋めたテストと対象外の理由は `cells.csv` にある。", ""]
+    total = Counter(cell_state(evidence) for _, evidence in cells)
+    lines += ["", "## 確認ケース", "",
+              f"期待する確認ケース {number(len(cells))} のうち、テストありは {number(total[FILLED])}、"
+              f"テストなし（不足の候補）は {number(total[GAP])}、対象外（理由つき）は {number(total[EXCLUDED])} である。"
+              f"確認ケースごとの確かめたテストと対象外の理由は `cases.csv` にある（数え方は{ref('cases')}、対象の取り出し方は{ref('targets')}）。", ""]
     lines += state_table("観点", [(view, f"{view}（{details['name']}）") for view, details in config["viewpoints"].items()], views)
     lines += [""] + state_table("対象のグループ（対象の数）", [(group, f"{group}（{group_targets[group]}）") for group in groups], groups)
-    lines += ["", "## テストの状況", "", "結果は指定された JSON の最終試行。現在の一覧・コードと同じ版で採取したかは利用者が確認する。テストごとの結果は `tests.csv` の `結果` にある。", ""]
-    for stage in config["stages"]:
-        counts = statuses.get(stage["id"])
-        if counts is None:
-            lines += [f"- {stage['name']}: 未実行。`cd dashboard && {stage['run']}`"]
-        else:
-            lines += [f"- {stage['name']}: 成功 {counts['passed']} / 失敗 {counts['failed']} / スキップ {counts['skipped']} / 未実行 {counts['unexecuted']} / suite エラー {counts['suite_errors']}"]
-            actual = sum(value for key, value in counts.items() if key != "suite_errors")
+    situation = "".join(result_sentences(config, tests, statuses, problems, head=False))
+    lines += ["", "## テストの状況", "", situation + "テストごとの結果は `tests.csv` の `結果` にある"
+              + ("。" if ref("results") in situation else f"（数え方は{ref('results')}）。"), ""]
+    names = stage_names(config)
+    reported = [stage for stage in config["stages"] if statuses.get(stage["id"]) is not None]
+    if reported:
+        lines += ["| 段階 | 一覧 | 成功 | 失敗 | スキップ | 未実行 | 読み込みの失敗 |", "| --- | ---: | ---: | ---: | ---: | ---: | ---: |"]
+        for stage in reported:
+            counts = statuses[stage["id"]]
             listed = sum(test["stage"] == stage["id"] for test in tests)
-            if actual != listed:
-                lines += [f"  - 一覧 {listed} 件と結果 {actual} 件が不一致。採取時刻、フィルター、コードの版を確認する。"]
-    lines += [""] + transition_lines(machine, trace)
-    lines += ["## 網羅率", "", "unit と UI は同じ実装を別々に測る。百分率を足さない。n/a は未計測として扱う。値は全体（Istanbul の `total`）。ファイルごとの値は `coverage.csv` にある。", ""]
+            lines.append(f"| {names[stage['id']]} | {listed} | " + " | ".join(
+                str(counts[key]) for key in ("passed", "failed", "skipped", "unexecuted", "suite_errors")) + " |")
+        lines.append("")
+    lines += transition_lines(machine, trace)
+    judged = coverage_judgements(coverage, config, threshold)
+    lines += ["## 網羅率", "", "".join(coverage_sentences(config, coverage, judged, threshold)), ""]
     measured = [scope for scope in ("unit", "ui") if coverage.get(scope) is not None]
     if measured:
         lines += ["| 段階 | ファイル数 | Statements | Branches | Functions | Lines |", "| --- | ---: | ---: | ---: | ---: | ---: |"]
         for scope in measured:
             rows = coverage[scope]
-            total = rows.get("total")
-            values = [pct(total[m]) if total else "—" for m in METRICS]
-            lines.append(f"| {scope} | {len(rows.keys() - {'total'})} | " + " | ".join(values) + " |")
+            total_row = rows.get("total")
+            values = [pct(total_row[m]) if total_row else "—" for m in METRICS]
+            lines.append(f"| {scope_name(config, scope)} | {len(rows.keys() - {'total'})} | " + " | ".join(values) + " |")
         lines.append("")
-    for scope in ("unit", "ui"):
-        if coverage.get(scope) is None:
-            lines += [f"- {scope}: 未計測。`cd dashboard && npm run test:{'unit' if scope == 'unit' else 'ui'} -- --coverage`"]
-    judged = coverage_judgements(coverage, config, threshold)
     excluded = sorted({file for scope in measured for file in coverage[scope] if excluded_file(file, config)})
-    lines += ["", f"低網羅率の抽出基準: 指標ごとのunit/UIの最大値が {threshold:g}% 未満（既定80%）。両段階を照合し、片方で十分な実装を不足候補にしない。値は足さず、結合網羅率ではない。両段階のデータが揃わない、またはn/aの指標は判定しない。分母0の指標は候補に使わない。全条件が対象外のファイルは不足候補から除く。", ""]
-    if judged is None:
-        lines += ["- 基準を下回ったファイル: 判定できない（unit と UI の両方の網羅率が要る）。",
-                  "- unit と UI の両方で 0% のファイル: 判定できない（両方の網羅率を採取する）。"]
-    else:
-        lines += [f"- 判定したファイル（両段階にあり対象外でない）: {len(judged)}",
-                  f"- 基準を下回ったファイル: {sum(bool(below) for below, _ in judged.values())}（`coverage.csv` の `基準未満の指標` が空でない行）",
-                  f"- unit と UI の両方で 0% のファイル: {sum(zero for _, zero in judged.values())}（`coverage.csv` の `両方で0%` が「はい」の行）"]
-    lines += [f"- 対象外のファイル: {len(excluded)}（`coverage.csv` の `対象外` が「はい」の行。不足候補から除く）"]
+    if judged is not None:
+        lines += [f"- 判定したファイル（両方の段階にあり対象外でない）: {len(judged)}"]
+    lines += [f"- 対象外のファイル: {len(excluded)}（`coverage.csv` の `対象外` が「はい」の行。網羅率が低いファイルから除く）"]
     used = {tag.split(":")[0] for test in tests for tag in test["tags"]}
+    untested = [details["name"] for view, details in config["viewpoints"].items() if view not in used]
     lines += ["", "## 不足しているテスト", "",
-              "理由のない空きのますの数は「集計」と「観点×条件」の節、1 つずつは `cells.csv` の `状態` が「空き」の行にある。",
-              "", "### テストのない観点", ""]
-    lines += [f"- {view}: {details['name']}" for view, details in config["viewpoints"].items() if view not in used] or ["なし。"]
-    lines += ["", f"### 未分類のテスト（{len(unclassified)}）", ""]
-    lines += [f"- {escape(t['stage'] + ' / ' + t['file'] + ' / ' + t['name'])}"
-              for t in sorted(unclassified, key=listing_order(stage_ids(config)))] or ["なし。"]
-    origin = Counter((row["group"], bool(row.get("reason"))) for row in targets.values())
-    lines += ["", "## 対象の抽出根拠", "",
-              "対象は構文・ファイルから抽出し、構文で決まらないものだけを理由付きで手で定義する。対象ごとのソースと理由は `targets.csv` にある。", "",
-              "| グループ | 構文・ファイル | 手動 | 計 |", "| --- | ---: | ---: | ---: |"]
-    for group in sorted({group for group, _ in origin}):
-        lines.append(f"| {escape(group)} | {origin[group, False]} | {origin[group, True]} | {origin[group, False] + origin[group, True]} |")
-    lines.append(f"| 計 | {sum(v for (_, manual), v in origin.items() if not manual)} | {sum(v for (_, manual), v in origin.items() if manual)} | {len(targets)} |")
-    lines += ["", "## 詳細の CSV", "",
-              "どれも BOM 付きの UTF-8 で、この文書と同じディレクトリに出る。表計算のソフトで開き、「データ」→「フィルター」で絞る。"
-              "1つのセルに複数の値があるときは、テストと遷移の一覧は改行、観点・条件・対象は `; ` で区切る。列の意味は `tools/test_report/README.md` にある。", "",
+              ("どの観点にもテストがある。" if not untested else "テストのない観点は" + "・".join(untested) + "である。")
+              + ("未分類のテストはない。" if not unclassified else
+                 f"未分類のテストが {number(len(unclassified))} 件あり、宣言にタグを書くか分類の規則を足す必要がある。")
+              + (f"不足の候補は、テストのない確認ケース {number(total[GAP])} か所である（`cases.csv` の `状態` を「{GAP}」に絞る）。" if total[GAP] else ""), ""]
+    if unclassified:
+        lines += [f"### 未分類のテスト（{len(unclassified)}）", ""]
+        lines += [f"- {escape(t['stage'] + ' / ' + t['file'] + ' / ' + t['name'])}"
+                  for t in sorted(unclassified, key=listing_order(stage_ids(config)))]
+        lines.append("")
+    lines += ["## 詳細の CSV", "",
+              f"詳細は次の {len(CSV_GUIDE)} つの CSV にある（形式は{ref('csv')}）。", "",
               "| CSV | 1 行 | 行数 | 絞り方の例 |", "| --- | --- | ---: | --- |"]
     for name, unit, example in CSV_GUIDE:
         lines.append(f"| `{name}` | {unit} | {len(tables[name][1])} | {example} |")
+    lines += [""] + notes(config, targets, threshold)
     return "\n".join(lines) + "\n"
 
 
@@ -705,7 +888,7 @@ def csv_rows(tests, matrix, unclassified, outcomes, stages=()):
     return [row for _, row in sorted(rows, key=lambda pair: (key(pair[0]), [str(value) for value in pair[1]]))]
 
 
-CELL_COLUMNS = ["対象", "対象のグループ", "観点", "条件", "状態", "テスト数", "埋めたテスト", "対象外の理由"]
+CELL_COLUMNS = ["対象", "対象のグループ", "観点", "条件", "状態", "テスト数", "確かめたテスト", "対象外の理由"]
 
 
 def cell_rows(matrix, targets, stages=()):
@@ -750,7 +933,7 @@ def detail_tables(config, tests, targets, matrix, unclassified, outcomes, covera
     """All CSV files by name, as (columns, rows); the Markdown counts are taken from the same inputs."""
     return {
         "tests.csv": (CSV_COLUMNS, csv_rows(tests, matrix, unclassified, outcomes, stage_ids(config))),
-        "cells.csv": (CELL_COLUMNS, cell_rows(matrix, targets, stage_ids(config))),
+        "cases.csv": (CELL_COLUMNS, cell_rows(matrix, targets, stage_ids(config))),
         "transitions.csv": (TRANSITION_COLUMNS, transition_rows(machine, trace)),
         "representatives.csv": (REPRESENTATIVE_COLUMNS, representative_rows(machine)),
         "coverage.csv": (COVERAGE_COLUMNS, coverage_csv_rows(coverage, config, threshold)),
@@ -863,7 +1046,7 @@ def feature_lines(config, dashboard):
     lines += ["| " + " | ".join(note_cell(row[key]) for key in ("area", "stages", "scope")) + " |"
               for row in config.get("responsibilities", [])]
     lines += ["", "### 機能ごとの観点と層", "",
-              "ますは、その機能のその観点を確かめているテストの層である。「なし」は、その観点をその機能で確かめるテストがないことを示す。", "",
+              "表の各欄は、その機能のその観点を確かめているテストの層である。「なし」は、その観点をその機能で確かめるテストがないことを示す。", "",
               "| 機能 | " + " | ".join(note_cell(name) for name in names.values()) + " |",
               "| " + " | ".join(["---"] * (len(names) + 1)) + " |"]
     for feature in features:
