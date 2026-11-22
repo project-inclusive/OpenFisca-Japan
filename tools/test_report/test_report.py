@@ -642,7 +642,7 @@ def test_legacy_classification_is_scoped_and_unknown_names_remain_visible(file, 
 
 
 def test_composition_is_folded_without_descriptions_and_names_undescribed_files(config):
-    """Multiple tags in one viewpoint count once; the table folds; descriptions live in test_note.md."""
+    """Multiple tags in one viewpoint count once; the table folds; descriptions live in frontend_test_note.md."""
     rows = [{"file": "src/age.test.ts", "stage": "unit", "tags": ["input:normal", "input:empty"]}]
     source = {"files": [{"file": "src/age.test.ts", "imports": ["src/age.ts"]},  # noqa: FS003
                         {"file": "src/name.test.ts", "imports": []}]}  # noqa: FS003
@@ -652,7 +652,7 @@ def test_composition_is_folded_without_descriptions_and_names_undescribed_files(
     assert "| src/age.test.ts | unit | src/age.ts | 1 | input: 1 |" in lines
     assert "| ファイル | 段階 | 確かめる対象（import） | 件数 | 観点の内訳 |" in lines
     assert "確かめていること |" not in text and "年齢を確かめる" not in text, "the two description columns are dropped"
-    assert "`docs/test_note.md`" in text and "（注記 4）" in text and "`test_descriptions`" not in text, \
+    assert "`docs/frontend_test_note.md`" in text and "（注記 4）" in text and "`test_descriptions`" not in text, \
         "the YAML key is named in the note, not in the sentence"
     assert lines[2].startswith("テストは 2 ファイルにある。件数が多いのは `src/age.test.ts`（1）である。説明のないファイルが 1 ある: `src/name.test.ts`。")
     # GitHub and VS Code render Markdown inside <details> only with blank lines around it.
@@ -727,17 +727,17 @@ def test_machine_graph_keeps_automatic_and_guarded_alternatives_and_representati
     assert len(values["見積もりモード"]) == 4
 
 
-def test_test_note_region_matches_definitions(tmp_path):
-    """Regenerating docs/test_note.md from the YAML must leave the checked-in file unchanged."""
-    note = BASE / "docs/test_note.md"
-    copied = tmp_path / "test_note.md"
+def test_frontend_test_note_region_matches_definitions(tmp_path):
+    """Regenerating docs/frontend_test_note.md from the YAML must leave the checked-in file unchanged."""
+    note = BASE / "docs/frontend_test_note.md"
+    copied = tmp_path / "frontend_test_note.md"
     copied.write_text(note.read_text(encoding="utf-8"), encoding="utf-8")
     main(["--write-test-note", "--test-note", str(copied), "--input-dir", str(tmp_path)])
     assert copied.read_text(encoding="utf-8") == note.read_text(encoding="utf-8"), \
-        "docs/test_note.md is stale: run python tools/test_report/report.py --write-test-note"
+        "docs/frontend_test_note.md is stale: run python tools/test_report/report.py --write-test-note"
 
 
-def test_test_note_features_cover_every_description():
+def test_frontend_test_note_features_cover_every_description():
     """Every described test file appears under a feature, with its layer and both descriptions."""
     config = yaml.safe_load((BASE / "tools/test_report/viewpoints.yaml").read_text())
     text = "\n".join(feature_lines(config, BASE / "dashboard"))
@@ -748,7 +748,7 @@ def test_test_note_features_cover_every_description():
         assert "### " + feature["name"] in text
 
 
-def test_test_note_features_are_app_features_with_conclusions():
+def test_frontend_test_note_features_are_app_features_with_conclusions():
     """Features carry both conclusions; qualities stay a separate axis and are not features."""
     config = yaml.safe_load((BASE / "tools/test_report/viewpoints.yaml").read_text())
     quality_names = {row["name"] for row in config["qualities"]}
@@ -763,7 +763,7 @@ def test_test_note_features_are_app_features_with_conclusions():
     assert "| 機能 | 振る舞い | " + " | ".join(row["name"] for row in config["qualities"]) + " |" in text
 
 
-def test_test_note_region_shows_visible_start_and_finish():
+def test_frontend_test_note_region_shows_visible_start_and_finish():
     """Visible lines open and close the region; the opening names the last feature as its end."""
     config = yaml.safe_load((BASE / "tools/test_report/viewpoints.yaml").read_text())
     lines = feature_lines(config, BASE / "dashboard")
@@ -775,7 +775,7 @@ def test_test_note_region_shows_visible_start_and_finish():
     assert all(line.startswith(">") for line in (lines[0], lines[-1])), "must render in a Markdown preview"
     headings = [line[4:] for line in lines if line.startswith("### ")]
     assert headings[0] == "品質の観点" and headings[-1] == last
-    region = (BASE / "docs/test_note.md").read_text(encoding="utf-8").split(NOTE_BEGIN, 1)[1].split(NOTE_END, 1)[0]
+    region = (BASE / "docs/frontend_test_note.md").read_text(encoding="utf-8").split(NOTE_BEGIN, 1)[1].split(NOTE_END, 1)[0]
     body = region.strip().splitlines()
     assert body[0] == note_start(last) and body[-1] == NOTE_FINISH
     more = copy.deepcopy(config)
@@ -785,7 +785,7 @@ def test_test_note_region_shows_visible_start_and_finish():
     assert "「追加の機能」の節まで" in added[0] and added[-1] == NOTE_FINISH
 
 
-def test_test_note_rejects_drift_and_rewrites_only_the_region(tmp_path):
+def test_frontend_test_note_rejects_drift_and_rewrites_only_the_region(tmp_path):
     """Unassigned descriptions, unknown files and broken markers are errors; text outside stays."""
     (tmp_path / "src").mkdir()
     (tmp_path / "src/age.test.ts").write_text("")

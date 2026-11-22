@@ -364,7 +364,7 @@ def scope_name(config, scope):
 
 
 def composition_lines(config, tests, source, problems):
-    """Fold the per-file table; the human descriptions are in docs/test_note.md, not repeated here."""
+    """Fold the per-file table; the human descriptions are in docs/frontend_test_note.md, not repeated here."""
     files = {row["file"]: row.get("imports", []) for row in (source or {}).get("files", [])}
     files.update({test["file"]: files.get(test["file"], []) for test in tests})
     undescribed = sorted(set(files) - set(config.get("test_descriptions", {})))
@@ -376,7 +376,7 @@ def composition_lines(config, tests, source, problems):
     conclusion += ("説明のないファイルはない。" if not undescribed else
                    f"説明のないファイルが {len(undescribed)} ある: " + "、".join(f"`{file}`" for file in undescribed) + "。")
     lines = ["## テストの構成", "", conclusion
-             + f"ファイルごとに確かめていること・確かめていないことは `docs/test_note.md` の「機能ごとに保証していること」にある（{ref('composition')}）。", ""]
+             + f"ファイルごとに確かめていること・確かめていないことは `docs/frontend_test_note.md` の「機能ごとに保証していること」にある（{ref('composition')}）。", ""]
     lines += ["<details>", f"<summary>テストのファイル {len(files)}・テスト {count}（ファイルごとの段階・import・件数・観点の内訳）</summary>", "",
               "| ファイル | 段階 | 確かめる対象（import） | 件数 | 観点の内訳 |",
               "| --- | --- | --- | ---: | --- |"]
@@ -749,7 +749,7 @@ def notes(config, targets, threshold):
                   "表の観点の括弧の前の値（`input` など）と対象のグループの値（`file` など）は、`cases.csv` の `観点`・`対象のグループ` の値である。"],
         "composition": ["「確かめる対象（import）」は、テストのファイルが直接 import するローカルのファイルで、型と補助のコードも含む。"
                         "観点の内訳は、1 件のテストを観点ごとに 1 回数える。"
-                        "ファイルごとの説明の正本は `viewpoints.yaml` の `test_descriptions` で、`docs/test_note.md` に出す。"
+                        "ファイルごとの説明の正本は `viewpoints.yaml` の `test_descriptions` で、`docs/frontend_test_note.md` に出す。"
                         "`e2e/visual/` の見た目の比較は通常の E2E の一覧に入らないため、件数が 0 になる。"],
         "graph": ["遷移は、状態機械の宣言から全部の分岐を数える。ガードの選択肢、回答の保存の自己遷移、`always` を 1 つずつ数え、到達できない宣言も分母に残す。"
                   "1 段先の探索は、`xstate/graph` の `getAdjacencyMap` で、代表回答を使ってモード・続柄・回答の組ごとに各質問の隣を試す。"
@@ -1013,7 +1013,7 @@ def feature_lines(config, dashboard):
     features = config.get("features", [])
     qualities = {row["id"]: row for row in config.get("qualities", [])}
     if not features:
-        raise ValueError("features is required to write the test note")
+        raise ValueError("features is required to write the frontend test note")
     listed, entries = set(), {}
     for feature in features:
         if not all(feature.get(key) for key in ("name", "guarantees", "risks", "files")):
@@ -1069,7 +1069,7 @@ def feature_lines(config, dashboard):
 def replace_note_region(text, lines):
     """Replace only the text between the markers; markers must appear once, in order."""
     if text.count(NOTE_BEGIN) != 1 or text.count(NOTE_END) != 1 or text.index(NOTE_BEGIN) > text.index(NOTE_END):
-        raise ValueError(f"Test note needs one {NOTE_BEGIN} followed by one {NOTE_END}")
+        raise ValueError(f"Frontend test note needs one {NOTE_BEGIN} followed by one {NOTE_END}")
     head, rest = text.split(NOTE_BEGIN)
     _, tail = rest.split(NOTE_END)
     return head + NOTE_BEGIN + "\n\n" + "\n".join(lines) + "\n\n" + NOTE_END + tail
@@ -1099,8 +1099,8 @@ def main(argv=None):
     parser.add_argument("--csv", type=Path, default=Path("tmp/test-report/tests.csv"), help="one row per listed test; the detail CSVs are written to the same directory")
     parser.add_argument("--definitions", type=Path, default=Path("tools/test_report/viewpoints.yaml"))
     parser.add_argument("--write-tags", action="store_true", help="regenerate dashboard/testReportTags.ts from YAML and exit")
-    parser.add_argument("--write-test-note", action="store_true", help="rewrite the generated region of the test note from YAML and exit")
-    parser.add_argument("--test-note", type=Path, default=Path("docs/test_note.md"))
+    parser.add_argument("--write-test-note", dest="write_frontend_test_note", action="store_true", help="rewrite the generated region of the frontend test note from YAML and exit")
+    parser.add_argument("--test-note", dest="frontend_test_note", type=Path, default=Path("docs/frontend_test_note.md"))
     parser.add_argument("--offline",action="store_true", help="read existing lists without invoking runners")
     parser.add_argument("--low-coverage", type=float, default=80)
     args = parser.parse_args(argv)
@@ -1118,8 +1118,8 @@ def main(argv=None):
             "// Generated from tools/test_report/viewpoints.yaml; checked by make test-report.\n"
             + "export const testReportTags = " + json.dumps(tags, indent=2) + ";\n", encoding="utf-8")
         return
-    if args.write_test_note:
-        note = root / args.test_note
+    if args.write_frontend_test_note:
+        note = root / args.frontend_test_note
         note.write_text(replace_note_region(note.read_text(encoding="utf-8"), feature_lines(config, dashboard)), encoding="utf-8")
         return
     source = json.loads(subprocess.check_output(["node", "tools/test_report/source_index.mjs", "dashboard"], cwd=root, text=True))

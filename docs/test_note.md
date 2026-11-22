@@ -1,253 +1,106 @@
-# フロントエンドのテストで保証していること
+# テストの全体の状況と残っていること
 
-`dashboard` のテストが、アプリの機能ごとに何を保証し、何を保証していないか（テストが通っても本番で起こりうること）をまとめる。
-テストの流し方は [開発ドキュメント](./dev_note.md#フロントエンド) にある。この文書には流し方を書かない。
+リポジトリのテストを、バックエンド（制度の計算）・フロントエンド・道具・契約テストの 4 つの層に分け、層ごとに何があるか、どこまでか、どこで流れるか、残っていることをまとめる。
+「残っていること」は、今のテストと設定から確かめられる空きであり、予定ではない。層ごとの詳しい中身と流し方は、各節の「詳しい文書」にある。
 
-## 機能と品質の観点
+## 数の時点と数え方
 
-この文書でいう**機能**は、利用者が画面で使う、アプリの機能である。テストのファイルのまとまりではない。
-次の 7 つに分ける。
+数は **2026 年 11 月 22 日の時点**で、リポジトリのルートで各節のコマンドを流して手で書いた。自動では更新されないため、テスト・変数・設定を変えたら数え直す。
 
-| 機能 | 利用者が使うもの |
-| --- | --- |
-| トップと同意 | トップの説明と見積もりの入口、利用規約とプライバシーポリシーへの同意 |
-| 質問（3 つの見積もりモード） | かんたん・くわしく・地震被災者支援の見積もりで、質問に答えて進む・戻ること |
-| 入力欄 | 年齢・金額・子の年齢と学年・人数・住所・選択肢などの入力欄 |
-| 計算の依頼 | 答えた内容を計算の API へ送ることと、困りごとから候補にする制度を選ぶこと |
-| 結果（給付・貸付・窓口） | 受けられる可能性のある給付・貸付と、相談する窓口の表示 |
-| 共有 | 結果のリンクのコピー・QR・画像の保存と、共有されたリンクを開くこと |
-| エラーの画面 | 計算の失敗・存在しない URL・壊れた共有リンクのときに出る画面 |
+## バックエンド（制度の計算）
 
-計算の依頼は、送る内容と送り方、失敗したときの動きを一つにまとめた。利用者は直接操作しないが、結果の正しさの前提であり、テストが通っても本番で起こりうることの多くがここにあるため、結果とは分けた。
-プライバシーポリシーの画面は説明文だけであり、`viewpoints.yaml` の `exclusions` で対象外にしているため、トップと同意に含めて別の機能にしない。
+- **何があるか**: `openfisca_japan/tests/` の YAML（`*.yaml`・`*.yml`）の OpenFisca のテスト。1 つのケースが `period`・`input`・`output` を持ち、`input` の世帯で計算した変数の値が `output` の値と一致するかを確かめる。`generated/` の 3 ファイルは、`tools/make_tests` が CSV から作ったものである。
+- **流し方と CI**: `make test`（`openfisca test --country-package openfisca_japan openfisca_japan/tests`）で `generated/` を含めて全部流れる。CI は `.github/workflows/test_backend.yml` で、push と pull request のたびに `build` ジョブの `make build` のあと、`test` ジョブで `make check-style`（flake8・ruff）・`make test`・`make check-docs`（生成した制度ドキュメントとソースの差）の順に流れる。
 
-互換（画面幅・ブラウザー・端末）・a11y・見た目・通しの操作は、機能ではなく**品質の観点**である。どの機能にもかかわるため、機能ごとの表の列にして、その機能のどの観点をどの層で確かめているかを示す。観点ごとに表を分けると、同じ機能が 4 つの表に散らばり、機能ごとの空きが読み取りにくくなるため、列にした。
+どこまでか:
 
-## 方針
+| 項目 | 数 |
+| --- | ---: |
+| テストの YAML のファイル | 95（うち `generated/` が 3） |
+| テストのケース | 1,829（うち `generated/` が 319） |
+| 変数の定義（`openfisca_japan/variables/` の `class …(Variable)`） | 301 |
+| `output` で値を確かめている変数 | 151 |
+| `input` に使うだけで、`output` で確かめていない変数 | 80 |
+| どのテストにも名前が出てこない変数 | 70 |
 
-- 機能・品質の観点・機能ごとの結論（保証していること・保証していないこと）・根拠のファイルの対応の正本は、`tools/test_report/viewpoints.yaml` の `features` と `qualities` である。ファイルごとの「確かめていること」「確かめていないこと」の正本は `test_descriptions`、段階ごとの受け持ちは `responsibilities` である。
-- 「機能ごとに保証していること」の節のうち、「品質の観点」から最後の機能の節までは、これらから生成した区間であり、説明を二重に書かない。節の頭の説明は人が書く。機能ごとの結論は機能単位の要約だけを `features` に書き、ファイルごとの説明は `test_descriptions` から引く。
-- テストや説明を変えるときは YAML を直してから区間を生成し直す。この文書の生成の区間を手で直さない。
-
-## テストの層と役割
-
-| 層 | 置き場所 | 役割 |
-| --- | --- | --- |
-| 単体 | `src/**/*.test.ts(x)` | node・jsdom の Vitest。状態機械・世帯の変換・進捗・共有データ・入力の正規化と境界など |
-| story | `src/**/*.stories.tsx` | Storybook の play 関数を Chromium で動かす。入力・選択・結果とエラーの表示、自動 a11y |
-| Browser Mode | `src/**/*.browser.test.tsx` | story にしない実ブラウザーの検査。実キーボード・フォーカス・画面幅・状態機械への配線 |
-| E2E | `e2e/*.spec.ts` | Playwright の 5 つの project で、ホームと見積もりの固定経路を通す smoke |
-| 見た目の比較 | `e2e/visual/screens.spec.ts` | 固定した Docker 環境の Chromium で、13 画面 × 2 幅の画像と ARIA スナップショットを比べる |
-
-単体の段階は `unit` project、story と Browser Mode は `vitest.browser.config.mts` の `storybook`・`browser` projects、E2E は `playwright.config.ts`、見た目の比較は `playwright.visual.config.ts` で動く。
-API の応答は、単体・story・Browser Mode では MSW 2 の共通 handler（`src/mocks/handlers.ts`）、E2E と見た目の比較では `page.route` などで固定の JSON に置き換える。どの層も本物のバックエンドにはつながない。
-
-## 機能ごとに保証していること
-
-機能ごとに、はじめに結論（保証していること・保証していないこと）を書き、その下に根拠のファイルの表を置く。表の「観点」の「振る舞い」は機能そのものの動きを確かめること、品質の観点の名前はその機能についてその観点を確かめることを示す（両方を確かめるファイルには両方を書く）。一つのファイルが二つ以上の機能にまたがる場合は、それぞれの機能の表に出す。
-この節のうち、「品質の観点」の見出しから最後の機能の見出しの節までが生成の区間であり、その最初と最後に区間の範囲を示す引用の文を生成で出す（その後の「保証していないこと・既知の制約」からは人が書く）。
-区間は次のコマンドで生成し、下の目印のコメントの間だけを書き換える。生成し直して差が出ないことは `python -m pytest tools/test_report` で確かめている。
+変数は、`output:`・`input:` の行から次の 2 字下げ以下の行までの区間にあるキーのうち、変数の定義の名前と完全に一致するものを数える。世帯・世帯員の名前や日付のキーは一致しないため数えない。一つの変数が、あるケースでは `input`、別のケースでは `output` にあれば、`output` で確かめている変数に数える。`output` で確かめていることは値を比べたケースがあることだけを示し、制度の条件や境界をどこまで確かめたかは示さない。
 
 ```bash
-python tools/test_report/report.py --write-test-note
+# ファイルとケース（ケースごとに output の行が 1 つある）
+grep -rl --include='*.yaml' --include='*.yml' '' openfisca_japan/tests | wc -l
+grep -rh --include='*.yaml' --include='*.yml' '^  output:' openfisca_japan/tests | wc -l
+grep -rh '^- ' openfisca_japan/tests/generated | wc -l
+# 変数の定義の名前と、output・input の区間のキー
+mkdir -p tmp/backend-count
+grep -rhoP '^class \K\w+(?=\(Variable\))' openfisca_japan/variables | sort -u > tmp/backend-count/variables.txt
+grep -rhPzo --include='*.yaml' --include='*.yml' '(?m)^  output:\n(?:(?!\S)(?! \S)(?!  \S)[^\n]*\n)*' openfisca_japan/tests | tr '\0' '\n' | grep -oP '^   +\K[^- #:"\x27][^:]*(?=:)' | sort -u > tmp/backend-count/output.txt
+grep -rhPzo --include='*.yaml' --include='*.yml' '(?m)^  input:\n(?:(?!\S)(?! \S)(?!  \S)[^\n]*\n)*' openfisca_japan/tests | tr '\0' '\n' | grep -oP '^   +\K[^- #:"\x27][^:]*(?=:)' | sort -u > tmp/backend-count/input.txt
+wc -l < tmp/backend-count/variables.txt
+# output で確かめている変数
+comm -12 tmp/backend-count/variables.txt tmp/backend-count/output.txt | wc -l
+# input に使うだけの変数
+comm -12 tmp/backend-count/variables.txt tmp/backend-count/input.txt | comm -23 - tmp/backend-count/output.txt | wc -l
+# どのテストにも出てこない変数
+comm -23 tmp/backend-count/variables.txt tmp/backend-count/output.txt | comm -23 - tmp/backend-count/input.txt | wc -l
 ```
 
-<!-- test-report:features:begin -->
+残っていること:
 
-> **ここから生成した区間（「品質の観点」から「エラーの画面」の節まで）。** 正本は `tools/test_report/viewpoints.yaml` で、`python tools/test_report/report.py --write-test-note` で作り直す。手で直さない。
+- **何を保証しているかの記載がない。** 開発ドキュメントにあるのは流し方だけで、フロントエンドの [フロントエンドのテストで保証していること](./frontend_test_note.md) にあたる、制度ごとに確かめていること・確かめていないことの文書がない。
+- **`output` で値を確かめていない変数が 150 ある。** 301 のうち、入力に使うだけが 80、どのテストにも出てこないのが 70 である。変数ごとの一覧を出す道具はなく、上のコマンドで数える。
+- **網羅率を測っていない。** `Makefile` と CI に網羅率の測定はない。
 
-### 品質の観点
+詳しい文書: 流し方とテストのファイルの自動生成は [開発ドキュメントの「バックエンド」](./dev_note.md#バックエンド) にある。
 
-| 観点 | 確かめ方 |
-| --- | --- |
-| 互換 | 画面幅・ブラウザー・端末の違い。390・820・1440 CSS px の幅、jsdom で与えた UA、Playwright の 5 つの設定で確かめる。 |
-| a11y | キーボード操作・フォーカスと、story の自動 a11y 検査。自動の検査は違反を警告として報告するだけで、合否にしない。 |
-| 見た目 | 固定した Docker 環境の Chromium で、保存した期待値と画像・ARIA スナップショットを比べる。 |
-| 通しの操作 | 組み立てたアプリをブラウザーで開き、画面をまたいで操作する E2E。API はモックの応答を返す。 |
+## フロントエンド
 
-### 段階ごとの受け持ち
+- **何があるか**: `dashboard` の単体（Vitest の node・jsdom）、コンポーネント（Storybook の story と Browser Mode）、E2E（Playwright のモック応答の smoke）、見た目の比較（画像・ARIA スナップショット）。どの層も本物のバックエンドにはつながない。
+- **どこまでか**: 1,248 件（単体 8 ファイル 1,087 件・コンポーネント 13 ファイル 136 件・E2E 3 ファイル 25 件（5 件 × 5 つの project））。見た目の比較は通常の E2E とは別の設定で 26 件（13 画面 × 2 幅）ある。テストのない確認ケース（不足の候補）は 123 か所である。
+- **流し方と CI**: `.github/workflows/test_frontend.yml` の `test` ジョブで、push と pull request のたびに ESLint・Prettier・`npm run test`（単体）・`npm run test:ui`（story と Browser Mode）・Storybook のビルド・ビルド・`npm run test:e2e` の順に流れる。見た目の比較は同じ workflow の `visual` ジョブで、固定した Docker のイメージの中で流れる。網羅率（`--coverage`）と `make test-report` は CI で流れない。
 
-| 受け持ち | 段階 | 範囲 |
-| --- | --- | --- |
-| 状態の論理 | unit | 質問の流れ・回答から世帯JSONへの変換・決まった時点の進捗・共有データ。 |
-| 表示・入力・操作 | unit / ui | 入力テンプレート、モック応答の結果とエラー、幅・キー操作・自動a11y検査。 |
-| 通し | e2e | 5設定でホームとかんたん・くわしい見積もりの固定経路。APIはモック。 |
+```bash
+# 集計の節に、段階ごとのファイル数・件数と、テストのない確認ケースの数が出る（テストの本体は流さない）
+make test-report
+# 見た目の比較の件数
+cd dashboard && npx playwright test --config playwright.visual.config.ts --list
+```
 
-### 機能ごとの観点と層
+残っていること: テストが通っても本番で起こりうること（金額と判定の誤り、本物の API との形の食い違い、地震被災者支援のモードの通しの操作、実機の IME、a11y の違反、既知の不具合 1 件）と、テストの作り方による制約は、[保証していないこと・既知の制約](./frontend_test_note.md#保証していないこと既知の制約) にある。テストのない確認ケースは、`make test-report` の `cases.csv` で確かめる。
 
-表の各欄は、その機能のその観点を確かめているテストの層である。「なし」は、その観点をその機能で確かめるテストがないことを示す。
+詳しい文書: 機能ごとに保証していることは [フロントエンドのテストで保証していること](./frontend_test_note.md)、流し方は [開発ドキュメントの「フロントエンド」](./dev_note.md#フロントエンド)、レポートの出し方は [`tools/test_report/README.md`](../tools/test_report/README.md) にある。
 
-| 機能 | 振る舞い | 互換 | a11y | 見た目 | 通しの操作 |
-| --- | --- | --- | --- | --- | --- |
-| トップと同意 | Browser Mode | E2E | Browser Mode | 見た目の比較 | E2E |
-| 質問（3 つの見積もりモード） | 単体 / Browser Mode | Browser Mode / E2E | Browser Mode | 見た目の比較 | E2E |
-| 入力欄 | 単体 / story / Browser Mode | 単体 / E2E | story / Browser Mode | 見た目の比較 | E2E |
-| 計算の依頼 | 単体 / story | E2E | なし | なし | E2E |
-| 結果（給付・貸付・窓口） | story / Browser Mode | Browser Mode / E2E | story / Browser Mode | 見た目の比較 | E2E |
-| 共有 | 単体 / story / Browser Mode | なし | story | なし | なし |
-| エラーの画面 | story / Browser Mode | Browser Mode | story / Browser Mode | 見た目の比較 | なし |
+## 道具
 
-### トップと同意
+- **何があるか**: `tools/make_docs/test_make_docs.py`（制度ドキュメントの生成の、数の書式とパラメータの単位の警告）と、`tools/test_report/test_report.py`（フロントエンドのテストレポートの一覧・集計・CSV と、[フロントエンドのテストで保証していること](./frontend_test_note.md) の生成した区間）の pytest。
+- **どこまでか**: 62 件（`test_make_docs.py` 6 件・`test_report.py` 56 件）。`tools/make_tests`・`tools/dependency_graph`・`tools/municipalities_order` にテストはない。
+- **流し方と CI**: `python -m pytest tools/make_docs tools/test_report` で流す。`Makefile` と CI に pytest はなく、CI では流れない（CI の `make check-docs` は生成物とソースの差を確かめるもので、この pytest ではない）。
 
-- **保証していること**: トップの説明とフッターのリンク、2 つの同意がそろうまで見積もりを始められず、取り消しや閉じたときに同意が解除されること、3 つのモードの画面を直接開いて始められることを保証する。ホームの見出しと 2 つの見積もりの入口は、5 つのブラウザー・端末の設定で確かめている。
-- **保証していないこと（テストが通っても本番で起こりうること）**: リンク先のページが開けることや内容は確かめない（確かめるのはリンクの行き先の値だけである）。プライバシーポリシーと説明文だけの部品は exclusions で対象外にしており、本文の誤りはテストで見つからない。
+```bash
+python -m pytest tools/make_docs tools/test_report --collect-only -q
+```
 
-根拠のファイル:
+残っていること:
 
-| 層 | ファイル | 観点 | 確かめていること | 確かめていないこと |
-| --- | --- | --- | --- | --- |
-| Browser Mode | `dashboard/src/App.browser.test.tsx` | 振る舞い | Appのルート表で、2つの同意の確認と取り消し・閉じたときの解除、トップの説明とフッターのリンク、3モードの画面を直接開いて始めること、プライバシーポリシー・保存した結果のURL・応答エラー・存在しないURLの表示と戻り先を確認する。 | 同意から結果までの通し（E2E）、実API、全端末。 |
-| Browser Mode | `dashboard/src/components/layout/uiCompatibility.browser.test.tsx` | a11y | 390・820・1440 CSS pxで質問・結果・3種のエラーの幅とキーボード操作、同意モーダルのフォーカス復帰を確認する。 | モバイル実機のUA、全画面幅、状態機械との通し操作。 |
-| E2E | `dashboard/e2e/Homepage.spec.ts` | 互換・通しの操作 | 5ブラウザー・端末設定でホームの見出しと2つの見積もりの入口の表示を確認する。 | 実端末、すべてのルート、実API。 |
-| 見た目の比較 | `dashboard/e2e/visual/screens.spec.ts` | 見た目 | 通常のE2Eの設定から外し、playwright.visual.config.tsでだけ実行する（この表の件数は0）。固定したDocker環境のChromiumで、13画面をdesktopとmobileの2幅で撮り、保存した期待値と画像・ARIAスナップショットが一致することを確認する。 | 5ブラウザー・端末設定、操作の結果、期待値そのものの正しさ（撮影時にレビューする）。 |
+- **CI で流れない。** 道具を変えてテストが失敗しても、pull request では気づけない。
+- **テストのない道具がある。** `tools/make_tests`（バックエンドのテストの YAML の生成）・`tools/dependency_graph`・`tools/municipalities_order`。
 
-### 質問（3 つの見積もりモード）
+詳しい文書: フロントエンドのテストレポートの道具は [`tools/test_report/README.md`](../tools/test_report/README.md) にある。
 
-- **保証していること**: かんたん・くわしく・地震被災者支援の 3 つのモードで、実際の状態機械につないだ質問画面が、未回答では進まず、次へ・前へで回答を復元し、世帯員ごとに入力欄を切り替えること、3 つのモードとも最後の質問のあとに結果へ移って世帯を保存することを保証する。進捗は決まった時点の値と下限だけを確かめている。
-- **保証していないこと（テストが通っても本番で起こりうること）**: 確かめているのは決まった回答経路だけであり、ほかの回答の組み合わせで質問が飛ぶ・行き止まる不具合は本番で起こりうる。進捗が途中で戻る、最後に 1 にならない、といったことは確かめない。地震被災者支援のモードは、同意から結果までを E2E で通していない。
+## 契約テスト（フロントエンドとバックエンドの突き合わせ）
 
-根拠のファイル:
+- **何があるか**: ない。フロントエンドのテストは MSW の handler と `page.route` の固定の JSON で応答し、バックエンドのテストは YAML の世帯で計算するだけで、フロントエンドが送る世帯の JSON を使わない。どちらも相手の形を確かめない。
+- **どこまでか**: 0 件。`dashboard/src`・`dashboard/e2e`・`tools`・`.github` に、`/spec` やその `SituationInput`・`SituationOutput` を読むコードはない。
+- **流し方と CI**: ない。固定の応答と本物の API の差は、[開発ドキュメントの「計算 API の固定データと再記録」](./dev_note.md#計算-api-の固定データと再記録) の手順で人が確かめる。
 
-| 層 | ファイル | 観点 | 確かめていること | 確かめていないこと |
-| --- | --- | --- | --- | --- |
-| 単体 | `dashboard/src/state/questionState.test.ts` | 振る舞い | 決まった回答経路で目的の質問まで進み、値の保存・次の質問・戻る際の質問と回答と世帯員の復元、一部の分岐を確認する。 | 画面表示、すべての回答経路・分岐の組合せ、入力値の妥当性。 |
-| 単体 | `dashboard/src/state/progress.test.ts` | 振る舞い | 3モードの決まった時点で進捗の値や下限を確認する（最初は0、配偶者の最初は0.6以上など）。 | 途中の全値、単調増加、最後に1になること。 |
-| Browser Mode | `dashboard/src/components/questions/question.browser.test.tsx` | 振る舞い | 実際の状態機械につないだ質問画面で、未回答と一部回答の阻止、次へ・前への回答の復元、配偶者・子ども・親の入力欄の切り替えと世帯員ごとの回答、3モードで最後の質問のあとに結果へ移り両方の世帯を保存することを確認する。 | 結果の表示と計算の送信、すべての質問と回答経路、全端末。 |
-| Browser Mode | `dashboard/src/App.browser.test.tsx` | 振る舞い | Appのルート表で、2つの同意の確認と取り消し・閉じたときの解除、トップの説明とフッターのリンク、3モードの画面を直接開いて始めること、プライバシーポリシー・保存した結果のURL・応答エラー・存在しないURLの表示と戻り先を確認する。 | 同意から結果までの通し（E2E）、実API、全端末。 |
-| Browser Mode | `dashboard/src/components/layout/uiCompatibility.browser.test.tsx` | 互換・a11y | 390・820・1440 CSS pxで質問・結果・3種のエラーの幅とキーボード操作、同意モーダルのフォーカス復帰を確認する。 | モバイル実機のUA、全画面幅、状態機械との通し操作。 |
-| E2E | `dashboard/e2e/SimpleCalculation.spec.ts` | 互換・通しの操作 | 5設定でかんたん見積もりの決まった回答経路からモック結果の表示までを確認する。 | 全回答経路、実API・制度計算。 |
-| E2E | `dashboard/e2e/DetailedCalculation.spec.ts` | 互換・通しの操作 | 5設定でくわしい見積もりの決まった回答経路からモック結果の表示までを確認する。 | 全回答経路、災害モードの通し、実API・制度計算。 |
-| 見た目の比較 | `dashboard/e2e/visual/screens.spec.ts` | 見た目 | 通常のE2Eの設定から外し、playwright.visual.config.tsでだけ実行する（この表の件数は0）。固定したDocker環境のChromiumで、13画面をdesktopとmobileの2幅で撮り、保存した期待値と画像・ARIAスナップショットが一致することを確認する。 | 5ブラウザー・端末設定、操作の結果、期待値そのものの正しさ（撮影時にレビューする）。 |
+```bash
+# 何も出なければ、/spec と突き合わせるコードはない
+grep -rln "/spec\b\|SituationInput\|SituationOutput" dashboard/src dashboard/e2e tools .github
+```
 
-### 入力欄
+残っていること（まだない突き合わせ）:
 
-- **保証していること**: 年齢・金額・子の年齢と学年・人数の入力欄で、値の正規化と境界、未回答、回答の復元と消してからの入れ直しを保証する。実ブラウザーのキー操作とフォーカス、端末ごとの UA での type と pattern、IME の変換中のイベントの扱いも確かめている。
-- **保証していないこと（テストが通っても本番で起こりうること）**: 実機の端末と OS の IME・キー動作で値が崩れる、確定できない、といったことは起こりうる（UA は jsdom で与えただけ、IME はイベントを作って確かめただけである）。選択式の入力欄（住所・選択肢・複数選択・はい/いいえ）は、自由入力・数値の境界・IME を確かめない。
+1. **フロントエンドが送る世帯の JSON と API。** `dashboard/src/state/convert.ts` が作る世帯の JSON（固定データは `dashboard/src/mocks/calculate/*.request.json`）を、本物の API の `/calculate` が受け付けるか。
+2. **モックの応答の形と `/spec`。** `dashboard/src/mocks/calculate/*.response.json` と `dashboard/src/mocks/handlers.ts` の応答の形が、`/spec` の `SituationInput`・`SituationOutput` と合うか。
+3. **フロントエンドが使う変数の名前と制度の定義。** フロントエンドが送る・読む変数の名前が、`openfisca_japan/variables/` の制度の定義にあるか。
 
-根拠のファイル:
-
-| 層 | ファイル | 観点 | 確かめていること | 確かめていないこと |
-| --- | --- | --- | --- | --- |
-| 単体 | `dashboard/src/components/questions/template/questionTemplates.test.tsx` | 振る舞い | DOM上で年齢・金額・子の年齢と学年・人数の正規化と境界・未回答・復元・再描画を確認する。 | 実ブラウザーのレイアウト、全質問への配線、OS固有IME。 |
-| Browser Mode | `dashboard/src/components/questions/template/ageQuestionTemplate.browser.test.tsx` | 振る舞い | 実キーボードの下キーで年齢が0未満にならず、値と有効性とフォーカスを保つことを確認する。 | 年齢の全境界、ほかのテンプレート、OS固有キー動作。 |
-| Browser Mode | `dashboard/src/components/questions/template/questionTemplates.input.browser.test.tsx` | 振る舞い・a11y | 実ブラウザーのキー操作で、年齢・金額・子の年齢の復元値を消して0を入れ直すこと、学年の編集から年齢への変換、金額欄のEnterでフォームを送らないこと、人数の「はい」でのフォーカスと値の復元を確認する。 | IME、全端末、自動a11y検査、状態機械への配線。 |
-| story | `dashboard/src/components/questions/template/questionTemplates.stories.tsx` | 振る舞い・a11y | 実ブラウザーで各テンプレートの入力・選択・復元・フォーカスと自動a11y検査を確認する。 | 全質問の状態機械への配線、全端末、手動支援技術。 |
-| 単体 | `dashboard/src/components/questions/template/questionTemplates.device.test.tsx` | 互換 | jsdomで8種の端末・ブラウザーのUAを与え、年齢・金額・子の年齢・人数の入力欄のtypeとpattern、IME変換中の値と回答の扱い、InputEventのない変更、未回答・復元・消去と0の再入力の有効性を確認する。 | 実ブラウザー・実端末とOSのIME、レイアウト、状態機械への配線。 |
-| E2E | `dashboard/e2e/SimpleCalculation.spec.ts` | 互換・通しの操作 | 5設定でかんたん見積もりの決まった回答経路からモック結果の表示までを確認する。 | 全回答経路、実API・制度計算。 |
-| E2E | `dashboard/e2e/DetailedCalculation.spec.ts` | 互換・通しの操作 | 5設定でくわしい見積もりの決まった回答経路からモック結果の表示までを確認する。 | 全回答経路、災害モードの通し、実API・制度計算。 |
-| 見た目の比較 | `dashboard/e2e/visual/screens.spec.ts` | 見た目 | 通常のE2Eの設定から外し、playwright.visual.config.tsでだけ実行する（この表の件数は0）。固定したDocker環境のChromiumで、13画面をdesktopとmobileの2幅で撮り、保存した期待値と画像・ARIAスナップショットが一致することを確認する。 | 5ブラウザー・端末設定、操作の結果、期待値そのものの正しさ（撮影時にレビューする）。 |
-
-### 計算の依頼
-
-- **保証していること**: 回答から送る世帯 JSON の変数名・期間・単位換算・未回答の省略と、POST の送信先と本文、応答の保存を保証する。HTTP 500 と通信の失敗の扱いと再試行、失敗したときにエラーの画面へ移ること、困りごとごとにフロントエンドで候補にする制度の一覧も確かめている。
-- **保証していないこと（テストが通っても本番で起こりうること）**: バックエンドが送った世帯 JSON を受け付けるか、応答の形が画面の読む形と一致するかは確かめない。API の形が変わると、テストが通ったまま本番で結果が出ない・誤って出ることが起こりうる。世帯 JSON への変換は主に回答を 1 項目ずつ確かめており、複数の回答の組み合わせは確かめない。本番の送信先の設定も確かめない。
-
-根拠のファイル:
-
-| 層 | ファイル | 観点 | 確かめていること | 確かめていないこと |
-| --- | --- | --- | --- | --- |
-| 単体 | `dashboard/src/state/convert.test.ts` | 振る舞い | 主に回答を1項目ずつ設定し、contextから送信する世帯JSONの変数名・期間・単位換算・未回答の省略・世帯員追加・変換規則を確認する。 | 複数回答の組合せ、バックエンドによる受理。 |
-| 単体 | `dashboard/src/hooks/calculate.test.tsx` | 振る舞い | モックHTTPでPOSTのURL・本文・応答保存、未指定時の非送信、HTTP500・通信失敗と再試行を確認する。 | 実バックエンド、全環境の送信先、ブラウザー表示。 |
-| 単体 | `dashboard/src/components/calculate/calculate.test.tsx` | 振る舞い | 3つの住所で困りごとごとに候補にする制度の一覧、前の結果の解除、複数の困りごとの組み合わせと再計算、選んだ日付の住所での地域の制度を確認する。 | 制度を受けられるかの判定、バックエンドの計算、画面表示、ほかの地域。 |
-| story | `dashboard/src/components/result/result.stories.tsx` | 振る舞い | モック応答で給付・貸付の有無、地域・URL・金額幅・単位・HIVの表示分岐、HTTP500・通信失敗時の移動とa11yを確認する。 | 実制度計算、全応答データ、全端末。 |
-| E2E | `dashboard/e2e/SimpleCalculation.spec.ts` | 互換・通しの操作 | 5設定でかんたん見積もりの決まった回答経路からモック結果の表示までを確認する。 | 全回答経路、実API・制度計算。 |
-| E2E | `dashboard/e2e/DetailedCalculation.spec.ts` | 互換・通しの操作 | 5設定でくわしい見積もりの決まった回答経路からモック結果の表示までを確認する。 | 全回答経路、災害モードの通し、実API・制度計算。 |
-
-### 結果（給付・貸付・窓口）
-
-- **保証していること**: モックの応答に対して、給付・貸付・窓口の欄の有無、地域・URL・金額の幅・単位・HIV の回答による表示の分かれ方と、バックエンドとフロントエンドの制度の統合と重複の除外を保証する。
-- **保証していないこと（テストが通っても本番で起こりうること）**: 給付・貸付の金額と、制度を受けられるかの判定が正しいことは保証しない。応答は画面が読む形に合わせた手作りのデータであり、計算はバックエンドのテストに任せている。すべての制度と窓口のデータも確かめない。既知の不具合として、フロントエンドの計算結果だけが変わったときに表示する制度が入れ替わらない（it.fails で残している）。
-
-根拠のファイル:
-
-| 層 | ファイル | 観点 | 確かめていること | 確かめていないこと |
-| --- | --- | --- | --- | --- |
-| Browser Mode | `dashboard/src/components/result/applicable.browser.test.tsx` | 振る舞い | 困りごとから候補にした制度の表示と説明・窓口、バックエンドとフロントの制度の統合と重複・偽の値の除外、結果がないときの非表示、HIVの回答による窓口、結果の都道府県による窓口、新しい結果での入れ替えを確認する。フロントの結果だけが変わったときの入れ替えは既知の失敗（it.fails）として残す。 | 制度を受けられるかの判定、すべての制度と窓口、全端末。 |
-| Browser Mode | `dashboard/src/components/result/resultDetails.browser.test.tsx` | 振る舞い | 社会福祉協議会の調べ方、窓口がない住所での非表示、3種の窓口の名前・地図・電話のリンクとWebサイトがないときの文字、金額が0のときに給付と貸付の欄を出さないことを確認する。 | すべての住所と窓口のデータ、設定の値の正しさ、全端末。 |
-| story | `dashboard/src/components/result/result.stories.tsx` | 振る舞い・a11y | モック応答で給付・貸付の有無、地域・URL・金額幅・単位・HIVの表示分岐、HTTP500・通信失敗時の移動とa11yを確認する。 | 実制度計算、全応答データ、全端末。 |
-| story | `dashboard/src/components/result/resultDetails.stories.tsx` | 振る舞い・a11y | 給付の金額の並びと単位、貸付の上限と区分、HIVの回答による拠点病院の表示、拠点病院の並びと重複の除去、注記つきの窓口と各リンクを確認する。 | 実制度計算、すべての制度と窓口、自動a11y検査での合否。 |
-| Browser Mode | `dashboard/src/components/layout/uiCompatibility.browser.test.tsx` | 互換・a11y | 390・820・1440 CSS pxで質問・結果・3種のエラーの幅とキーボード操作、同意モーダルのフォーカス復帰を確認する。 | モバイル実機のUA、全画面幅、状態機械との通し操作。 |
-| E2E | `dashboard/e2e/SimpleCalculation.spec.ts` | 互換・通しの操作 | 5設定でかんたん見積もりの決まった回答経路からモック結果の表示までを確認する。 | 全回答経路、実API・制度計算。 |
-| E2E | `dashboard/e2e/DetailedCalculation.spec.ts` | 互換・通しの操作 | 5設定でくわしい見積もりの決まった回答経路からモック結果の表示までを確認する。 | 全回答経路、災害モードの通し、実API・制度計算。 |
-| 見た目の比較 | `dashboard/e2e/visual/screens.spec.ts` | 見た目 | 通常のE2Eの設定から外し、playwright.visual.config.tsでだけ実行する（この表の件数は0）。固定したDocker環境のChromiumで、13画面をdesktopとmobileの2幅で撮り、保存した期待値と画像・ARIAスナップショットが一致することを確認する。 | 5ブラウザー・端末設定、操作の結果、期待値そのものの正しさ（撮影時にレビューする）。 |
-
-### 共有
-
-- **保証していること**: 共有データの主な項目の往復と短縮・旧形式のリンクの読み込み、3 つのモードの共有リンクを開いたときの送信内容、壊れたリンクのエラーと戻り先、リンクのコピーと失敗時の再試行、画像の保存の操作を保証する。
-- **保証していないこと（テストが通っても本番で起こりうること）**: 共有データのすべての項目が往復で一致することは確かめない。QR と保存した画像の中身、実際のクリップボードと端末ごとの権限での動きは確かめない。
-
-根拠のファイル:
-
-| 層 | ファイル | 観点 | 確かめていること | 確かめていないこと |
-| --- | --- | --- | --- | --- |
-| 単体 | `dashboard/src/components/result/shareLink.test.ts` | 振る舞い | 共有データの主な項目の往復・短縮・旧形式、base64の可逆性と展開を確認する。 | 全項目の一致、壊れたURL、画面操作。 |
-| Browser Mode | `dashboard/src/components/result/resultShare.browser.test.tsx` | 振る舞い | モック応答で、短縮・旧形式の共有リンクを3モードで開いた送信内容とQRのURL、壊れたリンクのエラーと戻り先、リンクのコピー、コピーの拒否と環境情報のコピーの再試行、画像保存と読み込み中の表示を確認する。 | QRの画像そのもの、画像の中身、実際のクリップボードと実API。 |
-| story | `dashboard/src/components/result/resultShare.stories.tsx` | 振る舞い・a11y | 実ブラウザーで、短縮の共有リンクの3モード、frontendのデータの有無による旧形式のリンク、壊れたリンクのエラーと戻り先を表示することを確認する。 | 送信内容、コピー・QR・画像の操作、自動a11y検査での合否。 |
-| Browser Mode | `dashboard/src/App.browser.test.tsx` | 振る舞い | Appのルート表で、2つの同意の確認と取り消し・閉じたときの解除、トップの説明とフッターのリンク、3モードの画面を直接開いて始めること、プライバシーポリシー・保存した結果のURL・応答エラー・存在しないURLの表示と戻り先を確認する。 | 同意から結果までの通し（E2E）、実API、全端末。 |
-
-### エラーの画面
-
-- **保証していること**: 汎用・存在しない URL・応答エラーの 3 つの画面の表示と、モードごとの戻り先、キー操作を保証する。HTTP 500 と通信の失敗のときに応答エラーの画面へ移ること、3 つの幅で画面に収まることも確かめている。
-- **保証していないこと（テストが通っても本番で起こりうること）**: 本物の通信で起こる失敗のときの動きは確かめない。失敗はモックの HTTP 500 と通信の失敗で作っている。すべてのエラーの本文と、手動の支援技術での読み上げは確かめない。
-
-根拠のファイル:
-
-| 層 | ファイル | 観点 | 確かめていること | 確かめていないこと |
-| --- | --- | --- | --- | --- |
-| story | `dashboard/src/components/errors/errors.stories.tsx` | 振る舞い・a11y | 汎用・404・応答エラーの表示、モード別の戻り先とキー操作、自動a11y検査を確認する。 | 実HTTPでの発生、手動支援技術、すべてのエラー本文。 |
-| Browser Mode | `dashboard/src/App.browser.test.tsx` | 振る舞い | Appのルート表で、2つの同意の確認と取り消し・閉じたときの解除、トップの説明とフッターのリンク、3モードの画面を直接開いて始めること、プライバシーポリシー・保存した結果のURL・応答エラー・存在しないURLの表示と戻り先を確認する。 | 同意から結果までの通し（E2E）、実API、全端末。 |
-| story | `dashboard/src/components/result/result.stories.tsx` | 振る舞い・a11y | モック応答で給付・貸付の有無、地域・URL・金額幅・単位・HIVの表示分岐、HTTP500・通信失敗時の移動とa11yを確認する。 | 実制度計算、全応答データ、全端末。 |
-| Browser Mode | `dashboard/src/components/result/resultShare.browser.test.tsx` | 振る舞い | モック応答で、短縮・旧形式の共有リンクを3モードで開いた送信内容とQRのURL、壊れたリンクのエラーと戻り先、リンクのコピー、コピーの拒否と環境情報のコピーの再試行、画像保存と読み込み中の表示を確認する。 | QRの画像そのもの、画像の中身、実際のクリップボードと実API。 |
-| Browser Mode | `dashboard/src/components/layout/uiCompatibility.browser.test.tsx` | 互換・a11y | 390・820・1440 CSS pxで質問・結果・3種のエラーの幅とキーボード操作、同意モーダルのフォーカス復帰を確認する。 | モバイル実機のUA、全画面幅、状態機械との通し操作。 |
-| 見た目の比較 | `dashboard/e2e/visual/screens.spec.ts` | 見た目 | 通常のE2Eの設定から外し、playwright.visual.config.tsでだけ実行する（この表の件数は0）。固定したDocker環境のChromiumで、13画面をdesktopとmobileの2幅で撮り、保存した期待値と画像・ARIAスナップショットが一致することを確認する。 | 5ブラウザー・端末設定、操作の結果、期待値そのものの正しさ（撮影時にレビューする）。 |
-
-> **生成した区間はここまで。** ここから下は人が書く。
-
-<!-- test-report:features:end -->
-
-## 保証していないこと・既知の制約
-
-テストがすべて通っても、本番では次のことが起こりうる。
-
-1. **給付・貸付の金額と、制度を受けられるかの判定が間違っている。** フロントエンドのテストはモックの応答で表示を確かめるだけであり、計算はバックエンドのテストに任せている。
-2. **本物の API と形が食い違い、結果が出ない・誤って出る。** 送る世帯 JSON と応答の形を、本物の API と突き合わせる自動のテスト（契約テスト）はない。
-3. **地震被災者支援のモードで、同意から結果までの通しの操作が壊れる。** E2E はかんたん見積もりとくわしく見積もりしか通さない。
-4. **実機の端末と OS の IME で、入力が崩れる・確定できない。** 端末は jsdom で UA を与え、IME はイベントを作って確かめているだけである。
-5. **a11y の違反がある。** 自動の検査は違反を警告として報告するだけで、テストは失敗しない。
-6. **フロントエンドの計算結果だけが変わったときに、表示する制度が入れ替わらない。** 既知の不具合であり、`it.fails` で残している。
-
-それぞれの根拠は次のとおりである。ここに書くのは、テストのファイルと設定、`viewpoints.yaml` から確かめられる事実だけである。
-
-- **金額と判定**: 結果のテストの応答は `src/mocks/calculate/*.response.json` の手作りのデータであり、`src/mocks/calculateFixtures.ts` は「表示のための固定データで、記録でも適格性の主張でもない」としている。`test_descriptions` の結果のファイルは、いずれも「制度を受けられるかの判定」「実制度計算」を確かめていないことに挙げる。制度の計算はリポジトリの `openfisca_japan/tests` の YAML のテスト（`make test`）で確かめる。
-- **API の形**: 単体・story・Browser Mode は `src/testSetup.ts` の `onUnhandledRequest: 'error'` で本物の通信を止め、MSW の handler で応答する。E2E と見た目の比較は `page.route` で `/calculate` への POST に固定の JSON を返す（`e2e/SimpleCalculation.spec.ts`・`e2e/DetailedCalculation.spec.ts`・`e2e/visual/screens.spec.ts`）。`src/hooks/calculate.test.tsx` も「実バックエンド」「全環境の送信先」を、`src/state/convert.test.ts` も「バックエンドによる受理」を確かめていない。固定の応答と本物の API の差は、開発ドキュメントの「計算 API の固定データと再記録」の手順で人が確かめる。
-- **地震被災者支援のモード**: `e2e/` にあるのは `Homepage.spec.ts`・`SimpleCalculation.spec.ts`・`DetailedCalculation.spec.ts` だけであり、`DetailedCalculation.spec.ts` の `does_not_verify` に「災害モードの通し」がある。部分としては、`src/components/questions/question.browser.test.tsx` が最後の質問から結果へ移ること、`src/App.browser.test.tsx` が画面を直接開いて始めること、`e2e/visual/screens.spec.ts` が最初の質問の見た目を確かめている。
-- **実機と IME**: `src/components/questions/template/questionTemplates.device.test.tsx` は jsdom で 8 種の UA を与え、IME は変換中のイベントで確かめる。その `does_not_verify` は「実ブラウザー・実端末と OS の IME」である。E2E の 5 つの設定も Playwright の端末の模倣であり、実機ではない。
-- **a11y**: `.storybook/preview.ts` は `a11y: { test: 'todo' }` とし、違反を警告として報告する。キーボード操作とフォーカスは Browser Mode と story で確かめるが、手動の支援技術による確認はしていない（`errors.stories.tsx`・`questionTemplates.stories.tsx` の `does_not_verify`）。
-- **既知の不具合**: `src/components/result/applicable.browser.test.tsx` の「refreshes programs when only the frontend calculation changes」を `it.fails` で残している。バックエンドの応答が同じでフロントエンドの計算結果だけが変わったときの入れ替えを、意図した動きとして書き、今は失敗することを確かめている。直ると、このテストが失敗して知らせる。
-
-ほかに、テストの作り方による次の制約がある。
-
-- **E2E は固定の経路の smoke である。** かんたん見積もりとくわしく見積もりを 1 本ずつ通し、全回答経路は確かめない。`playwright.config.ts` の `retries` は 0 で、失敗を再試行で隠さない。
-- **見た目の比較は通常の E2E に含まれない。** `playwright.config.ts` の `testIgnore` で外し、Docker の Chromium でだけ動かす。5 つのブラウザー・端末の設定では比べず、期待値そのものの正しさは撮影時のレビューに任せる。
-- **網羅率の閾値はない。** `--coverage` の数値はテストを足す先を探すためのもので、閾値や CI での強制は設定していない。`make test-report` の 80% も調査先を絞る目安であり、合否の条件ではない。E2E の網羅率は測らない。
-- **対象外にした部品と条件がある。** `viewpoints.yaml` の `exclusions` で、説明文だけの部品（`PrivacyPolicy.tsx`・`Description.tsx`・`questions/description.tsx`・`descriptions/spouseExistsButSingleParent.tsx`）と起動入口の `main.tsx`、説明だけのプライバシーポリシー画面を全条件で対象外にしている。選択式の入力欄（住所・選択肢・複数選択・はい/いいえ）には自由入力・数値の境界・IME・数値入力属性を求めず、給付・貸付・窓口には互いの責務の表示（単位・金額の範囲・HIV の分岐）を求めない。
-- **状態機械の通過は代表回答による。** `make test-report` の「状態機械の分かれ道」は、代表回答での探索と既存テストの実行時の通過を示す。全回答の組合せの網羅や、各遷移への専用の assertion を意味しない。
-
-今後の課題の計画はこの文書には書かない。上の一覧は、テストを足したり設定を変えたりしたときに書き直す。
-
-## レポートの読み方
-
-`make test-report` は、テストの本体を実行せずに一覧を集め、`tmp/test-report/` にレポートを出す（生成物であり、commit しない）。`frontend.md` は結論と集計だけを載せ、1 行ずつの詳細は同じディレクトリの CSV に出す。実行結果と網羅率は、別に採取した JSON があるときだけ載る。出し方と採取の手順、CSV の列と行の順、タグと分類の詳しい規則は、リポジトリの `tools/test_report/README.md` にある。
-
-- **文書の形**: `frontend.md` の各節は、その節で分かったことの結論の文（何件か、通ったか、何が残っているか）から始まる。作り方・数え方・読み方の注意は最後の「注記」の節に番号つきでまとめ、本文には「注記 2」のように番号だけを書く。
-- **確認ケース**: 確かめる対象 × 観点 × 条件の組み合わせ（たとえば「年齢の入力欄 × 入力 × 境界値」）を、レポートでは確認ケースと呼び、テスト 1 件とは別に数える。1 つの確認ケースを複数のテストが確かめることも、1 つのテストが複数の確認ケースを確かめることもある。状態は「テストあり」「テストなし（不足の候補）」「対象外（理由つき）」のどれかで、確認ケースごとの確かめたテストと対象外の理由は `cases.csv` にある。レポートの観点（入力・遷移など）はテストの分類であり、この文書の品質の観点とは別のものである。
-- **集計**: `frontend.md` の冒頭の節。テストの件数と結果、未分類のテストの数、テストのない確認ケースの数と多い観点を結論の文にし、その下に段階・project ごとの件数と、網羅率の全体・基準を下回ったファイル・状態機械の遷移の通過の数の表を置く。まずここで対処が要るかをつかみ、表の行に書いた節と CSV で確かめる。
-- **テストの構成**: ファイルごとの段階・import・件数・観点の内訳の表。長いので折りたたんであり、`<summary>` の行（ファイル数と件数）を開くと出る。ファイルごとの確かめていること・確かめていないことは載せず、この文書の機能ごとの根拠のファイルの表を見る（どちらも `test_descriptions` から作る）。説明のないファイルだけを結論の文に並べる。
-- **テストなしの扱い**: 「テストなし（不足の候補）」の確認ケース（`cases.csv` の `状態` で絞る）はテストを足す候補であり、必ず足すべきという判定ではない。名前・タグ・対応の定義と実際の assertion を確かめ、必要がなければ `exclusions` に理由を書いて対象外にする。「対象外（理由つき）」の確認ケースには、その理由が出る。タグは確かめていることの分類であり、確かめ方の強さや成功を示さない。
-- **未分類のテスト**: タグも分類の規則もないテスト、または対象に結び付かないテスト。すぐ直すものなので、件数だけでなく `frontend.md` にも一覧を出す。0 件を保つ。新しい名前の型を足したら、宣言にタグを書くか `classification_rules` を足す。
-- **テストの状況・状態機械・網羅率**: `frontend.md` には段階ごとの結果の数、状態機械の遷移の分母・通過・未通過の数、全体の網羅率と基準を下回ったファイルの数を出す。遷移ごとの通過は `transitions.csv`、ファイルごとの網羅率は `coverage.csv` にある。JSON がなければ「実行結果がないため、通ったかは分からない」のように結論の文で言い切り、採取のコマンドは注記に出す。unit の結果は、遷移の通過も同時に記録する補助の設定で採る（README の手順のとおり。ふつうの設定の結果では、遷移はすべて「判定不能」になる）。古い結果は自動では見分けられないため、コードを変えたら採取し直す。
-- **CSV**: テスト 1 件の `tests.csv`、確認ケース 1 つの `cases.csv`、遷移 1 つの `transitions.csv`、質問ごとの代表回答の `representatives.csv`、ファイル×段階の `coverage.csv`、対象 1 つの `targets.csv` を出す。BOM 付きの UTF-8 で、表計算のソフトのフィルターで絞り込む。行は決まった順（`tests.csv` は段階・ファイル・行・テスト名・project）に並ぶので、一覧を取り直しても、前の回の CSV との差は中身の変化だけになる。`frontend.md` の「詳細の CSV」の節に、それぞれの行数と絞り方の例がある。
-
-## 流し方
-
-テストの流し方、ブラウザーの準備、網羅率と見た目の比較の手順は、[開発ドキュメントの「フロントエンド」](./dev_note.md#フロントエンド) にある。
+詳しい文書: フロントエンドから見た影響は [保証していないこと・既知の制約](./frontend_test_note.md#保証していないこと既知の制約) の「API の形」にある。

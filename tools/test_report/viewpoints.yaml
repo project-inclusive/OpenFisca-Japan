@@ -948,7 +948,7 @@ responsibilities:
     stages: e2e
     scope: 5設定でホームとかんたん・くわしい見積もりの固定経路。APIはモック。
 
-# qualities と features は docs/test_note.md の「機能ごとに保証していること」の正本（test_descriptions・responsibilities も使う）。
+# qualities と features は docs/frontend_test_note.md の「機能ごとに保証していること」の正本（test_descriptions・responsibilities も使う）。
 # 生成は python tools/test_report/report.py --write-test-note で行う。
 #
 # 機能をまたぐ品質の観点である。機能ではない。features の files で id を参照する。

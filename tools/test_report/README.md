@@ -70,7 +70,7 @@ make test-report
 | `frontend.md` の節 | Markdown に載せるもの | 詳細の CSV |
 | --- | --- | --- |
 | 集計（タイトルと説明の直後） | 結論の文（テストの件数と結果、未分類のテストの数、テストのない確認ケースの数と多い観点）と確認ケースの説明。段階・E2E の project ごとのファイル数と件数の表。未分類のテストの数、テストのない確認ケースの数（計と観点ごと）、段階ごとの成功・失敗の数（結果がなければ結果なし）、網羅率の全体の 4 指標（未計測を含む）、基準を下回ったファイルの数、状態機械の遷移の通過・未通過・判定不能の数を 1 つの表にまとめ、それぞれの詳しい節と CSV を示す | 各行に書いた CSV |
-| テストの構成 | 結論の文（ファイル数、件数の多いファイル、説明のないファイル）。ファイルごとの段階・import・件数・観点の内訳（`<details>` で折りたたみ、`<summary>` にファイル数と件数）、全体の受け持ち。確かめていること・いないことは `docs/test_note.md` への案内だけにする | `tests.csv` |
+| テストの構成 | 結論の文（ファイル数、件数の多いファイル、説明のないファイル）。ファイルごとの段階・import・件数・観点の内訳（`<details>` で折りたたみ、`<summary>` にファイル数と件数）、全体の受け持ち。確かめていること・いないことは `docs/frontend_test_note.md` への案内だけにする | `tests.csv` |
 | 確認ケース | 結論の文（確認ケースの数と状態ごとの数）。観点ごと・対象のグループごとの状態ごとの数と計 | `cases.csv` |
 | テストの状況 | 結論の文（通ったか、失敗の数と `tests.csv` での絞り方、結果のない段階、一覧との件数の差）。結果のある段階の成功・失敗・スキップ・未実行・読み込みの失敗の数 | `tests.csv` の `結果` |
 | 状態機械の分かれ道 | 結論の文（通過した遷移の数、未通過の数、記録がない・版が違うときはそのこと）。ガードのある遷移・代表回答を決めた質問・隣接探索の数、遷移の分母・通過・未通過・判定不能の表 | `transitions.csv`、`representatives.csv` |
@@ -210,12 +210,12 @@ Markdown の「未分類のテスト」の一覧も `tests.csv` と同じ順に�
 | `bindings` | 必須 | テストと対象の対応 | `frontend.md`（確認ケース・未分類）、`cases.csv`、`tests.csv` |
 | `file_cells` | 任意 | 実装ファイルごとに期待する条件 | `frontend.md`（確認ケース）、`cases.csv` |
 | `classification_rules` | 任意 | タグのないテストの分類 | `frontend.md`、`tests.csv`、`cases.csv` |
-| `test_descriptions` | 任意 | ファイルごとの確かめていること・いないこと | `docs/test_note.md`、`frontend.md`（テストの構成の説明のないファイル） |
-| `responsibilities` | 任意 | 段階ごとの全体の受け持ち | `frontend.md`（テストの構成）、`docs/test_note.md` |
-| `qualities` | 任意 | 機能をまたぐ品質の観点 | `docs/test_note.md` |
-| `features` | 任意 | 機能ごとの結論と根拠のファイル | `docs/test_note.md` |
+| `test_descriptions` | 任意 | ファイルごとの確かめていること・いないこと | `docs/frontend_test_note.md`、`frontend.md`（テストの構成の説明のないファイル） |
+| `responsibilities` | 任意 | 段階ごとの全体の受け持ち | `frontend.md`（テストの構成）、`docs/frontend_test_note.md` |
+| `qualities` | 任意 | 機能をまたぐ品質の観点 | `docs/frontend_test_note.md` |
+| `features` | 任意 | 機能ごとの結論と根拠のファイル | `docs/frontend_test_note.md` |
 
-`features` は `--write-test-note` のときだけ要る（ないとエラー）。`frontend.md` と CSV を作り直すのは `make test-report`、`testReportTags.ts` は `--write-tags`、`docs/test_note.md` は `--write-test-note` である。
+`features` は `--write-test-note` のときだけ要る（ないとエラー）。`frontend.md` と CSV を作り直すのは `make test-report`、`testReportTags.ts` は `--write-tags`、`docs/frontend_test_note.md` は `--write-test-note` である。
 
 ### `version`
 
@@ -345,7 +345,7 @@ make test-report
 
 ## 冒頭の構成と分類規則
 
-`frontend.md` の冒頭は「集計」の結論の文と表で、その次の「テストの構成」は結論の文、ファイル別の段階・直接のローカル import・一覧の件数・観点別件数の表（折りたたみ）と、全体の受け持ちを示す。型や補助コードの import も対象に含む。複数条件を持つ同じ観点は1テストにつき1件数える。全体の表は `responsibilities` で編集する。ファイルごとの確かめていること・いないことは `test_descriptions` で編集し、`docs/test_note.md` の機能ごとの根拠のファイルの表に出す（`frontend.md` には載せない）。新しいファイルに説明がなければ結論の文に「説明のないファイル」として並べ、一覧が取れなければ件数は「未取得」と表示する。
+`frontend.md` の冒頭は「集計」の結論の文と表で、その次の「テストの構成」は結論の文、ファイル別の段階・直接のローカル import・一覧の件数・観点別件数の表（折りたたみ）と、全体の受け持ちを示す。型や補助コードの import も対象に含む。複数条件を持つ同じ観点は1テストにつき1件数える。全体の表は `responsibilities` で編集する。ファイルごとの確かめていること・いないことは `test_descriptions` で編集し、`docs/frontend_test_note.md` の機能ごとの根拠のファイルの表に出す（`frontend.md` には載せない）。新しいファイルに説明がなければ結論の文に「説明のないファイル」として並べ、一覧が取れなければ件数は「未取得」と表示する。
 
 既存の質問状態・世帯変換・進捗・共有URLの4ファイルはテスト本体にタグを加えず、`classification_rules` のファイル名と名前の正規表現で分類する。明示タグと規則の和集合を使う。質問状態と進捗の未知の名前は未分類に残す。世帯変換は「未回答」の有無、共有URLは「旧形式」の有無という既存の規約で分ける。分類と対象の `bindings` は別であり、タグがあっても対象の期待条件に結び付かなければ未分類になる。
 
@@ -357,7 +357,7 @@ make test-report
 
 ## 機能ごとの説明の文書
 
-[docs/test_note.md](../../docs/test_note.md) の「機能ごとに保証していること」の区間は、`viewpoints.yaml` の `features`・`qualities`・`test_descriptions`・`responsibilities` から生成する。
+[docs/frontend_test_note.md](../../docs/frontend_test_note.md) の「機能ごとに保証していること」の区間は、`viewpoints.yaml` の `features`・`qualities`・`test_descriptions`・`responsibilities` から生成する。
 
 - `features` はアプリの機能（利用者が画面で使うもの）であり、テストのファイルのまとまりではない。各機能は `name`、機能単位の結論の `guarantees`（保証していること）と `risks`（テストが通っても本番で起こりうること）、根拠の `files` を持つ。
 - `qualities` は互換・a11y・見た目・通しの操作の品質の観点であり、機能ではない。`files` の要素が文字列なら、そのファイルは機能の振る舞いを確かめる。`{file, qualities}` なら、その機能について並べた観点を確かめる。振る舞いも確かめるときは `behavior` を並べる。

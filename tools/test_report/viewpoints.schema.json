@@ -298,7 +298,7 @@
       }
     },
     "features": {
-      "description": "アプリの機能ごとの結論と根拠のファイル。docs/test_note.md の生成した区間になる。",
+      "description": "アプリの機能ごとの結論と根拠のファイル。docs/frontend_test_note.md の生成した区間になる。",
       "type": "array",
       "items": {
         "type": "object",
