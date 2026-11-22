@@ -45,6 +45,7 @@ from tools.test_report.report import (
     SCHEMA_RULES,
     source_tags,
     TARGET_COLUMNS,
+    TRACE_RUN,
     TRANSITION_COLUMNS,
     transition_lines,
     transition_rows,
@@ -610,7 +611,8 @@ def test_transition_evidence_requires_matching_fingerprint():
         {"id": "age / next / 0", "target": "income", "guarded": True},
         {"id": "age / next / 1", "target": "result", "guarded": False}]}
     trace = {"fingerprint": "old", "tests": {"age / next / 0": ["forward test"]}}
-    assert "| 2 | 0 | 0 | 2 |" in "\n".join(transition_lines(machine, trace))
+    stale = "\n".join(transition_lines(machine, trace))
+    assert "| 2 | 0 | 0 | 2 |" in stale and f"`cd dashboard && {TRACE_RUN}`" in stale
     assert [row[6] for row in transition_rows(machine, trace)] == ["判定不能", "判定不能"]
     trace["fingerprint"] = "current"
     text = "\n".join(transition_lines(machine, trace))
@@ -753,6 +755,17 @@ def test_test_note_rejects_drift_and_rewrites_only_the_region(tmp_path):
 def definitions():
     """The checked-in definitions, read the way report.py reads them."""
     return yaml.safe_load((BASE / "tools/test_report/viewpoints.yaml").read_text(encoding="utf-8"))
+
+
+def test_unit_results_are_taken_with_the_trace_config():
+    """One unit run gives both results and transition evidence, so the documented and shown commands agree."""
+    stage = next(stage for stage in definitions()["stages"] if stage["id"] == "unit")
+    assert stage["run"] == TRACE_RUN
+    readme = (BASE / "tools/test_report/README.md").read_text(encoding="utf-8")
+    steps = readme.split("## 実行結果と網羅率の追加", 1)[1].split("\n## ", 1)[0]
+    assert TRACE_RUN in steps and "npm run test -- --reporter" not in steps
+    trace_section = readme.split("## 状態機械の分岐と通過の記録", 1)[1].split("\n## ", 1)[0]
+    assert "trace.config.mjs --reporter" not in trace_section and "「実行結果と網羅率の追加」" in trace_section
 
 
 def test_definitions_follow_schema_and_are_documented():

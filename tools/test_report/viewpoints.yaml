@@ -93,7 +93,10 @@ stages:
       - --no-static-parse
       - --includeTaskLocation
       - --json
-    run: npm run test -- --reporter=json --outputFile=../tmp/test-report/unit.results.json
+    # trace の設定で流すと、同じ unit の実行で状態機械の遷移の通過も記録する。
+    run:
+      npm run test -- --config ../tools/test_report/trace.config.mjs
+      --reporter=json --outputFile=../tmp/test-report/unit.results.json
   - id: ui
     name: コンポーネント（story・Browser Mode）
     projects:

@@ -35,12 +35,12 @@ Vitest 5 の標準の静的一覧は `each` の展開前の宣言を数えるた
 
 ## 実行結果と網羅率の追加
 
-以下は一覧取得とは別に、人が必要に応じて実行する。E2E は事前に `npm run build` を実行する。
+以下は一覧取得とは別に、人が必要に応じて実行する。E2E は事前に `npm run build` を実行する。unit は補助の `trace.config.mjs` で流し、同じ実行で状態機械の遷移の通過も記録する（仕組みは「状態機械の分岐と通過の記録」の節）。ふつうの設定で流すと記録がなく、遷移はすべて「判定不能」になる。
 
 ```bash
 mkdir -p tmp/test-report
 cd dashboard
-npm run test -- --reporter=json --outputFile=../tmp/test-report/unit.results.json
+npm run test -- --config ../tools/test_report/trace.config.mjs --reporter=json --outputFile=../tmp/test-report/unit.results.json
 npm run test:ui -- --reporter=json --outputFile=../tmp/test-report/ui.results.json
 PLAYWRIGHT_JSON_OUTPUT_NAME=../tmp/test-report/e2e.results.json npm run test:e2e -- --reporter=json
 npm run test:unit -- --coverage
@@ -368,13 +368,6 @@ python -m pytest tools/test_report
 
 `getAdjacencyMap` は3モード×4続柄×6回答プロファイルについて各質問の1段の隣接を探索する。プロファイルは代表値を順に循環させ、世帯員には2人分を用意し、`back` 用にモードへの合成履歴を置く。完全なcontextと履歴を状態の識別に含め、ガードに影響する値をまとめない。代表回答の保存・next・reset・履歴があるときのbackを試す。探索数は代表値の動作確認であり、合成contextの到達可能性、全回答の組合せ、すべての人数や履歴を網羅したとは扱わない。
 
-通過は名前から推測せず、既存の質問状態テストを実行した際の `@xstate.microstep` で選ばれた遷移を記録する。ガードの同じ到着先も分岐番号で区別する。補助の設定とセットアップを使うため、アプリのテスト・通常の設定・件数は変えない。
-
-```bash
-cd dashboard
-npm run test -- --config ../tools/test_report/trace.config.mjs --reporter=json --outputFile=../tmp/test-report/unit.results.json
-cd ..
-make test-report
-```
+通過は名前から推測せず、既存の質問状態テストを実行した際の `@xstate.microstep` で選ばれた遷移を記録する。ガードの同じ到着先も分岐番号で区別する。補助の設定 `trace.config.mjs` は通常の設定に記録用のセットアップ（`dashboard/testReportTrace.mjs`）を足すだけなので、アプリのテスト・通常の設定・件数は変えない。採取は「実行結果と網羅率の追加」の手順の unit の行で行う（`viewpoints.yaml` の unit の `run` と、記録がないときに Markdown に出すコマンドも同じ）。
 
 記録は `tmp/test-report/transitions.trace.json` に保存する（`--input-dir` を変える場合は同じディレクトリへコピーする）。モデル・質問定義・質問状態テストのSHA-256が一致するときだけ採用し、不一致や未採取は「判定不能」とする。記録にない遷移は `transitions.csv` の `通過` を「未通過」にし、Markdown にはそれぞれの数を出す。これは経路準備の `skipUntil` も含む実行の通過であり、各遷移への専用assertionや成功の保証ではない。実行結果の成否と採取した版も併せて確認する。

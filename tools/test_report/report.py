@@ -375,6 +375,9 @@ def observed_transitions(machine, trace):
 
 TRANSITION_COLUMNS = ["遷移ID", "状態", "event", "分岐", "到着先", "ガード", "通過", "通過したテスト"]
 TRANSITION_PASSED = ("通過", "未通過", "判定不能")
+# The unit run that also records transitions; the unit stage in viewpoints.yaml uses the same command.
+TRACE_RUN = ("npm run test -- --config ../tools/test_report/trace.config.mjs"
+             " --reporter=json --outputFile=../tmp/test-report/unit.results.json")
 
 
 def transition_counts(rows):
@@ -424,7 +427,7 @@ def transition_lines(machine, trace):
               "通過の根拠は既存questionStateテスト実行時のXState microstep（ガードの選択肢を含む）。通過はassertionの強さを表さない。",
               "実行記録はモデル・質問定義・テストのハッシュが一致する場合だけ採用する。実行結果の成功・同じ版での採取もテストの状況と合わせて確認する。", ""]
     if observed is None:
-        lines += ["実行記録なし、または版が不一致。`cd dashboard && npm run test -- --config ../tools/test_report/trace.config.mjs` で採取する。", ""]
+        lines += [f"実行記録なし、または版が不一致。`cd dashboard && {TRACE_RUN}` で採取する（unit の実行結果も同時に取る）。", ""]
     lines += ["| 遷移の分母 | 通過 | 未通過 | 判定不能 |", "| ---: | ---: | ---: | ---: |",
               f"| {len(rows)} | " + " | ".join(str(counts[key]) for key in TRANSITION_PASSED) + " |", "",
               "遷移ごとの到着先・ガード・通過したテストは `transitions.csv`、質問ごとの代表回答は `representatives.csv` にある。"]
