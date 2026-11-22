@@ -931,3 +931,52 @@ responsibilities:
   - area: 通し
     stages: e2e
     scope: 5設定でホームとかんたん・くわしい見積もりの固定経路。APIはモック。
+
+# docs/test_note.md の機能ごとの表の分け方。説明は test_descriptions を使い、ここには書かない。
+# test_descriptions のファイルは、少なくとも1つの機能に置く（2つ以上の機能に置いてもよい）。
+# 生成は python tools/test_report/report.py --write-test-note で行う。
+features:
+  - name: 質問の流れと回答の保存
+    files:
+      - src/state/questionState.test.ts
+      - src/state/progress.test.ts
+      - src/components/questions/question.browser.test.tsx
+  - name: 入力欄
+    files:
+      - src/components/questions/template/questionTemplates.test.tsx
+      - src/components/questions/template/questionTemplates.device.test.tsx
+      - src/components/questions/template/ageQuestionTemplate.browser.test.tsx
+      - src/components/questions/template/questionTemplates.input.browser.test.tsx
+      - src/components/questions/template/questionTemplates.stories.tsx
+  - name: 計算の送信
+    files:
+      - src/state/convert.test.ts
+      - src/hooks/calculate.test.tsx
+      - src/components/calculate/calculate.test.tsx
+  - name: 結果と窓口
+    files:
+      - src/components/result/applicable.browser.test.tsx
+      - src/components/result/resultDetails.browser.test.tsx
+      - src/components/result/result.stories.tsx
+      - src/components/result/resultDetails.stories.tsx
+  - name: 共有
+    files:
+      - src/components/result/shareLink.test.ts
+      - src/components/result/resultShare.browser.test.tsx
+      - src/components/result/resultShare.stories.tsx
+  - name: 画面の移動・同意とエラーの画面
+    files:
+      - src/App.browser.test.tsx
+      - src/components/errors/errors.stories.tsx
+  - name: 画面幅と端末（互換）
+    files:
+      - src/components/layout/uiCompatibility.browser.test.tsx
+      - src/components/questions/template/questionTemplates.device.test.tsx
+  - name: 通しの操作
+    files:
+      - e2e/Homepage.spec.ts
+      - e2e/SimpleCalculation.spec.ts
+      - e2e/DetailedCalculation.spec.ts
+  - name: 見た目
+    files:
+      - e2e/visual/screens.spec.ts

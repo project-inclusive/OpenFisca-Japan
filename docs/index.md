@@ -17,6 +17,12 @@
 - [デプロイ方法](./dev_note.md#デプロイ方法)
 - [TroubleShooting](./dev_note.md#troubleshooting)
 
+### [フロントエンドのテストで保証していること](./test_note.md)
+- [テストの層と役割](./test_note.md#テストの層と役割)
+- [機能ごとに保証していること](./test_note.md#機能ごとに保証していること)
+- [保証していないこと・既知の制約](./test_note.md#保証していないこと既知の制約)
+- [レポートの読み方](./test_note.md#レポートの読み方)
+
 ### [Dev Container 開発環境](./devcontainer_note.md)
 - [起動方法](./devcontainer_note.md#起動方法)
 - [ファイル構成](./devcontainer_note.md#ファイル構成)

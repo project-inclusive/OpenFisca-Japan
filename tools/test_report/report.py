@@ -379,6 +379,74 @@ def render(config, tests, targets, matrix, unclassified, statuses, coverage, pro
     return "\n".join(lines) + "\n"
 
 
+NOTE_BEGIN = "<!-- test-report:features:begin -->"
+NOTE_END = "<!-- test-report:features:end -->"
+NOTE_COMMAND = "python tools/test_report/report.py --write-test-note"
+
+
+def layer_of(file):
+    """Name the test layer from the file layout used by the dashboard configs."""
+    if file.startswith("e2e/visual/"):
+        return "見た目の比較"
+    if file.startswith("e2e/"):
+        return "E2E"
+    if ".stories." in file:
+        return "story"
+    if ".browser.test." in file:
+        return "Browser Mode"
+    return "単体"
+
+
+def note_cell(value):
+    """Keep a hand-readable Markdown cell; only the table syntax needs escaping."""
+    return str(value).replace("|", "\\|").replace("\n", " ")
+
+
+def feature_lines(config, dashboard):
+    """Render the per-feature tables from features, test_descriptions and responsibilities."""
+    descriptions = config.get("test_descriptions", {})
+    features = config.get("features", [])
+    if not features:
+        raise ValueError("features is required to write the test note")
+    listed = set()
+    for feature in features:
+        files = feature.get("files", [])
+        if not feature.get("name") or not files:
+            raise ValueError("Feature requires name and files: " + str(feature))
+        if len(files) != len(set(files)):
+            raise ValueError("Duplicate file in feature: " + feature["name"])
+        for file in files:
+            if file not in descriptions:
+                raise ValueError("Feature file has no test_descriptions: " + file)
+            if not (dashboard / file).exists():
+                raise ValueError("Feature file missing: " + file)
+        listed.update(files)
+    missing = sorted(set(descriptions) - listed)
+    if missing:
+        raise ValueError("test_descriptions files without a feature: " + ", ".join(missing))
+    lines = [f"<!-- この区間は `{NOTE_COMMAND}` で tools/test_report/viewpoints.yaml から生成する。手で直さない。 -->", "",
+             "### 段階ごとの受け持ち", "", "| 受け持ち | 段階 | 範囲 |", "| --- | --- | --- |"]
+    lines += ["| " + " | ".join(note_cell(row[key]) for key in ("area", "stages", "scope")) + " |"
+              for row in config.get("responsibilities", [])]
+    for feature in features:
+        lines += ["", "### " + feature["name"], "",
+                  "| 層 | ファイル | 確かめていること | 確かめていないこと |", "| --- | --- | --- | --- |"]
+        for file in feature["files"]:
+            row = descriptions[file]
+            lines.append("| " + " | ".join([layer_of(file), f"`dashboard/{note_cell(file)}`",
+                                              note_cell(row["verifies"]), note_cell(row["does_not_verify"])]) + " |")
+    return lines
+
+
+def replace_note_region(text, lines):
+    """Replace only the text between the markers; markers must appear once, in order."""
+    if text.count(NOTE_BEGIN) != 1 or text.count(NOTE_END) != 1 or text.index(NOTE_BEGIN) > text.index(NOTE_END):
+        raise ValueError(f"Test note needs one {NOTE_BEGIN} followed by one {NOTE_END}")
+    head, rest = text.split(NOTE_BEGIN)
+    _, tail = rest.split(NOTE_END)
+    return head + NOTE_BEGIN + "\n\n" + "\n".join(lines) + "\n\n" + NOTE_END + tail
+
+
 def collect(stage, dashboard, directory):
     """Collect lists into new files; remove stale lists before trying a command."""
     output = directory / stage["list"]
@@ -402,7 +470,9 @@ def main(argv=None):
     parser.add_argument("--output", type=Path, default=Path("tmp/test-report/frontend.md"))
     parser.add_argument("--definitions", type=Path, default=Path("tools/test_report/viewpoints.yaml"))
     parser.add_argument("--write-tags", action="store_true", help="regenerate dashboard/testReportTags.ts from YAML and exit")
-    parser.add_argument("--offline", action="store_true", help="read existing lists without invoking runners")
+    parser.add_argument("--write-test-note", action="store_true", help="rewrite the generated region of the test note from YAML and exit")
+    parser.add_argument("--test-note", type=Path, default=Path("docs/test_note.md"))
+    parser.add_argument("--offline",action="store_true", help="read existing lists without invoking runners")
     parser.add_argument("--low-coverage", type=float, default=80)
     args = parser.parse_args(argv)
     if not 0 <= args.low_coverage <= 100:
@@ -417,6 +487,10 @@ def main(argv=None):
         (dashboard / "testReportTags.ts").write_text(
             "// Generated from tools/test_report/viewpoints.yaml; checked by make test-report.\n"
             + "export const testReportTags = " + json.dumps(tags, indent=2) + ";\n", encoding="utf-8")
+        return
+    if args.write_test_note:
+        note = root / args.test_note
+        note.write_text(replace_note_region(note.read_text(encoding="utf-8"), feature_lines(config, dashboard)), encoding="utf-8")
         return
     source = json.loads(subprocess.check_output(["node", "tools/test_report/source_index.mjs", "dashboard"], cwd=root, text=True))
     targets = extract_targets(source, config, dashboard)

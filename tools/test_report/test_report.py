@@ -15,10 +15,15 @@ from tools.test_report.report import (
     coverage_gaps,
     coverage_rows,
     extract_targets,
+    feature_lines,
+    layer_of,
     main,
+    NOTE_BEGIN,
+    NOTE_END,
     playwright_tests,
     read_json,
     render,
+    replace_note_region,
     result_counts,
     source_tags,
     transition_lines,
@@ -352,3 +357,52 @@ def test_machine_graph_keeps_automatic_and_guarded_alternatives_and_representati
     assert {row.get("selection") for row in values["配偶者はいますか？"]} == {False, True, None}
     assert {row.get("selection") for row in values["子どもの人数"]} == {0, 1, 2, None}
     assert len(values["見積もりモード"]) == 4
+
+
+def test_test_note_region_matches_definitions(tmp_path):
+    """Regenerating docs/test_note.md from the YAML must leave the checked-in file unchanged."""
+    note = BASE / "docs/test_note.md"
+    copied = tmp_path / "test_note.md"
+    copied.write_text(note.read_text(encoding="utf-8"), encoding="utf-8")
+    main(["--write-test-note", "--test-note", str(copied), "--input-dir", str(tmp_path)])
+    assert copied.read_text(encoding="utf-8") == note.read_text(encoding="utf-8"), \
+        "docs/test_note.md is stale: run python tools/test_report/report.py --write-test-note"
+
+
+def test_test_note_features_cover_every_description():
+    """Every described test file appears under a feature, with its layer and both descriptions."""
+    config = yaml.safe_load((BASE / "tools/test_report/viewpoints.yaml").read_text())
+    text = "\n".join(feature_lines(config, BASE / "dashboard"))
+    for file, row in config["test_descriptions"].items():
+        assert f"| {layer_of(file)} | `dashboard/{file}` | {row['verifies']} | {row['does_not_verify']} |" in text
+    for feature in config["features"]:
+        assert "### " + feature["name"] in text
+
+
+def test_test_note_rejects_drift_and_rewrites_only_the_region(tmp_path):
+    """Unassigned descriptions, unknown files and broken markers are errors; text outside stays."""
+    (tmp_path / "src").mkdir()
+    (tmp_path / "src/age.test.ts").write_text("")
+    config = {"test_descriptions": {"src/age.test.ts": {"verifies": "a|b", "does_not_verify": "c"}},  # noqa: FS003
+              "features": [{"name": "入力欄", "files": ["src/age.test.ts"]}],  # noqa: FS003
+              "responsibilities": []}
+    lines = feature_lines(config, tmp_path)
+    assert "| 単体 | `dashboard/src/age.test.ts` | a\\|b | c |" in lines
+    text = f"before\n{NOTE_BEGIN}\nold\n{NOTE_END}\nafter\n"
+    replaced = replace_note_region(text, lines)
+    assert replaced.startswith("before\n" + NOTE_BEGIN) and replaced.endswith(NOTE_END + "\nafter\n")
+    assert "old" not in replaced
+    assert replace_note_region(replaced, lines) == replaced
+    with pytest.raises(ValueError, match="one"):
+        replace_note_region("before\n" + NOTE_BEGIN + "\n", lines)
+    config["test_descriptions"]["src/new.test.ts"] = {"verifies": "x", "does_not_verify": "y"}  # noqa: FS003
+    with pytest.raises(ValueError, match="without a feature"):
+        feature_lines(config, tmp_path)
+    config["features"][0]["files"].append("src/new.test.ts")  # noqa: FS003
+    with pytest.raises(ValueError, match="missing"):
+        feature_lines(config, tmp_path)
+    config["features"][0]["files"] = ["src/other.test.ts"]  # noqa: FS003
+    with pytest.raises(ValueError, match="no test_descriptions"):
+        feature_lines(config, tmp_path)
+    layers = [layer_of(file) for file in ("e2e/visual/a.spec.ts", "e2e/a.spec.ts", "src/a.stories.tsx", "src/a.browser.test.tsx")]
+    assert layers == ["見た目の比較", "E2E", "story", "Browser Mode"]

@@ -130,6 +130,17 @@ make test-report
 
 低網羅率の候補は両段階に存在するファイルの各指標について、unit/UIの大きい方が基準未満かを判定する。片方で十分な実装を他方の0%だけで候補にしないためである。両段階の数値の結合や和集合の網羅率ではない。分母0は候補に使わず、計測対象の `n/a`・欠測はその指標の判定を保留する。`exclusions` で全条件を対象外にしたファイルは不足候補から外し、段階別の網羅率表には「対象外」を付けて残す。
 
+## 機能ごとの説明の文書
+
+[docs/test_note.md](../../docs/test_note.md) の「機能ごとに保証していること」の表は、`viewpoints.yaml` の `features`・`test_descriptions`・`responsibilities` から生成する。`features` は機能の名前とテストのファイルの一覧だけを持ち、説明は `test_descriptions` から引く。`test_descriptions` のファイルはどれかの機能に置く（2つ以上でもよい）。機能に置いていない説明、説明のないファイル、存在しないファイルは生成エラーになる。
+
+```bash
+python tools/test_report/report.py --write-test-note
+python -m pytest tools/test_report
+```
+
+書き換えるのは `<!-- test-report:features:begin -->` と `<!-- test-report:features:end -->` の間だけで、ほかの節は人が書く。テストの一覧も実行も使わない。`test_descriptions`・`responsibilities`・`features` を直したら生成し直す。pytest は生成し直した結果と commit 済みの文書を比べ、差があれば失敗する。
+
 ## 状態機械の分岐と通過の記録
 
 `machine_graph.cjs` は既存のTypeScriptコンパイラーで純粋なモデルだけを読み、`xstate/graph` の `toDirectedGraph` から各状態の宣言を取り出す。`always` も加え、同じeventのガード選択肢、回答保存の自己遷移を分けて数える。構造上の全遷移が分母となり、到達不能な宣言も自動では対象外にしない。
