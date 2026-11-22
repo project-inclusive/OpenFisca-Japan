@@ -98,30 +98,47 @@ def assert_csv_match_markdown(report, directory):
     total = re.search(r"^\| 計 \| (\d+) \| (\d+) \| (\d+) \| (\d+) \|$", views, re.M).groups()
     assert [int(value) for value in total] == [sum(row["状態"] == state for row in cells) for state in CELL_STATES] + [len(cells)]
     gaps = [row for row in cells if row["状態"] == "空き"]
-    assert int(re.search(r"理由のない空きのます: (\d+)", report).group(1)) == len(gaps)
+    total_gaps, by_view = re.search(r"^\| 理由のない空きのます \| (\d+)（観点ごと: ([^）]*)） \|", report, re.M).groups()
+    assert int(total_gaps) == len(gaps)
+    by_view = dict(item.split(" ") for item in by_view.split("・"))
+    assert all(int(count) == sum(row["観点"] == view for row in gaps) for view, count in by_view.items())
+    assert {row["観点"] for row in gaps} <= by_view.keys()
     assert all(row["テスト数"] == "0" and not row["埋めたテスト"] and not row["対象外の理由"] for row in gaps)
     assert all(row["対象外の理由"] for row in cells if row["状態"] == "対象外")
     assert all(int(row["テスト数"]) == len(row["埋めたテスト"].split("\n")) for row in cells if row["状態"] == "埋まり")
 
     unclassified = sum(row["未分類"] == "はい" for row in tables["tests.csv"])
     assert f"### 未分類のテスト（{unclassified}）" in report
+    assert f"| 未分類のテスト | {unclassified} |" in report
 
     transitions = tables["transitions.csv"]
     if transitions:
+        passed = [sum(row["通過"] == state for row in transitions) for state in ("通過", "未通過", "判定不能")]
         summary = re.search(r"^\| 遷移の分母 .*\n.*\n\| (\d+) \| (\d+) \| (\d+) \| (\d+) \|$", report, re.M).groups()
-        assert [int(value) for value in summary] == [len(transitions)] + [
-            sum(row["通過"] == state for row in transitions) for state in ("通過", "未通過", "判定不能")]
+        assert [int(value) for value in summary] == [len(transitions)] + passed
+        assert f"| 状態機械の遷移 | 通過 {passed[0]} / {len(transitions)}（未通過 {passed[1]}・判定不能 {passed[2]}） |" in report
         assert re.search(rf"宣言された遷移: {len(transitions)}（うちガードあり {sum(row['ガード'] == 'あり' for row in transitions)}）", report)
         assert int(re.search(r"代表回答を決めた質問: (\d+)", report).group(1)) == len(tables["representatives.csv"])
 
     coverage = tables["coverage.csv"]
     low = re.search(r"基準を下回ったファイル: (\d+)", report)
+    summary_low = re.search(r"^\| 網羅率が基準（[\d.]+%）を下回ったファイル \| ([^|]+) \|", report, re.M).group(1)
     if low:
-        assert int(low.group(1)) == len({row["ファイル"] for row in coverage if row["基準未満の指標"]})
+        assert int(low.group(1)) == len({row["ファイル"] for row in coverage if row["基準未満の指標"]}) == int(summary_low)
         zero = int(re.search(r"両方で 0% のファイル: (\d+)", report).group(1))
         assert zero == len({row["ファイル"] for row in coverage if row["両方で0%"] == "はい"})
     else:
+        assert summary_low.startswith("判定できない")
         assert "判定できない" in report and not any(row["基準未満の指標"] or row["両方で0%"] for row in coverage)
+    totals = re.search(r"^\| 網羅率の全体（Statements / Branches / Functions / Lines） \| ([^|]+) \|", report, re.M).group(1)
+    for scope in ("unit", "ui"):
+        total = next((row for row in coverage if row["段階"] == scope and row["ファイル"] == "total"), None)
+        if total:
+            values = " / ".join(total[name] + ("%" if re.fullmatch(r"[\d.]+", total[name]) else "")
+                                for name in ("Statements", "Branches", "Functions", "Lines"))
+            assert f"{scope}: {values}" in totals
+        elif not any(row["段階"] == scope for row in coverage):
+            assert f"{scope}: 未計測" in totals
     excluded = int(re.search(r"対象外のファイル: (\d+)", report).group(1))
     assert excluded == len({row["ファイル"] for row in coverage if row["対象外"] == "はい"})
     for scope in ("unit", "ui"):
@@ -262,7 +279,11 @@ def test_coverage_and_markdown(config):
     both = {"unit": coverage, "ui": copy.deepcopy(coverage)}
     text = render(config, [row], targets, matrix, unknown, {"unit": None}, both, {}, 80)
     assert "未実行" in text
-    assert "理由のない空きのます: 2" in text
+    assert "| 理由のない空きのます | 2（観点ごと: input 2） |" in text
+    assert "| テストの実行結果 | unit: 未実行 |" in text
+    assert "| 網羅率の全体（Statements / Branches / Functions / Lines） | unit: 90% / 90% / 90% / 90%、ui: 90% / 90% / 90% / 90% |" in text
+    assert "| 網羅率が基準（80%）を下回ったファイル | 1 |" in text
+    assert "| 状態機械の遷移 | 遷移未取得 |" in text
     assert "未分類のテスト（1）" in text
     assert "a&#124;b&#95;&lt;script&gt;" in text, "unclassified tests stay listed in the Markdown"
     assert "| unit | 1 | 90% | 90% | 90% | 90% |" in text and "| ui | 1 | 90% | 90% | 90% | 90% |" in text
@@ -271,9 +292,13 @@ def test_coverage_and_markdown(config):
     rows = detail_tables(config, [row], targets, matrix, unknown, {}, both, 80, None, None)["coverage.csv"][1]
     assert ["src/age.ts", "unit", 0, 0, 0, 0, "いいえ", "statements=0%; branches=0%; functions=0%; lines=0%", "はい"] in rows  # noqa: FS003
     assert ["total", "ui", 90, 90, 90, 90, "いいえ", "", ""] in rows
-    headings = ["## テストの構成", "## 概要", "## 観点×条件", "## テストの状況", "## 網羅率", "## 不足しているテスト",
+    headings = ["## 集計", "## テストの構成", "## 観点×条件", "## テストの状況", "## 網羅率", "## 不足しているテスト",
                 "## 対象の抽出根拠", "## 詳細の CSV"]
     assert [text.index(heading) for heading in headings] == sorted(text.index(heading) for heading in headings)
+    title, intro, first = [block for block in text.split("\n\n")][:3]
+    assert title.startswith("# ") and not intro.startswith("#") and first == "## 集計", \
+        "the summary comes right after the title and its one paragraph"
+    assert "## 概要" not in text, "the former overview is part of the summary"
     assert "確かめ方の強さ" in text
     half = render(config, [row], targets, matrix, unknown, {"unit": None}, {"unit": coverage, "ui": None}, {}, 80)
     assert "- ui: 未計測。`cd dashboard && npm run test:ui -- --coverage`" in half
@@ -309,16 +334,18 @@ def test_csv_files_match_markdown_summary(config, tmp_path):
             write_csv(tmp_path / name, rows, columns)
         tables = assert_csv_match_markdown(text, tmp_path)
     assert "| input（入力） | 2 | 1 | 1 | 4 |" in text
-    assert "- 理由のない空きのます: 1" in text and "### 未分類のテスト（1）" in text
+    assert "| 理由のない空きのます | 1（観点ごと: input 1） |" in text and "### 未分類のテスト（1）" in text
     assert "| 3 | 0 | 0 | 3 |" in text, "without a matching trace every transition is undecidable"
+    assert "| 状態機械の遷移 | 通過 0 / 3（未通過 0・判定不能 3） |" in text
     cells = {(row["対象"], row["条件"]): row for row in tables["cells.csv"]}
     assert cells["template:age", "input:normal"]["埋めたテスト"] == \
         "unit / unit / age 0 (src/age.test.ts:4)\nunit / unit / age 1 (src/age.test.ts:?)"  # noqa: FS003
     assert cells["template:name", "input:empty"]["対象外の理由"] == "空にできない"
     text = render(config, tests, targets, matrix, unclassified, {"unit": None}, coverage, {}, 80, None, machine, trace)
-    assert "| 3 | 1 | 2 | 0 |" in text and "テストが通した遷移: 1 / 通していない遷移: 2" in text
-    rows = transition_rows(machine, trace)
-    assert rows[0] == ["年齢 / next / 0", "年齢", "next", "0", "年収", "あり", "通過", "a > 次へ\nb > 次へ"]
+    assert "| 3 | 1 | 2 | 0 |" in text and "| 状態機械の遷移 | 通過 1 / 3（未通過 2・判定不能 0） |" in text
+    rows = transition_rows(machine, dict(trace, tests={"年齢 / next / 0": ["b > 次へ", "a > 次へ"]}))
+    assert rows[0] == ["年齢 / next / 0", "年齢", "next", "0", "年収", "あり", "通過", "a > 次へ\nb > 次へ"], \
+        "the passing tests are sorted whatever order the run recorded them in"
     assert rows[2][1:4] == ["年収", "always", "0"]
     assert "- 判定したファイル（両段階にあり対象外でない）: 2" in text
     assert "- 基準を下回ったファイル: 2" in text and "- unit と UI の両方で 0% のファイル: 1" in text
@@ -358,7 +385,9 @@ def test_csv_results_follow_final_attempt_and_list_keys(config):
     assert outcomes["unit"][("src/age.test.ts", "age > same")] == ["passed", "skipped"]  # noqa: FS003
     listed = [{"file": "src/age.test.ts", "name": name, "project": "unit", "stage": "unit", "tags": []}  # noqa: FS003
               for name in ("age > same", "age > same", "odd", "age > new")]
-    assert [row[-1] for row in csv_rows(listed, {}, listed, outcomes)] == ["成功", "スキップ", "unknown", "未実行"]
+    # Results follow the list order; the rows are then sorted by name.
+    assert [(row[4], row[-1]) for row in csv_rows(listed, {}, listed, outcomes)] == [
+        ("age > new", "未実行"), ("age > same", "スキップ"), ("age > same", "成功"), ("odd", "unknown")]
     assert outcomes["unit"][("src/age.test.ts", "age > same")] == ["passed", "skipped"], "input must not be consumed"  # noqa: FS003
 
 
@@ -469,7 +498,8 @@ def test_browser_name_line_classifies_all_error_width_cases(tmp_path):
     assert len(report.splitlines()) < 200, "the Markdown is a summary; details live in the CSV files"
     header, *body = read_csv(table)
     assert header == CSV_COLUMNS and len(body) == 9
-    first = dict(zip(header, body[0]))
+    assert [row[4] for row in body] == sorted(row["name"] for row in data), "same file and line: sorted by test name"
+    first = dict(zip(header, next(row for row in body if row[4] == data[0]["name"])))
     assert first["段階"] == "ui" and first["project"] == "browser (chromium)" and first["行"] == "157"
     assert first["テスト名"] == data[0]["name"]
     assert first["観点"] == "a11y; display; transition"
@@ -482,8 +512,35 @@ def test_browser_name_line_classifies_all_error_width_cases(tmp_path):
                               "status": "failed"}]}]}))
     again = tmp_path / "again.md"
     main(["--offline", "--input-dir", str(tmp_path), "--output", str(again), "--csv", str(table)])
-    results = [row[-1] for row in read_csv(table)[1:]]
-    assert results == ["失敗"] + ["未実行"] * 8
+    results = {row[4]: row[-1] for row in read_csv(table)[1:]}
+    assert results.pop(data[0]["name"]) == "失敗" and set(results.values()) == {"未実行"}
+
+
+def test_outputs_are_byte_identical_whatever_the_collection_order(tmp_path):
+    """Re-collecting the list can reorder tests; the Markdown and every CSV must keep the same bytes."""
+    names = ["generic", "not found", "response"]
+    data = [{"name": f"UI at {width} CSS pixels > 画面幅ごとに、{name} エラーが収まりキーボードで復帰できる",
+             "file": "/copied/dashboard/src/components/layout/uiCompatibility.browser.test.tsx",
+             "projectName": "browser (chromium)", "location": {"line": 157, "column": 4}}
+            for width in (390, 820, 1440) for name in names]
+    data.append({"file": "/copied/dashboard/src/components/errors/errors.stories.tsx",
+                 "name": "汎用エラーのとき、エラー画面を表示する", "projectName": "storybook (chromium)", "location": {"line": 999}})
+    outputs = []
+    for run, rows in enumerate([data, data[::-1], data[3:] + data[:3], data]):
+        directory = tmp_path / str(run)
+        directory.mkdir()
+        (directory / "ui.list.json").write_text(json.dumps(rows))
+        main(["--offline", "--input-dir", str(directory), "--output", str(directory / "frontend.md"),
+              "--csv", str(directory / "tests.csv")])
+        outputs.append({path.name: path.read_bytes() for path in sorted(directory.iterdir()) if path.suffix in (".md", ".csv")})
+    assert set(outputs[0]) == {"frontend.md", *DETAIL_COLUMNS}
+    for other in outputs[1:]:
+        assert other == outputs[0]
+    header, *body = read_csv(tmp_path / "0" / "tests.csv")
+    keys = [(row[2], int(row[3]), row[4], row[1]) for row in body]
+    assert keys == sorted(keys), "one stage: file, line, test name, project"
+    cell = next(row for row in read_csv(tmp_path / "0" / "cells.csv")[1:] if row[0] == "error:GenericError" and row[3] == "a11y:focus")
+    assert cell[6].split("\n") == sorted(cell[6].split("\n")), "the tests in a cell follow the same order"
 
 
 @pytest.mark.parametrize("file,name,expected", [
@@ -505,13 +562,28 @@ def test_legacy_classification_is_scoped_and_unknown_names_remain_visible(file, 
     assert classification_tags({"file": file, "name": name}, config) == expected
 
 
-def test_composition_imports_counts_descriptions_and_missing_explanation(config):
-    """Multiple tags in one viewpoint count once; undocumented files remain visible."""
+def test_composition_is_folded_without_descriptions_and_names_undescribed_files(config):
+    """Multiple tags in one viewpoint count once; the table folds; descriptions live in test_note.md."""
     rows = [{"file": "src/age.test.ts", "stage": "unit", "tags": ["input:normal", "input:empty"]}]
-    source = {"files": [{"file": "src/age.test.ts", "imports": ["src/age.ts"]}]}
-    text = "\n".join(composition_lines(config, rows, source, {}))
-    assert "src/age.ts | 1 | input: 1 | 説明なし | 説明なし" in text
-    assert "src/age.ts | 未取得" in "\n".join(composition_lines(config, rows, source, {"unit": "unavailable"}))
+    source = {"files": [{"file": "src/age.test.ts", "imports": ["src/age.ts"]},  # noqa: FS003
+                        {"file": "src/name.test.ts", "imports": []}]}  # noqa: FS003
+    config["test_descriptions"] = {"src/age.test.ts": {"verifies": "年齢を確かめる", "does_not_verify": "実機"}}  # noqa: FS003
+    lines = composition_lines(config, rows, source, {})
+    text = "\n".join(lines)
+    assert "| src/age.test.ts | unit | src/age.ts | 1 | input: 1 |" in lines
+    assert "| ファイル | 段階 | 確かめる対象（import） | 件数 | 観点の内訳 |" in lines
+    assert "確かめていること |" not in text and "年齢を確かめる" not in text, "the two description columns are dropped"
+    assert "`docs/test_note.md`" in text and "`test_descriptions`" in text
+    assert "- `test_descriptions` に説明がないファイル: src/name.test.ts" in lines
+    # GitHub and VS Code render Markdown inside <details> only with blank lines around it.
+    start, end = lines.index("<details>"), lines.index("</details>")
+    assert lines[start + 1] == "<summary>テストのファイル 2・テスト 1 件（ファイルごとの段階・import・件数・観点の内訳）</summary>"
+    assert lines[start + 2] == "" and lines[end - 1] == "" and lines[end + 1] == ""
+    assert all(line.startswith("|") for line in lines[start + 3:end - 1])
+    assert lines.index("| 全体の受け持ち | 段階 | 範囲 |") > end, "the short responsibilities table stays open"
+    unavailable = composition_lines(config, rows, source, {"unit": "unavailable"})
+    assert "| src/age.test.ts | unit | src/age.ts | 未取得 | 未取得 |" in unavailable
+    assert "テスト 1 件（一覧未取得の段階あり）" in "\n".join(unavailable)
 
 
 def test_coverage_combines_stages_and_omits_exclusions_and_unknown_metrics(config):
@@ -538,11 +610,10 @@ def test_transition_evidence_requires_matching_fingerprint():
         {"id": "age / next / 0", "target": "income", "guarded": True},
         {"id": "age / next / 1", "target": "result", "guarded": False}]}
     trace = {"fingerprint": "old", "tests": {"age / next / 0": ["forward test"]}}
-    assert "テストが通した遷移: 未取得" in "\n".join(transition_lines(machine, trace))
+    assert "| 2 | 0 | 0 | 2 |" in "\n".join(transition_lines(machine, trace))
     assert [row[6] for row in transition_rows(machine, trace)] == ["判定不能", "判定不能"]
     trace["fingerprint"] = "current"
     text = "\n".join(transition_lines(machine, trace))
-    assert "テストが通した遷移: 1 / 通していない遷移: 1" in text
     assert "| 2 | 1 | 1 | 0 |" in text and "transitions.csv" in text
     rows = transition_rows(machine, trace)
     assert [(row[6], row[7]) for row in rows] == [("通過", "forward test"), ("未通過", "")]
