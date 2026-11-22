@@ -464,6 +464,151 @@ bindings:
     name: 再描画したとき
     targets:
       - template:ageQuestionTemplate
+  # 英語の名前の部品の語で、テンプレートを絞る。
+  - file: src/components/questions/template/questionTemplates.device.test.tsx
+    name: '(?<!child )(?<!derived )\bage\b'
+    targets:
+      - template:ageQuestionTemplate
+  - file: src/components/questions/template/questionTemplates.device.test.tsx
+    name: money
+    targets:
+      - template:amountOfMoneyQuestionTemplate
+  - file: src/components/questions/template/questionTemplates.device.test.tsx
+    name: child age|school year
+    targets:
+      - template:childrenAgeQuestionTemplate
+  - file: src/components/questions/template/questionTemplates.device.test.tsx
+    name: count
+    targets:
+      - template:personNumQuestionTemplate
+  - file: src/components/questions/template/questionTemplates.input.browser.test.tsx
+    name: restored age,
+    targets:
+      - template:ageQuestionTemplate
+  - file: src/components/questions/template/questionTemplates.input.browser.test.tsx
+    name: money
+    targets:
+      - template:amountOfMoneyQuestionTemplate
+  - file: src/components/questions/template/questionTemplates.input.browser.test.tsx
+    name: child age|school year
+    targets:
+      - template:childrenAgeQuestionTemplate
+  - file: src/components/questions/template/questionTemplates.input.browser.test.tsx
+    name: the count on yes
+    targets:
+      - template:personNumQuestionTemplate
+  - file: src/components/questions/question.browser.test.tsx
+    targets:
+      - file:src/components/questions/question.tsx
+  - file: src/components/questions/question.browser.test.tsx
+    name: last question in かんたん見積もり
+    targets:
+      - mode:かんたん見積もり
+  - file: src/components/questions/question.browser.test.tsx
+    name: last question in くわしく見積もり
+    targets:
+      - mode:くわしく見積もり
+  - file: src/components/questions/question.browser.test.tsx
+    name: last question in 地震被災者支援制度見積もり
+    targets:
+      - mode:地震被災者支援制度見積もり
+  - file: src/components/calculate/calculate.test.tsx
+    targets:
+      - file:src/components/calculate/calculate.ts
+  - file: src/App.browser.test.tsx
+    name: requires both acknowledgements|revokes consent when acknowledgement|cancels consent on close
+    targets:
+      - file:src/components/TermsModal.tsx
+      - file:src/components/top/topPage.tsx
+  - file: src/App.browser.test.tsx
+    name: features and footer links
+    targets:
+      - route:/
+  - file: src/App.browser.test.tsx
+    name: opens /calculate-simple and
+    targets:
+      - route:/calculate-simple
+      - mode:かんたん見積もり
+  - file: src/App.browser.test.tsx
+    name: opens /calculate and
+    targets:
+      - route:/calculate
+      - mode:くわしく見積もり
+  - file: src/App.browser.test.tsx
+    name: opens /calculate-disaster and
+    targets:
+      - route:/calculate-disaster
+      - mode:地震被災者支援制度見積もり
+  - file: src/App.browser.test.tsx
+    name: privacy policy without first visiting|saved /result URL
+    targets:
+      - file:src/App.tsx
+  - file: src/App.browser.test.tsx
+    name: saved /result URL
+    targets:
+      - file:src/components/result/result.tsx
+  - file: src/App.browser.test.tsx
+    name: response error with its navigation payload|/response-error has no navigation payload
+    targets:
+      - error:FormResponseError
+  - file: src/App.browser.test.tsx
+    name: not-found for an unknown URL
+    targets:
+      - error:NotFoundError
+  - file: src/components/result/resultShare.browser.test.tsx
+    targets:
+      - file:src/components/result/result.tsx
+  - file: src/components/result/resultShare.browser.test.tsx
+    name: legacy
+    targets:
+      - share:legacy-object
+  - file: src/components/result/resultShare.browser.test.tsx
+    name: recovery link
+    targets:
+      - error:FormResponseError
+  - file: src/components/result/resultShare.stories.tsx
+    targets:
+      - file:src/components/result/result.tsx
+  - file: src/components/result/resultShare.stories.tsx
+    name: Legacy
+    targets:
+      - share:legacy-object
+  - file: src/components/result/resultShare.stories.tsx
+    name: Corrupt ?Link
+    targets:
+      - error:FormResponseError
+  - file: src/components/result/resultDetails.browser.test.tsx
+    name: help desk
+    targets:
+      - result:窓口
+  - file: src/components/result/resultDetails.browser.test.tsx
+    name: no benefit section
+    targets:
+      - result:給付
+  - file: src/components/result/resultDetails.browser.test.tsx
+    name: no loan section
+    targets:
+      - result:貸付
+  # story 名は export 名、または単語の間に空白を入れた名前で一覧に出る。
+  - file: src/components/result/resultDetails.stories.tsx
+    name: Benefit ?Amounts
+    targets:
+      - result:給付
+  - file: src/components/result/resultDetails.stories.tsx
+    name: Loan
+    targets:
+      - result:貸付
+  - file: src/components/result/resultDetails.stories.tsx
+    name: Hiv|Base ?Hospitals|Help ?Desk
+    targets:
+      - result:窓口
+  - file: src/components/result/applicable.browser.test.tsx
+    targets:
+      - file:src/components/result/applicable.tsx
+  - file: src/components/result/applicable.browser.test.tsx
+    name: HIV hospital contacts|private-school desk
+    targets:
+      - result:窓口
 file_cells:
   src/hooks/calculate.ts:
     - communication:success
@@ -512,6 +657,14 @@ file_cells:
     - sharing:unknown
   src/components/layout/narrowWidth.tsx:
     - display:viewport
+  src/components/calculate/calculate.ts:
+    - state:conversion
+  src/components/result/applicable.tsx:
+    - display:present
+    - display:absent
+    - display:region
+    - display:url
+    - display:hiv
 
 # 既存テストの名前の型に限って分類する。新しい型は未分類として見直す。
 classification_rules:
@@ -539,6 +692,157 @@ classification_rules:
   - file: src/components/result/shareLink.test.ts
     name: '^(?!.*旧形式).+$'
     tags: [sharing:roundtrip]
+  # 以下は、タグを付けずに足したテストを名前の型で分類する。
+  - file: src/components/questions/template/questionTemplates.device.test.tsx
+    name: 'input attributes'
+    tags: [input:mobile]
+  - file: src/components/questions/template/questionTemplates.device.test.tsx
+    name: 'until composition commits|handles composing and committed|stable during suppressed composition'
+    tags: [input:ime]
+  - file: src/components/questions/template/questionTemplates.device.test.tsx
+    name: 'delivered without InputEvent'
+    tags: [input:normal]
+  - file: src/components/questions/template/questionTemplates.device.test.tsx
+    name: 'starts unanswered .+ as invalid|accepts no without a count'
+    tags: [input:empty]
+  - file: src/components/questions/template/questionTemplates.device.test.tsx
+    name: 'restores .+ with selection'
+    tags: [transition:restore]
+  - file: src/components/questions/template/questionTemplates.device.test.tsx
+    name: 'invalidates restored .+ after clearing and accepts zero'
+    tags: [input:empty, input:boundary, transition:restore]
+  - file: src/components/questions/template/questionTemplates.device.test.tsx
+    name: 'invalidates a restored person count'
+    tags: [input:empty, transition:restore]
+  - file: src/components/questions/template/questionTemplates.device.test.tsx
+    name: 're-entered after confirming an empty yes|typed after choosing yes'
+    tags: [input:empty, input:normal]
+  - file: src/components/questions/template/questionTemplates.input.browser.test.tsx
+    name: 'focuses restored .+ clears it with the keyboard'
+    tags: [input:empty, input:boundary, transition:restore, a11y:keyboard, a11y:focus]
+  - file: src/components/questions/template/questionTemplates.input.browser.test.tsx
+    name: 'focuses the child school year'
+    tags: [input:normal, a11y:keyboard, a11y:focus]
+  - file: src/components/questions/template/questionTemplates.input.browser.test.tsx
+    name: 'prevents Enter in the money field'
+    tags: [a11y:keyboard, a11y:focus]
+  - file: src/components/questions/template/questionTemplates.input.browser.test.tsx
+    name: 'focuses the count on yes'
+    tags: [transition:restore, a11y:keyboard, a11y:focus]
+  - file: src/components/questions/question.browser.test.tsx
+    name: 'blocks missing and partial answers'
+    tags: [input:empty, transition:forward, transition:back, transition:restore]
+  - file: src/components/questions/question.browser.test.tsx
+    name: 'switches spouse, child and parent forms'
+    tags: [transition:member, transition:forward, transition:back, transition:restore]
+  - file: src/components/questions/question.browser.test.tsx
+    name: 'isolates answers between children'
+    tags: [transition:member, transition:back, transition:restore]
+  - file: src/components/questions/question.browser.test.tsx
+    name: 'saves both households and navigates after the last question'
+    tags: [input:empty, transition:save]
+  - file: src/components/calculate/calculate.test.tsx
+    name: 'enables only the relevant programs|clears every previous program|combines concerns|uses the residence at the selected Recoil date'
+    tags: [state:conversion]
+  - file: src/App.browser.test.tsx
+    name: 'requires both acknowledgements|revokes consent when acknowledgement'
+    tags: [transition:consent]
+  - file: src/App.browser.test.tsx
+    name: 'cancels consent on close'
+    tags: [transition:consent, transition:forward]
+  - file: src/App.browser.test.tsx
+    name: 'features and footer links'
+    tags: [transition:forward, transition:back]
+  - file: src/App.browser.test.tsx
+    name: 'and can start the selected mode'
+    tags: [transition:forward]
+  - file: src/App.browser.test.tsx
+    name: 'privacy policy without first visiting'
+    tags: [display:present]
+  - file: src/App.browser.test.tsx
+    name: 'saved /result URL'
+    tags: [display:present, sharing:roundtrip]
+  - file: src/App.browser.test.tsx
+    name: 'response error with its navigation payload|/response-error has no navigation payload|not-found for an unknown URL'
+    tags: [display:present, transition:back]
+  - file: src/components/result/resultShare.browser.test.tsx
+    name: 'restores compact data'
+    tags: [sharing:roundtrip, sharing:qr]
+  - file: src/components/result/resultShare.browser.test.tsx
+    name: 'restores legacy data'
+    tags: [sharing:legacy, sharing:qr]
+  - file: src/components/result/resultShare.browser.test.tsx
+    name: 'opens a legacy link'
+    tags: [sharing:legacy]
+  - file: src/components/result/resultShare.browser.test.tsx
+    name: 'shows an error and follows the recovery link'
+    tags: [sharing:invalid, transition:back]
+  - file: src/components/result/resultShare.browser.test.tsx
+    name: 'copies the current URL and supplies the same URL to QR'
+    tags: [sharing:copy, sharing:qr]
+  - file: src/components/result/resultShare.browser.test.tsx
+    name: 'when the clipboard rejects|environment copy failure'
+    tags: [sharing:copy]
+  - file: src/components/result/resultShare.browser.test.tsx
+    name: 'saves the result as an image'
+    tags: [sharing:image]
+  - file: src/components/result/resultShare.stories.tsx
+    name: 'Compact ?(Simple|Detailed|Disaster)'
+    tags: [sharing:roundtrip]
+  - file: src/components/result/resultShare.stories.tsx
+    name: 'Legacy ?With(out)? ?Frontend'
+    tags: [sharing:legacy]
+  - file: src/components/result/resultShare.stories.tsx
+    name: 'Corrupt ?Link'
+    tags: [sharing:invalid, display:present]
+  - file: src/components/result/resultDetails.browser.test.tsx
+    name: 'find a council for an unsupported residence'
+    tags: [display:region, display:url]
+  - file: src/components/result/resultDetails.browser.test.tsx
+    name: 'does not link the facility name to a non-URL value'
+    tags: [display:url]
+  - file: src/components/result/resultDetails.browser.test.tsx
+    name: 'shows nothing when the residence has no help desk'
+    tags: [display:absent, display:region]
+  - file: src/components/result/resultDetails.browser.test.tsx
+    name: 'links the facility name to its website|shows the facility name as text without a website'
+    tags: [display:present, display:url]
+  - file: src/components/result/resultDetails.browser.test.tsx
+    name: 'renders no .+ section'
+    tags: [display:absent]
+  - file: src/components/result/resultDetails.stories.tsx
+    name: 'Benefit ?Amounts'
+    tags: [display:present, display:range, display:url]
+  - file: src/components/result/resultDetails.stories.tsx
+    name: 'Benefit ?Hiv'
+    tags: [display:hiv]
+  - file: src/components/result/resultDetails.stories.tsx
+    name: 'Loan ?Units'
+    tags: [display:present, display:unit]
+  - file: src/components/result/resultDetails.stories.tsx
+    name: 'Loan ?Other ?Only|Base ?Hospitals ?Without ?Duplicates'
+    tags: [display:present]
+  - file: src/components/result/resultDetails.stories.tsx
+    name: 'Base ?Hospitals ?Tokyo'
+    tags: [display:present, display:region]
+  - file: src/components/result/resultDetails.stories.tsx
+    name: 'Help ?Desk ?With ?Note'
+    tags: [display:present, display:url]
+  - file: src/components/result/applicable.browser.test.tsx
+    name: 'renders calculated work programs|shows a reference and explanation without a desk'
+    tags: [display:present, display:url]
+  - file: src/components/result/applicable.browser.test.tsx
+    name: 'merges backend and frontend programs|replaces displayed programs|refreshes programs when only the frontend calculation changes'
+    tags: [display:present, display:absent]
+  - file: src/components/result/applicable.browser.test.tsx
+    name: 'hides the section without applicable results'
+    tags: [display:absent]
+  - file: src/components/result/applicable.browser.test.tsx
+    name: 'HIV hospital contacts only for a positive'
+    tags: [display:hiv]
+  - file: src/components/result/applicable.browser.test.tsx
+    name: 'gates the private-school desk'
+    tags: [display:region]
 
 # import・一覧・観点の件数とは独立した、assertion の受け持ち。
 test_descriptions:
@@ -584,6 +888,39 @@ test_descriptions:
   e2e/DetailedCalculation.spec.ts:
     verifies: 5設定でくわしい見積もりの決まった回答経路からモック結果の表示までを確認する。
     does_not_verify: 全回答経路、災害モードの通し、実API・制度計算。
+  e2e/visual/screens.spec.ts:
+    verifies: 通常のE2Eの設定から外し、playwright.visual.config.tsでだけ実行する（この表の件数は0）。固定したDocker環境のChromiumで、13画面をdesktopとmobileの2幅で撮り、保存した期待値と画像・ARIAスナップショットが一致することを確認する。
+    does_not_verify: 5ブラウザー・端末設定、操作の結果、期待値そのものの正しさ（撮影時にレビューする）。
+  src/components/questions/template/questionTemplates.device.test.tsx:
+    verifies: jsdomで8種の端末・ブラウザーのUAを与え、年齢・金額・子の年齢・人数の入力欄のtypeとpattern、IME変換中の値と回答の扱い、InputEventのない変更、未回答・復元・消去と0の再入力の有効性を確認する。
+    does_not_verify: 実ブラウザー・実端末とOSのIME、レイアウト、状態機械への配線。
+  src/components/questions/template/questionTemplates.input.browser.test.tsx:
+    verifies: 実ブラウザーのキー操作で、年齢・金額・子の年齢の復元値を消して0を入れ直すこと、学年の編集から年齢への変換、金額欄のEnterでフォームを送らないこと、人数の「はい」でのフォーカスと値の復元を確認する。
+    does_not_verify: IME、全端末、自動a11y検査、状態機械への配線。
+  src/components/questions/question.browser.test.tsx:
+    verifies: 実際の状態機械につないだ質問画面で、未回答と一部回答の阻止、次へ・前への回答の復元、配偶者・子ども・親の入力欄の切り替えと世帯員ごとの回答、3モードで最後の質問のあとに結果へ移り両方の世帯を保存することを確認する。
+    does_not_verify: 結果の表示と計算の送信、すべての質問と回答経路、全端末。
+  src/components/calculate/calculate.test.tsx:
+    verifies: 3つの住所で困りごとごとに候補にする制度の一覧、前の結果の解除、複数の困りごとの組み合わせと再計算、選んだ日付の住所での地域の制度を確認する。
+    does_not_verify: 制度を受けられるかの判定、バックエンドの計算、画面表示、ほかの地域。
+  src/App.browser.test.tsx:
+    verifies: Appのルート表で、2つの同意の確認と取り消し・閉じたときの解除、トップの説明とフッターのリンク、3モードの画面を直接開いて始めること、プライバシーポリシー・保存した結果のURL・応答エラー・存在しないURLの表示と戻り先を確認する。
+    does_not_verify: 同意から結果までの通し（E2E）、実API、全端末。
+  src/components/result/resultShare.browser.test.tsx:
+    verifies: モック応答で、短縮・旧形式の共有リンクを3モードで開いた送信内容とQRのURL、壊れたリンクのエラーと戻り先、リンクのコピー、コピーの拒否と環境情報のコピーの再試行、画像保存と読み込み中の表示を確認する。
+    does_not_verify: QRの画像そのもの、画像の中身、実際のクリップボードと実API。
+  src/components/result/resultShare.stories.tsx:
+    verifies: 実ブラウザーで、短縮の共有リンクの3モード、frontendのデータの有無による旧形式のリンク、壊れたリンクのエラーと戻り先を表示することを確認する。
+    does_not_verify: 送信内容、コピー・QR・画像の操作、自動a11y検査での合否。
+  src/components/result/resultDetails.browser.test.tsx:
+    verifies: 社会福祉協議会の調べ方、窓口がない住所での非表示、3種の窓口の名前・地図・電話のリンクとWebサイトがないときの文字、金額が0のときに給付と貸付の欄を出さないことを確認する。
+    does_not_verify: すべての住所と窓口のデータ、設定の値の正しさ、全端末。
+  src/components/result/resultDetails.stories.tsx:
+    verifies: 給付の金額の並びと単位、貸付の上限と区分、HIVの回答による拠点病院の表示、拠点病院の並びと重複の除去、注記つきの窓口と各リンクを確認する。
+    does_not_verify: 実制度計算、すべての制度と窓口、自動a11y検査での合否。
+  src/components/result/applicable.browser.test.tsx:
+    verifies: 困りごとから候補にした制度の表示と説明・窓口、バックエンドとフロントの制度の統合と重複・偽の値の除外、結果がないときの非表示、HIVの回答による窓口、結果の都道府県による窓口、新しい結果での入れ替えを確認する。フロントの結果だけが変わったときの入れ替えは既知の失敗（it.fails）として残す。
+    does_not_verify: 制度を受けられるかの判定、すべての制度と窓口、全端末。
 responsibilities:
   - area: 状態の論理
     stages: unit
