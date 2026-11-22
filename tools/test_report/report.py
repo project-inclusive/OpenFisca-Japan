@@ -2,6 +2,7 @@
 
 import argparse
 from collections import Counter
+import csv
 import fnmatch
 import json
 from pathlib import Path
@@ -61,29 +62,47 @@ def playwright_tests(data):
     return rows
 
 
+VITEST_SKIPS = {"pending": "skipped", "todo": "skipped", "disabled": "skipped"}
+
+
+def playwright_outcome(row):
+    """Classify the final retry of one Playwright test instance against its expected status."""
+    attempts = row["attempts"]
+    status = attempts[-1]["status"] if attempts else "unexecuted"
+    if status in ("skipped", "unexecuted"):
+        return status
+    return "passed" if status == row["expected"] else "failed"
+
+
 def result_counts(data, engine):
     """Count final test outcomes, not retries or suites; preserve unknown outcomes."""
     counts = Counter()
     if engine == "playwright":
         for row in playwright_tests(data):
-            attempts = row["attempts"]
-            status = attempts[-1]["status"] if attempts else "unexecuted"
-            if status == "skipped":
-                counts["skipped"] += 1
-            elif status == "unexecuted":
-                counts["unexecuted"] += 1
-            elif status == row["expected"]:
-                counts["passed"] += 1
-            else:
-                counts["failed"] += 1
+            counts[playwright_outcome(row)] += 1
     else:
         for file in data.get("testResults", []):
             for test in file.get("assertionResults", []):
                 status = test["status"]
-                counts[{"pending": "skipped", "todo": "skipped", "disabled": "skipped"}.get(status, status)] += 1
+                counts[VITEST_SKIPS.get(status, status)] += 1
         if data.get("numFailedTestSuites", 0) and not counts["failed"]:
             counts["suite_errors"] = data["numFailedTestSuites"]
     return counts
+
+
+def outcomes_by_test(data, engine):
+    """Map each result to the list key (file, name[, project]); repeated keys keep result order."""
+    outcomes = {}
+    if engine == "playwright":
+        for row in playwright_tests(data):
+            outcomes.setdefault((row["file"], row["name"], row["project"]), []).append(playwright_outcome(row))
+    else:
+        for file in data.get("testResults", []):
+            for test in file.get("assertionResults", []):
+                name = " > ".join(list(test.get("ancestorTitles", [])) + [test["title"]])
+                status = VITEST_SKIPS.get(test["status"], test["status"])
+                outcomes.setdefault((dashboard_path(file["name"]), name), []).append(status)
+    return outcomes
 
 
 def extract_targets(source, config, dashboard):
@@ -379,6 +398,44 @@ def render(config, tests, targets, matrix, unclassified, statuses, coverage, pro
     return "\n".join(lines) + "\n"
 
 
+CSV_COLUMNS = ["段階", "project", "ファイル", "行", "テスト名", "観点", "条件", "対象", "未分類", "結果"]
+CSV_OUTCOMES = {"passed": "成功", "failed": "失敗", "skipped": "スキップ", "unexecuted": "未実行"}
+CSV_SEPARATOR = "; "
+
+
+def csv_rows(tests, matrix, unclassified, outcomes):
+    """One row per listed test; the result is empty when its stage has no result JSON."""
+    filled = {}
+    for (target, _), evidence in matrix.items():
+        for test in evidence["tests"]:
+            filled.setdefault(id(test), set()).add(target)
+    unknown = {id(test) for test in unclassified}
+    remaining = {stage: {key: list(values) for key, values in rows.items()}
+                 for stage, rows in outcomes.items() if rows is not None}
+    rows = []
+    for test in tests:
+        result = ""
+        if test["stage"] in remaining:
+            key = (test["file"], test["name"], test["project"]) if test["stage"] == "e2e" else (test["file"], test["name"])
+            queue = remaining[test["stage"]].get(key)
+            status = queue.pop(0) if queue else "unexecuted"
+            result = CSV_OUTCOMES.get(status, status)
+        rows.append([test["stage"], test["project"], test["file"], "" if test.get("line") is None else test["line"],
+                     test["name"], CSV_SEPARATOR.join(sorted({tag.split(":")[0] for tag in test["tags"]})),
+                     CSV_SEPARATOR.join(test["tags"]), CSV_SEPARATOR.join(sorted(filled.get(id(test), ()))),
+                     "はい" if id(test) in unknown else "いいえ", result])
+    return rows
+
+
+def write_csv(path, rows):
+    """Write RFC 4180 quoting with a UTF-8 BOM so Excel detects the encoding on open."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8-sig", newline="") as stream:
+        writer = csv.writer(stream)
+        writer.writerow(CSV_COLUMNS)
+        writer.writerows(rows)
+
+
 NOTE_BEGIN = "<!-- test-report:features:begin -->"
 NOTE_END = "<!-- test-report:features:end -->"
 NOTE_COMMAND = "python tools/test_report/report.py --write-test-note"
@@ -525,6 +582,7 @@ def main(argv=None):
     parser.add_argument("--root", type=Path, default=BASE)
     parser.add_argument("--input-dir", type=Path, default=Path("tmp/test-report"))
     parser.add_argument("--output", type=Path, default=Path("tmp/test-report/frontend.md"))
+    parser.add_argument("--csv", type=Path, default=Path("tmp/test-report/tests.csv"), help="one row per listed test")
     parser.add_argument("--definitions", type=Path, default=Path("tools/test_report/viewpoints.yaml"))
     parser.add_argument("--write-tags", action="store_true", help="regenerate dashboard/testReportTags.ts from YAML and exit")
     parser.add_argument("--write-test-note", action="store_true", help="rewrite the generated region of the test note from YAML and exit")
@@ -552,7 +610,7 @@ def main(argv=None):
     source = json.loads(subprocess.check_output(["node", "tools/test_report/source_index.mjs", "dashboard"], cwd=root, text=True))
     targets = extract_targets(source, config, dashboard)
     check_definitions(config, source, dashboard, targets)
-    tests, statuses, problems = [], {}, {}
+    tests, statuses, outcomes, problems = [], {}, {}, {}
     for stage in config["stages"]:
         problem = None if args.offline else collect(stage, dashboard, directory)
         data = read_json(directory / stage["list"])
@@ -570,7 +628,9 @@ def main(argv=None):
                 test["tags"] = sorted(set(test["tags"] or syntax_tags) | set(classification_tags(test, config)))
                 tests.append(test)
         result = read_json(directory / stage["result"])
-        statuses[stage["id"]] = None if result is None else result_counts(result, "playwright" if stage["id"] == "e2e" else "vitest")
+        engine = "playwright" if stage["id"] == "e2e" else "vitest"
+        statuses[stage["id"]] = None if result is None else result_counts(result, engine)
+        outcomes[stage["id"]] = None if result is None else outcomes_by_test(result, engine)
     coverage = {}
     for scope in ("unit", "ui"):
         data = read_json(dashboard / "coverage" / scope / "coverage-summary.json")
@@ -581,8 +641,12 @@ def main(argv=None):
     output = root / args.output
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(render(config, tests, targets, matrix, unclassified, statuses, coverage, problems, args.low_coverage, source, machine, trace), encoding="utf-8")
+    table = root / args.csv
+    write_csv(table, csv_rows(tests, matrix, unclassified, outcomes))
     display_path = output.relative_to(root) if output.is_relative_to(root) else output
+    table_path = table.relative_to(root) if table.is_relative_to(root) else table
     sys.stdout.write(f"{display_path}: {len(tests)} tests; {len(targets)} targets; {len(problems)} unavailable lists\n")
+    sys.stdout.write(f"{table_path}: {len(tests)} rows\n")
 
 
 if __name__ == "__main__":

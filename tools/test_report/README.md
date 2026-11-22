@@ -8,7 +8,9 @@
 
 ```bash
 make test-report
-# 出力: tmp/test-report/frontend.md
+# 出力: tmp/test-report/frontend.md と tmp/test-report/tests.csv
+# CSV の出力先を変える
+make test-report TEST_REPORT_ARGS='--csv tmp/test-report/all-tests.csv'
 # 保存した一覧だけで再生成する
 make test-report TEST_REPORT_ARGS='--offline'
 # 低網羅率の候補を 60% 未満に変える
@@ -16,7 +18,7 @@ make test-report TEST_REPORT_ARGS='--offline --low-coverage 60'
 python -m pytest tools/test_report
 ```
 
-通常の生成は一覧だけを新規取得し、テスト本体を実行しない。テスト実行は時間・ブラウザー環境を要するため別操作にしている。`dashboard/package.json` は変更しない。`--input-dir` と `--output` はルートからの相対パス（絶対パスも指定可）。一覧・結果は、同じコミット、同じフィルターなしの設定で採取する。
+通常の生成は一覧だけを新規取得し、テスト本体を実行しない。テスト実行は時間・ブラウザー環境を要するため別操作にしている。`dashboard/package.json` は変更しない。`--input-dir`・`--output`・`--csv` はルートからの相対パス（絶対パスも指定可）。一覧・結果は、同じコミット、同じフィルターなしの設定で採取する。
 
 実際の一覧取得コマンドは `viewpoints.yaml` の `stages` にある。
 
@@ -50,6 +52,33 @@ make test-report
 結果がなければ「未実行」、網羅率がなければ「未計測」と再取得コマンドを出す。結果は最終試行の成功・失敗・スキップを数え、一覧との件数の差も表示する。古い結果の自動判別はできないため、コード更新後は再採取するか削除する。起動時点の失敗で JSON が生成されない場合も、前回の結果を削除してから採取する。
 
 網羅率は、上の `--coverage` の実行で `dashboard` に出力される `coverage/unit/coverage-summary.json` と `coverage/ui/coverage-summary.json` を読む。計測の設定と読み方は [docs/dev_note.md](../../docs/dev_note.md) の「テストの網羅率」にある。全体と全ファイルの Statements・Branches・Functions・Lines をそれぞれ出す。unit と UI の値は足さない。既定の 80% は不足の調査先を絞る目安で、CI の合否条件ではない。4 指標のいずれかでunit/UIの高い方が基準未満なら候補とする。分母 0 や `n/a` は低網羅率とみなさない。「両方で 0%」は両方に存在し Statements の分母が正、かつ値が 0% のファイルを出す。
+
+## テストの一覧の CSV
+
+`make test-report` は Markdown と同時に、一覧のテスト 1 件（パラメーターと project を展開した 1 件）を 1 行にした CSV を `tmp/test-report/tests.csv` に出す。表計算のソフトで段階・ファイル・観点・結果などの列を絞り込むためのもので、Markdown の表と説明の文はそのまま残す。出力先は `--csv` で変える。一覧を取得できなかった段階のテストは行に出ない（Markdown の「未取得」を確かめる）。
+
+| 列 | 内容 |
+| --- | --- |
+| 段階 | `stages` の `id`（`unit`・`ui`・`e2e`） |
+| project | 一覧の project 名（`storybook (chromium)`・`webkit` など） |
+| ファイル | `dashboard` からの相対パス |
+| 行 | 一覧の行番号。ない場合は空 |
+| テスト名 | `describe` などの親の名前を ` > ` でつないだ名前 |
+| 観点 | 条件のタグの観点（`input` など）。重複を除き `; ` で区切る |
+| 条件 | コードのタグと `classification_rules` の和集合（`input:empty` など）。`; ` で区切る |
+| 対象 | このテストが「観点×条件」のますを埋めた対象。`; ` で区切る。ないときは空 |
+| 未分類 | Markdown の「未分類のテスト」に出るテストは `はい`、ほかは `いいえ` |
+| 結果 | 実行の結果。成功・失敗・スキップ・未実行のどれか。その段階の結果 JSON がないときは空 |
+
+結果は Markdown の「テストの状況」と同じ最終試行の数え方を使う。E2E はファイル・名前・project で、Vitest はファイルと名前（`ancestorTitles` と `title` を ` > ` でつなぐ）で結果を一覧に結ぶ。同じキーの結果が複数あるときは結果の JSON の順に割り当てる。結果 JSON はあるが一覧のテストに結ぶ結果がないときは「未実行」とする。未知の状態は英語の値のまま出す。
+
+CSV は Python 標準の `csv` で書く（`,`・`"`・改行を含む値は `"` で囲み、`"` は 2 つ重ねる。行の区切りは CRLF）。文字コードは BOM 付きの UTF-8 にする。日本語版の Excel は BOM のない CSV を Shift_JIS として開き、テスト名が文字化けするためである。LibreOffice、Google スプレッドシート、Python（`encoding="utf-8-sig"`）も BOM 付きのまま読める。
+
+使い方の例:
+
+- Excel でファイルを開き、「データ」→「フィルター」で `結果` を「失敗」に絞る。
+- `観点` や `条件` の列で「テキスト フィルター」→「指定の値を含む」を使い、`a11y` のテストを並べる。
+- `未分類` が `はい` の行を絞り、タグか `classification_rules` を足す先を探す。
 
 ## タグと分類の正本
 

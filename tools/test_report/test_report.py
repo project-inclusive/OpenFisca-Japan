@@ -1,6 +1,8 @@
 """Test report adapters and gap accounting with small, isolated inputs."""
 
 import copy
+import csv
+import io
 import json
 import subprocess
 
@@ -14,6 +16,8 @@ from tools.test_report.report import (
     composition_lines,
     coverage_gaps,
     coverage_rows,
+    CSV_COLUMNS,
+    csv_rows,
     extract_targets,
     feature_lines,
     layer_of,
@@ -23,6 +27,7 @@ from tools.test_report.report import (
     NOTE_END,
     NOTE_FINISH,
     note_start,
+    outcomes_by_test,
     playwright_tests,
     read_json,
     render,
@@ -31,8 +36,16 @@ from tools.test_report.report import (
     source_tags,
     transition_lines,
     vitest_list,
+    write_csv,
     )
 import yaml
+
+
+def read_csv(path):
+    """Read the CSV as a spreadsheet would, after the UTF-8 BOM."""
+    raw = path.read_bytes()
+    assert raw.startswith(b"\xef\xbb\xbf")
+    return list(csv.reader(io.StringIO(raw.decode("utf-8-sig"), newline="")))
 
 
 @pytest.fixture
@@ -173,6 +186,42 @@ def test_coverage_and_markdown(config):
     assert "確かめ方の強さ" in text
 
 
+def test_csv_quotes_values_and_leaves_results_empty_without_json(config, tmp_path):
+    """Commas, quotes and newlines survive a round trip; one row per listed test."""
+    targets = {"template:age": {"group": "template", "source": "src/age.ts"}}  # noqa: FS003
+    tricky = {"file": "src/age.test.ts", "name": 'age, "0"\nnext', "project": "unit", "stage": "unit",  # noqa: FS003
+              "line": 3, "tags": ["input:empty", "input:normal"]}
+    loose = {"file": "src/new.test.ts", "name": "未分類", "project": "unit", "stage": "unit", "line": None, "tags": []}  # noqa: FS003
+    matrix, unclassified = build_matrix([tricky, loose], targets, config)
+    table = tmp_path / "out" / "tests.csv"
+    write_csv(table, csv_rows([tricky, loose], matrix, unclassified, {"unit": None}))
+    assert '"age, ""0""\nnext"'.encode() in table.read_bytes()
+    header, first, second = read_csv(table)
+    assert header == ["段階", "project", "ファイル", "行", "テスト名", "観点", "条件", "対象", "未分類", "結果"]
+    assert first == ["unit", "unit", "src/age.test.ts", "3", tricky["name"], "input",  # noqa: FS003
+                     "input:empty; input:normal", "template:age", "いいえ", ""]
+    assert second == ["unit", "unit", "src/new.test.ts", "", "未分類", "", "", "", "はい", ""]  # noqa: FS003
+
+
+def test_csv_results_follow_final_attempt_and_list_keys(config):
+    """Playwright matches by project; Vitest by file and describe path; missing results are unexecuted."""
+    rows = playwright_tests(pw_data({"chromium": ["failed", "passed"], "webkit": []}))
+    for row in rows:
+        row.update(stage="e2e", tags=[])
+    outcomes = {"e2e": outcomes_by_test(pw_data({"chromium": ["failed", "passed"], "webkit": ["timedOut"]}), "playwright")}
+    assert [row[-1] for row in csv_rows(rows, {}, rows, outcomes)] == ["成功", "失敗"]
+    vitest = {"testResults": [{"name": "/x/dashboard/src/age.test.ts", "assertionResults": [
+        {"ancestorTitles": ["age"], "title": "same", "status": "passed"},
+        {"ancestorTitles": ["age"], "title": "same", "status": "pending"},
+        {"ancestorTitles": [], "title": "odd", "status": "unknown"}]}]}
+    outcomes = {"unit": outcomes_by_test(vitest, "vitest")}
+    assert outcomes["unit"][("src/age.test.ts", "age > same")] == ["passed", "skipped"]  # noqa: FS003
+    listed = [{"file": "src/age.test.ts", "name": name, "project": "unit", "stage": "unit", "tags": []}  # noqa: FS003
+              for name in ("age > same", "age > same", "odd", "age > new")]
+    assert [row[-1] for row in csv_rows(listed, {}, listed, outcomes)] == ["成功", "スキップ", "unknown", "未実行"]
+    assert outcomes["unit"][("src/age.test.ts", "age > same")] == ["passed", "skipped"], "input must not be consumed"  # noqa: FS003
+
+
 def test_optional_and_malformed_json(tmp_path):
     """Missing evidence is unknown; malformed evidence must never look unmeasured."""
     path = tmp_path / "optional.json"
@@ -238,7 +287,7 @@ def test_offline_cli_accepts_browser_instance_and_story_metadata(tmp_path):
         "projectName": "storybook (chromium)", "location": {"line": 999},
         }]))
     output = tmp_path / "frontend.md"
-    main(["--offline", "--input-dir", str(tmp_path), "--output", str(output)])
+    main(["--offline", "--input-dir", str(tmp_path), "--output", str(output), "--csv", str(tmp_path / "tests.csv")])
     report = output.read_text()
     assert "コンポーネント（story・Browser Mode） | 1 | 1" in report
     assert "ui / storybook (chromium) / 汎用エラー" in report
@@ -270,11 +319,29 @@ def test_browser_name_line_classifies_all_error_width_cases(tmp_path):
             assert matrix["error:" + target, tag]["tests"] == expected
     (tmp_path / "ui.list.json").write_text(json.dumps(data))
     output = tmp_path / "frontend.md"
-    main(["--offline", "--input-dir", str(tmp_path), "--output", str(output)])
+    table = tmp_path / "tests.csv"
+    main(["--offline", "--input-dir", str(tmp_path), "--output", str(output), "--csv", str(table)])
     report = output.read_text()
     assert "コンポーネント（story・Browser Mode） | 1 | 9" in report
     assert "未分類のテスト（0）" in report
     assert report.splitlines().count("### 網羅率が低いファイル") == 1
+    header, *body = read_csv(table)
+    assert header == CSV_COLUMNS and len(body) == 9
+    first = dict(zip(header, body[0]))
+    assert first["段階"] == "ui" and first["project"] == "browser (chromium)" and first["行"] == "157"
+    assert first["テスト名"] == data[0]["name"]
+    assert first["観点"] == "a11y; display; transition"
+    assert first["条件"] == "a11y:focus; a11y:keyboard; display:present; display:viewport; transition:back"
+    assert "error:GenericError" in first["対象"].split("; ")
+    assert first["未分類"] == "いいえ" and first["結果"] == ""
+    (tmp_path / "ui.results.json").write_text(json.dumps({"testResults": [{
+        "name": "/other/dashboard/src/components/layout/uiCompatibility.browser.test.tsx",
+        "assertionResults": [{"ancestorTitles": ["UI at 390 CSS pixels"], "title": data[0]["name"].split(" > ")[1],
+                              "status": "failed"}]}]}))
+    again = tmp_path / "again.md"
+    main(["--offline", "--input-dir", str(tmp_path), "--output", str(again), "--csv", str(table)])
+    results = [row[-1] for row in read_csv(table)[1:]]
+    assert results == ["失敗"] + ["未実行"] * 8
 
 
 @pytest.mark.parametrize("file,name,expected", [
