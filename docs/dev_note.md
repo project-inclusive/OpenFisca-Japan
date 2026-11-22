@@ -300,6 +300,29 @@ preview のポート 30000 を空けてから実行する。`webServer` が既�
 戻る操作と API エラーの分岐は画面のテストで確認する。Playwright のコンポーネントテストは使わない。
 E2E の安定性を確認するときは `npm run test:e2e` を続けて 2 回実行する。失敗時の trace は `tmp/playwright/test-results/`（リポジトリルートからの相対パス）に残る。
 
+#### テストを足すときに、テストのレポートの定義で直すこと
+
+テストのレポートの定義は `tools/test_report/viewpoints.yaml` にある。テストを足す・名前を変える・消すときは、次の表で直すところを確かめる。上流の CI はレポートを流さないため、直し忘れても PR は止まらない。
+
+| する作業 | 直すところ | 直さないと |
+| --- | --- | --- |
+| 既にあるファイルにテストを足す | 宣言にタグを書く（Vitest は `{ tags: ['input:empty'] }`、Playwright は `{ tag: ['@input:empty'] }`、story は `tags`）。`classification_rules` で分類しているファイルは、規則に合う名前ならタグは要らない | タグも規則もないテスト、またはタグが対象の期待する条件に合わないテストは「未分類」に出る。エラーにはならない |
+| 新しいテストのファイルを足す | `bindings` にファイルと対象を書く。`test_descriptions` は任意 | 対象に結び付かず、テストが「未分類」に出る（状態機械の質問と E2E の端末は書かなくても結ぶ）。説明がなければ「説明のないファイル」に出る。どちらもエラーにはならない |
+| 新しい観点・条件を使う | `viewpoints` に足し、`--write-tags` で `dashboard/testReportTags.ts` を作り直す | 知らないタグ、または YAML と `testReportTags.ts` の食い違いとして `make test-report` がエラーで止まる |
+| テストのファイルの名前を変える・消す | `bindings`・`classification_rules`・`test_descriptions`・`features` の古いパス | `bindings`・`classification_rules` が古いと `make test-report` が、`test_descriptions`・`features` が古いと `--write-test-note` がエラーで止まる |
+| 機能ごとの文書（[フロントエンドのテストで保証していること](./frontend_test_note.md)）に載せる | `features` の `files` と `test_descriptions` を書き、`--write-test-note` で作り直す | 説明のない根拠のファイル、機能に置いていない説明はエラーで止まる。作り直さないと `python -m pytest tools/test_report` が失敗する |
+
+直したら、リポジトリのルートで次を実行し、`tmp/test-report/frontend.md` の未分類のテストと説明のないファイルを確かめる。
+
+```bash
+python tools/test_report/report.py --write-tags       # 観点・条件を足したとき（続けて dashboard で npx prettier --write testReportTags.ts）
+python tools/test_report/report.py --write-test-note  # features・test_descriptions を直したとき
+make test-report
+python -m pytest tools/test_report
+```
+
+書き方の詳細は `tools/test_report/README.md` の「タグと分類の正本」「対象と期待する条件の編集」「`viewpoints.yaml` の構成」の節にある。
+
 #### テストの網羅率
 
 `dashboard` で既存のテストスクリプトに `--coverage` を渡す。通常のテスト実行では網羅率を計測しない。
