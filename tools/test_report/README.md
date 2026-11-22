@@ -145,7 +145,7 @@ python tools/test_report/report.py --write-test-note
 python -m pytest tools/test_report
 ```
 
-書き換えるのは `<!-- test-report:features:begin -->` と `<!-- test-report:features:end -->` の間だけで、ほかの節は人が書く。テストの一覧も実行も使わない。`test_descriptions`・`responsibilities`・`features`・`qualities` を直したら生成し直す。pytest は生成し直した結果と commit 済みの文書を比べ、差があれば失敗する。
+書き換えるのは `<!-- test-report:features:begin -->` と `<!-- test-report:features:end -->` の間だけで、ほかの節は人が書く。目印のコメントはプレビューで見えないため、区間の最初と最後には引用の文も出す。最初の文は、区間がどこまでか（`features` の最後の機能の名前から作るので、機能が増えてもずれない）、正本が `viewpoints.yaml` であること、作り直すコマンド、手で直さないことを示し、最後の文は区間がここまでで、ここから下は人が書くことを示す。機械が区間を見つけるのは目印のコメントだけである。テストの一覧も実行も使わない。`test_descriptions`・`responsibilities`・`features`・`qualities` を直したら生成し直す。pytest は生成し直した結果と commit 済みの文書を比べ、差があれば失敗する。
 
 ## 状態機械の分岐と通過の記録
 

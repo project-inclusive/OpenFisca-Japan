@@ -19,7 +19,10 @@ from tools.test_report.report import (
     layer_of,
     main,
     NOTE_BEGIN,
+    NOTE_COMMAND,
     NOTE_END,
+    NOTE_FINISH,
+    note_start,
     playwright_tests,
     read_json,
     render,
@@ -393,6 +396,28 @@ def test_test_note_features_are_app_features_with_conclusions():
         assert section.lstrip().startswith("- **保証していること**: ")
         assert "- **保証していないこと（テストが通っても本番で起こりうること）**: " in section.split("根拠のファイル", 1)[0]
     assert "| 機能 | 振る舞い | " + " | ".join(row["name"] for row in config["qualities"]) + " |" in text
+
+
+def test_test_note_region_shows_visible_start_and_finish():
+    """Visible lines open and close the region; the opening names the last feature as its end."""
+    config = yaml.safe_load((BASE / "tools/test_report/viewpoints.yaml").read_text())
+    lines = feature_lines(config, BASE / "dashboard")
+    last = config["features"][-1]["name"]
+    assert lines[0] == note_start(last) and lines[-1] == NOTE_FINISH
+    assert f"「{last}」の節まで" in lines[0]
+    assert "tools/test_report/viewpoints.yaml" in lines[0] and NOTE_COMMAND in lines[0] and "手で直さない" in lines[0]
+    assert "ここまで" in NOTE_FINISH and "人が書く" in NOTE_FINISH
+    assert all(line.startswith(">") for line in (lines[0], lines[-1])), "must render in a Markdown preview"
+    headings = [line[4:] for line in lines if line.startswith("### ")]
+    assert headings[0] == "品質の観点" and headings[-1] == last
+    region = (BASE / "docs/test_note.md").read_text(encoding="utf-8").split(NOTE_BEGIN, 1)[1].split(NOTE_END, 1)[0]
+    body = region.strip().splitlines()
+    assert body[0] == note_start(last) and body[-1] == NOTE_FINISH
+    more = copy.deepcopy(config)
+    more["features"].append(dict(more["features"][0], name="追加の機能"))
+    more["features"][0]["files"] = more["features"][0]["files"][:1]
+    added = feature_lines(more, BASE / "dashboard")
+    assert "「追加の機能」の節まで" in added[0] and added[-1] == NOTE_FINISH
 
 
 def test_test_note_rejects_drift_and_rewrites_only_the_region(tmp_path):

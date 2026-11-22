@@ -45,6 +45,7 @@ API の応答は、単体・story・Browser Mode では MSW 2 の共通 handler�
 ## 機能ごとに保証していること
 
 機能ごとに、はじめに結論（保証していること・保証していないこと）を書き、その下に根拠のファイルの表を置く。表の「観点」の「振る舞い」は機能そのものの動きを確かめること、品質の観点の名前はその機能についてその観点を確かめることを示す（両方を確かめるファイルには両方を書く）。一つのファイルが二つ以上の機能にまたがる場合は、それぞれの機能の表に出す。
+この節のうち、「品質の観点」の見出しから最後の機能の見出しの節までが生成の区間であり、その最初と最後に区間の範囲を示す引用の文を生成で出す（その後の「保証していないこと・既知の制約」からは人が書く）。
 区間は次のコマンドで生成し、下の目印のコメントの間だけを書き換える。生成し直して差が出ないことは `python -m pytest tools/test_report` で確かめている。
 
 ```bash
@@ -53,7 +54,7 @@ python tools/test_report/report.py --write-test-note
 
 <!-- test-report:features:begin -->
 
-<!-- この区間は `python tools/test_report/report.py --write-test-note` で tools/test_report/viewpoints.yaml から生成する。手で直さない。 -->
+> **ここから生成した区間（「品質の観点」から「エラーの画面」の節まで）。** 正本は `tools/test_report/viewpoints.yaml` で、`python tools/test_report/report.py --write-test-note` で作り直す。手で直さない。
 
 ### 品質の観点
 
@@ -199,6 +200,8 @@ python tools/test_report/report.py --write-test-note
 | Browser Mode | `dashboard/src/components/result/resultShare.browser.test.tsx` | 振る舞い | モック応答で、短縮・旧形式の共有リンクを3モードで開いた送信内容とQRのURL、壊れたリンクのエラーと戻り先、リンクのコピー、コピーの拒否と環境情報のコピーの再試行、画像保存と読み込み中の表示を確認する。 | QRの画像そのもの、画像の中身、実際のクリップボードと実API。 |
 | Browser Mode | `dashboard/src/components/layout/uiCompatibility.browser.test.tsx` | 互換・a11y | 390・820・1440 CSS pxで質問・結果・3種のエラーの幅とキーボード操作、同意モーダルのフォーカス復帰を確認する。 | モバイル実機のUA、全画面幅、状態機械との通し操作。 |
 | 見た目の比較 | `dashboard/e2e/visual/screens.spec.ts` | 見た目 | 通常のE2Eの設定から外し、playwright.visual.config.tsでだけ実行する（この表の件数は0）。固定したDocker環境のChromiumで、13画面をdesktopとmobileの2幅で撮り、保存した期待値と画像・ARIAスナップショットが一致することを確認する。 | 5ブラウザー・端末設定、操作の結果、期待値そのものの正しさ（撮影時にレビューする）。 |
+
+> **生成した区間はここまで。** ここから下は人が書く。
 
 <!-- test-report:features:end -->
 

@@ -382,6 +382,14 @@ def render(config, tests, targets, matrix, unclassified, statuses, coverage, pro
 NOTE_BEGIN = "<!-- test-report:features:begin -->"
 NOTE_END = "<!-- test-report:features:end -->"
 NOTE_COMMAND = "python tools/test_report/report.py --write-test-note"
+NOTE_FIRST_HEADING = "品質の観点"
+NOTE_FINISH = "> **生成した区間はここまで。** ここから下は人が書く。"
+
+
+def note_start(last_feature):
+    """Visible opening line: the markers are HTML comments and do not show in a preview."""
+    return (f"> **ここから生成した区間（「{NOTE_FIRST_HEADING}」から「{last_feature}」の節まで）。** "
+            f"正本は `tools/test_report/viewpoints.yaml` で、`{NOTE_COMMAND}` で作り直す。手で直さない。")
 
 
 def layer_of(file):
@@ -460,8 +468,8 @@ def feature_lines(config, dashboard):
 
     names = {BEHAVIOR_ID: BEHAVIOR} | {key: row["name"] for key, row in qualities.items()}
 
-    lines = [f"<!-- この区間は `{NOTE_COMMAND}` で tools/test_report/viewpoints.yaml から生成する。手で直さない。 -->", "",
-             "### 品質の観点", "", "| 観点 | 確かめ方 |", "| --- | --- |"]
+    lines = [note_start(features[-1]["name"]), "",
+             "### " + NOTE_FIRST_HEADING, "", "| 観点 | 確かめ方 |", "| --- | --- |"]
     lines += [f"| {note_cell(row['name'])} | {note_cell(row['description'])} |" for row in qualities.values()]
     lines += ["", "### 段階ごとの受け持ち", "", "| 受け持ち | 段階 | 範囲 |", "| --- | --- | --- |"]
     lines += ["| " + " | ".join(note_cell(row[key]) for key in ("area", "stages", "scope")) + " |"
@@ -484,7 +492,7 @@ def feature_lines(config, dashboard):
             aspect = "・".join(names[key] for key in names if key in ids)
             lines.append("| " + " | ".join([layer_of(file), f"`dashboard/{note_cell(file)}`", note_cell(aspect),
                                               note_cell(row["verifies"]), note_cell(row["does_not_verify"])]) + " |")
-    return lines
+    return lines + ["", NOTE_FINISH]
 
 
 def replace_note_region(text, lines):
