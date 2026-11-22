@@ -374,20 +374,54 @@ def test_test_note_features_cover_every_description():
     config = yaml.safe_load((BASE / "tools/test_report/viewpoints.yaml").read_text())
     text = "\n".join(feature_lines(config, BASE / "dashboard"))
     for file, row in config["test_descriptions"].items():
-        assert f"| {layer_of(file)} | `dashboard/{file}` | {row['verifies']} | {row['does_not_verify']} |" in text
+        assert f"| {layer_of(file)} | `dashboard/{file}` | " in text
+        assert f" | {row['verifies']} | {row['does_not_verify']} |" in text
     for feature in config["features"]:
         assert "### " + feature["name"] in text
+
+
+def test_test_note_features_are_app_features_with_conclusions():
+    """Features carry both conclusions; qualities stay a separate axis and are not features."""
+    config = yaml.safe_load((BASE / "tools/test_report/viewpoints.yaml").read_text())
+    quality_names = {row["name"] for row in config["qualities"]}
+    assert {row["id"] for row in config["qualities"]} == {"compatibility", "a11y", "visual", "journey"}
+    names = [feature["name"] for feature in config["features"]]
+    assert not quality_names & set(names)
+    text = "\n".join(feature_lines(config, BASE / "dashboard"))
+    for feature in config["features"]:
+        section = text.split("### " + feature["name"] + "\n", 1)[1]
+        assert section.lstrip().startswith("- **保証していること**: ")
+        assert "- **保証していないこと（テストが通っても本番で起こりうること）**: " in section.split("根拠のファイル", 1)[0]
+    assert "| 機能 | 振る舞い | " + " | ".join(row["name"] for row in config["qualities"]) + " |" in text
 
 
 def test_test_note_rejects_drift_and_rewrites_only_the_region(tmp_path):
     """Unassigned descriptions, unknown files and broken markers are errors; text outside stays."""
     (tmp_path / "src").mkdir()
     (tmp_path / "src/age.test.ts").write_text("")
-    config = {"test_descriptions": {"src/age.test.ts": {"verifies": "a|b", "does_not_verify": "c"}},  # noqa: FS003
-              "features": [{"name": "入力欄", "files": ["src/age.test.ts"]}],  # noqa: FS003
+    (tmp_path / "src/age.browser.test.tsx").write_text("")
+    config = {"test_descriptions": {"src/age.test.ts": {"verifies": "a|b", "does_not_verify": "c"},  # noqa: FS003
+                                    "src/age.browser.test.tsx": {"verifies": "d", "does_not_verify": "e"}},  # noqa: FS003
+              "qualities": [{"id": "a11y", "name": "a11y", "description": "キー"}],
+              "features": [{"name": "入力欄", "guarantees": "値を保つ。\n  復元する。", "risks": "実機は見ない。",
+                            "files": ["src/age.test.ts",  # noqa: FS003
+                                      {"file": "src/age.browser.test.tsx", "qualities": ["a11y"]}]}],  # noqa: FS003
               "responsibilities": []}
     lines = feature_lines(config, tmp_path)
-    assert "| 単体 | `dashboard/src/age.test.ts` | a\\|b | c |" in lines
+    assert "| 単体 | `dashboard/src/age.test.ts` | 振る舞い | a\\|b | c |" in lines
+    assert "| Browser Mode | `dashboard/src/age.browser.test.tsx` | a11y | d | e |" in lines
+    assert "| 入力欄 | 単体 | Browser Mode |" in lines
+    assert "- **保証していること**: 値を保つ。復元する。" in lines
+    bad = copy.deepcopy(config)
+    bad["features"][0]["files"][1]["qualities"] = ["speed"]
+    with pytest.raises(ValueError, match="Unknown quality"):
+        feature_lines(bad, tmp_path)
+    bad = copy.deepcopy(config)
+    del bad["features"][0]["risks"]
+    with pytest.raises(ValueError, match="guarantees, risks"):
+        feature_lines(bad, tmp_path)
+    config["features"][0]["files"] = ["src/age.test.ts"]  # noqa: FS003
+    del config["test_descriptions"]["src/age.browser.test.tsx"]
     text = f"before\n{NOTE_BEGIN}\nold\n{NOTE_END}\nafter\n"
     replaced = replace_note_region(text, lines)
     assert replaced.startswith("before\n" + NOTE_BEGIN) and replaced.endswith(NOTE_END + "\nafter\n")

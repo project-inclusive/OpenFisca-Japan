@@ -402,17 +402,45 @@ def note_cell(value):
     return str(value).replace("|", "\\|").replace("\n", " ")
 
 
+LAYERS = ["単体", "story", "Browser Mode", "E2E", "見た目の比較"]
+BEHAVIOR_ID = "behavior"
+BEHAVIOR = "振る舞い"
+
+
+def note_sentences(value):
+    """Join folded YAML sentences without the space that folding inserts after Japanese full stops."""
+    return re.sub(r"。\s+", "。", " ".join(str(value).split()))
+
+
+def feature_entries(feature, qualities):
+    """Normalize feature files to (file, aspect ids); a bare string checks the behavior only."""
+    entries = []
+    for entry in feature.get("files", []):
+        if isinstance(entry, str):
+            entry = {"file": entry, "qualities": [BEHAVIOR_ID]}
+        if not isinstance(entry, dict) or not entry.get("file") or not entry.get("qualities") \
+                or set(entry) - {"file", "qualities"}:
+            raise ValueError("Feature file needs a path or {file, qualities}: " + str(entry))
+        unknown = sorted(set(entry["qualities"]) - set(qualities) - {BEHAVIOR_ID})
+        if unknown:
+            raise ValueError("Unknown quality in feature " + str(feature.get("name")) + ": " + ", ".join(unknown))
+        entries.append((entry["file"], list(entry["qualities"])))
+    return entries
+
+
 def feature_lines(config, dashboard):
-    """Render the per-feature tables from features, test_descriptions and responsibilities."""
+    """Render the feature conclusions and evidence tables from features, qualities and test_descriptions."""
     descriptions = config.get("test_descriptions", {})
     features = config.get("features", [])
+    qualities = {row["id"]: row for row in config.get("qualities", [])}
     if not features:
         raise ValueError("features is required to write the test note")
-    listed = set()
+    listed, entries = set(), {}
     for feature in features:
-        files = feature.get("files", [])
-        if not feature.get("name") or not files:
-            raise ValueError("Feature requires name and files: " + str(feature))
+        if not all(feature.get(key) for key in ("name", "guarantees", "risks", "files")):
+            raise ValueError("Feature requires name, guarantees, risks and files: " + str(feature.get("name")))
+        rows = feature_entries(feature, qualities)
+        files = [file for file, _ in rows]
         if len(files) != len(set(files)):
             raise ValueError("Duplicate file in feature: " + feature["name"])
         for file in files:
@@ -421,19 +449,40 @@ def feature_lines(config, dashboard):
             if not (dashboard / file).exists():
                 raise ValueError("Feature file missing: " + file)
         listed.update(files)
+        entries[feature["name"]] = rows
     missing = sorted(set(descriptions) - listed)
     if missing:
         raise ValueError("test_descriptions files without a feature: " + ", ".join(missing))
+
+    def layers(rows, key):
+        found = {layer_of(file) for file, ids in rows if key in ids}
+        return " / ".join(layer for layer in LAYERS if layer in found) or "なし"
+
+    names = {BEHAVIOR_ID: BEHAVIOR} | {key: row["name"] for key, row in qualities.items()}
+
     lines = [f"<!-- この区間は `{NOTE_COMMAND}` で tools/test_report/viewpoints.yaml から生成する。手で直さない。 -->", "",
-             "### 段階ごとの受け持ち", "", "| 受け持ち | 段階 | 範囲 |", "| --- | --- | --- |"]
+             "### 品質の観点", "", "| 観点 | 確かめ方 |", "| --- | --- |"]
+    lines += [f"| {note_cell(row['name'])} | {note_cell(row['description'])} |" for row in qualities.values()]
+    lines += ["", "### 段階ごとの受け持ち", "", "| 受け持ち | 段階 | 範囲 |", "| --- | --- | --- |"]
     lines += ["| " + " | ".join(note_cell(row[key]) for key in ("area", "stages", "scope")) + " |"
               for row in config.get("responsibilities", [])]
+    lines += ["", "### 機能ごとの観点と層", "",
+              "ますは、その機能のその観点を確かめているテストの層である。「なし」は、その観点をその機能で確かめるテストがないことを示す。", "",
+              "| 機能 | " + " | ".join(note_cell(name) for name in names.values()) + " |",
+              "| " + " | ".join(["---"] * (len(names) + 1)) + " |"]
+    for feature in features:
+        rows = entries[feature["name"]]
+        lines.append(f"| {note_cell(feature['name'])} | " + " | ".join(layers(rows, key) for key in names) + " |")
     for feature in features:
         lines += ["", "### " + feature["name"], "",
-                  "| 層 | ファイル | 確かめていること | 確かめていないこと |", "| --- | --- | --- | --- |"]
-        for file in feature["files"]:
+                  "- **保証していること**: " + note_sentences(feature["guarantees"]),
+                  "- **保証していないこと（テストが通っても本番で起こりうること）**: " + note_sentences(feature["risks"]),
+                  "", "根拠のファイル:", "",
+                  "| 層 | ファイル | 観点 | 確かめていること | 確かめていないこと |", "| --- | --- | --- | --- | --- |"]
+        for file, ids in entries[feature["name"]]:
             row = descriptions[file]
-            lines.append("| " + " | ".join([layer_of(file), f"`dashboard/{note_cell(file)}`",
+            aspect = "・".join(names[key] for key in names if key in ids)
+            lines.append("| " + " | ".join([layer_of(file), f"`dashboard/{note_cell(file)}`", note_cell(aspect),
                                               note_cell(row["verifies"]), note_cell(row["does_not_verify"])]) + " |")
     return lines
 

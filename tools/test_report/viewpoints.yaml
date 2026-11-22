@@ -932,51 +932,126 @@ responsibilities:
     stages: e2e
     scope: 5設定でホームとかんたん・くわしい見積もりの固定経路。APIはモック。
 
-# docs/test_note.md の機能ごとの表の分け方。説明は test_descriptions を使い、ここには書かない。
-# test_descriptions のファイルは、少なくとも1つの機能に置く（2つ以上の機能に置いてもよい）。
+# docs/test_note.md の「機能ごとに保証していること」の正本。
 # 生成は python tools/test_report/report.py --write-test-note で行う。
+#
+# qualities は機能をまたぐ品質の観点である。機能ではない。
+# features はアプリの機能（利用者が画面で使うもの）であり、テストのファイルのまとまりではない。
+# - guarantees・risks は機能単位の結論だけを書く。ファイルごとの説明は test_descriptions から引き、ここには書かない。
+# - risks は「テストが通っても本番で起こりうること」を、テストのファイルと設定から確かめられる事実で書く。
+# - files は根拠のファイルである。文字列は機能そのものの振る舞いを確かめるファイル、
+#   {file, qualities} はその機能についてどの品質の観点を確かめるかを示す。振る舞いも確かめる場合は behavior を並べる。
+# - test_descriptions のファイルは、少なくとも1つの機能に置く（2つ以上の機能に置いてもよい）。
+qualities:
+  - id: compatibility
+    name: 互換
+    description: 画面幅・ブラウザー・端末の違い。390・820・1440 CSS px の幅、jsdom で与えた UA、Playwright の 5 つの設定で確かめる。
+  - id: a11y
+    name: a11y
+    description: キーボード操作・フォーカスと、story の自動 a11y 検査。自動の検査は違反を警告として報告するだけで、合否にしない。
+  - id: visual
+    name: 見た目
+    description: 固定した Docker 環境の Chromium で、保存した期待値と画像・ARIA スナップショットを比べる。
+  - id: journey
+    name: 通しの操作
+    description: 組み立てたアプリをブラウザーで開き、画面をまたいで操作する E2E。API はモックの応答を返す。
 features:
-  - name: 質問の流れと回答の保存
+  - name: トップと同意
+    guarantees: >-
+      トップの説明とフッターのリンク、2 つの同意がそろうまで見積もりを始められず、取り消しや閉じたときに同意が解除されること、3 つのモードの画面を直接開いて始められることを保証する。
+      ホームの見出しと 2 つの見積もりの入口は、5 つのブラウザー・端末の設定で確かめている。
+    risks: >-
+      リンク先のページが開けることや内容は確かめない（確かめるのはリンクの行き先の値だけである）。
+      プライバシーポリシーと説明文だけの部品は exclusions で対象外にしており、本文の誤りはテストで見つからない。
+    files:
+      - src/App.browser.test.tsx
+      - { file: src/components/layout/uiCompatibility.browser.test.tsx, qualities: [a11y] }
+      - { file: e2e/Homepage.spec.ts, qualities: [journey, compatibility] }
+      - { file: e2e/visual/screens.spec.ts, qualities: [visual] }
+  - name: 質問（3 つの見積もりモード）
+    guarantees: >-
+      かんたん・くわしく・地震被災者支援の 3 つのモードで、実際の状態機械につないだ質問画面が、未回答では進まず、次へ・前へで回答を復元し、世帯員ごとに入力欄を切り替えること、3 つのモードとも最後の質問のあとに結果へ移って世帯を保存することを保証する。
+      進捗は決まった時点の値と下限だけを確かめている。
+    risks: >-
+      確かめているのは決まった回答経路だけであり、ほかの回答の組み合わせで質問が飛ぶ・行き止まる不具合は本番で起こりうる。
+      進捗が途中で戻る、最後に 1 にならない、といったことは確かめない。
+      地震被災者支援のモードは、同意から結果までを E2E で通していない。
     files:
       - src/state/questionState.test.ts
       - src/state/progress.test.ts
       - src/components/questions/question.browser.test.tsx
+      - src/App.browser.test.tsx
+      - { file: src/components/layout/uiCompatibility.browser.test.tsx, qualities: [compatibility, a11y] }
+      - { file: e2e/SimpleCalculation.spec.ts, qualities: [journey, compatibility] }
+      - { file: e2e/DetailedCalculation.spec.ts, qualities: [journey, compatibility] }
+      - { file: e2e/visual/screens.spec.ts, qualities: [visual] }
   - name: 入力欄
+    guarantees: >-
+      年齢・金額・子の年齢と学年・人数の入力欄で、値の正規化と境界、未回答、回答の復元と消してからの入れ直しを保証する。
+      実ブラウザーのキー操作とフォーカス、端末ごとの UA での type と pattern、IME の変換中のイベントの扱いも確かめている。
+    risks: >-
+      実機の端末と OS の IME・キー動作で値が崩れる、確定できない、といったことは起こりうる（UA は jsdom で与えただけ、IME はイベントを作って確かめただけである）。
+      選択式の入力欄（住所・選択肢・複数選択・はい/いいえ）は、自由入力・数値の境界・IME を確かめない。
     files:
       - src/components/questions/template/questionTemplates.test.tsx
-      - src/components/questions/template/questionTemplates.device.test.tsx
       - src/components/questions/template/ageQuestionTemplate.browser.test.tsx
-      - src/components/questions/template/questionTemplates.input.browser.test.tsx
-      - src/components/questions/template/questionTemplates.stories.tsx
-  - name: 計算の送信
+      - { file: src/components/questions/template/questionTemplates.input.browser.test.tsx, qualities: [behavior, a11y] }
+      - { file: src/components/questions/template/questionTemplates.stories.tsx, qualities: [behavior, a11y] }
+      - { file: src/components/questions/template/questionTemplates.device.test.tsx, qualities: [compatibility] }
+      - { file: e2e/SimpleCalculation.spec.ts, qualities: [journey, compatibility] }
+      - { file: e2e/DetailedCalculation.spec.ts, qualities: [journey, compatibility] }
+      - { file: e2e/visual/screens.spec.ts, qualities: [visual] }
+  - name: 計算の依頼
+    guarantees: >-
+      回答から送る世帯 JSON の変数名・期間・単位換算・未回答の省略と、POST の送信先と本文、応答の保存を保証する。
+      HTTP 500 と通信の失敗の扱いと再試行、失敗したときにエラーの画面へ移ること、困りごとごとにフロントエンドで候補にする制度の一覧も確かめている。
+    risks: >-
+      バックエンドが送った世帯 JSON を受け付けるか、応答の形が画面の読む形と一致するかは確かめない。API の形が変わると、テストが通ったまま本番で結果が出ない・誤って出ることが起こりうる。
+      世帯 JSON への変換は主に回答を 1 項目ずつ確かめており、複数の回答の組み合わせは確かめない。本番の送信先の設定も確かめない。
     files:
       - src/state/convert.test.ts
       - src/hooks/calculate.test.tsx
       - src/components/calculate/calculate.test.tsx
-  - name: 結果と窓口
+      - src/components/result/result.stories.tsx
+      - { file: e2e/SimpleCalculation.spec.ts, qualities: [journey, compatibility] }
+      - { file: e2e/DetailedCalculation.spec.ts, qualities: [journey, compatibility] }
+  - name: 結果（給付・貸付・窓口）
+    guarantees: >-
+      モックの応答に対して、給付・貸付・窓口の欄の有無、地域・URL・金額の幅・単位・HIV の回答による表示の分かれ方と、バックエンドとフロントエンドの制度の統合と重複の除外を保証する。
+    risks: >-
+      給付・貸付の金額と、制度を受けられるかの判定が正しいことは保証しない。応答は画面が読む形に合わせた手作りのデータであり、計算はバックエンドのテストに任せている。
+      すべての制度と窓口のデータも確かめない。既知の不具合として、フロントエンドの計算結果だけが変わったときに表示する制度が入れ替わらない（it.fails で残している）。
     files:
       - src/components/result/applicable.browser.test.tsx
       - src/components/result/resultDetails.browser.test.tsx
-      - src/components/result/result.stories.tsx
-      - src/components/result/resultDetails.stories.tsx
+      - { file: src/components/result/result.stories.tsx, qualities: [behavior, a11y] }
+      - { file: src/components/result/resultDetails.stories.tsx, qualities: [behavior, a11y] }
+      - { file: src/components/layout/uiCompatibility.browser.test.tsx, qualities: [compatibility, a11y] }
+      - { file: e2e/SimpleCalculation.spec.ts, qualities: [journey, compatibility] }
+      - { file: e2e/DetailedCalculation.spec.ts, qualities: [journey, compatibility] }
+      - { file: e2e/visual/screens.spec.ts, qualities: [visual] }
   - name: 共有
+    guarantees: >-
+      共有データの主な項目の往復と短縮・旧形式のリンクの読み込み、3 つのモードの共有リンクを開いたときの送信内容、壊れたリンクのエラーと戻り先、リンクのコピーと失敗時の再試行、画像の保存の操作を保証する。
+    risks: >-
+      共有データのすべての項目が往復で一致することは確かめない。
+      QR と保存した画像の中身、実際のクリップボードと端末ごとの権限での動きは確かめない。
     files:
       - src/components/result/shareLink.test.ts
       - src/components/result/resultShare.browser.test.tsx
-      - src/components/result/resultShare.stories.tsx
-  - name: 画面の移動・同意とエラーの画面
-    files:
+      - { file: src/components/result/resultShare.stories.tsx, qualities: [behavior, a11y] }
       - src/App.browser.test.tsx
-      - src/components/errors/errors.stories.tsx
-  - name: 画面幅と端末（互換）
+  - name: エラーの画面
+    guarantees: >-
+      汎用・存在しない URL・応答エラーの 3 つの画面の表示と、モードごとの戻り先、キー操作を保証する。
+      HTTP 500 と通信の失敗のときに応答エラーの画面へ移ること、3 つの幅で画面に収まることも確かめている。
+    risks: >-
+      本物の通信で起こる失敗のときの動きは確かめない。失敗はモックの HTTP 500 と通信の失敗で作っている。
+      すべてのエラーの本文と、手動の支援技術での読み上げは確かめない。
     files:
-      - src/components/layout/uiCompatibility.browser.test.tsx
-      - src/components/questions/template/questionTemplates.device.test.tsx
-  - name: 通しの操作
-    files:
-      - e2e/Homepage.spec.ts
-      - e2e/SimpleCalculation.spec.ts
-      - e2e/DetailedCalculation.spec.ts
-  - name: 見た目
-    files:
-      - e2e/visual/screens.spec.ts
+      - { file: src/components/errors/errors.stories.tsx, qualities: [behavior, a11y] }
+      - src/App.browser.test.tsx
+      - { file: src/components/result/result.stories.tsx, qualities: [behavior, a11y] }
+      - src/components/result/resultShare.browser.test.tsx
+      - { file: src/components/layout/uiCompatibility.browser.test.tsx, qualities: [compatibility, a11y] }
+      - { file: e2e/visual/screens.spec.ts, qualities: [visual] }

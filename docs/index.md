@@ -18,6 +18,7 @@
 - [TroubleShooting](./dev_note.md#troubleshooting)
 
 ### [フロントエンドのテストで保証していること](./test_note.md)
+- [機能と品質の観点](./test_note.md#機能と品質の観点)
 - [テストの層と役割](./test_note.md#テストの層と役割)
 - [機能ごとに保証していること](./test_note.md#機能ごとに保証していること)
 - [保証していないこと・既知の制約](./test_note.md#保証していないこと既知の制約)

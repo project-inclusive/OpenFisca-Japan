@@ -132,14 +132,20 @@ make test-report
 
 ## 機能ごとの説明の文書
 
-[docs/test_note.md](../../docs/test_note.md) の「機能ごとに保証していること」の表は、`viewpoints.yaml` の `features`・`test_descriptions`・`responsibilities` から生成する。`features` は機能の名前とテストのファイルの一覧だけを持ち、説明は `test_descriptions` から引く。`test_descriptions` のファイルはどれかの機能に置く（2つ以上でもよい）。機能に置いていない説明、説明のないファイル、存在しないファイルは生成エラーになる。
+[docs/test_note.md](../../docs/test_note.md) の「機能ごとに保証していること」の区間は、`viewpoints.yaml` の `features`・`qualities`・`test_descriptions`・`responsibilities` から生成する。
+
+- `features` はアプリの機能（利用者が画面で使うもの）であり、テストのファイルのまとまりではない。各機能は `name`、機能単位の結論の `guarantees`（保証していること）と `risks`（テストが通っても本番で起こりうること）、根拠の `files` を持つ。
+- `qualities` は互換・a11y・見た目・通しの操作の品質の観点であり、機能ではない。`files` の要素が文字列なら、そのファイルは機能の振る舞いを確かめる。`{file, qualities}` なら、その機能について並べた観点を確かめる。振る舞いも確かめるときは `behavior` を並べる。
+- ファイルごとの説明は `test_descriptions` から引き、`features` には書かない。`test_descriptions` のファイルはどれかの機能に置く（2つ以上でもよい）。
+
+機能に置いていない説明、説明のないファイル、存在しないファイル、結論のない機能、知らない観点は生成エラーになる。
 
 ```bash
 python tools/test_report/report.py --write-test-note
 python -m pytest tools/test_report
 ```
 
-書き換えるのは `<!-- test-report:features:begin -->` と `<!-- test-report:features:end -->` の間だけで、ほかの節は人が書く。テストの一覧も実行も使わない。`test_descriptions`・`responsibilities`・`features` を直したら生成し直す。pytest は生成し直した結果と commit 済みの文書を比べ、差があれば失敗する。
+書き換えるのは `<!-- test-report:features:begin -->` と `<!-- test-report:features:end -->` の間だけで、ほかの節は人が書く。テストの一覧も実行も使わない。`test_descriptions`・`responsibilities`・`features`・`qualities` を直したら生成し直す。pytest は生成し直した結果と commit 済みの文書を比べ、差があれば失敗する。
 
 ## 状態機械の分岐と通過の記録
 
