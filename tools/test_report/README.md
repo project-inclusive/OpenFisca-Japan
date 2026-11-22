@@ -162,6 +162,93 @@ Markdown の件数と CSV の行は同じ入力から作る。pytest は、CSV �
 - `transitions.csv` で `通過` を「未通過」に絞り、`状態` で並べる。
 - `coverage.csv` で `基準未満の指標` を「(空白以外)」に絞る。`段階` を絞って `Branches` を昇順に並べる。
 
+## `viewpoints.yaml` の構成
+
+`viewpoints.yaml` はこの道具の定義の正本で、トップレベルのキーは次の 13 個である。形（キー・必須の項目・型）の正本は `viewpoints.schema.json`（JSON Schema draft-07）で、各キーと項目の `description` も書いてある。
+
+- 編集のとき: YAML の先頭の `# yaml-language-server: $schema=./viewpoints.schema.json` により、VS Code の YAML の拡張（`redhat.vscode-yaml`）が補完と誤りを出す。
+- 生成のとき: `report.py` は YAML を読んだ直後に、依存を足さずにスキーマを読んで形を確かめる。知らないキー（項目名の打ち間違いを含む）、必須の項目の漏れ、型の誤り、空の文字列・配列を、`(root).stages[1]: unknown key 'comand'` のようなキーの道すじつきの `ValueError` で止める。中身の食い違い（存在しない対象・ファイル、知らないタグ、理由のない対象外など）は、その後の検査で止まる。
+- スキーマを直すとき: 検査が扱うのは `type`・`enum`・`properties`・`required`・`additionalProperties`・`propertyNames`・`minProperties`・`items`・`minItems`・`minLength`・`pattern`・`oneOf`・ほかのキーを並べない局所の `$ref` だけである。ほかのキーワードを使うと、黙って無視せずにエラーにする。`$ref` の横に `description` を書くと draft-07 では無視されるため、説明を付ける項目は型をその場に書く。
+
+型の「文字列」は空でない文字列、「配列」は 1 つ以上の要素を持つ配列である。タグは `観点:条件`（どちらも英小文字と数字）。パスは `dashboard` からの相対パス。
+
+| キー | 必須 | 役割 | 効く出力 |
+| --- | --- | --- | --- |
+| `version` | 必須 | 定義の形の版 | なし（形の検査だけ） |
+| `viewpoints` | 必須 | 観点と条件（タグの語彙） | `dashboard/testReportTags.ts`、`frontend.md`、`tests.csv`、`cells.csv` |
+| `stages` | 必須 | 段階ごとの一覧・結果のファイルとコマンド | `frontend.md`（概要・テストの状況）、`tests.csv` |
+| `applicability` | 必須 | 対象のグループごとに期待する条件 | `frontend.md`（観点×条件）、`cells.csv` |
+| `manual_targets` | 任意 | 手で定義する対象 | `frontend.md`（対象の抽出根拠）、`targets.csv`、`cells.csv` |
+| `exclusions` | 任意 | 理由つきの対象外 | `frontend.md`（観点×条件・網羅率）、`cells.csv`、`coverage.csv` |
+| `bindings` | 必須 | テストと対象の対応 | `frontend.md`（観点×条件・未分類）、`cells.csv`、`tests.csv` |
+| `file_cells` | 任意 | 実装ファイルごとに期待する条件 | `frontend.md`（観点×条件）、`cells.csv` |
+| `classification_rules` | 任意 | タグのないテストの分類 | `frontend.md`、`tests.csv`、`cells.csv` |
+| `test_descriptions` | 任意 | ファイルごとの確かめていること・いないこと | `frontend.md`（テストの構成）、`docs/test_note.md` |
+| `responsibilities` | 任意 | 段階ごとの全体の受け持ち | `frontend.md`（テストの構成）、`docs/test_note.md` |
+| `qualities` | 任意 | 機能をまたぐ品質の観点 | `docs/test_note.md` |
+| `features` | 任意 | 機能ごとの結論と根拠のファイル | `docs/test_note.md` |
+
+`features` は `--write-test-note` のときだけ要る（ないとエラー）。`frontend.md` と CSV を作り直すのは `make test-report`、`testReportTags.ts` は `--write-tags`、`docs/test_note.md` は `--write-test-note` である。
+
+### `version`
+
+定義の形の版で、整数の `1` だけを受け付ける。キーや項目の形を変えるときに上げ、スキーマと `report.py` を合わせて直す。例: `version: 1`
+
+### `viewpoints`
+
+キーは観点の ID（英小文字と数字）、値は `name`（必須、文字列。レポートに出す名前）・`description`（必須、文字列）・`conditions`（必須、英小文字と数字の配列）。`観点:条件` が、テストのタグと `applicability`・`file_cells`・`exclusions`・`classification_rules` の条件になる。使い方は「タグと分類の正本」の節。
+
+```yaml
+input:
+  name: 入力
+  description: 値の変換、未回答と入力制約
+  conditions: [normal, empty]
+```
+
+### `stages`
+
+配列の要素は `id`（英小文字と数字。`e2e` は Playwright、ほかは Vitest の形で読む）・`name`・`projects`（文字列の配列）・`list` と `result`（`--input-dir` の中の `*.json` のファイル名）・`command`（一覧を取る引数の配列）・`run`（結果の採取のコマンド）で、すべて必須。例: `{id: unit, name: 単体, projects: [unit], list: unit.list.json, result: unit.results.json, command: [node_modules/.bin/vitest, list, --json], run: npm run test}`。段階の足し方は「出力の読み方と拡張」の節。
+
+### `applicability`
+
+キーは対象のグループ（`route`・`template`・`file` など）、値は期待する条件のタグの配列。抽出した対象のないグループはエラーになる。`file` は `file_cells` にない実装ファイルの既定値。例: `route: [transition:forward, a11y:keyboard]`。使い方は「対象と期待する条件の編集」の節。
+
+### `manual_targets`
+
+配列の要素は `id`（`グループ:名前`）・`group`（`applicability` のキー）・`source`（根拠の実装ファイル）・`reason`（手で定義する理由）で、すべて必須の文字列。例: `{id: environment:other, group: environment, source: src/hooks/calculate.ts, reason: else 分岐は…}`。
+
+### `exclusions`
+
+配列の要素は `target`（対象の ID。glob を使える）・`cells`（タグの配列。すべての条件なら `'*'`）・`reason`（文字列）で、すべて必須。例: `{target: result:給付, cells: [display:unit], reason: 貸付の単位は給付の責務ではない。}`。網羅率への効き方は「対象と期待する条件の編集」の節。
+
+### `bindings`
+
+配列の要素は `file`（必須、テストのファイル。glob を使える）・`targets`（必須、対象の ID の配列）・`name`（任意、テストの名前の正規表現。ないときはすべての名前）。例: `{file: src/state/convert.test.ts, targets: [file:src/state/convert.ts]}`。状態機械のテストの質問名と E2E の project の端末は、ここに書かなくても結ぶ（「対象と期待する条件の編集」の節）。
+
+### `file_cells`
+
+キーは実装ファイル（`src/` から）、値は期待する条件のタグの配列で、そのファイルの `applicability` の `file` を置き換える。例: `src/state/convert.ts: [state:conversion, state:optional]`。
+
+### `classification_rules`
+
+配列の要素は `file`（テストのファイル。glob を使える）・`name`（テストの名前の正規表現）・`tags`（足す条件のタグの配列）で、すべて必須。例: `{file: src/state/convert.test.ts, name: 未回答, tags: [state:optional]}`。書き方は「冒頭の構成と分類規則」の節。
+
+### `test_descriptions`
+
+キーはテストのファイル、値は `verifies`（確かめていること）と `does_not_verify`（確かめていないこと）で、どちらも必須の文字列。ないファイルは `frontend.md` で「説明なし」になり、どれかの `features` に置かないと `--write-test-note` がエラーになる。例: `src/state/progress.test.ts: {verifies: 決まった時点で進捗の値を確かめる。, does_not_verify: 途中の全値。}`
+
+### `responsibilities`
+
+配列の要素は `area`（受け持ちの名前）・`stages`（`unit / ui` のような文字列）・`scope`（範囲）で、すべて必須の文字列。例: `{area: 通し, stages: e2e, scope: 5設定でホームと見積もりの固定経路。}`
+
+### `qualities`
+
+配列の要素は `id`（英小文字と数字。`behavior` は振る舞いのために予約）・`name`・`description`（確かめ方）で、すべて必須。`features` の `files` が `id` で参照する。例: `{id: a11y, name: a11y, description: キーボード操作・フォーカスと自動 a11y 検査。}`
+
+### `features`
+
+配列の要素は `name`（機能の名前）・`guarantees`（保証していること）・`risks`（テストが通っても本番で起こりうること）・`files`（根拠のファイルの配列）で、すべて必須。`files` の要素は、文字列（振る舞いを確かめるファイル）か `{file, qualities}`（`qualities` は `qualities` の `id` か `behavior` の配列）。例: `{name: 共有, guarantees: …, risks: …, files: [src/components/result/shareLink.test.ts, {file: e2e/Homepage.spec.ts, qualities: [journey]}]}`。書き方は「機能ごとの説明の文書」の節。
+
 ## タグと分類の正本
 
 `viewpoints.yaml` の `viewpoints` が正本である。名前・説明・条件の型を定義し、`観点:条件` をタグとして使う。初期の分類は、入力、遷移、通信、アクセシビリティ、表示、互換、共有、状態の 8 観点。既存の入力正規化・質問遷移・HTTP の失敗・キー操作・表示幅・共有互換・状態変換を分け、不足を別々に確認できるようにした。

@@ -14,6 +14,7 @@ from tools.test_report.report import (
     CELL_COLUMNS,
     CELL_STATES,
     check_definitions,
+    check_shape,
     classification_tags,
     collect,
     composition_lines,
@@ -26,6 +27,7 @@ from tools.test_report.report import (
     extract_targets,
     feature_lines,
     layer_of,
+    load_schema,
     main,
     NOTE_BEGIN,
     NOTE_COMMAND,
@@ -39,6 +41,8 @@ from tools.test_report.report import (
     replace_note_region,
     REPRESENTATIVE_COLUMNS,
     result_counts,
+    SCHEMA,
+    SCHEMA_RULES,
     source_tags,
     TARGET_COLUMNS,
     TRANSITION_COLUMNS,
@@ -673,3 +677,103 @@ def test_test_note_rejects_drift_and_rewrites_only_the_region(tmp_path):
         feature_lines(config, tmp_path)
     layers = [layer_of(file) for file in ("e2e/visual/a.spec.ts", "e2e/a.spec.ts", "src/a.stories.tsx", "src/a.browser.test.tsx")]
     assert layers == ["見た目の比較", "E2E", "story", "Browser Mode"]
+
+
+def definitions():
+    """The checked-in definitions, read the way report.py reads them."""
+    return yaml.safe_load((BASE / "tools/test_report/viewpoints.yaml").read_text(encoding="utf-8"))
+
+
+def test_definitions_follow_schema_and_are_documented():
+    """The YAML passes the shape check; every key is in the schema, the README and a YAML comment."""
+    text = (BASE / "tools/test_report/viewpoints.yaml").read_text(encoding="utf-8")
+    lines = text.splitlines()
+    assert lines[0] == "# yaml-language-server: $schema=./viewpoints.schema.json"
+    config = definitions()
+    check_shape(config)
+    schema = load_schema()
+    assert list(schema["properties"]) == list(config)
+    readme = (BASE / "tools/test_report/README.md").read_text(encoding="utf-8").split("## `viewpoints.yaml` の構成", 1)[1]
+    for key, rule in schema["properties"].items():
+        assert rule["description"], key
+        assert f"### `{key}`" in readme, key
+        start = next(index for index, line in enumerate(lines) if line.startswith(key + ":"))
+        assert lines[start - 1].startswith("# "), key
+
+    def objects(node):
+        """Every object schema with named properties, so unknown keys cannot slip through."""
+        if "properties" in node:
+            yield node
+        children = [node.get("items"), node.get("additionalProperties"), *node.get("oneOf", []), *node.get("properties", {}).values()]
+        for child in children:
+            if isinstance(child, dict):
+                yield from objects(child)
+
+    assert all(node.get("additionalProperties") is False for node in objects(schema))
+
+
+def drop(config, path):
+    """Delete the last key of a path such as ("stages", 0, "run")."""
+    for key in path[:-1]:
+        config = config[key]
+    del config[path[-1]]
+
+
+@pytest.mark.parametrize("change, expected", [
+    (lambda c: c.update(viewpoint={}), "(root): unknown key 'viewpoint'"),
+    (lambda c: c["stages"][1].update(comand=["x"]), "(root).stages[1]: unknown key 'comand'"),
+    (lambda c: drop(c, ("exclusions", 0, "reason")), "(root).exclusions[0]: missing required key 'reason'"),
+    (lambda c: drop(c, ("bindings",)), "(root): missing required key 'bindings'"),
+    (lambda c: c["viewpoints"]["input"].update(conditions="normal"), "(root).viewpoints.input.conditions: expected array, got string"),
+    (lambda c: c["stages"][0].update(projects=[]), "(root).stages[0].projects: needs at least 1 item(s)"),
+    (lambda c: c["file_cells"]["src/state/convert.ts"].append("state"), "(root).file_cells['src/state/convert.ts'][2]: 'state' does not match"),
+    (lambda c: c["viewpoints"].update(Input=c["viewpoints"]["input"]), "(root).viewpoints.Input: key 'Input' does not match"),
+    (lambda c: c["features"][0]["files"].append({"file": "e2e/Homepage.spec.ts"}), "(root).features[0].files[4]: missing required key 'qualities'"),
+    (lambda c: c["features"][0]["files"].append(3), "(root).features[0].files[4]: must match exactly one allowed form"),
+    (lambda c: c["test_descriptions"]["e2e/Homepage.spec.ts"].update(verifies=""),
+     "(root).test_descriptions['e2e/Homepage.spec.ts'].verifies: must not be empty"),
+    (lambda c: c.update(version=2), "(root).version: must be one of [1]"),
+    ])
+def test_shape_errors_name_the_key_path(change, expected):
+    """Unknown keys, missing items and wrong types stop with the path of the offending key."""
+    config = definitions()
+    change(config)
+    with pytest.raises(ValueError) as error:
+        check_shape(config)
+    assert expected in str(error.value)
+
+
+def test_cli_checks_shape_before_reading_tests(tmp_path):
+    """A typo in the definitions fails before collection, tag or note generation."""
+    config = definitions()
+    config["bindings"][0]["target"] = config["bindings"][0].pop("targets")
+    broken = tmp_path / "viewpoints.yaml"
+    broken.write_text(yaml.safe_dump(config, allow_unicode=True), encoding="utf-8")
+    with pytest.raises(ValueError, match=r"\(root\)\.bindings\[0\]: unknown key 'target'"):
+        main(["--write-tags", "--definitions", str(broken), "--input-dir", str(tmp_path)])
+
+
+def test_checker_applies_every_schema_keyword(tmp_path):
+    """The checker reads the schema itself; a keyword it would ignore is rejected, so the two cannot drift."""
+    schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
+    used = set()
+
+    def visit(node):
+        """Collect keywords; the keys under properties and definitions are names, not keywords."""
+        used.update(node)
+        for keyword, value in node.items():
+            children = value.values() if keyword in ("properties", "definitions") else value if isinstance(value, list) else [value]
+            for child in children:
+                if isinstance(child, dict):
+                    visit(child)
+
+    visit(schema)
+    assert used - {"$schema", "$id", "title", "description", "definitions"} <= SCHEMA_RULES
+    for bad, message in (({"anyOf": []}, "Unsupported schema keyword"), ({"type": "number"}, "Unsupported schema type"),
+                         ({"$ref": "#/definitions/text", "description": "x"}, "must be alone")):
+        changed = copy.deepcopy(schema)
+        changed["properties"]["version"] = bad
+        path = tmp_path / "schema.json"
+        path.write_text(json.dumps(changed), encoding="utf-8")
+        with pytest.raises(ValueError, match=message):
+            load_schema(path)

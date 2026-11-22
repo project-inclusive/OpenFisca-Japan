@@ -1,5 +1,9 @@
-# 観点・条件の正本。対象の期待条件とテストとの対応は別に管理する。
+# yaml-language-server: $schema=./viewpoints.schema.json
+# フロントエンドのテストレポートの定義。キーごとの説明は README.md の「viewpoints.yaml の構成」、形は viewpoints.schema.json にある。
+
+# 定義の形の版。キーや項目の形を変えるときに上げ、スキーマと report.py を合わせて直す。
 version: 1
+# 観点・条件の正本。「観点:条件」がテストのタグになる。対象の期待条件とテストとの対応は別のキーで管理する。
 viewpoints:
   input:
     name: 入力
@@ -75,6 +79,7 @@ viewpoints:
       - conversion
       - progress
       - optional
+# テストの段階ごとの一覧・結果のファイル、project、一覧を取るコマンドと結果を採取するコマンド。
 stages:
   - id: unit
     name: 単体
@@ -123,6 +128,7 @@ stages:
     run:
       PLAYWRIGHT_JSON_OUTPUT_NAME=../tmp/test-report/e2e.results.json npm run test:e2e
       -- --reporter=json
+# 対象のグループごとに期待する条件のタグ。file は file_cells にない実装ファイルの既定値になる。
 applicability:
   route:
     - transition:forward
@@ -180,6 +186,7 @@ applicability:
     - sharing:image
   file:
     - display:present
+# 構文から決まらない対象を、理由つきで手で定義する。
 manual_targets:
   - id: environment:other
     group: environment
@@ -197,6 +204,7 @@ manual_targets:
     group: share
     source: src/components/result/shareLink.ts
     reason: 旧形式のオブジェクトと空白になった+の互換性を手で定義する。
+# 対象と条件のますを、理由つきで対象外にする。target は glob を使え、cells の '*' はすべての条件。
 exclusions:
   - target: file:src/components/PrivacyPolicy.tsx
     cells:
@@ -265,6 +273,7 @@ exclusions:
       - input:ime
       - input:mobile
     reason: 選択肢から回答する部品であり、自由入力・数値の境界・IME・数値入力属性を持たない。
+# テストのファイル（glob）と名前の正規表現から、テストが確かめる対象を決める。
 bindings:
   - file: src/state/convert.test.ts
     targets:
@@ -609,6 +618,7 @@ bindings:
     name: HIV hospital contacts|private-school desk
     targets:
       - result:窓口
+# 実装ファイルごとに期待する条件のタグ。そのファイルでは applicability の file を置き換える。
 file_cells:
   src/hooks/calculate.ts:
     - communication:success
@@ -666,6 +676,7 @@ file_cells:
     - display:url
     - display:hiv
 
+# タグのないテストを、ファイルと名前の正規表現で条件のタグに分類する（コードのタグとの和集合）。
 # 既存テストの名前の型に限って分類する。新しい型は未分類として見直す。
 classification_rules:
   - file: src/state/questionState.test.ts
@@ -844,6 +855,7 @@ classification_rules:
     name: 'gates the private-school desk'
     tags: [display:region]
 
+# テストのファイルごとの、確かめていること（verifies）と確かめていないこと（does_not_verify）。
 # import・一覧・観点の件数とは独立した、assertion の受け持ち。
 test_descriptions:
   src/state/questionState.test.ts:
@@ -921,6 +933,7 @@ test_descriptions:
   src/components/result/applicable.browser.test.tsx:
     verifies: 困りごとから候補にした制度の表示と説明・窓口、バックエンドとフロントの制度の統合と重複・偽の値の除外、結果がないときの非表示、HIVの回答による窓口、結果の都道府県による窓口、新しい結果での入れ替えを確認する。フロントの結果だけが変わったときの入れ替えは既知の失敗（it.fails）として残す。
     does_not_verify: 制度を受けられるかの判定、すべての制度と窓口、全端末。
+# 段階ごとの全体の受け持ち。
 responsibilities:
   - area: 状態の論理
     stages: unit
@@ -932,16 +945,10 @@ responsibilities:
     stages: e2e
     scope: 5設定でホームとかんたん・くわしい見積もりの固定経路。APIはモック。
 
-# docs/test_note.md の「機能ごとに保証していること」の正本。
+# qualities と features は docs/test_note.md の「機能ごとに保証していること」の正本（test_descriptions・responsibilities も使う）。
 # 生成は python tools/test_report/report.py --write-test-note で行う。
 #
-# qualities は機能をまたぐ品質の観点である。機能ではない。
-# features はアプリの機能（利用者が画面で使うもの）であり、テストのファイルのまとまりではない。
-# - guarantees・risks は機能単位の結論だけを書く。ファイルごとの説明は test_descriptions から引き、ここには書かない。
-# - risks は「テストが通っても本番で起こりうること」を、テストのファイルと設定から確かめられる事実で書く。
-# - files は根拠のファイルである。文字列は機能そのものの振る舞いを確かめるファイル、
-#   {file, qualities} はその機能についてどの品質の観点を確かめるかを示す。振る舞いも確かめる場合は behavior を並べる。
-# - test_descriptions のファイルは、少なくとも1つの機能に置く（2つ以上の機能に置いてもよい）。
+# 機能をまたぐ品質の観点である。機能ではない。features の files で id を参照する。
 qualities:
   - id: compatibility
     name: 互換
@@ -955,6 +962,12 @@ qualities:
   - id: journey
     name: 通しの操作
     description: 組み立てたアプリをブラウザーで開き、画面をまたいで操作する E2E。API はモックの応答を返す。
+# アプリの機能（利用者が画面で使うもの）であり、テストのファイルのまとまりではない。
+# - guarantees・risks は機能単位の結論だけを書く。ファイルごとの説明は test_descriptions から引き、ここには書かない。
+# - risks は「テストが通っても本番で起こりうること」を、テストのファイルと設定から確かめられる事実で書く。
+# - files は根拠のファイルである。文字列は機能そのものの振る舞いを確かめるファイル、
+#   {file, qualities} はその機能についてどの品質の観点を確かめるかを示す。振る舞いも確かめる場合は behavior を並べる。
+# - test_descriptions のファイルは、少なくとも1つの機能に置く（2つ以上の機能に置いてもよい）。
 features:
   - name: トップと同意
     guarantees: >-
