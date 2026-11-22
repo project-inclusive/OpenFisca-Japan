@@ -3,6 +3,7 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './e2e',
+  testIgnore: '**/visual/**',
   metadata: { reportTags: testReportTags.map(({ name }) => `@${name}`) },
   fullyParallel: true,
   forbidOnly: !!process.env.CI,

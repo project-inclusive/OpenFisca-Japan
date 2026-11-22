@@ -7,16 +7,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v7
         with:
-          python-version: 3.11.6 # Patch version must be specified to avoid any cache confusion, since the cache key depends on the full Python version. Any potentiel difference in patches between jobs will lead to a cache not found error.
+          python-version: 3.11.18 # Patch version must be specified to avoid any cache confusion, since the cache key depends on the full Python version. Any potentiel difference in patches between jobs will lead to a cache not found error.
       - name: Install specific pip version # ビルドが失敗したため一時的にpipのバージョンを固定（再び動作するバージョンがリリースされたら最新版に戻す）
         run: pip install --upgrade pip==25.0.1
       - name: Cache build
         id: restore-build
-        uses: actions/cache@v3
+        uses: actions/cache@v6
         with:
           path: ${{ env.pythonLocation }}
           key: build-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}-${{ github.sha }} # Cache the entire build Python environment
@@ -27,7 +27,7 @@ jobs:
         run: make build
       - name: Cache release
         id: restore-release
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: dist
           key: release-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}-${{ github.sha }}
@@ -37,14 +37,14 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v7
         with:
-          python-version: 3.11.6
+          python-version: 3.11.18
       - name: Cache build
         id: restore-build
-        uses: actions/cache@v3
+        uses: actions/cache@v6
         with:
           path: ${{ env.pythonLocation }}
           key: build-${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}-${{ github.sha }}

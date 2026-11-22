@@ -480,7 +480,7 @@ export const data: { [key: string]: { [key: string]: CityTypes } } = {
       緯度: 35.77059,
       座標系: 'JGD2011',
       電話番号: '042-554-0304',
-      WebサイトURL: '羽村市社会福祉協議会',
+      WebサイトURL: 'https://www.hamurashakyo.jp/',
     },
     あきる野市: {
       施設名: 'あきる野市社会福祉協議会',
@@ -560,7 +560,7 @@ export const data: { [key: string]: { [key: string]: CityTypes } } = {
       緯度: 34.52935,
       座標系: 'JGD2011',
       電話番号: '04992-9-0018',
-      WebサイトURL: '利島村社会福祉協議会',
+      WebサイトURL: 'https://toshimamura-csw.main.jp/',
     },
     新島村: {
       施設名: '新島村社会福祉協議会',
