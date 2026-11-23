@@ -1,3 +1,4 @@
+import { testReportTags } from './testReportTags';
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 
@@ -20,6 +21,7 @@ export default () => {
       target: ['es2019', 'edge88', 'firefox78', 'chrome87', 'safari13.1'],
     },
     test: {
+      tags: testReportTags,
       coverage: {
         provider: 'v8',
         include: ['src/**/*.{ts,tsx}'],
@@ -37,6 +39,7 @@ export default () => {
         {
           test: {
             name: 'unit',
+            tags: testReportTags,
             environment: 'node',
             include: ['src/**/*.{test,spec}.{ts,tsx}'],
             exclude: ['src/**/*.browser.test.{ts,tsx}'],

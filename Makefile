@@ -98,3 +98,8 @@ calc:
 encode-jananese-filename:
 	@# disable Japanese filename escape (by default Japanese characters are printed as `\346\211\200\345\276\227.py`)
 	git config --local core.quotepath false
+
+.PHONY: test-report
+# Lists tests without running their bodies. Optional existing JSON results are read separately.
+test-report:
+	python tools/test_report/report.py $(TEST_REPORT_ARGS)

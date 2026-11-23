@@ -31,7 +31,8 @@ describe('useCalculate over HTTP', () => {
   });
 
   it.each(resultCases)(
-    'POSTs the household and stores the $scenario response',
+    '結果が $scenario のとき、世帯をPOSTし応答を保存する',
+    { tags: ['communication:success'] },
     async ({ scenario }) => {
       const fixture = calculateFixtures[scenario];
       server.use(calculateSuccessHandler(scenario));
@@ -53,7 +54,8 @@ describe('useCalculate over HTTP', () => {
   );
 
   it.each([undefined, null])(
-    'does not send an absent household (%s)',
+    '世帯が %s のとき、送信せず結果を保存しない',
+    { tags: ['communication:absent'] },
     async (household) => {
       const { result } = renderHook(() => useCalculate());
       await act(async () => {
@@ -64,54 +66,68 @@ describe('useCalculate over HTTP', () => {
     }
   );
 
-  it('rejects a non-OK response with its status and body', async () => {
-    server.use(calculateFailureHandlers['HTTP 500']);
-    const { result } = renderHook(() => useCalculate());
-    await act(async () => {
-      await expect(
-        result.current[1](calculateFixtures.both.request)
-      ).rejects.toThrow(
-        `unexpected error response: status: 500, body: ${calculateErrorBody}`
-      );
-    });
-    expect(requests).toHaveLength(1);
-    expect(result.current[0]).toBeUndefined();
-  });
+  it(
+    'HTTP 500 のとき、ステータスと本文を含むエラーになる',
+    { tags: ['communication:http500'] },
+    async () => {
+      server.use(calculateFailureHandlers['HTTP 500']);
+      const { result } = renderHook(() => useCalculate());
+      await act(async () => {
+        await expect(
+          result.current[1](calculateFixtures.both.request)
+        ).rejects.toThrow(
+          `unexpected error response: status: 500, body: ${calculateErrorBody}`
+        );
+      });
+      expect(requests).toHaveLength(1);
+      expect(result.current[0]).toBeUndefined();
+    }
+  );
 
-  it('rejects a network failure without publishing a result', async () => {
-    server.use(calculateFailureHandlers['network error']);
-    const { result } = renderHook(() => useCalculate());
-    await act(async () => {
-      await expect(
-        result.current[1](calculateFixtures.both.request)
-      ).rejects.toBeInstanceOf(TypeError);
-    });
-    expect(requests).toHaveLength(1);
-    expect(result.current[0]).toBeUndefined();
-  });
+  it(
+    'ネットワーク失敗のとき、結果を保存せずエラーになる',
+    { tags: ['communication:network'] },
+    async () => {
+      server.use(calculateFailureHandlers['network error']);
+      const { result } = renderHook(() => useCalculate());
+      await act(async () => {
+        await expect(
+          result.current[1](calculateFixtures.both.request)
+        ).rejects.toBeInstanceOf(TypeError);
+      });
+      expect(requests).toHaveLength(1);
+      expect(result.current[0]).toBeUndefined();
+    }
+  );
 
-  it('keeps input output-fields null on recalculation and retains the last successful result on failure', async () => {
-    const household = structuredClone(calculateFixtures.both.request);
-    const { result } = renderHook(() => useCalculate());
-    await act(async () => {
-      await result.current[1](household);
-    });
-    expect(result.current[0]).toEqual(calculateFixtures.both.response);
+  it(
+    '再計算のとき出力項目はnullのまま送信し、失敗すると前の成功結果を保つ',
+    { tags: ['communication:retry'] },
+    async () => {
+      const household = structuredClone(calculateFixtures.both.request);
+      const { result } = renderHook(() => useCalculate());
+      await act(async () => {
+        await result.current[1](household);
+      });
+      expect(result.current[0]).toEqual(calculateFixtures.both.response);
 
-    server.use(calculateFailureHandlers['HTTP 500']);
-    await act(async () => {
-      await expect(result.current[1](household)).rejects.toThrow('status: 500');
-    });
-    expect(requests).toHaveLength(2);
-    expect(await requests[1].json()).toEqual(calculateFixtures.both.request);
-    expect(household).toEqual(calculateFixtures.both.request);
-    expect(result.current[0]).toEqual(calculateFixtures.both.response);
+      server.use(calculateFailureHandlers['HTTP 500']);
+      await act(async () => {
+        await expect(result.current[1](household)).rejects.toThrow(
+          'status: 500'
+        );
+      });
+      expect(requests).toHaveLength(2);
+      expect(await requests[1].json()).toEqual(calculateFixtures.both.request);
+      expect(household).toEqual(calculateFixtures.both.request);
+      expect(result.current[0]).toEqual(calculateFixtures.both.response);
 
-    server.use(calculateSuccessHandler('none'));
-    await act(async () => {
-      await result.current[1](calculateFixtures.none.request);
-    });
-    expect(requests).toHaveLength(3);
-    expect(result.current[0]).toEqual(calculateFixtures.none.response);
-  });
+      server.use(calculateSuccessHandler('none'));
+      await act(async () => {
+        await result.current[1](calculateFixtures.none.request);
+      });
+      expect(requests).toHaveLength(3);
+      expect(result.current[0]).toEqual(calculateFixtures.none.response);
+    }
+  );
 });

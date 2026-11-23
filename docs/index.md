@@ -17,6 +17,19 @@
 - [デプロイ方法](./dev_note.md#デプロイ方法)
 - [TroubleShooting](./dev_note.md#troubleshooting)
 
+### [テストの全体の状況と残っていること](./test_note.md)
+- [バックエンド（制度の計算）](./test_note.md#バックエンド制度の計算)
+- [フロントエンド](./test_note.md#フロントエンド)
+- [道具](./test_note.md#道具)
+- [契約テスト（フロントエンドとバックエンドの突き合わせ）](./test_note.md#契約テストフロントエンドとバックエンドの突き合わせ)
+
+### [フロントエンドのテストで保証していること](./frontend_test_note.md)
+- [機能と品質の観点](./frontend_test_note.md#機能と品質の観点)
+- [テストの層と役割](./frontend_test_note.md#テストの層と役割)
+- [機能ごとに保証していること](./frontend_test_note.md#機能ごとに保証していること)
+- [保証していないこと・既知の制約](./frontend_test_note.md#保証していないこと既知の制約)
+- [レポートの読み方](./frontend_test_note.md#レポートの読み方)
+
 ### [Dev Container 開発環境](./devcontainer_note.md)
 - [起動方法](./devcontainer_note.md#起動方法)
 - [ファイル構成](./devcontainer_note.md#ファイル構成)

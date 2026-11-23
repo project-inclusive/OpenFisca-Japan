@@ -1,0 +1,365 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "viewpoints.schema.json",
+  "title": "フロントエンドのテストレポートの定義（viewpoints.yaml）",
+  "description": "tools/test_report/report.py が読む定義の形。中身の食い違い（存在しない対象・知らないタグなど）は report.py が別に確かめる。キーごとの説明は tools/test_report/README.md の「viewpoints.yaml の構成」にある。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "viewpoints", "stages", "applicability", "bindings"],
+  "properties": {
+    "version": {
+      "description": "定義の形の版。今は 1 だけ。キーや項目の形を変えるときに上げ、スキーマと report.py を合わせて直す。",
+      "type": "integer",
+      "enum": [1]
+    },
+    "viewpoints": {
+      "description": "観点と条件の正本。キーは観点の ID で、`観点:条件` がテストのタグになる。dashboard/testReportTags.ts はここから生成する。",
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "$ref": "#/definitions/word" },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "description", "conditions"],
+        "properties": {
+          "name": {
+            "description": "レポートに出す観点の名前。",
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "description": "観点が扱う範囲。",
+            "type": "string",
+            "minLength": 1
+          },
+          "conditions": {
+            "description": "観点の条件。タグは `観点:条件` になる。",
+            "type": "array",
+            "minItems": 1,
+            "items": { "$ref": "#/definitions/word" }
+          }
+        }
+      }
+    },
+    "stages": {
+      "description": "テストの段階（unit・ui・e2e）ごとの一覧と結果のファイル、project、一覧を取るコマンドと結果を採取するコマンド。",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "name",
+          "projects",
+          "list",
+          "result",
+          "command",
+          "run"
+        ],
+        "properties": {
+          "id": {
+            "description": "段階の ID。e2e は Playwright、ほかは Vitest の形で読む。",
+            "type": "string",
+            "pattern": "^[a-z0-9]+$"
+          },
+          "name": {
+            "description": "レポートに出す段階の名前。",
+            "type": "string",
+            "minLength": 1
+          },
+          "projects": {
+            "description": "一覧に出てよい project の名前。Browser Mode の ` (chromium)` などの後ろは除いて照合する。",
+            "type": "array",
+            "minItems": 1,
+            "items": { "$ref": "#/definitions/text" }
+          },
+          "list": {
+            "description": "一覧の JSON のファイル名（--input-dir の中）。",
+            "type": "string",
+            "pattern": "^[^/]+\\.json$"
+          },
+          "result": {
+            "description": "実行結果の JSON のファイル名（--input-dir の中）。",
+            "type": "string",
+            "pattern": "^[^/]+\\.json$"
+          },
+          "command": {
+            "description": "dashboard で一覧を取るコマンド（引数の配列）。",
+            "type": "array",
+            "minItems": 1,
+            "items": { "$ref": "#/definitions/text" }
+          },
+          "run": {
+            "description": "結果がないときにレポートに出す、dashboard で結果を採取するコマンド。",
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "applicability": {
+      "description": "対象のグループごとに期待する条件のタグ。キーはグループ。file は file_cells にない実装ファイルの既定値になる。",
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "$ref": "#/definitions/tags" }
+    },
+    "manual_targets": {
+      "description": "構文から決まらない対象を、理由つきで手で定義する。",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "group", "source", "reason"],
+        "properties": {
+          "id": {
+            "description": "対象の ID（`グループ:名前`）。",
+            "type": "string",
+            "minLength": 1
+          },
+          "group": {
+            "description": "対象のグループ。applicability のキーのどれか。",
+            "type": "string",
+            "minLength": 1
+          },
+          "source": {
+            "description": "根拠の実装ファイル（dashboard からの相対パス）。",
+            "type": "string",
+            "minLength": 1
+          },
+          "reason": {
+            "description": "手で定義する理由。targets.csv に出る。",
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "exclusions": {
+      "description": "確認ケース（対象と条件の組み合わせ）を、理由つきで対象外にする。",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["target", "cells", "reason"],
+        "properties": {
+          "target": {
+            "description": "対象の ID。glob を使える。",
+            "type": "string",
+            "minLength": 1
+          },
+          "cells": {
+            "description": "対象外にする条件のタグ。すべての条件なら '*'。",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "pattern": "^(\\*|[a-z0-9]+:[a-z0-9]+)$"
+            }
+          },
+          "reason": {
+            "description": "対象外にする理由。cases.csv に出る。",
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "bindings": {
+      "description": "テストのファイルと名前から、テストが確かめる対象を決める。",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["file", "targets"],
+        "properties": {
+          "file": {
+            "description": "テストのファイル（dashboard からの相対パス）。glob を使える。",
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "description": "テストの名前の正規表現（Python の re.search）。ないときはすべての名前。",
+            "type": "string",
+            "minLength": 1
+          },
+          "targets": {
+            "description": "対応する対象の ID。",
+            "type": "array",
+            "minItems": 1,
+            "items": { "$ref": "#/definitions/text" }
+          }
+        }
+      }
+    },
+    "file_cells": {
+      "description": "実装ファイル（dashboard からの相対パス）ごとに期待する条件のタグ。applicability の file を置き換える。",
+      "type": "object",
+      "additionalProperties": { "$ref": "#/definitions/tags" }
+    },
+    "classification_rules": {
+      "description": "タグのない既存のテストを、ファイルと名前で条件に分類する。コードのタグとの和集合を使う。",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["file", "name", "tags"],
+        "properties": {
+          "file": {
+            "description": "テストのファイル（dashboard からの相対パス）。glob を使える。",
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "description": "テストの名前の正規表現（Python の re.search）。",
+            "type": "string",
+            "minLength": 1
+          },
+          "tags": {
+            "description": "一致したテストに足す条件のタグ。",
+            "type": "array",
+            "minItems": 1,
+            "items": { "$ref": "#/definitions/tag" }
+          }
+        }
+      }
+    },
+    "test_descriptions": {
+      "description": "テストのファイル（dashboard からの相対パス）ごとに、確かめていることと確かめていないこと。",
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["verifies", "does_not_verify"],
+        "properties": {
+          "verifies": {
+            "description": "確かめていること。",
+            "type": "string",
+            "minLength": 1
+          },
+          "does_not_verify": {
+            "description": "確かめていないこと。",
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "responsibilities": {
+      "description": "段階ごとの全体の受け持ち。",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["area", "stages", "scope"],
+        "properties": {
+          "area": {
+            "description": "受け持ちの名前。",
+            "type": "string",
+            "minLength": 1
+          },
+          "stages": {
+            "description": "受け持つ段階（`unit / ui` のような文字列）。",
+            "type": "string",
+            "minLength": 1
+          },
+          "scope": {
+            "description": "受け持つ範囲。",
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "qualities": {
+      "description": "機能をまたぐ品質の観点。features の files で参照する。",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "name", "description"],
+        "properties": {
+          "id": {
+            "description": "観点の ID。behavior は振る舞いのために予約している。",
+            "type": "string",
+            "pattern": "^[a-z0-9]+$"
+          },
+          "name": {
+            "description": "表に出す観点の名前。",
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "description": "観点の確かめ方。",
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "features": {
+      "description": "アプリの機能ごとの結論と根拠のファイル。docs/frontend_test_note.md の生成した区間になる。",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "guarantees", "risks", "files"],
+        "properties": {
+          "name": {
+            "description": "機能の名前（利用者が画面で使うもの）。",
+            "type": "string",
+            "minLength": 1
+          },
+          "guarantees": {
+            "description": "機能単位で保証していること。",
+            "type": "string",
+            "minLength": 1
+          },
+          "risks": {
+            "description": "テストが通っても本番で起こりうること。",
+            "type": "string",
+            "minLength": 1
+          },
+          "files": {
+            "description": "根拠のテストのファイル。文字列は振る舞いを確かめるファイル、{file, qualities} は確かめる観点を並べる。",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "oneOf": [
+                { "$ref": "#/definitions/text" },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["file", "qualities"],
+                  "properties": {
+                    "file": {
+                      "description": "テストのファイル（dashboard からの相対パス）。",
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "qualities": {
+                      "description": "qualities の id、または behavior。",
+                      "type": "array",
+                      "minItems": 1,
+                      "items": { "$ref": "#/definitions/word" }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "text": { "type": "string", "minLength": 1 },
+    "word": { "type": "string", "pattern": "^[a-z0-9]+$" },
+    "tag": { "type": "string", "pattern": "^[a-z0-9]+:[a-z0-9]+$" },
+    "tags": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/tag" }
+    }
+  }
+}

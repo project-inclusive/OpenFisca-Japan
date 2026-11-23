@@ -47,7 +47,8 @@ describe('question templates', () => {
     ['200', 200],
     ['201', 200],
   ])(
-    'normalizes age %s to %i and invalidates a cleared answer',
+    '年齢が %s のとき、%i に正規化しクリア後は無効になる',
+    { tags: ['input:boundary', 'input:empty'] },
     (raw, expected) => {
       const assign = vi.fn();
       renderWithValidity(<AgeQuestionTemplate assignFunc={assign} />);
@@ -73,7 +74,8 @@ describe('question templates', () => {
     ['1000000', 1000000],
     ['1000001', 0],
   ])(
-    'normalizes money %s to %i万円 and invalidates a cleared answer',
+    '金額が %s のとき、%i 万円に正規化しクリア後は無効になる',
+    { tags: ['input:boundary', 'input:empty'] },
     (raw, expected) => {
       const assign = vi.fn();
       renderWithValidity(
@@ -102,7 +104,8 @@ describe('question templates', () => {
     ['200', 200],
     ['201', 200],
   ])(
-    'normalizes child age %s to %i and invalidates a cleared answer',
+    '子の年齢が %s のとき、%i に正規化しクリア後は無効になる',
+    { tags: ['input:boundary', 'input:empty'] },
     (raw, expected) => {
       const assign = vi.fn();
       renderWithValidity(<ChildrenAgeQuestionTemplate assignFunc={assign} />);
@@ -123,7 +126,8 @@ describe('question templates', () => {
   );
 
   it.each(schoolYearCases)(
-    'converts $school year $year and crosses its upper boundary',
+    '学校が $school で学年が $year のとき、年齢を換算し上限を越えると学校が変わる',
+    { tags: ['input:boundary', 'input:empty'] },
     ({ school, year, age, nextSchool }) => {
       const assign = vi.fn();
       renderWithValidity(<ChildrenAgeQuestionTemplate assignFunc={assign} />);
@@ -156,39 +160,47 @@ describe('question templates', () => {
   it.each([
     [new Date(2026, 0, 15, 12), '1'],
     [new Date(2026, 3, 15, 12), '2'],
-  ])('reflects the school year for age seven on %s', (date, year) => {
-    vi.setSystemTime(date);
-    renderWithValidity(
-      <ChildrenAgeQuestionTemplate
-        assignFunc={vi.fn()}
-        initialValue={initialAnswers.childrenAge}
-      />
-    );
-    expect(screen.getByRole('combobox')).toHaveValue('小学校');
-    expect(screen.getAllByRole('textbox')[1]).toHaveValue(year);
-  });
+  ])(
+    '日付が %s のとき、7歳の学年が年度に対応する',
+    { tags: ['input:normal'] },
+    (date, year) => {
+      vi.setSystemTime(date);
+      renderWithValidity(
+        <ChildrenAgeQuestionTemplate
+          assignFunc={vi.fn()}
+          initialValue={initialAnswers.childrenAge}
+        />
+      );
+      expect(screen.getByRole('combobox')).toHaveValue('小学校');
+      expect(screen.getAllByRole('textbox')[1]).toHaveValue(year);
+    }
+  );
 
-  it('changes school with an existing year and keeps age when only the year is cleared', () => {
-    const assign = vi.fn();
-    renderWithValidity(
-      <ChildrenAgeQuestionTemplate
-        assignFunc={assign}
-        initialValue={initialAnswers.childrenAge}
-      />
-    );
-    fireEvent.change(screen.getByRole('combobox'), {
-      target: { value: '中学校' },
-    });
-    expect(assign).toHaveBeenLastCalledWith({ type: 'Age', selection: 13 });
-    expect(screen.getAllByRole('textbox')[0]).toHaveValue('13');
-    expect(screen.getAllByRole('textbox')[1]).toHaveValue('1');
-    fireEvent.change(screen.getAllByRole('textbox')[1], {
-      target: { value: '' },
-    });
-    expect(screen.getAllByRole('textbox')[1]).toHaveValue('');
-    expect(screen.getAllByRole('textbox')[0]).toHaveValue('13');
-    expectValidity(true);
-  });
+  it(
+    '復元した学年で学校を変えると年齢が変わり、学年だけ消すと年齢を保つ',
+    { tags: ['input:normal'] },
+    () => {
+      const assign = vi.fn();
+      renderWithValidity(
+        <ChildrenAgeQuestionTemplate
+          assignFunc={assign}
+          initialValue={initialAnswers.childrenAge}
+        />
+      );
+      fireEvent.change(screen.getByRole('combobox'), {
+        target: { value: '中学校' },
+      });
+      expect(assign).toHaveBeenLastCalledWith({ type: 'Age', selection: 13 });
+      expect(screen.getAllByRole('textbox')[0]).toHaveValue('13');
+      expect(screen.getAllByRole('textbox')[1]).toHaveValue('1');
+      fireEvent.change(screen.getAllByRole('textbox')[1], {
+        target: { value: '' },
+      });
+      expect(screen.getAllByRole('textbox')[1]).toHaveValue('');
+      expect(screen.getAllByRole('textbox')[0]).toHaveValue('13');
+      expectValidity(true);
+    }
+  );
 
   it.each([
     ['２', 2, '2', true],
@@ -196,7 +208,8 @@ describe('question templates', () => {
     ['6', 5, '5', true],
     ['0', 0, '', false],
   ])(
-    'handles person count %s at the input boundary',
+    '人数が %s のとき、上限と有効性が対応する',
+    { tags: ['input:boundary', 'input:empty'] },
     (raw, expected, shown, valid) => {
       const assign = vi.fn();
       renderWithValidity(
@@ -219,7 +232,8 @@ describe('question templates', () => {
   );
 
   it.each([undefined, initialAnswers.personNum])(
-    'updates person count validity immediately when clearing and re-entering with initial answer %j',
+    '初期値が %j のとき、人数をクリアし再入力すると有効性が直ちに変わる',
+    { tags: ['input:empty', 'transition:restore'] },
     (initialValue) => {
       const assign = vi.fn();
       renderWithValidity(
@@ -255,17 +269,21 @@ describe('question templates', () => {
     }
   );
 
-  it('isolates Recoil state and DOM between fresh renders', () => {
-    const first = renderWithValidity(
-      <AgeQuestionTemplate
-        assignFunc={vi.fn()}
-        initialValue={initialAnswers.age}
-      />
-    );
-    expectValidity(true);
-    first.unmount();
-    renderWithValidity(<AgeQuestionTemplate assignFunc={vi.fn()} />);
-    expect(screen.getByLabelText('年齢')).toHaveValue('');
-    expectValidity(false);
-  });
+  it(
+    '再描画したとき、前の回答とDOMを引き継がない',
+    { tags: ['input:normal'] },
+    () => {
+      const first = renderWithValidity(
+        <AgeQuestionTemplate
+          assignFunc={vi.fn()}
+          initialValue={initialAnswers.age}
+        />
+      );
+      expectValidity(true);
+      first.unmount();
+      renderWithValidity(<AgeQuestionTemplate assignFunc={vi.fn()} />);
+      expect(screen.getByLabelText('年齢')).toHaveValue('');
+      expectValidity(false);
+    }
+  );
 });

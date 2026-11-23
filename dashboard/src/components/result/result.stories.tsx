@@ -112,21 +112,47 @@ const checkResult: NonNullable<Story['play']> = async ({ canvas, args }) => {
 };
 
 export const BenefitOnly: Story = {
+  name: '給付のみのとき、給付を表示し貸付を表示しない',
+  tags: [
+    'a11y:audit',
+    'display:present',
+    'communication:success',
+    'a11y:keyboard',
+    'a11y:focus',
+  ],
   args: { scenario: 'benefit-only' },
   parameters: { msw: { handlers: [calculateSuccessHandler('benefit-only')] } },
   play: checkResult,
 };
 export const LoanOnly: Story = {
+  name: '貸付のみのとき、貸付を表示し給付を表示しない',
+  tags: [
+    'a11y:audit',
+    'display:present',
+    'communication:success',
+    'a11y:keyboard',
+    'a11y:focus',
+  ],
   args: { scenario: 'loan-only' },
   parameters: { msw: { handlers: [calculateSuccessHandler('loan-only')] } },
   play: checkResult,
 };
 export const Both: Story = {
+  name: '給付と貸付があるとき、両方を表示する',
+  tags: [
+    'a11y:audit',
+    'display:present',
+    'communication:success',
+    'a11y:keyboard',
+    'a11y:focus',
+  ],
   args: { scenario: 'both' },
   parameters: { msw: { handlers: [calculateSuccessHandler('both')] } },
   play: checkResult,
 };
 export const None: Story = {
+  name: '支援がないとき、空の結果を表示する',
+  tags: ['a11y:audit', 'display:absent', 'communication:success'],
   args: { scenario: 'none' },
   parameters: { msw: { handlers: [calculateSuccessHandler('none')] } },
   play: checkResult,
@@ -155,21 +181,29 @@ const checkFailure: NonNullable<Story['play']> = async ({ canvas, args }) => {
   // Leave the error rendered for the a11y audit; the error-page stories test navigation.
 };
 export const Http500Simple: Story = {
+  name: 'かんたんモードでHTTP 500のとき、応答エラーへ移る',
+  tags: ['a11y:audit', 'communication:http500'],
   args: { state: calculationModes[0].state },
   parameters: { msw: { handlers: [calculateFailureHandlers['HTTP 500']] } },
   play: checkFailure,
 };
 export const Http500Detailed: Story = {
+  name: 'くわしくモードでHTTP 500のとき、応答エラーへ移る',
+  tags: ['a11y:audit', 'communication:http500'],
   args: { state: calculationModes[1].state },
   parameters: { msw: { handlers: [calculateFailureHandlers['HTTP 500']] } },
   play: checkFailure,
 };
 export const Http500Disaster: Story = {
+  name: '災害モードでHTTP 500のとき、応答エラーへ移る',
+  tags: ['a11y:audit', 'communication:http500'],
   args: { state: calculationModes[2].state },
   parameters: { msw: { handlers: [calculateFailureHandlers['HTTP 500']] } },
   play: checkFailure,
 };
 export const NetworkFailureSimple: Story = {
+  name: 'かんたんモードでネットワーク失敗のとき、応答エラーへ移る',
+  tags: ['a11y:audit', 'communication:network'],
   args: { state: calculationModes[0].state },
   parameters: {
     msw: { handlers: [calculateFailureHandlers['network error']] },
@@ -177,6 +211,8 @@ export const NetworkFailureSimple: Story = {
   play: checkFailure,
 };
 export const NetworkFailureDetailed: Story = {
+  name: 'くわしくモードでネットワーク失敗のとき、応答エラーへ移る',
+  tags: ['a11y:audit', 'communication:network'],
   args: { state: calculationModes[1].state },
   parameters: {
     msw: { handlers: [calculateFailureHandlers['network error']] },
@@ -184,6 +220,8 @@ export const NetworkFailureDetailed: Story = {
   play: checkFailure,
 };
 export const NetworkFailureDisaster: Story = {
+  name: '災害モードでネットワーク失敗のとき、応答エラーへ移る',
+  tags: ['a11y:audit', 'communication:network'],
   args: { state: calculationModes[2].state },
   parameters: {
     msw: { handlers: [calculateFailureHandlers['network error']] },

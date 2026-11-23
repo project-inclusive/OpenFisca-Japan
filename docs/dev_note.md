@@ -146,6 +146,7 @@ make serve-dev
 - バックエンドのdocker環境に入る
 
 #### テスト実行
+- テストの数・CI で流れる段・残っていることは [テストの全体の状況と残っていること](./test_note.md#バックエンド制度の計算) にある
 - 全てのテストを実行 (変更内容の影響範囲が大きい場合またはmainブランチマージ時は、デグレードを検知するため実行してください。)
   - `make test` 
 - 一部のテストを実行
@@ -270,6 +271,8 @@ npm install
 
 #### テスト、linter実行
 
+テストの層ごとの役割と、アプリの機能ごとに保証していること・保証していないこと（テストが通っても本番で起こりうること）は [フロントエンドのテストで保証していること](./frontend_test_note.md) にまとめている。バックエンド・道具・契約テストを含む全体の状況と残っていることは [テストの全体の状況と残っていること](./test_note.md) にある。この節には流し方を書く。
+
 ```bash
 # dashboardディレクトリに移動
 cd dashboard
@@ -296,6 +299,29 @@ preview のポート 30000 を空けてから実行する。`webServer` が既�
 計算 API は `page.route` で `src/mocks/calculate/` の JSON を返し、ブラウザーの日付を `2026-01-15` に固定するため、バックエンドの起動は不要。
 戻る操作と API エラーの分岐は画面のテストで確認する。Playwright のコンポーネントテストは使わない。
 E2E の安定性を確認するときは `npm run test:e2e` を続けて 2 回実行する。失敗時の trace は `tmp/playwright/test-results/`（リポジトリルートからの相対パス）に残る。
+
+#### テストを足すときに、テストのレポートの定義で直すこと
+
+テストのレポートの定義は `tools/test_report/viewpoints.yaml` にある。テストを足す・名前を変える・消すときは、次の表で直すところを確かめる。上流の CI はレポートも道具の pytest も流さないため、直し忘れても PR は止まらない。`viewpoints.yaml` の形（キー・必須の項目・型）は、`report.py` が読んだ直後に `jsonschema` で `viewpoints.schema.json` を当てて確かめ、誤りをキーの道すじつきで出して止まる（`make install` で入る）。
+
+| する作業 | 直すところ | 直さないと |
+| --- | --- | --- |
+| 既にあるファイルにテストを足す | 宣言にタグを書く（Vitest は `{ tags: ['input:empty'] }`、Playwright は `{ tag: ['@input:empty'] }`、story は `tags`）。`classification_rules` で分類しているファイルは、規則に合う名前ならタグは要らない | タグも規則もないテスト、またはタグが対象の期待する条件に合わないテストは「未分類」に出る。エラーにはならない |
+| 新しいテストのファイルを足す | `bindings` にファイルと対象を書く。`test_descriptions` は任意 | 対象に結び付かず、テストが「未分類」に出る（状態機械の質問と E2E の端末は書かなくても結ぶ）。説明がなければ「説明のないファイル」に出る。どちらもエラーにはならない |
+| 新しい観点・条件を使う | `viewpoints` に足し、`--write-tags` で `dashboard/testReportTags.ts` を作り直す | 知らないタグ、または YAML と `testReportTags.ts` の食い違いとして `make test-report` がエラーで止まる |
+| テストのファイルの名前を変える・消す | `bindings`・`classification_rules`・`test_descriptions`・`features` の古いパス | `bindings`・`classification_rules` が古いと `make test-report` が、`test_descriptions`・`features` が古いと `--write-test-note` がエラーで止まる |
+| 機能ごとの文書（[フロントエンドのテストで保証していること](./frontend_test_note.md)）に載せる | `features` の `files` と `test_descriptions` を書き、`--write-test-note` で作り直す | 説明のない根拠のファイル、機能に置いていない説明はエラーで止まる。作り直さないと `python -m pytest tools/test_report` が失敗する |
+
+直したら、リポジトリのルートで次を手で実行し、`tmp/test-report/frontend.md` の未分類のテストと説明のないファイルを確かめる。`python -m pytest tools/test_report` の結果は pull request の本文に書く。
+
+```bash
+python tools/test_report/report.py --write-tags       # 観点・条件を足したとき（続けて dashboard で npx prettier --write testReportTags.ts）
+python tools/test_report/report.py --write-test-note  # features・test_descriptions を直したとき
+make test-report
+python -m pytest tools/test_report
+```
+
+書き方の詳細は `tools/test_report/README.md` の「タグと分類の正本」「対象と期待する条件の編集」「`viewpoints.yaml` の構成」の節にある。
 
 #### テストの網羅率
 
