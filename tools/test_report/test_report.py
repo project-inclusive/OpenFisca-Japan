@@ -7,6 +7,7 @@ import io
 import json
 import re
 import subprocess
+import sys
 
 import pytest
 from tools.test_report.report import (
@@ -48,8 +49,6 @@ from tools.test_report.report import (
     replace_note_region,
     REPRESENTATIVE_COLUMNS,
     result_counts,
-    SCHEMA,
-    SCHEMA_RULES,
     source_tags,
     TARGET_COLUMNS,
     TRACE_RUN,
@@ -884,27 +883,47 @@ def drop(config, path):
 
 
 @pytest.mark.parametrize("change, expected", [
-    (lambda c: c.update(viewpoint={}), "(root): unknown key 'viewpoint'"),
-    (lambda c: c["stages"][1].update(comand=["x"]), "(root).stages[1]: unknown key 'comand'"),
-    (lambda c: drop(c, ("exclusions", 0, "reason")), "(root).exclusions[0]: missing required key 'reason'"),
-    (lambda c: drop(c, ("bindings",)), "(root): missing required key 'bindings'"),
-    (lambda c: c["viewpoints"]["input"].update(conditions="normal"), "(root).viewpoints.input.conditions: expected array, got string"),
-    (lambda c: c["stages"][0].update(projects=[]), "(root).stages[0].projects: needs at least 1 item(s)"),
+    (lambda c: c.update(viewpoint={}), "(root): Additional properties are not allowed ('viewpoint' was unexpected)"),
+    (lambda c: c["stages"][1].update(comand=["x"]), "(root).stages[1]: Additional properties are not allowed ('comand' was unexpected)"),
+    (lambda c: drop(c, ("exclusions", 0, "reason")), "(root).exclusions[0]: 'reason' is a required property"),
+    (lambda c: drop(c, ("bindings",)), "(root): 'bindings' is a required property"),
+    (lambda c: c["viewpoints"]["input"].update(conditions="normal"), "(root).viewpoints.input.conditions: 'normal' is not of type 'array'"),
+    (lambda c: c["stages"][0].update(projects=[]), "(root).stages[0].projects: [] should be non-empty"),
     (lambda c: c["file_cells"]["src/state/convert.ts"].append("state"), "(root).file_cells['src/state/convert.ts'][2]: 'state' does not match"),
-    (lambda c: c["viewpoints"].update(Input=c["viewpoints"]["input"]), "(root).viewpoints.Input: key 'Input' does not match"),
-    (lambda c: c["features"][0]["files"].append({"file": "e2e/Homepage.spec.ts"}), "(root).features[0].files[4]: missing required key 'qualities'"),
-    (lambda c: c["features"][0]["files"].append(3), "(root).features[0].files[4]: must match exactly one allowed form"),
+    (lambda c: c["viewpoints"].update(Input=c["viewpoints"]["input"]), "(root).viewpoints.Input: 'Input' does not match"),
+    (lambda c: c["features"][0]["files"].append({"file": "e2e/Homepage.spec.ts"}), "(root).features[0].files[4]: 'qualities' is a required property"),
+    (lambda c: c["features"][0]["files"].append(3), "(root).features[0].files[4]: 3 is not valid under any of the given schemas"),
     (lambda c: c["test_descriptions"]["e2e/Homepage.spec.ts"].update(verifies=""),
-     "(root).test_descriptions['e2e/Homepage.spec.ts'].verifies: must not be empty"),
-    (lambda c: c.update(version=2), "(root).version: must be one of [1]"),
+     "(root).test_descriptions['e2e/Homepage.spec.ts'].verifies: '' should be non-empty"),
+    (lambda c: c.update(version=2), "(root).version: 2 is not one of [1]"),
     ])
 def test_shape_errors_name_the_key_path(change, expected):
-    """Unknown keys, missing items and wrong types stop with the path of the offending key."""
+    """Unknown keys, missing items and wrong types stop with the path of the offending key, one line per error."""
     config = definitions()
     change(config)
     with pytest.raises(ValueError) as error:
         check_shape(config)
-    assert expected in str(error.value)
+    lines = str(error.value).splitlines()[1:]
+    assert len(lines) == 1 and lines[0].startswith(expected)
+
+
+def test_shape_errors_list_every_problem():
+    """Several mistakes give one line each, so all of them can be fixed in one pass."""
+    config = definitions()
+    config["stages"][1].update(comand=["x"])
+    drop(config, ("exclusions", 0, "reason"))
+    with pytest.raises(ValueError) as error:
+        check_shape(config)
+    assert str(error.value).splitlines()[1:] == [
+        "(root).exclusions[0]: 'reason' is a required property",
+        "(root).stages[1]: Additional properties are not allowed ('comand' was unexpected)"]
+
+
+def test_shape_check_asks_for_make_install_without_jsonschema(monkeypatch):
+    """Without the dev dependency the check stops with how to install it, instead of skipping the check."""
+    monkeypatch.setitem(sys.modules, "jsonschema", None)
+    with pytest.raises(SystemExit, match="make install"):
+        check_shape(definitions())
 
 
 def test_cli_checks_shape_before_reading_tests(tmp_path):
@@ -913,31 +932,5 @@ def test_cli_checks_shape_before_reading_tests(tmp_path):
     config["bindings"][0]["target"] = config["bindings"][0].pop("targets")
     broken = tmp_path / "viewpoints.yaml"
     broken.write_text(yaml.safe_dump(config, allow_unicode=True), encoding="utf-8")
-    with pytest.raises(ValueError, match=r"\(root\)\.bindings\[0\]: unknown key 'target'"):
+    with pytest.raises(ValueError, match=r"\(root\)\.bindings\[0\]: 'targets' is a required property"):
         main(["--write-tags", "--definitions", str(broken), "--input-dir", str(tmp_path)])
-
-
-def test_checker_applies_every_schema_keyword(tmp_path):
-    """The checker reads the schema itself; a keyword it would ignore is rejected, so the two cannot drift."""
-    schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
-    used = set()
-
-    def visit(node):
-        """Collect keywords; the keys under properties and definitions are names, not keywords."""
-        used.update(node)
-        for keyword, value in node.items():
-            children = value.values() if keyword in ("properties", "definitions") else value if isinstance(value, list) else [value]
-            for child in children:
-                if isinstance(child, dict):
-                    visit(child)
-
-    visit(schema)
-    assert used - {"$schema", "$id", "title", "description", "definitions"} <= SCHEMA_RULES
-    for bad, message in (({"anyOf": []}, "Unsupported schema keyword"), ({"type": "number"}, "Unsupported schema type"),
-                         ({"$ref": "#/definitions/text", "description": "x"}, "must be alone")):
-        changed = copy.deepcopy(schema)
-        changed["properties"]["version"] = bad
-        path = tmp_path / "schema.json"
-        path.write_text(json.dumps(changed), encoding="utf-8")
-        with pytest.raises(ValueError, match=message):
-            load_schema(path)

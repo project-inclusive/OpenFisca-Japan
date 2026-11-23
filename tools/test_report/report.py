@@ -128,105 +128,50 @@ def extract_targets(source, config, dashboard):
 
 
 SCHEMA = Path(__file__).with_name("viewpoints.schema.json")
-SCHEMA_RULES = {"type", "enum", "properties", "required", "additionalProperties", "propertyNames",
-                "minProperties", "items", "minItems", "minLength", "pattern", "oneOf", "$ref"}
-SCHEMA_NOTES = {"$schema", "$id", "title", "description", "definitions"}
-SCHEMA_TYPES = {"object": dict, "array": list, "string": str, "integer": int, "boolean": bool}
 
 
 def load_schema(path=SCHEMA):
-    """Read the JSON Schema; a keyword this small checker does not apply is an error, not ignored."""
-    schema = json.loads(path.read_text(encoding="utf-8"))
-
-    def visit(node, where):
-        unknown = set(node) - SCHEMA_RULES - SCHEMA_NOTES
-        if unknown:
-            raise ValueError(f"Unsupported schema keyword at {where}: {sorted(unknown)}")
-        if "type" in node and node["type"] not in SCHEMA_TYPES:
-            raise ValueError(f"Unsupported schema type at {where}: {node['type']}")
-        if "$ref" in node and (len(node) > 1 or not node["$ref"].startswith("#/definitions/")):
-            raise ValueError(f"Schema $ref must be alone and local at {where}")
-        children = [(f"{where}.{key}", node[key]) for key in ("additionalProperties", "propertyNames", "items")
-                    if isinstance(node.get(key), dict)]
-        children += [(f"{where}.properties.{key}", value) for key, value in node.get("properties", {}).items()]
-        children += [(f"{where}.oneOf[{index}]", value) for index, value in enumerate(node.get("oneOf", []))]
-        children += [(f"{where}.definitions.{key}", value) for key, value in node.get("definitions", {}).items()]
-        for child, value in children:
-            visit(value, child)
-
-    visit(schema, "(root)")
-    return schema
+    """Read the JSON Schema that viewpoints.yaml follows."""
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
-def type_name(value):
-    """Name a YAML value in JSON Schema terms for error messages."""
-    if value is None or isinstance(value, bool):
-        return "null" if value is None else "boolean"
-    return next((name for name, kind in SCHEMA_TYPES.items() if isinstance(value, kind)), type(value).__name__)
+def key_path(path):
+    """Name a key the way the YAML is read, e.g. (root).features[0].files or (root).file_cells['src/a.ts']."""
+    text = "(root)"
+    for key in path:
+        text += f"[{key}]" if isinstance(key, int) else f".{key}" if re.fullmatch(r"\w+", str(key)) else f"[{str(key)!r}]"
+    return text
 
 
-def shape_errors(value, schema, root, path):
-    """Apply the supported subset of JSON Schema; return `path: problem` lines."""
-    if "$ref" in schema:
-        return shape_errors(value, root["definitions"][schema["$ref"].rsplit("/", 1)[1]], root, path)
-    if "oneOf" in schema:
-        results = [shape_errors(value, option, root, path) for option in schema["oneOf"]]
-        if sum(not errors for errors in results) == 1:
-            return []
-        # Report the form of the same type, e.g. a missing key in the object form rather than "not a string".
-        typed = [errors for option, errors in zip(schema["oneOf"], results)
-                 if errors and resolve(option, root).get("type") == type_name(value)]
-        return typed[0] if len(typed) == 1 else [f"{path}: must match exactly one allowed form"]
-    expected = schema.get("type")
-    if expected and type_name(value) != expected:
-        return [f"{path}: expected {expected}, got {type_name(value)}"]
-    if "enum" in schema and value not in schema["enum"]:
-        return [f"{path}: must be one of {schema['enum']}"]
-    errors = []
-    if isinstance(value, str):
-        if len(value) < schema.get("minLength", 0):
-            errors.append(f"{path}: must not be empty")
-        if "pattern" in schema and not re.search(schema["pattern"], value):
-            errors.append(f"{path}: {value!r} does not match {schema['pattern']}")
-    if isinstance(value, list):
-        if len(value) < schema.get("minItems", 0):
-            errors.append(f"{path}: needs at least {schema['minItems']} item(s)")
-        for index, item in enumerate(value):
-            errors += shape_errors(item, schema.get("items", {}), root, f"{path}[{index}]")
-    if isinstance(value, dict):
-        properties = schema.get("properties", {})
-        if len(value) < schema.get("minProperties", 0):
-            errors.append(f"{path}: needs at least {schema['minProperties']} key(s)")
-        errors += [f"{path}: missing required key {key!r}" for key in schema.get("required", []) if key not in value]
-        for key, item in value.items():
-            where = f"{path}.{key}" if re.fullmatch(r"\w+", str(key)) else f"{path}[{str(key)!r}]"
-            if not isinstance(key, str):
-                errors.append(f"{where}: key must be a string")
-            elif "propertyNames" in schema:
-                errors += [f"{where}: key {error.split(': ', 1)[1]}"
-                           for error in shape_errors(key, schema["propertyNames"], root, where)]
-            if key in properties:
-                errors += shape_errors(item, properties[key], root, where)
-            elif schema.get("additionalProperties", True) is False:
-                errors.append(f"{path}: unknown key {key!r}")
-            elif isinstance(schema.get("additionalProperties"), dict):
-                errors += shape_errors(item, schema["additionalProperties"], root, where)
-    return errors
+def shape_lines(error):
+    """`path: problem` lines for one jsonschema error.
 
-
-def resolve(schema, root):
-    """Follow a local $ref to the definition it names."""
-    while "$ref" in schema:
-        schema = root["definitions"][schema["$ref"].rsplit("/", 1)[1]]
-    return schema
+    For oneOf, report the form of the same type (a missing key in the object form rather than
+    "not a string"); a key name that breaks propertyNames is named in the path.
+    """
+    forms = {}
+    for detail in error.context or ():
+        forms.setdefault(detail.relative_schema_path[0], []).append(detail)
+    typed = [details for details in forms.values()
+             if not any(detail.validator == "type" and not detail.relative_path for detail in details)]
+    if len(typed) == 1:
+        return [line for detail in typed[0] for line in shape_lines(detail)]
+    path = list(error.absolute_path)
+    if "propertyNames" in error.absolute_schema_path:
+        path.append(error.instance)
+    return [f"{key_path(path)}: {error.message}"]
 
 
 def check_shape(config, schema=None):
     """Reject unknown keys, missing required items and wrong types with the key path, before any content check."""
+    try:
+        from jsonschema import Draft7Validator
+    except ImportError:
+        raise SystemExit("jsonschema is needed to check viewpoints.yaml; run `make install` (pip install -e '.[dev]').") from None
     schema = load_schema() if schema is None else schema
-    errors = shape_errors(config, schema, schema, "(root)")
-    if errors:
-        raise ValueError("viewpoints.yaml shape errors (see viewpoints.schema.json):\n" + "\n".join(errors))
+    lines = [line for error in Draft7Validator(schema).iter_errors(config) for line in shape_lines(error)]
+    if lines:
+        raise ValueError("viewpoints.yaml shape errors (see viewpoints.schema.json):\n" + "\n".join(sorted(lines)))
 
 
 def known_tags(config):

@@ -96,8 +96,8 @@ cd dashboard && npx playwright test --config playwright.visual.config.ts --list
 ## 道具
 
 - **何があるか**: `tools/make_docs/test_make_docs.py`（制度ドキュメントの生成の、数の書式とパラメータの単位の警告）と、`tools/test_report/test_report.py`（フロントエンドのテストレポートの一覧・集計・CSV と、[フロントエンドのテストで保証していること](./frontend_test_note.md) の生成した区間）の pytest。
-- **どこまでか**: 62 件（`test_make_docs.py` 6 件・`test_report.py` 56 件）。`tools/make_tests`・`tools/dependency_graph`・`tools/municipalities_order` にテストはない。
-- **流し方と CI**: `python -m pytest tools/make_docs tools/test_report` で流す。`Makefile` と CI に pytest はなく、CI では流れない（CI の `make check-docs` は生成物とソースの差を確かめるもので、この pytest ではない）。
+- **どこまでか**: 63 件（`test_make_docs.py` 6 件・`test_report.py` 57 件）。`tools/make_tests`・`tools/dependency_graph`・`tools/municipalities_order` にテストはない。
+- **流し方と CI**: 道具とそのテストを変えたときに、変えた人が `python -m pytest tools/make_docs tools/test_report` を手で流し、pull request の本文に結果を書く。この pytest は CI に入れないと決めている（CI の `make check-docs` は生成物とソースの差を確かめるもので、この pytest ではない）。`make install` で入る開発の依存（`jsonschema` など）が要る。
 
 ```bash
 python -m pytest tools/make_docs tools/test_report --collect-only -q
@@ -105,7 +105,6 @@ python -m pytest tools/make_docs tools/test_report --collect-only -q
 
 残っていること:
 
-- **CI で流れない。** 道具を変えてテストが失敗しても、pull request では気づけない。
 - **テストのない道具がある。** `tools/make_tests`（バックエンドのテストの YAML の生成）・`tools/dependency_graph`・`tools/municipalities_order`。
 
 詳しい文書: フロントエンドのテストレポートの道具は [`tools/test_report/README.md`](https://github.com/project-inclusive/OpenFisca-Japan/blob/main/tools/test_report/README.md) にある。

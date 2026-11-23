@@ -302,7 +302,7 @@ E2E の安定性を確認するときは `npm run test:e2e` を続けて 2 回�
 
 #### テストを足すときに、テストのレポートの定義で直すこと
 
-テストのレポートの定義は `tools/test_report/viewpoints.yaml` にある。テストを足す・名前を変える・消すときは、次の表で直すところを確かめる。上流の CI はレポートを流さないため、直し忘れても PR は止まらない。
+テストのレポートの定義は `tools/test_report/viewpoints.yaml` にある。テストを足す・名前を変える・消すときは、次の表で直すところを確かめる。上流の CI はレポートも道具の pytest も流さないため、直し忘れても PR は止まらない。`viewpoints.yaml` の形（キー・必須の項目・型）は、`report.py` が読んだ直後に `jsonschema` で `viewpoints.schema.json` を当てて確かめ、誤りをキーの道すじつきで出して止まる（`make install` で入る）。
 
 | する作業 | 直すところ | 直さないと |
 | --- | --- | --- |
@@ -312,7 +312,7 @@ E2E の安定性を確認するときは `npm run test:e2e` を続けて 2 回�
 | テストのファイルの名前を変える・消す | `bindings`・`classification_rules`・`test_descriptions`・`features` の古いパス | `bindings`・`classification_rules` が古いと `make test-report` が、`test_descriptions`・`features` が古いと `--write-test-note` がエラーで止まる |
 | 機能ごとの文書（[フロントエンドのテストで保証していること](./frontend_test_note.md)）に載せる | `features` の `files` と `test_descriptions` を書き、`--write-test-note` で作り直す | 説明のない根拠のファイル、機能に置いていない説明はエラーで止まる。作り直さないと `python -m pytest tools/test_report` が失敗する |
 
-直したら、リポジトリのルートで次を実行し、`tmp/test-report/frontend.md` の未分類のテストと説明のないファイルを確かめる。
+直したら、リポジトリのルートで次を手で実行し、`tmp/test-report/frontend.md` の未分類のテストと説明のないファイルを確かめる。`python -m pytest tools/test_report` の結果は pull request の本文に書く。
 
 ```bash
 python tools/test_report/report.py --write-tags       # 観点・条件を足したとき（続けて dashboard で npx prettier --write testReportTags.ts）

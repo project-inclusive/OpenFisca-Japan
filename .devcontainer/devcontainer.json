@@ -100,6 +100,9 @@
         "ms-vsliveshare.vsliveshare",
         "ms-azuretools.vscode-docker",
         "esbenp.prettier-vscode",
+        // tools/test_report/viewpoints.yaml の補完と誤りの表示。先頭の
+        // `# yaml-language-server: $schema=./viewpoints.schema.json` でスキーマを当てる。
+        "redhat.vscode-yaml",
         "mhutchie.git-graph",
         "anthropic.claude-code",
         "github.copilot",

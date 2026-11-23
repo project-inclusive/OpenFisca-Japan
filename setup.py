@@ -54,6 +54,8 @@ setup(
             "flake8-quotes >= 3.2.0, < 4.0.0",
             "flake8-simplify >= 0.9.0, < 1.0.0",
             "flake8-use-fstring >= 1.1.0, < 2.0.0",
+            # tools/test_report/report.py が viewpoints.yaml の形を viewpoints.schema.json で確かめる
+            "jsonschema >= 4.0.0, < 5.0.0",
             "pylint >= 2.6.0, < 3.0.0",
             "pycodestyle >= 2.6.0, < 3.0.0",
             "python-dateutil > 2.8.1",

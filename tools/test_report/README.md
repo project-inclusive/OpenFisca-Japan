@@ -6,7 +6,7 @@
 
 ## 前提と生成
 
-プロダクトリポジトリのルートで実行する。既存の Python 環境（PyYAML）、Node.js、`dashboard/node_modules` が必要。追加の依存は不要。構文解析には dashboard が既に使っている TypeScript を使う。
+プロダクトリポジトリのルートで実行する。`make install` で入る Python の開発の依存（PyYAML・`viewpoints.yaml` の形を確かめる `jsonschema`）、Node.js、`dashboard/node_modules` が必要。構文解析には dashboard が既に使っている TypeScript を使う。
 
 ```bash
 make test-report
@@ -19,6 +19,8 @@ make test-report TEST_REPORT_ARGS='--offline'
 make test-report TEST_REPORT_ARGS='--offline --low-coverage 60'
 python -m pytest tools/test_report
 ```
+
+道具の pytest は CI に入れない。`report.py`・アダプター・`viewpoints.yaml`・スキーマとそのテストを変えたときに、変えた人が `python -m pytest tools/test_report` を手で流し、pull request の本文に結果を書く。
 
 通常の生成は一覧だけを新規取得し、テスト本体を実行しない。テスト実行は時間・ブラウザー環境を要するため別操作にしている。`dashboard/package.json` は変更しない。`--input-dir`・`--output`・`--csv` はルートからの相対パス（絶対パスも指定可）。一覧・結果は、同じコミット、同じフィルターなしの設定で採取する。
 
@@ -196,8 +198,8 @@ Markdown の「未分類のテスト」の一覧も `tests.csv` と同じ順に�
 `viewpoints.yaml` はこの道具の定義の正本で、トップレベルのキーは次の 13 個である。形（キー・必須の項目・型）の正本は `viewpoints.schema.json`（JSON Schema draft-07）で、各キーと項目の `description` も書いてある。
 
 - 編集のとき: YAML の先頭の `# yaml-language-server: $schema=./viewpoints.schema.json` により、VS Code の YAML の拡張（`redhat.vscode-yaml`）が補完と誤りを出す。
-- 生成のとき: `report.py` は YAML を読んだ直後に、依存を足さずにスキーマを読んで形を確かめる。知らないキー（項目名の打ち間違いを含む）、必須の項目の漏れ、型の誤り、空の文字列・配列を、`(root).stages[1]: unknown key 'comand'` のようなキーの道すじつきの `ValueError` で止める。中身の食い違い（存在しない対象・ファイル、知らないタグ、理由のない対象外など）は、その後の検査で止まる。
-- スキーマを直すとき: 検査が扱うのは `type`・`enum`・`properties`・`required`・`additionalProperties`・`propertyNames`・`minProperties`・`items`・`minItems`・`minLength`・`pattern`・`oneOf`・ほかのキーを並べない局所の `$ref` だけである。ほかのキーワードを使うと、黙って無視せずにエラーにする。`$ref` の横に `description` を書くと draft-07 では無視されるため、説明を付ける項目は型をその場に書く。
+- 生成のとき: `report.py` は YAML を読んだ直後に、`jsonschema` の `Draft7Validator` でスキーマを当てて形を確かめる。知らないキー（項目名の打ち間違いを含む）、必須の項目の漏れ、型の誤り、空の文字列・配列を、誤りごとに `(root).stages[1]: Additional properties are not allowed ('comand' was unexpected)` のようなキーの道すじつきの 1 行にまとめた `ValueError` で止める。`files` の要素のように形を選べる項目（`oneOf`）は、値と同じ型の形での誤り（`'qualities' is a required property` など）を出す。`jsonschema` が入っていないときは、`make install` を流すように案内して止まる。中身の食い違い（存在しない対象・ファイル、知らないタグ、理由のない対象外など）は、その後の検査で止まる。
+- スキーマを直すとき: draft-07 のキーワードを使える。`$ref` の横に `description` を書くと draft-07 では無視されるため、説明を付ける項目は型をその場に書く。
 
 型の「文字列」は空でない文字列、「配列」は 1 つ以上の要素を持つ配列である。タグは `観点:条件`（どちらも英小文字と数字）。パスは `dashboard` からの相対パス。
 
