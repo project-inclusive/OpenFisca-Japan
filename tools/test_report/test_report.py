@@ -320,7 +320,7 @@ def test_coverage_and_markdown(config):
                 "## 詳細の CSV", "## 注記"]
     assert [text.index(heading) for heading in headings] == sorted(text.index(heading) for heading in headings)
     assert "## 対象の抽出根拠" not in text, "how targets were extracted is a note, the rows are in targets.csv"
-    title, intro, first = [block for block in text.split("\n\n")][:3]
+    title, intro, first = text.split("\n\n")[:3]
     assert title.startswith("# ") and not intro.startswith("#") and first == "## 集計", \
         "the summary comes right after the title and its one paragraph"
     assert "## 概要" not in text, "the former overview is part of the summary"

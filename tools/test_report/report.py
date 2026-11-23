@@ -999,7 +999,7 @@ def feature_entries(feature, qualities):
             entry = {"file": entry, "qualities": [BEHAVIOR_ID]}
         if not isinstance(entry, dict) or not entry.get("file") or not entry.get("qualities") \
                 or set(entry) - {"file", "qualities"}:
-            raise ValueError("Feature file needs a path or {file, qualities}: " + str(entry))
+            raise ValueError("Feature file needs a path or a mapping of file and qualities: " + str(entry))
         unknown = sorted(set(entry["qualities"]) - set(qualities) - {BEHAVIOR_ID})
         if unknown:
             raise ValueError("Unknown quality in feature " + str(feature.get("name")) + ": " + ", ".join(unknown))
@@ -1062,7 +1062,7 @@ def feature_lines(config, dashboard):
             row = descriptions[file]
             aspect = "・".join(names[key] for key in names if key in ids)
             lines.append("| " + " | ".join([layer_of(file), f"`dashboard/{note_cell(file)}`", note_cell(aspect),
-                                              note_cell(row["verifies"]), note_cell(row["does_not_verify"])]) + " |")
+                                            note_cell(row["verifies"]), note_cell(row["does_not_verify"])]) + " |")
     return lines + ["", NOTE_FINISH]
 
 
@@ -1101,7 +1101,7 @@ def main(argv=None):
     parser.add_argument("--write-tags", action="store_true", help="regenerate dashboard/testReportTags.ts from YAML and exit")
     parser.add_argument("--write-test-note", dest="write_frontend_test_note", action="store_true", help="rewrite the generated region of the frontend test note from YAML and exit")
     parser.add_argument("--test-note", dest="frontend_test_note", type=Path, default=Path("docs/frontend_test_note.md"))
-    parser.add_argument("--offline",action="store_true", help="read existing lists without invoking runners")
+    parser.add_argument("--offline", action="store_true", help="read existing lists without invoking runners")
     parser.add_argument("--low-coverage", type=float, default=80)
     args = parser.parse_args(argv)
     if not 0 <= args.low_coverage <= 100:
